@@ -1,0 +1,113 @@
+/* Top Panel 1 Menu Buttons */
+#TopPanel1 {
+	top: 80px;
+	left: 120px;
+}
+
+.TopPanel1Button {
+	
+}
+
+.TopPanelButton2 {
+	top: -38px;
+}
+
+.TopPanelButton3 {
+	top: -75px;
+}
+
+.TopPanelButton4 {
+	top: -112px;
+}
+
+.TopPanelButton5 {
+	top: -149px
+}
+
+.TopPanelButton6 {
+	top: -186px;
+}
+
+
+/* Top Panel 1 Menu Buttons Text */
+
+.TopPanel1ButtonText {
+	
+}
+
+/* Top Panel 1 Drop Down */
+
+.TopPanelDropDown {
+
+}
+
+.TopPanelDropDown1 {
+	left: 172px;
+	z-index: 70px;
+}
+
+
+.TopPanelDropDown1-1 {
+	z-index: 51px;
+}
+
+.TopPanelDropDown1-2 {
+	top: 15px;
+	left: 170px;
+	z-index: 52px;
+}
+
+.TopPanelDropDown1-3 {
+	top: 18px;
+	left: 165px;
+	z-index: 53px;
+}
+
+.TopPanelDropDown1-4 {
+	top: 21px;
+	left: 160px;
+	z-index: 54px;
+}
+
+.TopPanelDropDown1-5 {
+	top: 21px;
+	left: 155px;
+	z-index: 55px;
+}
+
+/* Top Panel 1 Drop Down Text */
+
+.TopPanelDropDownText {
+	left: 50px; 
+
+}
+
+.TopPanelDropDownText2 {
+	left: 47px;
+}
+
+.TopPanelDropDownText3 {
+	left: 44px;
+}
+
+.TopPanelDropDownText4 {
+	left: 41px;
+}
+
+.TopPanelDropDownText5 {
+	left: 38px;
+}
+
+.TopPanel1Button:hover {
+	
+}
+
+.MainHeading {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.Paragraph {
+	top: 10px;
+	margin-bottom: 10px;
+}

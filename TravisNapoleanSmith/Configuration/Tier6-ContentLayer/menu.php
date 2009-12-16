@@ -1,0 +1,64 @@
+<?php
+	require ("Modules/Tier6ContentLayer/Menu/ClassMenu.php");
+	require ("Configuration/settings.php");
+	
+	// Fetch PrintPreview Flag
+	if (!$_GET['printpreview']){
+		
+		// Fetch Current Page ID - Based on filename
+		if ($_GET) {
+			$pagename = $_SERVER["REQUEST_URI"];
+		} else {
+			$pagename = $_SERVER['PHP_SELF'];
+		}
+		$directory = dirname($_SERVER['PHP_SELF']);
+		$directory .= '/';
+		$pagename = str_replace($directory, ' ', $pagename);
+		$pagename = trim($pagename);
+	
+		// Fetch Current PAge ID - Based On Id Number
+		$idnumber = Array();
+		$idnumber['idnumber'] = 1;
+		if ($_GET['idnumber']){
+			$idnumber['idnumber'] = $_GET['idnumber'];
+		}
+
+		/*if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
+			print "\n";
+			print "<script type=\"text/javascript\" src=\"";
+			print "Tier8-BehavioralLayer/jquery-1.3.2.min.js";
+			print "\">\n</script>\n\n";
+		}*/
+	
+		// Main Menu	
+		$MainMenu = new Menu();
+		
+		$MainMenu->setDatabaseData($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MainMenu');
+		$MainMenu->setDatabaseLookup($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MainMenuLookup');
+		$MainMenu->setDatabaseLookup2($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MainMenuLookup2');
+		
+		$MainMenu->setIdNumber($idnumber);
+		
+		$MainMenu->setPageName($pagename);
+		$MainMenu->FetchMenuLookup2();
+		$MainMenu->FetchAll();
+				
+		$MainMenu->setDynamicDatabase ('NewsDatabaseButtons');
+		$MainMenu->setDynamicDatabaseButtons($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsButtons', 'NewsDatabaseButtons');
+		$MainMenu->DynamicFetchAll('NewsDatabaseButtons');
+		
+		$MainMenu->setMenuMaxDeep(2);
+
+		$MainMenu->removeMenuItems('NewsDatabaseButtons', 'News', NULL, 'News Item', 'news.php', 'NewsID');
+		
+		ob_start();
+		$MainMenu->setMenuClassIDAll('TopPanel1', 'main-menu main-menu-down');
+		$MainMenu->makeMenuItem(1, 'MenuDatabase');
+		$Menu = $MainMenu->getMenu();
+		ob_end_clean();
+		//print_r($MainMenu);
+		print "$Menu\n";
+
+		
+	}
+?>
