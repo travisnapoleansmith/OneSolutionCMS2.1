@@ -1,52 +1,54 @@
 <?php
-class XhtmlMenu {
-	var $PageID;
-	var $ObjectID;
-	var $NewsID;
-	var $ClassReplace;
-	var $ClassClass;
-	var $MenuProtectionLayer;
-	var $DatabaseTableName;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlMenu implements Tier6ContentLayerModules {
+	private $PageID;
+	private $ObjectID;
+	private $NewsID;
+	private $ClassReplace;
+	private $ClassClass;
+	private $MenuProtectionLayer;
+	private $DatabaseTableName;
 	
-	var $newsflag;
+	private $newsflag;
 	
-	var $hostname;
-	var $user; 
-	var $password; 
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user; 
+	private $password; 
+	private $databasename;
+	private $databasetable;
 	
-	var $StartTag;
-	var $EndTag;
-	var $StartTagID;
-	var $StartTagStyle;
-	var $StartTagClass;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagID;
+	private $StartTagStyle;
+	private $StartTagClass;
 	
-	var $MainDiv;
-	var $MainDivID;
-	var $MainDivClass;
-	var $MainDivStyle;
+	private $MainDiv;
+	private $MainDivID;
+	private $MainDivClass;
+	private $MainDivStyle;
 	
-	var $Div;
-	var $DivTitle;
-	var $DivID;
-	var $DivClass;
-	var $DivStyle;
+	private $Div;
+	private $DivTitle;
+	private $DivID;
+	private $DivClass;
+	private $DivStyle;
 	
-	var $EnableDisable;
-	var $Status;
+	private $EnableDisable;
+	private $Status;
 	
-	var $Space;
-	var $List;
-	var $HttpUserAgent;
-	var $errormessage;
+	private $Space;
+	private $List;
+	private $HttpUserAgent;
+	private $errormessage;
 	
-	function XhtmlMenu($tablenames, $database) {
+	public function XhtmlMenu($tablenames, $database) {
 		$this->MenuProtectionLayer = &$database;
 		$this->DatabaseTableName = current($tablenames);
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user; 
 		$this->password = $password; 
@@ -57,39 +59,39 @@ class XhtmlMenu {
 		$this->MenuProtectionLayer->setDatabasetable ($databasetable);
 	}
 	
-	function setPageID($PageID) {
+	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
 	
-	function getPageID() {
+	public function getPageID() {
 		return $this->PageID;
 	}
 	
-	function setObjectID($ObjectID) {
+	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
 	
-	function getObjectID() {
+	public function getObjectID() {
 		return $this->ObjectID;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function FetchDatabase ($PageID) {
+	public function FetchDatabase ($PageID) {
 		$this->MenuProtectionLayer->Connect($this->databasetable);
 		
 		$ConnectionID = array();
@@ -136,7 +138,7 @@ class XhtmlMenu {
 				
 	}
 	
-	function CreateWordWrap($wordwrapstring) {
+	private function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, "<a href");
@@ -172,7 +174,7 @@ class XhtmlMenu {
 		return $wordwrapstring;
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->NewsID) {
@@ -354,7 +356,7 @@ class XhtmlMenu {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->List;
 	}
 }

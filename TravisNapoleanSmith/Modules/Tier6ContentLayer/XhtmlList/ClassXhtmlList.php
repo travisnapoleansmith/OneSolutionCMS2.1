@@ -1,42 +1,44 @@
 <?php
-class XhtmlList {
-	var $PageID;
-	var $ObjectID;
-	var $ListProtectionLayer;
-	var $DatabaseTableName;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlList implements Tier6ContentLayerModules {
+	private $PageID;
+	private $ObjectID;
+	private $ListProtectionLayer;
+	private $DatabaseTableName;
 	
-	var $hostname;
-	var $user; 
-	var $password; 
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user; 
+	private $password; 
+	private $databasename;
+	private $databasetable;
 	
-	var $StartTag;
-	var $EndTag;
-	var $StartTagID;
-	var $StartTagStyle;
-	var $StartTagClass;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagID;
+	private $StartTagStyle;
+	private $StartTagClass;
 	
-	var $Ul;
-	var $UlID;
-	var $UlClass;
-	var $UlStyle;
+	private $Ul;
+	private $UlID;
+	private $UlClass;
+	private $UlStyle;
 	
-	var $Li;
-	var $LiChildID;
-	var $LiID;
-	var $LiClass;
-	var $LiStyle;
+	private $Li;
+	private $LiChildID;
+	private $LiID;
+	private $LiClass;
+	private $LiStyle;
 	
-	var $EnableDisable;
-	var $Status;
+	private $EnableDisable;
+	private $Status;
 	
-	var $Space;
-	var $List;
-	var $HttpUserAgent;
-	var $errormessage;
+	private $Space;
+	private $List;
+	private $HttpUserAgent;
+	private $errormessage;
 	
-	function XhtmlList($tablenames, $database) {
+	public function XhtmlList($tablenames, $database) {
 		$this->ListProtectionLayer = &$database;
 		$this->DatabaseTableName = current($tablenames);
 		$this->Li = Array();
@@ -46,7 +48,7 @@ class XhtmlList {
 		$this->LiStyle = Array();
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user; 
 		$this->password = $password; 
@@ -57,39 +59,39 @@ class XhtmlList {
 		$this->ListProtectionLayer->setDatabasetable ($databasetable);
 	}
 	
-	function setPageID($PageID) {
+	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
 	
-	function getPageID() {
+	public function getPageID() {
 		return $this->PageID;
 	}
 	
-	function setObjectID($ObjectID) {
+	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
 	
-	function getObjectID() {
+	public function getObjectID() {
 		return $this->ObjectID;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function FetchDatabase ($PageID) {
+	public function FetchDatabase ($PageID) {
 		$this->ListProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $PageID;
@@ -122,7 +124,7 @@ class XhtmlList {
 		$this->ListProtectionLayer->Disconnect($this->databasetable);
 	}
 	
-	function BuildLiList($LiList) {
+	private function BuildLiList($LiList) {
 		if (is_array($this->$LiList)) {
 			$i = 1;
 			$Field = 'Li';
@@ -139,7 +141,7 @@ class XhtmlList {
 		}
 	}
 	
-	function CreateWordWrap($wordwrapstring) {
+	private function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, "<a href");
@@ -175,7 +177,7 @@ class XhtmlList {
 		return $wordwrapstring;
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
@@ -379,7 +381,7 @@ class XhtmlList {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->List;
 	}
 }

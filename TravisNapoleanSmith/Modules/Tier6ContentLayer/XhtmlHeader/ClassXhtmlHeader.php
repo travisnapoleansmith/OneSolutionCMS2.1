@@ -1,59 +1,61 @@
 <?php
-class XhtmlHeader
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlHeader implements Tier6ContentLayerModules 
 {
-	var $PageID;
+	private $PageID;
 	
-	var $hostname;
-	var $user;
-	var $password;
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user;
+	private $password;
+	private $databasename;
+	private $databasetable;
 	
-	var $PageTitle;
-	var $PageIcon;
-	var $StyleSheet;
-	var $Rss2_0;
-	var $Rss0_92;
-	var $Atom0_3;
-	var $BaseHref;
-	var $MetaName;
-	var $MetaNameContent;
-	var $HttpEquivType;
-	var $HttpEquivTypeContent;
-	var $LinkCharset;
-	var $LinkHref;
-	var $LinkHreflang;
-	var $LinkMedia;
-	var $LinkRel;
-	var $LinkRev;
-	var $LinkType;
-	var $IE6StyleSheet;
-	var $IE7StyleSheet;
-	var $IE8StyleSheet;
-	var $JavaScriptSheet;
-	var $PrintPreviewStyleSheet;
-	var $ScriptStyleSheet;
-	var $ScriptStyleSheetCharset;
-	var $ScriptStyleSheetCode;
-	var $ScriptStyleSheetDefer;
-	var $ScriptJavaScriptSheet;
-	var $ScriptJavaScriptSheetCharset;
-	var $ScriptJavaScriptSheetCode;
-	var $ScriptJavaScriptDefer;
-	var $ScriptVBScriptSheet;
-	var $ScriptVBScriptCharset;
-	var $ScriptVBScriptCode;
-	var $ScriptVBScriptDefer;
-	var $SiteName;
-	var $HttpUserAgent;
-	var $header;
-	var $HeaderProtectionLayer;
+	private $PageTitle;
+	private $PageIcon;
+	private $StyleSheet;
+	private $Rss2_0;
+	private $Rss0_92;
+	private $Atom0_3;
+	private $BaseHref;
+	private $MetaName;
+	private $MetaNameContent;
+	private $HttpEquivType;
+	private $HttpEquivTypeContent;
+	private $LinkCharset;
+	private $LinkHref;
+	private $LinkHreflang;
+	private $LinkMedia;
+	private $LinkRel;
+	private $LinkRev;
+	private $LinkType;
+	private $IE6StyleSheet;
+	private $IE7StyleSheet;
+	private $IE8StyleSheet;
+	private $JavaScriptSheet;
+	private $PrintPreviewStyleSheet;
+	private $ScriptStyleSheet;
+	private $ScriptStyleSheetCharset;
+	private $ScriptStyleSheetCode;
+	private $ScriptStyleSheetDefer;
+	private $ScriptJavaScriptSheet;
+	private $ScriptJavaScriptSheetCharset;
+	private $ScriptJavaScriptSheetCode;
+	private $ScriptJavaScriptDefer;
+	private $ScriptVBScriptSheet;
+	private $ScriptVBScriptCharset;
+	private $ScriptVBScriptCode;
+	private $ScriptVBScriptDefer;
+	private $SiteName;
+	private $HttpUserAgent;
+	private $header;
+	private $HeaderProtectionLayer;
 	
-	function XhtmlHeader($tablenames, $database) {
+	public function XhtmlHeader($tablenames, $database) {
 		$this->HeaderProtectionLayer = &$database;
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user;
 		$this->password = $password;
@@ -64,19 +66,19 @@ class XhtmlHeader
 		$this->HeaderProtectionLayer->setDatabasetable ($databasetable);
 	}
 	
-	function setSiteName ($SiteName) {
+	public function setSiteName ($SiteName) {
 		$this->SiteName = $SiteName;
 	}
 	
-	function getSiteName() {
+	public function getSiteName() {
 		return $this->SiteName;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
@@ -94,10 +96,7 @@ class XhtmlHeader
 		$this->Rss0_92 = $this->HeaderProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Rss0.92'));
 		$this->Atom0_3 = $this->HeaderProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Atom0.3'));
 		$this->BaseHref = $this->HeaderProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'BaseHref'));
-		
-		//print_r($this->HeaderProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'PageTitle')));
-		//print_r($this->HeaderProtectionLayer);
-		
+				
 		$this->FillArray('MetaName', 'MetaName');
 		$this->FillArray('MetaNameContent', 'MetaNameContent');
 		$this->FillArray('HttpEquivType', 'HttpEquivType');
@@ -136,7 +135,7 @@ class XhtmlHeader
 		$this->HeaderProtectionLayer->Disconnect($this->databasetable);
 	}
 	
-	function FillArray($arrayname, $arrayvalue) {
+	private function FillArray($arrayname, $arrayvalue) {
 		$i = 1;
 		$temp = $arrayvalue;
 		$temp .= $i;
@@ -156,14 +155,14 @@ class XhtmlHeader
 		$this->NullArrayWalk ($arrayname, 0, count($this->$arrayname));
 	}
 	
-	function PrintArrayHelper ($item, $nametag ){
+	private function PrintArrayHelper ($item, $nametag ){
 		$this->header .= "$nametag";
 		$this->header .= "=\"";
 		$this->header .= "$item";
 		$this->header .= "\" ";
 	}
 	
-	function PrintArray($arraynames, $starttag, $arraynametags) {
+	private function PrintArray($arraynames, $starttag, $arraynametags) {
 		$i = 1;
 		$j = 0;
 		$flag = NULL;
@@ -229,7 +228,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function NullArrayWalk($arrayname, $key, $max) {
+	private function NullArrayWalk($arrayname, $key, $max) {
 		$hasvalue = FALSE;
 		$i = 0;
 		while ($i < $max) {
@@ -244,7 +243,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function IEStyleSheetBuild($IEStyleSheetName){
+	private function IEStyleSheetBuild($IEStyleSheetName){
 		$i = 1;
 		$temp = $IEStyleSheetName;
 		$temp .= $i;
@@ -257,7 +256,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function TagSheet($starttag, $rel, $type, $charset, $defer, $title, $src, $href, $intag, $endtag) {
+	private function TagSheet($starttag, $rel, $type, $charset, $defer, $title, $src, $href, $intag, $endtag) {
 		$i = 0;
 		$max = 1;
 		if (is_array($rel)) {
@@ -346,7 +345,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function TagSheetCheck ($tag, $tagname, $i) {
+	private function TagSheetCheck ($tag, $tagname, $i) {
 		if (is_array($tag)) {
 			if ($tag[$i] != NULL) {
 				$this->TagSheetOutput($tagname, $tag[$i]);
@@ -356,7 +355,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function TagSheetOutput($tag, $tagvalue) {
+	private function TagSheetOutput($tag, $tagvalue) {
 		$this->header .= " ";
 		if ($tag) {
 			$this->header .= $tag;
@@ -368,7 +367,7 @@ class XhtmlHeader
 		}
 	}
 	
-	function ArrayCheck(&$array) {
+	private function ArrayCheck(&$array) {
 		$i = 0;
 		$max = count($array);
 		while ($i < $max) {
@@ -379,7 +378,11 @@ class XhtmlHeader
 		}
 	}
 	
-	function CreateOutput ($printpreviewflag, $stylesheet) {
+	public function CreateOutput ($space) {
+		$arguments = func_get_args();
+		$printpreviewflag = $arguments[0];
+		$stylesheet = $arguments[1];
+		
 		$this->header .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\" >\n";
 		$this->header .= "<html lang=\"en-US\" xml:lang=\"en-US\" xmlns=\"http://www.w3.org/1999/xhtml\"> \n\n";
 		$this->header .= "<head>\n";
@@ -556,7 +559,7 @@ class XhtmlHeader
 		$this->header .= "</head>\n\n";
 	}
 	
-	function GetOutput () {
+	public function GetOutput () {
 		return $this->header;
 	}
 	

@@ -1,64 +1,66 @@
 <?php
-class XhtmlContent {
-	var $PageID;
-	var $ObjectID;
-	var $ContentTable;
-	var $ContentLayerTables;
-	var $ContentTableName;
-	var $ContentLayerTablesName;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlContent implements Tier6ContentLayerModules {
+	private $PageID;
+	private $ObjectID;
+	private $ContentTable;
+	private $ContentLayerTables;
+	private $ContentTableName;
+	private $ContentLayerTablesName;
 	
-	var $PrintPreview;
+	private $PrintPreview;
 	
-	var $hostname;
-	var $user; 
-	var $password; 
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user; 
+	private $password; 
+	private $databasename;
+	private $databasetable;
 	
-	var $ContainerObjectType;
-	var $ContainerObjectTypeName;
-	var $ContainerObjectID;
-	var $ContainerObjectPrintPreview;
-	var $RevisionID;
-	var $CurrentVersion;
-	var $Empty;
+	private $ContainerObjectType;
+	private $ContainerObjectTypeName;
+	private $ContainerObjectID;
+	private $ContainerObjectPrintPreview;
+	private $RevisionID;
+	private $CurrentVersion;
+	private $Empty;
 	
-	var $StartTag;
-	var $EndTag;
-	var $StartTagID;
-	var $StartTagStyle;
-	var $StartTagClass;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagID;
+	private $StartTagStyle;
+	private $StartTagClass;
 	
-	var $Heading;
-	var $HeadingStartTag;
-	var $HeadingEndTag;
-	var $HeadingStartTagID;
-	var $HeadingStartTagClass;
-	var $HeadingStartTagStyle;
+	private $Heading;
+	private $HeadingStartTag;
+	private $HeadingEndTag;
+	private $HeadingStartTagID;
+	private $HeadingStartTagClass;
+	private $HeadingStartTagStyle;
 	
-	var $Content;
-	var $ContentStartTag;
-	var $ContentEndTag;
-	var $ContentStartTagID;
-	var $ContentStartTagClass;
-	var $ContentStartTagStyle;
+	private $Content;
+	private $ContentStartTag;
+	private $ContentEndTag;
+	private $ContentStartTagID;
+	private $ContentStartTagClass;
+	private $ContentStartTagStyle;
 	
-	var $EnableDisable;
-	var $Status;
+	private $EnableDisable;
+	private $Status;
 	
-	var $Space;
-	var $ContentOutput;
-	var $HttpUserAgent;
-	var $errormessage;
+	private $Space;
+	private $ContentOutput;
+	private $HttpUserAgent;
+	private $errormessage;
 	
-	function XhtmlContent($tablenames, $database) {
+	public function XhtmlContent($tablenames, $database) {
 		$this->ContentTable = &$database;
 		$this->ContentTableName = current($tablenames);
 		$this->ContentLayerTables = &$database;
 		$this->ContentLayerTablesName = next($tablenames);
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user; 
 		$this->password = $password; 
@@ -72,184 +74,183 @@ class XhtmlContent {
 		
 	}
 	
-	function setPageID($PageID) {
+	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
 	
-	function getPageID() {
+	public function getPageID() {
 		return $this->PageID;
 	}
 	
-	function setObjectID($ObjectID) {
+	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
 	
-	function getObjectID() {
+	public function getObjectID() {
 		return $this->ObjectID;
 	}
 	
-	function getContentTable() {
+	public function getContentTable() {
 		return $this->ContentTable;
 	}
 	
-	function getContentLayerTables() {
+	public function getContentLayerTables() {
 		return $this->ContentLayerTables;
 	}
 	
-	function getContentTableName() {
+	public function getContentTableName() {
 		return $this->ContentTableName;
 	}
 	
-	function getContentLayerTablesName() {
+	public function getContentLayerTablesName() {
 		return $this->ContentLayerTablesName;
 	}
 	
-	function getPrintPreview() {
+	public function getPrintPreview() {
 		return $this->PrintPreview;
 	}
 	
-	function gethostname() {
+	public function gethostname() {
 		return $this->hostname;
 	}
 	
-	function getuser() {
+	public function getuser() {
 		return $this->user;
 	}
 	
-	function getpassword() {
+	public function getpassword() {
 		return $this->password;
 	}
 	
-	function getdatabasename() {
+	public function getdatabasename() {
 		return $this->databasename;
 	}
 	
-	function getdatabasetable() {
+	public function getdatabasetable() {
 		return $this->databasetable;
 	}
 	
-	function getContainerObjectType() {
+	public function getContainerObjectType() {
 		return $this->ContainerObjectType;
 	}
 	
-	function getContainerObjectID() {
+	public function getContainerObjectID() {
 		return $this->ContainerObjectID;
 	}
 	
-	function getContainerObjectPrintPreview() {
+	public function getContainerObjectPrintPreview() {
 		return $this->ContainerObjectPrintPreview;
 	}
 	
-	function getRevisionID() {
+	public function getRevisionID() {
 		return $this->RevisionID;
 	}
 	
-	function getCurrentVersion() {
+	public function getCurrentVersion() {
 		return $this->CurrentVersion;
 	}
 	
-	function getEmpty() {
+	public function getEmpty() {
 		return $this->Empty;
 	}
 	
-	function getStartTag() {
+	public function getStartTag() {
 		return $this->StartTag;
 	}
 	
-	function getEndTag() {
+	public function getEndTag() {
 		return $this->EndTag;
 	}
 	
-	function getStartTagID() {
+	public function getStartTagID() {
 		return $this->StartTagID;
 	}
 	
-	function getStartTagStyle() {
+	public function getStartTagStyle() {
 		return $this->StartTagStyle;
 	}		
 	
-	function getStartTagClass() {
+	public function getStartTagClass() {
 		return $this->StartTagClass;
 	}
 	
-	function getHeading() {
+	public function getHeading() {
 		return $this->Heading;
 	}
 		
-	function getHeadingStartTag() {
+	public function getHeadingStartTag() {
 		return $this->HeadingStartTag;
 	}
 	
-	function getHeadingEndTag() {
+	public function getHeadingEndTag() {
 		return $this->HeadingEndTag;
 	}	
 	
-	function getHeadingStartTagID() {
+	public function getHeadingStartTagID() {
 		return $this->HeadingStartTagID;
 	}
 	
-	function getHeadingStartTagClass() {
+	public function getHeadingStartTagClass() {
 		return $this->HeadingStartTagClass;
 	}
 	
-	function getHeadingStartTagStyle() {
+	public function getHeadingStartTagStyle() {
 		return $this->HeadingStartTagStyle;
 	}
 	
-	function getContent() {
+	public function getContent() {
 		return $this->Content;
 	}
 	
-	function getContentStartTag() {
+	public function getContentStartTag() {
 		return $this->ContentStartTag;
 	}
 	
-	function getContentEndTag() {
+	public function getContentEndTag() {
 		return $this->ContentEndTag;
 	}
 	
-	function getContentStartTagID() {
+	public function getContentStartTagID() {
 		return $this->ContentStartTagID;
 	}
 	
-	
-	function getContentStartTagClass() {
+	public function getContentStartTagClass() {
 		return $this->ContentStartTagClass;
 	}
 	
-	function getContentStartTagStyle() {
+	public function getContentStartTagStyle() {
 		return $this->ContentStartTagStyle;
 	}
 	
-	function getEnableDisable() {
+	public function getEnableDisable() {
 		return $this->EnableDisable;
 	}
 	
-	function getStatus() {
+	public function getStatus() {
 		return $this->Status;
 	}
 	
-	function getSpace() {
+	public function getSpace() {
 		return $this->Space;
 	}	
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function FetchDatabase ($PageID) {
+	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['printpreview'];
@@ -296,7 +297,7 @@ class XhtmlContent {
 		$this->ContentTable->Disconnect($this->ContentTableName);
 	}
 	
-	function CreateWordWrap($wordwrapstring) {
+	private function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, "<a href");
@@ -332,7 +333,7 @@ class XhtmlContent {
 		return $wordwrapstring;
 	}
 	
-	function buildModules($moduleslocation) {
+	private function buildModules($moduleslocation) {
 		if ($moduleslocation) {
 			$hold = Array();
 			$dir = dir($moduleslocation);
@@ -360,7 +361,7 @@ class XhtmlContent {
 		}
 	}
 	
-	function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
+	private function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
 		$modulesidnumber = Array();
 		$modulesidnumber['PageID'] = $PageID;
 		$modulesidnumber['ObjectID'] = $ObjectID;
@@ -415,7 +416,7 @@ class XhtmlContent {
 		}
 	}
 	
-	function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $ContentTable, $ContentLayerTables, $print) {
+	private function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $ContentTable, $ContentLayerTables, $print) {
 		$contentidnumber = Array();
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
@@ -431,7 +432,7 @@ class XhtmlContent {
 		} 
 	}
 	
-	function buildOutput ($Space) {
+	private function buildOutput ($Space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
@@ -717,7 +718,7 @@ class XhtmlContent {
 		}
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 		$this->buildOutput($Space);
 		if ($this->ContainerObjectType) {
 			$temp = $this->ObjectID;
@@ -754,7 +755,7 @@ class XhtmlContent {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->ContentOutput;
 	}
 }

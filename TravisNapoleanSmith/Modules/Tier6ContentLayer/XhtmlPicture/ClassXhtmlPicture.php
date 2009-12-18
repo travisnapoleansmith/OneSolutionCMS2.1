@@ -1,41 +1,43 @@
 <?php
-class XhtmlPicture {
-	var $PageID;
-	var $ObjectID;
-	var $PictureProtectionLayer;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlPicture implements Tier6ContentLayerModules {
+	private $PageID;
+	private $ObjectID;
+	private $PictureProtectionLayer;
 	
-	var $hostname;
-	var $user;
-	var $password;
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user;
+	private $password;
+	private $databasename;
+	private $databasetable;
 	
-	var $StartTag;
-	var $EndTag;
-	var $StartTagID;
-	var $StartTagStyle;
-	var $StartTagClass;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagID;
+	private $StartTagStyle;
+	private $StartTagClass;
 	
-	var $PictureID;
-	var $PictureClass;
-	var $PictureStyle;
-	var $PictureLink;
-	var $PictureAltText;
+	private $PictureID;
+	private $PictureClass;
+	private $PictureStyle;
+	private $PictureLink;
+	private $PictureAltText;
 	
-	var $EnableDisable;
-	var $Status;
-	var $Width;
-	var $Height;
+	private $EnableDisable;
+	private $Status;
+	private $Width;
+	private $Height;
 	
-	var $Space;
-	var $Picture;
-	var $HttpUserAgent;
+	private $Space;
+	private $Picture;
+	private $HttpUserAgent;
 	
-	function XhtmlPicture($tablenames, $database) {
+	public function XhtmlPicture($tablenames, $database) {
 		$this->PictureProtectionLayer = &$database;
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user;
 		$this->password = $password;
@@ -46,32 +48,31 @@ class XhtmlPicture {
 		$this->PictureProtectionLayer->setDatabasetable ($databasetable);
 	}
 	
-	function setPageID($PageID) {
+	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
 	
-	function getPageID() {
+	public function getPageID() {
 		return $this->PageID;
 	}
 	
-	function setObjectID($ObjectID) {
+	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
 	
-	function getObjectID() {
+	public function getObjectID() {
 		return $this->ObjectID;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function FetchDatabase ($PageID) {
-		
+	public function FetchDatabase ($PageID) {
 		$this->PictureProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $PageID;
@@ -102,7 +103,7 @@ class XhtmlPicture {
 				
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
@@ -217,7 +218,7 @@ class XhtmlPicture {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->Picture;
 	}
 }

@@ -1,94 +1,96 @@
 <?php
-class XhtmlFlash {
-	var $idnumber;
-	var $idnumber1;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlFlash implements Tier6ContentLayerModules {
+	private $idnumber;
+	private $idnumber1;
 	
-	var $hostname;
-	var $user;
-	var $password;
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user;
+	private $password;
+	private $databasename;
+	private $databasetable;
 	
-	var $FlashProtectionLayer;
-	var $FlashPath;
-	var $Width;
-	var $Height;
-	var $Wmode;
-	var $AllowFullScreen;
-	var $AllowScriptAccess;
+	private $FlashProtectionLayer;
+	private $FlashPath;
+	private $Width;
+	private $Height;
+	private $Wmode;
+	private $AllowFullScreen;
+	private $AllowScriptAccess;
 	
-	// FlashVars File Properties
-	var $FlashVarsAuthor;
-	var $FlashVarsDate;
-	var $FlashVarsDescription;
-	var $FlashVarsDuration;
-	var $FlashVarsFile;
-	var $FlashVarsImage;
-	var $FlashVarsLink;
-	var $FlashVarsStart;
-	var $FlashVarsStreamer;
-	var $FlashVarsTags;
-	var $FlashVarsTitle;
-	var $FlashVarsType;
+	// Flashprivates File Properties
+	private $FlashprivatesAuthor;
+	private $FlashprivatesDate;
+	private $FlashprivatesDescription;
+	private $FlashprivatesDuration;
+	private $FlashprivatesFile;
+	private $FlashprivatesImage;
+	private $FlashprivatesLink;
+	private $FlashprivatesStart;
+	private $FlashprivatesStreamer;
+	private $FlashprivatesTags;
+	private $FlashprivatesTitle;
+	private $FlashprivatesType;
 	
-	//FlashVars Layout Properties
-	var $FlashVarsBackColor;
-	var $FlashVarsControlBar;
-	var $FlashVarsDock;
-	var $FlashVarsFrontColor;
-	var $FlashVarsHeight;
-	var $FlashVarsIcons;
-	var $FlashVarsLightColor;
-	var $FlashVarsLogo;
-	var $FlashVarsPlaylist;
-	var $FlashVarsPlaylistSize;
-	var $FlashVarsSkin;
-	var $FlashVarsScreenColor;
-	var $FlashVarsWidth;
+	//Flashprivates Layout Properties
+	private $FlashprivatesBackColor;
+	private $FlashprivatesControlBar;
+	private $FlashprivatesDock;
+	private $FlashprivatesFrontColor;
+	private $FlashprivatesHeight;
+	private $FlashprivatesIcons;
+	private $FlashprivatesLightColor;
+	private $FlashprivatesLogo;
+	private $FlashprivatesPlaylist;
+	private $FlashprivatesPlaylistSize;
+	private $FlashprivatesSkin;
+	private $FlashprivatesScreenColor;
+	private $FlashprivatesWidth;
 	
-	//FlashVars Behavior Properties
-	var $FlashVarsAutoStart;
-	var $FlashVarsBufferLength;
-	var $FlashVarsDisplayClick;
-	var $FlashVarsDisplayTitle;
-	var $FlashVarsFullScreen;
-	var $FlashVarsItem;
-	var $FlashVarsLinkTarget;
-	var $FlashVarsMute;
-	var $FlashVarsRepeat;
-	var $FlashVarsShuffle;
-	var $FlashVarsSmoothing;
-	var $FlashVarsState;
-	var $FlashVarsStretching;
-	var $FlashVarsVolume;
+	//Flashprivates Behavior Properties
+	private $FlashprivatesAutoStart;
+	private $FlashprivatesBufferLength;
+	private $FlashprivatesDisplayClick;
+	private $FlashprivatesDisplayTitle;
+	private $FlashprivatesFullScreen;
+	private $FlashprivatesItem;
+	private $FlashprivatesLinkTarget;
+	private $FlashprivatesMute;
+	private $FlashprivatesRepeat;
+	private $FlashprivatesShuffle;
+	private $FlashprivatesSmoothing;
+	private $FlashprivatesState;
+	private $FlashprivatesStretching;
+	private $FlashprivatesVolume;
 	
-	//FlashVars API Properties
-	var $FlashVarsClient;
-	var $FlashVarsDebug;
-	var $FlashVarsId;
-	var $FlashVarsPlugins;
-	var $FlashVarsVersion;
+	//Flashprivates API Properties
+	private $FlashprivatesClient;
+	private $FlashprivatesDebug;
+	private $FlashprivatesId;
+	private $FlashprivatesPlugins;
+	private $FlashprivatesVersion;
 	
-	//FlashVars ConfigXML Properties
-	var $FlashVarsConfig;
+	//Flashprivates ConfigXML Properties
+	private $FlashprivatesConfig;
 	
-	var $FlashVarsText;
-	var $AltText;
-	var $StartTag;
-	var $EndTag;
-	var $StartTagId;
-	var $StartTagStyle;
-	var $StartTagClass;
-	var $Flash;
-	var $Space;
-	var $HttpUserAgent;
-	var $IsIE;
+	private $FlashprivatesText;
+	private $AltText;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagId;
+	private $StartTagStyle;
+	private $StartTagClass;
+	private $Flash;
+	private $Space;
+	private $HttpUserAgent;
+	private $IsIE;
 	
-	function XhtmlFlash($tablenames, $database) {
+	public function XhtmlFlash($tablenames, $database) {
 		$this->FlashProtectionLayer = &$database;
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user;
 		$this->password = $password;
@@ -99,27 +101,27 @@ class XhtmlFlash {
 		$this->FlashProtectionLayer->setDatabasetable ($databasetable);
 	}
 	
-	function setIdnumber($idnumber) {
+	public function setIdnumber($idnumber) {
 		$this->idnumber = $idnumber;
 	}
 	
-	function getIdNumber() {
+	public function getIdNumber() {
 		return $this->idnumber;
 	}
 	
-	function getIdnumber1() {
+	public function getIdnumber1() {
 		return $this->idnumber1;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($idnumber) {
 		$this->FlashProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $idnumber;
@@ -202,7 +204,7 @@ class XhtmlFlash {
 		$this->FlashProtectionLayer->Disconnect($this->databasetable);
 	}
 	
-	function CheckUserString() {
+	private function CheckUserString() {
 		if (strstr($this->HttpUserAgent, 'MSIE 6.0')) {
 			if ($this->AllowScriptAccess == 'true') {
 				$this->AllowScriptAccess = 'always';
@@ -225,7 +227,7 @@ class XhtmlFlash {
 		}
 	}
 	
-	function BuildFlashVarsText() {
+	private function BuildFlashVarsText() {
 		// FlashVars File Properties
 		if ($this->FlashVarsAuthor) {
 			$this->FlashVarsAuthor = trim($this->FlashVarsAuthor, '"');
@@ -485,7 +487,7 @@ class XhtmlFlash {
 		$this->FlashVarsText = trim($this->FlashVarsText, '&amp;');
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 	  	$this->BuildFlashVarsText();
 		$this->Space = $space;
 		
@@ -643,7 +645,7 @@ class XhtmlFlash {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->flash;
 	}
 }

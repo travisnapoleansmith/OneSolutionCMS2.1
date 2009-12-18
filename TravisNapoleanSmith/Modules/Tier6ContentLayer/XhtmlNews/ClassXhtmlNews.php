@@ -1,56 +1,58 @@
 <?php
-class XhtmlNews {
-	var $PageID;
-	var $ObjectID;
-	var $NewsButtons;
-	var $NewsStories;
-	var $ContentLayerTables;
-	var $NewsButtonsTableName;
-	var $NewsStoriesTableName;
-	var $ContentLayerTablesName;
+require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
+
+class XhtmlNews implements Tier6ContentLayerModules {
+	private $PageID;
+	private $ObjectID;
+	private $NewsButtons;
+	private $NewsStories;
+	private $ContentLayerTables;
+	private $NewsButtonsTableName;
+	private $NewsStoriesTableName;
+	private $ContentLayerTablesName;
 	
-	var $hostname;
-	var $user; 
-	var $password; 
-	var $databasename;
-	var $databasetable;
+	private $hostname;
+	private $user; 
+	private $password; 
+	private $databasename;
+	private $databasetable;
 	
-	var $ContainerObjectType;
-	var $ContainerObjectID;
-	var $RevisionID;
-	var $CurrentVersion;
-	var $Empty;
+	private $ContainerObjectType;
+	private $ContainerObjectID;
+	private $RevisionID;
+	private $CurrentVersion;
+	private $Empty;
 	
-	var $StartTag;
-	var $EndTag;
-	var $StartTagID;
-	var $StartTagStyle;
-	var $StartTagClass;
+	private $StartTag;
+	private $EndTag;
+	private $StartTagID;
+	private $StartTagStyle;
+	private $StartTagClass;
 	
-	var $Heading;
-	var $HeadingStartTag;
-	var $HeadingEndTag;
-	var $HeadingStartTagID;
-	var $HeadingStartTagClass;
-	var $HeadingStartTagStyle;
+	private $Heading;
+	private $HeadingStartTag;
+	private $HeadingEndTag;
+	private $HeadingStartTagID;
+	private $HeadingStartTagClass;
+	private $HeadingStartTagStyle;
 	
-	var $Content;
-	var $ContentStartTag;
-	var $ContentEndTag;
-	var $ContentStartTagID;
-	var $ContentStartTagClass;
-	var $ContentStartTagStyle;
+	private $Content;
+	private $ContentStartTag;
+	private $ContentEndTag;
+	private $ContentStartTagID;
+	private $ContentStartTagClass;
+	private $ContentStartTagStyle;
 	
-	var $EnableDisable;
-	var $Status;
+	private $EnableDisable;
+	private $Status;
 	
-	var $Space;
-	var $News;
-	var $HttpUserAgent;
-	var $errormessage;
-	var $NewsButtonsRowCount;
+	private $Space;
+	private $News;
+	private $HttpUserAgent;
+	private $errormessage;
+	private $NewsButtonsRowCount;
 	
-	function XhtmlNews($tablenames, $database) {
+	public function XhtmlNews($tablenames, $database) {
 		$this->NewsButtons = &$database;
 		$this->NewsButtonsTableName = current($tablenames);
 		$this->NewsStories = &$database;
@@ -59,7 +61,7 @@ class XhtmlNews {
 		$this->ContentLayerTablesName = next($tablenames);
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user; 
 		$this->password = $password; 
@@ -74,39 +76,39 @@ class XhtmlNews {
 		
 	}
 	
-	function setPageID($PageID) {
+	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
 	
-	function getPageID() {
+	public function getPageID() {
 		return $this->PageID;
 	}
 	
-	function setObjectID($ObjectID) {
+	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
 	
-	function getObjectID() {
+	public function getObjectID() {
 		return $this->ObjectID;
 	}
 	
-	function setHttpUserAgent ($HttpUserAgent) {
+	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
-	function getHttpUserAgent() {
+	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function FetchDatabase ($PageID) {
+	public function FetchDatabase ($PageID) {
 		$this->NewsButtons->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = &$PageID;
@@ -163,7 +165,7 @@ class XhtmlNews {
 				
 	}
 	
-	function CreateWordWrap($wordwrapstring) {
+	private function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, "<a href");
@@ -199,7 +201,7 @@ class XhtmlNews {
 		return $wordwrapstring;
 	}
 	
-	function buildModules($moduleslocation) {
+	private function buildModules($moduleslocation) {
 		if ($moduleslocation) {
 			$hold = Array();
 			$dir = dir($moduleslocation);
@@ -228,7 +230,7 @@ class XhtmlNews {
 		}
 	}
 	
-	function CreateOutput($space) {
+	public function CreateOutput($space) {
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
@@ -585,7 +587,7 @@ class XhtmlNews {
 		}
 	}
 	
-	function getOutput() {
+	public function getOutput() {
 		return $this->News;
 	}
 }
