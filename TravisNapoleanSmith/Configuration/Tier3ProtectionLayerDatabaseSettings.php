@@ -6,6 +6,7 @@
 	$Databases->createDatabaseTable('Content');
 	$Databases->createDatabaseTable('ContentLayer');
 	$Databases->createDatabaseTable('ContentLayerTables');
+	$Databases->createDatabaseTable('ContentPrintPreview');
 	$Databases->createDatabaseTable('Flash');
 	$Databases->createDatabaseTable('List');
 	$Databases->createDatabaseTable('MainMenu');

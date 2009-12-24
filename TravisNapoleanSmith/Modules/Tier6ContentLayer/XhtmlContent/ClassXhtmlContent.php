@@ -8,6 +8,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	private $ContentLayerTables;
 	private $ContentTableName;
 	private $ContentLayerTablesName;
+	private $ContentPrintPreviewTable;
+	private $ContentPrintPreviewTableName;
 	
 	private $PrintPreview;
 	
@@ -58,6 +60,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		$this->ContentTableName = current($tablenames);
 		$this->ContentLayerTables = &$database;
 		$this->ContentLayerTablesName = next($tablenames);
+		$this->ContentPrintPreviewTable = &$database;
+		$this->ContentPrintPreviewTableName = next($tablenames);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -71,6 +75,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		$this->ContentTable->setDatabasetable ($this->ContentTableName);
 		$this->ContentLayerTables->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ContentLayerTables->setDatabasetable ($this->ContentLayerTablesName);
+		$this->ContentPrintPreviewTable->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->ContentPrintPreviewTable->setDatabasetable ($this->ContentPrintPreviewTableName);
 		
 	}
 	
@@ -101,9 +107,17 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getContentTableName() {
 		return $this->ContentTableName;
 	}
-	
+
 	public function getContentLayerTablesName() {
 		return $this->ContentLayerTablesName;
+	}
+	
+	public function getContentPrintPreviewTable() {
+		return $this->ContentPrintPreviewTable;
+	}
+	
+	public function getContentPrintPreviewTableName() {
+		return $this->ContentPrintPreviewTableName;
 	}
 	
 	public function getPrintPreview() {
@@ -295,6 +309,17 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		$this->Status = $this->ContentTable->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Status'));
 		
 		$this->ContentTable->Disconnect($this->ContentTableName);
+		
+		/*if ($this->PrintPreview) {
+			print "$this->ContentPrintPreviewTableName\n";
+			$this->ContentPrintPreviewTable->Connect($this->ContentPrintPreviewTableName);
+			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('PageID' => $this->PageID));
+			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('PageID' => $this->PageID));
+			$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => 'ContainerObjectType'));
+			print "$hold\n";
+			$this->ContentPrintPreviewTable->Disconnect($this->ContentPrintPreviewTableName);
+			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'walkarray', array());
+		}*/
 	}
 	
 	private function CreateWordWrap($wordwrapstring) {

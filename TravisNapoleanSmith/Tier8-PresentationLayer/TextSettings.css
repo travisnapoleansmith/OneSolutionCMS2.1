@@ -45,6 +45,17 @@
 	margin-bottom: 5px;
 }
 
+.Paragraph0-3 {
+	position:relative; 
+	width: 660px; 
+	height: auto; 
+	z-index:1; 
+	left: 110px; 
+	background-repeat: no-repeat;
+	top: -5px;
+	margin-bottom: 5px;
+}
+
 .Paragraph1 {
 	left: 120px;
 }
@@ -83,6 +94,46 @@
 
 .Paragraph10 {
 	left: 210px;
+}
+
+.Paragraph11 {
+	left: 220px;
+}
+
+.Paragraph12 {
+	left: 230px;
+}
+
+.Paragraph13 {
+	left: 240px;
+}
+
+.Paragraph14 {
+	left: 250px;
+}
+
+.Paragraph15 {
+	left: 260px;
+}
+
+.Paragraph16 {
+	left: 270px;
+}
+
+.Paragraph17 {
+	left: 280px;
+}
+
+.Paragraph18 {
+	left: 290px;
+}
+
+.Paragraph19 {
+	left: 300px;
+}
+
+.Paragraph20 {
+	left: 310px;
 }
 
 .List {

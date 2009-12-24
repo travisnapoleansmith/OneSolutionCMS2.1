@@ -4,18 +4,18 @@ require_once("Configuration/Tier3ProtectionLayerSettings.php");
 
 class ProtectionLayer
 {
-	var $modules;
-	var $hostname;
-	var $user;
-	var $password;
-	var $databasename; 
-	var $databasetable;
-	var $errormessage;
-	var $moduleslocation;
-	var $DatabaseAllow;
-	var $DatabaseDeny;
+	private $modules;
+	private $hostname;
+	private $user;
+	private $password;
+	private $databasename; 
+	private $databasetable;
+	private $errormessage;
+	private $moduleslocation;
+	private $DatabaseAllow;
+	private $DatabaseDeny;
 	
-	function ProtectionLayer () {
+	public function ProtectionLayer () {
 		$this->modules = Array();
 		$this->databasetable = Array();
 		$this->errormessage = Array();
@@ -23,78 +23,78 @@ class ProtectionLayer
 		$this->DatabaseDeny = &$GLOBALS['DatabaseDeny'];
 	}
 	
-	function setModules() {
+	public function setModules() {
 	
 	}
 	
-	function getModules($key) {
+	public function getModules($key) {
 		return $this->modules[$key];
 	}
 	
-	function setHostname ($hostname){
+	public function setHostname ($hostname){
 		$this->hostname = $hostname;
 	}
 	
-	function getHostname () {
+	public function getHostname () {
 		return $this->hostname;
 	}
 	
-	function setUser ($user){
+	public function setUser ($user){
 		$this->user = $user;
 	}
 	
-	function getUser () {
+	public function getUser () {
 		return $this->user;
 	}
 	
-	function setPassword ($password){
+	public function setPassword ($password){
 		$this->password = $password;
 	}
 	
-	function getPassword () {
+	public function getPassword () {
 		return $this->password;
 	}
 	
-	function setDatabasename ($databasename){
+	public function setDatabasename ($databasename){
 		$this->databasename = $databasename;
 	}
 	
-	function getDatabasename () {
+	public function getDatabasename () {
 		return $this->databasename;
 	}
 
-	function setDatabasetable ($databasetable){
+	public function setDatabasetable ($databasetable){
 		$this->databasetable[$databasetable] =  new MySqlConnect();
 	}
 	
-	function getDatabasetable () {
+	public function getDatabasetable () {
 		return $this->databasetable;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function setModulesLocation ($moduleslocation){
+	public function setModulesLocation ($moduleslocation){
 		$this->moduleslocation = $moduleslocation;
 	}
 	
-	function getModulesLocation () {
+	public function getModulesLocation () {
 		return $this->moduleslocation;
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename) {
 		$this->hostname = $hostname;
 		$this->user = $user;
 		$this->password = $password;
 		$this->databasename = $databasename;
 	}
 	
-	function ConnectAll () {
+	public function ConnectAll () {
 		reset($this->databasetable);
 		while (current($this->databasetable)){
 			$tablename = key($this->databasetable);
@@ -105,12 +105,12 @@ class ProtectionLayer
 		}
 	}
 	
-	function Connect ($key) {
+	public function Connect ($key) {
 		$this->databasetable[$key]->setDatabaseAll($this->hostname, $this->user, $this->password, $this->databasename, $key);
 		$this->databasetable[$key]->Connect();
 	}
 	
-	function DisconnectAll () {
+	public function DisconnectAll () {
 		reset($this->databasetable);
 		while (current($this->databasetable)){
 			$tablename = key($this->databasetable);
@@ -120,15 +120,15 @@ class ProtectionLayer
 		}
 	}
 	
-	function Disconnect ($key) {
+	public function Disconnect ($key) {
 		$this->databasetable[$key]->Disconnect();
 	}
 	
-	function buildDatabase() {
+	public function buildDatabase() {
 
 	}
 	
-	function buildModules() {
+	public function buildModules() {
 		if ($this->moduleslocation) {
 			$dir = dir($this->moduleslocation);
 			while ($entry = $dir->read()) {
@@ -154,17 +154,17 @@ class ProtectionLayer
 		}
 	}
 	
-	function createDatabaseTable($key) {
+	public function createDatabaseTable($key) {
 		$this->databasetable[$key] =  new MySqlConnect();
 		
 		//$this->Connect($key);
 	}
 	
-	function createModules($key) {
+	public function createModules($key) {
 		$this->modules[$key] = new $key;
 	}
 	
-	function pass($databasetable, $function, $functionarguments) {
+	public function pass($databasetable, $function, $functionarguments) {
 		if (!is_null($functionarguments)) {
 			if (is_array($functionarguments)) {
 				if (!is_null($function)) {
@@ -191,14 +191,6 @@ class ProtectionLayer
 		} else {
 			array_push($this->errormessage,'pass: Function Arguments Cannot Be Null!');
 		}
-	}
-	
-	function setPass() {
-	
-	}
-	
-	function getPass() {
-	
 	}
 		
 }

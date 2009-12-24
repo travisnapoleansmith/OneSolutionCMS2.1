@@ -1,109 +1,109 @@
 <?php
 class MySqlConnect
 {
-	var $idnumber;
-	var $orderbyname;
-	var $orderbytype;
-	var $databasename;
-	var $user;
-	var $password;
-	var $databasetable;
-	var $hostname;
-	var $link;
-	var $rowquery;
-	var $rowresult;
-	var $rowfield;
-	var $rowfieldnames;
-	var $tablenamequery;
-	var $tablenames;
-	var $tablequery;
-	var $tableresult;
-	var $rownumber;
-	var $entiretable;
-	var $entiretableresult;
-	var $database;
-	var $i;
-	var $idsearch;
-	var $errormessage;
+	private $idnumber;
+	private $orderbyname;
+	private $orderbytype;
+	private $databasename;
+	private $user;
+	private $password;
+	private $databasetable;
+	private $hostname;
+	private $link;
+	private $rowquery;
+	private $rowresult;
+	private $rowfield;
+	private $rowfieldnames;
+	private $tablenamequery;
+	private $tablenames;
+	private $tablequery;
+	private $tableresult;
+	private $rownumber;
+	private $entiretable;
+	private $entiretableresult;
+	private $database;
+	private $i;
+	private $idsearch;
+	private $errormessage;
 	
-	function MySqlConnect () {
+	public function MySqlConnect () {
 		$this->idsearch = Array();
 		$this->errormessage = Array();
 	}
 	
-	function setIdnumber ($idnumber) {
+	public function setIdnumber ($idnumber) {
 		$this->idnumber = $idnumber;
 	}
 	
-	function getIdnumber () {
+	public function getIdnumber () {
 		return $this->idnumber;
 	}
 	
-	function setOrderbyname ($orderbyname) {
+	public function setOrderbyname ($orderbyname) {
 		$this->orderbyname = $orderbyname;
 	}
 	
-	function getOrderbyname () {
+	public function getOrderbyname () {
 		return $this->orderbyname;
 	}
 	
-	function setOrderbytype ($orderbytype) {
+	public function setOrderbytype ($orderbytype) {
 		$this->orderbytype = $orderbytype;
 	}
 	
-	function getOrderbytype () {
+	public function getOrderbytype () {
 		return $this->orderbytype;
 	}
 	
-	function setDatabasename ($databasename){
+	public function setDatabasename ($databasename){
 		$this->databasename = $databasename;
 	}
 	
-	function getDatabasename () {
+	public function getDatabasename () {
 		return $this->databasename;
 	}
 	
-	function setUser ($user){
+	public function setUser ($user){
 		$this->user = $user;
 	}
 	
-	function getUser () {
+	public function getUser () {
 		return $this->user;
 	}
 	
-	function setPassword ($password){
+	public function setPassword ($password){
 		$this->password = $password;
 	}
 	
-	function getPassword () {
+	public function getPassword () {
 		return $this->password;
 	}
 	
-	function setDatabasetable ($databasetable){
+	public function setDatabasetable ($databasetable){
 		$this->databasetable = $databasetable;
 	}
 	
-	function getDatabasetable () {
+	public function getDatabasetable () {
 		return $this->databasetable;
 	}
 	
-	function setHostname ($hostname){
+	public function setHostname ($hostname){
 		$this->hostname = $hostname;
 	}
 	
-	function getHostname () {
+	public function getHostname () {
 		return $this->hostname;
 	}
 	
-	function getError ($idnumber) {
+	public function getError ($idnumber) {
 		return $this->errormessage[$idnumber];
 	}
 	
-	function getErrorArray() {
+	public function getErrorArray() {
 		return $this->errormessage;
 	}
 	
-	function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user;
 		$this->password = $password;
@@ -111,12 +111,12 @@ class MySqlConnect
 		$this->databasetable = $databasetable;
 	}
 	
-	function setOrderByAll ($orderbyname, $orderbytype) {
+	public function setOrderByAll ($orderbyname, $orderbytype) {
 		$this->orderbyname = $orderbyname;
 		$this->orderbytype = $orderbytype;
 	}
 	
-	function Connect () {
+	public function Connect () {
 		if (!($this->link = mysql_connect($this->hostname, $this->user, $this->password))) {
 			array_push($this->errormessage,'Connect: Could not connect to server');
 		}
@@ -128,13 +128,13 @@ class MySqlConnect
 		}
 	}
 		
-	function Disconnect () {
+	public function Disconnect () {
 		if ($this->link) {
 			mysql_close($this->link);
 		}
 	}
 	
-	function checkDatabaseName (){
+	private function checkDatabaseName (){
 		$this->Connect();
 		$results = mysql_list_dbs($this->link);
 		$i = 0;
@@ -149,7 +149,7 @@ class MySqlConnect
 		return FALSE;
 	}
 	
-	function checkTableName () {
+	private function checkTableName () {
 		if ($this->tablenames) {
 			$results = $this->tablenamequery;
 		} else {
@@ -175,7 +175,7 @@ class MySqlConnect
 		return FALSE;
 	}
 	
-	function checkPermissions ($permission) {
+	private function checkPermissions ($permission) {
 		$this->Connect();
 		$query = 'SHOW GRANTS';
 		$result = mysql_query($query);
@@ -192,7 +192,7 @@ class MySqlConnect
 		}
 	}
 	
-	function checkField ($field) {
+	private function checkField ($field) {
 		$this->Connect();
 		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` LIKE "' . $field . '" ';
 		$result = mysql_query($query);
@@ -209,7 +209,7 @@ class MySqlConnect
 		}
 	}
 	
-	function createDatabase () {
+	public function createDatabase () {
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
 		
@@ -225,7 +225,7 @@ class MySqlConnect
 		}
 	}
 	
-	function deleteDatabase (){
+	public function deleteDatabase (){
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions('DROP');
 		
@@ -241,7 +241,7 @@ class MySqlConnect
 		}
 	}
 	
-	function createTable ($tablestring) {
+	public function createTable ($tablestring) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
@@ -270,7 +270,7 @@ class MySqlConnect
 		}
 	}
 	
-	function updateTable ($tablestring) {
+	public function updateTable ($tablestring) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('UPDATE');
@@ -303,7 +303,7 @@ class MySqlConnect
 		}
 	}
 	
-	function deleteTable () {
+	public function deleteTable () {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
@@ -324,7 +324,7 @@ class MySqlConnect
 		}
 	}
 	
-	function createRow ($rowname, $rowvalue) {
+	public function createRow ($rowname, $rowvalue) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('INSERT');
@@ -437,7 +437,7 @@ class MySqlConnect
 		}
 	}
 	
-	function updateRow ($rowname, $rowvalue, $rownumbername, $rownumber) {
+	public function updateRow ($rowname, $rowvalue, $rownumbername, $rownumber) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('UPDATE');
@@ -510,7 +510,7 @@ class MySqlConnect
 		}
 	}
 	
-	function deleteRow ($rowname, $rowvalue) {
+	public function deleteRow ($rowname, $rowvalue) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('DELETE');
@@ -572,7 +572,7 @@ class MySqlConnect
 		}
 	}
 	
-	function createField ($fieldstring, $fieldflag, $fieldflagcolumn) {
+	public function createField ($fieldstring, $fieldflag, $fieldflagcolumn) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('ALTER');
@@ -689,7 +689,7 @@ class MySqlConnect
 		}
 	}
 	
-	function updateField ($field, $fieldchange) {
+	public function updateField ($field, $fieldchange) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('ALTER');
@@ -853,7 +853,7 @@ class MySqlConnect
 		}
 	}
 	
-	function deleteField ($field) {
+	public function deleteField ($field) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('ALTER');
@@ -901,7 +901,7 @@ class MySqlConnect
 		
 	}
 	
-	function setDatabaseRow ($idnumber) {
+	public function setDatabaseRow ($idnumber) {
 		$this->idnumber = $idnumber;
 		if (is_array($idnumber)) {
 			while (isset($this->idnumber[key($this->idnumber)])) {
@@ -930,7 +930,7 @@ class MySqlConnect
 		}
 	}
 	
-	function setDatabaseField ($idnumber) {
+	public function setDatabaseField ($idnumber) {
 		$this->idnumber = $idnumber;
 		$this->BuildDatabaseRows();
 		$this->rowfieldnames = Array ();
@@ -939,7 +939,7 @@ class MySqlConnect
 		}
 	}
 	
-	function setEntireTable () {
+	public function setEntireTable () {
 		if ($this->orderbyname && $this->orderbytype) {
 			$this->tablequery = 'SELECT * FROM ' . $this->databasetable . ' ' . 'ORDER BY `' . $this->orderbyname . '` ' . $this->orderbytype;
 		} else {
@@ -956,7 +956,7 @@ class MySqlConnect
 		$this->BuildingEntireTable();
 	}
 	
-	function BuildingEntireTable(){
+	private function BuildingEntireTable(){
 		$i = 1;
 		while ($i <= $this->rownumber){
 			$this->entiretable[$i] = mysql_fetch_array($this->tableresult, MYSQL_ASSOC);
@@ -964,7 +964,7 @@ class MySqlConnect
 		}
 	}
 	
-	function searchFieldNames($search) {
+	public function searchFieldNames($search) {
 		if (is_array($this->rowfieldnames)) {
 			if (array_search($search, $this->rowfieldnames)) {
 				return TRUE;
@@ -973,7 +973,10 @@ class MySqlConnect
 			}
 		}
 	}
-	function searchEntireTable($search, $search2){
+	public function searchEntireTable($search){
+		$arguments = func_get_args();
+		$search2 = $arguments[1];
+		
 		if ($this->idsearch) {
 			unset ($this->idsearch);
 		}
@@ -1005,23 +1008,23 @@ class MySqlConnect
 		}
 	}
 	
-	function removeEntryEntireTable($rownumber, $rowcolumn){
+	public function removeEntryEntireTable($rownumber, $rowcolumn){
 		unset($this->entiretable[$rownumber][$rowcolumn]);
 	}
 	
-	function removeEntireEntireTable($rownumber) {
+	public function removeEntireEntireTable($rownumber) {
 		unset($this->entiretable[$rownumber]);
 	}
 	
-	function reindexEntireTable(){
+	public function reindexEntireTable(){
 		$this->entiretable = array_merge($this->entiretable);
 	}
 	
-	function updateEntireTableEntry ($rownumber, $rowcolumn, $information) {
+	public function updateEntireTableEntry ($rownumber, $rowcolumn, $information) {
 		$this->entiretable[$rownumber][$rowcolumn] = $information;
 	}
 	
-	function BuildDatabaseRows (){
+	public function BuildDatabaseRows (){
 		if (is_array($this->idnumber)) {
 			while (isset($this->idnumber[key($this->idnumber)])) {
 				$temp .= '`';
@@ -1051,51 +1054,51 @@ class MySqlConnect
 		
 	}
 	
-	function getRowCount (){
+	public function getRowCount (){
 		return $this->rownumber;
 	}
 	
-	function getRowFieldName ($rownumber) {
+	public function getRowFieldName ($rownumber) {
 		return $this->rowfieldnames[$rownumber];
 	}
 	
-	function getDatabase ($rownumber) {
+	public function getDatabase ($rownumber) {
 		return $this->database[$rownumber];
 	}
 	
-	function getRowField ($rownumber) {
+	public function getRowField ($rownumber) {
 		return $this->rowfield[$rownumber];
 	}
 	
-	function getTable ($rownumber, $rowcolumn) {
+	public function getTable ($rownumber, $rowcolumn) {
 		return $this->entiretable[$rownumber][$rowcolumn];
 	}
 	
-	function getSearchResults($idnumber, $key) {
+	public function getSearchResults($idnumber, $key) {
 		return $this->idsearch[$idnumber][$key];
 	}
 	
-	function getSearchResultsArray() {
+	public function getSearchResultsArray() {
 		return $this->idsearch;
 	}
 	
-	function getTableNames() {
+	public function getTableNames() {
 		return $this->tablenames;
 	}
 	
-	function walkarray () {
+	public function walkarray () {
 		print_r($this->database);
 	}
 	
-	function walkfieldname () {
+	public function walkfieldname () {
 		print_r($this->rowfieldnames);
 	}
 	
-	function walktable () {
+	public function walktable () {
 		print_r($this->entiretable);
 	}
 	
-	function walkidsearch () {
+	public function walkidsearch () {
 		print_r($this->idsearch);
 	}
 	

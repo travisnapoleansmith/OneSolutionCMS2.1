@@ -22,7 +22,7 @@
 		
 	}
 	// Main Menu 
-	require ('Configuration/Tier6-ContentLayer/menu.php');
+	//require ('Configuration/Tier6-ContentLayer/menu.php');
 	
 	// Contain Container
 	print "<div id=\"textlayer1\">\n";
