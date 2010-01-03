@@ -3,7 +3,7 @@ body,td,th {
 }
 body {
 	background-color: #2F00CE;
-	background-image: url(http://buttons.travisnapoleansmith.com/Background2.png);
+	background-image: url(http://buttons.travisnapoleansmith.org/Background2.png);
 	background-attachment: fixed;
 	background-repeat: repeat-y;
 	background-position: inherit;
@@ -42,7 +42,7 @@ a:active {
 }
 
 #textlayer1 {
-	background-image: url(http://buttons.travisnapoleansmith.com/Text-Background.png);
+	background-image: url(http://buttons.travisnapoleansmith.org/Text-Background.png);
 	background-repeat: no-repeat;
 	position: absolute; 
 	width:900px; 
@@ -240,7 +240,7 @@ div.container {
 	width:111px; 
 	height:53px;
 	z-index:1; 
-	background-image: url(http://buttons.travisnapoleansmith.com/InUseButton.png);
+	background-image: url(http://buttons.travisnapoleansmith.org/InUseButton.png);
 	background-repeat: no-repeat; 
 	top: 0px;
 }
@@ -272,7 +272,7 @@ div.container {
 	width:111px; 
 	height:53px;
 	z-index:1; 
-	background-image: url(http://buttons.travisnapoleansmith.com/BottomPanel1Button.png); 
+	background-image: url(http://buttons.travisnapoleansmith.org/BottomPanel1Button.png); 
 	background-repeat: no-repeat; 
 	top: 0px;
 }
@@ -334,7 +334,7 @@ div.container {
 	z-index:5; 
 	left: 38px; 
 	top: 747px; 
-	background-image: url(http://buttons.travisnapoleansmith.com/BottomPanel2Background.png); 
+	background-image: url(http://buttons.travisnapoleansmith.org/BottomPanel2Background.png); 
 	background-repeat: no-repeat; 
 	border: 1px none #000000;
 }
@@ -345,7 +345,7 @@ div.container {
 	z-index:1; 
 	top: 1px;
 	width:145px; 
-	background-image: url(http://buttons.travisnapoleansmith.com/BottomPanel2Button.png); 
+	background-image: url(http://buttons.travisnapoleansmith.org/BottomPanel2Button.png); 
 	background-repeat: no-repeat; 
 	border: 1px none #000000;
 }
@@ -421,7 +421,7 @@ div.container {
 	height:32px; 
 	z-index:5; 
 	/*top: 1px;*/ 
-	background-image: url(http://buttons.travisnapoleansmith.com/Button2.png); 
+	background-image: url(http://buttons.travisnapoleansmith.org/Button2.png); 
 	background-repeat: no-repeat; 
 	border: 1px none #000000;
 }

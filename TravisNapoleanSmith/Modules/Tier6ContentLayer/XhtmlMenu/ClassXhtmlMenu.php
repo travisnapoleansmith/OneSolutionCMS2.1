@@ -92,11 +92,12 @@ class XhtmlMenu implements Tier6ContentLayerModules {
 	}
 	
 	public function FetchDatabase ($PageID) {
-		$this->MenuProtectionLayer->Connect($this->databasetable);
-		
 		$ConnectionID = array();
 		$ConnectionID['PageID'] = $PageID['PageID'];
 		$ConnectionID['ObjectID'] = $PageID['ObjectID'];
+		unset ($PageID['PrintPreview']);
+		
+		$this->MenuProtectionLayer->Connect($this->databasetable);
 		
 		$this->MenuProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $ConnectionID));
 		$this->MenuProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
@@ -139,10 +140,10 @@ class XhtmlMenu implements Tier6ContentLayerModules {
 	}
 	
 	private function CreateWordWrap($wordwrapstring) {
-		if (stristr($wordwrapstring, "<a href")) {
+		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, "<a href");
-			$lastpos = strpos($wordwrapstring, "</a>");
+			$firstpos = strpos($wordwrapstring, '<a href');
+			$lastpos = strpos($wordwrapstring, '</a>');
 			$lastpos = $lastpos + 3;
 			
 			// Split a string into an array - character by character
@@ -161,7 +162,7 @@ class XhtmlMenu implements Tier6ContentLayerModules {
 			}
 			
 			$returnstring = $endstring;
-			$returnstring = str_replace (" ", "<SPACE>", $returnstring);
+			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			
@@ -256,24 +257,24 @@ class XhtmlMenu implements Tier6ContentLayerModules {
 				$this->List .= '    ';
 			}
 			
-			$this->List .= "<div";
+			$this->List .= '<div';
 			
 			if ($this->MainDivID) {
-				$this->List .= " id=\"";
+				$this->List .= ' id="';
 				$this->List .= $this->MainDivID;
 				$this->List .= "\"";
 			}
 			
 			if ($this->MainDivClass) {
-				$this->List .= " class=\"";
+				$this->List .= ' class="';
 				$this->List .= $this->MainDivClass;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			if ($this->MainDivStyle) {
-				$this->List .= " style=\"";
+				$this->List .= ' style="';
 				$this->List .= $this->MainDivStyle;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			$this->List .= ">\n";
@@ -284,30 +285,30 @@ class XhtmlMenu implements Tier6ContentLayerModules {
 			} else {
 				$this->List .= '  ';
 			}
-			$this->List .= "<div";
+			$this->List .= '<div';
 			
 			if ($this->DivID) {
-				$this->List .= " id=\"";
+				$this->List .= ' id="';
 				$this->List .= $this->DivID;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			if ($this->DivClass) {
-				$this->List .= " class=\"";
+				$this->List .= ' class="';
 				$this->List .= $this->DivClass;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			if ($this->DivStyle) {
-				$this->List .= " style=\"";
+				$this->List .= ' style="';
 				$this->List .= $this->DivStyle;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			if ($this->DivTitle) {
-				$this->List .= " title='";
+				$this->List .= ' title="';
 				$this->List .= $this->DivTitle;
-				$this->List .= "'";
+				$this->List .= '"';
 			}
 			
 			$this->List .= ">\n";

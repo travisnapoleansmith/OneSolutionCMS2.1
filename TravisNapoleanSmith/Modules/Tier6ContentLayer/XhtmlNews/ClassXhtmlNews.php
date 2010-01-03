@@ -109,6 +109,8 @@ class XhtmlNews implements Tier6ContentLayerModules {
 	}
 	
 	public function FetchDatabase ($PageID) {
+		unset ($PageID['PrintPreview']);
+		
 		$this->NewsButtons->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = &$PageID;
@@ -117,13 +119,13 @@ class XhtmlNews implements Tier6ContentLayerModules {
 		$this->NewsButtons->Disconnect($this->databasetable);
 		
 		$this->NewsButtonsRowCount = $this->NewsButtons->pass ($this->databasetable, 'getTable', array('rownumber' => $this->NewsButtonsRowCount, 'rowcolumn' => 'PageID'));
+		
 		if ($PageID['PageID'] == NULL) {
 			$this->PageID = $this->NewsButtonsRowCount;
 			$PageID['PageID'] = $this->NewsButtonsRowCount;
 		} else {
 			$this->PageID = $PageID['PageID'];
 		}
-		
 		$this->ObjectID = $PageID['ObjectID'];
 		
 		$this->NewsStories->Connect($this->databasetable);
@@ -160,16 +162,15 @@ class XhtmlNews implements Tier6ContentLayerModules {
 		$this->EnableDisable = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Status'));
 		
-		//print_r($this->NewsStories);
 		$this->NewsStories->Disconnect($this->databasetable);
 				
 	}
 	
 	private function CreateWordWrap($wordwrapstring) {
-		if (stristr($wordwrapstring, "<a href")) {
+		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, "<a href");
-			$lastpos = strpos($wordwrapstring, "</a>");
+			$firstpos = strpos($wordwrapstring, '<a href');
+			$lastpos = strpos($wordwrapstring, '</a>');
 			$lastpos = $lastpos + 3;
 			
 			// Split a string into an array - character by character
@@ -188,7 +189,7 @@ class XhtmlNews implements Tier6ContentLayerModules {
 			}
 			
 			$returnstring = $endstring;
-			$returnstring = str_replace (" ", "<SPACE>", $returnstring);
+			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			

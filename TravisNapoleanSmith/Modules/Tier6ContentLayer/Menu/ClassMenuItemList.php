@@ -219,7 +219,7 @@ class MenuItemList
 	
 	private function processInformation ($Name, $Title) {
 		$this->MenuItemOutput .= ' ';
-		$this->MenuItemOutput .= "$Name";
+		$this->MenuItemOutput .= $Name;
 		$this->MenuItemOutput .= "='";
 		$this->MenuItemOutput .= $Title;
 		$this->MenuItemOutput .= "'";
@@ -232,7 +232,7 @@ class MenuItemList
 		$finaloutput .= $insert;
 		$finaloutput .= '   ';
 		$finaloutput .= $after;
-		return "$finaloutput";
+		return $finaloutput;
 	}
 	
 	private function processRoot ($space) {
@@ -293,7 +293,7 @@ class MenuItemList
 				if ($this->root) {
 					$this->MenuItemOutput .= '       ';
 				} else if ($space) {
-					$this->MenuItemOutput .= "$space";
+					$this->MenuItemOutput .= $space;
 				} else {
 					$this->MenuItemOutput .= '  ';
 				}
@@ -360,7 +360,7 @@ class MenuItemList
 						$i++;
 					}
 					if ($space) {
-						$this->MenuItemOutput .= "$space";
+						$this->MenuItemOutput .= $space;
 					}
 					
 					$this->MenuItemOutput .= '   ';
@@ -374,7 +374,7 @@ class MenuItemList
 			else if ($this->root){
 				$this->processRoot($space);
 				if ($space) {
-					$this->MenuItemOuput .= "$space";
+					$this->MenuItemOuput .= $space;
 				}
 				$this->MenuItemOutput .= '    ';
 				$this->MenuItemOutput .= "</li>\n";

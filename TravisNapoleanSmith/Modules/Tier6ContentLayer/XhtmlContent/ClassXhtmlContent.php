@@ -333,10 +333,10 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	}
 	
 	private function CreateWordWrap($wordwrapstring) {
-		if (stristr($wordwrapstring, "<a href")) {
+		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, "<a href");
-			$lastpos = strpos($wordwrapstring, "</a>");
+			$firstpos = strpos($wordwrapstring, '<a href');
+			$lastpos = strpos($wordwrapstring, '</a>');
 			$lastpos = $lastpos + 3;
 			
 			// Split a string into an array - character by character
@@ -355,16 +355,17 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			}
 			
 			$returnstring = $endstring;
-			$returnstring = str_replace (" ", "<SPACE>", $returnstring);
+			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n       $this->Space$this->Space");
 			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
 			
 		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n       $this->Space$this->Space");
 		}
+		
 		return $wordwrapstring;
 	}
 	
@@ -400,6 +401,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		$modulesidnumber = Array();
 		$modulesidnumber['PageID'] = $PageID;
 		$modulesidnumber['ObjectID'] = $ObjectID;
+		$modulesidnumber['PrintPreview'] = $this->PrintPreview;
 		
 		$ContentLayerTableArray = Array();
 		$ContentLayerTableArray['ObjectType'] = $ContainerObjectType;
@@ -468,11 +470,11 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	}
 	
 	private function buildOutput ($Space) {
-		$this->Space = $space;
-		
-		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & ($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true')) {
+		$this->Space = $Space;
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
+			$this->ContentOutput .= '  ';
 			if ($this->StartTag){
-				if ($this->StartTagID) {
+				if ($this->StartTagID & !$this->PrintPreview) {
 					$temp = strrpos($this->StartTag, '>');
 					$this->StartTag[$temp] = ' ';
 					$this->StartTag .= 'id="';
@@ -492,6 +494,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					} else {
 						$this->StartTag .= ">\n";
 					}
+					
 					$this->ContentOutput .= $this->StartTag;
 				} else if ($this->StartTagClass){
 					$temp = strrpos($this->StartTag, '>');
@@ -524,6 +527,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			}
 			
 			if ($this->HeadingStartTag){
+				$this->ContentOutput .= '     ';
 				if ($this->HeadingStartTagID) {
 					$temp = strrpos($this->HeadingStartTag, '>');
 					$this->HeadingStartTag[$temp] = ' ';
@@ -547,9 +551,11 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					if ($this->Space) {
 						$this->ContentOutput .= $this->Space;
 					}
+
 					$this->ContentOutput .= $this->HeadingStartTag;
 					
 					if ($this->Heading) {
+						$this->ContentOutput .= '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -582,6 +588,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					$this->ContentOutput .= $this->HeadingStartTag;
 					
 					if ($this->Heading) {
+						$this->ContentOutput .= '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -608,6 +615,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					$this->ContentOutput .= $this->HeadingStartTag;
 					
 					if ($this->Heading) {
+						$this->ContentOutput .= '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -624,6 +632,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			}
 			
 			if ($this->HeadingEndTag) {
+				$this->ContentOutput .= '   ';
 				if($this->Space) {
 					$this->ContentOutput .= $this->Space;
 				} else {
@@ -634,6 +643,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			}
 			
 			if ($this->ContentStartTag){
+				$this->ContentOutput .= '     ';
 				if ($this->ContentStartTagID) {
 					$temp = strrpos($this->ContentStartTag, '>');
 					$this->ContentStartTag[$temp] = ' ';
@@ -660,6 +670,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					$this->ContentOutput .= $this->ContentStartTag;
 					
 					if ($this->Content) {
+						$this->ContentOutput .= '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -668,6 +679,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 							$this->ContentOutput .= "\n";
 						} else {
 							$this->ContentOutput .= '  ';
+							$this->Content = $this->CreateWordWrap($this->Content);
 							$this->ContentOutput .= $this->Content;
 							$this->ContentOutput .= "\n";
 						}
@@ -693,6 +705,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					$this->ContentOutput .= $this->ContentStartTag;
 					
 					if ($this->Content) {
+						$this->ContentOutput .=  '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -701,6 +714,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 							$this->ContentOutput .= "\n";
 						} else {
 							$this->ContentOutput .= '  ';
+							$this->Content = $this->CreateWordWrap($this->Content);
 							$this->ContentOutput .= $this->Content;
 							$this->ContentOutput .= "\n";
 						}
@@ -720,6 +734,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 					$this->ContentOutput .= $this->ContentStartTag;
 					
 					if ($this->Content) {
+						$this->ContentOutput .= '     ';
 						if($this->Space) {
 							$this->ContentOutput .= $this->Space;
 							$this->ContentOutput .= $this->Space;
@@ -728,6 +743,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 							$this->ContentOutput .= "\n";
 						} else {
 							$this->ContentOutput .= '  ';
+							$this->Content = $this->CreateWordWrap($this->Content);
 							$this->ContentOutput .= $this->Content;
 							$this->ContentOutput .= "\n";
 						}
@@ -737,6 +753,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			}
 			
 			if ($this->ContentEndTag) {
+				$this->ContentOutput .= '    ';
 				if($this->Space) {
 					$this->ContentOutput .= $this->Space;
 				} else {
@@ -760,44 +777,44 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		
 		if ($NoPrintPreview) {
 			$PrintPreview = TRUE;
-		} else {
+		} else if ($this->PrintPreview){
 			$PrintPreview = $this->PrintPreview;
+		} else {
+			$PrintPreview = TRUE;
 		}
-		if ($PrintPreview) {
-			$this->buildOutput($Space);
-		
-			if ($this->ContainerObjectType) {
-				$temp = $this->ObjectID;
-				$temp++;
-				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
-				while ($this->EnableDisable) {
-					if ($this->ContainerObjectType) {
-						$containertype = $this->ContainerObjectType;
-						
-						if ($containertype ==  'XhtmlContent') {
-							if ($this->ContainerObjectID) {
-								if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-									$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, TRUE);
-								}
+		$this->buildOutput($Space);
+	
+		if ($this->ContainerObjectType) {
+			$temp = $this->ObjectID;
+			$temp++;
+			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
+			while ($this->EnableDisable) {
+				if ($this->ContainerObjectType) {
+					$containertype = $this->ContainerObjectType;
+					
+					if ($containertype ==  'XhtmlContent') {
+						if ($this->ContainerObjectID) {
+							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, TRUE);
 							}
-						} else if ($containertype == 'XhtmlMenu') {
-							if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
-								$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
-								require($filename);
-								$hold = bottompanel1();
-								$this->ContentOutput .= $hold;
-							}
-						} else {
-							if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
-								if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-									$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
-								}
+						}
+					} else if ($containertype == 'XhtmlMenu') {
+						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
+							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
+							require($filename);
+							$hold = bottompanel1();
+							$this->ContentOutput .= $hold;
+						}
+					} else {
+						if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
+							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+								$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
 							}
 						}
 					}
-					$temp++;
-					$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
 				}
+				$temp++;
+				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
 			}
 			
 			if ($this->PrintPreview & !$NoPrintPreview) {

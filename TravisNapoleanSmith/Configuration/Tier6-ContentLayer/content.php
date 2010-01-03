@@ -47,6 +47,6 @@
 	
 	$contentoutput = $content->getOutput();
 
-	print "  $contentoutput";
+	print "$contentoutput";
 	
 ?>

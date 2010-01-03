@@ -16,12 +16,12 @@
 	
 	// Fetch Current Page ID - Based On ID Number
 	$flashidnumber = Array();
-	$flashidnumber['idnumber'] = 1;
+	$flashidnumber['PageID'] = 1;
 	
 	if ($_GET['flashidnumber']){
-		$flashidnumber['idnumber'] = $_GET['flashidnumber'];
+		$flashidnumber['PageID'] = $_GET['flashidnumber'];
 	}
-	$flashidnumber['idnumber1'] = 1;
+	$flashidnumber['ObjectID'] = 1;
 	
 	$flashdatabase = Array();
 	$flashdatabase['Flash'] = 'Flash';

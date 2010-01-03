@@ -7,6 +7,8 @@ class XhtmlList implements Tier6ContentLayerModules {
 	private $ListProtectionLayer;
 	private $DatabaseTableName;
 	
+	private $PrintPreview;
+	
 	private $hostname;
 	private $user; 
 	private $password; 
@@ -92,14 +94,16 @@ class XhtmlList implements Tier6ContentLayerModules {
 	}
 	
 	public function FetchDatabase ($PageID) {
+		$this->PageID = $PageID['PageID'];
+		$this->ObjectID = $PageID['ObjectID'];
+		$this->PrintPreview = $PageID['PrintPreview'];
+		unset ($PageID['PrintPreview']);
+		
 		$this->ListProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $PageID;
 		$this->ListProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->ListProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
-		$this->PageID = $PageID['PageID'];
-		$this->ObjectID = $PageID['ObjectID'];
 		
 		$this->StartTag = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'EndTag'));
@@ -144,8 +148,8 @@ class XhtmlList implements Tier6ContentLayerModules {
 	private function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, "<a href");
-			$lastpos = strpos($wordwrapstring, "</a>");
+			$firstpos = strpos($wordwrapstring, '<a href');
+			$lastpos = strpos($wordwrapstring, '</a>');
 			$lastpos = $lastpos + 3;
 			
 			// Split a string into an array - character by character
@@ -164,24 +168,25 @@ class XhtmlList implements Tier6ContentLayerModules {
 			}
 			
 			$returnstring = $endstring;
-			$returnstring = str_replace (" ", "<SPACE>", $returnstring);
+			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n    $this->Space$this->Space$this->Space");
 			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
 			
 		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n    $this->Space$this->Space");
 		}
 		return $wordwrapstring;
 	}
 	
 	public function CreateOutput($space) {
-	  	$this->Space = $space;
+		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
-				if ($this->StartTagID) {
+				$this->List .= '  ';
+				if ($this->StartTagID & !$this->PrintPreview) {
 					$temp = strrpos($this->StartTag, '>');
 					$this->StartTag[$temp] = ' ';
 					$this->StartTag .= 'id="';
@@ -233,7 +238,6 @@ class XhtmlList implements Tier6ContentLayerModules {
 					$this->List .= "\n";
 				}
 			}
-			
 			if ($this->Ul) {
 				if($this->Space) {
 					$this->List .= $this->Space;
@@ -252,24 +256,24 @@ class XhtmlList implements Tier6ContentLayerModules {
 				$this->List .= '    ';
 			}
 			
-			$this->List .= "<ul";
+			$this->List .= '<ul';
 			
-			if ($this->UlID) {
-				$this->List .= " id=\"";
+			if ($this->UlID & !$this->PrintPreview) {
+				$this->List .= ' id="';
 				$this->List .= $this->UlID;
 				$this->List .= "\"";
 			}
 			
 			if ($this->UlClass) {
-				$this->List .= " class=\"";
+				$this->List .= ' class="';
 				$this->List .= $this->UlClass;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 			
 			if ($this->UlStyle) {
-				$this->List .= " style=\"";
+				$this->List .= ' style="';
 				$this->List .= $this->UlStyle;
-				$this->List .= "\"";
+				$this->List .= '"';
 			}
 		
 			$this->List .= ">\n";
@@ -286,24 +290,24 @@ class XhtmlList implements Tier6ContentLayerModules {
 									} else {
 										$this->List .= '  ';
 									}
-									$this->List .= "<li";
+									$this->List .= '<li';
 			
-									if (current($this->LiID)) {
-										$this->List .= " id=\"";
+									if (current($this->LiID) & !$this->PrintPreview) {
+										$this->List .= ' id="';
 										$this->List .= current($this->LiID);
-										$this->List .= "\"";
+										$this->List .= '"';
 									}
 									
 									if (current($this->LiClass)) {
-										$this->List .= " class=\"";
+										$this->List .= ' class="';
 										$this->List .= current($this->LiClass);
-										$this->List .= "\"";
+										$this->List .= '"';
 									}
 									
 									if (current($this->LiStyle)) {
-										$this->List .= " style=\"";
+										$this->List .= ' style="';
 										$this->List .= current($this->LiStyle);
-										$this->List .= "\"";
+										$this->List .= '"';
 									}
 		
 									$this->List .= ">\n";
@@ -374,7 +378,7 @@ class XhtmlList implements Tier6ContentLayerModules {
 			$this->List .= "</ul>\n";
 			
 			if ($this->EndTag) {
-				$this->List .= "  ";
+				$this->List .= '  ';
 				$this->List .= $this->EndTag;
 				$this->List .= "\n";
 			}

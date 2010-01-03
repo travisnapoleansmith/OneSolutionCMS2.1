@@ -156,10 +156,10 @@ class XhtmlHeader implements Tier6ContentLayerModules
 	}
 	
 	private function PrintArrayHelper ($item, $nametag ){
-		$this->header .= "$nametag";
-		$this->header .= "=\"";
-		$this->header .= "$item";
-		$this->header .= "\" ";
+		$this->header .= $nametag;
+		$this->header .= '="';
+		$this->header .= $item;
+		$this->header .= '" ';
 	}
 	
 	private function PrintArray($arraynames, $starttag, $arraynametags) {
@@ -172,9 +172,9 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		$nametag = $arraynametags[$j];
 		while ($j < $max) {
 			if ($hold[$j]) {
-				$this->header .= "<";
+				$this->header .= '<';
 				$this->header .= $starttag;
-				$this->header .= " ";
+				$this->header .= ' ';
 				
 				$temp = $hold[$j];
 				
@@ -198,9 +198,9 @@ class XhtmlHeader implements Tier6ContentLayerModules
 			
 			while ($hold2) {			
 				if (!$flag & !empty($hold2[$j])) {
-					$this->header .= "<";
+					$this->header .= '<';
 					$this->header .= $starttag;
-					$this->header .= " ";
+					$this->header .= ' ';
 				}
 				if (!empty($hold2[$j])) {
 					$flag = TRUE;
@@ -329,13 +329,13 @@ class XhtmlHeader implements Tier6ContentLayerModules
 			}
 			
 			if ($endtag) {
-				$this->header .= ">";
+				$this->header .= '>';
 				if ($intag) {
 					$this->header .= "\n  ";
 					$this->TagSheetCheck($intag, NULL, $i);
-					$this->header .= "\n";
+					$this->header .= '\n';
 				}
-				$this->header .= "</";
+				$this->header .= '</';
 				$this->header .= $endtag;
 				$this->header .= ">\n";
 			} else {
@@ -356,14 +356,14 @@ class XhtmlHeader implements Tier6ContentLayerModules
 	}
 	
 	private function TagSheetOutput($tag, $tagvalue) {
-		$this->header .= " ";
+		$this->header .= ' ';
 		if ($tag) {
 			$this->header .= $tag;
-			$this->header .= "=\"";
+			$this->header .= '="';
 		}
 		$this->header .= $tagvalue;
 		if ($tag) {
-			$this->header .= "\"";
+			$this->header .= '"';
 		}
 	}
 	
@@ -388,9 +388,9 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		$this->header .= "<head>\n";
 		$this->header .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n";
 		
-		$this->header .= "<title>";
+		$this->header .= '<title>';
 		if ($printpreviewflag) {
-			$this->header .= "Print Preview";
+			$this->header .= 'Print Preview';
 			
 			if ($this->PageTitle || $this->SiteName) {
 				$this->header .= " - ";
@@ -465,19 +465,19 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		
 		if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
 			$this->header .= "\n";
-			$metaarray[0] = "MetaName";
-			$metaarray[1] = "MetaNameContent";
-			$metanamesarray[0] = "name";
-			$metanamesarray[1] = "content";
+			$metaarray[0] = 'MetaName';
+			$metaarray[1] = 'MetaNameContent';
+			$metanamesarray[0] = 'name';
+			$metanamesarray[1] = 'content';
 			$this->PrintArray($metaarray, 'meta', $metanamesarray);
 		}
 		
 		if (!empty($this->HttpEquivType) && !empty($this->HttpEquivTypeContent)) {
 			$this->header .= "\n";
-			$httpequivtypearray[0] = "HttpEquivType";
-			$httpequivtypearray[1] = "HttpEquivTypeContent";
-			$httpequivnamesarray[0] = "http-equiv";
-			$httpequivnamesarray[1] = "content";
+			$httpequivtypearray[0] = 'HttpEquivType';
+			$httpequivtypearray[1] = 'HttpEquivTypeContent';
+			$httpequivnamesarray[0] = 'http-equiv';
+			$httpequivnamesarray[1] = 'content';
 			$this->PrintArray($httpequivtypearray, 'meta', $httpequivnamesarray);
 		}
 
@@ -486,34 +486,34 @@ class XhtmlHeader implements Tier6ContentLayerModules
 			$linkarray = Array();
 			$linknamearray = Array();
 			if (!empty($this->LinkCharset)) {
-				array_push($linkarray, "LinkCharset");
-				array_push($linknamearray, "charset");
+				array_push($linkarray, 'LinkCharset');
+				array_push($linknamearray, 'charset');
 			}
 			if (!empty($this->LinkHref)) {
-				array_push($linkarray, "LinkHref");
-				array_push($linknamearray, "href");
+				array_push($linkarray, 'LinkHref');
+				array_push($linknamearray, 'href');
 			}
 			if (!empty($this->LinkHreflang)){
-				array_push($linkarray, "LinkHreflang");
-				array_push($linknamearray, "hreflang");
+				array_push($linkarray, 'LinkHreflang');
+				array_push($linknamearray, 'hreflang');
 			}
 			if (!empty($this->LinkMedia)) {
-				array_push($linkarray, "LinkMedia");
-				array_push($linknamearray, "media");
+				array_push($linkarray, 'LinkMedia');
+				array_push($linknamearray, 'media');
 			}
 			if (!empty($this->LinkRel)) {
-				array_push($linkarray, "LinkRel");
-				array_push($linknamearray, "rel");
+				array_push($linkarray, 'LinkRel');
+				array_push($linknamearray, 'rel');
 			}
 			if (!empty($this->LinkRev)) {
-				array_push($linkarray, "LinkRev");
-				array_push($linknamearray, "rev");
+				array_push($linkarray, 'LinkRev');
+				array_push($linknamearray, 'rev');
 			}
 			if (!empty($this->LinkType)) {
-				array_push($linkarray, "LinkType");
-				array_push($linknamearray, "type");
+				array_push($linkarray, 'LinkType');
+				array_push($linknamearray, 'type');
 			}
-			$this->PrintArray($linkarray, "link", $linknamearray);
+			$this->PrintArray($linkarray, 'link', $linknamearray);
 		}
 		
 		if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
@@ -564,5 +564,4 @@ class XhtmlHeader implements Tier6ContentLayerModules
 	}
 	
 }
-
 ?>

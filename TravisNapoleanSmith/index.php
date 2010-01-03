@@ -5,7 +5,9 @@
 	if ($_GET['PageID']){
 		$idnumber = $_GET['PageID'];
 	}
+
 	$idnumberkeep = $idnumber;
+
 	if ($_GET['printpreview']) {
 		$printpreview = TRUE;
 	}
@@ -13,7 +15,7 @@
 	require ('Configuration/Tier6-ContentLayer/header.php');
 
 	print "<body>\n";
-	
+
 	if ($printpreview == FALSE) {
 		// Top Panel 2
 		print "\n<div id=\"TopPanel2\" class=\"TopPanel2\">\n";
@@ -23,6 +25,10 @@
 	}
 	// Main Menu 
 	//require ('Configuration/Tier6-ContentLayer/menu.php');
+
+	if ($printpreview == FALSE) {
+		require('menu.html');
+	}
 	
 	// Contain Container
 	print "<div id=\"textlayer1\">\n";
@@ -48,7 +54,7 @@
 		require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
 		print "</div>\n\n";
 	}
-	
+
 	// Print Out End Of Body and HTML File
 	print "</body>\n";
 	print "</html>\n";

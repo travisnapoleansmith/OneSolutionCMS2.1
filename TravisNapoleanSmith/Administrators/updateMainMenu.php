@@ -38,10 +38,7 @@
 		// Main Menu	
 		$MainMenu = new Menu($menudatabase, $databases);
 		
-		
 		$MainMenu->setDatabaseAll($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3]);
-		
-
 		
 		$MainMenu->setPageName($pagename);
 
@@ -55,19 +52,15 @@
 
 		$MainMenu->removeMenuItems('NewsButtons', 'News', NULL, 'News Item', 'news.php', 'NewsID');
 		
-		//ob_start();
 		$MainMenu->setMenuClassIDAll('TopPanel1', 'main-menu main-menu-down');
 		$MainMenu->makeMenuItem(1, 'MenuDatabase');
 		$Menu = $MainMenu->getMenu();
-		//ob_end_clean();
-		//print_r($MainMenu);
-		print "$Menu\n";
-		/*
+		
 		$MenuFile = 'menu.html';
 		$file = fopen($MenuFile, 'w');
 		if ($file) {
 			fwrite($file, $Menu);
 			fclose($file);
-		}*/
+		}
 	}
 ?>

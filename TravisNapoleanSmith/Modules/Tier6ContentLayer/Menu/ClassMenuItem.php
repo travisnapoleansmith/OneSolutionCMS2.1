@@ -126,7 +126,7 @@ class MenuItem
 	
 	private function processInformation ($Name, $Title) {
 		$this->MenuItemOutput .= ' ';
-		$this->MenuItemOutput .= "$Name";
+		$this->MenuItemOutput .= $Name;
 		$this->MenuItemOutput .= "='";
 		$this->MenuItemOutput .= $Title;
 		$this->MenuItemOutput .= "'";
@@ -168,10 +168,6 @@ class MenuItem
 	}
 	
 	private function processA($space) {
-		if ($this->AClass) {
-			//$this->processInformation('class', $this->AClass);
-		}
-		
 		if ($this->MenuItemTitle) {
 			$this->processInformation('title', $this->MenuItemTitle);
 		}

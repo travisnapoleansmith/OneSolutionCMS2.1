@@ -73,14 +73,15 @@ class XhtmlPicture implements Tier6ContentLayerModules {
 	}
 	
 	public function FetchDatabase ($PageID) {
+		$this->PageID = $PageID['PageID'];
+		$this->ObjectID = $PageID['ObjectID'];
+		unset ($PageID['PrintPreview']);
+		
 		$this->PictureProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $PageID;
 		$this->PictureProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->PictureProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
-		$this->PageID = $PageID['PageID'];
-		$this->ObjectID = $PageID['ObjectID'];
 		
 		$this->StartTag = $this->PictureProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->PictureProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'EndTag'));
@@ -164,54 +165,54 @@ class XhtmlPicture implements Tier6ContentLayerModules {
 				$this->Picture .= $this->Space;
 			}
 			
-			$this->Picture .= "<img";
+			$this->Picture .= '<img';
 			
 			if ($this->PictureID) {
-				$this->Picture .= " id=\"";
+				$this->Picture .= ' id="';
 				$this->Picture .= $this->PictureID;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->PictureClass) {
-				$this->Picture .= " class=\"";
+				$this->Picture .= ' class="';
 				$this->Picture .= $this->PictureClass;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->PictureStyle) {
-				$this->Picture .= " style=\"";
+				$this->Picture .= ' style="';
 				$this->Picture .= $this->PictureStyle;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->PictureLink) {
-				$this->Picture .= " src=\"";
+				$this->Picture .= ' src="';
 				$this->Picture .= $this->PictureLink;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->PictureAltText) {
-				$this->Picture .= " alt=\"";
+				$this->Picture .= ' alt="';
 				$this->Picture .= $this->PictureAltText;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->Width) {
-				$this->Picture .= " width=\"";
+				$this->Picture .= ' width="';
 				$this->Picture .= $this->Width;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 			
 			if ($this->Height) {
-				$this->Picture .= " height=\"";
+				$this->Picture .= ' height="';
 				$this->Picture .= $this->Height;
-				$this->Picture .= "\"";
+				$this->Picture .= '"';
 			}
 		
 			$this->Picture .= " />\n";
 			
 			if ($this->EndTag) {
-				$this->Picture .= "  ";
+				$this->Picture .= '  ';
 				$this->Picture .= $this->EndTag;
 				$this->Picture .= "\n";
 			}

@@ -121,15 +121,17 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 		return $this->HttpUserAgent;
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
+		$this->idnumber = $PageID['PageID'];
+		$this->idnumber1 = $PageID['ObjectID'];
+		unset ($PageID['PrintPreview']);
+		
 		$this->FlashProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
-		$passarray = $idnumber;
+		$passarray = $PageID;
 		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->idnumber = $idnumber;
-		$this->idnumber1 = $idnumber1;
 		$this->FlashPath = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashPath'));
 		$this->Width = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Width'));
 		$this->Height = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Height'));
@@ -546,35 +548,35 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			$this->flash .= $this->Space;
 		}
 		
-		$this->flash .= "<object";
+		$this->flash .= '<object';
 		
 		if ($this->IsIE) {
 			$this->flash .= ' classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"';
 		}
 		
 		if ($this->Width) {
-			$this->flash .= " width=\"";
+			$this->flash .= ' width="';
 			$this->flash .= $this->Width;
-			$this->flash .= "\"";
+			$this->flash .= '"';
 		}
 		
 		if ($this->Height) {
-			$this->flash .= " height=\"";
+			$this->flash .= ' height="';
 			$this->flash .= $this->Height;
-			$this->flash .= "\"";
+			$this->flash .= '"';
 		}
 		
 		if ($this->IsIE) {
 			$this->flash .= 'id="player" name="player"';
 		} else {
-			$this->flash .= " type=\"application/x-shockwave-flash\"";
+			$this->flash .= ' type="application/x-shockwave-flash"';
 		}
 		
 		if (!$this->IsIE) {
 			if ($this->FlashPath) {
-				$this->flash .= " data=\"";
+				$this->flash .= ' data="';
 				$this->flash .= $this->FlashPath;
-				$this->flash .= "\"";
+				$this->flash .= '"';
 			}
 		}
 		$this->flash .= ">\n";
@@ -583,7 +585,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			if ($this->Space) {
 				$this->flash .= $this->Space;
 			}
-			$this->flash .= "  <param name=\"movie\" value=\"";
+			$this->flash .= '  <param name="movie" value="';
 			$this->flash .= $this->FlashPath;
 			$this->flash .= "\" />\n";
 		}
@@ -592,7 +594,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			if ($this->Space) {
 				$this->flash .= $this->Space;
 			}
-			$this->flash .= "  <param name=\"wmode\" value=\"";
+			$this->flash .= '  <param name="wmode" value="';
 			$this->flash .= $this->Wmode;
 			$this->flash .= "\" />\n";
 		}
@@ -601,7 +603,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			if ($this->Space) {
 				$this->flash .= $this->Space;
 			}
-			$this->flash .= "  <param name=\"allowfullscreen\" value=\"";
+			$this->flash .= '  <param name="allowfullscreen" value="';
 			$this->flash .= $this->AllowFullScreen;
 			$this->flash .= "\" />\n";
 		}
@@ -610,7 +612,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			if ($this->Space) {
 				$this->flash .= $this->Space;
 			}
-			$this->flash .= "  <param name=\"allowscriptaccess\" value=\"";
+			$this->flash .= '  <param name="allowscriptaccess" value="';
 			$this->flash .= $this->AllowScriptAccess;
 			$this->flash .= "\" />\n";
 		}
@@ -619,7 +621,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 			if ($this->Space) {
 				$this->flash .= $this->Space;
 			}
-			$this->flash .= "  <param name=\"flashvars\" value=\"";
+			$this->flash .= '  <param name="flashvars" value="';
 			$this->flash .= $this->FlashVarsText;
 			$this->flash .= "\" />\n";
 		}
@@ -639,7 +641,7 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 		$this->flash .= "</object>\n";
 		
 		if ($this->EndTag) {
-			$this->flash .= "  ";
+			$this->flash .= '  ';
 			$this->flash .= $this->EndTag;
 			$this->flash .= "\n";
 		}
