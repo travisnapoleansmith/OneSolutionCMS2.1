@@ -12,6 +12,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	private $ContentPrintPreviewTableName;
 	
 	private $PrintPreview;
+	private $PrintIdNumberArray;
 	
 	private $hostname;
 	private $user; 
@@ -73,8 +74,10 @@ class XhtmlContent implements Tier6ContentLayerModules {
 
 		$this->ContentTable->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ContentTable->setDatabasetable ($this->ContentTableName);
+		
 		$this->ContentLayerTables->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ContentLayerTables->setDatabasetable ($this->ContentLayerTablesName);
+		
 		$this->ContentPrintPreviewTable->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ContentPrintPreviewTable->setDatabasetable ($this->ContentPrintPreviewTableName);
 		
@@ -310,16 +313,23 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		
 		$this->ContentTable->Disconnect($this->ContentTableName);
 		
-		/*if ($this->PrintPreview) {
-			print "$this->ContentPrintPreviewTableName\n";
+		if ($this->PrintPreview) {
+			$this->PrintIdNumberArray = array();
+			$passarray = array();
+			$passarray['PageID'] = $PageID['PageID'];
 			$this->ContentPrintPreviewTable->Connect($this->ContentPrintPreviewTableName);
-			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('PageID' => $this->PageID));
-			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('PageID' => $this->PageID));
-			$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => 'ContainerObjectType'));
-			print "$hold\n";
+			
+			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
+			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$i = 1;
+			$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
+			while ($hold) {
+				$this->PrintIdNumberArray["PrintPageID$i"] = $hold;
+				$i++;
+				$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
+			}
 			$this->ContentPrintPreviewTable->Disconnect($this->ContentPrintPreviewTableName);
-			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'walkarray', array());
-		}*/
+		}
 	}
 	
 	private function CreateWordWrap($wordwrapstring) {
@@ -459,7 +469,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	
 	private function buildOutput ($Space) {
 		$this->Space = $space;
-		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
+		
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & ($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true')) {
 			if ($this->StartTag){
 				if ($this->StartTagID) {
 					$temp = strrpos($this->StartTag, '>');
@@ -744,38 +755,78 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	}
 	
 	public function CreateOutput($space) {
-		$this->buildOutput($Space);
-		if ($this->ContainerObjectType) {
-			$temp = $this->ObjectID;
-			$temp++;
-			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
-			while ($this->EnableDisable) {
-				if ($this->ContainerObjectType) {
-					$containertype = $this->ContainerObjectType;
-					
-					if ($containertype ==  'XhtmlContent') {
-						if ($this->ContainerObjectID) {
-							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, TRUE);
+		$arguments = func_get_args();
+		$NoPrintPreview = $arguments[1];
+		
+		if ($NoPrintPreview) {
+			$PrintPreview = TRUE;
+		} else {
+			$PrintPreview = $this->PrintPreview;
+		}
+		if ($PrintPreview) {
+			$this->buildOutput($Space);
+		
+			if ($this->ContainerObjectType) {
+				$temp = $this->ObjectID;
+				$temp++;
+				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
+				while ($this->EnableDisable) {
+					if ($this->ContainerObjectType) {
+						$containertype = $this->ContainerObjectType;
+						
+						if ($containertype ==  'XhtmlContent') {
+							if ($this->ContainerObjectID) {
+								if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+									$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, TRUE);
+								}
 							}
-						}
-					} else if ($containertype == 'XhtmlMenu') {
-						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
-							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
-							require($filename);
-							$hold = bottompanel1();
-							$this->ContentOutput .= $hold;
-						}
-					} else {
-						if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
-							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
+						} else if ($containertype == 'XhtmlMenu') {
+							if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
+								$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
+								require($filename);
+								$hold = bottompanel1();
+								$this->ContentOutput .= $hold;
+							}
+						} else {
+							if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
+								if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+									$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
+								}
 							}
 						}
 					}
+					$temp++;
+					$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
 				}
-				$temp++;
-				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
+			}
+			
+			if ($this->PrintPreview & !$NoPrintPreview) {
+				reset($this->PrintIdNumberArray);
+				$this->ContentOutput = NULL;
+				while (current($this->PrintIdNumberArray)) {
+					$holdnow = current($this->PrintIdNumberArray);
+					
+					$contentidnumber = Array();
+					$contentidnumber['PageID'] = $holdnow;
+					$contentidnumber['ObjectID'] = 0;
+					$contentidnumber['printpreview'] = TRUE;
+					
+					$contentdatabase = Array();
+					$contentdatabase[$this->ContentTableName] = $this->ContentTableName;
+					$contentdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
+					$contentdatabase[$this->ContentPrintPreviewTableName] = $this->ContentPrintPreviewTableName;
+					
+					$content = new XhtmlContent($contentdatabase, $this->ContentTable);
+					$content->setDatabaseAll ($this->hostname, $this->user, $this->password, $this->databasename, $this->databasetable);
+					$content->setHttpUserAgent($this->HttpUserAgent);
+					$content->FetchDatabase ($contentidnumber);
+					$content->CreateOutput('    ', TRUE);
+					
+					$contentoutput = $content->getOutput();
+					$this->ContentOutput .= $contentoutput;
+					
+					next($this->PrintIdNumberArray);
+				}
 			}
 		}
 	}
