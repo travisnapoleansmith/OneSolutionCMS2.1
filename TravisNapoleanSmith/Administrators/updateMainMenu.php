@@ -55,7 +55,7 @@
 		$MainMenu->makeMenuItem(1, 'MenuDatabase');
 		$Menu = $MainMenu->getMenu();
 		
-		$MenuFile = 'menu.html';
+		$MenuFile = '../menu.html';
 		$file = fopen($MenuFile, 'w');
 		if ($file) {
 			fwrite($file, $Menu);
