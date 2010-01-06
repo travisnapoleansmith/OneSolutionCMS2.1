@@ -1,6 +1,5 @@
 <?php
-require_once ("Modules/Tier6ContentLayer/Menu/ClassMenuItem.php"); 
-require_once ("Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php");
+
 class Menu
 {
 	private $MenuDatabase;

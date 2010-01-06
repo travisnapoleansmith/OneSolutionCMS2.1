@@ -1,5 +1,7 @@
-
 <?php	
+	// Includes all files
+	require_once ('Configuration/includes.php');
+	
 	// Fetch idnumber For Current Page
 	$idnumber = 1;
 	if ($_GET['PageID']){
@@ -25,7 +27,7 @@
 	}
 	// Main Menu 
 	//require ('Configuration/Tier6-ContentLayer/menu.php');
-
+	//require ('Administrators/updateMainMenu.php');
 	if ($printpreview == FALSE) {
 		require('menu.html');
 	}

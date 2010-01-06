@@ -1,5 +1,4 @@
 <?php
-require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
 
 class XhtmlNews implements Tier6ContentLayerModules {
 	private $PageID;

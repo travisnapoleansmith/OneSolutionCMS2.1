@@ -179,12 +179,12 @@ class MySqlConnect
 		$this->Connect();
 		$query = 'SHOW GRANTS';
 		$result = mysql_query($query);
-		$userdata = mysql_result($result, 0);
-		
+		$userdata = mysql_result($result, 1);
+		$userdata2 = mysql_result($result, 0);
 		$userdata = substr_replace($userdata, NULL, 0, 5);
 		if (strpos($userdata, $permission)) {
 			return TRUE;
-		} else if (strpos($userdata, 'ALL PRIVILEGES ON')){
+		} else if (strpos($userdata2, 'ALL PRIVILEGES ON')){
 			return TRUE;
 		} else {
 			array_push($this->errormessage,'checkPermissions: Permission has been denied');

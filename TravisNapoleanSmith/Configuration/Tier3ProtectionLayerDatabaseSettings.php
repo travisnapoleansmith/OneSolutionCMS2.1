@@ -1,6 +1,4 @@
 <?php
-	require_once ("Tier3-ProtectionLayer/ClassProtectionLayer.php");
-	
 	// MySql Database Tables
 	$Databases = &new ProtectionLayer();
 	$Databases->createDatabaseTable('Content');

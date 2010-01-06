@@ -1,8 +1,4 @@
 <?php
-	require_once ("Configuration/Tier3ProtectionLayerDatabaseSettings.php");
-	require_once ("Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php");
-	require_once ("Configuration/settings.php");
-	
 	// Fetch Current Page ID - Based on filename
 	//$pagename = $_SERVER['PHP_SELF'];
 	//$directory = dirname($_SERVER['PHP_SELF']);

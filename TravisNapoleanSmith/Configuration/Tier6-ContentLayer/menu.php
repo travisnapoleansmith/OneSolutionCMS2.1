@@ -1,8 +1,4 @@
 <?php
-	require_once ("Configuration/Tier3ProtectionLayerDatabaseSettings.php");
-	require ("Modules/Tier6ContentLayer/Menu/ClassMenu.php");
-	require ("Configuration/settings.php");
-	
 	// Fetch PrintPreview Flag
 	if (!$_GET['printpreview']){
 		

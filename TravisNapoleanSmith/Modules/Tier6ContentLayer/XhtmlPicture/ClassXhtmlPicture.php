@@ -1,5 +1,4 @@
 <?php
-require_once ("ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php");
 
 class XhtmlPicture implements Tier6ContentLayerModules {
 	private $PageID;

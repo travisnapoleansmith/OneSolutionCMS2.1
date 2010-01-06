@@ -1,8 +1,4 @@
 <?php
-	require ("Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php");
-	require_once ("Configuration/Tier3ProtectionLayerDatabaseSettings.php");
-	require ("Configuration/settings.php");
-	
 	// Fetch Current Page ID - Based on filename
 	//$pagename = $_SERVER['PHP_SELF'];
 	//$directory = dirname($_SERVER['PHP_SELF']);

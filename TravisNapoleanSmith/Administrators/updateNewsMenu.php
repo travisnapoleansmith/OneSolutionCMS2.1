@@ -1,7 +1,9 @@
 <?php
 	// Updates all news articles - can be run as a regularily scheduled job
-	require_once ("Tier2-DataAccessLayer/ClassMySqlConnect.php");
-	require ("Configuration/updatesettings.php");
+	
+	error_reporting(E_ERROR);
+	// Includes all files
+	require_once ('includes.php');
 	
 	$newsdatabaseupdate = &new MySqlConnect();
 	$newsdatabaseupdate2 = &new MySqlConnect();
@@ -24,5 +26,19 @@
 		$i++;
 		$rowcount--;
 	}
-	print "Update Completed!";
+
+	print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\" >\n";
+	print "<html lang=\"en-US\" xml:lang=\"en-US\" xmlns=\"http://www.w3.org/1999/xhtml\"> \n\n";
+	print "<html>\n";
+	print "<head>\n";
+	print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n";
+	print "<title>Administrators Update News Menu</title>\n";
+	print "</head>\n\n";
+			
+	print "<body>\n";
+	print "<h1>Administrators Update News Menu</h1>\n";
+	print "<p>News Menu has been updated!</p>\n";
+	print "<p><a href='../index.php' title='Home Page'>Return to Home Page</a></p>\n";
+	print "</body>\n\n";
+	print "</html>\n";
 ?>

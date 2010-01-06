@@ -1,6 +1,4 @@
 <?php
-require_once("Tier2-DataAccessLayer/ClassMySqlConnect.php");
-require_once("Configuration/Tier3ProtectionLayerSettings.php");
 
 class ProtectionLayer
 {
