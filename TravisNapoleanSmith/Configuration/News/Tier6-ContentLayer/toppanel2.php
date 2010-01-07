@@ -12,14 +12,12 @@
 	
 	// Fetch Current Page ID - Based On ID Number
 	$listidnumber = Array();
-	$listidnumber['PageID'] = 1;
+	$listidnumber['PageID'] = 1200;
 	
 	if ($_GET['PageID']){
 		$listidnumber['PageID'] = $_GET['PageID'];
 	}
-	if ($_GET['idnumber']) {
-		$listidnumber['PageID'] = $_GET['idnumber'];
-	}
+	
 	$listidnumber['ObjectID'] = 0;
 	$listdatabase = Array();
 	$listdatabase['MenuTopPanel2'] = 'MenuTopPanel2';

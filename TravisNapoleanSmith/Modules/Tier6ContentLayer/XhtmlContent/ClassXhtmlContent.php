@@ -1,59 +1,59 @@
 <?php
 
-class XhtmlContent implements Tier6ContentLayerModules {
-	private $PageID;
-	private $ObjectID;
-	private $ContentTable;
-	private $ContentLayerTables;
-	private $ContentTableName;
-	private $ContentLayerTablesName;
-	private $ContentPrintPreviewTable;
-	private $ContentPrintPreviewTableName;
+class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	//protected $PageID;
+	//protected $ObjectID;
+	protected $ContentTable;
+	protected $ContentLayerTables;
+	protected $ContentTableName;
+	protected $ContentLayerTablesName;
+	protected $ContentPrintPreviewTable;
+	protected $ContentPrintPreviewTableName;
 	
-	private $PrintPreview;
-	private $PrintIdNumberArray;
+	//protected $PrintPreview;
+	protected $PrintIdNumberArray;
+	/*
+	protected $hostname;
+	protected $user; 
+	protected $password; 
+	protected $databasename;
+	protected $databasetable;
+	*/
+	protected $ContainerObjectType;
+	protected $ContainerObjectTypeName;
+	protected $ContainerObjectID;
+	protected $ContainerObjectPrintPreview;
+	protected $RevisionID;
+	protected $CurrentVersion;
+	protected $Empty;
+	/*
+	protected $StartTag;
+	protected $EndTag;
+	protected $StartTagID;
+	protected $StartTagStyle;
+	protected $StartTagClass;
+	*/
+	protected $Heading;
+	protected $HeadingStartTag;
+	protected $HeadingEndTag;
+	protected $HeadingStartTagID;
+	protected $HeadingStartTagClass;
+	protected $HeadingStartTagStyle;
 	
-	private $hostname;
-	private $user; 
-	private $password; 
-	private $databasename;
-	private $databasetable;
-	
-	private $ContainerObjectType;
-	private $ContainerObjectTypeName;
-	private $ContainerObjectID;
-	private $ContainerObjectPrintPreview;
-	private $RevisionID;
-	private $CurrentVersion;
-	private $Empty;
-	
-	private $StartTag;
-	private $EndTag;
-	private $StartTagID;
-	private $StartTagStyle;
-	private $StartTagClass;
-	
-	private $Heading;
-	private $HeadingStartTag;
-	private $HeadingEndTag;
-	private $HeadingStartTagID;
-	private $HeadingStartTagClass;
-	private $HeadingStartTagStyle;
-	
-	private $Content;
-	private $ContentStartTag;
-	private $ContentEndTag;
-	private $ContentStartTagID;
-	private $ContentStartTagClass;
-	private $ContentStartTagStyle;
-	
-	private $EnableDisable;
-	private $Status;
-	
-	private $Space;
-	private $ContentOutput;
-	private $HttpUserAgent;
-	private $errormessage;
+	protected $Content;
+	protected $ContentStartTag;
+	protected $ContentEndTag;
+	protected $ContentStartTagID;
+	protected $ContentStartTagClass;
+	protected $ContentStartTagStyle;
+	/*
+	protected $EnableDisable;
+	protected $Status;
+	*/
+	//protected $Space;
+	protected $ContentOutput;
+	//protected $HttpUserAgent;
+	//protected $errormessage;
 	
 	public function XhtmlContent($tablenames, $database) {
 		$this->ContentTable = &$database;
@@ -81,7 +81,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		$this->ContentPrintPreviewTable->setDatabasetable ($this->ContentPrintPreviewTableName);
 		
 	}
-	
+	/*
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
@@ -97,7 +97,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getObjectID() {
 		return $this->ObjectID;
 	}
-	
+	*/
 	public function getContentTable() {
 		return $this->ContentTable;
 	}
@@ -122,6 +122,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		return $this->ContentPrintPreviewTableName;
 	}
 	
+	/*
 	public function getPrintPreview() {
 		return $this->PrintPreview;
 	}
@@ -145,7 +146,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getdatabasetable() {
 		return $this->databasetable;
 	}
-	
+	*/
 	public function getContainerObjectType() {
 		return $this->ContainerObjectType;
 	}
@@ -165,7 +166,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getCurrentVersion() {
 		return $this->CurrentVersion;
 	}
-	
+	/*
 	public function getEmpty() {
 		return $this->Empty;
 	}
@@ -189,7 +190,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getStartTagClass() {
 		return $this->StartTagClass;
 	}
-	
+	*/
 	public function getHeading() {
 		return $this->Heading;
 	}
@@ -237,7 +238,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getContentStartTagStyle() {
 		return $this->ContentStartTagStyle;
 	}
-	
+	/*
 	public function getEnableDisable() {
 		return $this->EnableDisable;
 	}
@@ -265,6 +266,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 	public function getErrorArray() {
 		return $this->errormessage;
 	}
+	*/
 	
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
@@ -330,8 +332,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			$this->ContentPrintPreviewTable->Disconnect($this->ContentPrintPreviewTableName);
 		}
 	}
-	
-	private function CreateWordWrap($wordwrapstring) {
+	/*
+	protected function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, '<a href');
@@ -367,8 +369,9 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		
 		return $wordwrapstring;
 	}
-	
-	private function buildModules($moduleslocation) {
+	*/
+	/*
+	protected function buildModules($moduleslocation) {
 		if ($moduleslocation) {
 			$hold = Array();
 			$dir = dir($moduleslocation);
@@ -395,8 +398,8 @@ class XhtmlContent implements Tier6ContentLayerModules {
 			array_push($this->errormessage,'buildModules: Module Location is not set!');
 		}
 	}
-	
-	private function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
+	*/
+	protected function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
 		$modulesidnumber = Array();
 		$modulesidnumber['PageID'] = $PageID;
 		$modulesidnumber['ObjectID'] = $ObjectID;
@@ -452,7 +455,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		}
 	}
 	
-	private function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $ContentTable, $ContentLayerTables, $print) {
+	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $ContentTable, $ContentLayerTables, $print) {
 		$contentidnumber = Array();
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
@@ -468,7 +471,7 @@ class XhtmlContent implements Tier6ContentLayerModules {
 		} 
 	}
 	
-	private function buildOutput ($Space) {
+	protected function buildOutput ($Space) {
 		$this->Space = $Space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
 			$this->ContentOutput .= '  ';

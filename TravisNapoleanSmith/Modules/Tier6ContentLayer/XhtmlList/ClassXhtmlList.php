@@ -1,43 +1,43 @@
 <?php
 
-class XhtmlList implements Tier6ContentLayerModules {
-	private $PageID;
-	private $ObjectID;
-	private $ListProtectionLayer;
-	private $DatabaseTableName;
+class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	//protected $PageID;
+	//protected $ObjectID;
+	protected $ListProtectionLayer;
+	protected $DatabaseTableName;
 	
-	private $PrintPreview;
+	//protected $PrintPreview;
+	/*
+	protected $hostname;
+	protected $user; 
+	protected $password; 
+	protected $databasename;
+	protected $databasetable;
 	
-	private $hostname;
-	private $user; 
-	private $password; 
-	private $databasename;
-	private $databasetable;
+	protected $StartTag;
+	protected $EndTag;
+	protected $StartTagID;
+	protected $StartTagStyle;
+	protected $StartTagClass;
+	*/
+	protected $Ul;
+	protected $UlID;
+	protected $UlClass;
+	protected $UlStyle;
 	
-	private $StartTag;
-	private $EndTag;
-	private $StartTagID;
-	private $StartTagStyle;
-	private $StartTagClass;
+	protected $Li;
+	protected $LiChildID;
+	protected $LiID;
+	protected $LiClass;
+	protected $LiStyle;
 	
-	private $Ul;
-	private $UlID;
-	private $UlClass;
-	private $UlStyle;
+	//protected $EnableDisable;
+	//protected $Status;
 	
-	private $Li;
-	private $LiChildID;
-	private $LiID;
-	private $LiClass;
-	private $LiStyle;
-	
-	private $EnableDisable;
-	private $Status;
-	
-	private $Space;
-	private $List;
-	private $HttpUserAgent;
-	private $errormessage;
+	//protected $Space;
+	protected $List;
+	//protected $HttpUserAgent;
+	//protected $errormessage;
 	
 	public function XhtmlList($tablenames, $database) {
 		$this->ListProtectionLayer = &$database;
@@ -59,7 +59,7 @@ class XhtmlList implements Tier6ContentLayerModules {
 		$this->ListProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ListProtectionLayer->setDatabasetable ($databasetable);
 	}
-	
+	/*
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
@@ -91,7 +91,7 @@ class XhtmlList implements Tier6ContentLayerModules {
 	public function getErrorArray() {
 		return $this->errormessage;
 	}
-	
+	*/
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
@@ -127,7 +127,7 @@ class XhtmlList implements Tier6ContentLayerModules {
 		$this->ListProtectionLayer->Disconnect($this->databasetable);
 	}
 	
-	private function BuildLiList($LiList) {
+	protected function BuildLiList($LiList) {
 		if (is_array($this->$LiList)) {
 			$i = 1;
 			$Field = 'Li';
@@ -143,8 +143,8 @@ class XhtmlList implements Tier6ContentLayerModules {
 			}
 		}
 	}
-	
-	private function CreateWordWrap($wordwrapstring) {
+	/*
+	protected function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, "<a href")) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, '<a href');
@@ -179,7 +179,7 @@ class XhtmlList implements Tier6ContentLayerModules {
 		}
 		return $wordwrapstring;
 	}
-	
+	*/
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {

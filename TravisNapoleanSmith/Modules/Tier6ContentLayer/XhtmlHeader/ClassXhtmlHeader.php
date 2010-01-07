@@ -1,54 +1,54 @@
 <?php
 
-class XhtmlHeader implements Tier6ContentLayerModules 
+class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules 
 {
-	private $PageID;
-	
-	private $hostname;
-	private $user;
-	private $password;
-	private $databasename;
-	private $databasetable;
-	
-	private $PageTitle;
-	private $PageIcon;
-	private $StyleSheet;
-	private $Rss2_0;
-	private $Rss0_92;
-	private $Atom0_3;
-	private $BaseHref;
-	private $MetaName;
-	private $MetaNameContent;
-	private $HttpEquivType;
-	private $HttpEquivTypeContent;
-	private $LinkCharset;
-	private $LinkHref;
-	private $LinkHreflang;
-	private $LinkMedia;
-	private $LinkRel;
-	private $LinkRev;
-	private $LinkType;
-	private $IE6StyleSheet;
-	private $IE7StyleSheet;
-	private $IE8StyleSheet;
-	private $JavaScriptSheet;
-	private $PrintPreviewStyleSheet;
-	private $ScriptStyleSheet;
-	private $ScriptStyleSheetCharset;
-	private $ScriptStyleSheetCode;
-	private $ScriptStyleSheetDefer;
-	private $ScriptJavaScriptSheet;
-	private $ScriptJavaScriptSheetCharset;
-	private $ScriptJavaScriptSheetCode;
-	private $ScriptJavaScriptDefer;
-	private $ScriptVBScriptSheet;
-	private $ScriptVBScriptCharset;
-	private $ScriptVBScriptCode;
-	private $ScriptVBScriptDefer;
-	private $SiteName;
-	private $HttpUserAgent;
-	private $header;
-	private $HeaderProtectionLayer;
+	//protected $PageID;
+	/*
+	protected $hostname;
+	protected $user;
+	protected $password;
+	protected $databasename;
+	protected $databasetable;
+	*/
+	protected $PageTitle;
+	protected $PageIcon;
+	protected $StyleSheet;
+	protected $Rss2_0;
+	protected $Rss0_92;
+	protected $Atom0_3;
+	protected $BaseHref;
+	protected $MetaName;
+	protected $MetaNameContent;
+	protected $HttpEquivType;
+	protected $HttpEquivTypeContent;
+	protected $LinkCharset;
+	protected $LinkHref;
+	protected $LinkHreflang;
+	protected $LinkMedia;
+	protected $LinkRel;
+	protected $LinkRev;
+	protected $LinkType;
+	protected $IE6StyleSheet;
+	protected $IE7StyleSheet;
+	protected $IE8StyleSheet;
+	protected $JavaScriptSheet;
+	protected $PrintPreviewStyleSheet;
+	protected $ScriptStyleSheet;
+	protected $ScriptStyleSheetCharset;
+	protected $ScriptStyleSheetCode;
+	protected $ScriptStyleSheetDefer;
+	protected $ScriptJavaScriptSheet;
+	protected $ScriptJavaScriptSheetCharset;
+	protected $ScriptJavaScriptSheetCode;
+	protected $ScriptJavaScriptDefer;
+	protected $ScriptVBScriptSheet;
+	protected $ScriptVBScriptCharset;
+	protected $ScriptVBScriptCode;
+	protected $ScriptVBScriptDefer;
+	protected $SiteName;
+	//protected $HttpUserAgent;
+	protected $header;
+	protected $HeaderProtectionLayer;
 	
 	public function XhtmlHeader($tablenames, $database) {
 		$this->HeaderProtectionLayer = &$database;
@@ -72,7 +72,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 	public function getSiteName() {
 		return $this->SiteName;
 	}
-	
+	/*
 	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
@@ -80,7 +80,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
-	
+	*/
 	function FetchDatabase ($PageID) {
 		$this->HeaderProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
@@ -134,7 +134,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		$this->HeaderProtectionLayer->Disconnect($this->databasetable);
 	}
 	
-	private function FillArray($arrayname, $arrayvalue) {
+	protected function FillArray($arrayname, $arrayvalue) {
 		$i = 1;
 		$temp = $arrayvalue;
 		$temp .= $i;
@@ -154,14 +154,14 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		$this->NullArrayWalk ($arrayname, 0, count($this->$arrayname));
 	}
 	
-	private function PrintArrayHelper ($item, $nametag ){
+	protected function PrintArrayHelper ($item, $nametag ){
 		$this->header .= $nametag;
 		$this->header .= '="';
 		$this->header .= $item;
 		$this->header .= '" ';
 	}
 	
-	private function PrintArray($arraynames, $starttag, $arraynametags) {
+	protected function PrintArray($arraynames, $starttag, $arraynametags) {
 		$i = 1;
 		$j = 0;
 		$flag = NULL;
@@ -227,7 +227,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function NullArrayWalk($arrayname, $key, $max) {
+	protected function NullArrayWalk($arrayname, $key, $max) {
 		$hasvalue = FALSE;
 		$i = 0;
 		while ($i < $max) {
@@ -242,7 +242,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function IEStyleSheetBuild($IEStyleSheetName){
+	protected function IEStyleSheetBuild($IEStyleSheetName){
 		$i = 1;
 		$temp = $IEStyleSheetName;
 		$temp .= $i;
@@ -255,7 +255,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function TagSheet($starttag, $rel, $type, $charset, $defer, $title, $src, $href, $intag, $endtag) {
+	protected function TagSheet($starttag, $rel, $type, $charset, $defer, $title, $src, $href, $intag, $endtag) {
 		$i = 0;
 		$max = 1;
 		if (is_array($rel)) {
@@ -344,7 +344,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function TagSheetCheck ($tag, $tagname, $i) {
+	protected function TagSheetCheck ($tag, $tagname, $i) {
 		if (is_array($tag)) {
 			if ($tag[$i] != NULL) {
 				$this->TagSheetOutput($tagname, $tag[$i]);
@@ -354,7 +354,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function TagSheetOutput($tag, $tagvalue) {
+	protected function TagSheetOutput($tag, $tagvalue) {
 		$this->header .= ' ';
 		if ($tag) {
 			$this->header .= $tag;
@@ -366,7 +366,7 @@ class XhtmlHeader implements Tier6ContentLayerModules
 		}
 	}
 	
-	private function ArrayCheck(&$array) {
+	protected function ArrayCheck(&$array) {
 		$i = 0;
 		$max = count($array);
 		while ($i < $max) {

@@ -11,9 +11,8 @@
 
 
 <?
-	require("Tier2-DataAccessLayer/ClassMySqlConnect.php");
-	require("Tier3-ProtectionLayer/ClassProtectionLayer.php");
-	require ("Configuration/settings.php");
+	// Includes all files
+	require_once ('Configuration/includes.php');
 	
 	//$credentaillogonarray = Array ('mysql', 'yroot', 'gmt461z020414', 'Test');
 	//$credentaillogonarray = Array ('mysql', 'yroot', 'gmt461z020414', 'TravisNapoleanSmithVersion2');

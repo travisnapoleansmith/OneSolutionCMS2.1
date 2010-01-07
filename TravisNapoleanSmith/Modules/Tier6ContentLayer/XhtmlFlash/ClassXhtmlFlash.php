@@ -1,89 +1,91 @@
 <?php
 
-class XhtmlFlash implements Tier6ContentLayerModules {
-	private $idnumber;
-	private $idnumber1;
+class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	//protected $PageID;
+	//protected $ObjectID;
+	/*
+	protected $hostname;
+	protected $user;
+	protected $password;
+	protected $databasename;
+	protected $databasetable;
+	*/
+	protected $FlashProtectionLayer;
+	protected $FlashPath;
+	protected $Width;
+	protected $Height;
+	protected $Wmode;
+	protected $AllowFullScreen;
+	protected $AllowScriptAccess;
 	
-	private $hostname;
-	private $user;
-	private $password;
-	private $databasename;
-	private $databasetable;
+	// Flashprotecteds File Properties
+	protected $FlashprotectedsAuthor;
+	protected $FlashprotectedsDate;
+	protected $FlashprotectedsDescription;
+	protected $FlashprotectedsDuration;
+	protected $FlashprotectedsFile;
+	protected $FlashprotectedsImage;
+	protected $FlashprotectedsLink;
+	protected $FlashprotectedsStart;
+	protected $FlashprotectedsStreamer;
+	protected $FlashprotectedsTags;
+	protected $FlashprotectedsTitle;
+	protected $FlashprotectedsType;
 	
-	private $FlashProtectionLayer;
-	private $FlashPath;
-	private $Width;
-	private $Height;
-	private $Wmode;
-	private $AllowFullScreen;
-	private $AllowScriptAccess;
+	//Flashprotecteds Layout Properties
+	protected $FlashprotectedsBackColor;
+	protected $FlashprotectedsControlBar;
+	protected $FlashprotectedsDock;
+	protected $FlashprotectedsFrontColor;
+	protected $FlashprotectedsHeight;
+	protected $FlashprotectedsIcons;
+	protected $FlashprotectedsLightColor;
+	protected $FlashprotectedsLogo;
+	protected $FlashprotectedsPlaylist;
+	protected $FlashprotectedsPlaylistSize;
+	protected $FlashprotectedsSkin;
+	protected $FlashprotectedsScreenColor;
+	protected $FlashprotectedsWidth;
 	
-	// Flashprivates File Properties
-	private $FlashprivatesAuthor;
-	private $FlashprivatesDate;
-	private $FlashprivatesDescription;
-	private $FlashprivatesDuration;
-	private $FlashprivatesFile;
-	private $FlashprivatesImage;
-	private $FlashprivatesLink;
-	private $FlashprivatesStart;
-	private $FlashprivatesStreamer;
-	private $FlashprivatesTags;
-	private $FlashprivatesTitle;
-	private $FlashprivatesType;
+	//Flashprotecteds Behavior Properties
+	protected $FlashprotectedsAutoStart;
+	protected $FlashprotectedsBufferLength;
+	protected $FlashprotectedsDisplayClick;
+	protected $FlashprotectedsDisplayTitle;
+	protected $FlashprotectedsFullScreen;
+	protected $FlashprotectedsItem;
+	protected $FlashprotectedsLinkTarget;
+	protected $FlashprotectedsMute;
+	protected $FlashprotectedsRepeat;
+	protected $FlashprotectedsShuffle;
+	protected $FlashprotectedsSmoothing;
+	protected $FlashprotectedsState;
+	protected $FlashprotectedsStretching;
+	protected $FlashprotectedsVolume;
 	
-	//Flashprivates Layout Properties
-	private $FlashprivatesBackColor;
-	private $FlashprivatesControlBar;
-	private $FlashprivatesDock;
-	private $FlashprivatesFrontColor;
-	private $FlashprivatesHeight;
-	private $FlashprivatesIcons;
-	private $FlashprivatesLightColor;
-	private $FlashprivatesLogo;
-	private $FlashprivatesPlaylist;
-	private $FlashprivatesPlaylistSize;
-	private $FlashprivatesSkin;
-	private $FlashprivatesScreenColor;
-	private $FlashprivatesWidth;
+	//Flashprotecteds API Properties
+	protected $FlashprotectedsClient;
+	protected $FlashprotectedsDebug;
+	protected $FlashprotectedsId;
+	protected $FlashprotectedsPlugins;
+	protected $FlashprotectedsVersion;
 	
-	//Flashprivates Behavior Properties
-	private $FlashprivatesAutoStart;
-	private $FlashprivatesBufferLength;
-	private $FlashprivatesDisplayClick;
-	private $FlashprivatesDisplayTitle;
-	private $FlashprivatesFullScreen;
-	private $FlashprivatesItem;
-	private $FlashprivatesLinkTarget;
-	private $FlashprivatesMute;
-	private $FlashprivatesRepeat;
-	private $FlashprivatesShuffle;
-	private $FlashprivatesSmoothing;
-	private $FlashprivatesState;
-	private $FlashprivatesStretching;
-	private $FlashprivatesVolume;
+	//Flashprotecteds ConfigXML Properties
+	protected $FlashprotectedsConfig;
 	
-	//Flashprivates API Properties
-	private $FlashprivatesClient;
-	private $FlashprivatesDebug;
-	private $FlashprivatesId;
-	private $FlashprivatesPlugins;
-	private $FlashprivatesVersion;
-	
-	//Flashprivates ConfigXML Properties
-	private $FlashprivatesConfig;
-	
-	private $FlashprivatesText;
-	private $AltText;
-	private $StartTag;
-	private $EndTag;
-	private $StartTagId;
-	private $StartTagStyle;
-	private $StartTagClass;
-	private $Flash;
-	private $Space;
-	private $HttpUserAgent;
-	private $IsIE;
+	protected $FlashprotectedsText;
+	protected $AltText;
+	/*
+	protected $StartTag;
+	protected $EndTag;
+	protected $StartTagId;
+	protected $StartTagStyle;
+	protected $StartTagClass;
+	*/
+	protected $Flash;
+	//protected $Space;
+	//protected $HttpUserAgent;
+	protected $IsIE;
 	
 	public function XhtmlFlash($tablenames, $database) {
 		$this->FlashProtectionLayer = &$database;
@@ -99,17 +101,17 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 		$this->FlashProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->FlashProtectionLayer->setDatabasetable ($databasetable);
 	}
-	
-	public function setIdnumber($idnumber) {
-		$this->idnumber = $idnumber;
+	/*
+	public function setPageID($PageID) {
+		$this->PageID = $PageID;
 	}
 	
-	public function getIdNumber() {
-		return $this->idnumber;
+	public function getPageID() {
+		return $this->PageID;
 	}
 	
-	public function getIdnumber1() {
-		return $this->idnumber1;
+	public function getObjectID() {
+		return $this->ObjectID;
 	}
 	
 	public function setHttpUserAgent ($HttpUserAgent) {
@@ -119,17 +121,17 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
-	
+	*/
 	public function FetchDatabase ($PageID) {
-		$this->idnumber = $PageID['PageID'];
-		$this->idnumber1 = $PageID['ObjectID'];
+		$this->PageID = $PageID['PageID'];
+		$this->ObjectID = $PageID['ObjectID'];
 		unset ($PageID['PrintPreview']);
 		
 		$this->FlashProtectionLayer->Connect($this->databasetable);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('PageID' => $passarray));
+		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('PageID' => $passarray));
 		
 		$this->FlashPath = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashPath'));
 		$this->Width = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Width'));
@@ -200,35 +202,37 @@ class XhtmlFlash implements Tier6ContentLayerModules {
 		$this->StartTagStyle = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->CheckUserString();
+		$this->IsIE = $this->CheckUserString();
 		
 		$this->FlashProtectionLayer->Disconnect($this->databasetable);
 	}
-	
-	private function CheckUserString() {
+	/*
+	// PUT THIS IN ABSTRACT LAYER
+	protected function CheckUserString() {
 		if (strstr($this->HttpUserAgent, 'MSIE 6.0')) {
 			if ($this->AllowScriptAccess == 'true') {
 				$this->AllowScriptAccess = 'always';
 			}
-			$this->IsIE = TRUE;
+			return TRUE;
 		}
 		
 		if (strstr($this->HttpUserAgent,'MSIE 7.0')) {
 			if ($this->AllowScriptAccess == 'true') {
 				$this->AllowScriptAccess = 'always';
 			}
-			$this->IsIE = TRUE;
+			return TRUE;
 		}
 		
 		if (strstr($this->HttpUserAgent,'MSIE 8.0')) {
 			if ($this->AllowScriptAccess == 'true') {
 				$this->AllowScriptAccess = 'always';
 			}
-			$this->IsIE = TRUE;
+			return TRUE;
 		}
 	}
+	*/
 	
-	private function BuildFlashVarsText() {
+	protected function BuildFlashVarsText() {
 		// FlashVars File Properties
 		if ($this->FlashVarsAuthor) {
 			$this->FlashVarsAuthor = trim($this->FlashVarsAuthor, '"');

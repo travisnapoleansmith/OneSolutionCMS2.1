@@ -1,55 +1,55 @@
 <?php
 
-class XhtmlNews implements Tier6ContentLayerModules {
-	private $PageID;
-	private $ObjectID;
-	private $NewsButtons;
-	private $NewsStories;
-	private $ContentLayerTables;
-	private $NewsButtonsTableName;
-	private $NewsStoriesTableName;
-	private $ContentLayerTablesName;
+class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	//protected $PageID;
+	//protected $ObjectID;
+	protected $NewsButtons;
+	protected $NewsStories;
+	protected $ContentLayerTables;
+	protected $NewsButtonsTableName;
+	protected $NewsStoriesTableName;
+	protected $ContentLayerTablesName;
+	/*
+	protected $hostname;
+	protected $user; 
+	protected $password; 
+	protected $databasename;
+	protected $databasetable;
+	*/
+	protected $ContainerObjectType;
+	protected $ContainerObjectID;
+	protected $RevisionID;
+	protected $CurrentVersion;
+	protected $Empty;
+	/*
+	protected $StartTag;
+	protected $EndTag;
+	protected $StartTagID;
+	protected $StartTagStyle;
+	protected $StartTagClass;
+	*/
+	protected $Heading;
+	protected $HeadingStartTag;
+	protected $HeadingEndTag;
+	protected $HeadingStartTagID;
+	protected $HeadingStartTagClass;
+	protected $HeadingStartTagStyle;
 	
-	private $hostname;
-	private $user; 
-	private $password; 
-	private $databasename;
-	private $databasetable;
-	
-	private $ContainerObjectType;
-	private $ContainerObjectID;
-	private $RevisionID;
-	private $CurrentVersion;
-	private $Empty;
-	
-	private $StartTag;
-	private $EndTag;
-	private $StartTagID;
-	private $StartTagStyle;
-	private $StartTagClass;
-	
-	private $Heading;
-	private $HeadingStartTag;
-	private $HeadingEndTag;
-	private $HeadingStartTagID;
-	private $HeadingStartTagClass;
-	private $HeadingStartTagStyle;
-	
-	private $Content;
-	private $ContentStartTag;
-	private $ContentEndTag;
-	private $ContentStartTagID;
-	private $ContentStartTagClass;
-	private $ContentStartTagStyle;
-	
-	private $EnableDisable;
-	private $Status;
-	
-	private $Space;
-	private $News;
-	private $HttpUserAgent;
-	private $errormessage;
-	private $NewsButtonsRowCount;
+	protected $Content;
+	protected $ContentStartTag;
+	protected $ContentEndTag;
+	protected $ContentStartTagID;
+	protected $ContentStartTagClass;
+	protected $ContentStartTagStyle;
+	/*
+	protected $EnableDisable;
+	protected $Status;
+	*/
+	//protected $Space;
+	protected $News;
+	//protected $HttpUserAgent;
+	//protected $ErrorMessage;
+	protected $NewsButtonsRowCount;
 	
 	public function XhtmlNews($tablenames, $database) {
 		$this->NewsButtons = &$database;
@@ -74,7 +74,7 @@ class XhtmlNews implements Tier6ContentLayerModules {
 		$this->NewsStories->setDatabasetable ($databasetable);
 		
 	}
-	
+	/*
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
@@ -100,13 +100,13 @@ class XhtmlNews implements Tier6ContentLayerModules {
 	}
 	
 	public function getError ($idnumber) {
-		return $this->errormessage[$idnumber];
+		return $this->ErrorMessage[$idnumber];
 	}
 	
 	public function getErrorArray() {
-		return $this->errormessage;
+		return $this->ErrorMessage;
 	}
-	
+	*/
 	public function FetchDatabase ($PageID) {
 		unset ($PageID['PrintPreview']);
 		
@@ -164,8 +164,8 @@ class XhtmlNews implements Tier6ContentLayerModules {
 		$this->NewsStories->Disconnect($this->databasetable);
 				
 	}
-	
-	private function CreateWordWrap($wordwrapstring) {
+	// MAKE THIS WORK WITH XHTMLCONTENT's WORDWRAP!
+	protected function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, '<a href');
@@ -200,8 +200,8 @@ class XhtmlNews implements Tier6ContentLayerModules {
 		}
 		return $wordwrapstring;
 	}
-	
-	private function buildModules($moduleslocation) {
+	/*
+	protected function buildModules($moduleslocation) {
 		if ($moduleslocation) {
 			$hold = Array();
 			$dir = dir($moduleslocation);
@@ -219,16 +219,16 @@ class XhtmlNews implements Tier6ContentLayerModules {
 						if (is_file($modulesfile)) {
 							$hold[$entry] = $modulesfile;
 						} else {
-							array_push($this->errormessage,'buildModules: Module file does not exist!');
+							array_push($this->ErrorMessage,'buildModules: Module file does not exist!');
 						}
 					}
 				}
 			}
 			return $hold;
 		} else {
-			array_push($this->errormessage,'buildModules: Module Location is not set!');
+			array_push($this->ErrorMessage,'buildModules: Module Location is not set!');
 		}
-	}
+	}*/
 	
 	public function CreateOutput($space) {
 	  	$this->Space = $space;

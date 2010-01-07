@@ -1,6 +1,5 @@
 <?php
 	function bottompanel1() {
-		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		// Fetch Current Page ID - Based on filename
 		//$pagename = $_SERVER['PHP_SELF'];
 		//$directory = dirname($_SERVER['PHP_SELF']);
@@ -36,7 +35,7 @@
 		$list->FetchDatabase ($listidnumber);
 		$list->CreateOutput('   ');
 		$listidnumber['ObjectID'] = 1;
-		
+	
 		$listoutput = $list->getOutput();
 		
 		$list1 = new XhtmlMenu($listdatabase, $databases);
@@ -97,7 +96,6 @@
 		$output .= "  $listoutput5";
 		$output .= "</div>\n\n";
 		return $output;
-		
 	}
 	
 ?>

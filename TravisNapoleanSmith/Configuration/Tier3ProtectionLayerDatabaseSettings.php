@@ -13,8 +13,12 @@
 	$Databases->createDatabaseTable('MenuBottomPanel2');
 	$Databases->createDatabaseTable('MenuTopPanel2');
 	$Databases->createDatabaseTable('NewsButtons');
+	$Databases->createDatabaseTable('NewsMenuBottomPanel2');
+	$Databases->createDatabaseTable('NewsPageAttributes');
 	$Databases->createDatabaseTable('NewsStories');
+	$Databases->createDatabaseTable('NewsStoriesFull');
 	$Databases->createDatabaseTable('PageAttributes');
 	$Databases->createDatabaseTable('Picture');
+	$Databases->createDatabaseTable('XMLSitemap');
 	
 ?>

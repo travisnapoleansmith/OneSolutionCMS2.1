@@ -1,4 +1,5 @@
 <?php	
+	//error_reporting('E_ERROR');
 	// Includes all files
 	require_once ('Configuration/includes.php');
 	

@@ -1,36 +1,36 @@
 <?php
 
-class XhtmlPicture implements Tier6ContentLayerModules {
-	private $PageID;
-	private $ObjectID;
-	private $PictureProtectionLayer;
+class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	/*protected $PageID;
+	protected $ObjectID;*/
+	protected $PictureProtectionLayer;
+	/*
+	protected $hostname;
+	protected $user;
+	protected $password;
+	protected $databasename;
+	protected $databasetable;
 	
-	private $hostname;
-	private $user;
-	private $password;
-	private $databasename;
-	private $databasetable;
+	protected $StartTag;
+	protected $EndTag;
+	protected $StartTagID;
+	protected $StartTagStyle;
+	protected $StartTagClass;
+	*/
+	protected $PictureID;
+	protected $PictureClass;
+	protected $PictureStyle;
+	protected $PictureLink;
+	protected $PictureAltText;
+	/*
+	protected $EnableDisable;
+	protected $Status;*/
+	protected $Width;
+	protected $Height;
 	
-	private $StartTag;
-	private $EndTag;
-	private $StartTagID;
-	private $StartTagStyle;
-	private $StartTagClass;
-	
-	private $PictureID;
-	private $PictureClass;
-	private $PictureStyle;
-	private $PictureLink;
-	private $PictureAltText;
-	
-	private $EnableDisable;
-	private $Status;
-	private $Width;
-	private $Height;
-	
-	private $Space;
-	private $Picture;
-	private $HttpUserAgent;
+	//protected $Space;
+	protected $Picture;
+	//protected $HttpUserAgent;
 	
 	public function XhtmlPicture($tablenames, $database) {
 		$this->PictureProtectionLayer = &$database;
@@ -46,7 +46,7 @@ class XhtmlPicture implements Tier6ContentLayerModules {
 		$this->PictureProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->PictureProtectionLayer->setDatabasetable ($databasetable);
 	}
-	
+	/*
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
@@ -70,7 +70,7 @@ class XhtmlPicture implements Tier6ContentLayerModules {
 	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
 	}
-	
+	*/
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
