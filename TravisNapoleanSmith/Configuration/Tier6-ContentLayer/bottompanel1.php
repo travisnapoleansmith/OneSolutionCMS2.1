@@ -1,5 +1,6 @@
 <?php
 	function bottompanel1() {
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		// Fetch Current Page ID - Based on filename
 		//$pagename = $_SERVER['PHP_SELF'];
 		//$directory = dirname($_SERVER['PHP_SELF']);
