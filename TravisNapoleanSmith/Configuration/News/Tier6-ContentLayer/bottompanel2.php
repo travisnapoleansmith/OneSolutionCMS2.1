@@ -13,9 +13,17 @@
 	// Fetch Current Page ID - Based On ID Number
 	$listidnumber = Array();
 	$listidnumber['PageID'] = 1;
+	$listidnumber['ObjectID'] = 0;
+	
+	$listdatabase = Array();
 	
 	if ($_GET['NewsID']){
 		$listidnumber['PageID'] = $_GET['NewsID'];
+		$listdatabase['NewsMenuBottomPanel2'] = 'NewsMenuBottomPanel2';
+		$listname = 'NewsMenuBottomPanel2';
+	} else {
+		$listdatabase['NewsMenuBottomPanel2YearMonth'] = 'NewsMenuBottomPanel2YearMonth';
+		$listname = 'NewsMenuBottomPanel2YearMonth';
 	}
 	
 	if ($_GET['StoryYear'] & $_GET['StoryMonth']) {
@@ -26,14 +34,10 @@
 		$listidnumber['PageID'] = $_GET['StoryMonth'];
 	}
 	
-	$listidnumber['ObjectID'] = 0;
-	$listdatabase = Array();
-	$listdatabase['MenuBottomPanel2'] = 'MenuBottomPanel2';
-	
 	$databases = &$GLOBALS['Databases'];
 	
 	$list = new XhtmlMenu($listdatabase, $databases);
-	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsMenuBottomPanel2');
+	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $listname);
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list->FetchDatabase ($listidnumber);
 	$list->CreateOutput('   ');
@@ -43,7 +47,7 @@
 	$listoutput = $list->getOutput();
 	
 	$list1 = new XhtmlMenu($listdatabase, $databases);
-	$list1->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsMenuBottomPanel2');
+	$list1->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $listname);
 	$list1->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list1->FetchDatabase ($listidnumber);
 	$list1->CreateOutput('   ');
@@ -53,7 +57,7 @@
 	$listoutput1 = $list1->getOutput();
 		
 	$list2 = new XhtmlMenu($listdatabase, $databases);
-	$list2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsMenuBottomPanel2');
+	$list2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $listname);
 	$list2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list2->FetchDatabase ($listidnumber);
 	$list2->CreateOutput('   ');
@@ -63,7 +67,7 @@
 	$listoutput2 = $list2->getOutput();
 			
 	$list3 = new XhtmlMenu($listdatabase, $databases);
-	$list3->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsMenuBottomPanel2');
+	$list3->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $listname);
 	$list3->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list3->FetchDatabase ($listidnumber);
 	$list3->CreateOutput('   ');
@@ -77,6 +81,5 @@
 	print "  $listoutput2";
 	print "  $listoutput3";
 	//print "\n";
-	//print_r($list);
 	
 ?>

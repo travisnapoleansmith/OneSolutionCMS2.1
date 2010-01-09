@@ -15,12 +15,23 @@
 	// MUST LOOK AT FIXING P PROBLEM WITH LINKS!
 	//$newsidnumber['PageID'] = 6;
 	
-	//$newsidnumber['PageID'] = NULL;
+	$newsidnumber['PageID'] = NULL;
+	$newsidnumber['ObjectID'] = 0;
+	
+	$newsdatabase = Array();
 	
 	if ($_GET['NewsID']){
 		$newsidnumber['PageID'] = $_GET['NewsID'];
+		$newsdatabase['NewsButtons'] = 'NewsButtons';
+		$newsdatabase['NewsStoriesFull'] = 'NewsStoriesFull';
+		$newsdatabase['ContentLayerTables'] = 'ContentLayerTables';
+		$newsname = 'NewsStoriesFull';
 	} else {
 		$newsidnumber['PageID'] = 1;
+		$newsdatabase['NewsButtons'] = 'NewsButtons';
+		$newsdatabase['NewsStoriesFullYearMonth'] = 'NewsStoriesFullYearMonth';
+		$newsdatabase['ContentLayerTables'] = 'ContentLayerTables';
+		$newsname = 'NewsStoriesFullYearMonth';
 	}
 	
 	if ($_GET['StoryYear'] & $_GET['StoryMonth']) {
@@ -31,16 +42,10 @@
 		$newsidnumber['PageID'] = $_GET['StoryMonth'];
 	}
 
-	$newsidnumber['ObjectID'] = 0;
-	$newsdatabase = Array();
-	$newsdatabase['NewsButtons'] = 'NewsButtons';
-	$newsdatabase['NewsStoriesFull'] = 'NewsStoriesFull';
-	$newsdatabase['ContentLayerTables'] = 'ContentLayerTables';
-
 	$databases = &$GLOBALS['Databases'];
-
+	
 	$news = new XhtmlNews($newsdatabase, $databases);
-	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStoriesFull');
+	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $newsname);
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$news->FetchDatabase ($newsidnumber);
 	$news->CreateOutput('    ');
