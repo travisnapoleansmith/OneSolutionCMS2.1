@@ -28,4 +28,6 @@
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenuItem.php'; 
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php';
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenu.php';
+	
+	require_once 'Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';
 ?>

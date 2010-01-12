@@ -1074,6 +1074,10 @@ class MySqlConnect
 		return $this->entiretable[$rownumber][$rowcolumn];
 	}
 	
+	public function getEntireTable () {
+		return $this->entiretable;
+	}
+	
 	public function getSearchResults($idnumber, $key) {
 		return $this->idsearch[$idnumber][$key];
 	}

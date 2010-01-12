@@ -4,13 +4,13 @@
 	<title>MY RSS FEED</title>
 	<link>http://beta.travisnapoleansmith.org/rss.php</link>
 	<description>This is a description of my feed!</description>
-	<lastBuildDate>Mon, 12 Sept 2005 18:37:00 GMT</lastBuildDate>
+	<lastBuildDate>Mon, 11 Jan 2010 08:00:00 EST</lastBuildDate>
 	<language>en-us</language>
  
 	<item>
 		<title>Title of my item</title>
 		<link>http://beta.travisnapoleansmith.org/rss.php</link>
-		<pubDate>Mon, 12 Sep 2005 18:37:00 GMT</pubDate>
+		<pubDate>Mon, 11 Jan 2010 08:00:00 EST</pubDate>
 		<description>This is my description</description>
 	</item>
 </channel>

@@ -1,4 +1,6 @@
 <?php
+// DON'T USE THIS
+
 $var = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
 $var .= "<rss version=\"2.0\">\n";
 $var .= "<channel>\n";

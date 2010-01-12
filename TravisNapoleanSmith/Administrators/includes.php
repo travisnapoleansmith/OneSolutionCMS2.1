@@ -6,6 +6,9 @@
 	// Tiers Interface Includes
 	require_once '../ModulesInterfaces/Tier6ContentLayer/Tier6ContentLayerModulesInterfaces.php';
 	
+	// Tiers Modules Abstract
+	require_once '../ModulesAbstract/Tier6ContentLayer/Tier6ContentLayerModulesAbstract.php';
+	
 	// Tier 3 Protection Layer Settings
 	require_once '../Configuration/Tier3ProtectionLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier3ProtectionLayerSettings.php';
@@ -24,5 +27,5 @@
 	
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItem.php'; 
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php';
-	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php';
+	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php'
 ?>

@@ -84,6 +84,7 @@
 	$DatabaseAllow['getDatabase'] = 'getDatabase';
 	$DatabaseAllow['getRowField'] = 'getRowField';
 	$DatabaseAllow['getTable'] = 'getTable';
+	$DatabaseAllow['getEntireTable'] = 'getEntireTable';
 	$DatabaseAllow['getSearchResults'] = 'getSearchResults';
 	$DatabaseAllow['getTableNames'] = 'getTableNames';
 	
