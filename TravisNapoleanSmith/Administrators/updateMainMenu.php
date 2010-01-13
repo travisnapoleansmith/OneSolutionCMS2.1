@@ -71,7 +71,7 @@
 			print "<body>\n";
 			print "<h1>Administrators Update Main Menu</h1>\n";
 			print "<p>menu.html has been updated!</p>\n";
-			print "<p><a href='../index.php' title='Home Page'>Return to Home Page</a></p>\n";
+			print "<p><a href='index.php' title='Home Page'>Return to Administrators Page</a></p>\n";
 			print "</body>\n\n";
 			print "</html>\n";
 		}
