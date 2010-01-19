@@ -107,6 +107,11 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		return $this->ErrorMessage;
 	}
 	*/
+	
+	public function getNewsButtonsRowCount() {
+		return $this->NewsButtonsRowCount;
+	}
+	
 	public function FetchDatabase ($PageID) {
 		unset ($PageID['PrintPreview']);
 		
