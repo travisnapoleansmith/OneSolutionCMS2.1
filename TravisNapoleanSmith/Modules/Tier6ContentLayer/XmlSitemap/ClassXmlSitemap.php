@@ -44,11 +44,11 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user;
-		$this->password = $password;
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+		$this->Hostname = $hostname;
+		$this->User = $user;
+		$this->Password = $password;
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 		
 		$this->XmlProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		

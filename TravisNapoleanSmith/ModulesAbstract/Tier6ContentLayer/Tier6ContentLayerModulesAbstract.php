@@ -1,16 +1,7 @@
 <?php
 
-abstract class Tier6ContentLayerModulesAbstract 
+abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 {
-	protected $PageID;
-	protected $ObjectID;
-	
-	protected $hostname;
-	protected $user;
-	protected $password;
-	protected $databasename;
-	protected $databasetable;
-	
 	protected $StartTag;
 	protected $EndTag;
 	protected $StartTagID;
@@ -18,47 +9,9 @@ abstract class Tier6ContentLayerModulesAbstract
 	protected $StartTagClass;
 	
 	protected $PrintPreview;
-	protected $Space;
 	protected $EnableDisable;
 	protected $Status;
-	protected $ErrorMessage = array();
 	protected $HttpUserAgent;
-	
-	public function setPageID($PageID) {
-		$this->PageID = $PageID;
-	}
-	
-	public function getPageID() {
-		return $this->PageID;
-	}
-	
-	public function setObjectID($ObjectID) {
-		$this->ObjectID = $ObjectID;
-	}
-	
-	public function getObjectID() {
-		return $this->ObjectID;
-	}
-	
-	public function gethostname() {
-		return $this->hostname;
-	}
-	
-	public function getuser() {
-		return $this->user;
-	}
-	
-	public function getpassword() {
-		return $this->password;
-	}
-	
-	public function getdatabasename() {
-		return $this->databasename;
-	}
-	
-	public function getdatabasetable() {
-		return $this->databasetable;
-	}
 	
 	public function getEmpty() {
 		return $this->Empty;
@@ -95,39 +48,13 @@ abstract class Tier6ContentLayerModulesAbstract
 	public function getStatus() {
 		return $this->Status;
 	}
-	
-	public function getSpace() {
-		return $this->Space;
-	}	
-	
+
 	public function setHttpUserAgent ($HttpUserAgent) {
 		$this->HttpUserAgent = $HttpUserAgent;
 	}
 	
 	public function getHttpUserAgent() {
 		return $this->HttpUserAgent;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->ErrorMessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->ErrorMessage;
-	}
-	
-	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-	
-	}
-
-	public function FetchDatabase ($idnumber) {
-	
-	}
-	public function CreateOutput($space) {
-	
-	}
-	public function getOutput() {
-	
 	}
 	
 	/*protected function CreateWordWrap($wordwrapstring) {
@@ -202,35 +129,6 @@ abstract class Tier6ContentLayerModulesAbstract
 		}
 		
 		return $wordwrapstring;
-	}
-	
-	protected function buildModules($moduleslocation) {
-		if ($moduleslocation) {
-			$hold = Array();
-			$dir = dir($moduleslocation);
-			
-			while ($entry = $dir->read()) {
-				
-				$filestring = $moduleslocation;
-				$filestring .= $entry;
-				if (!($entry == '.' | $entry == '..')) {
-					if (is_dir($filestring)) {
-						$modulesfile = $filestring;
-						$modulesfile .= '/Class';
-						$modulesfile .= $entry;
-						$modulesfile .= '.php';
-						if (is_file($modulesfile)) {
-							$hold[$entry] = $modulesfile;
-						} else {
-							array_push($this->errormessage,'buildModules: Module file does not exist!');
-						}
-					}
-				}
-			}
-			return $hold;
-		} else {
-			array_push($this->errormessage,'buildModules: Module Location is not set!');
-		}
 	}
 	
 	protected function CheckUserString() {

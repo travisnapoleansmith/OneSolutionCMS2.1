@@ -1,33 +1,19 @@
 <?php
 
 class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	//protected $PageID;
-	//protected $ObjectID;
 	protected $NewsButtons;
 	protected $NewsStories;
 	protected $ContentLayerTables;
 	protected $NewsButtonsTableName;
 	protected $NewsStoriesTableName;
 	protected $ContentLayerTablesName;
-	/*
-	protected $hostname;
-	protected $user; 
-	protected $password; 
-	protected $databasename;
-	protected $databasetable;
-	*/
+	
 	protected $ContainerObjectType;
 	protected $ContainerObjectID;
 	protected $RevisionID;
 	protected $CurrentVersion;
 	protected $Empty;
-	/*
-	protected $StartTag;
-	protected $EndTag;
-	protected $StartTagID;
-	protected $StartTagStyle;
-	protected $StartTagClass;
-	*/
+	
 	protected $Heading;
 	protected $HeadingStartTag;
 	protected $HeadingEndTag;
@@ -41,14 +27,9 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $ContentStartTagID;
 	protected $ContentStartTagClass;
 	protected $ContentStartTagStyle;
-	/*
-	protected $EnableDisable;
-	protected $Status;
-	*/
-	//protected $Space;
+	
 	protected $News;
-	//protected $HttpUserAgent;
-	//protected $ErrorMessage;
+	
 	protected $NewsButtonsRowCount;
 	
 	public function XhtmlNews($tablenames, $database) {
@@ -61,11 +42,11 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user; 
-		$this->password = $password; 
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+		$this->Hostname = $hostname;
+		$this->User = $user; 
+		$this->Password = $password; 
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 		
 		$this->NewsButtons->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->NewsButtons->setDatabasetable ($databasetable);
@@ -74,39 +55,6 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->NewsStories->setDatabasetable ($databasetable);
 		
 	}
-	/*
-	public function setPageID($PageID) {
-		$this->PageID = $PageID;
-	}
-	
-	public function getPageID() {
-		return $this->PageID;
-	}
-	
-	public function setObjectID($ObjectID) {
-		$this->ObjectID = $ObjectID;
-	}
-	
-	public function getObjectID() {
-		return $this->ObjectID;
-	}
-	
-	public function setHttpUserAgent ($HttpUserAgent) {
-		$this->HttpUserAgent = $HttpUserAgent;
-	}
-	
-	public function getHttpUserAgent() {
-		return $this->HttpUserAgent;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->ErrorMessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->ErrorMessage;
-	}
-	*/
 	
 	public function getNewsButtonsRowCount() {
 		return $this->NewsButtonsRowCount;
@@ -115,14 +63,14 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	public function FetchDatabase ($PageID) {
 		unset ($PageID['PrintPreview']);
 		
-		$this->NewsButtons->Connect($this->databasetable);
+		$this->NewsButtons->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = &$PageID;
-		$this->NewsButtons->pass ($this->databasetable, 'setEntireTable', array());
-		$this->NewsButtonsRowCount = $this->NewsButtons->pass ($this->databasetable, 'getRowCount', array());
-		$this->NewsButtons->Disconnect($this->databasetable);
+		$this->NewsButtons->pass ($this->DatabaseTable, 'setEntireTable', array());
+		$this->NewsButtonsRowCount = $this->NewsButtons->pass ($this->DatabaseTable, 'getRowCount', array());
+		$this->NewsButtons->Disconnect($this->DatabaseTable);
 		
-		$this->NewsButtonsRowCount = $this->NewsButtons->pass ($this->databasetable, 'getTable', array('rownumber' => $this->NewsButtonsRowCount, 'rowcolumn' => 'PageID'));
+		$this->NewsButtonsRowCount = $this->NewsButtons->pass ($this->DatabaseTable, 'getTable', array('rownumber' => $this->NewsButtonsRowCount, 'rowcolumn' => 'PageID'));
 		
 		if ($PageID['PageID'] == NULL) {
 			$this->PageID = $this->NewsButtonsRowCount;
@@ -132,41 +80,41 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 		$this->ObjectID = $PageID['ObjectID'];
 		
-		$this->NewsStories->Connect($this->databasetable);
-		$this->NewsStories->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->NewsStories->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->NewsStories->Connect($this->DatabaseTable);
+		$this->NewsStories->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->NewsStories->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->ContainerObjectType = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
-	    $this->ContainerObjectID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContainerObjectID'));
-	    $this->RevisionID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'RevisionID'));
-	    $this->CurrentVersion = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'CurrentVersion'));
-	    $this->Empty = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Empty'));
+		$this->ContainerObjectType = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
+	    $this->ContainerObjectID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectID'));
+	    $this->RevisionID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'RevisionID'));
+	    $this->CurrentVersion = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'CurrentVersion'));
+	    $this->Empty = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Empty'));
 		
-		$this->StartTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->StartTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
+		$this->StartTagStyle = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->Heading = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Heading'));
-		$this->HeadingStartTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'HeadingStartTag'));
-		$this->HeadingEndTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'HeadingEndTag'));
-		$this->HeadingStartTagID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'HeadingStartTagID'));
-		$this->HeadingStartTagClass = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'HeadingStartTagClass'));
-		$this->HeadingStartTagStyle = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'HeadingStartTagStyle'));
+		$this->Heading = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Heading'));
+		$this->HeadingStartTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTag'));
+		$this->HeadingEndTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingEndTag'));
+		$this->HeadingStartTagID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagID'));
+		$this->HeadingStartTagClass = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagClass'));
+		$this->HeadingStartTagStyle = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagStyle'));
 	
-		$this->Content = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Content'));
-		$this->ContentStartTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentStartTag'));
-		$this->ContentEndTag = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentEndTag'));
-		$this->ContentStartTagID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
-		$this->ContentStartTagID = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
-		$this->ContentStartTagClass = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
-		$this->ContentStartTagStyle = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
+		$this->Content = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Content'));
+		$this->ContentStartTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTag'));
+		$this->ContentEndTag = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentEndTag'));
+		$this->ContentStartTagID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
+		$this->ContentStartTagID = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
+		$this->ContentStartTagClass = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
+		$this->ContentStartTagStyle = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
 	
-		$this->EnableDisable = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->NewsStories->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Status'));
+		$this->EnableDisable = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->NewsStories->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
-		$this->NewsStories->Disconnect($this->databasetable);
+		$this->NewsStories->Disconnect($this->DatabaseTable);
 				
 	}
 	// MAKE THIS WORK WITH XHTMLCONTENT's WORDWRAP!
@@ -205,35 +153,6 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 		return $wordwrapstring;
 	}
-	/*
-	protected function buildModules($moduleslocation) {
-		if ($moduleslocation) {
-			$hold = Array();
-			$dir = dir($moduleslocation);
-			
-			while ($entry = $dir->read()) {
-				
-				$filestring = $moduleslocation;
-				$filestring .= $entry;
-				if (!($entry == '.' | $entry == '..')) {
-					if (is_dir($filestring)) {
-						$modulesfile = $filestring;
-						$modulesfile .= '/Class';
-						$modulesfile .= $entry;
-						$modulesfile .= '.php';
-						if (is_file($modulesfile)) {
-							$hold[$entry] = $modulesfile;
-						} else {
-							array_push($this->ErrorMessage,'buildModules: Module file does not exist!');
-						}
-					}
-				}
-			}
-			return $hold;
-		} else {
-			array_push($this->ErrorMessage,'buildModules: Module Location is not set!');
-		}
-	}*/
 	
 	public function CreateOutput($space) {
 	  	$this->Space = $space;
@@ -534,7 +453,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					
 					$news = new XhtmlNews($newsdatabase, $this->NewsButtons);
 					$news->setHttpUserAgent($this->HttpUserAgent);
-					$news->setDatabaseAll ($this->hostname, $this->user, $this->password, $this->databasename, $this->databasetable);
+					$news->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 					$news->FetchDatabase ($newsidnumber);
 					$news->CreateOutput($this->Space);
 					
@@ -579,7 +498,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 						$module = new $this->ContainerObjectType($modulesdatabase);
 						reset($databasetablename);
-						$module->setDatabaseAll ($this->hostname, $this->user, $this->password, $this->databasename, current($databasetablename));
+						$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 						$module->setHttpUserAgent($this->HttpUserAgent);
 						$module->FetchDatabase($modulesidnumber);
 						$module->CreateOutput('    ');

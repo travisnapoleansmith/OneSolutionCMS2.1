@@ -1,15 +1,6 @@
 <?php
 
 class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	//protected $PageID;
-	//protected $ObjectID;
-	/*
-	protected $hostname;
-	protected $user;
-	protected $password;
-	protected $databasename;
-	protected $databasetable;
-	*/
 	protected $FlashProtectionLayer;
 	protected $FlashPath;
 	protected $Width;
@@ -75,16 +66,9 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $FlashprotectedsText;
 	protected $AltText;
-	/*
-	protected $StartTag;
-	protected $EndTag;
-	protected $StartTagId;
-	protected $StartTagStyle;
-	protected $StartTagClass;
-	*/
+	
 	protected $Flash;
-	//protected $Space;
-	//protected $HttpUserAgent;
+	
 	protected $IsIE;
 	
 	public function XhtmlFlash($tablenames, $database) {
@@ -92,145 +76,100 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user;
-		$this->password = $password;
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+		$this->Hostname = $hostname;
+		$this->User = $user;
+		$this->Password = $password;
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 		
 		$this->FlashProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->FlashProtectionLayer->setDatabasetable ($databasetable);
 	}
-	/*
-	public function setPageID($PageID) {
-		$this->PageID = $PageID;
-	}
 	
-	public function getPageID() {
-		return $this->PageID;
-	}
-	
-	public function getObjectID() {
-		return $this->ObjectID;
-	}
-	
-	public function setHttpUserAgent ($HttpUserAgent) {
-		$this->HttpUserAgent = $HttpUserAgent;
-	}
-	
-	public function getHttpUserAgent() {
-		return $this->HttpUserAgent;
-	}
-	*/
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->FlashProtectionLayer->Connect($this->databasetable);
+		$this->FlashProtectionLayer->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('PageID' => $passarray));
-		$this->FlashProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('PageID' => $passarray));
+		$this->FlashProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('PageID' => $passarray));
+		$this->FlashProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('PageID' => $passarray));
 		
-		$this->FlashPath = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashPath'));
-		$this->Width = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Width'));
-		$this->Height = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Height'));
-		$this->Wmode = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Wmode'));
-		$this->AllowFullScreen = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'AllowFullScreen'));
-		$this->AllowScriptAccess = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'AllowScriptAccess'));
+		$this->FlashPath = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashPath'));
+		$this->Width = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Width'));
+		$this->Height = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Height'));
+		$this->Wmode = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Wmode'));
+		$this->AllowFullScreen = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AllowFullScreen'));
+		$this->AllowScriptAccess = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AllowScriptAccess'));
 		
 		// FlashVars File Properties
-		$this->FlashVarsAuthor = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsAuthor'));
-		$this->FlashVarsDate = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDate'));
-		$this->FlashVarsDescription = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDescription'));
-		$this->FlashVarsDuration = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDuration'));
-		$this->FlashVarsFile = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsFile'));
-		$this->FlashVarsImage = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsImage'));
-		$this->FlashVarsLink = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsLink'));
-		$this->FlashVarsStart = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsStart'));
-		$this->FlashVarsStreamer = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsStreamer'));
-		$this->FlashVarsTags = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsTags'));
-		$this->FlashVarsTitle = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsTitle'));
-		$this->FlashVarsType = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsType'));
+		$this->FlashVarsAuthor = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsAuthor'));
+		$this->FlashVarsDate = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDate'));
+		$this->FlashVarsDescription = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDescription'));
+		$this->FlashVarsDuration = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDuration'));
+		$this->FlashVarsFile = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsFile'));
+		$this->FlashVarsImage = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsImage'));
+		$this->FlashVarsLink = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsLink'));
+		$this->FlashVarsStart = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsStart'));
+		$this->FlashVarsStreamer = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsStreamer'));
+		$this->FlashVarsTags = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsTags'));
+		$this->FlashVarsTitle = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsTitle'));
+		$this->FlashVarsType = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsType'));
 		
 		//FlashVars Layout Properties
-		$this->FlashVarsBackColor = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsBackColor'));
-		$this->FlashVarsControlBar = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsControlBar'));
-		$this->FlashVarsDock = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDock'));
-		$this->FlashVarsFrontColor = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsFrontColor'));
-		$this->FlashVarsHeight = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsHeight'));
-		$this->FlashVarsIcons = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsIcons'));
-		$this->FlashVarsLightColor = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsLightColor'));
-		$this->FlashVarsLogo = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsLogo'));
-		$this->FlashVarsPlaylist = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsPlaylist'));
-		$this->FlashVarsPlaylistSize = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsPlaylistSize'));
-		$this->FlashVarsSkin = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsSkin'));
-		$this->FlashVarsScreenColor = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsScreenColor'));
-		$this->FlashVarsWidth = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsWidth'));
+		$this->FlashVarsBackColor = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsBackColor'));
+		$this->FlashVarsControlBar = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsControlBar'));
+		$this->FlashVarsDock = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDock'));
+		$this->FlashVarsFrontColor = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsFrontColor'));
+		$this->FlashVarsHeight = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsHeight'));
+		$this->FlashVarsIcons = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsIcons'));
+		$this->FlashVarsLightColor = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsLightColor'));
+		$this->FlashVarsLogo = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsLogo'));
+		$this->FlashVarsPlaylist = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsPlaylist'));
+		$this->FlashVarsPlaylistSize = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsPlaylistSize'));
+		$this->FlashVarsSkin = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsSkin'));
+		$this->FlashVarsScreenColor = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsScreenColor'));
+		$this->FlashVarsWidth = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsWidth'));
 		
 		//FlashVars Behavior Properties
-		$this->FlashVarsAutoStart = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsAutoStart'));
-		$this->FlashVarsBufferLength = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsBufferLength'));
-		$this->FlashVarsDisplayClick = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDisplayClick'));
-		$this->FlashVarsDisplayTitle = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDisplayTitle'));
-		$this->FlashVarsFullScreen = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsFullScreen'));
-		$this->FlashVarsItem = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsItem'));
-		$this->FlashVarsLinkTarget = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsLinkTarget'));
-		$this->FlashVarsMute = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsMute'));
-		$this->FlashVarsRepeat = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsRepeat'));
-		$this->FlashVarsShuffle = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsShuffle'));
-		$this->FlashVarsSmoothing = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsSmoothing'));
-		$this->FlashVarsState = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsState'));
-		$this->FlashVarsStretching = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsStretching'));
-		$this->FlashVarsVolume = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsVolume'));
+		$this->FlashVarsAutoStart = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsAutoStart'));
+		$this->FlashVarsBufferLength = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsBufferLength'));
+		$this->FlashVarsDisplayClick = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDisplayClick'));
+		$this->FlashVarsDisplayTitle = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDisplayTitle'));
+		$this->FlashVarsFullScreen = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsFullScreen'));
+		$this->FlashVarsItem = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsItem'));
+		$this->FlashVarsLinkTarget = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsLinkTarget'));
+		$this->FlashVarsMute = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsMute'));
+		$this->FlashVarsRepeat = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsRepeat'));
+		$this->FlashVarsShuffle = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsShuffle'));
+		$this->FlashVarsSmoothing = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsSmoothing'));
+		$this->FlashVarsState = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsState'));
+		$this->FlashVarsStretching = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsStretching'));
+		$this->FlashVarsVolume = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsVolume'));
 	
 		//FlashVars API Properties
-		$this->FlashVarsClient = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsClient'));
-		$this->FlashVarsDebug = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsDebug'));
-		$this->FlashVarsId = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsId'));
-		$this->FlashVarsPlugins = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsPlugins'));
-		$this->FlashVarsVersion = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsVersion'));
+		$this->FlashVarsClient = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsClient'));
+		$this->FlashVarsDebug = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsDebug'));
+		$this->FlashVarsId = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsId'));
+		$this->FlashVarsPlugins = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsPlugins'));
+		$this->FlashVarsVersion = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsVersion'));
 	
 		//FlashVars ConfigXML Properties
-		$this->FlashVarsConfig = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'FlashVarsConfig'));
+		$this->FlashVarsConfig = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashVarsConfig'));
 		
-		$this->AltText = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'AltText'));
-		$this->StartTag = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagId = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagId'));
-		$this->StartTagStyle = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->FlashProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->AltText = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AltText'));
+		$this->StartTag = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagId = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagId'));
+		$this->StartTagStyle = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->FlashProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
 		$this->IsIE = $this->CheckUserString();
 		
-		$this->FlashProtectionLayer->Disconnect($this->databasetable);
+		$this->FlashProtectionLayer->Disconnect($this->DatabaseTable);
 	}
-	/*
-	// PUT THIS IN ABSTRACT LAYER
-	protected function CheckUserString() {
-		if (strstr($this->HttpUserAgent, 'MSIE 6.0')) {
-			if ($this->AllowScriptAccess == 'true') {
-				$this->AllowScriptAccess = 'always';
-			}
-			return TRUE;
-		}
-		
-		if (strstr($this->HttpUserAgent,'MSIE 7.0')) {
-			if ($this->AllowScriptAccess == 'true') {
-				$this->AllowScriptAccess = 'always';
-			}
-			return TRUE;
-		}
-		
-		if (strstr($this->HttpUserAgent,'MSIE 8.0')) {
-			if ($this->AllowScriptAccess == 'true') {
-				$this->AllowScriptAccess = 'always';
-			}
-			return TRUE;
-		}
-	}
-	*/
 	
 	protected function BuildFlashVarsText() {
 		// FlashVars File Properties

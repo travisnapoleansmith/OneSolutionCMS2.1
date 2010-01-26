@@ -1,22 +1,16 @@
 <?php
 
-class ProtectionLayer
+class ProtectionLayer extends LayerModulesAbstract
 {
-	private $modules;
-	private $hostname;
-	private $user;
-	private $password;
-	private $databasename; 
-	private $databasetable;
-	private $errormessage;
-	private $moduleslocation;
-	private $DatabaseAllow;
-	private $DatabaseDeny;
+	protected $Modules;
+	
+	protected $DatabaseAllow;
+	protected $DatabaseDeny;
 	
 	public function ProtectionLayer () {
-		$this->modules = Array();
-		$this->databasetable = Array();
-		$this->errormessage = Array();
+		$this->Modules = Array();
+		$this->DatabaseTable = Array();
+		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['DatabaseDeny'];
 	}
@@ -26,140 +20,80 @@ class ProtectionLayer
 	}
 	
 	public function getModules($key) {
-		return $this->modules[$key];
-	}
-	
-	public function setHostname ($hostname){
-		$this->hostname = $hostname;
-	}
-	
-	public function getHostname () {
-		return $this->hostname;
-	}
-	
-	public function setUser ($user){
-		$this->user = $user;
-	}
-	
-	public function getUser () {
-		return $this->user;
-	}
-	
-	public function setPassword ($password){
-		$this->password = $password;
-	}
-	
-	public function getPassword () {
-		return $this->password;
-	}
-	
-	public function setDatabasename ($databasename){
-		$this->databasename = $databasename;
-	}
-	
-	public function getDatabasename () {
-		return $this->databasename;
-	}
-
-	public function setDatabasetable ($databasetable){
-		$this->databasetable[$databasetable] =  new MySqlConnect();
-	}
-	
-	public function getDatabasetable () {
-		return $this->databasetable;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->errormessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->errormessage;
-	}
-	
-	public function setModulesLocation ($moduleslocation){
-		$this->moduleslocation = $moduleslocation;
-	}
-	
-	public function getModulesLocation () {
-		return $this->moduleslocation;
+		return $this->Modules[$key];
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename) {
-		$this->hostname = $hostname;
-		$this->user = $user;
-		$this->password = $password;
-		$this->databasename = $databasename;
+		$this->Hostname = $hostname;
+		$this->User = $user;
+		$this->Password = $password;
+		$this->DatabaseName = $databasename;
 	}
 	
 	public function ConnectAll () {
-		reset($this->databasetable);
-		while (current($this->databasetable)){
-			$tablename = key($this->databasetable);
-			$this->databasetable[key($this->databasetable)]->setDatabaseAll($this->hostname, $this->user, $this->password, $this->databasename, $tablename);
-			$this->databasetable[key($this->databasetable)]->Connect();
+		reset($this->DatabaseTable);
+		while (current($this->DatabaseTable)){
+			$tablename = key($this->DatabaseTable);
+			$this->DatabaseTable[key($this->DatabaseTable)]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $tablename);
+			$this->DatabaseTable[key($this->DatabaseTable)]->Connect();
 			
-			next($this->databasetable);
+			next($this->DatabaseTable);
 		}
 	}
 	
 	public function Connect ($key) {
-		$this->databasetable[$key]->setDatabaseAll($this->hostname, $this->user, $this->password, $this->databasename, $key);
-		$this->databasetable[$key]->Connect();
+		$this->DatabaseTable[$key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $key);
+		$this->DatabaseTable[$key]->Connect();
 	}
 	
 	public function DisconnectAll () {
-		reset($this->databasetable);
-		while (current($this->databasetable)){
-			$tablename = key($this->databasetable);
-			$this->databasetable[key($this->databasetable)]->Disconnect();
+		reset($this->DatabaseTable);
+		while (current($this->DatabaseTable)){
+			$tablename = key($this->DatabaseTable);
+			$this->DatabaseTable[key($this->DatabaseTable)]->Disconnect();
 			
-			next($this->databasetable);
+			next($this->DatabaseTable);
 		}
 	}
 	
 	public function Disconnect ($key) {
-		$this->databasetable[$key]->Disconnect();
+		$this->DatabaseTable[$key]->Disconnect();
 	}
 	
 	public function buildDatabase() {
 
 	}
 	
-	public function buildModules() {
-		if ($this->moduleslocation) {
-			$dir = dir($this->moduleslocation);
-			while ($entry = $dir->read()) {
-				$filestring = $this->moduleslocation;
-				$filestring .= $entry;
-				if (!($entry == '.' | $entry == '..')) {
-					if (is_dir($filestring)) {
-						$modulesfile = $filestring;
-						$modulesfile .= '/Class';
-						$modulesfile .= $entry;
-						$modulesfile .= '.php';
-						if (is_file($modulesfile)) {
-							require_once($modulesfile);
-						} else {
-							array_push($this->errormessage,'buildModules: Module file does not exist!');
-						}
-						$this->createModules($entry);
-					}
-				}
-			}
-		} else {
-			array_push($this->errormessage,'buildModules: Module Location is not set!');
-		}
-	}
-	
 	public function createDatabaseTable($key) {
-		$this->databasetable[$key] =  new MySqlConnect();
+		$this->DatabaseTable[$key] =  new MySqlConnect();
 		
 		//$this->Connect($key);
 	}
 	
 	public function createModules($key) {
-		$this->modules[$key] = new $key;
+		$this->Modules[$key] = new $key;
+		$this->Modules[$key]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
+		
+	}
+	
+	protected function checkPass($DatabaseTable, $function, $functionarguments) {
+		reset($this->Modules);
+		$hold = NULL;
+		while (current($this->Modules)) {
+			$this->Modules[key(current($this->Modules))]->FetchDatabase ($DatabaseTable);
+			$this->Modules[key(current($this->Modules))]->CreateOutput($this->Space);
+			$this->Modules[key(current($this->Modules))]->getOutput();
+			$hold = $$this->Modules[key(current($this->Modules))]->Verify($function, $functionarguments);
+			next($this->Modules);
+		}
+		if ($hold) {
+			$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
+			if ($hold2) {
+				return $hold2;
+			} else {
+				return FALSE;
+			}
+		}
 	}
 	
 	public function pass($databasetable, $function, $functionarguments) {
@@ -168,26 +102,31 @@ class ProtectionLayer
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = call_user_func_array(array($this->databasetable["$databasetable"], "$function"), $functionarguments);
+							$hold = call_user_func_array(array($this->DatabaseTable["$databasetable"], "$function"), $functionarguments);
 							if ($hold) {
 								return $hold;
 							}
 						} else if ($this->DatabaseDeny[$function]) {
-						
+							$hold = $this->checkPass($databasetable, $function, $functionarguments);
+							if ($hold) {
+								return $hold;
+							} else {
+								return FALSE;
+							}
 						} else {
-							array_push($this->errormessage,'pass: MySqlConnect Member Does Not Exist!');
+							array_push($this->ErrorMessage,'pass: MySqlConnect Member Does Not Exist!');
 						}
 					} else {
-						array_push($this->errormessage,'pass: MySqlConnect Member Cannot Be An Array!');
+						array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be An Array!');
 					}
 				} else {
-					array_push($this->errormessage,'pass: MySqlConnect Member Cannot Be Null!');
+					array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be Null!');
 				}
 			} else {
-				array_push($this->errormessage,'pass: Function Arguments Must Be An Array!');
+				array_push($this->ErrorMessage,'pass: Function Arguments Must Be An Array!');
 			}
 		} else {
-			array_push($this->errormessage,'pass: Function Arguments Cannot Be Null!');
+			array_push($this->ErrorMessage,'pass: Function Arguments Cannot Be Null!');
 		}
 	}
 		

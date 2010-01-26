@@ -1,25 +1,9 @@
 <?php
 
 class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	//protected $PageID;
-	//protected $ObjectID;
 	protected $ListProtectionLayer;
 	protected $DatabaseTableName;
 	
-	//protected $PrintPreview;
-	/*
-	protected $hostname;
-	protected $user; 
-	protected $password; 
-	protected $databasename;
-	protected $databasetable;
-	
-	protected $StartTag;
-	protected $EndTag;
-	protected $StartTagID;
-	protected $StartTagStyle;
-	protected $StartTagClass;
-	*/
 	protected $Ul;
 	protected $UlID;
 	protected $UlClass;
@@ -31,13 +15,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $LiClass;
 	protected $LiStyle;
 	
-	//protected $EnableDisable;
-	//protected $Status;
-	
-	//protected $Space;
 	protected $List;
-	//protected $HttpUserAgent;
-	//protected $errormessage;
 	
 	public function XhtmlList($tablenames, $database) {
 		$this->ListProtectionLayer = &$database;
@@ -50,70 +28,38 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user; 
-		$this->password = $password; 
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+		$this->Hostname = $hostname;
+		$this->User = $user; 
+		$this->Password = $password; 
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 		
 		$this->ListProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->ListProtectionLayer->setDatabasetable ($databasetable);
 	}
-	/*
-	public function setPageID($PageID) {
-		$this->PageID = $PageID;
-	}
 	
-	public function getPageID() {
-		return $this->PageID;
-	}
-	
-	public function setObjectID($ObjectID) {
-		$this->ObjectID = $ObjectID;
-	}
-	
-	public function getObjectID() {
-		return $this->ObjectID;
-	}
-	
-	public function setHttpUserAgent ($HttpUserAgent) {
-		$this->HttpUserAgent = $HttpUserAgent;
-	}
-	
-	public function getHttpUserAgent() {
-		return $this->HttpUserAgent;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->errormessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->errormessage;
-	}
-	*/
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['PrintPreview'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->ListProtectionLayer->Connect($this->databasetable);
+		$this->ListProtectionLayer->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->ListProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->ListProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->ListProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->ListProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->StartTag = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->StartTag = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
+		$this->StartTagStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->Ul = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Ul'));
-		$this->UlID = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'UlID'));
-		$this->UlClass = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'UlClass'));
-		$this->UlStyle = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'UlStyle'));
+		$this->Ul = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ul'));
+		$this->UlID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlID'));
+		$this->UlClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlClass'));
+		$this->UlStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlStyle'));
 		
 		$this->BuildLiList('Li');
 		$this->BuildLiList('LiChildID');
@@ -121,10 +67,10 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->BuildLiList('LiClass');
 		$this->BuildLiList('LiStyle');
 		
-		$this->EnableDisable = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => 'Status'));
+		$this->EnableDisable = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
-		$this->ListProtectionLayer->Disconnect($this->databasetable);
+		$this->ListProtectionLayer->Disconnect($this->DatabaseTable);
 	}
 	
 	protected function BuildLiList($LiList) {
@@ -133,8 +79,8 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$Field = 'Li';
 			$Field .= $i;
 			$FieldName = str_replace('Li', $Field, $LiList);
-			while($this->ListProtectionLayer->pass ($this->databasetable, 'searchFieldNames', array('rowfield' => $FieldName))) {
-				$temp = $this->ListProtectionLayer->pass ($this->databasetable, 'getRowField', array('rowfield' => $FieldName));
+			while($this->ListProtectionLayer->pass ($this->DatabaseTable, 'searchFieldNames', array('rowfield' => $FieldName))) {
+				$temp = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $FieldName));
 				array_push($this->$LiList, $temp);
 				$i++;
 				$Field = 'Li';
@@ -143,43 +89,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			}
 		}
 	}
-	/*
-	protected function CreateWordWrap($wordwrapstring) {
-		if (stristr($wordwrapstring, "<a href")) {
-			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, '<a href');
-			$lastpos = strpos($wordwrapstring, '</a>');
-			$lastpos = $lastpos + 3;
-			
-			// Split a string into an array - character by character
-			$newwordwrapstring = Array();
-			$j = 0;
-			$end = strlen($wordwrapstring);
-			while ($j <= $end) {
-				array_push ($newwordwrapstring, $wordwrapstring[$j]);
-				$j++;
-			}
-			
-			$j = $firstpos;
-			while ($j <= $lastpos) {
-				$endstring .= $newwordwrapstring[$j];
-				$j++;
-			}
-			
-			$returnstring = $endstring;
-			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
-			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
-			// END STRIP AHREF TAG FOR WORDWRAP
-			
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n    $this->Space$this->Space$this->Space");
-			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
-			
-		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n    $this->Space$this->Space");
-		}
-		return $wordwrapstring;
-	}
-	*/
+	
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {

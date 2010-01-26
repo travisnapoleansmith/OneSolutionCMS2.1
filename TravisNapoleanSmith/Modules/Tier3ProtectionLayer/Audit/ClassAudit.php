@@ -1,11 +1,30 @@
 <?php
-require_once("ClassProtectionLayer.php");
 
-class Audit extends ProtectionLayer
+class Audit extends Tier3ProtectionLayerModulesAbstract implements Tier3ProtectionLayerModules
 {
 	
-	function Audit() {
-		parent::ProtectionLayer();
+	public function __construct() {
+
+	}
+	
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	
+	}
+	
+	public function FetchDatabase ($idnumber) {
+	
+	}
+	
+	public function CreateOutput($space){ 
+	
+	}
+	
+	public function Verify($function, $functionarguments){
+	
+	}
+	
+	public function getOutput() {
+	
 	}
 }
 

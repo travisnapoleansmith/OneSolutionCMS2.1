@@ -1,11 +1,30 @@
 <?php
-require_once("ClassProtectionLayer.php");
 
-class Revisions extends ProtectionLayer
+class Revisions extends Tier3ProtectionLayerModulesAbstract implements Tier3ProtectionLayerModules
 {
 	
-	function Revisions() {
-		parent::ProtectionLayer();
+	public function __construct() {
+
+	}
+	
+	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+	
+	}
+	
+	public function FetchDatabase ($idnumber) {
+	
+	}
+	
+	public function CreateOutput($space){ 
+	
+	}
+	
+	public function Verify($function, $functionarguments){
+	
+	}
+	
+	public function getOutput() {
+	
 	}
 }
 

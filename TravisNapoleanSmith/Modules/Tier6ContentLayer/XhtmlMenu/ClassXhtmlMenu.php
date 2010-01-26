@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	//protected $PageID;
-	//protected $ObjectID;
 	protected $NewsID;
 	protected $ClassReplace;
 	protected $ClassClass;
@@ -10,19 +8,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $DatabaseTableName;
 	
 	protected $newsflag;
-	/*
-	protected $hostname;
-	protected $user; 
-	protected $password; 
-	protected $databasename;
-	protected $databasetable;
 	
-	protected $StartTag;
-	protected $EndTag;
-	protected $StartTagID;
-	protected $StartTagStyle;
-	protected $StartTagClass;
-	*/
 	protected $MainDiv;
 	protected $MainDivID;
 	protected $MainDivClass;
@@ -34,13 +20,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $DivClass;
 	protected $DivStyle;
 	
-	//protected $EnableDisable;
-	//protected $Status;
-	
-	//protected $Space;
 	protected $List;
-	//protected $HttpUserAgent;
-	//protected $errormessage;
 	
 	public function XhtmlMenu($tablenames, $database) {
 		$this->MenuProtectionLayer = &$database;
@@ -48,59 +28,27 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user; 
-		$this->password = $password; 
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+		$this->Hostname = $hostname;
+		$this->User = $user; 
+		$this->Password = $password; 
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 		
 		$this->MenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->MenuProtectionLayer->setDatabasetable ($databasetable);
 	}
-	/*
-	public function setPageID($PageID) {
-		$this->PageID = $PageID;
-	}
 	
-	public function getPageID() {
-		return $this->PageID;
-	}
-	
-	public function setObjectID($ObjectID) {
-		$this->ObjectID = $ObjectID;
-	}
-	
-	public function getObjectID() {
-		return $this->ObjectID;
-	}
-	
-	public function setHttpUserAgent ($HttpUserAgent) {
-		$this->HttpUserAgent = $HttpUserAgent;
-	}
-	
-	public function getHttpUserAgent() {
-		return $this->HttpUserAgent;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->errormessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->errormessage;
-	}
-	*/
 	public function FetchDatabase ($PageID) {
 		$ConnectionID = array();
 		$ConnectionID['PageID'] = $PageID['PageID'];
 		$ConnectionID['ObjectID'] = $PageID['ObjectID'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->MenuProtectionLayer->Connect($this->databasetable);
+		$this->MenuProtectionLayer->Connect($this->DatabaseTable);
 		
-		$this->MenuProtectionLayer->pass ($this->databasetable, 'setDatabaseField', array('idnumber' => $ConnectionID));
-		$this->MenuProtectionLayer->pass ($this->databasetable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
-		$this->MenuProtectionLayer->pass ($this->databasetable, 'setEntireTable', array());
+		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $ConnectionID));
+		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
+		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setEntireTable', array());
 		
 		$this->PageID = current($PageID);
 		next($PageID);
@@ -114,68 +62,30 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->ClassClass = current($PageID);
 		}
 		
-		$this->StartTag = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('StartTag'));
-		$this->EndTag = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('EndTag'));
-		$this->StartTagID = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('StartTagID'));
-		$this->StartTagStyle = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('StartTagStyle'));
-		$this->StartTagClass = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('StartTagClass'));
+		$this->StartTag = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTag'));
+		$this->EndTag = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('EndTag'));
+		$this->StartTagID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagID'));
+		$this->StartTagStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagStyle'));
+		$this->StartTagClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagClass'));
 		
-		$this->MainDiv = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div'));
-		$this->MainDivID = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('DivID'));
-		$this->MainDivClass = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('DivClass'));
-		$this->MainDivStyle = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('DivStyle'));
+		$this->MainDiv = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div'));
+		$this->MainDivID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivID'));
+		$this->MainDivClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivClass'));
+		$this->MainDivStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivStyle'));
 		
-		$this->Div = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div1'));
-		$this->DivTitle = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div1Title'));
-		$this->DivID = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div1ID'));
-		$this->DivClass = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div1Class'));
-		$this->DivStyle = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Div1Style'));
+		$this->Div = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1'));
+		$this->DivTitle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Title'));
+		$this->DivID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1ID'));
+		$this->DivClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Class'));
+		$this->DivStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Style'));
 		
-		$this->EnableDisable = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Enable/Disable'));
-		$this->Status = $this->MenuProtectionLayer->pass ($this->databasetable, 'getRowField', array('Status'));
+		$this->EnableDisable = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Enable/Disable'));
+		$this->Status = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Status'));
 		
-		$this->MenuProtectionLayer->Disconnect($this->databasetable);
-		//$hold = $this->MenuProtectionLayer->getErrorArray();
-		//print_r($this->MenuProtectionLayer);
+		$this->MenuProtectionLayer->Disconnect($this->DatabaseTable);
 		
 	}
-	/*
-	protected function CreateWordWrap($wordwrapstring) {
-		if (stristr($wordwrapstring, '<a href')) {
-			// Strip Ahref Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, '<a href');
-			$lastpos = strpos($wordwrapstring, '</a>');
-			$lastpos = $lastpos + 3;
-			
-			// Split a string into an array - character by character
-			$newwordwrapstring = Array();
-			$j = 0;
-			$end = strlen($wordwrapstring);
-			while ($j <= $end) {
-				array_push ($newwordwrapstring, $wordwrapstring[$j]);
-				$j++;
-			}
-			
-			$j = $firstpos;
-			while ($j <= $lastpos) {
-				$endstring .= $newwordwrapstring[$j];
-				$j++;
-			}
-			
-			$returnstring = $endstring;
-			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
-			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
-			// END STRIP AHREF TAG FOR WORDWRAP
-			
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space$this->Space");
-			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
-			
-		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n$this->Space$this->Space");
-		}
-		return $wordwrapstring;
-	}
-	*/
+	
 	public function CreateOutput($space) {
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {

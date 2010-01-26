@@ -31,6 +31,6 @@
 	$Databases->createDatabaseTable('XMLNewsFeed');
 	$Databases->createDatabaseTable('XMLSitemap');
 	
-	$Databases->buildModules('Modules/Tier3ProtectionLayer/');
+	$Databases->buildModules('../Modules/Tier3ProtectionLayer/');
 	
 ?>
