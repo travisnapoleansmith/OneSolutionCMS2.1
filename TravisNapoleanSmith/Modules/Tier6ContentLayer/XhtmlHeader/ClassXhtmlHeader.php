@@ -38,7 +38,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $ScriptVBScriptCode;
 	protected $ScriptVBScriptDefer;
 	protected $SiteName;
-	protected $header;
 	protected $HeaderProtectionLayer;
 	
 	protected $Page; // XMLWriter Object
@@ -68,6 +67,10 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	
 	public function getSiteName() {
 		return $this->SiteName;
+	}
+	
+	public function getPage(){
+		return $this->Page;
 	}
 	
 	function FetchDatabase ($PageID) {
@@ -144,10 +147,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	protected function PrintArrayHelper ($item, $nametag ){
-		$this->header .= $nametag;
-		$this->header .= '="';
-		$this->header .= $item;
-		$this->header .= '" ';
+		$this->Page->writeAttribute($nametag, $item);
 	}
 	
 	protected function PrintArray($arraynames, $starttag, $arraynametags) {
@@ -160,10 +160,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$nametag = $arraynametags[$j];
 		while ($j < $max) {
 			if ($hold[$j]) {
-				$this->header .= '<';
-				$this->header .= $starttag;
-				$this->header .= ' ';
-				
+				$this->Page->startElement($starttag);
 				$temp = $hold[$j];
 				
 				$this->PrintArrayHelper ($hold[$j], $nametag);
@@ -186,9 +183,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			
 			while ($hold2) {			
 				if (!$flag & !empty($hold2[$j])) {
-					$this->header .= '<';
-					$this->header .= $starttag;
-					$this->header .= ' ';
+					$this->Page->startElement($starttag);
 				}
 				if (!empty($hold2[$j])) {
 					$flag = TRUE;
@@ -208,7 +203,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 				}
 			}
 				if ($hold[$j] || $flag) {
-					$this->header .= "/>\n";
+					$this->Page->endElement();
 				}
 				
 			$i = 1;
@@ -285,9 +280,8 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		while ($i < $max) {
-			$this->header .= "<";
-			$this->header .= $starttag;
-
+			$this->Page->startElement($starttag);
+			
 			if ($rel) {
 				$this->TagSheetCheck($rel, 'rel', $i);
 			}
@@ -317,18 +311,12 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			}
 			
 			if ($endtag) {
-				$this->header .= '>';
 				if ($intag) {
-					$this->header .= "\n  ";
 					$this->TagSheetCheck($intag, NULL, $i);
-					$this->header .= '\n';
+					
 				}
-				$this->header .= '</';
-				$this->header .= $endtag;
-				$this->header .= ">\n";
-			} else {
-				$this->header .= " />\n";
-			}
+			} 
+			$this->Page->endElement();
 			$i++;
 		}
 	}
@@ -344,15 +332,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	protected function TagSheetOutput($tag, $tagvalue) {
-		$this->header .= ' ';
-		if ($tag) {
-			$this->header .= $tag;
-			$this->header .= '="';
-		}
-		$this->header .= $tagvalue;
-		if ($tag) {
-			$this->header .= '"';
-		}
+		$this->Page->writeAttribute($tag, $tagvalue);
 	}
 	
 	protected function ArrayCheck(&$array) {
@@ -371,10 +351,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$printpreviewflag = $arguments[0];
 		$stylesheet = $arguments[1];
 		
-		$this->header .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\" >\n";
-		$this->header .= "<html lang=\"en-US\" xml:lang=\"en-US\" xmlns=\"http://www.w3.org/1999/xhtml\"> \n\n";
-		$this->header .= "<head>\n";
-		$this->header .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n";
 		// USING NEW XMLWRITER
 		// STARTS HEADER
 		$this->Page->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
@@ -393,28 +369,27 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->Page->writeAttribute('http-equiv', 'Content-Type');
 		$this->Page->writeAttribute('content', 'text/html; charset=iso-8859-1');
 		$this->Page->endElement(); //ENDS META
-		// ENDS USING XMLWRITER
 		
-		$this->header .= '<title>';
+		$this->Page->startElement('title');
 		if ($printpreviewflag) {
-			$this->header .= 'Print Preview';
-			
+			$this->Page->text('Print Preview');
 			if ($this->PageTitle || $this->SiteName) {
-				$this->header .= " - ";
+				$this->Page->text(' - ');
 			}
 		}
 		
 		if ($this->PageTitle) {
-			$this->header .= $this->PageTitle;
+			$this->Page->text($this->PageTitle);
 		}
 		
 		if ($this->SiteName) {
 			if ($this->PageTitle) {
-				$this->header .= " - ";
+				$this->Page->text(' - ');
 			}
-			$this->header .= $this->SiteName;
+			$this->Page->text($this->SiteName);
 		}
-		$this->header .= "</title>\n\n";
+		$this->Page->endElement(); // ENDS TITLE TAG
+		$this->Page->writeRaw("\n");
 		
 		if ($this->PageIcon){
 			$this->TagSheet('link', 'icon', 'image/x-icon', NULL, NULL, NULL, NULL, $this->PageIcon, NULL, NULL);
@@ -447,7 +422,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
-			$this->header .= "\n";
+			$this->Page->writeRaw("\n");
 		}
 		
 		if ($this->Rss2_0) {
@@ -463,7 +438,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
-			$this->header .= "\n";
+			$this->Page->writeRaw("\n");
 		}
 		
 		if ($this->BaseHref) {
@@ -471,7 +446,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
-			$this->header .= "\n";
+			$this->Page->writeRaw("\n");
 			$metaarray[0] = 'MetaName';
 			$metaarray[1] = 'MetaNameContent';
 			$metanamesarray[0] = 'name';
@@ -480,7 +455,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if (!empty($this->HttpEquivType) && !empty($this->HttpEquivTypeContent)) {
-			$this->header .= "\n";
 			$httpequivtypearray[0] = 'HttpEquivType';
 			$httpequivtypearray[1] = 'HttpEquivTypeContent';
 			$httpequivnamesarray[0] = 'http-equiv';
@@ -489,7 +463,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 
 		if (!empty($this->LinkCharset) || !empty($this->LinkHref) || !empty($this->LinkMedia) || !empty($this->LinkRel) || !empty($this->LinkRev) || !empty($this->LinkType)) {
-			$this->header .= "\n";
 			$linkarray = Array();
 			$linknamearray = Array();
 			if (!empty($this->LinkCharset)) {
@@ -524,50 +497,42 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
-			$this->header .= "\n";
 			$this->TagSheet('link', NULL, 'text/javascript', NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL);
 		}
 		
 		if (!empty($this->PrintPreviewStyleSheet) && $printpreviewflag && !$stylesheet) {
-			$this->header .= "\n";
 			$this->TagSheet('link', NULL, 'text/css', NULL, NULL, NULL, NULL, $this->PrintPreviewStyleSheet, NULL, NULL);
 		}
 		
 		if (!empty($this->ScriptStyleSheet) && !$printpreviewflag && !$stylesheet) {
-			$this->header .= "\n";
 			$this->TagSheet('script', NULL, 'text/css', $this->ScriptStyleSheetCharset, NULL, NULL, $this->ScriptStyleSheet, NULL, NULL, 'script');
 		}
 		
 		if (!empty($this->ScriptStyleSheetCode) && !$printpreviewflag && !$stylesheet) {
-			$this->header .= "\n";
 			$this->TagSheet('script', null, 'text/css', NULL, $this->ScriptStyleSheetDefer, NULL, NULL, NULL, $this->ScriptStyleSheetCode, 'script');
 		}
 		
 		if (!empty($this->ScriptJavaScriptSheet) && !$printpreviewflag) {
-			$this->header .= "\n";
 			$this->TagSheet('script', NULL, 'text/javascript', $this->ScriptJavaScriptSheetCharset, NULL, NULL, $this->ScriptJavaScriptSheet, NULL, NULL, 'script');
 		}
 		
 		if (!empty($this->ScriptJavaScriptSheetCode) && !$printpreviewflag) {
-			$this->header .= "\n";
 			$this->TagSheet('script', null, 'text/javascript', NULL, $this->ScriptJavaScriptSheetDefer, NULL, NULL, NULL, $this->ScriptJavaScriptSheetCode, 'script');
 		}
 		
 		if (!empty($this->ScriptVBScriptSheet) && !$printpreviewflag) {
-			$this->header .= "\n";
 			$this->TagSheet('script', NULL, 'text/vbscript', $this->ScriptVBScriptSheetCharset, NULL, NULL, $this->ScriptVBScriptSheet, NULL, NULL, 'script');
 		}
 		
 		if (!empty($this->ScriptVBScriptSheetCode) && !$printpreviewflag) {
-			$this->header .= "\n";
 			$this->TagSheet('script', null, 'text/vbscript', NULL, $this->ScriptVBScriptSheetDefer, NULL, NULL, NULL, $this->ScriptVBScriptSheetCode, 'script');
 		}
 		
-		$this->header .= "</head>\n\n";
+		$this->Page->endElement(); // END HEAD TAG
 	}
 	
 	public function GetOutput () {
-		return $this->header;
+		return $this->Page->flush();
 	}
 	
 }

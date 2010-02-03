@@ -7,4 +7,8 @@
 	$credentaillogonarray = Array ($servername, $username, $password, $databasename);
 	
 	$sitename = 'Travis Napolean Smith.com';
+	
+	$Writer = new XMLWriter();
+	$Writer->openMemory();
+	$Writer->setIndent(4);
 ?>

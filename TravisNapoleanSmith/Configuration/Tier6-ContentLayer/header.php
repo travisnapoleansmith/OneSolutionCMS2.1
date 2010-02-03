@@ -44,7 +44,10 @@
 	$header->setSiteName($sitename);
 	
 	$header->CreateOutput ($printpreview, $stylesheet);
+	$GLOBALS['Writer'] = $header->getPage();
+	
 	$headeroutput = $header->GetOutput();
+	
 	print "$headeroutput";
 	print "\n";
 	
