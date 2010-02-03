@@ -168,7 +168,9 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->List .= '    ';
 			}
 			
-			$this->List .= '<div';
+			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
+				$this->List .= '<div';
+			}
 			
 			if ($this->MainDivID) {
 				$this->List .= ' id="';
@@ -188,15 +190,20 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->List .= '"';
 			}
 			
-			$this->List .= ">\n";
-
+			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
+				$this->List .= ">\n";
+			}
+			
 			if($this->Space) {
 				$this->List .= $this->Space;
 				$this->List .= $this->Space;
 			} else {
 				$this->List .= '  ';
 			}
-			$this->List .= '<div';
+			
+			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
+				$this->List .= '<div';
+			}
 			
 			if ($this->DivID) {
 				$this->List .= ' id="';
@@ -222,13 +229,16 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->List .= '"';
 			}
 			
-			$this->List .= ">\n";
+			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
+				$this->List .= ">\n";
+			}
 			
 			if ($this->NewsID) {
 				if (strstr($this->Div, $this->NewsID) | $this->NewsID == -1) {
 					$this->Div = strip_tags($this->Div);
 				}
 			}
+			
 			if ($this->Div) {
 				if($this->Space) {
 					$this->List .= $this->Space;
@@ -251,14 +261,19 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			} else {
 				$this->List .= '  ';
 			}
-			$this->List .= "</div>\n";
-									
+			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
+				$this->List .= "</div>\n";
+			}
+			
 			if($this->Space) {
 				$this->List .= $this->Space;
 			} else {
 				$this->List .= '  ';
 			}
-			$this->List .= "</div>\n";
+			
+			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
+				$this->List .= "</div>\n";
+			}
 			
 			if ($this->EndTag) {
 				$this->List .= "  ";

@@ -295,7 +295,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
 			$this->ContentOutput .= '  ';
 			if ($this->StartTag){
-				if ($this->StartTagID & !$this->PrintPreview) {
+				if ($this->StartTagID) {
 					$temp = strrpos($this->StartTag, '>');
 					$this->StartTag[$temp] = ' ';
 					$this->StartTag .= 'id="';
@@ -604,7 +604,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$PrintPreview = TRUE;
 		}
 		$this->buildOutput($Space);
-	
+		
 		if ($this->ContainerObjectType) {
 			$temp = $this->ObjectID;
 			$temp++;

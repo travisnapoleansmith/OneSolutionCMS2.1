@@ -41,8 +41,14 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $header;
 	protected $HeaderProtectionLayer;
 	
+	protected $Page; // XMLWriter Object
+	
 	public function XhtmlHeader($tablenames, $database) {
 		$this->HeaderProtectionLayer = &$database;
+		$this->Page = new XMLWriter();
+		
+		$this->Page->openMemory();
+		$this->Page->setIndent(4);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -369,6 +375,25 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->header .= "<html lang=\"en-US\" xml:lang=\"en-US\" xmlns=\"http://www.w3.org/1999/xhtml\"> \n\n";
 		$this->header .= "<head>\n";
 		$this->header .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n";
+		// USING NEW XMLWRITER
+		// STARTS HEADER
+		$this->Page->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
+		$this->Page->endDTD();
+		
+		$this->Page->startElement('html');
+		$this->Page->writeAttribute('lang', 'en-US');
+		$this->Page->writeAttribute('xml:lang', 'en-US');
+		$this->Page->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+		$this->Page->endElement(); //Ends HTML
+		
+		$this->Page->startElement('html');
+		$this->Page->startElement('head');
+		
+		$this->Page->startElement('meta');
+		$this->Page->writeAttribute('http-equiv', 'Content-Type');
+		$this->Page->writeAttribute('content', 'text/html; charset=iso-8859-1');
+		$this->Page->endElement(); //ENDS META
+		// ENDS USING XMLWRITER
 		
 		$this->header .= '<title>';
 		if ($printpreviewflag) {
