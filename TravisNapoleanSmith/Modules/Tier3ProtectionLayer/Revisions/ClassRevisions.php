@@ -3,7 +3,7 @@
 class Revisions extends Tier3ProtectionLayerModulesAbstract implements Tier3ProtectionLayerModules
 {
 	
-	public function __construct() {
+	public function __construct($tablenames, $database) {
 
 	}
 	
@@ -20,7 +20,7 @@ class Revisions extends Tier3ProtectionLayerModulesAbstract implements Tier3Prot
 	}
 	
 	public function Verify($function, $functionarguments){
-	
+		return TRUE;
 	}
 	
 	public function getOutput() {

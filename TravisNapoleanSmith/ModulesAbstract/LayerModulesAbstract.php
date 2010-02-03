@@ -13,6 +13,8 @@ abstract class LayerModulesAbstract
 	
 	protected $ModulesLocation;
 	
+	protected $Modules = array();
+	
 	protected $Space;
 	
 	protected $ErrorMessage = array();
@@ -112,30 +114,39 @@ abstract class LayerModulesAbstract
 	}
 	
 	public function buildModules($moduleslocation) {
+		$argumentlist = func_get_args();
+		$createobject = $argumentlist[1];
+		$tablenames = $argumentlist[2];
+		$database = $argumentlist[3];
 		if ($moduleslocation) {
 			$this->ModulesLocation = $moduleslocation;
 			$hold = Array();
 			$dir = dir($moduleslocation);
 			
 			while ($entry = $dir->read()) {
-				
 				$filestring = $moduleslocation;
 				$filestring .= $entry;
+				
 				if (!($entry == '.' | $entry == '..')) {
 					if (is_dir($filestring)) {
 						$modulesfile = $filestring;
 						$modulesfile .= '/Class';
 						$modulesfile .= $entry;
 						$modulesfile .= '.php';
+						
 						if (is_file($modulesfile)) {
-							$hold[$entry] = $modulesfile;
+							if ($createobject) {
+								$this->Modules[$entry] = $modulesfile;
+							} else {
+								$this->Modules[$entry] = new $entry ($tablenames, $database);
+							}
 						} else {
 							array_push($this->ErrorMessage,'buildModules: Module file does not exist!');
 						}
 					}
 				}
 			}
-			return $hold;
+			return $this->Modules;
 		} else {
 			array_push($this->ErrorMessage,'buildModules: Module Location is not set!');
 		}

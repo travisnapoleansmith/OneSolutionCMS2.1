@@ -485,7 +485,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$hold .= $i;
 					}
 					
-					$filearray = $this->buildModules('Modules/Tier6ContentLayer/');
+					$filearray = $this->buildModules('Modules/Tier6ContentLayer/', TRUE);
 					$modulesfile = NULL;
 					$modulesfile = $filearray[$this->ContainerObjectType];
 					if ($modulesfile) {

@@ -14,13 +14,12 @@
 	require_once 'ModulesAbstract/Tier6ContentLayer/Tier6ContentLayerModulesAbstract.php';
 	require_once 'ModulesAbstract/Tier3ProtectionLayer/Tier3ProtectionLayerModulesAbstract.php';
 	
-	
-	// Tier 3 Protection Layer Settings
-	require_once 'Configuration/Tier3ProtectionLayerDatabaseSettings.php';
-	require_once 'Configuration/Tier3ProtectionLayerSettings.php';
-	
-	// General Settings
-	require_once 'Configuration/settings.php';
+	// Tier 3 Modules
+	require_once 'Modules/Tier3ProtectionLayer/Audit/ClassAudit.php';
+	require_once 'Modules/Tier3ProtectionLayer/Revisions/ClassRevisions.php';
+	require_once 'Modules/Tier3ProtectionLayer/SpamFilter/ClassSpamFilter.php';
+	require_once 'Modules/Tier3ProtectionLayer/SqlInjection/ClassSqlInjection.php';
+	require_once 'Modules/Tier3ProtectionLayer/UserPermissions/ClassUserPermissions.php';
 	
 	// Tier 6 Modules
 	require_once 'Modules/Tier6ContentLayer/XhtmlContent/ClassXhtmlContent.php';
@@ -36,4 +35,12 @@
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenu.php';
 	
 	require_once 'Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';
+	
+	// Tier 3 Protection Layer Settings
+	require_once 'Configuration/Tier3ProtectionLayerDatabaseSettings.php';
+	require_once 'Configuration/Tier3ProtectionLayerSettings.php';
+	
+	// General Settings
+	require_once 'Configuration/settings.php';
+	
 ?>

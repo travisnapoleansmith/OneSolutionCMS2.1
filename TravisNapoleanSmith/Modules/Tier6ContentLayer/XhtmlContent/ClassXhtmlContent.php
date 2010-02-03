@@ -245,7 +245,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$hold .= $i;
 		}
 
-		$filearray = $this->buildModules('Modules/Tier6ContentLayer/');
+		$filearray = $this->buildModules('Modules/Tier6ContentLayer/', TRUE);
 		$modulesfile = NULL;
 		$modulesfile = $filearray[$this->ContainerObjectType];
 		if ($modulesfile) {

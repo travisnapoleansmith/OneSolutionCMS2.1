@@ -80,10 +80,10 @@ class ProtectionLayer extends LayerModulesAbstract
 		reset($this->Modules);
 		$hold = NULL;
 		while (current($this->Modules)) {
-			$this->Modules[key(current($this->Modules))]->FetchDatabase ($DatabaseTable);
-			$this->Modules[key(current($this->Modules))]->CreateOutput($this->Space);
-			$this->Modules[key(current($this->Modules))]->getOutput();
-			$hold = $$this->Modules[key(current($this->Modules))]->Verify($function, $functionarguments);
+			$this->Modules[key($this->Modules)]->FetchDatabase ($DatabaseTable);
+			$this->Modules[key($this->Modules)]->CreateOutput($this->Space);
+			$this->Modules[key($this->Modules)]->getOutput();
+			$hold = $this->Modules[key($this->Modules)]->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
 		if ($hold) {
