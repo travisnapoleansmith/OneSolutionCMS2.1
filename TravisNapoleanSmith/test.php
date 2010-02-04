@@ -171,14 +171,14 @@
 	$testprotectionlayer->pass('Flash', 'setDatabaseField', $functionarguments);
 	$testprotectionlayer->pass('Flash', 'setDatabaseRow', $functionarguments);
 	*/
-	include('Configuration/Tier6-ContentLayer/flashimage.php');
-	include ('Configuration/Tier6-ContentLayer/list.php');
+	////////////include('Configuration/Tier6-ContentLayer/flashimage.php');
+	////////////include ('Configuration/Tier6-ContentLayer/list.php');
 	//include ('Configuration/Tier6-ContentLayer/bottompanel1news.php');
 	//include ('Configuration/Tier6-ContentLayer/bottompanel2.php');
 	//include ('Configuration/Tier6-ContentLayer/bottompanel1.php');
 	//include ('Configuration/Tier6-ContentLayer/toppanel2.php');
-	include ('Configuration/Tier6-ContentLayer/picture.php');
-	include ('Configuration/Tier6-ContentLayer/news.php');
+	//////////////include ('Configuration/Tier6-ContentLayer/picture.php');
+	////////////////include ('Configuration/Tier6-ContentLayer/news.php');
 	//$testprotectionlayer->buildModules();
 	//print "DOG\n";
 	//print_r($testprotectionlayer);
@@ -187,7 +187,12 @@
 	//$test2 = $testdatabase->getErrorArray();
 	//print "$test\n";
 	//print_r ($test2);
-	
+	require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
+	$calendartable = new XhtmlCalendarTable(NULL, NULL);
+	$calendartable->CreateOutput(NULL);
+	$output = $calendartable->getOutput();
+	print "$output\n";
+	//print_r($calendartable);
 	
 /*phpinfo();
 
