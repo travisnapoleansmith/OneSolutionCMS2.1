@@ -13,6 +13,7 @@
 	require_once '../ModulesInterfaces/Tier2DataAccessLayer/Tier2DataAccessLayerModulesInterfaces.php';
 	
 	// Tiers Includes
+	require_once '../Tier2-DataAccessLayer/ClassDataAccessLayer.php';
 	require_once '../Tier3-ProtectionLayer/ClassProtectionLayer.php';
 	
 	// Tier 2 Modules
@@ -37,6 +38,9 @@
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItem.php'; 
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php';
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php';
+	
+	// Tier 2 Data Access Layer Settings
+	require_once '../Configuration/Tier2DataAccessLayerDatabaseSettings.php';
 	
 	// Tier 3 Protection Layer Settings
 	require_once 'Tier3ProtectionLayerDatabaseSettings.php';
