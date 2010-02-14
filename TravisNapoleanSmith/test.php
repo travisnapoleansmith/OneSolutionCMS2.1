@@ -187,11 +187,13 @@
 	//$test2 = $testdatabase->getErrorArray();
 	//print "$test\n";
 	//print_r ($test2);
-	require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
+	/*require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
 	$calendartable = new XhtmlCalendarTable(NULL, NULL);
 	$calendartable->CreateOutput(NULL);
 	$output = $calendartable->getOutput();
 	print "$output\n";
+	*/
+	require_once 'Configuration/Tier6-ContentLayer/calendar.php';
 	//print_r($calendartable);
 	
 /*phpinfo();

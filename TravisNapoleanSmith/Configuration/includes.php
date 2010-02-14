@@ -22,6 +22,7 @@
 	require_once 'Modules/Tier3ProtectionLayer/UserPermissions/ClassUserPermissions.php';
 	
 	// Tier 6 Modules
+	require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlContent/ClassXhtmlContent.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php';

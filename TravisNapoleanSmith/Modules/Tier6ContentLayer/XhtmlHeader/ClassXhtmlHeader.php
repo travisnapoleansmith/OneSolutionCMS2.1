@@ -360,9 +360,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->Page->writeAttribute('lang', 'en-US');
 		$this->Page->writeAttribute('xml:lang', 'en-US');
 		$this->Page->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-		$this->Page->endElement(); //Ends HTML
 		
-		$this->Page->startElement('html');
 		$this->Page->startElement('head');
 		
 		$this->Page->startElement('meta');

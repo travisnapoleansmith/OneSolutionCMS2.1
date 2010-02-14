@@ -1,6 +1,12 @@
 <?php
 	// MySql Database Tables
 	$Databases = &new ProtectionLayer();
+	
+	$Databases->createDatabaseTable('CalendarTable');
+	$Databases->createDatabaseTable('CalendarTable2');
+	$Databases->createDatabaseTable('CalendarAppointments');
+	$Databases->createDatabaseTable('CalendarAppointments2');
+	
 	$Databases->createDatabaseTable('Content');
 	$Databases->createDatabaseTable('ContentLayer');
 	$Databases->createDatabaseTable('ContentLayerTables');
@@ -26,6 +32,8 @@
 	
 	$Databases->createDatabaseTable('PageAttributes');
 	$Databases->createDatabaseTable('Picture');
+	
+	$Databases->createDatabaseTable('XhtmlCalendarTable');
 	
 	$Databases->createDatabaseTable('XMLFeeds');
 	$Databases->createDatabaseTable('XMLNewsFeed');
