@@ -27,7 +27,7 @@
 
 		$picturedatabase['Picture'] = 'Picture';
 		
-		$databases = &$GLOBALS['Databases'];
+		$databases = &$GLOBALS['Tier4Databases'];
 		
 		$picture = new XhtmlPicture($picturedatabase, $databases);
 		$picture->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Picture');

@@ -3,9 +3,6 @@
 class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $XmlProtectionLayer;
 	
-	protected $Writer;
-	protected $FileName;
-	
 	protected $TableNames = array();
 	protected $SitemapTables = array();
 	

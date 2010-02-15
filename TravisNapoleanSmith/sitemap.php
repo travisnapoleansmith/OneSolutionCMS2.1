@@ -11,7 +11,7 @@
 	$sitemapdatabase['XMLNewsSitemap'] = 'XMLNewsSitemap';
 	$sitemapdatabase['FileName'] = 'sitemap.xml';
 	
-	$databases = &$GLOBALS['Databases'];
+	$databases = &$GLOBALS['Tier4Databases'];
 	
 	$sitemap = new XmlSitemap($sitemapdatabase, $databases);
 	$sitemap->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XMLSitemap');

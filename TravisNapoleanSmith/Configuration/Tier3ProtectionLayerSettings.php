@@ -1,96 +1,97 @@
 <?php
 	// MySql Connect Allow and Deny Member Functions For Tier 3 Protection Layer
-	$DatabaseAllow = Array();
-	$DatabaseDeny = Array();
+	$Tier3DatabaseAllow = Array();
+	$Tier3DatabaseDeny = Array();
 	
 	// Must be allowed!
-	$DatabaseAllow['MySqlConnect'] = 'MySqlConnect';
+	$Tier3DatabaseAllow['MySqlConnect'] = 'MySqlConnect';
 	
 	// Setters and Getters
-	$DatabaseAllow['setIdnumber'] = 'setIdnumber';
-	$DatabaseAllow['getIdnumber'] = 'getIdnumber';
-	$DatabaseAllow['setOrderbyname'] = 'setOrderbyname';
-	$DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
-	$DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
-	$DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
-	$DatabaseAllow['setDatabasename'] = 'setDatabasename';
-	$DatabaseAllow['getDatabasename'] = 'getDatabasename';
-	$DatabaseAllow['setUser'] = 'setUser';
-	$DatabaseAllow['getUser'] = 'getUser';
-	$DatabaseAllow['setPassword'] = 'setPassword';
-	$DatabaseAllow['getPassword'] = 'getPassword';
-	$DatabaseAllow['setDatabasetable'] = 'setDatabasetable';
-	$DatabaseAllow['getDatabasetable'] = 'getDatabasetable';
-	$DatabaseAllow['setHostname'] = 'setHostname';
-	$DatabaseAllow['getHostname'] = 'getHostname';
-	$DatabaseAllow['getError'] = 'getError';
-	$DatabaseAllow['getErrorArray'] = 'getErrorArray';
-	$DatabaseAllow['setDatabaseAll'] = 'setDatabaseAll';
-	$DatabaseAllow['setOrderByAll'] = 'setOrderByAll';
+	$Tier3DatabaseAllow['setIdnumber'] = 'setIdnumber';
+	$Tier3DatabaseAllow['getIdnumber'] = 'getIdnumber';
+	$Tier3DatabaseAllow['setOrderbyname'] = 'setOrderbyname';
+	$Tier3DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
+	$Tier3DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
+	$Tier3DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier3DatabaseAllow['setDatabasename'] = 'setDatabasename';
+	$Tier3DatabaseAllow['getDatabasename'] = 'getDatabasename';
+	$Tier3DatabaseAllow['setUser'] = 'setUser';
+	$Tier3DatabaseAllow['getUser'] = 'getUser';
+	$Tier3DatabaseAllow['setPassword'] = 'setPassword';
+	$Tier3DatabaseAllow['getPassword'] = 'getPassword';
+	$Tier3DatabaseAllow['setDatabasetable'] = 'setDatabasetable';
+	$Tier3DatabaseAllow['getDatabasetable'] = 'getDatabasetable';
+	$Tier3DatabaseAllow['setHostname'] = 'setHostname';
+	$Tier3DatabaseAllow['getHostname'] = 'getHostname';
+	$Tier3DatabaseAllow['getError'] = 'getError';
+	$Tier3DatabaseAllow['getErrorArray'] = 'getErrorArray';
+	$Tier3DatabaseAllow['setDatabaseAll'] = 'setDatabaseAll';
+	$Tier3DatabaseAllow['setOrderByAll'] = 'setOrderByAll';
 	
 	// Connecting to database
-	$DatabaseAllow['Connect'] = 'Connect';
-	$DatabaseAllow['Disconnect'] = 'Disconnect';
+	$Tier3DatabaseAllow['Connect'] = 'Connect';
+	$Tier3DatabaseAllow['Disconnect'] = 'Disconnect';
 	
 	// Basic checks and verifies
-	$DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
-	$DatabaseAllow['checkTableName'] = 'checkTableName';
-	$DatabaseAllow['checkPermissions'] = 'checkPermissions';
-	$DatabaseAllow['checkField'] = 'checkField';
+	$Tier3DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
+	$Tier3DatabaseAllow['checkTableName'] = 'checkTableName';
+	$Tier3DatabaseAllow['checkPermissions'] = 'checkPermissions';
+	$Tier3DatabaseAllow['checkField'] = 'checkField';
 	
 	// Basic Setup of Database
-	$DatabaseDeny['createDatabase'] = 'createDatabase';
-	$DatabaseDeny['deleteDatabase'] = 'deleteDatabase';
+	$Tier3DatabaseDeny['createDatabase'] = 'createDatabase';
+	$Tier3DatabaseDeny['deleteDatabase'] = 'deleteDatabase';
 	
 	// Table Methods
-	$DatabaseDeny['createTable'] = 'createTable';
-	$DatabaseDeny['updateTable'] = 'updateTable';
-	$DatabaseDeny['deleteTable'] = 'deleteTable';
+	$Tier3DatabaseDeny['createTable'] = 'createTable';
+	$Tier3DatabaseDeny['updateTable'] = 'updateTable';
+	$Tier3DatabaseDeny['deleteTable'] = 'deleteTable';
 	
 	// Row Methods
-	$DatabaseDeny['createRow'] = 'createRow';
-	$DatabaseDeny['deleteRow'] = 'deleteRow';
+	$Tier3DatabaseDeny['createRow'] = 'createRow';
+	$Tier3DatabaseDeny['deleteRow'] = 'deleteRow';
 	
 	// Field Methods
-	$DatabaseDeny['updateField'] = 'updateField';
-	$DatabaseDeny['deleteField'] = 'deleteField';
+	$Tier3DatabaseDeny['updateField'] = 'updateField';
+	$Tier3DatabaseDeny['deleteField'] = 'deleteField';
 	
 	// Setting Database Row
-	$DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
+	$Tier3DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
 	
 	// Setting Database Fields
-	$DatabaseAllow['setDatabaseField'] = 'setDatabaseField';
+	$Tier3DatabaseAllow['setDatabaseField'] = 'setDatabaseField';
 	
 	// Entire Table Methods
-	$DatabaseAllow['setEntireTable'] = 'setEntireTable';
-	$DatabaseAllow['BuildingEntireTable'] = 'BuildingEntireTable';
+	$Tier3DatabaseAllow['setEntireTable'] = 'setEntireTable';
+	$Tier3DatabaseAllow['BuildingEntireTable'] = 'BuildingEntireTable';
 	
 	// Field Methods
-	$DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
+	$Tier3DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
 	
 	// Entire Table Methods
-	$DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
-	$DatabaseAllow['removeEntryEntireTable'] = 'removeEntryEntireTable';
-	$DatabaseAllow['removeEntireEntireTable'] = 'RemoveEntireEntireTable';
-	$DatabaseAllow['reindexEntireTable'] = 'ReindexEntireTable';
-	$DatabaseAllow['updateEntireTableEntry'] = 'updateEntireTableEntry';
+	$Tier3DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
+	$Tier3DatabaseAllow['removeEntryEntireTable'] = 'removeEntryEntireTable';
+	$Tier3DatabaseAllow['removeEntireEntireTable'] = 'RemoveEntireEntireTable';
+	$Tier3DatabaseAllow['reindexEntireTable'] = 'ReindexEntireTable';
+	$Tier3DatabaseAllow['updateEntireTableEntry'] = 'updateEntireTableEntry';
 	
 	// Row Methods
-	$DatabaseAllow['BuildDatabaseRows'] = 'BuildDatabaseRows';
+	$Tier3DatabaseAllow['BuildDatabaseRows'] = 'BuildDatabaseRows';
 	
 	// Getters 
-	$DatabaseAllow['getRowCount'] = 'getRowCount';
-	$DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
-	$DatabaseAllow['getDatabase'] = 'getDatabase';
-	$DatabaseAllow['getRowField'] = 'getRowField';
-	$DatabaseAllow['getTable'] = 'getTable';
-	$DatabaseAllow['getEntireTable'] = 'getEntireTable';
-	$DatabaseAllow['getSearchResults'] = 'getSearchResults';
-	$DatabaseAllow['getTableNames'] = 'getTableNames';
+	$Tier3DatabaseAllow['getRowCount'] = 'getRowCount';
+	$Tier3DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
+	$Tier3DatabaseAllow['getDatabase'] = 'getDatabase';
+	$Tier3DatabaseAllow['getRowField'] = 'getRowField';
+	$Tier3DatabaseAllow['getMultiRowField'] = 'getMultiRowField';
+	$Tier3DatabaseAllow['getTable'] = 'getTable';
+	$Tier3DatabaseAllow['getEntireTable'] = 'getEntireTable';
+	$Tier3DatabaseAllow['getSearchResults'] = 'getSearchResults';
+	$Tier3DatabaseAllow['getTableNames'] = 'getTableNames';
 	
 	// Basic Developer Diagnostics
-	$DatabaseAllow['walkarray'] = 'walkarray';
-	$DatabaseAllow['walkfieldname'] = 'walkfieldname';
-	$DatabaseAllow['walktable'] = 'walktable';
-	$DatabaseAllow['walkidsearch'] = 'walkidsearch';
+	$Tier3DatabaseAllow['walkarray'] = 'walkarray';
+	$Tier3DatabaseAllow['walkfieldname'] = 'walkfieldname';
+	$Tier3DatabaseAllow['walktable'] = 'walktable';
+	$Tier3DatabaseAllow['walkidsearch'] = 'walkidsearch';
 ?>

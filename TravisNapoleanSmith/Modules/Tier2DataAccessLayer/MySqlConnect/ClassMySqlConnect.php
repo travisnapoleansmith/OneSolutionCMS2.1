@@ -812,9 +812,18 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
 			}
 			$this->rowresult = mysql_query($this->rowquery);
+			
 			if ($this->rowresult) {
 				$this->rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
 			}
+			
+			array_push($this->multirowfield, $this->rowfield);
+			$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
+			while ($rowfield) {
+				array_push($this->multirowfield, $rowfield);
+				$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
+			}
+			
 		} else {
 			array_push($this->errormessage,'setDatabaseRow: Idnumber must be an Array!');
 		}

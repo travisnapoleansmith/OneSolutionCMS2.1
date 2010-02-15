@@ -14,6 +14,7 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	protected $rowquery;
 	protected $rowresult;
 	protected $rowfield;
+	protected $multirowfield = array();
 	protected $rowfieldnames;
 	protected $tablenamequery;
 	protected $tablenames;
@@ -202,6 +203,10 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	
 	public function getRowField ($rownumber) {
 		return $this->rowfield[$rownumber];
+	}
+	
+	public function getMultiRowField() {
+		return $this->multirowfield;
 	}
 	
 	public function getTable ($rownumber, $rowcolumn) {

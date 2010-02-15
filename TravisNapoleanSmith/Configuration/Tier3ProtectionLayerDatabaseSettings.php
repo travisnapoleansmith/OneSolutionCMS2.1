@@ -1,44 +1,44 @@
 <?php
 	// MySql Database Tables
-	$Databases = &new ProtectionLayer();
+	$Tier3Databases = &new ProtectionLayer();
 	
-	$Databases->createDatabaseTable('CalendarTable');
-	$Databases->createDatabaseTable('CalendarTable2');
-	$Databases->createDatabaseTable('CalendarAppointments');
-	$Databases->createDatabaseTable('CalendarAppointments2');
+	$Tier3Databases->createDatabaseTable('CalendarTable');
+	$Tier3Databases->createDatabaseTable('CalendarTable2');
+	$Tier3Databases->createDatabaseTable('CalendarAppointments');
+	$Tier3Databases->createDatabaseTable('CalendarAppointments2');
 	
-	$Databases->createDatabaseTable('Content');
-	$Databases->createDatabaseTable('ContentLayer');
-	$Databases->createDatabaseTable('ContentLayerTables');
-	$Databases->createDatabaseTable('ContentPrintPreview');
+	$Tier3Databases->createDatabaseTable('Content');
+	$Tier3Databases->createDatabaseTable('ContentLayer');
+	$Tier3Databases->createDatabaseTable('ContentLayerTables');
+	$Tier3Databases->createDatabaseTable('ContentPrintPreview');
 	
-	$Databases->createDatabaseTable('Flash');
-	$Databases->createDatabaseTable('List');
+	$Tier3Databases->createDatabaseTable('Flash');
+	$Tier3Databases->createDatabaseTable('List');
 	
-	$Databases->createDatabaseTable('MainMenu');
-	$Databases->createDatabaseTable('MainMenuLookup');
-	$Databases->createDatabaseTable('MenuBottomPanel1');
-	$Databases->createDatabaseTable('MenuBottomPanel2');
-	$Databases->createDatabaseTable('MenuTopPanel2');
+	$Tier3Databases->createDatabaseTable('MainMenu');
+	$Tier3Databases->createDatabaseTable('MainMenuLookup');
+	$Tier3Databases->createDatabaseTable('MenuBottomPanel1');
+	$Tier3Databases->createDatabaseTable('MenuBottomPanel2');
+	$Tier3Databases->createDatabaseTable('MenuTopPanel2');
 	
-	$Databases->createDatabaseTable('NewsButtons');
-	$Databases->createDatabaseTable('NewsMenuBottomPanel2');
-	$Databases->createDatabaseTable('NewsMenuBottomPanel2YearMonth');
-	$Databases->createDatabaseTable('NewsPageAttributes');
-	$Databases->createDatabaseTable('NewsPageAttributesYearMonth');
-	$Databases->createDatabaseTable('NewsStories');
-	$Databases->createDatabaseTable('NewsStoriesFull');
-	$Databases->createDatabaseTable('NewsStoriesFullYearMonth');
+	$Tier3Databases->createDatabaseTable('NewsButtons');
+	$Tier3Databases->createDatabaseTable('NewsMenuBottomPanel2');
+	$Tier3Databases->createDatabaseTable('NewsMenuBottomPanel2YearMonth');
+	$Tier3Databases->createDatabaseTable('NewsPageAttributes');
+	$Tier3Databases->createDatabaseTable('NewsPageAttributesYearMonth');
+	$Tier3Databases->createDatabaseTable('NewsStories');
+	$Tier3Databases->createDatabaseTable('NewsStoriesFull');
+	$Tier3Databases->createDatabaseTable('NewsStoriesFullYearMonth');
 	
-	$Databases->createDatabaseTable('PageAttributes');
-	$Databases->createDatabaseTable('Picture');
+	$Tier3Databases->createDatabaseTable('PageAttributes');
+	$Tier3Databases->createDatabaseTable('Picture');
 	
-	$Databases->createDatabaseTable('XhtmlCalendarTable');
+	$Tier3Databases->createDatabaseTable('XhtmlCalendarTable');
 	
-	$Databases->createDatabaseTable('XMLFeeds');
-	$Databases->createDatabaseTable('XMLNewsFeed');
-	$Databases->createDatabaseTable('XMLSitemap');
+	$Tier3Databases->createDatabaseTable('XMLFeeds');
+	$Tier3Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier3Databases->createDatabaseTable('XMLSitemap');
 	
-	$Databases->buildModules('Modules/Tier3ProtectionLayer/');
+	$Tier3Databases->buildModules('Modules/Tier3ProtectionLayer/');
 	
 ?>

@@ -2,6 +2,9 @@
 
 abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 {
+	protected $Writer;
+	protected $FileName;
+	
 	protected $StartTag;
 	protected $EndTag;
 	protected $StartTagID;

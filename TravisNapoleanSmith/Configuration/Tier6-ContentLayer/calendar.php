@@ -13,6 +13,7 @@
 	// Fetch Current Page ID - Based On ID Number
 	$calendaridnumber = Array();
 	$calendaridnumber['PageID'] = 1;
+	$calendaridnumber['ObjectID'] = 1;
 	
 	if ($_GET['PageID']){
 		$calendaridnumber['PageID'] = $_GET['PageID'];
@@ -24,7 +25,7 @@
 	$calendardatabase['Month'] = NULL;
 	$calendardatabase['Year'] = NULL;
 	
-	$databases = &$GLOBALS['Databases'];
+	$databases = &$GLOBALS['Tier4Databases'];
 	
 	$calendartable = new XhtmlCalendarTable($calendardatabase, $databases);
 	$calendartable->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');

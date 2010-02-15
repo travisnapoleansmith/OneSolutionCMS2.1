@@ -22,7 +22,7 @@
 	$listdatabase = Array();
 	$listdatabase['MenuTopPanel2'] = 'MenuTopPanel2';
 	
-	$databases = &$GLOBALS['Databases'];
+	$databases = &$GLOBALS['Tier4Databases'];
 	
 	$list = new XhtmlMenu($listdatabase, $databases);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');

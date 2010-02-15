@@ -33,7 +33,7 @@
 	$headerdatabase = Array();
 	$headerdatabase['PageAttributes'] = 'PageAttributes';
 	
-	$databases = &$GLOBALS['Databases'];
+	$databases = &$GLOBALS['Tier4Databases'];
 	
 	$header = new XhtmlHeader($headerdatabase, $databases);
 	$header->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'PageAttributes');
