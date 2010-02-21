@@ -37,6 +37,8 @@
 	
 	$Tier4Databases->createDatabaseTable('XMLFeeds');
 	$Tier4Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier4Databases->createDatabaseTable('XMLNewsSitemap');
+	$Tier4Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier4Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier4Databases->buildModules('Modules/Tier4AuthenticationLayer/');

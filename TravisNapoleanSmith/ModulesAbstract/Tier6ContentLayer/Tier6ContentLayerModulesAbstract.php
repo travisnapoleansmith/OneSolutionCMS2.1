@@ -124,11 +124,11 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n       $this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 80, "\n       $this->Space$this->Space");
 			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
 			
 		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 100, "\n       $this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 80, "\n       $this->Space$this->Space");
 		}
 		
 		return $wordwrapstring;

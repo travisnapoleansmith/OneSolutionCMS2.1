@@ -37,6 +37,8 @@
 	
 	$Tier2Databases->createDatabaseTable('XMLFeeds');
 	$Tier2Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier2Databases->createDatabaseTable('XMLNewsSitemap');
+	$Tier2Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier2Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier2Databases->buildModules('Modules/Tier2DataAccessLayer/');

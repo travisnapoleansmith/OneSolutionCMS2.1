@@ -45,6 +45,7 @@
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php';
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenu.php';
 	
+	require_once 'Modules/Tier6ContentLayer/XmlFeed/ClassXmlFeed.php';
 	require_once 'Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';
 	
 	// Tier 2 Data Access Layer Settings

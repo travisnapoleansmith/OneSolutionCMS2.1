@@ -37,6 +37,8 @@
 	
 	$Tier3Databases->createDatabaseTable('XMLFeeds');
 	$Tier3Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier3Databases->createDatabaseTable('XMLNewsSitemap');
+	$Tier3Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier3Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier3Databases->buildModules('Modules/Tier3ProtectionLayer/');
