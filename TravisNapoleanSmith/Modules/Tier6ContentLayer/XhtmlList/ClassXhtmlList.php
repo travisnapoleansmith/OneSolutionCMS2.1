@@ -25,6 +25,19 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->LiID = Array();
 		$this->LiClass = Array();
 		$this->LiStyle = Array();
+		
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+
+		$this->Writer = new XMLWriter();
+		if ($this->FileName) {
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer->openMemory();
+		}
+		
+		$this->Writer->setIndent(3);
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -94,98 +107,36 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
-				$this->List .= '  ';
-				if ($this->StartTagID & !$this->PrintPreview) {
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'id="';
-					$this->StartTag .= $this->StartTagID;
-					$this->StartTag .= '"';
-					
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->startElement($this->StartTag);
+				
+					if ($this->StartTagID) {
+						$this->Writer->writeAttribute('id', $this->StartTagID);
+					}
 					if ($this->StartTagStyle) {
-						$this->StartTag .= ' style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '"';
+						$this->Writer->writeAttribute('style', $this->StartTagStyle);
 					}
 					if ($this->StartTagClass) {
-						$this->StartTag .= ' class="';
-						$this->StartTag .= $this->StartTagClass;
-						$this->StartTag .= '"';
-						$this->StartTag .= ">\n";
-					} else {
-						$this->StartTag .= ">\n";
+						$this->Writer->writeAttribute('class', $this->StartTagClass);
 					}
-					$this->List .= $this->StartTag;
-				} else if ($this->StartTagClass){
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-				
-					if ($this->StartTagStyle) {
-						$this->StartTag .= 'style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '" ';
-					}
-					
-					$this->StartTag .= 'class="';
-					$this->StartTag .= $this->StartTagClass;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-					$this->List .= $this->StartTag;
-				} else if ($this->StartTagStyle){
-					$temp = strrpos($this->StartTag, '>');
-					
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">";
-					
-					$this->List .= $this->StartTag;
-					$this->List .= "\n";
-				} else {
-					$this->List .= $this->StartTag;
-					$this->List .= "\n";
+			}
+			if ($this->Ul){
+				$this->Writer->writeRaw("\n ");
+				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
+				$this->Writer->writeRaw("\n");
+			}
+			
+			$this->Writer->startElement('ul');
+				if ($this->UlID) {
+					$this->Writer->writeAttribute('id', $this->UlID);
 				}
-			}
-			if ($this->Ul) {
-				if($this->Space) {
-					$this->List .= $this->Space;
-					$this->List .= $this->Ul;
-					$this->List .= "\n";
-				} else {
-					$this->List .= '  ';
-					$this->List .= $this->Ul;
-					$this->List .= "\n";
+				if ($this->UlStyle) {
+					$this->Writer->writeAttribute('style', $this->UlStyle);
 				}
-			}
-			
-			if ($this->Space) {
-				$this->List .= $this->Space;
-			} else {
-				$this->List .= '    ';
-			}
-			
-			$this->List .= '<ul';
-			
-			if ($this->UlID & !$this->PrintPreview) {
-				$this->List .= ' id="';
-				$this->List .= $this->UlID;
-				$this->List .= "\"";
-			}
-			
-			if ($this->UlClass) {
-				$this->List .= ' class="';
-				$this->List .= $this->UlClass;
-				$this->List .= '"';
-			}
-			
-			if ($this->UlStyle) {
-				$this->List .= ' style="';
-				$this->List .= $this->UlStyle;
-				$this->List .= '"';
-			}
-		
-			$this->List .= ">\n";
+				if ($this->UlClass) {
+					$this->Writer->writeAttribute('class', $this->UlClass);
+				}
 			
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
@@ -193,71 +144,50 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						if (is_array($this->LiClass)){
 							if (is_array($this->LiStyle)){
 								while (current($this->Li)) {
-									if($this->Space) {
-										$this->List .= $this->Space;
-										$this->List .= $this->Space;
-									} else {
-										$this->List .= '  ';
-									}
-									$this->List .= '<li';
-			
-									if (current($this->LiID) & !$this->PrintPreview) {
-										$this->List .= ' id="';
-										$this->List .= current($this->LiID);
-										$this->List .= '"';
-									}
-									
-									if (current($this->LiClass)) {
-										$this->List .= ' class="';
-										$this->List .= current($this->LiClass);
-										$this->List .= '"';
-									}
-									
-									if (current($this->LiStyle)) {
-										$this->List .= ' style="';
-										$this->List .= current($this->LiStyle);
-										$this->List .= '"';
-									}
-		
-									$this->List .= ">\n";
+									$this->Writer->startElement('li');
+										if (current($this->LiID)) {
+											$this->Writer->writeAttribute('id', current($this->LiID));
+										}
+										if (current($this->LiStyle)) {
+											$this->Writer->writeAttribute('style', current($this->LiStyle));
+										}
+										if (current($this->LiClass)) {
+											$this->Writer->writeAttribute('class', current($this->LiClass));
+										}
 									
 									if (current($this->Li)) {
-										if($this->Space) {
-											$this->List .= $this->Space;
-											$this->List .= $this->Space;
-											$this->List .= $this->Space;
-											$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
-											$this->List .= $this->Li[key($this->Li)];
-											$this->List .= "\n";
-										} else {
-											$this->List .= '    ';
-											$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
-											$this->List .= $this->Li[key($this->Li)];
-											$this->List .= "\n";
-										}
+										$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
+										$this->Writer->writeRaw("\n\t");
+										$this->Writer->writeRaw(current($this->Li));
+										$this->Writer->writeRaw("\n  ");
 									}
 									if (current($this->LiChildID)){
-										$idnumber = Array();
-										$idnumber['PageID'] = $this->PageID;
-										$idnumber['ObjectID'] = current($this->LiChildID);
-										$database = Array();
-										$database['List'] = $this->ListProtectionLayer;
-										$temp = new XhtmlList($database);
-										$temp->FetchDatabase ($idnumber);
+										$listidnumber = array();
+										$listidnumber['PageID'] = $this->PageID;
+										$listidnumber['ObjectID'] = current($this->LiChildID);
+										$listdatabase = Array();
+										$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
+										
+										$databases = &$this->ListProtectionLayer;
+			
+										$list = new XhtmlList($listdatabase, $databases);
+										
+										$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
+										$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
+										$list->FetchDatabase ($listidnumber);
+										
 										$tempspace = $this->Space;
 										$tempspace .= '    ';
-										$temp->CreateOutput($tempspace);
-										$tempoutput = $temp->getOutput();
-										$this->List .= $tempoutput;
+										$list->CreateOutput($tempspace);
+										
+										$listoutput = $list->getOutput();
+										$listoutput = str_replace("\n","\n$this->Space", $listoutput);
+										//$this->Writer->writeRaw("\n$this->Space");
+										$this->Writer->writeRaw($listoutput);
+										//$this->Writer->writeRaw("\n$this->Space");
 									}
 									
-									if($this->Space) {
-										$this->List .= $this->Space;
-										$this->List .= $this->Space;
-									} else {
-										$this->List .= '  ';
-									}
-									$this->List .= "</li>\n";
+									$this->Writer->endElement(); // ENDS LI
 									next($this->Li);
 									next($this->LiChildID);
 									next($this->LiID);
@@ -279,18 +209,22 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			} else {
 				array_push($this->errormessage,'CreateOutput: Li must be an Array!');
 			}
-			if($this->Space) {
-				$this->List .= $this->Space;
-			} else {
-				$this->List .= '  ';
-			}
-			$this->List .= "</ul>\n";
+			
+			$this->Writer->endElement(); // ENDS UL
 			
 			if ($this->EndTag) {
-				$this->List .= '  ';
-				$this->List .= $this->EndTag;
-				$this->List .= "\n";
+				$this->Writer->endElement(); // ENDS END TAG
+			} else {
+				$this->Writer->endElement(); // ENDS END TAG
 			}
+			
+		}
+		$this->Writer->endDocument();
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		} else {
+			$this->List = $this->Writer->flush();
 		}
 	}
 	

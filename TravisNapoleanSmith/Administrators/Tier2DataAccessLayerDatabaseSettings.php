@@ -16,7 +16,9 @@
 	$Tier2Databases->createDatabaseTable('List');
 	
 	$Tier2Databases->createDatabaseTable('MainMenu');
+	$Tier2Databases->createDatabaseTable('MainMenuNew');
 	$Tier2Databases->createDatabaseTable('MainMenuLookup');
+	$Tier2Databases->createDatabaseTable('MainMenuLookupNew');
 	$Tier2Databases->createDatabaseTable('MenuBottomPanel1');
 	$Tier2Databases->createDatabaseTable('MenuBottomPanel2');
 	$Tier2Databases->createDatabaseTable('MenuTopPanel2');
@@ -37,8 +39,10 @@
 	
 	$Tier2Databases->createDatabaseTable('XMLFeeds');
 	$Tier2Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier2Databases->createDatabaseTable('XMLNewsSitemap');
+	$Tier2Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier2Databases->createDatabaseTable('XMLSitemap');
 	
-	$Tier2Databases->buildModules('..Modules/Tier2DataAccessLayer/');
+	$Tier2Databases->buildModules('../Modules/Tier2DataAccessLayer/');
 	//print_r($Tier2Databases);
 ?>

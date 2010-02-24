@@ -6,6 +6,8 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	protected $TableNames = array();
 	protected $XMLFeedTables = array();
 	
+	protected $XMLLink;
+	
 	protected $XMLFeedName = array();
 	protected $FeedTitle = array();
 	protected $FeedLink = array();
@@ -56,7 +58,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	protected $StoryFeedItemEnclosureType = array();
 	protected $StoryFeedItemEnclosureUrl = array();
 	
-	protected $StoryFeedItemQuid = array();
+	protected $StoryFeedItemGuid = array();
 	protected $StoryFeedItemPubDate = array();
 	protected $StoryFeedItemSource = array();
 	
@@ -82,11 +84,14 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			next($tablenames);
 		}
 		
+		$this->XMLLink = $GLOBALS['rsslink'];
+		
 		$this->Writer->startDocument('1.0' , 'UTF-8');
 		$this->Writer->setIndent(4);
 		
 		$this->Writer->startElement('rss');
 		$this->Writer->writeAttribute('version', '2.0');
+		$this->Writer->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -178,9 +183,9 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				array_push($this->FeedRating[$key], $this->XMLFeedTables[current($this->TableNames)][$i]['FeedRating']);
 				
 				array_push($this->FeedSkipDays[$key], $this->XMLFeedTables[current($this->TableNames)][$i]['FeedSkipDays']);
-				$this->FeedSkipDaysNumber = $this->processArray($this->FeedSkipDaysNumber, 'FeedSkipDays', current($this->TableNames), $i, $key);
+				$this->FeedSkipDaysNumber = $this->ProcessArray($this->FeedSkipDaysNumber, 'FeedSkipDays', current($this->TableNames), $i, $key, $this->XMLFeedTables);
 				array_push($this->FeedSkipHours[$key], $this->XMLFeedTables[current($this->TableNames)][$i]['FeedSkipHours']);
-				$this->FeedSkipHoursNumber = $this->processArray($this->FeedSkipHoursNumber, 'FeedSkipHours', current($this->TableNames), $i, $key);
+				$this->FeedSkipHoursNumber = $this->ProcessArray($this->FeedSkipHoursNumber, 'FeedSkipHours', current($this->TableNames), $i, $key, $this->XMLFeedTables);
 				
 				array_push($this->FeedTextInput[$key], $this->XMLFeedTables[current($this->TableNames)][$i]['FeedTextInput']);
 				array_push($this->FeedTextInputDescription[$key], $this->XMLFeedTables[current($this->TableNames)][$i]['FeedTextInputDescription']);
@@ -227,7 +232,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	 	$this->StoryFeedItemEnclosureType[$databasetable] = array();
 	 	$this->StoryFeedItemEnclosureUrl[$databasetable] = array();
 		
-	 	$this->StoryFeedItemQuid[$databasetable] = array();
+	 	$this->StoryFeedItemGuid[$databasetable] = array();
 	 	$this->StoryFeedItemPubDate[$databasetable] = array();
 	 	$this->StoryFeedItemSource[$databasetable] = array();
 		
@@ -249,7 +254,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			array_push($this->StoryFeedItemEnclosureType[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemEnclosureType']);
 			array_push($this->StoryFeedItemEnclosureUrl[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemEnclosureUrl']);
 			
-			array_push($this->StoryFeedItemQuid[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemQuid']);
+			array_push($this->StoryFeedItemGuid[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemGuid']);
 			array_push($this->StoryFeedItemPubDate[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemPubDate']);
 			array_push($this->StoryFeedItemSource[$databasetable], $this->XMLFeedTables[$databasetable][$i]['FeedItemSource']);
 			
@@ -258,51 +263,6 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			
 			$i++;
 		}
-	}
-	
-	protected function processArray($array, $arrayname, $tablesname, $j, $key) {
-		if (is_array($array)) {
-			$i = 1;
-			$k = 0;
-			$name = $arrayname;
-			$name .= $i;
-			$hold = $this->XMLFeedTables[$tablesname][$j][$name];
-			while (array_key_exists($name, $this->XMLFeedTables[$tablesname][$j])) {
-				array_push($array[$key], $hold);
-				
-				$k++;
-				$i++;
-				$name = $arrayname;
-				$name .= $i;
-				$hold = $this->XMLFeedTables[$tablesname][$j][$name];
-			}
-			return $array;
-		} else {
-			return NULL;
-		}
-	}
-	
-	protected function outputArrayElement($array, $tag) {
-		$i = 0;
-		while (array_key_exists($i, $array)) {
-			if ($array[$i] != NULL) {
-				$this->outputSingleElement($array[$i], $tag);
-			}
-			$i++;
-		}
-	}
-	 
-	protected function outputSingleElement($text, $tag) {
-		$this->Writer->startElement($tag);
-		$this->Writer->text($text);
-		$this->Writer->endElement();
-	}
-	
-	protected function outputSingleElementRaw($text, $tag) {
-		$this->Writer->startElement($tag);
-		$this->Writer->writeRaw($text);
-		$this->Writer->writeRaw("\n   ");
-		$this->Writer->endElement();
 	}
 	
 	public function CreateOutput($space) {
@@ -385,30 +345,36 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				if ($FeedEnableDisable == 'Enable' & $FeedStatus == 'Approved') {
 					$this->Writer->startElement('channel');
 					
+					$this->Writer->startElement('atom:link');
+					$this->Writer->writeAttribute('href', $this->XMLLink);
+					$this->Writer->writeAttribute('rel', 'self');
+					$this->Writer->writeAttribute('type', 'application/rss+xml');
+					$this->Writer->endElement();
+					
 					// Required Elements
 					if ($FeedTitle) {
-						$this->outputSingleElement($FeedTitle, 'title');
+						$this->OutputSingleElement($FeedTitle, 'title');
 					}
 					
 					if ($FeedLink) {
-						$this->outputSingleElement($FeedLink, 'link');
+						$this->OutputSingleElement($FeedLink, 'link');
 					}
 					
 					if ($FeedDescription) {
-						$this->outputSingleElement($FeedDescription, 'description');
+						$this->OutputSingleElement($FeedDescription, 'description');
 					}
 					
 					// Optional Elements
 					if ($FeedCategory) {
-						$this->outputSingleElement($FeedCategory, 'category');
+						$this->OutputSingleElement($FeedCategory, 'category');
 					}
 					
 					if ($FeedCloud) {
-						$this->outputSingleElement($FeedCloud, 'cloud');
+						$this->OutputSingleElement($FeedCloud, 'cloud');
 					}
 					
 					if ($FeedCopyright) {
-						$this->outputSingleElement($FeedCopyright, 'copyright');
+						$this->OutputSingleElement($FeedCopyright, 'copyright');
 					}
 					
 					// Image Element
@@ -417,27 +383,27 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						$this->Writer->text($FeedImage);
 					
 						if ($FeedImageUrl) {
-							$this->outputSingleElement($FeedImageUrl, 'url');
+							$this->OutputSingleElement($FeedImageUrl, 'url');
 						}
 						
 						if ($FeedImageTitle) {
-							$this->outputSingleElement($FeedImageTitle, 'title');
+							$this->OutputSingleElement($FeedImageTitle, 'title');
 						}
 						
 						if ($FeedImageLink) {
-							$this->outputSingleElement($FeedImageLink, 'link');
+							$this->OutputSingleElement($FeedImageLink, 'link');
 						}
 						
 						if ($FeedImageDescription) {
-							$this->outputSingleElement($FeedImageDescription, 'description');
+							$this->OutputSingleElement($FeedImageDescription, 'description');
 						}
 						
 						if ($FeedImageHeight) {
-							$this->outputSingleElement($FeedImageHeight, 'height');
+							$this->OutputSingleElement($FeedImageHeight, 'height');
 						}
 						
 						if ($FeedImageWidth) {
-							$this->outputSingleElement($FeedImageWidth, 'width');
+							$this->OutputSingleElement($FeedImageWidth, 'width');
 						}
 						
 						$this->Writer->endElement();
@@ -445,30 +411,30 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					
 					// Optional Elements
 					if ($FeedLanguage) {
-						$this->outputSingleElement($FeedLanguage, 'language');
+						$this->OutputSingleElement($FeedLanguage, 'language');
 					}
 					
 					if ($FeedLastBuildDate) {
-						$this->outputSingleElement($FeedLastBuildDate, 'lastBuildDate');
+						$this->OutputSingleElement($FeedLastBuildDate, 'lastBuildDate');
 					}
 					
 					if ($FeedManagingEditor) {
-						$this->outputSingleElement($FeedManagingEditor, 'managingEditor');
+						$this->OutputSingleElement($FeedManagingEditor, 'managingEditor');
 					}
 					
 					if ($FeedPubDate) {
-						$this->outputSingleElement($FeedPubDate, 'pubDate');
+						$this->OutputSingleElement($FeedPubDate, 'pubDate');
 					}
 					
 					if ($FeedRating) {
-						$this->outputSingleElement($FeedRating, 'rating');
+						$this->OutputSingleElement($FeedRating, 'rating');
 					}
 					
 					// Skip Days Element
 					if ($FeedSkipDays == 'True') {
 						$this->Writer->startElement('skipDays');
 						if ($FeedSkipDaysNumber) {
-							$this->outputArrayElement($FeedSkipDaysNumber, 'days');
+							$this->OutputArrayElement($FeedSkipDaysNumber, 'days');
 							
 						}
 						$this->Writer->endElement();
@@ -479,7 +445,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						$this->Writer->startElement('skipHours');
 					
 						if ($FeedSkipHoursNumber) {
-							$this->outputArrayElement($FeedSkipHoursNumber, 'hours');
+							$this->OutputArrayElement($FeedSkipHoursNumber, 'hours');
 						}
 						$this->Writer->endElement();
 					}
@@ -489,30 +455,30 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						$this->Writer->startElement('textInput');
 						
 						if ($FeedTextInputDescription) {
-							$this->outputSingleElement($FeedTextInputDescription, 'description');
+							$this->OutputSingleElement($FeedTextInputDescription, 'description');
 						}
 						
 						if ($FeedTextInputName) {
-							$this->outputSingleElement($FeedTextInputName, 'name');
+							$this->OutputSingleElement($FeedTextInputName, 'name');
 						}
 						
 						if ($FeedTextInputLink) {
-							$this->outputSingleElement($FeedTextInputLink, 'link');
+							$this->OutputSingleElement($FeedTextInputLink, 'link');
 						}
 						
 						if ($FeedTextInputTitle) {
-							$this->outputSingleElement($FeedTextInputTitle, 'title');
+							$this->OutputSingleElement($FeedTextInputTitle, 'title');
 						}
 						$this->Writer->endElement();
 					}
 					
 					// Optional Elements
 					if ($FeedTTL) {
-						$this->outputSingleElement($FeedTTL, 'ttl');
+						$this->OutputSingleElement($FeedTTL, 'ttl');
 					}
 					
 					if ($FeedWebMaster) {
-						$this->outputSingleElement($FeedWebMaster, 'webMaster');
+						$this->OutputSingleElement($FeedWebMaster, 'webMaster');
 					}
 					
 					$this->processStoryItems($XMLFeedName);
@@ -587,7 +553,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	 		$StoryFeedItemEnclosureType = $this->StoryFeedItemEnclosureType[$XMLFeedName][$i];
 	 		$StoryFeedItemEnclosureUrl = $this->StoryFeedItemEnclosureUrl[$XMLFeedName][$i];
 			
-	 		$StoryFeedItemQuid = $this->StoryFeedItemQuid[$XMLFeedName][$i];
+	 		$StoryFeedItemGuid = $this->StoryFeedItemGuid[$XMLFeedName][$i];
 	 		$StoryFeedItemPubDate = $this->StoryFeedItemPubDate[$XMLFeedName][$i];
 	 		$StoryFeedItemSource = $this->StoryFeedItemSource[$XMLFeedName][$i];
 			
@@ -597,29 +563,29 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$this->Writer->startElement('item');
 					// Required Elements
 					if ($StoryFeedItemTitle) {
-						$this->outputSingleElement($StoryFeedItemTitle, 'title');
+						$this->OutputSingleElement($StoryFeedItemTitle, 'title');
 					}
 					
 					if ($StoryFeedItemLink) {
-						$this->outputSingleElement($StoryFeedItemLink, 'link');
+						$this->OutputSingleElement($StoryFeedItemLink, 'link');
 					}
 					
 					if ($StoryFeedItemDescription) {
 						$StoryFeedItemDescription = $this->CreateWordWrap($StoryFeedItemDescription);
-						$this->outputSingleElementRaw($StoryFeedItemDescription, 'description');
+						$this->OutputSingleElementRaw($StoryFeedItemDescription, 'description');
 					}
 					
 					// Optional Elements
 					if ($StoryFeedItemAuthor) {
-						$this->outputSingleElement($StoryFeedItemAuthor, 'author');
+						$this->OutputSingleElement($StoryFeedItemAuthor, 'author');
 					}
 					
 					if ($StoryFeedItemCategory) {
-						$this->outputSingleElement($StoryFeedItemCategory, 'category');
+						$this->OutputSingleElement($StoryFeedItemCategory, 'category');
 					}
 					
 					if ($StoryFeedItemComments) {
-						$this->outputSingleElement($StoryFeedItemComments, 'comments');
+						$this->OutputSingleElement($StoryFeedItemComments, 'comments');
 					}
 					
 					// Enclosure Element
@@ -627,30 +593,30 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						$this->Writer->startElement('enclosure');
 						
 						if ($StoryFeedItemEnclosureLength) {
-							$this->outputSingleElement($StoryFeedItemEnclosureLength, 'length');
+							$this->OutputSingleElement($StoryFeedItemEnclosureLength, 'length');
 						}
 						
 						if ($StoryFeedItemEnclosureType) {
-							$this->outputSingleElement($StoryFeedItemEnclosureType, 'type');
+							$this->OutputSingleElement($StoryFeedItemEnclosureType, 'type');
 						}
 						
 						if ($StoryFeedItemEnclosureUrl) {
-							$this->outputSingleElement($StoryFeedItemEnclosureUrl, 'url');
+							$this->OutputSingleElement($StoryFeedItemEnclosureUrl, 'url');
 						}
 						$this->endElement();
 					}
 					
 					// Optional Elements
-					if ($StoryFeedItemQuid) {
-						$this->outputSingleElement($StoryFeedItemQuid, 'quid');
+					if ($StoryFeedItemGuid) {
+						$this->OutputSingleElement($StoryFeedItemGuid, 'guid');
 					}
 					
 					if ($StoryFeedItemPubDate) {
-						$this->outputSingleElement($StoryFeedItemPubDate, 'pubDate');
+						$this->OutputSingleElement($StoryFeedItemPubDate, 'pubDate');
 					}
 					
 					if ($StoryFeedItemSource) {
-						$this->outputSingleElement($StoryFeedItemSource, 'source');
+						$this->OutputSingleElement($StoryFeedItemSource, 'source');
 					}
 					
 				$this->Writer->endElement();

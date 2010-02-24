@@ -21,7 +21,7 @@
 	
 	// Tier 2 Modules
 	require_once '../Modules/Tier2DataAccessLayer/MySqlConnect/ClassMySqlConnect.php';
-
+	
 	// Tier 3 Modules
 	require_once '../Modules/Tier3ProtectionLayer/Audit/ClassAudit.php';
 	require_once '../Modules/Tier3ProtectionLayer/Revisions/ClassRevisions.php';
@@ -36,6 +36,7 @@
 	require_once '../Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
 	require_once '../Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php';
 	require_once '../Modules/Tier6ContentLayer/XhtmlList/ClassXhtmlList.php';
+	require_once '../Modules/Tier6ContentLayer/XhtmlMainMenu/ClassXhtmlMainMenu.php';
 	require_once '../Modules/Tier6ContentLayer/XhtmlMenu/ClassXhtmlMenu.php';
 	require_once '../Modules/Tier6ContentLayer/XhtmlNews/ClassXhtmlNews.php';
 	require_once '../Modules/Tier6ContentLayer/XhtmlPicture/ClassXhtmlPicture.php';
@@ -45,7 +46,7 @@
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php';
 	
 	// Tier 2 Data Access Layer Settings
-	require_once '../Configuration/Tier2DataAccessLayerDatabaseSettings.php';
+	require_once 'Tier2DataAccessLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier2DataAccessLayerSettings.php';
 	
 	// Tier 3 Protection Layer Settings
@@ -53,7 +54,7 @@
 	require_once '../Configuration/Tier3ProtectionLayerSettings.php';
 	
 	// Tier 4 Authentication Layer Settings
-	require_once '../Configuration/Tier4AuthenticationLayerDatabaseSettings.php';
+	require_once 'Tier4AuthenticationLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier4AuthenticationLayerSettings.php';
 	
 	// General Settings

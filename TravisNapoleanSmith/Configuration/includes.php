@@ -37,6 +37,7 @@
 	require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlList/ClassXhtmlList.php';
+	require_once 'Modules/Tier6ContentLayer/XhtmlMainMenu/ClassXhtmlMainMenu.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlMenu/ClassXhtmlMenu.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlNews/ClassXhtmlNews.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlPicture/ClassXhtmlPicture.php';

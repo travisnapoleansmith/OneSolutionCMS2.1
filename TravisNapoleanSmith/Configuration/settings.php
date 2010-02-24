@@ -8,6 +8,8 @@
 	
 	$sitename = 'Travis Napolean Smith.com';
 	
+	$rsslink = 'http://beta.travisnapoleansmith.com/rss.php';
+	
 	$Writer = new XMLWriter();
 	$Writer->openMemory();
 	$Writer->setIndent(4);

@@ -25,7 +25,7 @@
 		$menudatabase['MainMenu'] = 'MainMenu';
 		$menudatabase['MainMenuLookup'] = 'MainMenuLookup';
 		
-		$databases = &$GLOBALS['Databases'];
+		$databases = &$GLOBALS['Tier4Databases'];
 		
 		/*if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
 			print "\n";

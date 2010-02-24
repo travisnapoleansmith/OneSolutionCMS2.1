@@ -16,7 +16,9 @@
 	$Tier2Databases->createDatabaseTable('List');
 	
 	$Tier2Databases->createDatabaseTable('MainMenu');
+	$Tier2Databases->createDatabaseTable('MainMenuNew');
 	$Tier2Databases->createDatabaseTable('MainMenuLookup');
+	$Tier2Databases->createDatabaseTable('MainMenuLookupNew');
 	$Tier2Databases->createDatabaseTable('MenuBottomPanel1');
 	$Tier2Databases->createDatabaseTable('MenuBottomPanel2');
 	$Tier2Databases->createDatabaseTable('MenuTopPanel2');

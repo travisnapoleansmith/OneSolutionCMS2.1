@@ -16,7 +16,9 @@
 	$Tier4Databases->createDatabaseTable('List');
 	
 	$Tier4Databases->createDatabaseTable('MainMenu');
+	$Tier4Databases->createDatabaseTable('MainMenuNew');
 	$Tier4Databases->createDatabaseTable('MainMenuLookup');
+	$Tier4Databases->createDatabaseTable('MainMenuLookupNew');
 	$Tier4Databases->createDatabaseTable('MenuBottomPanel1');
 	$Tier4Databases->createDatabaseTable('MenuBottomPanel2');
 	$Tier4Databases->createDatabaseTable('MenuTopPanel2');
@@ -37,6 +39,8 @@
 	
 	$Tier4Databases->createDatabaseTable('XMLFeeds');
 	$Tier4Databases->createDatabaseTable('XMLNewsFeed');
+	$Tier4Databases->createDatabaseTable('XMLNewsSitemap');
+	$Tier4Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier4Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier4Databases->buildModules('../Modules/Tier4AuthenticationLayer/');
