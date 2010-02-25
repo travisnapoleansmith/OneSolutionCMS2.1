@@ -8,6 +8,8 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	
 	protected $Writer;
 	protected $FileName;
+	protected $JavaScriptFileName;
+	protected $JavaScriptLibraryName;
 	
 	protected $LookupPageID = array();
 	protected $LookupObjectID = array();
@@ -26,6 +28,12 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
+		
+		$this->JavaScriptFileName = $tablenames['JavaScriptFileName'];
+		unset($tablenames['JavaScriptFileName']);
+		
+		$this->JavaScriptLibraryName = $tablenames['JavaScriptLibraryName'];
+		unset($tablenames['JavaScriptLibraryName']);
 		
 		$this->Writer = new XMLWriter();
 		if ($this->FileName) {
@@ -99,67 +107,50 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			$list->CreateOutput('    ');
 			
 			$this->MainMenuTables[current($this->TableNames)] = $list;
-			//print_r($list->getOutput());
 			$i++;
 		}
 			
 	}
 	
 	public function CreateOutput($space) {
-		/*reset($this->PageID);
-		while (current($this->PageID)) {
-			$PageId = current($this->PageID);
-			$Loc = current($this->Loc);
-			$Lastmod = current($this->Lastmod);
-			$ChangeFreq = current($this->ChangeFreq);
-			$Priority = current($this->Priority);
-			$EnableDisable = current($this->EnableDisable);
-			$Status = current($this->Status);
-			
-			if ($EnableDisable == 'Enable' & $Status == 'Approved') {
-				$this->Writer->startElement('url');
-				if ($Loc) {
-					$this->Writer->startElement('loc');
-					$this->Writer->text($Loc);
-					$this->Writer->endElement();
-				}
-				
-				if ($Lastmod) {
-					$this->Writer->startElement('lastmod');
-					$this->Writer->text($Lastmod);
-					$this->Writer->endElement();
-				}
-				
-				if ($ChangeFreq) {
-					$this->Writer->startElement('changefreq');
-					$this->Writer->text($ChangeFreq);
-					$this->Writer->endElement();
-				}
-				
-				if ($Priority) {
-					$this->Writer->startElement('priority');
-					$this->Writer->text($Priority);
-					$this->Writer->endElement();
-				}
-				
-				$this->Writer->endElement();
-			}
-			next($this->PageID);
-			next($this->Loc);
-			next($this->Lastmod);
-			next($this->ChangeFreq);
-			next($this->Priority);
-			next($this->EnableDisable);
-			next($this->Status);
+		reset($this->TableNames);
+		next($this->TableNames);
+		$i = 0;
+		if ($this->JavaScriptLibraryName) {
+			$this->Writer->startElement('script');
+			$this->Writer->writeAttribute('type', 'text/javascript');
+			$this->Writer->writeAttribute('src', $this->JavaScriptLibraryName);
+			$this->Writer->fullEndElement();
 		}
-		$this->Writer->endElement();
+		while ($this->LookupPageID[$i]) {
+			$LookupPageID = $this->LookupPageID[$i];
+			$LookupObjectID = $this->LookupObjectID[$i];
+			$LookupMenuItemName = $this->LookupMenuItemName[$i];
+			$LookupEnableDisable = $this->LookupEnableDisable[$i];
+			$LookupStatus = $this->LookupStatus[$i];
+			$Output = $this->MainMenuTables[current($this->TableNames)]->getOutput();
+			
+			if ($LookupEnableDisable == 'Enable' & $LookupStatus == 'Approved') {
+				$this->Writer->writeRaw("\n");
+				$this->Writer->writeRaw($Output);
+			}
+			$i++;
+		}
+		
+		if ($this->JavaScriptFileName) {
+			$this->Writer->startElement('script');
+			$this->Writer->writeAttribute('type', 'text/javascript');
+			$this->Writer->writeAttribute('src', $this->JavaScriptFileName);
+			$this->Writer->fullEndElement();
+		}
 		$this->Writer->endDocument();
+		
 		if ($this->FileName) {
 			$this->Writer->flush();
 		} else {
 			$this->MainMenu = $this->Writer->flush();
 		}
-		*/
+		
 	}
 	
 	public function getOutput() {

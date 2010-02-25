@@ -22,6 +22,11 @@
 	$mainmenudatabase['MainMenuLookupNew'] = 'MainMenuLookupNew';
 	$mainmenudatabase['MainMenuNew'] = 'MainMenuNew';
 	
+	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
+		$mainmenudatabase['JavaScriptFileName'] = 'Tier7-BehavioralLayer/menu-jquery.js';
+		$mainmenudatabase['JavaScriptLibraryName'] = 'Tier7-BehavioralLayer/jquery-1.3.2.min.js';
+	}
+	
 	$databases = &$GLOBALS['Tier4Databases'];
 	
 	$mainmenu = new XhtmlMainMenu($mainmenudatabase, $databases);
@@ -32,8 +37,6 @@
 	
 	$mainmenuoutput = $mainmenu->getOutput();
 	
-	print "  $mainmenuoutput";
-	//print "\n";
-	//print_r($mainmenu);
+	print "$mainmenuoutput";
 	
 ?>
