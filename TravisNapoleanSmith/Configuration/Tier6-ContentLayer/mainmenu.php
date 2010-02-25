@@ -19,13 +19,30 @@
 	}
 	
 	$mainmenudatabase = Array();
-	$mainmenudatabase['MainMenuLookupNew'] = 'MainMenuLookupNew';
-	$mainmenudatabase['MainMenuNew'] = 'MainMenuNew';
+	$mainmenudatabase['MainMenuLookup'] = 'MainMenuLookup';
+	$mainmenudatabase['MainMenu'] = 'MainMenu';
 	
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
 		$mainmenudatabase['JavaScriptFileName'] = 'Tier7-BehavioralLayer/menu-jquery.js';
 		$mainmenudatabase['JavaScriptLibraryName'] = 'Tier7-BehavioralLayer/jquery-1.3.2.min.js';
 	}
+	
+	$mainmenudatabase['MainMenuID'] = 'main-menu';
+	$mainmenudatabase['MainMenuClass'] = NULL;
+	$mainmenudatabase['MainMenuStyle'] = NULL;
+	$mainmenudatabase['MainMenuInsert'] = NULL;
+	
+	$mainmenudatabase['MainMenuTopID'] = 'main-menu-top';
+	$mainmenudatabase['MainMenuTopClass'] = NULL;
+	$mainmenudatabase['MainMenuTopStyle'] = NULL;
+	$mainmenudatabase['MainMenuTopInsert'] = NULL;
+	
+	$mainmenudatabase['MainMenuBottomID'] = 'main-menu-bottom';
+	$mainmenudatabase['MainMenuBottomClass'] = NULL;
+	$mainmenudatabase['MainMenuBottomStyle'] = NULL;
+	$mainmenudatabase['MainMenuBottomInsert'] = NULL;
+	
+	$mainmenudatabase['Insert'] = '<img src="Images/Main-Logo.png" alt="KC Photo and Video Logo" class="main-menu-image"/>';
 	
 	$databases = &$GLOBALS['Tier4Databases'];
 	
@@ -37,6 +54,9 @@
 	
 	$mainmenuoutput = $mainmenu->getOutput();
 	
-	print "$mainmenuoutput";
-	
+	if ($mainmenuoutput) {
+		$Writer->writeRaw($mainmenuoutput);
+		$Writer->writeRaw("\n");
+	}
+	//print "$mainmenuoutput\n";
 ?>

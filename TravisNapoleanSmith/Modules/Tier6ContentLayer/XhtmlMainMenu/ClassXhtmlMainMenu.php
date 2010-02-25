@@ -8,8 +8,26 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	
 	protected $Writer;
 	protected $FileName;
+	
 	protected $JavaScriptFileName;
 	protected $JavaScriptLibraryName;
+	
+	protected $MainMenuID;
+	protected $MainMenuClass;
+	protected $MainMenuStyle;
+	protected $MainMenuInsert;
+	
+	protected $MainMenuTopID;
+	protected $MainMenuTopClass;
+	protected $MainMenuTopStyle;
+	protected $MainMenuTopInsert;
+	
+	protected $MainMenuBottomID;
+	protected $MainMenuBottomClass;
+	protected $MainMenuBottomStyle;
+	protected $MainMenuBottomInsert;
+	
+	protected $Insert;
 	
 	protected $LookupPageID = array();
 	protected $LookupObjectID = array();
@@ -34,6 +52,45 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		
 		$this->JavaScriptLibraryName = $tablenames['JavaScriptLibraryName'];
 		unset($tablenames['JavaScriptLibraryName']);
+		
+		$this->MainMenuID = $tablenames['MainMenuID'];
+		unset($tablenames['MainMenuID']);
+		
+		$this->MainMenuClass = $tablenames['MainMenuClass'];
+		unset($tablenames['MainMenuClass']);
+		
+		$this->MainMenuStyle = $tablenames['MainMenuStyle'];
+		unset($tablenames['MainMenuStyle']);
+		
+		$this->MainMenuInsert = $tablenames['MainMenuInsert'];
+		unset($tablenames['MainMenuInsert']);
+		
+		$this->MainMenuTopID = $tablenames['MainMenuTopID'];
+		unset($tablenames['MainMenuTopID']);
+		
+		$this->MainMenuTopClass = $tablenames['MainMenuTopClass'];
+		unset($tablenames['MainMenuTopClass']);
+		
+		$this->MainMenuTopStyle = $tablenames['MainMenuTopStyle'];
+		unset($tablenames['MainMenuTopStyle']);
+		
+		$this->MainMenuTopInsert = $tablenames['MainMenuTopInsert'];
+		unset($tablenames['MainMenuTopInsert']);
+		
+		$this->MainMenuBottomID = $tablenames['MainMenuBottomID'];
+		unset($tablenames['MainMenuBottomID']);
+		
+		$this->MainMenuBottomClass = $tablenames['MainMenuBottomClass'];
+		unset($tablenames['MainMenuBottomClass']);
+		
+		$this->MainMenuBottomStyle = $tablenames['MainMenuBottomStyle'];
+		unset($tablenames['MainMenuBottomStyle']);
+		
+		$this->MainMenuBottomInsert = $tablenames['MainMenuBottomInsert'];
+		unset($tablenames['MainMenuBottomInsert']);
+		
+		$this->Insert = $tablenames['Insert'];
+		unset($tablenames['Insert']);
 		
 		$this->Writer = new XMLWriter();
 		if ($this->FileName) {
@@ -93,14 +150,18 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		while ($this->LookupPageID[$i]) {
 			$listidnumber['PageID'] = $this->LookupPageID[$i];
 			$listidnumber['ObjectID'] = $this->LookupObjectID[$i];
-			
+						
 			$listdatabase = Array();
 			$listdatabase[current($this->TableNames)] = current($this->TableNames);
+			
+			if ($this->Insert) {
+				$listdatabase['Insert'] = $this->Insert;
+			}
 			
 			$databases = &$this->XhtmlMainMenuProtectionLayer;
 			
 			$list = new XhtmlList($listdatabase, $databases);
-		
+			
 			$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($this->TableNames));
 			$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 			$list->FetchDatabase ($listidnumber);
@@ -122,6 +183,52 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			$this->Writer->writeAttribute('src', $this->JavaScriptLibraryName);
 			$this->Writer->fullEndElement();
 		}
+		
+		if ($this->MainMenuID || $this->MainMenuClass || $this->MainMenuStyle || $this->MainMenuInsert) {
+			$this->Writer->startElement('div');
+			
+			if ($this->MainMenuID) {
+				$this->Writer->writeAttribute('id', $this->MainMenuID);
+			}
+			
+			if ($this->MainMenuClass) {
+				$this->Writer->writeAttribute('class', $this->MainMenuClass);
+			}
+			
+			if ($this->MainMenuStyle) {
+				$this->Writer->writeAttribute('style', $this->MainMenuStyle);
+			}
+			
+			if ($this->MainMenuInsert) {
+				$this->Writer->writeRaw("\n");
+				$this->Writer->writeRaw($this->MainMenuInsert);
+				$this->Writer->writeRaw("\n");
+			}
+		}
+		
+		if ($this->MainMenuTopID || $this->MainMenuTopClass || $this->MainMenuTopStyle || $this->MainMenuTopInsert) {
+			$this->Writer->startElement('div');
+			
+			if ($this->MainMenuTopID) {
+				$this->Writer->writeAttribute('id', $this->MainMenuTopID);
+			}
+			
+			if ($this->MainMenuTopClass) {
+				$this->Writer->writeAttribute('class', $this->MainMenuTopClass);
+			}
+			
+			if ($this->MainMenuTopStyle) {
+				$this->Writer->writeAttribute('style', $this->MainMenuTopStyle);
+			}
+			
+			if ($this->MainMenuTopInsert) {
+				$this->Writer->writeRaw("\n");
+				$this->Writer->writeRaw($this->MainMenuTopInsert);
+				$this->Writer->writeRaw("\n");
+			}
+			$this->Writer->fullEndElement();
+		}
+		
 		while ($this->LookupPageID[$i]) {
 			$LookupPageID = $this->LookupPageID[$i];
 			$LookupObjectID = $this->LookupObjectID[$i];
@@ -135,6 +242,34 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 				$this->Writer->writeRaw($Output);
 			}
 			$i++;
+		}
+		
+		if ($this->MainMenuBottomID || $this->MainMenuBottomClass || $this->MainMenuBottomStyle || $this->MainMenuBottomInsert) {
+			$this->Writer->startElement('div');
+			
+			if ($this->MainMenuBottomID) {
+				$this->Writer->writeAttribute('id', $this->MainMenuBottomID);
+			}
+			
+			if ($this->MainMenuBottomClass) {
+				$this->Writer->writeAttribute('class', $this->MainMenuBottomClass);
+			}
+			
+			if ($this->MainMenuBottomStyle) {
+				$this->Writer->writeAttribute('style', $this->MainMenuBottomStyle);
+			}
+			
+			if ($this->MainMenuBottomInsert) {
+				$this->Writer->writeRaw("\n");
+				$this->Writer->writeRaw($this->MainMenuBottomInsert);
+				$this->Writer->writeRaw("\n");
+			}
+			$this->Writer->fullEndElement();
+		}
+		
+		if ($this->MainMenuID || $this->MainMenuClass || $this->MainMenuStyle || $this->MainMenuInsert) {
+			$this->Writer->writeRaw("\n");
+			$this->Writer->fullEndElement();
 		}
 		
 		if ($this->JavaScriptFileName) {

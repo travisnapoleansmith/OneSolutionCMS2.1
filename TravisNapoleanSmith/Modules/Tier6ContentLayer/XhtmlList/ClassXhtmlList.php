@@ -4,6 +4,8 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $ListProtectionLayer;
 	protected $DatabaseTableName;
 	
+	protected $Insert;
+	
 	protected $Ul;
 	protected $UlID;
 	protected $UlClass;
@@ -19,6 +21,13 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function XhtmlList($tablenames, $database) {
 		$this->ListProtectionLayer = &$database;
+		
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+		
+		$this->Insert = $tablenames['Insert'];
+		unset($tablenames['Insert']);
+		
 		$this->DatabaseTableName = current($tablenames);
 		$this->Li = Array();
 		$this->LiChildID = Array();
@@ -26,9 +35,6 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->LiClass = Array();
 		$this->LiStyle = Array();
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-
 		$this->Writer = new XMLWriter();
 		if ($this->FileName) {
 			$this->Writer->openURI($this->FileName);
@@ -182,9 +188,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 										
 										$listoutput = $list->getOutput();
 										$listoutput = str_replace("\n","\n$this->Space", $listoutput);
-										//$this->Writer->writeRaw("\n$this->Space");
 										$this->Writer->writeRaw($listoutput);
-										//$this->Writer->writeRaw("\n$this->Space");
 									}
 									
 									$this->Writer->endElement(); // ENDS LI
@@ -211,6 +215,12 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			}
 			
 			$this->Writer->endElement(); // ENDS UL
+			
+			if ($this->Insert) {
+				$this->Writer->writeRaw(' ');
+				$this->Writer->writeRaw($this->Insert); // WRITES INSERT
+				$this->Writer->writeRaw("\n ");
+			}
 			
 			if ($this->EndTag) {
 				$this->Writer->endElement(); // ENDS END TAG
