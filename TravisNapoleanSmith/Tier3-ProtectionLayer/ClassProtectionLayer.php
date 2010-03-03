@@ -8,7 +8,7 @@ class ProtectionLayer extends LayerModulesAbstract
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
-	public function ProtectionLayer () {
+	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
 		$this->ErrorMessage = Array();

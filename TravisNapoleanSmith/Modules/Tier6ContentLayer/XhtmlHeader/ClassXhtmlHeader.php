@@ -40,14 +40,29 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $SiteName;
 	protected $HeaderProtectionLayer;
 	
-	protected $Page; // XMLWriter Object
+	protected $Page; // XMLWriter Output
 	
-	public function XhtmlHeader($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->HeaderProtectionLayer = &$database;
-		$this->Page = new XMLWriter();
 		
-		$this->Page->openMemory();
-		$this->Page->setIndent(4);
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
+		} else {
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(4);
+		}
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -147,7 +162,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	protected function PrintArrayHelper ($item, $nametag ){
-		$this->Page->writeAttribute($nametag, $item);
+		$this->Writer->writeAttribute($nametag, $item);
 	}
 	
 	protected function PrintArray($arraynames, $starttag, $arraynametags) {
@@ -160,7 +175,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$nametag = $arraynametags[$j];
 		while ($j < $max) {
 			if ($hold[$j]) {
-				$this->Page->startElement($starttag);
+				$this->Writer->startElement($starttag);
 				$temp = $hold[$j];
 				
 				$this->PrintArrayHelper ($hold[$j], $nametag);
@@ -203,7 +218,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 				}
 			}
 				if ($hold[$j] || $flag) {
-					$this->Page->endElement();
+					$this->Writer->endElement();
 				}
 				
 			$i = 1;
@@ -280,7 +295,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		while ($i < $max) {
-			$this->Page->startElement($starttag);
+			$this->Writer->startElement($starttag);
 			
 			if ($rel) {
 				$this->TagSheetCheck($rel, 'rel', $i);
@@ -316,7 +331,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 					
 				}
 			} 
-			$this->Page->endElement();
+			$this->Writer->endElement();
 			$i++;
 		}
 	}
@@ -332,7 +347,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	protected function TagSheetOutput($tag, $tagvalue) {
-		$this->Page->writeAttribute($tag, $tagvalue);
+		$this->Writer->writeAttribute($tag, $tagvalue);
 	}
 	
 	protected function ArrayCheck(&$array) {
@@ -353,41 +368,41 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		
 		// USING NEW XMLWRITER
 		// STARTS HEADER
-		$this->Page->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
-		$this->Page->endDTD();
+		$this->Writer->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
+		$this->Writer->endDTD();
 		
-		$this->Page->startElement('html');
-		$this->Page->writeAttribute('lang', 'en-US');
-		$this->Page->writeAttribute('xml:lang', 'en-US');
-		$this->Page->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+		$this->Writer->startElement('html');
+		$this->Writer->writeAttribute('lang', 'en-US');
+		$this->Writer->writeAttribute('xml:lang', 'en-US');
+		$this->Writer->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
 		
-		$this->Page->startElement('head');
+		$this->Writer->startElement('head');
 		
-		$this->Page->startElement('meta');
-		$this->Page->writeAttribute('http-equiv', 'Content-Type');
-		$this->Page->writeAttribute('content', 'text/html; charset=iso-8859-1');
-		$this->Page->endElement(); //ENDS META
+		$this->Writer->startElement('meta');
+		$this->Writer->writeAttribute('http-equiv', 'Content-Type');
+		$this->Writer->writeAttribute('content', 'text/html; charset=iso-8859-1');
+		$this->Writer->endElement(); //ENDS META
 		
-		$this->Page->startElement('title');
+		$this->Writer->startElement('title');
 		if ($printpreviewflag) {
-			$this->Page->text('Print Preview');
+			$this->Writer->text('Print Preview');
 			if ($this->PageTitle || $this->SiteName) {
-				$this->Page->text(' - ');
+				$this->Writer->text(' - ');
 			}
 		}
 		
 		if ($this->PageTitle) {
-			$this->Page->text($this->PageTitle);
+			$this->Writer->text($this->PageTitle);
 		}
 		
 		if ($this->SiteName) {
 			if ($this->PageTitle) {
-				$this->Page->text(' - ');
+				$this->Writer->text(' - ');
 			}
-			$this->Page->text($this->SiteName);
+			$this->Writer->text($this->SiteName);
 		}
-		$this->Page->endElement(); // ENDS TITLE TAG
-		$this->Page->writeRaw("\n");
+		$this->Writer->endElement(); // ENDS TITLE TAG
+		$this->Writer->writeRaw("\n");
 		
 		if ($this->PageIcon){
 			$this->TagSheet('link', 'icon', 'image/x-icon', NULL, NULL, NULL, NULL, $this->PageIcon, NULL, NULL);
@@ -420,7 +435,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
-			$this->Page->writeRaw("\n");
+			$this->Writer->writeRaw("\n");
 		}
 		
 		if ($this->Rss2_0) {
@@ -436,7 +451,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
-			$this->Page->writeRaw("\n");
+			$this->Writer->writeRaw("\n");
 		}
 		
 		if ($this->BaseHref) {
@@ -444,7 +459,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
-			$this->Page->writeRaw("\n");
+			$this->Writer->writeRaw("\n");
 			$metaarray[0] = 'MetaName';
 			$metaarray[1] = 'MetaNameContent';
 			$metanamesarray[0] = 'name';
@@ -526,11 +541,17 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->TagSheet('script', null, 'text/vbscript', NULL, $this->ScriptVBScriptSheetDefer, NULL, NULL, NULL, $this->ScriptVBScriptSheetCode, 'script');
 		}
 		
-		$this->Page->endElement(); // END HEAD TAG
+		$this->Writer->endElement(); // END HEAD TAG
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		} else {
+			$this->Page = $this->Writer->flush();
+		}
 	}
 	
 	public function GetOutput () {
-		return $this->Page->flush();
+		return $this->Page;
 	}
 	
 }

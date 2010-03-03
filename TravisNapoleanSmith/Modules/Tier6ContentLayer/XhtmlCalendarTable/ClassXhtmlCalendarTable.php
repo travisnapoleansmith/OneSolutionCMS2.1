@@ -3,9 +3,6 @@
 class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $XhtmlCalendarTableProtectionLayer;
 	
-	protected $Writer;
-	protected $FileName;
-	
 	protected $TableNames = array();
 	protected $CalendarLookupTableName = array();
 	protected $CalendarAppointments = array();
@@ -146,13 +143,20 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
 		
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
 		} else {
-			$this->Writer->openMemory();
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(4);
 		}
-		$this->Writer->setIndent(4);
 		
 		$this->Day = $tablenames['Day'];
 		$this->Month = $tablenames['Month'];

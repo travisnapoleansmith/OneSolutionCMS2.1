@@ -6,9 +6,6 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	protected $TableNames = array();
 	protected $MainMenuTables = array();
 	
-	protected $Writer;
-	protected $FileName;
-	
 	protected $JavaScriptFileName;
 	protected $JavaScriptLibraryName;
 	
@@ -92,11 +89,19 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		$this->Insert = $tablenames['Insert'];
 		unset($tablenames['Insert']);
 		
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
 		} else {
-			$this->Writer->openMemory();
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(4);
 		}
 		
 		while (current($tablenames)) {
@@ -104,7 +109,6 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			next($tablenames);
 		}
 				
-		$this->Writer->setIndent(4);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

@@ -25,7 +25,7 @@
 	$calendardatabase['Month'] = NULL;
 	$calendardatabase['Year'] = NULL;
 	
-	$databases = &$GLOBALS['Tier4Databases'];
+	$databases = &$GLOBALS['Tier6Databases'];
 	
 	$calendartable = new XhtmlCalendarTable($calendardatabase, $databases);
 	$calendartable->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');

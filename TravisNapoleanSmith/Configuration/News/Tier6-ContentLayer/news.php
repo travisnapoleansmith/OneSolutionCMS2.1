@@ -42,7 +42,7 @@
 		$newsidnumber['PageID'] = $_GET['StoryMonth'];
 	}
 
-	$databases = &$GLOBALS['Tier4Databases'];
+	$databases = &$GLOBALS['Tier6Databases'];
 	
 	$news = new XhtmlNews($newsdatabase, $databases);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $newsname);

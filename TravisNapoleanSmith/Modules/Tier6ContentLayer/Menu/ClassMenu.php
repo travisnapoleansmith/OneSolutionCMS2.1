@@ -15,7 +15,7 @@ class Menu
 	private $HttpUserAgent;
 	private $PageName;
 	
-	public function Menu($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->MenuProtectionLayer = &$database;
 		$this->idnumber = current($tablenames);
 		$this->MenuDatabase = next($tablenames);

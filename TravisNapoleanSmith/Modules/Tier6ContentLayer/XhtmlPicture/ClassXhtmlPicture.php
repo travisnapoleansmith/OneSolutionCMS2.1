@@ -14,7 +14,7 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $Picture;
 	
-	public function XhtmlPicture($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->PictureProtectionLayer = &$database;
 	}
 	

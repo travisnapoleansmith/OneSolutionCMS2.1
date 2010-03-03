@@ -15,7 +15,7 @@ class MenuItem
 	private $AClass;
 	
 	
-	public function MenuItem() {
+	public function __construct() {
 		
 	}
 	

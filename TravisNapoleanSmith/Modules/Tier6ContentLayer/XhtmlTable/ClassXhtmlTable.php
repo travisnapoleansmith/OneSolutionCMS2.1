@@ -3,8 +3,6 @@
 class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $XhtmlTableProtectionLayer;
 	
-	protected $Writer;
-	protected $FileName;
 	/*
 	protected $TableNames = array();
 	protected $SitemapTables = array();
@@ -22,15 +20,23 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	public function __construct($tablenames, $database) {
 		$this->XhtmlTableProtectionLayer = &$database;
-		/*
+		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
-		*/
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
 		} else {
-			$this->Writer->openMemory();
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(4);
 		}
 		/*
 		while (current($tablenames)) {

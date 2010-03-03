@@ -32,7 +32,7 @@
 	$contentdatabase['ContentLayerTables'] = 'ContentLayerTables';
 	$contentdatabase['ContentPrintPreview'] = 'ContentPrintPreview';
 		
-	$databases = &$GLOBALS['Tier4Databases'];
+	$databases = &$GLOBALS['Tier6Databases'];
 	
 	$content = new XhtmlContent($contentdatabase, $databases);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Content');

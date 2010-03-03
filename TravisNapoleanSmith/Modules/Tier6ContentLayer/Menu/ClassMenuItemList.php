@@ -23,7 +23,7 @@ class MenuItemList
 	private $InsertInformation;
 	private $root;
 	
-	public function MenuItemList () {
+	public function __construct () {
 		$this->MenuItems = Array();
 		$this->idMenuItems = Array();
 		$this->InsertInformation = Array();

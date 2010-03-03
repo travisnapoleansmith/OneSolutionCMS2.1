@@ -8,7 +8,7 @@ class AuthenticationLayer extends LayerModulesAbstract
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
-	public function AuthenticationLayer () {
+	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
 		$this->ErrorMessage = Array();

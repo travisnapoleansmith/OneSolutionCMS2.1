@@ -3,8 +3,6 @@
 class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $XhtmlCalendarTableProtectionLayer;
 	
-	protected $Writer;
-	protected $FileName;
 	/*
 	protected $TableNames = array();
 	protected $SitemapTables = array();
@@ -36,15 +34,23 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->CurrentYear = date('Y');
 		
 		$this->XhtmlCalendarTableProtectionLayer = &$database;
-		/*
+		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
-		*/
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
 		} else {
-			$this->Writer->openMemory();
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(4);
 		}
 		/*
 		while (current($tablenames)) {

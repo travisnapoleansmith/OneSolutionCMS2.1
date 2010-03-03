@@ -18,7 +18,7 @@
 	require ('Configuration/Tier6-ContentLayer/header.php');
 
 	print "<body>\n";
-
+	
 	if ($printpreview == FALSE) {
 		// Top Panel 2
 		print "\n<div id=\"TopPanel2\" class=\"TopPanel2\">\n";
@@ -26,6 +26,7 @@
 		print "</div>\n\n";
 		
 	}
+	
 	// Main Menu 
 	//require ('Configuration/Tier6-ContentLayer/menu.php');
 	//require ('Administrators/updateMainMenu.php');
@@ -57,7 +58,7 @@
 		require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
 		print "</div>\n\n";
 	}
-
+	
 	// Print Out End Of Body and HTML File
 	print "</body>\n";
 	print "</html>\n";

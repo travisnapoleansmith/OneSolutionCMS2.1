@@ -9,7 +9,7 @@
 	$feeddatabase['XMLFeeds'] = 'XMLFeeds';
 	$feeddatabase['FileName'] = 'rss.xml';
 	
-	$databases = &$GLOBALS['Tier4Databases'];
+	$databases = &$GLOBALS['Tier6Databases'];
 	
 	$feed = new XmlFeed($feeddatabase, $databases);
 	$feed->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XMLFeeds');

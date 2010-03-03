@@ -19,7 +19,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $List;
 	
-	public function XhtmlList($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->ListProtectionLayer = &$database;
 		
 		$this->FileName = $tablenames['FileName'];
@@ -28,6 +28,9 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->Insert = $tablenames['Insert'];
 		unset($tablenames['Insert']);
 		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
 		$this->DatabaseTableName = current($tablenames);
 		$this->Li = Array();
 		$this->LiChildID = Array();
@@ -35,14 +38,17 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->LiClass = Array();
 		$this->LiStyle = Array();
 		
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
 		} else {
-			$this->Writer->openMemory();
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(3);
 		}
-		
-		$this->Writer->setIndent(3);
 		
 	}
 	

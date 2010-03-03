@@ -22,7 +22,7 @@
 	$flashdatabase = Array();
 	$flashdatabase['Flash'] = 'Flash';
 	
-	$databases = &$GLOBALS['Tier4Databases'];
+	$databases = &$GLOBALS['Tier6Databases'];
 	
 	$flash = new XhtmlFlash($flashdatabase, $databases);
 	$flash->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Flash');

@@ -34,7 +34,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $ContentOutput;
 	
-	public function XhtmlContent($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->ContentTable = &$database;
 		$this->ContentTableName = current($tablenames);
 		$this->ContentLayerTables = &$database;

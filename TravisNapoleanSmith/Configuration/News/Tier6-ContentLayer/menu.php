@@ -22,7 +22,7 @@
 		$menudatabase['MainMenu'] = 'MainMenu';
 		$menudatabase['MainMenuLookup'] = 'MainMenuLookup';
 		
-		$databases = &$GLOBALS['Tier4Databases'];
+		$databases = &$GLOBALS['Tier6Databases'];
 		
 		/*if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
 			print "\n";

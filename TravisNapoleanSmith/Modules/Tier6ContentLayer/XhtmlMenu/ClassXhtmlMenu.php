@@ -22,7 +22,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $List;
 	
-	public function XhtmlMenu($tablenames, $database) {
+	public function __construct($tablenames, $database) {
 		$this->MenuProtectionLayer = &$database;
 		$this->DatabaseTableName = current($tablenames);
 	}

@@ -1,9 +1,10 @@
 <?php
 
-class DataAccessLayer extends LayerModulesAbstract
+class ContentLayer extends LayerModulesAbstract
 {
 	protected $Modules;
 	
+	protected $Tier5ValidationTier;
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
@@ -11,8 +12,9 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
 		$this->ErrorMessage = Array();
-		$this->DatabaseAllow = &$GLOBALS['Tier2DatabaseAllow'];
-		$this->DatabaseDeny = &$GLOBALS['Tier2DatabaseDeny'];
+		$this->DatabaseAllow = &$GLOBALS['Tier6DatabaseAllow'];
+		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
+		$this->Tier5ValidationTier = &$GLOBALS['Tier5Databases'];
 	}
 	
 	public function setModules() {
@@ -28,36 +30,23 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
+		$this->Tier5ValidationTier->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function ConnectAll () {
-		reset($this->DatabaseTable);
-		while (current($this->DatabaseTable)){
-			$tablename = key($this->DatabaseTable);
-			$this->DatabaseTable[key($this->DatabaseTable)]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $tablename);
-			$this->DatabaseTable[key($this->DatabaseTable)]->Connect();
-			
-			next($this->DatabaseTable);
-		}
+		$this->Tier5ValidationTier->ConnectAll();
 	}
 	
 	public function Connect ($key) {
-		$this->DatabaseTable[$key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $key);
-		$this->DatabaseTable[$key]->Connect();
+		$this->Tier5ValidationTier->Connect($key);
 	}
 	
 	public function DisconnectAll () {
-		reset($this->DatabaseTable);
-		while (current($this->DatabaseTable)){
-			$tablename = key($this->DatabaseTable);
-			$this->DatabaseTable[key($this->DatabaseTable)]->Disconnect();
-			
-			next($this->DatabaseTable);
-		}
+		$this->Tier5ValidationTier->DisconnectAll();
 	}
 	
 	public function Disconnect ($key) {
-		$this->DatabaseTable[$key]->Disconnect();
+		$this->Tier5ValidationTier->Disconnect($key);
 	}
 	
 	public function buildDatabase() {
@@ -65,7 +54,7 @@ class DataAccessLayer extends LayerModulesAbstract
 	}
 	
 	public function createDatabaseTable($key) {
-		$this->DatabaseTable[$key] =  new MySqlConnect();
+		$this->Tier5ValidationTier->createDatabaseTable($key);
 	}
 	
 	public function createModules($key) {
@@ -78,15 +67,15 @@ class DataAccessLayer extends LayerModulesAbstract
 		reset($this->Modules);
 		$hold = NULL;
 		while (current($this->Modules)) {
-			//$this->Modules[key($this->Modules)]->FetchDatabase ($DatabaseTable);
-			//$this->Modules[key($this->Modules)]->CreateOutput($this->Space);
-			//$this->Modules[key($this->Modules)]->getOutput();
-			//$hold = $this->Modules[key($this->Modules)]->Verify($function, $functionarguments);
-			$hold = TRUE;
-			next($this->Modules);
+			/*$this->Modules[key($this->Modules)]->FetchDatabase ($DatabaseTable);
+			$this->Modules[key($this->Modules)]->CreateOutput($this->Space);
+			$this->Modules[key($this->Modules)]->getOutput();
+			$hold = $this->Modules[key($this->Modules)]->Verify($function, $functionarguments);
+			next($this->Modules);*/
 		}
+		
 		if ($hold) {
-			$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
+			$hold2 = $this->Tier5ValidationTier->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
 			} else {
@@ -101,7 +90,7 @@ class DataAccessLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = call_user_func_array(array($this->DatabaseTable["$databasetable"], "$function"), $functionarguments);
+							$hold = $this->Tier5ValidationTier->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}
