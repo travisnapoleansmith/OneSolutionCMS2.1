@@ -140,13 +140,16 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->AppointmentColumns['Appointment'] = 'Appointment';
 		
 		$this->AppointmentDayColumns['Day'] = 'Day';
-		$this->AppointmentDayColumns['Month'] = 'Month';
-		$this->AppointmentDayColumns['Year'] = 'Year';
+		//$this->AppointmentDayColumns['Month'] = 'Month';
+		//$this->AppointmentDayColumns['Year'] = 'Year';
 		$this->AppointmentDayColumns['Start Time'] = 'Start Time';
 		$this->AppointmentDayColumns['End Time'] = 'End Time';
 		$this->AppointmentDayColumns['Appointment'] = 'Appointment';
 		
 		$this->XhtmlCalendarTableProtectionLayer = &$database;
+		
+		$this->PrintPreview = $tablenames['PrintPreview'];
+		unset($tablenames['PrintPreview']);
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
@@ -226,7 +229,6 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				
 				$this->XhtmlCalendarTableProtectionLayer->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
 				$j = $i-1;
-				
 				$this->XhtmlCalendarTableProtectionLayer->Connect($this->CalendarTableNames[$j]);
 				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarTableNames[$j], 'setDatabaseField', array('idnumber' => $passarray));
 				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarTableNames[$j], 'setDatabaseRow', array('idnumber' => $passarray));
@@ -344,7 +346,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->AppointmentStartTimeAmPm[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['StartTimeAmPm'];
 			$this->AppointmentStartTimeZone[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['StartTimeZone'];
 			$this->AppointmentEndTime[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['EndTime'];
-			$this->AppointmentEndtimeAmPm[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['EndtimeAmPm'];
+			$this->AppointmentEndtimeAmPm[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['EndTimeAmPm'];
 			$this->AppointmentEndTimeZone[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['EndTimeZone'];
 			$this->Appointment[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['Appointment'];
 			
@@ -579,14 +581,22 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	}
 	
 	protected function TableWeek(array $week, $i) {
+		$Arguments = func_num_args();
+		if ($Arguments == 3) {
+			$TableCell = func_get_arg(2);
+		}
 		if ($this->CalendarEnableDisable[$i] == 'Enable' && $this->CalendarStatus[$i] == 'Approved'){
 			$this->Writer->startElement('tr');
 				$this->TableRow($i);
 				reset($week);
 				$max = count($week);
 				$j = 0;
+				
 				while ($j < $max) {
 					$this->Writer->startElement('td');
+						if (!is_null($TableCell)) {
+							$this->TableCell($i, $TableCell);
+						}
 						$this->Writer->writeRaw(current($week));
 					$this->Writer->endElement(); // ENDS TD TAG
 					next($week);
@@ -709,7 +719,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->Writer->startElement('tr');
 				$this->TableRow($i);
 				$this->Writer->startElement('td');
-					$this->Writer->writeAttribute('colspan', '6');
+					//$this->Writer->writeAttribute('colspan', '6');
+					$this->Writer->writeAttribute('colspan', '4');
 					$this->Writer->writeAttribute('align', 'center');
 					$this->Writer->text('Appointments');
 					$this->Writer->endElement();  // ENDS TD TAG
@@ -720,19 +731,19 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 					$starttime = $this->AppointmentStartTime[$i][$j];
 					$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
 					$endtime = $this->AppointmentEndTime[$i][$j];
-					$endtime .= $this->AppointmentEndTimeAmPm[$i][$j];
+					$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
 					$day = $this->AppointmentDay[$i][$j];
-					$month = $this->AppointmentMonth[$i][$j];
-					$year = $this->AppointmentYear[$i][$j];
+					//$month = $this->AppointmentMonth[$i][$j];
+					//$year = $this->AppointmentYear[$i][$j];
 					
 					$passarray = array();
 					$passarray['Day'] = $day;
-					$passarray['Month'] = $month;
-					$passarray['Year'] = $year;
+					//$passarray['Month'] = $month;
+					//$passarray['Year'] = $year;
 					$passarray['StartTime'] = $starttime;
 					$passarray['EndTime'] = $endtime;
 					$passarray['Appointment'] = $appointment;
-					$this->TableWeek($passarray, $i);
+					$this->TableWeek($passarray, $i, $j);
 					$j++;
 			}
 			$this->Writer->endElement(); // ENDS TABLE TAG
@@ -746,7 +757,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$starttime = $this->AppointmentStartTime[$i][$j];
 			$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
 			$endtime = $this->AppointmentEndTime[$i][$j];
-			$endtime .= $this->AppointmentEndTimeAmPm[$i][$j];
+			$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
 			
 			$passarray = array();
 			$passarray['StartTime'] = $starttime;
