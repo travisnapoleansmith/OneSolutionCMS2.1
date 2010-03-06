@@ -29,12 +29,12 @@
 	$flash->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$flash->FetchDatabase ($flashidnumber);
 	//$flash->BuildFlashVarsText();
-	$flash->CreateOutput('    ');
+	$flash->CreateOutput('  ');
 	
 	//print_r($flash);
 	$flashoutput = $flash->getOutput();
 	//print "<div id=\"textlayer1\">\n";
-	print "  $flashoutput";
+	print "$flashoutput";
 	///print "\n";
 	//print "</div>\n";
 	

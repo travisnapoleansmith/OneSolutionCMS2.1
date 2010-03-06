@@ -73,6 +73,24 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	public function __construct($tablenames, $database) {
 		$this->FlashProtectionLayer = &$database;
+		
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
+		} else {
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(3);
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -177,69 +195,69 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->FlashVarsAuthor = trim($this->FlashVarsAuthor, '"');
 			$this->FlashVarsText .= 'author=';
 			$this->FlashVarsText .= $this->FlashVarsAuthor;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDate) {
 			$this->FlashVarsText .= 'date=';
 			$this->FlashVarsText .= $this->FlashVarsDate;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDescription) {
 			$this->FlashVarsDescription = trim($this->FlashVarsDescription, '"');
 			$this->FlashVarsText .= 'description=';
 			$this->FlashVarsText .= $this->FlashVarsDescription;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDuration) {
 			$this->FlashVarsText .= 'duration=';
 			$this->FlashVarsText .= $this->FlashVarsDuration;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsFile) {
 			$this->FlashVarsFile = trim($this->FlashVarsFile, '"');
 			$this->FlashVarsText .= 'file=';
 			$this->FlashVarsText .= $this->FlashVarsFile;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsImage) {
 			$this->FlashVarsImage = trim($this->FlashVarsImage, '"');
 			$this->FlashVarsText .= 'image=';
 			$this->FlashVarsText .= $this->FlashVarsImage;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsLink) {
 			$this->FlashVarsLink = trim($this->FlashVarsLink, '"');
 			$this->FlashVarsText .= 'link=';
 			$this->FlashVarsText .= $this->FlashVarsLink;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsStart) {
 			$this->FlashVarsText .= 'start=';
 			$this->FlashVarsText .= $this->FlashVarsStart;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsStreamer) {
 			$this->FlashVarsStreamer = trim($this->FlashVarsStreamer, '"');
 			$this->FlashVarsText .= 'streamer=';
 			$this->FlashVarsText .= $this->FlashVarsStreamer;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsTags) {
 			$this->FlashVarsTags = trim($this->FlashVarsTags, '"');
 			$this->FlashVarsText .= 'tags=';
 			$this->FlashVarsText .= $this->FlashVarsTags;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsTitle) {
 			$this->FlashVarsTitle = trim($this->FlashVarsTitle, '"');
 			$this->FlashVarsText .= 'title=';
 			$this->FlashVarsText .= $this->FlashVarsTitle;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsType) {
 			$this->FlashVarsText .= 'type=';
 			$this->FlashVarsText .= $this->FlashVarsType;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 
 		//FlashVars Layout Properties
@@ -247,145 +265,145 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->FlashVarsBackColor = trim($this->FlashVarsBackColor, '"');
 			$this->FlashVarsText .= 'backcolor=';
 			$this->FlashVarsText .= $this->FlashVarsBackColor;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsControlBar) {
 			$this->FlashVarsText .= 'controlbar=';
 			$this->FlashVarsText .= $this->FlashVarsControlBar;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDock) {
 			$this->FlashVarsText .= 'dock=';
 			$this->FlashVarsText .= $this->FlashVarsDock;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsFrontColor) {
 			$this->FlashVarsFrontColor = trim($this->FlashVarsFrontColor, '"');
 			$this->FlashVarsText .= 'frontcolor=';
 			$this->FlashVarsText .= $this->FlashVarsFrontColor;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsHeight) {
 			$this->FlashVarsText .= 'height=';
 			$this->FlashVarsText .= $this->FlashVarsHeight;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsIcons) {
 			$this->FlashVarsText .= 'icons=';
 			$this->FlashVarsText .= $this->FlashVarsIcons;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsLightColor) {
 			$this->FlashVarsLightColor = trim($this->FlashVarsLightColor, '"');
 			$this->FlashVarsText .= 'lightcolor=';
 			$this->FlashVarsText .= $this->FlashVarsLightColor;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsLogo) {
 			$this->FlashVarsLogo = trim($this->FlashVarsLogo, '"');
 			$this->FlashVarsText .= 'logo=';
 			$this->FlashVarsText .= $this->FlashVarsLogo;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsPlaylist) {
 			$this->FlashVarsPlaylist = trim($this->FlashVarsPlaylist, '"');
 			$this->FlashVarsText .= 'playlist=';
 			$this->FlashVarsText .= $this->FlashVarsPlaylist;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsPlaylistSize) {
 			$this->FlashVarsText .= 'playlistsize=';
 			$this->FlashVarsText .= $this->FlashVarsPlaylistSize;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsSkin) {
 			$this->FlashVarsSkin = trim($this->FlashVarsSkin, '"');
 			$this->FlashVarsText .= 'skin=';
 			$this->FlashVarsText .= $this->FlashVarsSkin;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsScreenColor) {
 			$this->FlashVarsScreenColor = trim($this->FlashVarsScreenColor, '"');
 			$this->FlashVarsText .= 'screencolor=';
 			$this->FlashVarsText .= $this->FlashVarsScreenColor;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsWidth) {
 			$this->FlashVarsText .= 'width=';
 			$this->FlashVarsText .= $this->FlashVarsWidth;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		
 		//FlashVars Behavior Properties
 		if ($this->FlashVarsAutoStart) {
 			$this->FlashVarsText .= 'autostart=';
 			$this->FlashVarsText .= $this->FlashVarsAutoStart;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsBufferLength) {
 			$this->FlashVarsText .= 'bufferlength=';
 			$this->FlashVarsText .= $this->FlashVarsBufferLength;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDisplayClick) {
 			$this->FlashVarsText .= 'displayclick=';
 			$this->FlashVarsText .= $this->FlashVarsDisplayClick;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDisplayTitle) {
 			$this->FlashVarsText .= 'displaytitle=';
 			$this->FlashVarsText .= $this->FlashVarsDisplayTitle;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsFullScreen) {
 			$this->FlashVarsText .= 'fullscreen=';
 			$this->FlashVarsText .= $this->FlashVarsFullScreen;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsItem) {
 			$this->FlashVarsText .= 'item=';
 			$this->FlashVarsText .= $this->FlashVarsItem;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsLinkTarget) {
 			$this->FlashVarsText .= 'linktarget=';
 			$this->FlashVarsText .= $this->FlashVarsLinkTarget;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsMute) {
 			$this->FlashVarsText .= 'mute=';
 			$this->FlashVarsText .= $this->FlashVarsMute;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsRepeat) {
 			$this->FlashVarsText .= 'repeat=';
 			$this->FlashVarsText .= $this->FlashVarsRepeat;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsShuffle) {
 			$this->FlashVarsText .= 'shuffle=';
 			$this->FlashVarsText .= $this->FlashVarsShuffle;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsSmoothing) {
 			$this->FlashVarsText .= 'smoothing=';
 			$this->FlashVarsText .= $this->FlashVarsSmoothing;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsState) {
 			$this->FlashVarsText .= 'state=';
 			$this->FlashVarsText .= $this->FlashVarsState;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsStretching) {
 			$this->FlashVarsText .= 'stretching=';
 			$this->FlashVarsText .= $this->FlashVarsStretching;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsVolume) {
 			$this->FlashVarsText .= 'volume=';
 			$this->FlashVarsText .= $this->FlashVarsVolume;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		
 		//FlashVars API Properties		
@@ -393,31 +411,31 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->FlashVarsClient = trim($this->FlashVarsClient, '"');
 			$this->FlashVarsText .= 'client=';
 			$this->FlashVarsText .= $this->FlashVarsClient;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsDebug) {
 			$this->FlashVarsDebug = trim($this->FlashVarsDebug, '"');
 			$this->FlashVarsText .= 'debug=';
 			$this->FlashVarsText .= $this->FlashVarsDebug;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsId) {
 			$this->FlashVarsId = trim($this->FlashVarsId, '"');
 			$this->FlashVarsText .= 'id=';
 			$this->FlashVarsText .= $this->FlashVarsId;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsPlugins) {
 			$this->FlashVarsPlugins = trim($this->FlashVarsPlugins, '"');
 			$this->FlashVarsText .= 'plugins=';
 			$this->FlashVarsText .= $this->FlashVarsPlugins;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		if ($this->FlashVarsVersion) {
 			$this->FlashVarsVersion = trim($this->FlashVarsVersion, '"');
 			$this->FlashVarsText .= 'version=';
 			$this->FlashVarsText .= $this->FlashVarsVersion;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		
 		//FlashVars ConfigXML Properties
@@ -425,167 +443,111 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->FlashVarsConfig = trim($this->FlashVarsConfig, '"');
 			$this->FlashVarsText .= 'config=';
 			$this->FlashVarsText .= $this->FlashVarsConfig;
-			$this->FlashVarsText .= '&amp;';
+			$this->FlashVarsText .= '&';
 		}
 		
-		$this->FlashVarsText = trim($this->FlashVarsText, '&amp;');
+		$this->FlashVarsText = trim($this->FlashVarsText, '&');
 	}
 	
 	public function CreateOutput($space) {
-	  	$this->BuildFlashVarsText();
 		$this->Space = $space;
+		$this->BuildFlashVarsText();
 		
 		if ($this->StartTag){
-			if ($this->StartTagId) {
-				$temp = strrpos($this->StartTag, '>');
-				$this->StartTag[$temp] = ' ';
-				$this->StartTag .= 'id="';
-				$this->StartTag .= $this->StartTagId;
-				$this->StartTag .= '"';
-				
+			$this->StartTag = str_replace('<','', $this->StartTag);
+			$this->StartTag = str_replace('>','', $this->StartTag);
+			$this->Writer->startElement($this->StartTag);
+			
+				if ($this->StartTagID) {
+					$this->Writer->writeAttribute('id', $this->StartTagID);
+				}
 				if ($this->StartTagStyle) {
-					$this->StartTag .= ' style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '"';
+					$this->Writer->writeAttribute('style', $this->StartTagStyle);
 				}
 				if ($this->StartTagClass) {
-					$this->StartTag .= ' class="';
-					$this->StartTag .= $this->StartTagClass;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-				} else {
-					$this->StartTag .= ">\n";
+					$this->Writer->writeAttribute('class', $this->StartTagClass);
 				}
-				$this->flash .= $this->StartTag;
-			} else if ($this->StartTagClass){
-				$temp = strrpos($this->StartTag, '>');
-				$this->StartTag[$temp] = ' ';
-				
-				if ($this->StartTagStyle) {
-					$this->StartTag .= 'style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '" ';
-				}
-				
-				$this->StartTag .= 'class="';
-				$this->StartTag .= $this->StartTagClass;
-				$this->StartTag .= '"';
-				$this->StartTag .= ">\n";
-				$this->flash .= $this->StartTag;
-			} else {
-				$temp = strrpos($this->StartTag, '>');
-				
-				$this->StartTag[$temp] = ' ';
-				$this->StartTag .= 'style="';
-				$this->StartTag .= $this->StartTagStyle;
-				$this->StartTag .= '"';
-				$this->StartTag .= ">";
-				
-				$this->flash .= $this->StartTag;
-				$this->flash .= "\n";
-			}
 		}
 		
-		if ($this->Space) {
-			$this->flash .= $this->Space;
-		}
-		
-		$this->flash .= '<object';
+		$this->Writer->startElement('object');
 		
 		if ($this->IsIE) {
-			$this->flash .= ' classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"';
+			$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
 		}
 		
 		if ($this->Width) {
-			$this->flash .= ' width="';
-			$this->flash .= $this->Width;
-			$this->flash .= '"';
+			$this->Writer->writeAttribute('width', $this->Width);
 		}
 		
 		if ($this->Height) {
-			$this->flash .= ' height="';
-			$this->flash .= $this->Height;
-			$this->flash .= '"';
+			$this->Writer->writeAttribute('height', $this->Height);
 		}
 		
 		if ($this->IsIE) {
-			$this->flash .= 'id="player" name="player"';
+			$this->Writer->writeAttribute('id', 'player');
+			$this->Writer->writeAttribute('name', 'player');
 		} else {
-			$this->flash .= ' type="application/x-shockwave-flash"';
+			$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
 		}
 		
 		if (!$this->IsIE) {
 			if ($this->FlashPath) {
-				$this->flash .= ' data="';
-				$this->flash .= $this->FlashPath;
-				$this->flash .= '"';
+				$this->Writer->writeAttribute('data', $this->FlashPath);
 			}
 		}
-		$this->flash .= ">\n";
 	  	
 		if ($this->FlashPath) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= '  <param name="movie" value="';
-			$this->flash .= $this->FlashPath;
-			$this->flash .= "\" />\n";
+			$this->Writer->startElement('param');
+			$this->Writer->writeAttribute('name', 'movie');
+			$this->Writer->writeAttribute('value', $this->FlashPath);
+			$this->Writer->endElement();
 		}
 		
 		if ($this->Wmode) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= '  <param name="wmode" value="';
-			$this->flash .= $this->Wmode;
-			$this->flash .= "\" />\n";
+			$this->Writer->startElement('param');
+			$this->Writer->writeAttribute('name', 'wmode');
+			$this->Writer->writeAttribute('value', $this->Wmode);
+			$this->Writer->endElement();
 		}
 		
 		if ($this->AllowFullScreen) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= '  <param name="allowfullscreen" value="';
-			$this->flash .= $this->AllowFullScreen;
-			$this->flash .= "\" />\n";
+			$this->Writer->startElement('param');
+			$this->Writer->writeAttribute('name', 'allowfullscreen');
+			$this->Writer->writeAttribute('value', $this->AllowFullScreen);
+			$this->Writer->endElement();
 		}
 		
 		if ($this->AllowScriptAccess) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= '  <param name="allowscriptaccess" value="';
-			$this->flash .= $this->AllowScriptAccess;
-			$this->flash .= "\" />\n";
+			$this->Writer->startElement('param');
+			$this->Writer->writeAttribute('name', 'allowscriptaccess');
+			$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
+			$this->Writer->endElement();
 		}
 		
 		if ($this->FlashVarsText) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= '  <param name="flashvars" value="';
-			$this->flash .= $this->FlashVarsText;
-			$this->flash .= "\" />\n";
+			$this->Writer->startElement('param');
+			$this->Writer->writeAttribute('name', 'flashvars');
+			$this->Writer->writeAttribute('value', $this->FlashVarsText);
+			$this->Writer->endElement();
 		}
 		
 		if ($this->AltText) {
-			if ($this->Space) {
-				$this->flash .= $this->Space;
-			}
-			$this->flash .= "\t ";
-			$this->flash .= $this->AltText;
-			$this->flash .= "\n";
+			$this->Writer->writeRaw("\t");
+			$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
+			$this->Writer->writeRaw("\n");
 	  	}
-		if ($this->Space) {
-			$this->flash .= $this->Space;
-		}
 		
-		$this->flash .= "</object>\n";
-		
+		$this->Writer->writeRaw($this->Space); // END OBJECT TAG
+		$this->Writer->endElement();
 		if ($this->EndTag) {
-			$this->flash .= '  ';
-			$this->flash .= $this->EndTag;
-			$this->flash .= "\n";
+			$this->Writer->fullEndElement(); // ENDS END TAG
+		}
+		$this->Writer->endDocument();
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		} else {
+			$this->flash = $this->Writer->flush();
 		}
 	}
 	

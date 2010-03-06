@@ -195,6 +195,7 @@
 	print "$output\n";
 	*/
 	require_once 'Configuration/Tier6-ContentLayer/calendar.php';
+	//require_once 'Configuration/Tier6-ContentLayer/flashimage.php';
 	//require_once 'Configuration/Tier6-ContentLayer/mainmenu.php';
 	//print_r($Tier4Databases);
 	//print_r($calendartable);
