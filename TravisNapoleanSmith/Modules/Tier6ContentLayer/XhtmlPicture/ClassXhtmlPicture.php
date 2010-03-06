@@ -16,6 +16,25 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function __construct($tablenames, $database) {
 		$this->PictureProtectionLayer = &$database;
+		
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
+		} else {
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(3);
+		}
+		//print_r($this->Writer);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -65,114 +84,62 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
-				if ($this->StartTagID) {
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'id="';
-					$this->StartTag .= $this->StartTagID;
-					$this->StartTag .= '"';
-					
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->startElement($this->StartTag);
+				
+					if ($this->StartTagID) {
+						$this->Writer->writeAttribute('id', $this->StartTagID);
+					}
 					if ($this->StartTagStyle) {
-						$this->StartTag .= ' style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '"';
+						$this->Writer->writeAttribute('style', $this->StartTagStyle);
 					}
 					if ($this->StartTagClass) {
-						$this->StartTag .= ' class="';
-						$this->StartTag .= $this->StartTagClass;
-						$this->StartTag .= '"';
-						$this->StartTag .= ">\n";
-					} else {
-						$this->StartTag .= ">\n";
+						$this->Writer->writeAttribute('class', $this->StartTagClass);
 					}
-					$this->Picture .= $this->StartTag;
-				} else if ($this->StartTagClass){
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-				
-					if ($this->StartTagStyle) {
-						$this->StartTag .= 'style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '" ';
-					}
-					
-					$this->StartTag .= 'class="';
-					$this->StartTag .= $this->StartTagClass;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-					$this->Picture .= $this->StartTag;
-				} else if ($this->StartTagClass){
-					$temp = strrpos($this->StartTag, '>');
-					
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">";
-					
-					$this->Picture .= $this->StartTag;
-					$this->Picture .= "\n";
-				} else {
-					$this->Picture .= $this->StartTag;
-					$this->Picture .= "\n";
+			}
+			
+			$this->Writer->startElement('img');
+				if ($this->PictureID) {
+					$this->Writer->writeAttribute('id', $this->PictureID);
 				}
-			}
-			
-			if ($this->Space) {
-				$this->Picture .= $this->Space;
-			}
-			
-			$this->Picture .= '<img';
-			
-			if ($this->PictureID) {
-				$this->Picture .= ' id="';
-				$this->Picture .= $this->PictureID;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->PictureClass) {
-				$this->Picture .= ' class="';
-				$this->Picture .= $this->PictureClass;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->PictureStyle) {
-				$this->Picture .= ' style="';
-				$this->Picture .= $this->PictureStyle;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->PictureLink) {
-				$this->Picture .= ' src="';
-				$this->Picture .= $this->PictureLink;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->PictureAltText) {
-				$this->Picture .= ' alt="';
-				$this->Picture .= $this->PictureAltText;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->Width) {
-				$this->Picture .= ' width="';
-				$this->Picture .= $this->Width;
-				$this->Picture .= '"';
-			}
-			
-			if ($this->Height) {
-				$this->Picture .= ' height="';
-				$this->Picture .= $this->Height;
-				$this->Picture .= '"';
-			}
-		
-			$this->Picture .= " />\n";
+				
+				if ($this->PictureClass) {
+					$this->Writer->writeAttribute('class', $this->PictureClass);
+				}
+				
+				if ($this->PictureStyle) {
+					$this->Writer->writeAttribute('style', $this->PictureStyle);
+				}
+				
+				if ($this->PictureLink) {
+					$this->Writer->writeAttribute('src', $this->PictureLink);
+				}
+				
+				if ($this->PictureAltText) {
+					$this->Writer->writeAttribute('alt', $this->PictureAltText);
+				}
+				
+				if ($this->Width) {
+					$this->Writer->writeAttribute('width', $this->Width);
+				}
+				
+				if ($this->Height) {
+					$this->Writer->writeAttribute('height', $this->Height);
+				}
+			$this->Writer->endElement(); // ENDS IMG TAG
 			
 			if ($this->EndTag) {
-				$this->Picture .= '  ';
-				$this->Picture .= $this->EndTag;
-				$this->Picture .= "\n";
+				$this->Writer->endElement(); // ENDS END TAG
 			}
+			
+		}
+		$this->Writer->endDocument();
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		} else {
+			$this->Picture = $this->Writer->flush();
 		}
 	}
 	

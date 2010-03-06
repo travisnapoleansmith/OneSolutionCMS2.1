@@ -41,6 +41,24 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->ContentLayerTablesName = next($tablenames);
 		$this->ContentPrintPreviewTable = &$database;
 		$this->ContentPrintPreviewTableName = next($tablenames);
+		
+		$this->FileName = $tablenames['FileName'];
+		unset($tablenames['FileName']);
+		
+		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		unset($tablenames['GlobalWriter']);
+		
+		if ($this->GlobalWriter) {
+			$this->Writer = $this->GlobalWriter;
+		} else {
+			$this->Writer = new XMLWriter();
+			if ($this->FileName) {
+				$this->Writer->openURI($this->FileName);
+			} else {
+				$this->Writer->openMemory();
+			}
+			$this->Writer->setIndent(3);
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -256,7 +274,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$modulesdatabase[current($databasetablename)] = current($databasetablename);
 				next($databasetablename);
 			}
-			
+			//$modulesdatabase['GlobalWriter'] = &$this->Writer;
 			$module = new $this->ContainerObjectType($modulesdatabase, $this->ContentLayerTables);
 			reset($databasetablename);
 			$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
@@ -264,9 +282,12 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$module->FetchDatabase($modulesidnumber);
 			$module->CreateOutput('    ');
 			
+			//print_r($module);
 			if ($print == TRUE) {
 				if ($module->getOutput()) {
-					$this->ContentOutput .= $module->getOutput();
+					//$this->ContentOutput .= $module->getOutput();
+					$this->Writer->writeRaw($module->getOutput());
+					$this->Writer->writeRaw("\n");
 				}
 			} else {
 				return $module;
@@ -279,6 +300,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
 		$contentidnumber['printpreview'] = $PrintPreview;
+		//$contentidnumber['GlobalWriter'] = &$this->Writer;
 		
 		$contentdatabase = Array();
 		$contentdatabase[$this->ContentTableName] = $ContentTable;
@@ -293,301 +315,72 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected function buildOutput ($Space) {
 		$this->Space = $Space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
-			$this->ContentOutput .= '  ';
 			if ($this->StartTag){
-				if ($this->StartTagID) {
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'id="';
-					$this->StartTag .= $this->StartTagID;
-					$this->StartTag .= '"';
-					
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->startElement($this->StartTag);
+				
+					if ($this->StartTagID) {
+						$this->Writer->writeAttribute('id', $this->StartTagID);
+					}
 					if ($this->StartTagStyle) {
-						$this->StartTag .= ' style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '"';
+						$this->Writer->writeAttribute('style', $this->StartTagStyle);
 					}
 					if ($this->StartTagClass) {
-						$this->StartTag .= ' class="';
-						$this->StartTag .= $this->StartTagClass;
-						$this->StartTag .= '"';
-						$this->StartTag .= ">\n";
-					} else {
-						$this->StartTag .= ">\n";
+						$this->Writer->writeAttribute('class', $this->StartTagClass);
 					}
-					
-					$this->ContentOutput .= $this->StartTag;
-				} else if ($this->StartTagClass){
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-				
-					if ($this->StartTagStyle) {
-						$this->StartTag .= 'style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '" ';
-					}
-					
-					$this->StartTag .= 'class="';
-					$this->StartTag .= $this->StartTagClass;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-					
-					$this->ContentOutput .= $this->StartTag;
-				} else {
-					$temp = strrpos($this->StartTag, '>');
-					
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-					
-					$this->ContentOutput .= $this->StartTag;
-					$this->ContentOutput .= "\n";
-				}
 			}
 			
 			if ($this->HeadingStartTag){
-				$this->ContentOutput .= '     ';
-				if ($this->HeadingStartTagID) {
-					$temp = strrpos($this->HeadingStartTag, '>');
-					$this->HeadingStartTag[$temp] = ' ';
-					$this->HeadingStartTag .= 'id="';
-					$this->HeadingStartTag .= $this->HeadingStartTagID;
-					$this->HeadingStartTag .= '"';
-					
-					if ($this->HeadingStartTagStyle) {
-						$this->HeadingStartTag .= ' style="';
-						$this->HeadingStartTag .= $this->HeadingStartTagStyle;
-						$this->HeadingStartTag .= '"';
+				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
+				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
+				$this->Writer->startElement($this->HeadingStartTag);
+					if ($this->HeadingStartTagID) {
+						$this->Writer->writeAttribute('id', $this->HeadingStartTagID);
 					}
+					
 					if ($this->HeadingStartTagClass) {
-						$this->HeadingStartTag .= ' class="';
-						$this->HeadingStartTag .= $this->HeadingStartTagClass;
-						$this->HeadingStartTag .= '"';
-						$this->HeadingStartTag .= ">\n";
-					} else {
-						$this->HeadingStartTag .= ">\n";
-					}
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-
-					$this->ContentOutput .= $this->HeadingStartTag;
-					
-					if ($this->Heading) {
-						$this->ContentOutput .= '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						}
+						$this->Writer->writeAttribute('class', $this->HeadingStartTagClass);
 					}
 					
-				} else if ($this->HeadingStartTagClass){
-					$temp = strrpos($this->HeadingStartTag, '>');
-					$this->HeadingStartTag[$temp] = ' ';
-				
 					if ($this->HeadingStartTagStyle) {
-						$this->HeadingStartTag .= 'style="';
-						$this->HeadingStartTag .= $this->HeadingStartTagStyle;
-						$this->HeadingStartTag .= '" ';
+						$this->Writer->writeAttribute('style', $this->HeadingStartTagStyle);
 					}
-					
-					$this->HeadingStartTag .= 'class="';
-					$this->HeadingStartTag .= $this->HeadingStartTagClass;
-					$this->HeadingStartTag .= '"';
-					$this->HeadingStartTag .= ">\n";
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-					$this->ContentOutput .= $this->HeadingStartTag;
-					
-					if ($this->Heading) {
-						$this->ContentOutput .= '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						}
-					}
-				} else {
-					$temp = strrpos($this->HeadingStartTag, '>');
-					
-					$this->HeadingStartTag[$temp] = ' ';
-					$this->HeadingStartTag .= 'style="';
-					$this->HeadingStartTag .= $this->HeadingStartTagStyle;
-					$this->HeadingStartTag .= '"';
-					$this->HeadingStartTag .= ">\n";
-					
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-					$this->ContentOutput .= $this->HeadingStartTag;
-					
-					if ($this->Heading) {
-						$this->ContentOutput .= '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->ContentOutput .= $this->Heading;
-							$this->ContentOutput .= "\n";
-						}
-					}
-					$this->ContentOutput .= "\n";
-				}
+					$this->Writer->text($this->Heading);
 			}
 			
 			if ($this->HeadingEndTag) {
-				$this->ContentOutput .= '   ';
-				if($this->Space) {
-					$this->ContentOutput .= $this->Space;
-				} else {
-					$this->ContentOutput .= '  ';
-				}
-				$this->ContentOutput .= $this->HeadingEndTag;
-				$this->ContentOutput .= "\n";
+				$this->Writer->endElement();
 			}
 			
 			if ($this->ContentStartTag){
-				$this->ContentOutput .= '     ';
-				if ($this->ContentStartTagID) {
-					$temp = strrpos($this->ContentStartTag, '>');
-					$this->ContentStartTag[$temp] = ' ';
-					$this->ContentStartTag .= 'id="';
-					$this->ContentStartTag .= $this->ContentStartTagID;
-					$this->ContentStartTag .= '"';
-					
-					if ($this->ContentStartTagStyle) {
-						$this->ContentStartTag .= ' style="';
-						$this->ContentStartTag .= $this->ContentStartTagStyle;
-						$this->ContentStartTag .= '"';
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				$this->Writer->startElement($this->ContentStartTag);
+					if ($this->ContentStartTagID) {
+						$this->Writer->writeAttribute('id', $this->ContentStartTagID);
 					}
+					
 					if ($this->ContentStartTagClass) {
-						$this->ContentStartTag .= ' class="';
-						$this->ContentStartTag .= $this->ContentStartTagClass;
-						$this->ContentStartTag .= '"';
-						$this->ContentStartTag .= ">\n";
-					} else {
-						$this->ContentStartTag .= ">\n";
-					}
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-					$this->ContentOutput .= $this->ContentStartTag;
-					
-					if ($this->Content) {
-						$this->ContentOutput .= '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						}
+						$this->Writer->writeAttribute('class', $this->ContentStartTagClass);
 					}
 					
-				} else if ($this->ContentStartTagClass){
-					$temp = strrpos($this->ContentStartTag, '>');
-					$this->ContentStartTag[$temp] = ' ';
-				
 					if ($this->ContentStartTagStyle) {
-						$this->ContentStartTag .= 'style="';
-						$this->ContentStartTag .= $this->ContentStartTagStyle;
-						$this->ContentStartTag .= '" ';
+						$this->Writer->writeAttribute('style', $this->ContentStartTagStyle);
 					}
 					
-					$this->ContentStartTag .= 'class="';
-					$this->ContentStartTag .= $this->ContentStartTagClass;
-					$this->ContentStartTag .= '"';
-					$this->ContentStartTag .= ">\n";
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-					$this->ContentOutput .= $this->ContentStartTag;
-					
-					if ($this->Content) {
-						$this->ContentOutput .=  '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						}
-					}
-				} else {
-					$temp = strrpos($this->ContentStartTag, '>');
-					
-					$this->ContentStartTag[$temp] = ' ';
-					$this->ContentStartTag .= 'style="';
-					$this->ContentStartTag .= $this->ContentStartTagStyle;
-					$this->ContentStartTag .= '"';
-					$this->ContentStartTag .= ">\n";
-					
-					if ($this->Space) {
-						$this->ContentOutput .= $this->Space;
-					}
-					$this->ContentOutput .= $this->ContentStartTag;
-					
-					if ($this->Content) {
-						$this->ContentOutput .= '     ';
-						if($this->Space) {
-							$this->ContentOutput .= $this->Space;
-							$this->ContentOutput .= $this->Space;
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						} else {
-							$this->ContentOutput .= '  ';
-							$this->Content = $this->CreateWordWrap($this->Content);
-							$this->ContentOutput .= $this->Content;
-							$this->ContentOutput .= "\n";
-						}
-					}
-					$this->ContentOutput .= "\n";
-				}
+					$this->Content = $this->CreateWordWrap($this->Content);
+					$this->Content .= "\n  ";
+					$this->Writer->text($this->Content);
+					//$this->Writer->writeRaw("\n");
 			}
 			
 			if ($this->ContentEndTag) {
-				$this->ContentOutput .= '    ';
-				if($this->Space) {
-					$this->ContentOutput .= $this->Space;
-				} else {
-					$this->ContentOutput .= '  ';
-				}
-				$this->ContentOutput .= $this->ContentEndTag;
-				$this->ContentOutput .= "\n";
+				$this->Writer->endElement();
 			}
 			
 			if ($this->EndTag) {
-				$this->ContentOutput .= "  ";
-				$this->ContentOutput .= $this->EndTag;
-				$this->ContentOutput .= "\n";
+				$this->Writer->endElement();
 			}
 		}
 	}
@@ -624,7 +417,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
 							require($filename);
 							$hold = bottompanel1();
-							$this->ContentOutput .= $hold;
+							//$this->ContentOutput .= $hold;
+							$this->Writer->writeRaw($hold);
+							$this->Writer->writeRaw("\n");
 						}
 					} else {
 						if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
@@ -661,11 +456,20 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$content->CreateOutput('    ', TRUE);
 					
 					$contentoutput = $content->getOutput();
-					$this->ContentOutput .= $contentoutput;
+					//$this->ContentOutput .= $contentoutput;
+					$this->Writer->writeRaw($contentoutput);
+					$this->Writer->writeRaw("\n");
 					
 					next($this->PrintIdNumberArray);
 				}
 			}
+		}
+		$this->Writer->endDocument();
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		} else {
+			$this->ContentOutput = $this->Writer->flush();
 		}
 	}
 	
