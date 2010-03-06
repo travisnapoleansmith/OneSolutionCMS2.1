@@ -2,9 +2,10 @@
 
 class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules 
 {
+	protected $TableNames = array();
+	
 	protected $PageTitle;
 	protected $PageIcon;
-	protected $StyleSheet;
 	protected $Rss2_0;
 	protected $Rss0_92;
 	protected $Atom0_3;
@@ -20,11 +21,15 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $LinkRel;
 	protected $LinkRev;
 	protected $LinkType;
+	
+	protected $ThemeName;
+	protected $StyleSheet;
 	protected $IE6StyleSheet;
 	protected $IE7StyleSheet;
 	protected $IE8StyleSheet;
-	protected $JavaScriptSheet;
 	protected $PrintPreviewStyleSheet;
+	
+	protected $JavaScriptSheet;
 	protected $ScriptStyleSheet;
 	protected $ScriptStyleSheetCharset;
 	protected $ScriptStyleSheetCode;
@@ -37,6 +42,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $ScriptVBScriptCharset;
 	protected $ScriptVBScriptCode;
 	protected $ScriptVBScriptDefer;
+	
 	protected $SiteName;
 	protected $HeaderProtectionLayer;
 	
@@ -63,6 +69,10 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->Writer->setIndent(4);
 		}
 		
+		while (current($tablenames)) {
+			$this->TableNames[key($tablenames)] = current($tablenames);
+			next($tablenames);
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -89,20 +99,23 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	function FetchDatabase ($PageID) {
-		$this->HeaderProtectionLayer->Connect($this->DatabaseTable);
+		reset($this->TableNames);
+		
+		$this->HeaderProtectionLayer->Connect(current($this->TableNames));
 		$passarray = array();
 		$passarray = $PageID;
-		$this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
+		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->HeaderProtectionLayer->Disconnect(current($this->TableNames));
 		
 		$this->PageID = $PageID;
-		$this->PageTitle = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField',  array('rowfield' => 'PageTitle'));
-		$this->PageIcon = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PageIcon'));
-		$this->Rss2_0 = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Rss2.0'));
-		$this->Rss0_92 = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Rss0.92'));
-		$this->Atom0_3 = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Atom0.3'));
-		$this->BaseHref = $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'BaseHref'));
-				
+		$this->PageTitle = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField',  array('rowfield' => 'PageTitle'));
+		$this->PageIcon = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'PageIcon'));
+		$this->Rss2_0 = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss2.0'));
+		$this->Rss0_92 = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss0.92'));
+		$this->Atom0_3 = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Atom0.3'));
+		$this->BaseHref = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'BaseHref'));
+		
 		$this->FillArray('MetaName', 'MetaName');
 		$this->FillArray('MetaNameContent', 'MetaNameContent');
 		$this->FillArray('HttpEquivType', 'HttpEquivType');
@@ -115,6 +128,17 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('LinkRel', 'LinkRel');
 		$this->FillArray('LinkRev', 'LinkRev');
 		$this->FillArray('LinkType', 'LinkType');
+		
+		next($this->TableNames);
+		
+		$passarray = array();
+		$passarray['Enable/Disable'] = 'Enable';
+		$this->HeaderProtectionLayer->Connect(current($this->TableNames));
+		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
+		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->HeaderProtectionLayer->Disconnect(current($this->TableNames));
+		
+		$this->ThemeName = $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'ThemeName'));
 		
 		if ($this->HttpUserAgent) {
 			$this->IEStyleSheetBuild('IE6StyleSheet');
@@ -138,7 +162,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('ScriptVBScriptSheetCode', 'ScriptVBScriptSheetCode');
 		$this->FillArray('ScriptVBScriptSheetDefer', 'ScriptVBScriptSheetDefer');
 		
-		$this->HeaderProtectionLayer->Disconnect($this->DatabaseTable);
 	}
 	
 	protected function FillArray($arrayname, $arrayvalue) {
@@ -148,9 +171,9 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$j = 0;
 
 		$this->$arrayname = Array();
-		while ($this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'searchFieldNames', array('temp' => $temp))) {
-			if ($this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $temp))) {
-				array_push($this->$arrayname, $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $temp)));
+		while ($this->HeaderProtectionLayer->pass (current($this->TableNames), 'searchFieldNames', array('temp' => $temp))) {
+			if ($this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp))) {
+				array_push($this->$arrayname, $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp)));
 			} else {
 				array_push($this->$arrayname, NULL);
 			}
@@ -246,8 +269,8 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$temp = $IEStyleSheetName;
 		$temp .= $i;
 		$this->$IEStyleSheetName = Array ();
-		while ($this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $temp))) {
-			array_push($this->$IEStyleSheetName, $this->HeaderProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $temp)));
+		while ($this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp))) {
+			array_push($this->$IEStyleSheetName, $this->HeaderProtectionLayer->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp)));
 			$i++;
 			$temp = $IEStyleSheetName;
 			$temp .= $i;

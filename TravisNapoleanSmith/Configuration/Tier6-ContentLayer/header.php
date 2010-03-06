@@ -32,6 +32,7 @@
 	// Prints Out Header Information On Page ID
 	$headerdatabase = Array();
 	$headerdatabase['PageAttributes'] = 'PageAttributes';
+	$headerdatabase['ContentLayerTheme'] = 'ContentLayerTheme';
 	
 	$databases = &$GLOBALS['Tier6Databases'];
 	

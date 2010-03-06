@@ -9,6 +9,7 @@
 	
 	$Tier3Databases->createDatabaseTable('Content');
 	$Tier3Databases->createDatabaseTable('ContentLayer');
+	$Tier3Databases->createDatabaseTable('ContentLayerTheme');
 	$Tier3Databases->createDatabaseTable('ContentLayerTables');
 	$Tier3Databases->createDatabaseTable('ContentPrintPreview');
 	

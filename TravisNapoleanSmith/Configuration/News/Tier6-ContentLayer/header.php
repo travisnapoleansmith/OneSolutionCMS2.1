@@ -25,6 +25,8 @@
 		$headername = 'NewsPageAttributesYearMonth';
 	}
 	
+	$headerdatabase['ContentLayerTheme'] = 'ContentLayerTheme';
+	
 	if ($_GET['StoryYear'] & $_GET['StoryMonth']) {
 		$idnumber['PageID'] = $_GET['StoryYear'] . $_GET['StoryMonth'];
 	} else if ($_GET['StoryYear']) {
