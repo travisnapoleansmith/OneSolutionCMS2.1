@@ -31,6 +31,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $ContentStartTagID;
 	protected $ContentStartTagClass;
 	protected $ContentStartTagStyle;
+	protected $ContentPTagID;
+	protected $ContentPTagClass;
+	protected $ContentPTagStyle;
 	
 	protected $ContentOutput;
 	
@@ -208,10 +211,14 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->ContentStartTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTag'));
 		$this->ContentEndTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentEndTag'));
 		$this->ContentStartTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
-		$this->ContentStartTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
 		$this->ContentStartTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
 		$this->ContentStartTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
-	
+		
+		$this->ContentPTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagID'));
+		$this->ContentPTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagClass'));
+		$this->ContentPTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagStyle'));
+		
+		
 		$this->EnableDisable = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
@@ -346,14 +353,14 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					if ($this->HeadingStartTagStyle) {
 						$this->Writer->writeAttribute('style', $this->HeadingStartTagStyle);
 					}
-					$this->Writer->text($this->Heading);
+					$this->Writer->writeRaw($this->Heading);
 			}
 			
 			if ($this->HeadingEndTag) {
 				$this->Writer->endElement();
 			}
 			
-			if ($this->ContentStartTag){
+			if ($this->ContentStartTag == '<p>'){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
 				$this->Writer->startElement($this->ContentStartTag);
@@ -369,10 +376,142 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						$this->Writer->writeAttribute('style', $this->ContentStartTagStyle);
 					}
 					
-					$this->Content = $this->CreateWordWrap($this->Content);
-					$this->Content .= "\n  ";
-					$this->Writer->text($this->Content);
+					$this->Content = trim($this->Content);
+					// NEEDS TO BE WORKED ON!
+					if (strpos($this->Content, "\n\r")) {
+						$this->Content = explode("\n\r", $this->Content);
+						$i = 0;
+						$count = count($this->Content);
+						$count--;
+						while (current($this->Content)) {
+							$this->Content[key($this->Content)] = trim(current($this->Content));
+							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
+							if ($this->ContentStartTag == 'p' & $i == 0) {
+								/*$this->Writer->startElement('p');
+									if ($this->ContentPTagID) {
+										$this->Writer->writeAttribute('id', $this->ContentPTagID);
+									}
+									
+									if ($this->ContentPTagClass) {
+										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+									}
+									
+									if ($this->ContentPTagStyle) {
+										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+									}*/
+								$this->Writer->writeRaw("\n\t");
+								$this->Writer->writeRaw(current($this->Content));
+								$this->Writer->writeRaw("\n  ");
+								$this->Writer->endElement();
+							} else if ($this->ContentStartTag == 'p' & $count == $i /*&& $this->ContainerObjectID == NULL*/) {
+								/*print_r($this->Content);
+								print "$this->ContainerObjectType\n";
+								print "$i\n";*/
+								$this->Writer->startElement('p');
+									if ($this->ContentPTagID) {
+										$this->Writer->writeAttribute('id', $this->ContentPTagID);
+									}
+									
+									if ($this->ContentPTagClass) {
+										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+									}
+									
+									if ($this->ContentPTagStyle) {
+										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+									}
+									$this->Writer->writeRaw("\n    ");
+									$this->Writer->writeRaw(current($this->Content));
+									$this->Writer->writeRaw("\n  ");
+							} else {
+								$this->Writer->startElement('p');
+									if ($this->ContentPTagID) {
+										$this->Writer->writeAttribute('id', $this->ContentPTagID);
+									}
+									
+									if ($this->ContentPTagClass) {
+										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+									}
+									
+									if ($this->ContentPTagStyle) {
+										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+									}
+									$this->Writer->writeRaw("\n    ");
+									$this->Writer->writeRaw(current($this->Content));
+									$this->Writer->writeRaw("\n  ");
+								$this->Writer->endElement();
+							}
+							next($this->Content);
+							$i++;
+						}
+						//print_r($this->Content);
+					} else {
+						$this->Content = $this->CreateWordWrap($this->Content);
+						$this->Content .= "\n  ";
+						$this->Writer->writeRaw("\n   ");
+						$this->Writer->writeRaw($this->Content);
+					}
+					
+					//print_r($this->Content);
+					
+					
 					//$this->Writer->writeRaw("\n");
+			} else if ($this->ContentStartTag){
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				$this->Writer->startElement($this->ContentStartTag);
+					if ($this->ContentStartTagID) {
+						$this->Writer->writeAttribute('id', $this->ContentStartTagID);
+					}
+					
+					if ($this->ContentStartTagClass) {
+						$this->Writer->writeAttribute('class', $this->ContentStartTagClass);
+					}
+					
+					if ($this->ContentStartTagStyle) {
+						$this->Writer->writeAttribute('style', $this->ContentStartTagStyle);
+					}
+					
+				$this->Content = trim($this->Content);
+				if (strpos($this->Content, "\n\r")) {
+					$this->Content = explode("\n\r", $this->Content);
+					
+					while (current($this->Content)) {
+						$this->Writer->startElement('p');
+							if ($this->ContentPTagID) {
+								$this->Writer->writeAttribute('id', $this->ContentPTagID);
+							}
+							
+							if ($this->ContentPTagClass) {
+								$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+							}
+							
+							if ($this->ContentPTagStyle) {
+								$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+							}
+							$this->Writer->writeRaw("\n    ");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n  ");
+						$this->Writer->endElement();
+						next($this->Content);
+					}
+				} else {
+					$this->Writer->startElement('p');
+					if ($this->ContentPTagID) {
+						$this->Writer->writeAttribute('id', $this->ContentPTagID);
+					}
+					
+					if ($this->ContentPTagClass) {
+						$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+					}
+					
+					if ($this->ContentPTagStyle) {
+						$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+					}
+					$this->Writer->writeRaw("\n    ");
+					$this->Writer->writeRaw($this->Content);
+					$this->Writer->writeRaw("\n  ");
+					$this->Writer->endElement();
+				}
 			}
 			
 			if ($this->ContentEndTag) {
