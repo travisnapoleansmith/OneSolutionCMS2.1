@@ -31,6 +31,7 @@
 	$contentdatabase['Content'] = 'Content';
 	$contentdatabase['ContentLayerTables'] = 'ContentLayerTables';
 	$contentdatabase['ContentPrintPreview'] = 'ContentPrintPreview';
+	$contentdatabase['ContentLayerModules'] = 'ContentLayerModules';
 		
 	$databases = &$GLOBALS['Tier6Databases'];
 	

@@ -35,7 +35,7 @@
 	}
 	
 	// Contain Container
-	print "<div id=\"textlayer1\">\n";
+	print "<div id=\"textlayer1\">";
 
 	require('Configuration/Tier6-ContentLayer/content.php');
 	

@@ -4,7 +4,6 @@ class AuthenticationLayer extends LayerModulesAbstract
 {
 	protected $Modules;
 	
-	protected $Tier3ProtectionTier;
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
@@ -14,7 +13,7 @@ class AuthenticationLayer extends LayerModulesAbstract
 		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['Tier4DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier4DatabaseDeny'];
-		$this->Tier3ProtectionTier = &$GLOBALS['Tier3Databases'];
+		$this->LayerModule = &$GLOBALS['Tier3Databases'];
 	}
 	
 	public function setModules() {
@@ -30,23 +29,23 @@ class AuthenticationLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
-		$this->Tier3ProtectionTier->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function ConnectAll () {
-		$this->Tier3ProtectionTier->ConnectAll();
+		$this->LayerModule->ConnectAll();
 	}
 	
 	public function Connect ($key) {
-		$this->Tier3ProtectionTier->Connect($key);
+		$this->LayerModule->Connect($key);
 	}
 	
 	public function DisconnectAll () {
-		$this->Tier3ProtectionTier->DisconnectAll();
+		$this->LayerModule->DisconnectAll();
 	}
 	
 	public function Disconnect ($key) {
-		$this->Tier3ProtectionTier->Disconnect($key);
+		$this->LayerModule->Disconnect($key);
 	}
 	
 	public function buildDatabase() {
@@ -54,7 +53,7 @@ class AuthenticationLayer extends LayerModulesAbstract
 	}
 	
 	public function createDatabaseTable($key) {
-		$this->Tier3ProtectionTier->createDatabaseTable($key);
+		$this->LayerModule->createDatabaseTable($key);
 	}
 	
 	public function createModules($key) {
@@ -75,7 +74,7 @@ class AuthenticationLayer extends LayerModulesAbstract
 		}
 		
 		if ($hold) {
-			$hold2 = $this->Tier3ProtectionTier->pass($DatabaseTable, $function, $functionarguments);
+			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
 			} else {
@@ -90,7 +89,7 @@ class AuthenticationLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = $this->Tier3ProtectionTier->pass($databasetable, $function, $functionarguments);
+							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}

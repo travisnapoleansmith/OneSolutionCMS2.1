@@ -1,4 +1,7 @@
 <?php
+	// General Settings
+	require_once '../Configuration/settings.php';
+	
 	// All Tier Abstract
 	require_once '../ModulesAbstract/LayerModulesAbstract.php';
 	
@@ -52,26 +55,23 @@
 	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php';
 	
 	// Tier 2 Data Access Layer Settings
-	require_once 'Tier2DataAccessLayerDatabaseSettings.php';
+	require_once '../Configuration/Tier2DataAccessLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier2DataAccessLayerSettings.php';
 	
 	// Tier 3 Protection Layer Settings
-	require_once 'Tier3ProtectionLayerDatabaseSettings.php';
+	require_once '../Configuration/Tier3ProtectionLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier3ProtectionLayerSettings.php';
 	
 	// Tier 4 Authentication Layer Settings
-	require_once 'Tier4AuthenticationLayerDatabaseSettings.php';
+	require_once '../Configuration/Tier4AuthenticationLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier4AuthenticationLayerSettings.php';
 	
 	// Tier 5 Validation Layer Settings
-	require_once 'Tier5ValidationLayerDatabaseSettings.php';
+	require_once '../Configuration/Tier5ValidationLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier5ValidationLayerSettings.php';
 	
 	// Tier 6 Content Layer Settings
-	require_once 'Tier6ContentLayerDatabaseSettings.php';
+	require_once '../Configuration/Tier6ContentLayerDatabaseSettings.php';
 	require_once '../Configuration/Tier6ContentLayerSettings.php';
-	
-	// General Settings
-	require_once '../Configuration/settings.php';
 	
 ?>

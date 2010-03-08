@@ -4,7 +4,6 @@ class ContentLayer extends LayerModulesAbstract
 {
 	protected $Modules;
 	
-	protected $Tier5ValidationTier;
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
@@ -14,7 +13,7 @@ class ContentLayer extends LayerModulesAbstract
 		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['Tier6DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
-		$this->Tier5ValidationTier = &$GLOBALS['Tier5Databases'];
+		$this->LayerModule = &$GLOBALS['Tier5Databases'];
 	}
 	
 	public function setModules() {
@@ -30,23 +29,23 @@ class ContentLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
-		$this->Tier5ValidationTier->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function ConnectAll () {
-		$this->Tier5ValidationTier->ConnectAll();
+		$this->LayerModule->ConnectAll();
 	}
 	
 	public function Connect ($key) {
-		$this->Tier5ValidationTier->Connect($key);
+		$this->LayerModule->Connect($key);
 	}
 	
 	public function DisconnectAll () {
-		$this->Tier5ValidationTier->DisconnectAll();
+		$this->LayerModule->DisconnectAll();
 	}
 	
 	public function Disconnect ($key) {
-		$this->Tier5ValidationTier->Disconnect($key);
+		$this->LayerModule->Disconnect($key);
 	}
 	
 	public function buildDatabase() {
@@ -54,7 +53,7 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function createDatabaseTable($key) {
-		$this->Tier5ValidationTier->createDatabaseTable($key);
+		$this->LayerModule->createDatabaseTable($key);
 	}
 	
 	public function createModules($key) {
@@ -75,7 +74,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		
 		if ($hold) {
-			$hold2 = $this->Tier5ValidationTier->pass($DatabaseTable, $function, $functionarguments);
+			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
 			} else {
@@ -90,7 +89,7 @@ class ContentLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = $this->Tier5ValidationTier->pass($databasetable, $function, $functionarguments);
+							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}

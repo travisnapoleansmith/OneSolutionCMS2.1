@@ -2,6 +2,10 @@
 	// MySql Database Tables
 	$Tier2Databases = &new DataAccessLayer();
 	
+	$Tier2Databases->createDatabaseTable('AuthenticationLayerModules');
+	$Tier2Databases->createDatabaseTable('AuthenticationLayerModulesSettings');
+	$Tier2Databases->createDatabaseTable('AuthenticationLayerTables');
+	
 	$Tier2Databases->createDatabaseTable('CalendarTable');
 	$Tier2Databases->createDatabaseTable('CalendarTable2');
 	$Tier2Databases->createDatabaseTable('CalendarAppointments');
@@ -9,9 +13,14 @@
 	
 	$Tier2Databases->createDatabaseTable('Content');
 	$Tier2Databases->createDatabaseTable('ContentLayer');
+	$Tier2Databases->createDatabaseTable('ContentLayerModules');
+	$Tier2Databases->createDatabaseTable('ContentLayerModulesSettings');
 	$Tier2Databases->createDatabaseTable('ContentLayerTheme');
 	$Tier2Databases->createDatabaseTable('ContentLayerTables');
 	$Tier2Databases->createDatabaseTable('ContentPrintPreview');
+	
+	$Tier2Databases->createDatabaseTable('DataAccessLayerModules');
+	$Tier2Databases->createDatabaseTable('DataAccessLayerModulesSettings');
 	
 	$Tier2Databases->createDatabaseTable('Flash');
 	$Tier2Databases->createDatabaseTable('List');
@@ -36,6 +45,14 @@
 	$Tier2Databases->createDatabaseTable('PageAttributes');
 	$Tier2Databases->createDatabaseTable('Picture');
 	
+	$Tier2Databases->createDatabaseTable('ProtectionLayerModules');
+	$Tier2Databases->createDatabaseTable('ProtectionLayerModulesSettings');
+	$Tier2Databases->createDatabaseTable('ProtectionLayerTables');
+	
+	$Tier2Databases->createDatabaseTable('ValidationLayerModules');
+	$Tier2Databases->createDatabaseTable('ValidationLayerModulesSettings');
+	$Tier2Databases->createDatabaseTable('ValidationLayerTables');
+	
 	$Tier2Databases->createDatabaseTable('XhtmlCalendarTable');
 	
 	$Tier2Databases->createDatabaseTable('XMLFeeds');
@@ -44,6 +61,7 @@
 	$Tier2Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier2Databases->createDatabaseTable('XMLSitemap');
 	
-	$Tier2Databases->buildModules('Modules/Tier2DataAccessLayer/');
+	//$Tier2Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+	//$Tier2Databases->buildModules('DataAccessLayerModules');
 	//print_r($Tier2Databases);
 ?>

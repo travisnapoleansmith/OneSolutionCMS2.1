@@ -2,6 +2,10 @@
 
 abstract class LayerModulesAbstract 
 {
+	protected $LayerModule;
+	protected $LayerModuleTable;
+	protected $LayerModuleTableName;
+	
 	protected $PageID;
 	protected $ObjectID;
 	
@@ -113,42 +117,69 @@ abstract class LayerModulesAbstract
 	
 	}
 	
-	public function buildModules($moduleslocation) {
-		$argumentlist = func_get_args();
-		$createobject = $argumentlist[1];
-		$tablenames = $argumentlist[2];
-		$database = $argumentlist[3];
-		if ($moduleslocation) {
-			$this->ModulesLocation = $moduleslocation;
-			$hold = Array();
-			$dir = dir($moduleslocation);
-			
-			while ($entry = $dir->read()) {
-				$filestring = $moduleslocation;
-				$filestring .= $entry;
+	public function buildModules($LayerModuleTableName) {
+		$this->LayerModuleTableName = $LayerModuleTableName;
+		$passarray = array();
+		$passarray['Enable/Disable'] = 'Enable';
+		
+		$this->LayerModule->Connect($this->LayerModuleTableName);
+		$this->LayerModule->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->LayerModuleTableName);
+		
+		$this->LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
+		
+		if ($LayerModuleTableName) {
+			while (current($this->LayerModuleTable)) {
+				$ObjectType = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectType'];
+				$ObjectTypeName = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectTypeName'];
+				$ObjectTypeLocation = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectTypeLocation'];
+				$ModuleFileName = array();
+				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', key($this->LayerModuleTable), $this->LayerModuleTable);
+				$EnableDisable = $this->LayerModuleTable[key($this->LayerModuleTable)]['Enable/Disable'];
 				
-				if (!($entry == '.' | $entry == '..')) {
-					if (is_dir($filestring)) {
-						$modulesfile = $filestring;
-						$modulesfile .= '/Class';
-						$modulesfile .= $entry;
-						$modulesfile .= '.php';
-						
+				if ($EnableDisable == 'Enable') {
+					reset ($ModuleFileName);
+					$modulesfile = $ObjectTypeLocation;
+					$modulesfile .= '/';
+					$modulesfile .= current($ModuleFileName);
+					$modulesfile .= '.php';
+					
+					while (current($ModuleFileName)) {
 						if (is_file($modulesfile)) {
-							if ($createobject) {
-								$this->Modules[$entry] = $modulesfile;
-							} else {
-								$this->Modules[$entry] = new $entry ($tablenames, $database);
-							}
+							require_once($modulesfile);
 						} else {
-							array_push($this->ErrorMessage,'buildModules: Module file does not exist!');
+							array_push($this->ErrorMessage,"buildModules: Module filename - $modulesfile does not exist!");
 						}
+						next($ModuleFileName);
+						$modulesfile = $ObjectTypeLocation;
+						$modulesfile .= '/';
+						$modulesfile .= current($ModuleFileName);
+						$modulesfile .= '.php';
 					}
 				}
+				next($this->LayerModuleTable);
 			}
-			return $this->Modules;
 		} else {
-			array_push($this->ErrorMessage,'buildModules: Module Location is not set!');
+			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');
+		}
+	}
+	
+	protected function buildArray($array, $arrayname, $tablesname, $databasetable) {
+		if (is_array($array)) {
+			$i = 1;
+			$name = $arrayname;
+			$name .= $i;
+			$hold = $databasetable[$tablesname][$name];
+			while (array_key_exists($name, $databasetable[$tablesname])) {
+				array_push($array, $hold);
+				$i++;
+				$name = $arrayname;
+				$name .= $i;
+				$hold = $databasetable[$tablesname][$name];
+			}
+			return $array;
+		} else {
+			return NULL;
 		}
 	}
 	

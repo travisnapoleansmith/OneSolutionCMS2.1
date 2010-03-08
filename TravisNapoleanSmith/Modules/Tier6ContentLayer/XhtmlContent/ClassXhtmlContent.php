@@ -1,13 +1,13 @@
 <?php
 
 class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $ContentTable;
-	protected $ContentLayerTables;
+	//protected $LayerModule;
 	protected $ContentTableName;
 	protected $ContentLayerTablesName;
-	protected $ContentPrintPreviewTable;
 	protected $ContentPrintPreviewTableName;
+	protected $ContentLayerModulesTableName;
 	
+	protected $ContentLayerModulesTable;
 	protected $PrintIdNumberArray;
 	
 	protected $ContainerObjectType;
@@ -38,12 +38,11 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $ContentOutput;
 	
 	public function __construct($tablenames, $database) {
-		$this->ContentTable = &$database;
-		$this->ContentTableName = current($tablenames);
-		$this->ContentLayerTables = &$database;
-		$this->ContentLayerTablesName = next($tablenames);
-		$this->ContentPrintPreviewTable = &$database;
-		$this->ContentPrintPreviewTableName = next($tablenames);
+		$this->LayerModule = &$database;
+		$this->ContentTableName = $tablenames['Content'];
+		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
+		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
+		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
@@ -71,23 +70,26 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 
-		$this->ContentTable->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->ContentTable->setDatabasetable ($this->ContentTableName);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($this->ContentTableName);
 		
-		$this->ContentLayerTables->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->ContentLayerTables->setDatabasetable ($this->ContentLayerTablesName);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($this->ContentLayerTablesName);
 		
-		$this->ContentPrintPreviewTable->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->ContentPrintPreviewTable->setDatabasetable ($this->ContentPrintPreviewTableName);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($this->ContentPrintPreviewTableName);
+		
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($this->ContentLayerModulesTableName);
 		
 	}
 	
-	public function getContentTable() {
-		return $this->ContentTable;
+	public function getLayerModule() {
+		return $this->LayerModule;
 	}
 	
 	public function getContentLayerTables() {
-		return $this->ContentLayerTables;
+		return $this->LayerModule;
 	}
 	
 	public function getContentTableName() {
@@ -99,7 +101,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	}
 	
 	public function getContentPrintPreviewTable() {
-		return $this->ContentPrintPreviewTable;
+		return $this->LayerModule;
 	}
 	
 	public function getContentPrintPreviewTableName() {
@@ -180,66 +182,66 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->PrintPreview = $PageID['printpreview'];
 		unset($PageID['printpreview']);
 		
-		$this->ContentTable->Connect($this->ContentTableName);
+		$this->LayerModule->Connect($this->ContentTableName);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->ContentTable->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->ContentTable->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->ContainerObjectType = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
-	    $this->ContainerObjectTypeName = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectTypeName'));
-		$this->ContainerObjectID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectID'));
-		$this->ContainerObjectPrintPreview = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectPrintPreview'));
-	    $this->RevisionID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'RevisionID'));
-	    $this->CurrentVersion = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'CurrentVersion'));
-	    $this->Empty = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Empty'));
+		$this->ContainerObjectType = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
+	    $this->ContainerObjectTypeName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectTypeName'));
+		$this->ContainerObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectID'));
+		$this->ContainerObjectPrintPreview = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectPrintPreview'));
+	    $this->RevisionID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'RevisionID'));
+	    $this->CurrentVersion = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'CurrentVersion'));
+	    $this->Empty = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Empty'));
 		
-		$this->StartTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
+		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->Heading = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Heading'));
-		$this->HeadingStartTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTag'));
-		$this->HeadingEndTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingEndTag'));
-		$this->HeadingStartTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagID'));
-		$this->HeadingStartTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagClass'));
-		$this->HeadingStartTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagStyle'));
+		$this->Heading = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Heading'));
+		$this->HeadingStartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTag'));
+		$this->HeadingEndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingEndTag'));
+		$this->HeadingStartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagID'));
+		$this->HeadingStartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagClass'));
+		$this->HeadingStartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'HeadingStartTagStyle'));
 	
-		$this->Content = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Content'));
-		$this->ContentStartTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTag'));
-		$this->ContentEndTag = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentEndTag'));
-		$this->ContentStartTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
-		$this->ContentStartTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
-		$this->ContentStartTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
+		$this->Content = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Content'));
+		$this->ContentStartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTag'));
+		$this->ContentEndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentEndTag'));
+		$this->ContentStartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagID'));
+		$this->ContentStartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
+		$this->ContentStartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
 		
-		$this->ContentPTagID = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagID'));
-		$this->ContentPTagClass = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagClass'));
-		$this->ContentPTagStyle = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagStyle'));
+		$this->ContentPTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagID'));
+		$this->ContentPTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagClass'));
+		$this->ContentPTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContentPTagStyle'));
 		
 		
-		$this->EnableDisable = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->ContentTable->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
+		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
-		$this->ContentTable->Disconnect($this->ContentTableName);
+		$this->LayerModule->Disconnect($this->ContentTableName);
 		
 		if ($this->PrintPreview) {
 			$this->PrintIdNumberArray = array();
 			$passarray = array();
 			$passarray['PageID'] = $PageID['PageID'];
-			$this->ContentPrintPreviewTable->Connect($this->ContentPrintPreviewTableName);
+			$this->LayerModule->Connect($this->ContentPrintPreviewTableName);
 			
-			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
-			$this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
+			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$i = 1;
-			$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
+			$hold = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
 			while ($hold) {
 				$this->PrintIdNumberArray["PrintPageID$i"] = $hold;
 				$i++;
-				$hold = $this->ContentPrintPreviewTable->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
+				$hold = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
 			}
-			$this->ContentPrintPreviewTable->Disconnect($this->ContentPrintPreviewTableName);
+			$this->LayerModule->Disconnect($this->ContentPrintPreviewTableName);
 		}
 	}
 	
@@ -253,28 +255,32 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$ContentLayerTableArray['ObjectType'] = $ContainerObjectType;
 		$ContentLayerTableArray['ObjectTypeName'] = $ContainerObjectTypeName;
 		
-		$this->ContentLayerTables->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
-		$this->ContentLayerTables->setDatabaseTable ($this->ContentLayerTablesName);
-		$this->ContentLayerTables->Connect($this->ContentLayerTablesName);
+		$this->LayerModule->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
+		$this->LayerModule->setDatabaseTable ($this->ContentLayerTablesName);
+		$this->LayerModule->Connect($this->ContentLayerTablesName);
 		
-		$this->ContentLayerTables->pass ($this->ContentLayerTablesName, 'setDatabaseRow', array('idnumber' => $ContentLayerTableArray));
+		$this->LayerModule->pass ($this->ContentLayerTablesName, 'setDatabaseRow', array('idnumber' => $ContentLayerTableArray));
+		$this->LayerModule->Disconnect($this->ContentLayerTablesName);
+		
 		$hold = 'DatabaseTable';
 		$i = 1;
 		$databasetablename = Array();
 		$hold .= $i;
 		
-		while ($this->ContentLayerTables->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold))) {
-			array_push($databasetablename, $this->ContentLayerTables->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold)));
+		while ($this->LayerModule->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold))) {
+			array_push($databasetablename, $this->LayerModule->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold)));
 			$i++;
 			$hold = 'DatabaseTable';
 			$hold .= $i;
 		}
 
-		$filearray = $this->buildModules('Modules/Tier6ContentLayer/', TRUE);
+		//$filearray = $this->buildModules('Modules/Tier6ContentLayer/', TRUE);
+		//print_r($this->ContentLayerModulesTableName);
+		//$this->buildModules($this->ContentLayerModulesTableName);
 		$modulesfile = NULL;
 		$modulesfile = $filearray[$this->ContainerObjectType];
-		if ($modulesfile) {
-			require_once($modulesfile);
+		//if ($modulesfile) {
+			//require_once($modulesfile);
 			
 			$modulesdatabase = Array();
 			while (current($databasetablename)) {
@@ -282,7 +288,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				next($databasetablename);
 			}
 			//$modulesdatabase['GlobalWriter'] = &$this->Writer;
-			$module = new $this->ContainerObjectType($modulesdatabase, $this->ContentLayerTables);
+			$module = new $this->ContainerObjectType($modulesdatabase, $this->LayerModule);
 			reset($databasetablename);
 			$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 			$module->setHttpUserAgent($this->HttpUserAgent);
@@ -299,10 +305,10 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			} else {
 				return $module;
 			}
-		}
+		//}
 	}
 	
-	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $ContentTable, $ContentLayerTables, $print) {
+	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $LayerModule, $LayerModule, $print) {
 		$contentidnumber = Array();
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
@@ -310,8 +316,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		//$contentidnumber['GlobalWriter'] = &$this->Writer;
 		
 		$contentdatabase = Array();
-		$contentdatabase[$this->ContentTableName] = $ContentTable;
-		$contentdatabase[$this->ContentLayerTablesName] = $ContentLayerTables;
+		$contentdatabase[$this->ContentTableName] = $LayerModule;
+		$contentdatabase[$this->ContentLayerTablesName] = $LayerModule;
 		$this->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 		$this->FetchDatabase ($contentidnumber);
 		if ($print == TRUE) {
@@ -325,6 +331,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->writeRaw("\n\t");
 				$this->Writer->startElement($this->StartTag);
 				
 					if ($this->StartTagID) {
@@ -341,6 +348,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			if ($this->HeadingStartTag){
 				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
 				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
+				$this->Writer->writeRaw("\n\t");
 				$this->Writer->startElement($this->HeadingStartTag);
 					if ($this->HeadingStartTagID) {
 						$this->Writer->writeAttribute('id', $this->HeadingStartTagID);
@@ -363,6 +371,10 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			if ($this->ContentStartTag == '<p>'){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				if (!$this->HeadingStartTag) {
+					$this->Writer->writeRaw("\n");
+				}
+				$this->Writer->writeRaw("\t  ");
 				$this->Writer->startElement($this->ContentStartTag);
 					if ($this->ContentStartTagID) {
 						$this->Writer->writeAttribute('id', $this->ContentStartTagID);
@@ -377,7 +389,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					}
 					
 					$this->Content = trim($this->Content);
-					// NEEDS TO BE WORKED ON!
 					if (strpos($this->Content, "\n\r")) {
 						$this->Content = explode("\n\r", $this->Content);
 						$i = 0;
@@ -386,75 +397,36 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						while (current($this->Content)) {
 							$this->Content[key($this->Content)] = trim(current($this->Content));
 							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
-							if ($this->ContentStartTag == 'p' & $i == 0) {
-								/*$this->Writer->startElement('p');
-									if ($this->ContentPTagID) {
-										$this->Writer->writeAttribute('id', $this->ContentPTagID);
-									}
-									
-									if ($this->ContentPTagClass) {
-										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-									}
-									
-									if ($this->ContentPTagStyle) {
-										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-									}*/
-								$this->Writer->writeRaw("\n\t");
-								$this->Writer->writeRaw(current($this->Content));
-								$this->Writer->writeRaw("\n  ");
-								$this->Writer->endElement();
-							} else if ($this->ContentStartTag == 'p' & $count == $i /*&& $this->ContainerObjectID == NULL*/) {
-								/*print_r($this->Content);
-								print "$this->ContainerObjectType\n";
-								print "$i\n";*/
-								$this->Writer->startElement('p');
-									if ($this->ContentPTagID) {
-										$this->Writer->writeAttribute('id', $this->ContentPTagID);
-									}
-									
-									if ($this->ContentPTagClass) {
-										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-									}
-									
-									if ($this->ContentPTagStyle) {
-										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-									}
-									$this->Writer->writeRaw("\n    ");
-									$this->Writer->writeRaw(current($this->Content));
-									$this->Writer->writeRaw("\n  ");
-							} else {
-								$this->Writer->startElement('p');
-									if ($this->ContentPTagID) {
-										$this->Writer->writeAttribute('id', $this->ContentPTagID);
-									}
-									
-									if ($this->ContentPTagClass) {
-										$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-									}
-									
-									if ($this->ContentPTagStyle) {
-										$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-									}
-									$this->Writer->writeRaw("\n    ");
-									$this->Writer->writeRaw(current($this->Content));
-									$this->Writer->writeRaw("\n  ");
-								$this->Writer->endElement();
-							}
+							$this->Writer->writeRaw("\n\t     ");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n\t  ");
+							$this->Writer->endElement();
 							next($this->Content);
+							if (current($this->Content)) {
+								$this->ContentEndTag = NULL;
+								$this->Writer->writeRaw("\t  ");
+								$this->Writer->startElement('p');
+								
+								if ($this->ContentPTagID) {
+									$this->Writer->writeAttribute('id', $this->ContentPTagID);
+								}
+								
+								if ($this->ContentPTagClass) {
+									$this->Writer->writeAttribute('class', $this->ContentPTagClass);
+								}
+								
+								if ($this->ContentPTagStyle) {
+									$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
+								}
+							}
 							$i++;
 						}
-						//print_r($this->Content);
 					} else {
 						$this->Content = $this->CreateWordWrap($this->Content);
-						$this->Content .= "\n  ";
-						$this->Writer->writeRaw("\n   ");
+						$this->Content .= "\n\t  ";
+						$this->Writer->writeRaw("\n\t     ");
 						$this->Writer->writeRaw($this->Content);
 					}
-					
-					//print_r($this->Content);
-					
-					
-					//$this->Writer->writeRaw("\n");
 			} else if ($this->ContentStartTag){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
@@ -515,10 +487,12 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			}
 			
 			if ($this->ContentEndTag) {
+				//$this->Writer->writeRaw("\n\t");
 				$this->Writer->endElement();
 			}
 			
 			if ($this->EndTag) {
+				$this->Writer->writeRaw("\t");
 				$this->Writer->endElement();
 			}
 		}
@@ -540,7 +514,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		if ($this->ContainerObjectType) {
 			$temp = $this->ObjectID;
 			$temp++;
-			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
+			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
 			while ($this->EnableDisable) {
 				if ($this->ContainerObjectType) {
 					$containertype = $this->ContainerObjectType;
@@ -548,7 +522,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					if ($containertype ==  'XhtmlContent') {
 						if ($this->ContainerObjectID) {
 							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, TRUE);
+								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, TRUE);
 							}
 						}
 					} else if ($containertype == 'XhtmlMenu') {
@@ -569,7 +543,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					}
 				}
 				$temp++;
-				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->ContentTable, $this->ContentLayerTables, FALSE);
+				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
 			}
 			
 			if ($this->PrintPreview & !$NoPrintPreview) {
@@ -588,7 +562,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$contentdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
 					$contentdatabase[$this->ContentPrintPreviewTableName] = $this->ContentPrintPreviewTableName;
 					
-					$content = new XhtmlContent($contentdatabase, $this->ContentTable);
+					$content = new XhtmlContent($contentdatabase, $this->LayerModule);
 					$content->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 					$content->setHttpUserAgent($this->HttpUserAgent);
 					$content->FetchDatabase ($contentidnumber);

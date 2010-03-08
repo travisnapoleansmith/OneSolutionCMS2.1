@@ -4,7 +4,6 @@ class ValidationLayer extends LayerModulesAbstract
 {
 	protected $Modules;
 	
-	protected $Tier4AuthenticationTier;
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
@@ -14,7 +13,7 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['Tier5DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier5DatabaseDeny'];
-		$this->Tier4AuthenticationTier = &$GLOBALS['Tier4Databases'];
+		$this->LayerModule = &$GLOBALS['Tier4Databases'];
 	}
 	
 	public function setModules() {
@@ -30,23 +29,23 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
-		$this->Tier4AuthenticationTier->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function ConnectAll () {
-		$this->Tier4AuthenticationTier->ConnectAll();
+		$this->LayerModule->ConnectAll();
 	}
 	
 	public function Connect ($key) {
-		$this->Tier4AuthenticationTier->Connect($key);
+		$this->LayerModule->Connect($key);
 	}
 	
 	public function DisconnectAll () {
-		$this->Tier4AuthenticationTier->DisconnectAll();
+		$this->LayerModule->DisconnectAll();
 	}
 	
 	public function Disconnect ($key) {
-		$this->Tier4AuthenticationTier->Disconnect($key);
+		$this->LayerModule->Disconnect($key);
 	}
 	
 	public function buildDatabase() {
@@ -54,7 +53,7 @@ class ValidationLayer extends LayerModulesAbstract
 	}
 	
 	public function createDatabaseTable($key) {
-		$this->Tier4AuthenticationTier->createDatabaseTable($key);
+		$this->LayerModule->createDatabaseTable($key);
 	}
 	
 	public function createModules($key) {
@@ -75,7 +74,7 @@ class ValidationLayer extends LayerModulesAbstract
 		}
 		
 		if ($hold) {
-			$hold2 = $this->Tier4AuthenticationTier->pass($DatabaseTable, $function, $functionarguments);
+			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
 			} else {
@@ -90,7 +89,7 @@ class ValidationLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = $this->Tier4AuthenticationTier->pass($databasetable, $function, $functionarguments);
+							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}

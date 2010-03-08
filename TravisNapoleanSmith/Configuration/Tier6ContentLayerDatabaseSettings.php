@@ -2,6 +2,10 @@
 	// MySql Database Tables
 	$Tier6Databases = &new ContentLayer();
 	
+	$Tier6Databases->createDatabaseTable('AuthenticationLayerModules');
+	$Tier6Databases->createDatabaseTable('AuthenticationLayerModulesSettings');
+	$Tier6Databases->createDatabaseTable('AuthenticationLayerTables');
+	
 	$Tier6Databases->createDatabaseTable('CalendarTable');
 	$Tier6Databases->createDatabaseTable('CalendarTable2');
 	$Tier6Databases->createDatabaseTable('CalendarAppointments');
@@ -9,9 +13,14 @@
 	
 	$Tier6Databases->createDatabaseTable('Content');
 	$Tier6Databases->createDatabaseTable('ContentLayer');
+	$Tier6Databases->createDatabaseTable('ContentLayerModules');
+	$Tier6Databases->createDatabaseTable('ContentLayerModulesSettings');
 	$Tier6Databases->createDatabaseTable('ContentLayerTheme');
 	$Tier6Databases->createDatabaseTable('ContentLayerTables');
 	$Tier6Databases->createDatabaseTable('ContentPrintPreview');
+	
+	$Tier6Databases->createDatabaseTable('DataAccessLayerModules');
+	$Tier6Databases->createDatabaseTable('DataAccessLayerModulesSettings');
 	
 	$Tier6Databases->createDatabaseTable('Flash');
 	$Tier6Databases->createDatabaseTable('List');
@@ -36,6 +45,14 @@
 	$Tier6Databases->createDatabaseTable('PageAttributes');
 	$Tier6Databases->createDatabaseTable('Picture');
 	
+	$Tier6Databases->createDatabaseTable('ProtectionLayerModules');
+	$Tier6Databases->createDatabaseTable('ProtectionLayerModulesSettings');
+	$Tier6Databases->createDatabaseTable('ProtectionLayerTables');
+	
+	$Tier6Databases->createDatabaseTable('ValidationLayerModules');
+	$Tier6Databases->createDatabaseTable('ValidationLayerModulesSettings');
+	$Tier6Databases->createDatabaseTable('ValidationLayerTables');
+	
 	$Tier6Databases->createDatabaseTable('XhtmlCalendarTable');
 	
 	$Tier6Databases->createDatabaseTable('XMLFeeds');
@@ -44,6 +61,7 @@
 	$Tier6Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier6Databases->createDatabaseTable('XMLSitemap');
 	
-	$Tier6Databases->buildModules('Modules/Tier6ContentLayer/', TRUE);
+	$Tier6Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+	$Tier6Databases->buildModules('ContentLayerModules');
 	
 ?>

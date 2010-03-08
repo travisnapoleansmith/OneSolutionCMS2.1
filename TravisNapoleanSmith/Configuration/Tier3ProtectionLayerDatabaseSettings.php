@@ -2,6 +2,10 @@
 	// MySql Database Tables
 	$Tier3Databases = &new ProtectionLayer();
 	
+	$Tier3Databases->createDatabaseTable('AuthenticationLayerModules');
+	$Tier3Databases->createDatabaseTable('AuthenticationLayerModulesSettings');
+	$Tier3Databases->createDatabaseTable('AuthenticationLayerTables');
+	
 	$Tier3Databases->createDatabaseTable('CalendarTable');
 	$Tier3Databases->createDatabaseTable('CalendarTable2');
 	$Tier3Databases->createDatabaseTable('CalendarAppointments');
@@ -9,9 +13,14 @@
 	
 	$Tier3Databases->createDatabaseTable('Content');
 	$Tier3Databases->createDatabaseTable('ContentLayer');
+	$Tier3Databases->createDatabaseTable('ContentLayerModules');
+	$Tier3Databases->createDatabaseTable('ContentLayerModulesSettings');
 	$Tier3Databases->createDatabaseTable('ContentLayerTheme');
 	$Tier3Databases->createDatabaseTable('ContentLayerTables');
 	$Tier3Databases->createDatabaseTable('ContentPrintPreview');
+	
+	$Tier3Databases->createDatabaseTable('DataAccessLayerModules');
+	$Tier3Databases->createDatabaseTable('DataAccessLayerModulesSettings');
 	
 	$Tier3Databases->createDatabaseTable('Flash');
 	$Tier3Databases->createDatabaseTable('List');
@@ -36,6 +45,14 @@
 	$Tier3Databases->createDatabaseTable('PageAttributes');
 	$Tier3Databases->createDatabaseTable('Picture');
 	
+	$Tier3Databases->createDatabaseTable('ProtectionLayerModules');
+	$Tier3Databases->createDatabaseTable('ProtectionLayerModulesSettings');
+	$Tier3Databases->createDatabaseTable('ProtectionLayerTables');
+	
+	$Tier3Databases->createDatabaseTable('ValidationLayerModules');
+	$Tier3Databases->createDatabaseTable('ValidationLayerModulesSettings');
+	$Tier3Databases->createDatabaseTable('ValidationLayerTables');
+	
 	$Tier3Databases->createDatabaseTable('XhtmlCalendarTable');
 	
 	$Tier3Databases->createDatabaseTable('XMLFeeds');
@@ -44,6 +61,7 @@
 	$Tier3Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier3Databases->createDatabaseTable('XMLSitemap');
 	
-	$Tier3Databases->buildModules('Modules/Tier3ProtectionLayer/');
+	$Tier3Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+	$Tier3Databases->buildModules('ProtectionLayerModules');
 	
 ?>

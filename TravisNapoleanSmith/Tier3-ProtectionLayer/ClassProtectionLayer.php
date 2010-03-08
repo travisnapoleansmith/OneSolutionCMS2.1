@@ -4,7 +4,6 @@ class ProtectionLayer extends LayerModulesAbstract
 {
 	protected $Modules;
 	
-	protected $Tier2DatabaseTier;
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
@@ -14,7 +13,7 @@ class ProtectionLayer extends LayerModulesAbstract
 		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['Tier3DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier3DatabaseDeny'];
-		$this->Tier2DatabaseTier = &$GLOBALS['Tier2Databases'];
+		$this->LayerModule = &$GLOBALS['Tier2Databases'];
 	}
 	
 	public function setModules() {
@@ -30,23 +29,23 @@ class ProtectionLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
-		$this->Tier2DatabaseTier->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function ConnectAll () {
-		$this->Tier2DatabaseTier->ConnectAll();
+		$this->LayerModule->ConnectAll();
 	}
 	
 	public function Connect ($key) {
-		$this->Tier2DatabaseTier->Connect($key);
+		$this->LayerModule->Connect($key);
 	}
 	
 	public function DisconnectAll () {
-		$this->Tier2DatabaseTier->DisconnectAll();
+		$this->LayerModule->DisconnectAll();
 	}
 	
 	public function Disconnect ($key) {
-		$this->Tier2DatabaseTier->Disconnect($key);
+		$this->LayerModule->Disconnect($key);
 	}
 	
 	public function buildDatabase() {
@@ -54,7 +53,7 @@ class ProtectionLayer extends LayerModulesAbstract
 	}
 	
 	public function createDatabaseTable($key) {
-		$this->Tier2DatabaseTier->createDatabaseTable($key);
+		$this->LayerModule->createDatabaseTable($key);
 	}
 	
 	public function createModules($key) {
@@ -75,7 +74,7 @@ class ProtectionLayer extends LayerModulesAbstract
 		}
 		
 		if ($hold) {
-			$hold2 = $this->Tier2DatabaseTier->pass($DatabaseTable, $function, $functionarguments);
+			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
 			} else {
@@ -90,7 +89,7 @@ class ProtectionLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = $this->Tier2DatabaseTier->pass($databasetable, $function, $functionarguments);
+							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}

@@ -1,4 +1,7 @@
 <?php
+	// General Settings
+	require_once 'Configuration/settings.php';
+	
 	// All Tier Abstract
 	require_once 'ModulesAbstract/LayerModulesAbstract.php';
 	
@@ -27,18 +30,18 @@
 	require_once 'Modules/Tier2DataAccessLayer/MySqlConnect/ClassMySqlConnect.php';
 	
 	// Tier 3 Modules
-	require_once 'Modules/Tier3ProtectionLayer/Audit/ClassAudit.php';
+	/*require_once 'Modules/Tier3ProtectionLayer/Audit/ClassAudit.php';
 	require_once 'Modules/Tier3ProtectionLayer/Revisions/ClassRevisions.php';
 	require_once 'Modules/Tier3ProtectionLayer/SpamFilter/ClassSpamFilter.php';
 	require_once 'Modules/Tier3ProtectionLayer/SqlInjection/ClassSqlInjection.php';
-	require_once 'Modules/Tier3ProtectionLayer/UserPermissions/ClassUserPermissions.php';
+	require_once 'Modules/Tier3ProtectionLayer/UserPermissions/ClassUserPermissions.php';*/
 	
 	// Tier 4 Modules
 	
 	// Tier 5 Modules
 	
 	// Tier 6 Modules
-	require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
+	/*require_once 'Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlContent/ClassXhtmlContent.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
 	require_once 'Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php';
@@ -53,7 +56,7 @@
 	require_once 'Modules/Tier6ContentLayer/Menu/ClassMenu.php';
 	
 	require_once 'Modules/Tier6ContentLayer/XmlFeed/ClassXmlFeed.php';
-	require_once 'Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';
+	require_once 'Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';*/
 	
 	
 	// Tier 2 Data Access Layer Settings
@@ -75,8 +78,5 @@
 	// Tier 6 Content Layer Settings
 	require_once 'Configuration/Tier6ContentLayerDatabaseSettings.php';
 	require_once 'Configuration/Tier6ContentLayerSettings.php';
-	
-	// General Settings
-	require_once 'Configuration/settings.php';
 	
 ?>
