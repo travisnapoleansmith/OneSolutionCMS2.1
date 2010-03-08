@@ -62,6 +62,6 @@
 	$Tier4Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier4Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
-	$Tier4Databases->buildModules('AuthenticationLayerModules');
+	$Tier4Databases->buildModules('AuthenticationLayerModules', 'AuthenticationLayerTables');
 	
 ?>

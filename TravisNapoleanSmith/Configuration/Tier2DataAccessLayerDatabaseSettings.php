@@ -62,6 +62,6 @@
 	$Tier2Databases->createDatabaseTable('XMLSitemap');
 	
 	//$Tier2Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
-	//$Tier2Databases->buildModules('DataAccessLayerModules');
+	//$Tier2Databases->buildModules('DataAccessLayerModules', 'DataAccessLayerTables');
 	//print_r($Tier2Databases);
 ?>

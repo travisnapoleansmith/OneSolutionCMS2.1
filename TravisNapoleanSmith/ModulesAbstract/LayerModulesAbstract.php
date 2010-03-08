@@ -3,8 +3,12 @@
 abstract class LayerModulesAbstract 
 {
 	protected $LayerModule;
+	
 	protected $LayerModuleTable;
 	protected $LayerModuleTableName;
+	
+	protected $LayerTable;
+	protected $LayerTableName;
 	
 	protected $PageID;
 	protected $ObjectID;
@@ -117,8 +121,9 @@ abstract class LayerModulesAbstract
 	
 	}
 	
-	public function buildModules($LayerModuleTableName) {
+	public function buildModules($LayerModuleTableName, $LayerTableName) {
 		$this->LayerModuleTableName = $LayerModuleTableName;
+		$this->LayerTableName = $LayerTableName;
 		$passarray = array();
 		$passarray['Enable/Disable'] = 'Enable';
 		
@@ -127,8 +132,16 @@ abstract class LayerModulesAbstract
 		$this->LayerModule->Disconnect($this->LayerModuleTableName);
 		
 		$this->LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
+
+		$this->LayerModule->Connect($this->LayerTableName);
+		$this->LayerModule->pass ($this->LayerTableName, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($this->LayerTableName);
 		
-		if ($LayerModuleTableName) {
+		$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
+		
+		//print_r($this->LayerTable);
+		
+		if ($LayerModuleTableName && $this->LayerModuleTable && $LayerTableName && $this->LayerTable) {
 			while (current($this->LayerModuleTable)) {
 				$ObjectType = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectType'];
 				$ObjectTypeName = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectTypeName'];
@@ -136,6 +149,19 @@ abstract class LayerModulesAbstract
 				$ModuleFileName = array();
 				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', key($this->LayerModuleTable), $this->LayerModuleTable);
 				$EnableDisable = $this->LayerModuleTable[key($this->LayerModuleTable)]['Enable/Disable'];
+				
+				reset ($this->LayerTable);
+				while (current($this->LayerTable)) {
+					$NewObjectType = $this->LayerTable[key($this->LayerTable)]['ObjectType'];
+					$NewObjectTypeName = $this->LayerTable[key($this->LayerTable)]['ObjectTypeName'];
+					$DatabaseTables = array();
+					$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', key($this->LayerTable), $this->LayerTable);
+					
+					if ($NewObjectType == $ObjectType && $NewObjectTypeName == $ObjectTypeName) {
+						break;
+					}
+					next($this->LayerTable);
+				}
 				
 				if ($EnableDisable == 'Enable') {
 					reset ($ModuleFileName);
@@ -156,7 +182,22 @@ abstract class LayerModulesAbstract
 						$modulesfile .= current($ModuleFileName);
 						$modulesfile .= '.php';
 					}
+					
 				}
+				reset ($DatabaseTables);
+				$modulesdatabase = array();
+				while (current($DatabaseTables)) {
+					$modulesdatabase[current($DatabaseTables)] = current($DatabaseTables);
+					next($DatabaseTables);
+				}
+				if ($modulesdatabase) {
+					//print "I HAVE DATA\n";
+					$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($modulesdatabase, $this->LayerModule);
+				}
+				//$this->Modules[$ObjectType][$ObjectTypeName] = $ObjectTypeName;
+				//print_r($modulesdatabase);
+				
+				//var_dump ($this->Modules);
 				next($this->LayerModuleTable);
 			}
 		} else {

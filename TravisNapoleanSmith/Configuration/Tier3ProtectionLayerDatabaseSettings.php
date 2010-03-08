@@ -62,6 +62,6 @@
 	$Tier3Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier3Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
-	$Tier3Databases->buildModules('ProtectionLayerModules');
+	$Tier3Databases->buildModules('ProtectionLayerModules', 'ProtectionLayerTables');
 	
 ?>

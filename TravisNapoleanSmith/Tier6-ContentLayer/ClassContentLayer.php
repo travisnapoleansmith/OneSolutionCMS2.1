@@ -17,11 +17,11 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function setModules() {
-	
+		
 	}
 	
-	public function getModules($key) {
-		return $this->Modules[$key];
+	public function getModules($key, $key1) {
+		return $this->Modules[$key][$key1];
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename) {

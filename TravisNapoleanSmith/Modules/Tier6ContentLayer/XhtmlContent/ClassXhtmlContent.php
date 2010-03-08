@@ -273,39 +273,28 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$hold = 'DatabaseTable';
 			$hold .= $i;
 		}
-
-		//$filearray = $this->buildModules('Modules/Tier6ContentLayer/', TRUE);
-		//print_r($this->ContentLayerModulesTableName);
-		//$this->buildModules($this->ContentLayerModulesTableName);
-		$modulesfile = NULL;
-		$modulesfile = $filearray[$this->ContainerObjectType];
-		//if ($modulesfile) {
-			//require_once($modulesfile);
 			
-			$modulesdatabase = Array();
-			while (current($databasetablename)) {
-				$modulesdatabase[current($databasetablename)] = current($databasetablename);
-				next($databasetablename);
+		$modulesdatabase = Array();
+		while (current($databasetablename)) {
+			$modulesdatabase[current($databasetablename)] = current($databasetablename);
+			next($databasetablename);
+		}
+		
+		$module = &$this->LayerModule->getModules($ContainerObjectType, $ContainerObjectTypeName);
+		reset($databasetablename);
+		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
+		$module->setHttpUserAgent($this->HttpUserAgent);
+		$module->FetchDatabase($modulesidnumber);
+		$module->CreateOutput('    ');
+		
+		if ($print == TRUE) {
+			if ($module->getOutput()) {
+				$this->Writer->writeRaw($module->getOutput());
+				$this->Writer->writeRaw("\n");
 			}
-			//$modulesdatabase['GlobalWriter'] = &$this->Writer;
-			$module = new $this->ContainerObjectType($modulesdatabase, $this->LayerModule);
-			reset($databasetablename);
-			$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
-			$module->setHttpUserAgent($this->HttpUserAgent);
-			$module->FetchDatabase($modulesidnumber);
-			$module->CreateOutput('    ');
-			
-			//print_r($module);
-			if ($print == TRUE) {
-				if ($module->getOutput()) {
-					//$this->ContentOutput .= $module->getOutput();
-					$this->Writer->writeRaw($module->getOutput());
-					$this->Writer->writeRaw("\n");
-				}
-			} else {
-				return $module;
-			}
-		//}
+		} else {
+			return $module;
+		}
 	}
 	
 	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $LayerModule, $LayerModule, $print) {

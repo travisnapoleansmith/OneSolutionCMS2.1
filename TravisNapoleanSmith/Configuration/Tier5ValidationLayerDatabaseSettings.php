@@ -62,6 +62,6 @@
 	$Tier5Databases->createDatabaseTable('XMLSitemap');
 	
 	$Tier5Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
-	$Tier5Databases->buildModules('ValidationLayerModules');
+	$Tier5Databases->buildModules('ValidationLayerModules', 'ValidationLayerTables');
 	
 ?>
