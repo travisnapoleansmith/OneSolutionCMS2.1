@@ -367,7 +367,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->AppointmentDir[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentDir'];
 			$this->AppointmentId[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentId'];
 			$this->AppointmentLang[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentLang'];
-			$this->AppiointmentStyle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentStyle'];
+			$this->AppointmentStyle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentStyle'];
 			$this->AppointmentTitle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentTitle'];
 			$this->AppointmentXMLLang[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentXMLLang'];
 			$j++;
@@ -507,6 +507,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		}
 		if ($this->AppointmentId[$i][$j]) {
 			$this->Writer->writeAttribute('id', $this->AppointmentId[$i][$j]);
+			
 		}
 		if ($this->AppointmentLang[$i][$j]) {
 			$this->Writer->writeAttribute('lang', $this->AppointmentLang[$i][$j]);
@@ -599,6 +600,31 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 						}
 						$this->Writer->writeRaw(current($week));
 					$this->Writer->endElement(); // ENDS TD TAG
+					next($week);
+					$j++;
+				}
+			$this->Writer->endElement(); // ENDS TR TAG
+		}
+	}
+	protected function TableWeekHeading(array $week, $i) {
+		$Arguments = func_num_args();
+		if ($Arguments == 3) {
+			$TableCell = func_get_arg(2);
+		}
+		if ($this->CalendarEnableDisable[$i] == 'Enable' && $this->CalendarStatus[$i] == 'Approved'){
+			$this->Writer->startElement('tr');
+				$this->TableRow($i);
+				reset($week);
+				$max = count($week);
+				$j = 0;
+				
+				while ($j < $max) {
+					$this->Writer->startElement('th');
+						if (!is_null($TableCell)) {
+							$this->TableCell($i, $TableCell);
+						}
+						$this->Writer->writeRaw(current($week));
+					$this->Writer->endElement(); // ENDS TH TAG
 					next($week);
 					$j++;
 				}
@@ -725,7 +751,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 					$this->Writer->text('Appointments');
 					$this->Writer->endElement();  // ENDS TD TAG
 				$this->Writer->endElement(); // ENDS TR TAG
-				$this->TableWeek($this->AppointmentDayColumns, $i);
+				$this->TableWeekHeading($this->AppointmentDayColumns, $i);
 				while ($this->AppointmentDay[$i][$j]) {
 					$appointment = $this->Appointment[$i][$j];
 					$starttime = $this->AppointmentStartTime[$i][$j];
@@ -823,10 +849,10 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				$week['Friday'] = NULL;
 				$week['Saturday'] = NULL;
 				if ($this->CalendarDay[$i]) {
-					$this->TableWeek($this->AppointmentColumns, $i);
+					$this->TableWeekHeading($this->AppointmentColumns, $i);
 					$this->MakeDayAppointments($i);
 				} else {
-					$this->TableWeek($this->DaysOfTheWeek, $i);
+					$this->TableWeekHeading($this->DaysOfTheWeek, $i);
 				}
 				
 				if ($this->CalendarMonth[$i] == $this->CurrentMonth && $this->CalendarYear[$i] == $this->CurrentYear) {
