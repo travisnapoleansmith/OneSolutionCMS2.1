@@ -415,7 +415,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->PageTitle) {
-			$this->Writer->text($this->PageTitle);
+			$this->Writer->writeRaw($this->PageTitle);
 		}
 		
 		if ($this->SiteName) {
