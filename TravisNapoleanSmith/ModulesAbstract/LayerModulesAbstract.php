@@ -138,29 +138,33 @@ abstract class LayerModulesAbstract
 		$this->LayerModule->Disconnect($this->LayerTableName);
 		
 		$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
-		
-		//print_r($this->LayerTable);
-		
+				
 		if ($LayerModuleTableName && $this->LayerModuleTable && $LayerTableName && $this->LayerTable) {
-			while (current($this->LayerModuleTable)) {
-				$ObjectType = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectType'];
-				$ObjectTypeName = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectTypeName'];
-				$ObjectTypeLocation = $this->LayerModuleTable[key($this->LayerModuleTable)]['ObjectTypeLocation'];
+			$moduletable = current($this->LayerModuleTable);
+			$keymoduletable = key($this->LayerModuleTable);
+			while ($moduletable) {
+				$ObjectType = $this->LayerModuleTable[$keymoduletable]['ObjectType'];
+				$ObjectTypeName = $this->LayerModuleTable[$keymoduletable]['ObjectTypeName'];
+				$ObjectTypeLocation = $this->LayerModuleTable[$keymoduletable]['ObjectTypeLocation'];
 				$ModuleFileName = array();
-				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', key($this->LayerModuleTable), $this->LayerModuleTable);
-				$EnableDisable = $this->LayerModuleTable[key($this->LayerModuleTable)]['Enable/Disable'];
+				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $this->LayerModuleTable);
+				$EnableDisable = $this->LayerModuleTable[$keymoduletable]['Enable/Disable'];
 				
 				reset ($this->LayerTable);
-				while (current($this->LayerTable)) {
-					$NewObjectType = $this->LayerTable[key($this->LayerTable)]['ObjectType'];
-					$NewObjectTypeName = $this->LayerTable[key($this->LayerTable)]['ObjectTypeName'];
+				$layertable = current($this->LayerTable);
+				$keylayertable = key($this->LayerTable);
+				while ($layertable) {
+					$NewObjectType = $this->LayerTable[$keylayertable]['ObjectType'];
+					$NewObjectTypeName = $this->LayerTable[$keylayertable]['ObjectTypeName'];
 					$DatabaseTables = array();
-					$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', key($this->LayerTable), $this->LayerTable);
+					$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
 					
 					if ($NewObjectType == $ObjectType && $NewObjectTypeName == $ObjectTypeName) {
 						break;
 					}
 					next($this->LayerTable);
+					$layertable = current($this->LayerTable);
+					$keylayertable = key($this->LayerTable);
 				}
 				
 				if ($EnableDisable == 'Enable') {
@@ -170,7 +174,8 @@ abstract class LayerModulesAbstract
 					$modulesfile .= current($ModuleFileName);
 					$modulesfile .= '.php';
 					
-					while (current($ModuleFileName)) {
+					$filename = current($ModuleFileName);
+					while ($filename) {
 						if (is_file($modulesfile)) {
 							require_once($modulesfile);
 						} else {
@@ -179,26 +184,27 @@ abstract class LayerModulesAbstract
 						next($ModuleFileName);
 						$modulesfile = $ObjectTypeLocation;
 						$modulesfile .= '/';
-						$modulesfile .= current($ModuleFileName);
+						$modulesfile .= $filename;
 						$modulesfile .= '.php';
+						$filename = current($ModuleFileName);
 					}
 					
 				}
 				reset ($DatabaseTables);
 				$modulesdatabase = array();
-				while (current($DatabaseTables)) {
-					$modulesdatabase[current($DatabaseTables)] = current($DatabaseTables);
+				$tables = current($DatabaseTables);
+				while ($tables) {
+					$modulesdatabase[$tables] = $tables;
 					next($DatabaseTables);
+					$tables = current($DatabaseTables);
 				}
 				if ($modulesdatabase) {
-					//print "I HAVE DATA\n";
 					$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($modulesdatabase, $this->LayerModule);
 				}
-				//$this->Modules[$ObjectType][$ObjectTypeName] = $ObjectTypeName;
-				//print_r($modulesdatabase);
 				
-				//var_dump ($this->Modules);
 				next($this->LayerModuleTable);
+				$moduletable = current($this->LayerModuleTable);
+				$keymoduletable = key($this->LayerModuleTable);
 			}
 		} else {
 			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');

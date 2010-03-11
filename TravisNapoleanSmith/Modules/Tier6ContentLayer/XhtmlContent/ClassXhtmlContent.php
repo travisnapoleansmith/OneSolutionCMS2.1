@@ -1,7 +1,6 @@
 <?php
 
 class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	//protected $LayerModule;
 	protected $ContentTableName;
 	protected $ContentLayerTablesName;
 	protected $ContentPrintPreviewTableName;
@@ -180,6 +179,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['printpreview'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset($PageID['printpreview']);
 		
 		$this->LayerModule->Connect($this->ContentTableName);
@@ -187,13 +188,11 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$passarray = $PageID;
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
+
 		$this->ContainerObjectType = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
 	    $this->ContainerObjectTypeName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectTypeName'));
 		$this->ContainerObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectID'));
 		$this->ContainerObjectPrintPreview = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectPrintPreview'));
-	    $this->RevisionID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'RevisionID'));
-	    $this->CurrentVersion = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'CurrentVersion'));
 	    $this->Empty = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Empty'));
 		
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
@@ -302,6 +301,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
 		$contentidnumber['printpreview'] = $PrintPreview;
+		$contentidnumber['RevisionID'] = $this->RevisionID;
+		$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
 		//$contentidnumber['GlobalWriter'] = &$this->Writer;
 		
 		$contentdatabase = Array();
@@ -476,7 +477,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			}
 			
 			if ($this->ContentEndTag) {
-				//$this->Writer->writeRaw("\n\t");
 				$this->Writer->endElement();
 			}
 			
@@ -519,7 +519,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
 							require($filename);
 							$hold = bottompanel1();
-							//$this->ContentOutput .= $hold;
 							$this->Writer->writeRaw($hold);
 							$this->Writer->writeRaw("\n");
 						}
@@ -537,14 +536,15 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			
 			if ($this->PrintPreview & !$NoPrintPreview) {
 				reset($this->PrintIdNumberArray);
-				$this->ContentOutput = NULL;
+				next($this->PrintIdNumberArray);
 				while (current($this->PrintIdNumberArray)) {
 					$holdnow = current($this->PrintIdNumberArray);
-					
 					$contentidnumber = Array();
 					$contentidnumber['PageID'] = $holdnow;
 					$contentidnumber['ObjectID'] = 0;
 					$contentidnumber['printpreview'] = TRUE;
+					//$contentidnumber['RevisionID'] = $this->RevisionID;
+					//$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
 					
 					$contentdatabase = Array();
 					$contentdatabase[$this->ContentTableName] = $this->ContentTableName;
@@ -558,7 +558,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$content->CreateOutput('    ', TRUE);
 					
 					$contentoutput = $content->getOutput();
-					//$this->ContentOutput .= $contentoutput;
 					$this->Writer->writeRaw($contentoutput);
 					$this->Writer->writeRaw("\n");
 					

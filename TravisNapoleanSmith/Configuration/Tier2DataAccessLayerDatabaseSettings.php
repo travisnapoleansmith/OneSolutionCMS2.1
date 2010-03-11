@@ -23,6 +23,15 @@
 	$Tier2Databases->createDatabaseTable('DataAccessLayerModulesSettings');
 	
 	$Tier2Databases->createDatabaseTable('Flash');
+	
+	$Tier2Databases->createDatabaseTable('Form');
+	$Tier2Databases->createDatabaseTable('FormFieldSet');
+	$Tier2Databases->createDatabaseTable('FormInput');
+	$Tier2Databases->createDatabaseTable('FormLabel');
+	$Tier2Databases->createDatabaseTable('FormLegend');
+	$Tier2Databases->createDatabaseTable('FormTableListing');
+	$Tier2Databases->createDatabaseTable('FormTextArea');
+	
 	$Tier2Databases->createDatabaseTable('List');
 	
 	$Tier2Databases->createDatabaseTable('MainMenu');

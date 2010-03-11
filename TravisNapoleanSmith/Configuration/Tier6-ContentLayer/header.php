@@ -16,6 +16,9 @@
 	if ($_GET['PageID']){
 		$idnumber['PageID'] = $_GET['PageID'];
 	}
+	if ($_GET['Theme']){
+		$idnumber['Theme'] = $_GET['Theme'];
+	}
 	// Fetch PrintPreview Flag
 	if ($_GET['printpreview']){
 		$printpreview = $_GET['printpreview'];

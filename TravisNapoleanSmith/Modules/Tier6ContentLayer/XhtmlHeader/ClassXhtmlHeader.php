@@ -43,6 +43,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $ScriptVBScriptCode;
 	protected $ScriptVBScriptDefer;
 	
+	protected $Theme;
 	protected $SiteName;
 	protected $HeaderProtectionLayer;
 	
@@ -101,6 +102,9 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	function FetchDatabase ($PageID) {
 		reset($this->TableNames);
 		
+		$this->Theme = $PageID['Theme'];
+		unset($PageID['Theme']);
+		
 		$this->HeaderProtectionLayer->Connect(current($this->TableNames));
 		$passarray = array();
 		$passarray = $PageID;
@@ -132,7 +136,11 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		next($this->TableNames);
 		
 		$passarray = array();
-		$passarray['Enable/Disable'] = 'Enable';
+		if ($this->Theme) {
+			$passarray['ThemeName'] = $this->Theme;
+		} else {
+			$passarray['Enable/Disable'] = 'Enable';
+		}
 		$this->HeaderProtectionLayer->Connect(current($this->TableNames));
 		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
 		$this->HeaderProtectionLayer->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));

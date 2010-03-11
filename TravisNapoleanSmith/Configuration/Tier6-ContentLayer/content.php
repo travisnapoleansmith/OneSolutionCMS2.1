@@ -12,15 +12,24 @@
 	
 	// Fetch Current Page ID - Based On ID Number
 	$contentidnumber = Array();
-	// MUST LOOK AT FIXING P PROBLEM WITH LINKS!
 	$contentidnumber['PageID'] = 1;
-		
+	$contentidnumber['ObjectID'] = 0;
+	//$contentidnumber['RevisionID'] = 0;
+	$contentidnumber['CurrentVersion'] = 'true';
+			
 	if ($_GET['PageID']){
 		$contentidnumber['PageID'] = $_GET['PageID'];
 	}
 	
-	$contentidnumber['ObjectID'] = 0;
+	if (isset($_GET['RevisionID'])){
+		$contentidnumber['RevisionID'] = $_GET['RevisionID'];
+		unset($contentidnumber['CurrentVersion']);
+	}
 	
+	if ($_GET['CurrentVersion']){
+		$contentidnumber['CurrentVersion'] = $_GET['CurrentVersion'];
+	}
+
 	if ($_GET['printpreview']) {
 		$contentidnumber['printpreview'] = TRUE;
 	} else {

@@ -16,6 +16,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $LiID;
 	protected $LiClass;
 	protected $LiStyle;
+	protected $LiEnableDisable;
 	
 	protected $List;
 	
@@ -37,7 +38,8 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->LiID = Array();
 		$this->LiClass = Array();
 		$this->LiStyle = Array();
-		
+		$this->LiEnableDisable = Array();
+
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
 		} else {
@@ -86,11 +88,12 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->UlClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlClass'));
 		$this->UlStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlStyle'));
 		
-		$this->BuildLiList('Li');
-		$this->BuildLiList('LiChildID');
-		$this->BuildLiList('LiID');
-		$this->BuildLiList('LiClass');
-		$this->BuildLiList('LiStyle');
+		$this->BuildLiList('Li', 'Li');
+		$this->BuildLiList('LiChildID', 'LiChildID');
+		$this->BuildLiList('LiID', 'LiID');
+		$this->BuildLiList('LiClass', 'LiClass');
+		$this->BuildLiList('LiStyle', 'LiStyle');
+		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
 		
 		$this->EnableDisable = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
@@ -98,19 +101,24 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->ListProtectionLayer->Disconnect($this->DatabaseTable);
 	}
 	
-	protected function BuildLiList($LiList) {
+	protected function BuildLiList($LiList, $LiListField) {
+		if ($this->$LiList) {
+			$this->$LiList = NULL;
+			$this->$LiList = array();
+		}
+		
 		if (is_array($this->$LiList)) {
 			$i = 1;
 			$Field = 'Li';
 			$Field .= $i;
-			$FieldName = str_replace('Li', $Field, $LiList);
+			$FieldName = str_replace('Li', $Field, $LiListField);
 			while($this->ListProtectionLayer->pass ($this->DatabaseTable, 'searchFieldNames', array('rowfield' => $FieldName))) {
 				$temp = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $FieldName));
 				array_push($this->$LiList, $temp);
 				$i++;
 				$Field = 'Li';
 				$Field .= $i;
-				$FieldName = str_replace('Li', $Field, $LiList);
+				$FieldName = str_replace('Li', $Field, $LiListField);
 			}
 		}
 	}
@@ -149,75 +157,81 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				if ($this->UlClass) {
 					$this->Writer->writeAttribute('class', $this->UlClass);
 				}
-			
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
 					if (is_array($this->LiID)){
 						if (is_array($this->LiClass)){
 							if (is_array($this->LiStyle)){
-								while (current($this->Li)) {
-									$this->Writer->startElement('li');
-										if (current($this->LiID)) {
-											$this->Writer->writeAttribute('id', current($this->LiID));
+								if (is_array($this->LiEnableDisable)) {
+									while (current($this->Li)) {
+										if (current($this->LiEnableDisable) == 'Enable') {
+											$this->Writer->startElement('li');
+												if (current($this->LiID)) {
+													$this->Writer->writeAttribute('id', current($this->LiID));
+												}
+												if (current($this->LiStyle)) {
+													$this->Writer->writeAttribute('style', current($this->LiStyle));
+												}
+												if (current($this->LiClass)) {
+													$this->Writer->writeAttribute('class', current($this->LiClass));
+												}
+											
+											if (current($this->Li)) {
+												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
+												$this->Writer->writeRaw("\n\t");
+												$this->Writer->writeRaw(current($this->Li));
+												$this->Writer->writeRaw("\n  ");
+											}
+											if (current($this->LiChildID)){
+												$listidnumber = array();
+												$listidnumber['PageID'] = $this->PageID;
+												$listidnumber['ObjectID'] = current($this->LiChildID);
+												$listdatabase = Array();
+												$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
+												
+												$databases = &$this->ListProtectionLayer;
+												
+												$list = new XhtmlList($listdatabase, $databases);
+												
+												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
+												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
+												$list->FetchDatabase ($listidnumber);
+												
+												$tempspace = $this->Space;
+												$tempspace .= '    ';
+												$list->CreateOutput($tempspace);
+												
+												$listoutput = $list->getOutput();
+												$listoutput = str_replace("\n","\n$this->Space", $listoutput);
+												$this->Writer->writeRaw($listoutput);
+											}
+											
+											$this->Writer->endElement(); // ENDS LI
 										}
-										if (current($this->LiStyle)) {
-											$this->Writer->writeAttribute('style', current($this->LiStyle));
-										}
-										if (current($this->LiClass)) {
-											$this->Writer->writeAttribute('class', current($this->LiClass));
-										}
-									
-									if (current($this->Li)) {
-										$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
-										$this->Writer->writeRaw("\n\t");
-										$this->Writer->writeRaw(current($this->Li));
-										$this->Writer->writeRaw("\n  ");
+										next($this->Li);
+										next($this->LiChildID);
+										next($this->LiID);
+										next($this->LiClass);
+										next($this->LiStyle);
+										next($this->LiEnableDisable);
 									}
-									if (current($this->LiChildID)){
-										$listidnumber = array();
-										$listidnumber['PageID'] = $this->PageID;
-										$listidnumber['ObjectID'] = current($this->LiChildID);
-										$listdatabase = Array();
-										$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
-										
-										$databases = &$this->ListProtectionLayer;
-			
-										$list = new XhtmlList($listdatabase, $databases);
-										
-										$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
-										$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
-										$list->FetchDatabase ($listidnumber);
-										
-										$tempspace = $this->Space;
-										$tempspace .= '    ';
-										$list->CreateOutput($tempspace);
-										
-										$listoutput = $list->getOutput();
-										$listoutput = str_replace("\n","\n$this->Space", $listoutput);
-										$this->Writer->writeRaw($listoutput);
-									}
-									
-									$this->Writer->endElement(); // ENDS LI
-									next($this->Li);
-									next($this->LiChildID);
-									next($this->LiID);
-									next($this->LiClass);
-									next($this->LiStyle);
+								} else {
+									array_push($this->ErrorMessage,'CreateOutput: LiEnableDisable must be an Array!');
 								}
 							} else {
-								array_push($this->errormessage,'CreateOutput: LiStyle must be an Array!');
+								array_push($this->ErrorMessage,'CreateOutput: LiStyle must be an Array!');
 							}
 						} else {
-							array_push($this->errormessage,'CreateOutput: LiClass must be an Array!');
+							array_push($this->ErrorMessage,'CreateOutput: LiClass must be an Array!');
 						}
 					} else {
-						array_push($this->errormessage,'CreateOutput: LiID must be an Array!');
+						array_push($this->ErrorMessage,'CreateOutput: LiID must be an Array!');
 					}
 				} else {
-					array_push($this->errormessage,'CreateOutput: LiChildID must be an Array!');
+					array_push($this->ErrorMessage,'CreateOutput: LiChildID must be an Array!');
 				}
 			} else {
-				array_push($this->errormessage,'CreateOutput: Li must be an Array!');
+				array_push($this->ErrorMessage,'CreateOutput: Li must be an Array!');
 			}
 			
 			$this->Writer->endElement(); // ENDS UL

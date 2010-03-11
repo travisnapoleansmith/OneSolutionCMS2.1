@@ -193,6 +193,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	}
 	
 	public function FetchDatabase ($PageID) {
+		$this->PrintPreview = $PageID['PrintPreview'];
 		unset ($PageID['PrintPreview']);
 		$passarray = array();
 		$passarray = &$PageID;
@@ -370,6 +371,9 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->AppointmentStyle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentStyle'];
 			$this->AppointmentTitle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentTitle'];
 			$this->AppointmentXMLLang[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentXMLLang'];
+			
+			$this->AppointmentEnableDisable[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['Enable/Disable'];
+			$this->AppointmentStatus[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['Status'];
 			$j++;
 		}
 	}
@@ -714,17 +718,19 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	protected function DayWeekAppointment($week, $day, $dayofweek, $daysinmonth, $i) {
 		if (!is_null($week)) {
 			reset($week);
-			while (current($week)) {
-				$j = 0;
+			while (key($week)) {
+				$j = 0;				
 				while ($this->AppointmentDay[$i][$j]) {
 					if (current($week) == $this->AppointmentDay[$i][$j]) {
-						$hold = $week[key($week)];
-						$appointment = $this->Appointment[$i][$j];
-						$starttime = $this->AppointmentStartTime[$i][$j];
-						$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
-						$week[key($week)] = '<a style="font-weight: bold">';
-						$week[key($week)] .= $hold;
-						$week[key($week)] .= '</a>';
+						if ($this->AppointmentEnableDisable[$i][$j] == 'Enable' && $this->AppointmentStatus[$i][$j] == 'Approved') {
+							$hold = $week[key($week)];
+							$appointment = $this->Appointment[$i][$j];
+							$starttime = $this->AppointmentStartTime[$i][$j];
+							$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
+							$week[key($week)] = '<a style="font-weight: bold">';
+							$week[key($week)] .= $hold;
+							$week[key($week)] .= '</a>';
+						}
 					}
 					$j++;
 				}
@@ -753,23 +759,25 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->Writer->endElement(); // ENDS TR TAG
 				$this->TableWeekHeading($this->AppointmentDayColumns, $i);
 				while ($this->AppointmentDay[$i][$j]) {
-					$appointment = $this->Appointment[$i][$j];
-					$starttime = $this->AppointmentStartTime[$i][$j];
-					$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
-					$endtime = $this->AppointmentEndTime[$i][$j];
-					$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
-					$day = $this->AppointmentDay[$i][$j];
-					//$month = $this->AppointmentMonth[$i][$j];
-					//$year = $this->AppointmentYear[$i][$j];
+					if ($this->AppointmentEnableDisable[$i][$j] == 'Enable' && $this->AppointmentStatus[$i][$j] == 'Approved') {
+						$appointment = $this->Appointment[$i][$j];
+						$starttime = $this->AppointmentStartTime[$i][$j];
+						$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
+						$endtime = $this->AppointmentEndTime[$i][$j];
+						$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
+						$day = $this->AppointmentDay[$i][$j];
+						//$month = $this->AppointmentMonth[$i][$j];
+						//$year = $this->AppointmentYear[$i][$j];
 					
-					$passarray = array();
-					$passarray['Day'] = $day;
-					//$passarray['Month'] = $month;
-					//$passarray['Year'] = $year;
-					$passarray['StartTime'] = $starttime;
-					$passarray['EndTime'] = $endtime;
-					$passarray['Appointment'] = $appointment;
-					$this->TableWeek($passarray, $i, $j);
+						$passarray = array();
+						$passarray['Day'] = $day;
+						//$passarray['Month'] = $month;
+						//$passarray['Year'] = $year;
+						$passarray['StartTime'] = $starttime;
+						$passarray['EndTime'] = $endtime;
+						$passarray['Appointment'] = $appointment;
+						$this->TableWeek($passarray, $i, $j);
+					}
 					$j++;
 			}
 			$this->Writer->endElement(); // ENDS TABLE TAG
@@ -779,17 +787,18 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	protected function MakeDayAppointments($i) {
 		$j = 0;
 		while ($this->AppointmentDay[$i][$j]) {
-			$appointment = $this->Appointment[$i][$j];
-			$starttime = $this->AppointmentStartTime[$i][$j];
-			$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
-			$endtime = $this->AppointmentEndTime[$i][$j];
-			$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
-			
-			$passarray = array();
-			$passarray['StartTime'] = $starttime;
-			$passarray['EndTime'] = $endtime;
-			$passarray['Appointment'] = $appointment;
-			$this->TableWeek($passarray, $i);
+			if ($this->AppointmentEnableDisable[$i][$j] == 'Enable' && $this->AppointmentStatus[$i][$j] == 'Approved') {
+				$appointment = $this->Appointment[$i][$j];
+				$starttime = $this->AppointmentStartTime[$i][$j];
+				$starttime .= $this->AppointmentStartTimeAmPm[$i][$j];
+				$endtime = $this->AppointmentEndTime[$i][$j];
+				$endtime .= $this->AppointmentEndtimeAmPm[$i][$j];
+				$passarray = array();
+				$passarray['StartTime'] = $starttime;
+				$passarray['EndTime'] = $endtime;
+				$passarray['Appointment'] = $appointment;
+				$this->TableWeek($passarray, $i);
+			}
 			$j++;
 		}
 	}
@@ -855,40 +864,36 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 					$this->TableWeekHeading($this->DaysOfTheWeek, $i);
 				}
 				
-				if ($this->CalendarMonth[$i] == $this->CurrentMonth && $this->CalendarYear[$i] == $this->CurrentYear) {
+				if (($this->CalendarMonth[$i] == 'Current' && $this->CalendarYear[$i] == 'Current') && is_null($this->CalendarDay[$i])) {
 					if ($this->CurrentDay >= 21) {
 						$day = $this->CurrentDay - 21;	
 					} else if ($this->CurrentDay >= 14){
 						$day = $this->CurrentDay - 14;
 					} else if ($this->CurrentDay >= 7) {
-						$day = 0;
+						//$day = 0;
 						$day .= $this->CurrentDay - 7;
 					} else {
 						$day = $this->CurrentDay;
 					}
 					
-					if (!($this->CalendarDay[$i] | !$this->CalendarDay[$i] == 'Current')) {
-						$j = 0;
-						while ($j < 5) {
-							$newweek = $this->DayWeek($week, $day, $this->CurrentDayOfWeek, date('t'));
-							$newweek = $this->DayWeekAppointment($newweek, $day, $this->CurrentDayOfWeek, date('t'), $i);
-							if ($newweek) {
-								$this->TableWeek($newweek, $i);
-								$day = $day + 7;
-								$j++;
-							} else {
-								$j = 10;
-							}
+					$j = 0;
+					while ($j < 6) {
+						$newweek = $this->DayWeek($week, $day, $this->CurrentDayOfWeek, date('t'));
+						$newweek = $this->DayWeekAppointment($newweek, $day, $this->CurrentDayOfWeek, date('t'), $i);
+						if ($newweek) {
+							$this->TableWeek($newweek, $i);
+							$day = $day + 7;
+							$j++;
+						} else {
+							$j = 10;
 						}
 					}
 				} else {
-					$firstday = $this->FirstDayOfMonth ($this->getCalendarMonthNumber ($this->CalendarMonth[$i]), $this->CalendarYear[$i]);
-					$lastday = $this->LastDayOfMonth ($this->getCalendarMonthNumber ($this->CalendarMonth[$i]), $this->CalendarYear[$i]);
+					$monthnumber = $this->getCalendarMonthNumber ($this->CalendarMonth[$i]);
+					$firstday = $this->FirstDayOfMonth ($monthnumber, $this->CalendarYear[$i]);
+					$lastday = $this->LastDayOfMonth ($monthnumber + 1, $this->CalendarYear[$i]);
 					$day = 1;
-					
-					if ($this->CalendarDay[$i]) {
-						
-					} else {
+					if (!$this->CalendarDay[$i]) {
 						$j = 0;
 						while ($j < 6) {
 							$newweek = $this->DayWeek($week, $day, $firstday, $lastday);
