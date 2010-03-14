@@ -1,22 +1,35 @@
 <?php
 
-class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6ContentLayerModOles {
 	protected $ListProtectionLayer;
 	protected $DatabaseTableName;
 	
 	protected $Insert;
 	
-	protected $Ul;
-	protected $UlID;
-	protected $UlClass;
-	protected $UlStyle;
+	protected $Ol;
 	
-	protected $Li;
-	protected $LiChildID;
-	protected $LiID;
-	protected $LiClass;
-	protected $LiStyle;
-	protected $LiEnableDisable;
+	// Ol Standard Attributes
+	protected $OlClass;
+	protected $OlDir;
+	protected $OlID;
+	protected $OlLang;
+	protected $OlStyle;
+	protected $OlTitle;
+	protected $OlXMLLang;
+	
+	protected $Li = array();
+	protected $LiChildID = array();
+	
+	// Li Standard Attributes
+	protected $LiClass = array();
+	protected $LiDir = array();
+	protected $LiID = array();
+	protected $LiLang = array();
+	protected $LiStyle = array();
+	protected $LiTitle = array();
+	protected $LiXMLLang = array();
+	
+	protected $LiEnableDisable = array();
 	
 	protected $List;
 	
@@ -33,12 +46,6 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		unset($tablenames['GlobalWriter']);
 		
 		$this->DatabaseTableName = current($tablenames);
-		$this->Li = Array();
-		$this->LiChildID = Array();
-		$this->LiID = Array();
-		$this->LiClass = Array();
-		$this->LiStyle = Array();
-		$this->LiEnableDisable = Array();
 
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
@@ -83,18 +90,28 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->StartTagStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->Ul = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ul'));
-		$this->UlID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlID'));
-		$this->UlClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlClass'));
-		$this->UlStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlStyle'));
-		
+		$this->Ol = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ol'));
+		$this->OlClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlClass'));
+		$this->OlDir = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlDir'));
+		$this->OlID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlID'));
+		$this->OlLang = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlLang'));
+		$this->OlStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlStyle'));
+		$this->OlTitle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlTitle'));
+		$this->OlXMLLang = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlXMLLang'));
+
 		$this->BuildLiList('Li', 'Li');
 		$this->BuildLiList('LiChildID', 'LiChildID');
-		$this->BuildLiList('LiID', 'LiID');
-		$this->BuildLiList('LiClass', 'LiClass');
-		$this->BuildLiList('LiStyle', 'LiStyle');
-		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
 		
+		$this->BuildLiList('LiClass', 'LiClass');
+		$this->BuildLiList('LiDir', 'LiDir');
+		$this->BuildLiList('LiID', 'LiID');
+		$this->BuildLiList('LiLang', 'LiLang');
+		$this->BuildLiList('LiStyle', 'LiStyle');
+		$this->BuildLiList('LiTitle', 'LiTitle');
+		$this->BuildLiList('LiXMLLang', 'LiXMLLang');
+		
+		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
+	
 		$this->EnableDisable = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
@@ -103,7 +120,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected function BuildLiList($LiList, $LiListField) {
 		if ($this->$LiList) {
-			$this->$LiList = NULL;
+			$this->$LiList = NOlL;
 			$this->$LiList = array();
 		}
 		
@@ -130,7 +147,6 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-				
 					if ($this->StartTagID) {
 						$this->Writer->writeAttribute('id', $this->StartTagID);
 					}
@@ -141,21 +157,33 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$this->Writer->writeAttribute('class', $this->StartTagClass);
 					}
 			}
-			if ($this->Ul){
+			if ($this->Ol){
 				$this->Writer->writeRaw("\n ");
-				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
+				$this->Writer->writeRaw($this->CreateWordWrap($this->Ol));
 				$this->Writer->writeRaw("\n");
 			}
 			
-			$this->Writer->startElement('ul');
-				if ($this->UlID) {
-					$this->Writer->writeAttribute('id', $this->UlID);
+			$this->Writer->startElement('ol');
+				if ($this->OlClass) {
+					$this->Writer->writeAttribute('class', $this->OlClass);
 				}
-				if ($this->UlStyle) {
-					$this->Writer->writeAttribute('style', $this->UlStyle);
+				if ($this->OlDir) {
+					$this->Writer->writeAttribute('dir', $this->OlDir);
 				}
-				if ($this->UlClass) {
-					$this->Writer->writeAttribute('class', $this->UlClass);
+				if ($this->OlID) {
+					$this->Writer->writeAttribute('id', $this->OlID);
+				}
+				if ($this->OlLang) {
+					$this->Writer->writeAttribute('lang', $this->OlLang);
+				}
+				if ($this->OlStyle) {
+					$this->Writer->writeAttribute('style', $this->OlStyle);
+				}
+				if ($this->OlTitle) {
+					$this->Writer->writeAttribute('title', $this->OlTitle);
+				}
+				if ($this->OlXMLLang) {
+					$this->Writer->writeAttribute('xmllang', $this->OlXMLLang);
 				}
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
@@ -166,14 +194,26 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 									while (current($this->Li)) {
 										if (current($this->LiEnableDisable) == 'Enable') {
 											$this->Writer->startElement('li');
+												if (current($this->LiClass)) {
+													$this->Writer->writeAttribute('class', current($this->LiClass));
+												}
+												if (current($this->LiDir)) {
+													$this->Writer->writeAttribute('dir', current($this->LiDir));
+												}
 												if (current($this->LiID)) {
 													$this->Writer->writeAttribute('id', current($this->LiID));
+												}
+												if (current($this->LiLang)) {
+													$this->Writer->writeAttribute('lang', current($this->LiLang));
 												}
 												if (current($this->LiStyle)) {
 													$this->Writer->writeAttribute('style', current($this->LiStyle));
 												}
-												if (current($this->LiClass)) {
-													$this->Writer->writeAttribute('class', current($this->LiClass));
+												if (current($this->LiTitle)) {
+													$this->Writer->writeAttribute('title', current($this->LiTitle));
+												}
+												if (current($this->LiXMLLang)) {
+													$this->Writer->writeAttribute('xmllang', current($this->LiXMLLang));
 												}
 											
 											if (current($this->Li)) {
@@ -210,9 +250,13 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 										}
 										next($this->Li);
 										next($this->LiChildID);
-										next($this->LiID);
 										next($this->LiClass);
+										next($this->LiDir);
+										next($this->LiID);
+										next($this->LiLang);
 										next($this->LiStyle);
+										next($this->LiTitle);
+										next($this->LiXMLLang);
 										next($this->LiEnableDisable);
 									}
 								} else {
@@ -234,7 +278,7 @@ class XhtmlList extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				array_push($this->ErrorMessage,'CreateOutput: Li must be an Array!');
 			}
 			
-			$this->Writer->endElement(); // ENDS UL
+			$this->Writer->endElement(); // ENDS OL
 			
 			if ($this->Insert) {
 				$this->Writer->writeRaw(' ');

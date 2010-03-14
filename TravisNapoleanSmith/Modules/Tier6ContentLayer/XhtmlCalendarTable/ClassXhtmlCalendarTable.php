@@ -20,7 +20,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	// Xhtml Calendar Tables Standard Attributes
 	protected $CalendarTableClass = array();
 	protected $CalendarTableDir = array();
-	protected $CalendarTableId = array();
+	protected $CalendarTableID = array();
 	protected $CalendarTableLang = array();
 	protected $CalendarTableStyle = array();
 	protected $CalendarTableTitle = array();
@@ -51,7 +51,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	// Calendars Standard Attributes
 	protected $CalendarClass = array();
 	protected $CalendarDir = array();
-	protected $CalendarId = array();
+	protected $CalendarID = array();
 	protected $CalendarLang = array();
 	protected $CalendarStyle = array();
 	protected $CalendarTitle = array();
@@ -88,9 +88,9 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	// Appointments Standard Attributes
 	protected $AppointmentClass = array();
 	protected $AppointmentDir = array();
-	protected $AppointmentId = array();
+	protected $AppointmentID = array();
 	protected $AppointmentLang = array();
-	protected $AppiointmentStyle = array();
+	protected $AppointmentStyle = array();
 	protected $AppointmentTitle = array();
 	protected $AppointmentXMLLang = array();
 	
@@ -220,7 +220,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				array_push($this->CalendarTableWidth, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarWidth']);
 				array_push($this->CalendarTableClass, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarClass']);
 				array_push($this->CalendarTableDir, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarDir']);
-				array_push($this->CalendarTableId, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarId']);
+				array_push($this->CalendarTableID, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarID']);
 				array_push($this->CalendarTableLang, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarLang']);
 				array_push($this->CalendarTableStyle, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarStyle']);
 				array_push($this->CalendarTableTitle, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarTitle']);
@@ -325,7 +325,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		
 		array_push($this->CalendarClass, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarClass')));
 		array_push($this->CalendarDir, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarDir')));
-		array_push($this->CalendarId, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarId')));
+		array_push($this->CalendarID, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarID')));
 		array_push($this->CalendarLang, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarLang')));
 		array_push($this->CalendarStyle, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarStyle')));
 		array_push($this->CalendarTitle, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarTitle')));
@@ -366,7 +366,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			// Appointment Standard Attributes
 			$this->AppointmentClass[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentClass'];
 			$this->AppointmentDir[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentDir'];
-			$this->AppointmentId[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentId'];
+			$this->AppointmentID[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentID'];
 			$this->AppointmentLang[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentLang'];
 			$this->AppointmentStyle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentStyle'];
 			$this->AppointmentTitle[$i][$j] = $this->CalendarAppointments[$calendarappointmentname][$j]['AppointmentTitle'];
@@ -410,8 +410,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($this->CalendarTableDir[$i]) {
 			$this->Writer->writeAttribute('dir', $this->CalendarTableDir[$i]);
 		}
-		if ($this->CalendarTableId[$i]) {
-			$this->Writer->writeAttribute('id', $this->CalendarTableId[$i]);
+		if ($this->CalendarTableID[$i]) {
+			$this->Writer->writeAttribute('id', $this->CalendarTableID[$i]);
 		}
 		if ($this->CalendarTableLang[$i]) {
 			$this->Writer->writeAttribute('lang', $this->CalendarTableLang[$i]);
@@ -450,8 +450,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($this->CalendarDir[$i]) {
 			$this->Writer->writeAttribute('dir', $this->CalendarDir[$i]);
 		}
-		if ($this->CalendarId[$i]) {
-			$this->Writer->writeAttribute('id', $this->CalendarId[$i]);
+		if ($this->CalendarID[$i]) {
+			$this->Writer->writeAttribute('id', $this->CalendarID[$i]);
 		}
 		if ($this->CalendarLang[$i]) {
 			$this->Writer->writeAttribute('lang', $this->CalendarLang[$i]);
@@ -509,8 +509,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($this->AppointmentDir[$i][$j]) {
 			$this->Writer->writeAttribute('dir', $this->AppointmentDir[$i][$j]);
 		}
-		if ($this->AppointmentId[$i][$j]) {
-			$this->Writer->writeAttribute('id', $this->AppointmentId[$i][$j]);
+		if ($this->AppointmentID[$i][$j]) {
+			$this->Writer->writeAttribute('id', $this->AppointmentID[$i][$j]);
 			
 		}
 		if ($this->AppointmentLang[$i][$j]) {

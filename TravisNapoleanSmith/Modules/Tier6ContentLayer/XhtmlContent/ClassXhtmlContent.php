@@ -278,7 +278,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$modulesdatabase[current($databasetablename)] = current($databasetablename);
 			next($databasetablename);
 		}
-		
 		$module = &$this->LayerModule->getModules($ContainerObjectType, $ContainerObjectTypeName);
 		reset($databasetablename);
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
