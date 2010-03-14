@@ -164,7 +164,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			
 			$databases = &$this->XhtmlMainMenuProtectionLayer;
 			
-			$list = new XhtmlList($listdatabase, $databases);
+			$list = new XhtmlUnorderedList($listdatabase, $databases);
 			
 			$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($this->TableNames));
 			$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

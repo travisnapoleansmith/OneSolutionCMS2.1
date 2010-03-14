@@ -231,7 +231,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 												
 												$databases = &$this->ListProtectionLayer;
 												
-												$list = new XhtmlList($listdatabase, $databases);
+												$list = new XhtmlOrderedList($listdatabase, $databases);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
