@@ -156,9 +156,8 @@ abstract class LayerModulesAbstract
 				while ($layertable) {
 					$NewObjectType = $this->LayerTable[$keylayertable]['ObjectType'];
 					$NewObjectTypeName = $this->LayerTable[$keylayertable]['ObjectTypeName'];
-					$DatabaseTables = array();
-					$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
-					
+					//$DatabaseTables = array();
+					//$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
 					if ($NewObjectType == $ObjectType && $NewObjectTypeName == $ObjectTypeName) {
 						break;
 					}
@@ -190,18 +189,28 @@ abstract class LayerModulesAbstract
 					}
 					
 				}
-				reset ($DatabaseTables);
-				$modulesdatabase = array();
-				$tables = current($DatabaseTables);
-				while ($tables) {
-					$modulesdatabase[$tables] = $tables;
-					next($DatabaseTables);
-					$tables = current($DatabaseTables);
-				}
-				if ($modulesdatabase) {
-					$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($modulesdatabase, $this->LayerModule);
+				
+				if (is_array($layertable)) {
+					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
+						$DatabaseTables = array();
+						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
+						$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $this->LayerModule);
+					}
 				}
 				
+				//reset ($DatabaseTables);
+				//$modulesdatabase = array();
+				//$tables = current($DatabaseTables);
+				
+				//while ($tables) {
+					//$modulesdatabase[$tables] = $tables;
+					//next($DatabaseTables);
+					//$tables = current($DatabaseTables);
+				//}
+				/*if ($modulesdatabase) {
+					$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($modulesdatabase, $this->LayerModule);
+				}
+				*/
 				next($this->LayerModuleTable);
 				$moduletable = current($this->LayerModuleTable);
 				$keymoduletable = key($this->LayerModuleTable);

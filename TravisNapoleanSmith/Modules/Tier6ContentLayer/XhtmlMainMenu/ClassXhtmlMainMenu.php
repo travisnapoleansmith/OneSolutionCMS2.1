@@ -191,18 +191,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		if ($this->MainMenuID || $this->MainMenuClass || $this->MainMenuStyle || $this->MainMenuInsert) {
 			$this->Writer->startElement('div');
 			
-			if ($this->MainMenuID) {
-				$this->Writer->writeAttribute('id', $this->MainMenuID);
-			}
-			
-			if ($this->MainMenuClass) {
-				$this->Writer->writeAttribute('class', $this->MainMenuClass);
-			}
-			
-			if ($this->MainMenuStyle) {
-				$this->Writer->writeAttribute('style', $this->MainMenuStyle);
-			}
-			
+			$this->ProcessStandardAttribute('MainMenu');
 			if ($this->MainMenuInsert) {
 				$this->Writer->writeRaw("\n");
 				$this->Writer->writeRaw($this->MainMenuInsert);
@@ -213,17 +202,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		if ($this->MainMenuTopID || $this->MainMenuTopClass || $this->MainMenuTopStyle || $this->MainMenuTopInsert) {
 			$this->Writer->startElement('div');
 			
-			if ($this->MainMenuTopID) {
-				$this->Writer->writeAttribute('id', $this->MainMenuTopID);
-			}
-			
-			if ($this->MainMenuTopClass) {
-				$this->Writer->writeAttribute('class', $this->MainMenuTopClass);
-			}
-			
-			if ($this->MainMenuTopStyle) {
-				$this->Writer->writeAttribute('style', $this->MainMenuTopStyle);
-			}
+			$this->ProcessStandardAttribute('MainMenuTop');
 			
 			if ($this->MainMenuTopInsert) {
 				$this->Writer->writeRaw("\n");
@@ -251,17 +230,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		if ($this->MainMenuBottomID || $this->MainMenuBottomClass || $this->MainMenuBottomStyle || $this->MainMenuBottomInsert) {
 			$this->Writer->startElement('div');
 			
-			if ($this->MainMenuBottomID) {
-				$this->Writer->writeAttribute('id', $this->MainMenuBottomID);
-			}
-			
-			if ($this->MainMenuBottomClass) {
-				$this->Writer->writeAttribute('class', $this->MainMenuBottomClass);
-			}
-			
-			if ($this->MainMenuBottomStyle) {
-				$this->Writer->writeAttribute('style', $this->MainMenuBottomStyle);
-			}
+			$this->ProcessStandardAttribute('MainMenuBottom');
 			
 			if ($this->MainMenuBottomInsert) {
 				$this->Writer->writeRaw("\n");

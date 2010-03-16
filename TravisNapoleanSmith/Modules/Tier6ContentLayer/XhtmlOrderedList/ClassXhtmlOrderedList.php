@@ -147,15 +147,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-					if ($this->StartTagID) {
-						$this->Writer->writeAttribute('id', $this->StartTagID);
-					}
-					if ($this->StartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->StartTagStyle);
-					}
-					if ($this->StartTagClass) {
-						$this->Writer->writeAttribute('class', $this->StartTagClass);
-					}
+					$this->ProcessStandardAttribute('StartTag');
 			}
 			if ($this->Ol){
 				$this->Writer->writeRaw("\n ");
@@ -164,27 +156,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 			}
 			
 			$this->Writer->startElement('ol');
-				if ($this->OlClass) {
-					$this->Writer->writeAttribute('class', $this->OlClass);
-				}
-				if ($this->OlDir) {
-					$this->Writer->writeAttribute('dir', $this->OlDir);
-				}
-				if ($this->OlID) {
-					$this->Writer->writeAttribute('id', $this->OlID);
-				}
-				if ($this->OlLang) {
-					$this->Writer->writeAttribute('lang', $this->OlLang);
-				}
-				if ($this->OlStyle) {
-					$this->Writer->writeAttribute('style', $this->OlStyle);
-				}
-				if ($this->OlTitle) {
-					$this->Writer->writeAttribute('title', $this->OlTitle);
-				}
-				if ($this->OlXMLLang) {
-					$this->Writer->writeAttribute('xmllang', $this->OlXMLLang);
-				}
+				$this->ProcessStandardAttribute('Ol');
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
 					if (is_array($this->LiID)){

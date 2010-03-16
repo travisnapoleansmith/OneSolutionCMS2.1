@@ -322,16 +322,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->writeRaw("\n\t");
 				$this->Writer->startElement($this->StartTag);
-				
-					if ($this->StartTagID) {
-						$this->Writer->writeAttribute('id', $this->StartTagID);
-					}
-					if ($this->StartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->StartTagStyle);
-					}
-					if ($this->StartTagClass) {
-						$this->Writer->writeAttribute('class', $this->StartTagClass);
-					}
+					$this->ProcessStandardAttribute('StartTag');
 			}
 			
 			if ($this->HeadingStartTag){
@@ -339,17 +330,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
 				$this->Writer->writeRaw("\n\t");
 				$this->Writer->startElement($this->HeadingStartTag);
-					if ($this->HeadingStartTagID) {
-						$this->Writer->writeAttribute('id', $this->HeadingStartTagID);
-					}
-					
-					if ($this->HeadingStartTagClass) {
-						$this->Writer->writeAttribute('class', $this->HeadingStartTagClass);
-					}
-					
-					if ($this->HeadingStartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->HeadingStartTagStyle);
-					}
+					$this->ProcessStandardAttribute('HeadingStartTag');
 					$this->Writer->writeRaw($this->Heading);
 			}
 			
@@ -365,18 +346,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				}
 				$this->Writer->writeRaw("\t  ");
 				$this->Writer->startElement($this->ContentStartTag);
-					if ($this->ContentStartTagID) {
-						$this->Writer->writeAttribute('id', $this->ContentStartTagID);
-					}
-					
-					if ($this->ContentStartTagClass) {
-						$this->Writer->writeAttribute('class', $this->ContentStartTagClass);
-					}
-					
-					if ($this->ContentStartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->ContentStartTagStyle);
-					}
-					
+					$this->ProcessStandardAttribute('ContentStartTag');
 					$this->Content = trim($this->Content);
 					if (strpos($this->Content, "\n\r")) {
 						$this->Content = explode("\n\r", $this->Content);
@@ -395,18 +365,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 								$this->ContentEndTag = NULL;
 								$this->Writer->writeRaw("\t  ");
 								$this->Writer->startElement('p');
-								
-								if ($this->ContentPTagID) {
-									$this->Writer->writeAttribute('id', $this->ContentPTagID);
-								}
-								
-								if ($this->ContentPTagClass) {
-									$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-								}
-								
-								if ($this->ContentPTagStyle) {
-									$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-								}
+								$this->ProcessStandardAttribute('ContentPTag');
 							}
 							$i++;
 						}
@@ -420,17 +379,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
 				$this->Writer->startElement($this->ContentStartTag);
-					if ($this->ContentStartTagID) {
-						$this->Writer->writeAttribute('id', $this->ContentStartTagID);
-					}
-					
-					if ($this->ContentStartTagClass) {
-						$this->Writer->writeAttribute('class', $this->ContentStartTagClass);
-					}
-					
-					if ($this->ContentStartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->ContentStartTagStyle);
-					}
+					$this->ProcessStandardAttribute('ContentStartTag');
 					
 				$this->Content = trim($this->Content);
 				if (strpos($this->Content, "\n\r")) {
@@ -438,17 +387,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					
 					while (current($this->Content)) {
 						$this->Writer->startElement('p');
-							if ($this->ContentPTagID) {
-								$this->Writer->writeAttribute('id', $this->ContentPTagID);
-							}
-							
-							if ($this->ContentPTagClass) {
-								$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-							}
-							
-							if ($this->ContentPTagStyle) {
-								$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-							}
+							$this->ProcessStandardAttribute('ContentPTag');
 							$this->Writer->writeRaw("\n    ");
 							$this->Writer->writeRaw(current($this->Content));
 							$this->Writer->writeRaw("\n  ");
@@ -457,17 +396,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					}
 				} else {
 					$this->Writer->startElement('p');
-					if ($this->ContentPTagID) {
-						$this->Writer->writeAttribute('id', $this->ContentPTagID);
-					}
-					
-					if ($this->ContentPTagClass) {
-						$this->Writer->writeAttribute('class', $this->ContentPTagClass);
-					}
-					
-					if ($this->ContentPTagStyle) {
-						$this->Writer->writeAttribute('style', $this->ContentPTagStyle);
-					}
+					$this->ProcessStandardAttribute('ContentPTag');
 					$this->Writer->writeRaw("\n    ");
 					$this->Writer->writeRaw($this->Content);
 					$this->Writer->writeRaw("\n  ");

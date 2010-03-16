@@ -87,30 +87,11 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-				
-					if ($this->StartTagID) {
-						$this->Writer->writeAttribute('id', $this->StartTagID);
-					}
-					if ($this->StartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->StartTagStyle);
-					}
-					if ($this->StartTagClass) {
-						$this->Writer->writeAttribute('class', $this->StartTagClass);
-					}
+					$this->ProcessStandardAttribute('StartTag');
 			}
 			
 			$this->Writer->startElement('img');
-				if ($this->PictureID) {
-					$this->Writer->writeAttribute('id', $this->PictureID);
-				}
-				
-				if ($this->PictureClass) {
-					$this->Writer->writeAttribute('class', $this->PictureClass);
-				}
-				
-				if ($this->PictureStyle) {
-					$this->Writer->writeAttribute('style', $this->PictureStyle);
-				}
+				$this->ProcessStandardAttribute('Picture');
 				
 				if ($this->PictureLink) {
 					$this->Writer->writeAttribute('src', $this->PictureLink);

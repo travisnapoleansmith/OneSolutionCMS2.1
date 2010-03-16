@@ -147,15 +147,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-					if ($this->StartTagID) {
-						$this->Writer->writeAttribute('id', $this->StartTagID);
-					}
-					if ($this->StartTagStyle) {
-						$this->Writer->writeAttribute('style', $this->StartTagStyle);
-					}
-					if ($this->StartTagClass) {
-						$this->Writer->writeAttribute('class', $this->StartTagClass);
-					}
+					$this->ProcessStandardAttribute('StartTag');
 			}
 			if ($this->Ul){
 				$this->Writer->writeRaw("\n ");
@@ -164,27 +156,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			}
 			
 			$this->Writer->startElement('ul');
-				if ($this->UlClass) {
-					$this->Writer->writeAttribute('class', $this->UlClass);
-				}
-				if ($this->UlDir) {
-					$this->Writer->writeAttribute('dir', $this->UlDir);
-				}
-				if ($this->UlID) {
-					$this->Writer->writeAttribute('id', $this->UlID);
-				}
-				if ($this->UlLang) {
-					$this->Writer->writeAttribute('lang', $this->UlLang);
-				}
-				if ($this->UlStyle) {
-					$this->Writer->writeAttribute('style', $this->UlStyle);
-				}
-				if ($this->UlTitle) {
-					$this->Writer->writeAttribute('title', $this->UlTitle);
-				}
-				if ($this->UlXMLLang) {
-					$this->Writer->writeAttribute('xmllang', $this->UlXMLLang);
-				}
+				$this->ProcessStandardAttribute('Ul');
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
 					if (is_array($this->LiID)){

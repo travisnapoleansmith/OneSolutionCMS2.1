@@ -203,5 +203,48 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		$this->Writer->endElement();
 	}
 	
+	protected function ProcessArrayStandardAttribute($startingvariablename) {
+	
+	}
+	
+	protected function ProcessStandardAttribute($startingvariablename) {
+		$variablehold = $startingvariablename . 'AccessKey';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('accesskey', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'Class';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('class', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'Dir';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('dir', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'ID';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('id', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'Lang';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('lang', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'Style';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('style', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'TabIndex';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('tabindex', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'Title';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('title', $this->$variablehold);
+		}
+		$variablehold = $startingvariablename . 'XMLLang';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('xmllang', $this->$variablehold);
+		}
+	}
+	
 }
 ?>
