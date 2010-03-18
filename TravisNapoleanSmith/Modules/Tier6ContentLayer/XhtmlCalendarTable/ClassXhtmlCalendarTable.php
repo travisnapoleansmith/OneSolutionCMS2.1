@@ -402,7 +402,6 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($this->CalendarTableWidth[$i]) {
 			$this->Writer->writeAttribute('width', $this->CalendarTableWidth[$i]);
 		}
-		
 		// STANDARD ATTRIBUTES
 		if ($this->CalendarTableClass[$i]) {
 			$this->Writer->writeAttribute('class', $this->CalendarTableClass[$i]);

@@ -166,28 +166,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 									while (current($this->Li)) {
 										if (current($this->LiEnableDisable) == 'Enable') {
 											$this->Writer->startElement('li');
-												if (current($this->LiClass)) {
-													$this->Writer->writeAttribute('class', current($this->LiClass));
-												}
-												if (current($this->LiDir)) {
-													$this->Writer->writeAttribute('dir', current($this->LiDir));
-												}
-												if (current($this->LiID)) {
-													$this->Writer->writeAttribute('id', current($this->LiID));
-												}
-												if (current($this->LiLang)) {
-													$this->Writer->writeAttribute('lang', current($this->LiLang));
-												}
-												if (current($this->LiStyle)) {
-													$this->Writer->writeAttribute('style', current($this->LiStyle));
-												}
-												if (current($this->LiTitle)) {
-													$this->Writer->writeAttribute('title', current($this->LiTitle));
-												}
-												if (current($this->LiXMLLang)) {
-													$this->Writer->writeAttribute('xmllang', current($this->LiXMLLang));
-												}
-											
+												$this->ProcessArrayStandardAttribute('Li');
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
 												$this->Writer->writeRaw("\n\t");

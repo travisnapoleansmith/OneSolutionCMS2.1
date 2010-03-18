@@ -34,8 +34,8 @@
 	$form->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Form');
 	$form->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$form->FetchDatabase ($formidnumber);
-	//$form->CreateOutput(NULL);
-	//$output = $form->getOutput();
+	$form->CreateOutput(NULL);
+	$output = $form->getOutput();
 	
 	/*$formidnumber['PageID'] = 2;
 	$form2 = new Xhtmlform($formdatabase, $databases);
@@ -45,6 +45,6 @@
 	$form2->CreateOutput(NULL);
 	$output2 = $form2->getOutput();*/
 	//////print_r($form);
-	//////print "$output\n";
+	print "$output\n";
 	//print "$output2\n";
 ?>

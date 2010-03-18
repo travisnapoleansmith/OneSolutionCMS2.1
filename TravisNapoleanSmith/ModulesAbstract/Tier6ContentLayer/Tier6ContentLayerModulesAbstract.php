@@ -204,7 +204,66 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	}
 	
 	protected function ProcessArrayStandardAttribute($startingvariablename) {
-	
+		/*$hold = 'FormInputLang';
+		print current($this->$hold);
+		$variablehold = $startingvariablename . 'AccessKey';
+		if ($this->$variablehold) {
+			$this->Writer->writeAttribute('lang', current($this->$variablehold));
+		}*/
+		$variablehold = $startingvariablename . 'AccessKey';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('accesskey', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'Class';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('class', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'Dir';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('dir', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'ID';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('id', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'Lang';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('lang', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'Style';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('style', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'TabIndex';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('tabindex', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'Title';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('title', current($this->$variablehold));
+			}
+		}
+		$variablehold = $startingvariablename . 'XMLLang';
+		if ($this->$variablehold) {
+			if (current($this->$variablehold)) {
+				$this->Writer->writeAttribute('xmllang', current($this->$variablehold));
+			}
+		}
 	}
 	
 	protected function ProcessStandardAttribute($startingvariablename) {
