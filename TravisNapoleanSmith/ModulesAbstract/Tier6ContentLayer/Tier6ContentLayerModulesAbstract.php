@@ -99,6 +99,12 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	*/
 	
 	protected function CreateWordWrap($wordwrapstring) {
+		$args = func_get_args();
+		if ($args[1]) {
+			$wordspacing = $args[1];
+		} else {
+			$wordspacing = "\t     ";
+		}
 		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
 			$firstpos = strpos($wordwrapstring, '<a href');
@@ -125,11 +131,11 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
 			// END STRIP AHREF TAG FOR WORDWRAP
 			
-			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n\t     $this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n$wordspacing$this->Space$this->Space");
 			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
 			
 		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n\t     $this->Space$this->Space");
+			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n$wordspacing$this->Space$this->Space");
 		}
 		
 		return $wordwrapstring;
