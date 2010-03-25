@@ -267,7 +267,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		$variablehold = $startingvariablename . 'XMLLang';
 		if ($this->$variablehold) {
 			if (current($this->$variablehold)) {
-				$this->Writer->writeAttribute('xmllang', current($this->$variablehold));
+				$this->Writer->writeAttribute('xml:lang', current($this->$variablehold));
 			}
 		}
 	}
@@ -307,7 +307,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		}
 		$variablehold = $startingvariablename . 'XMLLang';
 		if ($this->$variablehold) {
-			$this->Writer->writeAttribute('xmllang', $this->$variablehold);
+			$this->Writer->writeAttribute('xml:lang', $this->$variablehold);
 		}
 	}
 	

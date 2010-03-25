@@ -158,6 +158,62 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $FormTextAreaEnableDisable = array();
 	protected $FormTextAreaStatus = array();
 	
+	// Xhtml Form Field Set
+	protected $FormFieldSetPageID = array();
+	protected $FormFieldSetObjectID = array();
+	protected $FormFieldSetContainerObjectType = array();
+	protected $FormFieldSetContainerObjectTypeName = array();
+	protected $FormFieldSetContainerObjectID = array();
+	
+	// Xhtml Form Field Set Text
+	protected $FormFieldSetTextStartTag = array();
+	protected $FormFieldSetTextEndTag = array();
+	protected $FormFieldSetText = array();
+	protected $FormFieldSetTextDynamic = array();
+	protected $FormFieldSetTextTableName = array();
+	protected $FormFieldSetTextField = array();
+	protected $FormFieldSetTextPageID = array();
+	protected $FormFieldSetTextObjectID = array();
+	protected $FormFieldSetTextRevisionID = array();
+	
+	// Xhtml Form Field Set Standard Attributes
+	protected $FormFieldSetClass = array();
+	protected $FormFieldSetDir = array();
+	protected $FormFieldSetID = array();
+	protected $FormFieldSetLang = array();
+	protected $FormFieldSetStyle = array();
+	protected $FormFieldSetTitle = array();
+	protected $FormFieldSetXMLLang = array();
+	
+	protected $FormFieldSetEnableDisable = array();
+	protected $FormFieldSetStatus = array();
+	
+	// Xhtml Form Legend
+	protected $FormLegendPageID = array();
+	protected $FormLegendObjectID = array();
+	
+	// Xhtml Form Legend Text
+	protected $FormLegendText = array();
+	protected $FormLegendTextDynamic = array();
+	protected $FormLegendTextTableName = array();
+	protected $FormLegendTextField = array();
+	protected $FormLegendTextPageID = array();
+	protected $FormLegendTextObjectID = array();
+	protected $FormLegendTextRevisionID = array();
+	
+	// Xhtml Form Legend Standard Attributes
+	protected $FormLegendAccessKey = array();
+	protected $FormLegendClass = array();
+	protected $FormLegendDir = array();
+	protected $FormLegendID = array();
+	protected $FormLegendLang = array();
+	protected $FormLegendStyle = array();
+	protected $FormLegendTitle = array();
+	protected $FormLegendXMLLang = array();
+	
+	protected $FormLegendEnableDisable = array();
+	protected $FormLegendStatus = array();
+	
 	protected $Form;
 	
 	public function __construct($tablenames, $database) {
@@ -222,7 +278,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$this->processForm($i);
 				
 				} else if (current($this->TableNames) == 'FormFieldSet') {
-					$this->processFormFieldSet($i); // NEEDS TO BE WORKED ON!
+					$this->processFormFieldSet($i);
 					
 				} else if (current($this->TableNames) == 'FormInput') {
 					$this->processFormInput($i);
@@ -231,7 +287,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$this->processFormLabel($i);
 					
 				} else if (current($this->TableNames) == 'FormLegend') {
-					$this->processFormLegend($i); // NEEDS TO BE WORKED ON!
+					$this->processFormLegend($i);
 					
 				} else if (current($this->TableNames) == 'FormSelect') {
 					$this->processFormSelect($i); // NEEDS TO BE WORKED ON!
@@ -250,7 +306,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			
 			next($this->TableNames);
 		}
-		print_r($this->FormLookupTableName);
+		//print_r($this->FormLookupTableName);
 		$i = 0;
 		$pageid = NULL;
 		
@@ -279,7 +335,32 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	protected function processFormFieldSet($i) {
+		array_push($this->FormFieldSetPageID, $this->FormLookupTableName['FormFieldSet'][$i]['PageID']);
+		array_push($this->FormFieldSetObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['ObjectID']);
+		array_push($this->FormFieldSetContainerObjectType, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectType']);
+		array_push($this->FormFieldSetContainerObjectTypeName, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectTypeName']);
+		array_push($this->FormFieldSetContainerObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectID']);
 		
+		array_push($this->FormFieldSetTextStartTag, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextStartTag']);
+		array_push($this->FormFieldSetTextEndTag, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextEndTag']);
+		array_push($this->FormFieldSetText, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetText']);
+		array_push($this->FormFieldSetTextDynamic, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextDynamic']);
+		array_push($this->FormFieldSetTextTableName, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextTableName']);
+		array_push($this->FormFieldSetTextField, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextField']);
+		array_push($this->FormFieldSetTextPageID, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextPageID']);
+		array_push($this->FormFieldSetTextObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextObjectID']);
+		array_push($this->FormFieldSetTextRevisionID, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTextRevisionID']);
+		
+		array_push($this->FormFieldSetClass, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetClass']);
+		array_push($this->FormFieldSetDir, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetDir']);
+		array_push($this->FormFieldSetID, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetID']);
+		array_push($this->FormFieldSetLang, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetLang']);
+		array_push($this->FormFieldSetStyle, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetStyle']);
+		array_push($this->FormFieldSetTitle, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetTitle']);
+		array_push($this->FormFieldSetXMLLang, $this->FormLookupTableName['FormFieldSet'][$i]['FormFieldSetXMLLang']);
+		
+		array_push($this->FormFieldSetEnableDisable, $this->FormLookupTableName['FormFieldSet'][$i]['Enable/Disable']);
+		array_push($this->FormFieldSetStatus, $this->FormLookupTableName['FormFieldSet'][$i]['Status']);
 	}
 	
 	protected function processFormInput($i) {
@@ -362,7 +443,28 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	protected function processFormLegend($i) {
+		array_push($this->FormLegendPageID, $this->FormLookupTableName['FormLegend'][$i]['PageID']);
+		array_push($this->FormLegendObjectID, $this->FormLookupTableName['FormLegend'][$i]['ObjectID']);
 		
+		array_push($this->FormLegendText, $this->FormLookupTableName['FormLegend'][$i]['FormLegendText']);
+		array_push($this->FormLegendTextDynamic, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextDynamic']);
+		array_push($this->FormLegendTextTableName, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextTableName']);
+		array_push($this->FormLegendTextField, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextField']);
+		array_push($this->FormLegendTextPageID, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextPageID']);
+		array_push($this->FormLegendTextObjectID, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextObjectID']);
+		array_push($this->FormLegendTextRevisionID, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTextRevisionID']);
+		
+		array_push($this->FormLegendAccessKey, $this->FormLookupTableName['FormLegend'][$i]['FormLegendAccessKey']);
+		array_push($this->FormLegendClass, $this->FormLookupTableName['FormLegend'][$i]['FormLegendClass']);
+		array_push($this->FormLegendDir, $this->FormLookupTableName['FormLegend'][$i]['FormLegendDir']);
+		array_push($this->FormLegendID, $this->FormLookupTableName['FormLegend'][$i]['FormLegendID']);
+		array_push($this->FormLegendLang, $this->FormLookupTableName['FormLegend'][$i]['FormLegendLang']);
+		array_push($this->FormLegendStyle, $this->FormLookupTableName['FormLegend'][$i]['FormLegendStyle']);
+		array_push($this->FormLegendTitle, $this->FormLookupTableName['FormLegend'][$i]['FormLegendTitle']);
+		array_push($this->FormLegendXMLLang, $this->FormLookupTableName['FormLegend'][$i]['FormLegendXMLLang']);
+		
+		array_push($this->FormLegendEnableDisable, $this->FormLookupTableName['FormLegend'][$i]['Enable/Disable']);
+		array_push($this->FormLegendStatus, $this->FormLookupTableName['FormLegend'][$i]['Status']);
 	}
 	
 	protected function processFormSelect($i) {
@@ -490,8 +592,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		while (current($this->FormLookupTableName['FormInput'])) {
 			if (current($this->FormInputObjectID) == $objectid && current($this->FormInputPageID) == $this->PageID) {
 				if (current($this->FormInputEnableDisable) == 'Enable' && current($this->FormInputStatus) == 'Approved') {
+					$this->Writer->startElement('div');
+					$this->Writer->writeRaw("\n");
 					if (current($this->FormInputText)) {
-						$this->Writer->writeRaw("  ");
+						$this->Writer->writeRaw("   ");
 						$this->Writer->text(current($this->FormInputText));
 					} else if (current($this->FormInputTextDynamic)) {
 						$tablename = current($this->FormInputTextTableName);
@@ -501,7 +605,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$revisionid = current($this->FormInputTextRevisionID);
 						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
 						if ($hold) {
-							$this->Writer->writeRaw("  ");
+							$this->Writer->writeRaw("   ");
 							$this->Writer->text($hold);
 						}
 					}
@@ -565,6 +669,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					
 					$this->ProcessArrayStandardAttribute('FormInput');
 					$this->Writer->endElement(); // ENDS INPUT
+					$this->Writer->endElement(); // ENDS DIV
 				}
 			}
 			next($this->FormLookupTableName['FormInput']);
@@ -652,6 +757,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		while (current($this->FormLookupTableName['FormLabel'])) {
 			if (current($this->FormLabelObjectID) == $objectid && current($this->FormLabelPageID) == $this->PageID) {
 				if (current($this->FormLabelEnableDisable) == 'Enable' && current($this->FormLabelStatus) == 'Approved') {
+					$this->Writer->startElement('div');
+					$this->Writer->writeRaw("\n");
 					$this->Writer->startElement('label');
 					
 					if (current($this->FormLabelFor)) {
@@ -677,7 +784,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					}
 					
-					$this->Writer->endElement(); // ENDS INPUT
+					$this->Writer->endElement(); // ENDS LABEL
+					$this->Writer->endElement(); // ENDS DIV
 				}
 			}
 			next($this->FormLookupTableName['FormLabel']);
@@ -745,6 +853,9 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		while (current($this->FormLookupTableName['FormTextArea'])) {
 			if (current($this->FormTextAreaObjectID) == $objectid && current($this->FormTextAreaPageID) == $this->PageID) {
 				if (current($this->FormTextAreaEnableDisable) == 'Enable' && current($this->FormTextAreaStatus) == 'Approved') {
+					$this->Writer->startElement('div');
+					$this->Writer->writeRaw("\n");
+					
 					$this->Writer->startElement('textarea');
 					
 					if (current($this->FormTextAreaCols)) {
@@ -786,7 +897,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					}
 					
-					$this->Writer->endElement(); // ENDS INPUT
+					$this->Writer->endElement(); // ENDS TEXTAREA
+					$this->Writer->endElement(); // ENDS DIV
 				}
 			}
 			next($this->FormLookupTableName['FormTextArea']);
@@ -823,67 +935,70 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 	}
 	
-	protected function createTextArea($startingvariablename) {
+	protected function createTextArea($startingvariablename, $contentvariablename) {
 		$starttag = $startingvariablename;
-		$starttag .= 'ContentStartTag';
+		$starttag .= $contentvariablename;
+		$starttag .= 'StartTag';
 		
 		$endtag = $startingvariablename;
-		$endtag .= 'ContentEndTag';
+		$endtag .= $contentvariablename;
+		$endtag .= 'EndTag';
 		
 		$content = $startingvariablename;
-		$content .= 'Content';
+		$content .= $contentvariablename;
 		
 		if (current($this->$starttag) == '<p>'){
-			$this->$starttag[key($this->$starttag)] = str_replace('<','', current($this->$starttag));
-			$this->$starttag[key($this->$starttag)] = str_replace('>','', current($this->$starttag));
-			$this->Writer->writeRaw("  ");
-			$this->Writer->startElement(current($this->$starttag));
+			$hold = str_replace('<','', current($this->$starttag));
+			$this->$starttag[key($this->$starttag)] = str_replace('>','', $hold);
+			
+			$this->Writer->startElement($this->$starttag[key($this->$starttag)]);
 				//$this->ProcessStandardAttribute($starttag);
-				$this->$content[key($this->$content)] = trim(current($this->$content));
-				if (strpos(current($this->$content), "\n\r")) {
-					$this->$content[key($this->$content)] = explode("\n\r", current($this->$content));
+				$temp = trim(current($this->$content));
+				if (strpos($temp, "\n\r")) {
+					$hold = explode("\n\r", $temp);
 					$i = 0;
-					$count = count(current($this->$content));
-					$count--;
-					while ($this->$content[key($this->$content)][$i]) {
-						$this->$content[key($this->$content)][$i] = trim($this->$content[key($this->$content)][$i]);
-						$this->$content[key($this->$content)][$i] = $this->CreateWordWrap($this->$content[key($this->$content)][$i], '    ');
-						$this->Writer->writeRaw("\n     ");
-						$this->Writer->writeRaw($this->$content[key($this->$content)][$i]);
+					while ($hold[$i]) {
+						$hold[$i] = trim($hold[$i]);
+						$hold[$i] = $this->CreateWordWrap($hold[$i], '    ');
+						$this->Writer->writeRaw("\n    ");
+						$this->Writer->writeRaw($hold[$i]);
 						$this->Writer->writeRaw("\n  ");
 						$this->Writer->endElement();
+						
 						$i++;
-						if ($this->$content[key($this->$content)][$i]) {
-							$this->Writer->writeRaw("  ");
+						if ($hold[$i]) {
 							$this->Writer->startElement('p');
 							///$this->ProcessStandardAttribute('ContentPTag');
 						}
 						
 					}
 				} else {
-					$this->$content[key($this->$content)] = $this->CreateWordWrap(current($this->$content), '    ');
-					$this->$content[key($this->$content)] .= "\n  ";
-					$this->Writer->writeRaw("\n     ");
-					$this->Writer->writeRaw(current($this->$content));
+					$hold = $this->CreateWordWrap($this->$content[key($this->$content)], '    ');
+					$hold .= "\n  ";
+					$this->$content[key($this->$content)] = $hold;
+					$this->Writer->writeRaw("\n    ");
+					$this->Writer->writeRaw($this->$content[key($this->$content)]);
 				}
+				
+				
 		} else if (current($this->$starttag)){
-			$this->$starttag[key($this->$starttag)] = str_replace('<','', current($this->$starttag));
-			$this->$starttag[key($this->$starttag)] = str_replace('>','', current($this->$starttag));
-			$this->Writer->startElement(current($this->$starttag));
+			$hold = str_replace('<','', current($this->$starttag));
+			$this->$starttag[key($this->$starttag)] = str_replace('>','', $hold);
+			$this->Writer->startElement($this->$starttag[key($this->$starttag)]);
 				//$this->ProcessStandardAttribute($starttag);
 				
-			$this->$content[key($this->$content)] = trim(current($this->$content));
-			if (strpos(current($this->$content), "\n\r")) {
-				$this->$content[key($this->$content)] = explode("\n\r", current($this->$content));
+			$temp = trim(current($this->$content));
+			if (strpos($temp, "\n\r")) {
+				$hold = explode("\n\r", $temp);
 				$i = 0;
-				while ($this->$content[key($this->$content)][$i]) {
-					$this->$content[key($this->$content)][$i] = trim($this->$content[key($this->$content)][$i]);
-					$this->$content[key($this->$content)][$i] = $this->CreateWordWrap($this->$content[key($this->$content)][$i], '    ');
+				while ($hold[$i]) {
+					$hold[$i] = trim($hold[$i]);
+					$hold[$i] = $this->CreateWordWrap($hold[$i], '     ');
 					$this->Writer->startElement('p');
 						//$this->ProcessStandardAttribute('ContentPTag');
-						$this->Writer->writeRaw("\n    ");
-						$this->Writer->writeRaw($this->$content[key($this->$content)][$i]);
-						$this->Writer->writeRaw("\n  ");
+						$this->Writer->writeRaw("\n     ");
+						$this->Writer->writeRaw($hold[$i]);
+						$this->Writer->writeRaw("\n   ");
 					$this->Writer->endElement();
 					$i++;
 				}
@@ -891,42 +1006,50 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				if (!strstr(current($this->$content), "<br />")){
 					$this->Writer->startElement('p');
 				}
-				//$this->ProcessStandardAttribute('ContentPTag');
-				$this->Writer->writeRaw(" ");
-				$this->Writer->writeRaw(current($this->$content));
-				$this->Writer->writeRaw("\n");
+				$hold = $this->CreateWordWrap($this->$content[key($this->$content)], '     ');
+				$hold .= "\n   ";
+				$this->$content[key($this->$content)] = $hold;
+				$this->Writer->writeRaw("\n     ");
+				$this->Writer->writeRaw($this->$content[key($this->$content)]);
+				
 				if (!strstr(current($this->$content), "<br />")){
 					$this->Writer->endElement();
 				}
 			}
 		} else if (current($this->$content)) {
-			$this->$starttag[key($this->$starttag)] = str_replace('<','', current($this->$starttag));
-			$this->$starttag[key($this->$starttag)] = str_replace('>','', current($this->$starttag));
-			//$this->ProcessStandardAttribute($starttag);
-				
-			$this->$content[key($this->$content)] = trim(current($this->$content));
-			if (strpos(current($this->$content), "\n\r")) {
-				$this->$content[key($this->$content)] = explode("\n\r", current($this->$content));
+			$temp = trim(current($this->$content));
+			if (strpos($temp, "\n\r")) {
+				$hold = explode("\n\r", $temp);
 				$i = 0;
-				while ($this->$content[key($this->$content)][$i]) {
-					$this->$content[key($this->$content)][$i] = trim($this->$content[key($this->$content)][$i]);
-					$this->$content[key($this->$content)][$i] = $this->CreateWordWrap($this->$content[key($this->$content)][$i], '    ');
+				while ($hold[$i]) {
+					$hold[$i] = trim($hold[$i]);
+					$hold[$i] = $this->CreateWordWrap($hold[$i], '    ');
 					$this->Writer->startElement('p');
 						//$this->ProcessStandardAttribute('ContentPTag');
 						$this->Writer->writeRaw("\n    ");
-						$this->Writer->writeRaw($this->$content[key($this->$content)][$i]);
+						$this->Writer->writeRaw($hold[$i]);
 						$this->Writer->writeRaw("\n  ");
 					$this->Writer->endElement();
 					$i++;
 				}
+				
 			} else {
 				if (!strstr(current($this->$content), "<br />")){
 					$this->Writer->startElement('p');
 				}
 				//$this->ProcessStandardAttribute('ContentPTag');
-				$this->Writer->writeRaw(" ");
-				$this->Writer->writeRaw(current($this->$content));
-				$this->Writer->writeRaw("\n");
+				if (!strstr(current($this->$content), "<br />")){
+					$hold = $this->CreateWordWrap($this->$content[key($this->$content)], '    ');
+					$hold .= "\n  ";
+					$this->$content[key($this->$content)] = $hold;
+					$this->Writer->writeRaw("\n    ");
+					$this->Writer->writeRaw($this->$content[key($this->$content)]);
+				} else {
+					$this->Writer->writeRaw(" ");
+					$this->Writer->writeRaw(current($this->$content));
+					$this->Writer->writeRaw("\n");
+				}
+				
 				if (!strstr(current($this->$content), "<br />")){
 					$this->Writer->endElement();
 				}
@@ -936,6 +1059,214 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		if (current($this->$endtag)) {
 			$this->Writer->endElement();
 		}
+	}
+	
+	protected function buildFormFieldSet($objectid) {
+		reset($this->FormLookupTableName['FormFieldSet']);
+		
+		reset($this->FormFieldSetPageID);
+		reset($this->FormFieldSetObjectID);
+		reset($this->FormFieldSetContainerObjectType);
+		reset($this->FormFieldSetContainerObjectTypeName);
+		
+		reset($this->FormFieldSetTextStartTag);
+		reset($this->FormFieldSetTextEndTag);
+		reset($this->FormFieldSetText);
+		reset($this->FormFieldSetTextDynamic);
+		reset($this->FormFieldSetTextTableName);
+		reset($this->FormFieldSetTextField);
+		reset($this->FormFieldSetTextPageID);
+		reset($this->FormFieldSetTextObjectID);
+		reset($this->FormFieldSetTextRevisionID);
+		
+		reset($this->FormFieldSetClass);
+		reset($this->FormFieldSetDir);
+		reset($this->FormFieldSetID);
+		reset($this->FormFieldSetLang);
+		reset($this->FormFieldSetStyle);
+		reset($this->FormFieldSetTitle);
+		reset($this->FormFieldSetXMLLang);
+		
+		reset($this->FormFieldSetEnableDisable);
+		reset($this->FormFieldSetStatus);
+		
+		$flag = NULL;
+		
+		while (current($this->FormLookupTableName['FormFieldSet'])) {
+			if (current($this->FormFieldSetEnableDisable) == 'Enable' && current($this->FormFieldSetStatus) == 'Approved') {
+				if (current($this->FormFieldSetObjectID) == $objectid && current($this->FormFieldSetPageID) == $this->PageID) {
+					$this->Writer->startElement('fieldset');
+					$flag = TRUE;
+				}
+				
+				if (current($this->FormFieldSetPageID) == $this->PageID) {
+						$this->ProcessArrayStandardAttribute('FormFieldSet');
+						
+						if (current($this->FormFieldSetText)) {
+							$this->createTextArea('FormFieldSet', 'Text');
+						} else if (current($this->FormFieldSetTextDynamic)) {
+							$tablename = current($this->FormFieldSetTextTableName);
+							$field = current($this->FormFieldSetTextField);
+							$pageid = current($this->FormFieldSetTextPageID);
+							$objectid = current($this->FormFieldSetTextObjectID);
+							$revisionid = current($this->FormFieldSetTextRevisionID);
+							$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+							if ($hold) {
+								$this->Writer->writeRaw("\n");
+								$this->FormFieldSetText[key($this->FormFieldSetText)] = $hold;
+								$this->createTextArea('FormFieldSet', 'Text');
+							}
+						} else {
+							$this->Writer->writeRaw("\n  ");
+						}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormInput' && current($this->FormFieldSetContainerObjectType) == 'Input') {
+						$this->buildFormInput(current($this->FormFieldSetContainerObjectID));
+					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormTextArea' && current($this->FormFieldSetContainerObjectType) == 'TextArea') {
+						$this->buildFormTextArea(current($this->FormFieldSetContainerObjectID));
+					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormLabel' && current($this->FormFieldSetContainerObjectType) == 'Label') {
+						$this->buildFormLabel(current($this->FormFieldSetContainerObjectID));
+					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormLegend' && current($this->FormFieldSetContainerObjectType) == 'Legend') {
+						$this->buildFormLegend(current($this->FormFieldSetContainerObjectID));
+					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormSelect' && current($this->FormFieldSetContainerObjectType) == 'Select') {
+						$this->buildFormSelect(current($this->FormFieldSetContainerObjectID));
+					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormButton' && current($this->FormFieldSetContainerObjectType) == 'Button') {
+						$this->buildFormButton(current($this->FormFieldSetContainerObjectID));
+					}
+				}
+				
+			}
+			
+			next($this->FormLookupTableName['FormFieldSet']);
+		
+			next($this->FormFieldSetPageID);
+			next($this->FormFieldSetObjectID);
+			next($this->FormFieldSetContainerObjectType);
+			next($this->FormFieldSetContainerObjectTypeName);
+			
+			next($this->FormFieldSetTextStartTag);
+			next($this->FormFieldSetTextEndTag);
+			next($this->FormFieldSetText);
+			next($this->FormFieldSetTextDynamic);
+			next($this->FormFieldSetTextTableName);
+			next($this->FormFieldSetTextField);
+			next($this->FormFieldSetTextPageID);
+			next($this->FormFieldSetTextObjectID);
+			next($this->FormFieldSetTextRevisionID);
+			
+			next($this->FormFieldSetClass);
+			next($this->FormFieldSetDir);
+			next($this->FormFieldSetID);
+			next($this->FormFieldSetLang);
+			next($this->FormFieldSetStyle);
+			next($this->FormFieldSetTitle);
+			next($this->FormFieldSetXMLLang);
+			
+			next($this->FormFieldSetEnableDisable);
+			next($this->FormFieldSetStatus);
+		}
+		if ($flag) {
+			$this->Writer->endElement(); // ENDS FIELD SET
+		}
+	}
+	
+	protected function buildFormLegend($objectid) {
+		reset($this->FormLookupTableName['FormLegend']);
+		
+		reset($this->FormLegendPageID);
+		reset($this->FormLegendObjectID);
+		
+		reset($this->FormLegendText);
+		reset($this->FormLegendTextDynamic);
+		reset($this->FormLegendTextTableName);
+		reset($this->FormLegendTextField);
+		reset($this->FormLegendTextPageID);
+		reset($this->FormLegendTextObjectID);
+		reset($this->FormLegendTextRevisionID);
+				
+		reset($this->FormLegendAccessKey);
+		reset($this->FormLegendClass);
+		reset($this->FormLegendDir);
+		reset($this->FormLegendID);
+		reset($this->FormLegendLang);
+		reset($this->FormLegendStyle);
+		reset($this->FormLegendTitle);
+		reset($this->FormLegendXMLLang);
+		
+		reset($this->FormLegendEnableDisable);
+		reset($this->FormLegendStatus);
+		
+		while (current($this->FormLookupTableName['FormLegend'])) {
+			if (current($this->FormLegendObjectID) == $objectid && current($this->FormLegendPageID) == $this->PageID) {
+				if (current($this->FormLegendEnableDisable) == 'Enable' && current($this->FormLegendStatus) == 'Approved') {
+					$this->Writer->startElement('legend');
+					
+					$this->ProcessArrayStandardAttribute('FormLegend');
+					
+					if (current($this->FormLegendText)) {
+						$this->Writer->text(current($this->FormLegendText));
+					} else if (current($this->FormLegendTextDynamic)) {
+						$tablename = current($this->FormLegendTextTableName);
+						$field = current($this->FormLegendTextField);
+						$pageid = current($this->FormLegendTextPageID);
+						$objectid = current($this->FormLegendTextObjectID);
+						$revisionid = current($this->FormLegendTextRevisionID);
+						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+						$hold = $this->CreateWordWrap($hold, '    ');
+						if ($hold) {
+							$this->Writer->writeRaw("\n    ");
+							$this->Writer->text($hold);
+							$this->Writer->writeRaw("\n  ");
+						}
+					}
+					
+					$this->Writer->endElement(); // ENDS INPUT
+				}
+			}
+			next($this->FormLookupTableName['FormLegend']);
+			
+			next($this->FormLegendPageID);
+			next($this->FormLegendObjectID);
+			
+			next($this->FormLegendText);
+			next($this->FormLegendTextDynamic);
+			next($this->FormLegendTextTableName);
+			next($this->FormLegendTextField);
+			next($this->FormLegendTextPageID);
+			next($this->FormLegendTextObjectID);
+			next($this->FormLegendTextRevisionID);
+			
+			next($this->FormLegendAccessKey);
+			next($this->FormLegendClass);
+			next($this->FormLegendDir);
+			next($this->FormLegendID);
+			next($this->FormLegendLang);
+			next($this->FormLegendStyle);
+			next($this->FormLegendTitle);
+			next($this->FormLegendXMLLang);
+			
+			next($this->FormLegendEnableDisable);
+			next($this->FormLegendStatus);
+		}
+		
+	}
+	
+	protected function buildFormSelect($objectid) {
+	
+	}
+	
+	protected function buildFormButton($objectid) {
+	
 	}
 	
 	public function CreateOutput($space) {
@@ -1000,7 +1331,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					reset($this->FormTableListingStatus);
 					while (current($this->FormLookupTableName['FormTableListing'])) {
 						if (current($this->FormTableListingEnableDisable) == 'Enable' && current($this->FormTableListingStatus) == 'Approved') {
-							$this->createTextArea('FormTableListing');
+							$this->createTextArea('FormTableListing', 'Content');
 							if (current($this->FormTableListingContainerObjectType) == 'Input') {
 								$this->buildFormInput(current($this->FormTableListingContainerObjectID));
 							}
@@ -1011,6 +1342,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 							
 							if (current($this->FormTableListingContainerObjectType) == 'TextArea') {
 								$this->buildFormTextArea(current($this->FormTableListingContainerObjectID));
+							}
+							
+							if (current($this->FormTableListingContainerObjectType) == 'FieldSet') {
+								$this->buildFormFieldSet(current($this->FormTableListingContainerObjectID));
 							}
 						}
 						next($this->FormLookupTableName['FormTableListing']);
@@ -1049,7 +1384,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				next($this->FormStatus);
 			}
 		}
-		
+		//print_r($this->FormFieldSetContainerObjectType);
 		if ($this->FileName) {
 			$this->Writer->flush();
 		} else {
