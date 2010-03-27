@@ -21,10 +21,14 @@
 	
 	$formdatabase = Array();
 	$formdatabase['Form'] = 'Form';
+	$formdatabase['FormButton'] = 'FormButton';
 	$formdatabase['FormFieldSet'] = 'FormFieldSet';
 	$formdatabase['FormInput'] = 'FormInput';
 	$formdatabase['FormLabel'] = 'FormLabel';
 	$formdatabase['FormLegend'] = 'FormLegend';
+	$formdatabase['FormOption'] = 'FormOption';
+	$formdatabase['FormOptGroup'] = 'FormOptGroup';
+	$formdatabase['FormSelect'] = 'FormSelect';
 	$formdatabase['FormTableListing'] = 'FormTableListing';
 	$formdatabase['FormTextArea'] = 'FormTextArea';
 	

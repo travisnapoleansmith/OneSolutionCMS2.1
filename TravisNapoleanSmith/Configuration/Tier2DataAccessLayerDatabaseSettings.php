@@ -25,10 +25,14 @@
 	$Tier2Databases->createDatabaseTable('Flash');
 	
 	$Tier2Databases->createDatabaseTable('Form');
+	$Tier2Databases->createDatabaseTable('FormButton');
 	$Tier2Databases->createDatabaseTable('FormFieldSet');
 	$Tier2Databases->createDatabaseTable('FormInput');
 	$Tier2Databases->createDatabaseTable('FormLabel');
 	$Tier2Databases->createDatabaseTable('FormLegend');
+	$Tier2Databases->createDatabaseTable('FormOption');
+	$Tier2Databases->createDatabaseTable('FormOptGroup');
+	$Tier2Databases->createDatabaseTable('FormSelect');
 	$Tier2Databases->createDatabaseTable('FormTableListing');
 	$Tier2Databases->createDatabaseTable('FormTextArea');
 	
