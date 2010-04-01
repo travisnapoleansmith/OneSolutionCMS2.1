@@ -195,7 +195,9 @@
 	print "$output\n";
 	*/
 	//require_once 'Configuration/Tier6-ContentLayer/calendar.php';
-	require_once 'Configuration/Tier6-ContentLayer/form.php';
+	//require_once 'Configuration/Tier6-ContentLayer/form.php';
+	require_once 'Configuration/Tier6-ContentLayer/authenticate.php';
+	//include ('Configuration/Tier6-ContentLayer/list.php');
 	//require_once 'Configuration/Tier6-ContentLayer/flashimage.php';
 	//require_once 'Configuration/Tier6-ContentLayer/mainmenu.php';
 	//print_r($Tier4Databases);

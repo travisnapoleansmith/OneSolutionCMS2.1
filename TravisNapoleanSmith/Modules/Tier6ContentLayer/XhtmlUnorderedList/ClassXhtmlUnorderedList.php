@@ -45,8 +45,11 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->GlobalWriter = $tablenames['GlobalWriter'];
 		unset($tablenames['GlobalWriter']);
 		
+		$this->NoAttributes = $tablenames['NoAttributes'];
+		unset($tablenames['NoAttributes']);
+		
 		$this->DatabaseTableName = current($tablenames);
-
+		
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
 		} else {
@@ -143,11 +146,13 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
-			if ($this->StartTag){
+			if ($this->StartTag && !$this->NoAttributes){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-					$this->ProcessStandardAttribute('StartTag');
+					if (!$this->NoAttributes) {
+						$this->ProcessStandardAttribute('StartTag');
+					}
 			}
 			if ($this->Ul){
 				$this->Writer->writeRaw("\n ");
@@ -156,7 +161,9 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			}
 			
 			$this->Writer->startElement('ul');
-				$this->ProcessStandardAttribute('Ul');
+				if (!$this->NoAttributes) {
+					$this->ProcessStandardAttribute('Ul');
+				}
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
 					if (is_array($this->LiID)){
@@ -166,7 +173,9 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 									while (current($this->Li)) {
 										if (current($this->LiEnableDisable) == 'Enable') {
 											$this->Writer->startElement('li');
-												$this->ProcessArrayStandardAttribute('Li');
+												if (!$this->NoAttributes) {
+													$this->ProcessArrayStandardAttribute('Li');
+												}
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
 												$this->Writer->writeRaw("\n\t");
@@ -179,7 +188,10 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 												$listidnumber['ObjectID'] = current($this->LiChildID);
 												$listdatabase = Array();
 												$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
-												
+												if ($this->NoAttributes) {
+													$listdatabase['NoAttributes'] = $this->NoAttributes;
+												}
+												//$listdatabase['GlobalWriter'] = $this->Writer;
 												$databases = &$this->ListProtectionLayer;
 												
 												$list = new XhtmlUnorderedList($listdatabase, $databases);
@@ -237,7 +249,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->Writer->writeRaw("\n ");
 			}
 			
-			if ($this->EndTag) {
+			if ($this->EndTag && !$this->NoAttributes) {
 				$this->Writer->endElement(); // ENDS END TAG
 			} else {
 				$this->Writer->endElement(); // ENDS END TAG

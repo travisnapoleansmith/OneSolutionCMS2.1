@@ -19,6 +19,7 @@
 		if ($_GET['idnumber']){
 			$menudatabase['idnumber'] = $_GET['idnumber'];
 		}
+		
 		$menudatabase['MainMenu'] = 'MainMenu';
 		$menudatabase['MainMenuLookup'] = 'MainMenuLookup';
 		

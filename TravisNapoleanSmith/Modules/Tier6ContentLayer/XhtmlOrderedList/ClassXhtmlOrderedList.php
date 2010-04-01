@@ -45,8 +45,11 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 		$this->GlobalWriter = $tablenames['GlobalWriter'];
 		unset($tablenames['GlobalWriter']);
 		
+		$this->NoAttributes = $tablenames['NoAttributes'];
+		unset($tablenames['NoAttributes']);
+		
 		$this->DatabaseTableName = current($tablenames);
-
+		
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
 		} else {
@@ -156,7 +159,9 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 			}
 			
 			$this->Writer->startElement('ol');
-				$this->ProcessStandardAttribute('Ol');
+				if (!$this->NoAttributes) {
+					$this->ProcessStandardAttribute('Ol');
+				}
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
 					if (is_array($this->LiID)){
@@ -166,7 +171,9 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 									while (current($this->Li)) {
 										if (current($this->LiEnableDisable) == 'Enable') {
 											$this->Writer->startElement('li');
-												$this->ProcessArrayStandardAttribute('Li');
+												if (!$this->NoAttributes) {
+													$this->ProcessArrayStandardAttribute('Li');
+												}
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
 												$this->Writer->writeRaw("\n\t");
@@ -179,10 +186,13 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 												$listidnumber['ObjectID'] = current($this->LiChildID);
 												$listdatabase = Array();
 												$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
-												
+												if ($this->NoAttributes) {
+													$listdatabase['NoAttributes'] = $this->NoAttributes;
+												}
+												//$listdatabase['GlobalWriter'] = $this->Writer;
 												$databases = &$this->ListProtectionLayer;
 												
-												$list = new XhtmlOrderedList($listdatabase, $databases);
+												$list = new XhtmlUnorderedList($listdatabase, $databases);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

@@ -793,6 +793,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	
 	public function setDatabaseRow ($idnumber) {
 		$this->idnumber = $idnumber;
+		if ($this->multirowfield) {
+			$this->multirowfield = array();
+		}
+		
 		if (is_array($idnumber)) {
 			while (isset($this->idnumber[key($this->idnumber)])) {
 				$temp .= '`';

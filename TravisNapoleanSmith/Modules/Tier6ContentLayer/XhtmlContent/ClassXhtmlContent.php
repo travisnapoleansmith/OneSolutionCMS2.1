@@ -38,16 +38,20 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function __construct($tablenames, $database) {
 		$this->LayerModule = &$database;
-		$this->ContentTableName = $tablenames['Content'];
-		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
-		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
-		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
 		
 		$this->GlobalWriter = $tablenames['GlobalWriter'];
 		unset($tablenames['GlobalWriter']);
+		
+		$this->NoAttributes = $tablenames['NoAttributes'];
+		unset($tablenames['NoAttributes']);
+		
+		$this->ContentTableName = $tablenames['Content'];
+		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
+		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
+		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
 		
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
