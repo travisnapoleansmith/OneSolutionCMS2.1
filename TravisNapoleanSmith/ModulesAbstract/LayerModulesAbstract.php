@@ -156,8 +156,7 @@ abstract class LayerModulesAbstract
 				while ($layertable) {
 					$NewObjectType = $this->LayerTable[$keylayertable]['ObjectType'];
 					$NewObjectTypeName = $this->LayerTable[$keylayertable]['ObjectTypeName'];
-					//$DatabaseTables = array();
-					//$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
+					
 					if ($NewObjectType == $ObjectType && $NewObjectTypeName == $ObjectTypeName) {
 						break;
 					}
@@ -194,23 +193,10 @@ abstract class LayerModulesAbstract
 					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
 						$DatabaseTables = array();
 						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
-						$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $this->LayerModule);
+						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables);
 					}
 				}
 				
-				//reset ($DatabaseTables);
-				//$modulesdatabase = array();
-				//$tables = current($DatabaseTables);
-				
-				//while ($tables) {
-					//$modulesdatabase[$tables] = $tables;
-					//next($DatabaseTables);
-					//$tables = current($DatabaseTables);
-				//}
-				/*if ($modulesdatabase) {
-					$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($modulesdatabase, $this->LayerModule);
-				}
-				*/
 				next($this->LayerModuleTable);
 				$moduletable = current($this->LayerModuleTable);
 				$keymoduletable = key($this->LayerModuleTable);
@@ -218,6 +204,14 @@ abstract class LayerModulesAbstract
 		} else {
 			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');
 		}
+	}
+	
+	protected function createModules($ObjectType, $ObjectTypeName, $DatabaseTables) {
+		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $this->LayerModule);
+		
+		reset($DatabaseTables);
+		$this->Modules[$ObjectType][$ObjectTypeName]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($DatabaseTables));
+		
 	}
 	
 	protected function buildArray($array, $arrayname, $tablesname, $databasetable) {
@@ -233,6 +227,19 @@ abstract class LayerModulesAbstract
 				$name .= $i;
 				$hold = $databasetable[$tablesname][$name];
 			}
+			reset ($array);
+			
+			$temp2 = NULL;
+			while (array_key_exists(key($array), $array)) {
+				if (!current($array)) {
+					$temp = key($array);
+					next($array);
+					unset($array[$temp]);
+				} else {
+					next($array);
+				}
+			}
+			
 			return $array;
 		} else {
 			return NULL;

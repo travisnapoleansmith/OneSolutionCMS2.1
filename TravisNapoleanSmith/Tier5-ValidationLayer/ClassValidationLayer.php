@@ -14,6 +14,8 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->DatabaseAllow = &$GLOBALS['Tier5DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier5DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier4Databases'];
+		
+		$this->PageID = $_GET['PageID'];
 	}
 	
 	public function setModules() {
@@ -56,20 +58,16 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->LayerModule->createDatabaseTable($key);
 	}
 	
-	public function createModules($key) {
-		$this->Modules[$key] = new $key;
-		$this->Modules[$key]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
-		
-	}
-	
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
 		while (current($this->Modules)) {
-			$this->Modules[key($this->Modules)]->FetchDatabase ($DatabaseTable);
-			$this->Modules[key($this->Modules)]->CreateOutput($this->Space);
-			$this->Modules[key($this->Modules)]->getOutput();
-			$hold = $this->Modules[key($this->Modules)]->Verify($function, $functionarguments);
+			$tempobject = current($this->Modules[key($this->Modules)]);
+			$databasetables = $tempobject->getTableNames();
+			$tempobject->FetchDatabase ($this->PageID);
+			$tempobject->CreateOutput($this->Space);
+			$tempobject->getOutput();
+			$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
 		

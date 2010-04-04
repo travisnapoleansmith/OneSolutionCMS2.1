@@ -438,7 +438,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$this->processForm($i);
 				
 				} else if (current($this->TableNames) == 'FormButton') {
-					$this->processFormButton($i); // NEEDS TO BE WORKED ON!
+					$this->processFormButton($i);
 					
 				} else if (current($this->TableNames) == 'FormFieldSet') {
 					$this->processFormFieldSet($i);

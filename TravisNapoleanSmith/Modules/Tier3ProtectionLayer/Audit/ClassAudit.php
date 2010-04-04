@@ -11,7 +11,7 @@ class Audit extends Tier3ProtectionLayerModulesAbstract implements Tier3Protecti
 	
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
 	
 	}
 	

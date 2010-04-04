@@ -11,7 +11,7 @@ class SqlInjection extends Tier3ProtectionLayerModulesAbstract implements Tier3P
 	
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
 	
 	}
 	

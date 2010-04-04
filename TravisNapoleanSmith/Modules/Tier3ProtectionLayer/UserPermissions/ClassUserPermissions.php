@@ -11,7 +11,7 @@ class UserPermissions extends Tier3ProtectionLayerModulesAbstract implements Tie
 	
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
 	
 	}
 	

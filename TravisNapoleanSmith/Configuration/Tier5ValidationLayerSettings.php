@@ -33,10 +33,10 @@
 	$Tier5DatabaseAllow['Disconnect'] = 'Disconnect';
 	
 	// Basic checks and verifies
-	$Tier5DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
-	$Tier5DatabaseAllow['checkTableName'] = 'checkTableName';
-	$Tier5DatabaseAllow['checkPermissions'] = 'checkPermissions';
-	$Tier5DatabaseAllow['checkField'] = 'checkField';
+	$Tier5DatabaseDeny['checkDatabaseName'] = 'checkDatabaseName';
+	$Tier5DatabaseDeny['checkTableName'] = 'checkTableName';
+	$Tier5DatabaseDeny['checkPermissions'] = 'checkPermissions';
+	$Tier5DatabaseDeny['checkField'] = 'checkField';
 	
 	// Basic Setup of Database
 	$Tier5DatabaseDeny['createDatabase'] = 'createDatabase';

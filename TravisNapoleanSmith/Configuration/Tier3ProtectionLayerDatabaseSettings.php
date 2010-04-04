@@ -36,6 +36,9 @@
 	$Tier3Databases->createDatabaseTable('FormTableListing');
 	$Tier3Databases->createDatabaseTable('FormTextArea');
 	
+	$Tier3Databases->createDatabaseTable('FormValidation');
+	$Tier3Databases->createDatabaseTable('HtmlTags');
+	
 	$Tier3Databases->createDatabaseTable('List');
 	
 	$Tier3Databases->createDatabaseTable('MainMenu');

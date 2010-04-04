@@ -13,6 +13,8 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->ErrorMessage = Array();
 		$this->DatabaseAllow = &$GLOBALS['Tier2DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier2DatabaseDeny'];
+		
+		$this->PageID = $_GET['PageID'];
 	}
 	
 	public function setModules() {
@@ -68,23 +70,19 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->DatabaseTable[$key] =  new MySqlConnect();
 	}
 	
-	public function createModules($key) {
-		$this->Modules[$key] = new $key;
-		$this->Modules[$key]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
-		
-	}
-	
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
 		while (current($this->Modules)) {
-			//$this->Modules[key($this->Modules)]->FetchDatabase ($DatabaseTable);
-			//$this->Modules[key($this->Modules)]->CreateOutput($this->Space);
-			//$this->Modules[key($this->Modules)]->getOutput();
-			//$hold = $this->Modules[key($this->Modules)]->Verify($function, $functionarguments);
-			$hold = TRUE;
+			$tempobject = current($this->Modules[key($this->Modules)]);
+			$databasetables = $tempobject->getTableNames();
+			$tempobject->FetchDatabase ($this->PageID);
+			$tempobject->CreateOutput($this->Space);
+			$tempobject->getOutput();
+			$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
+		
 		if ($hold) {
 			$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
 			if ($hold2) {

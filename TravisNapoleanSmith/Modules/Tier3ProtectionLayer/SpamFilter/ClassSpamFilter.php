@@ -11,7 +11,7 @@ class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3Pro
 	
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
 	
 	}
 	

@@ -11,7 +11,7 @@ class Revisions extends Tier3ProtectionLayerModulesAbstract implements Tier3Prot
 	
 	}
 	
-	public function FetchDatabase ($idnumber) {
+	public function FetchDatabase ($PageID) {
 	
 	}
 	
