@@ -65,8 +65,8 @@ class ValidationLayer extends LayerModulesAbstract
 			$tempobject = current($this->Modules[key($this->Modules)]);
 			$databasetables = $tempobject->getTableNames();
 			$tempobject->FetchDatabase ($this->PageID);
-			$tempobject->CreateOutput($this->Space);
-			$tempobject->getOutput();
+			//$tempobject->CreateOutput($this->Space);
+			//$tempobject->getOutput();
 			$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
@@ -91,7 +91,7 @@ class ValidationLayer extends LayerModulesAbstract
 							if ($hold) {
 								return $hold;
 							}
-						} else if ($this->DatabaseDeny[$function]) {
+						} else if ($this->DatabaseDeny[$function] || $function = 'FORM') {
 							$hold = $this->checkPass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;

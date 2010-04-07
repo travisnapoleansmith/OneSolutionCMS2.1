@@ -3,8 +3,9 @@
 class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier5ValidationLayerModules
 {
 	protected $XhtmlFormValidationProtectionLayer;
-	protected $TableNames = array();
 	
+	protected $TableNames = array();
+	protected $LookupTable = array();
 	public function __construct($tablenames, $database) {
 		$this->XhtmlFormValidationProtectionLayer = &$database;
 		
@@ -27,39 +28,46 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 	}
 	
 	public function FetchDatabase ($PageID) {
-		//print_r($this->TableNames);
-		
-		//print "\n";
-		//print_r($this->DatabaseTable);
-		//print_r($this->PageID);
 		if (!$PageID) {
 			$PageID = 2;
 		}
 		$this->PageID = $PageID;
 		
-		//print_r($PageID);
 		$passarray = array();
 		$passarray['PageID'] = $this->PageID;
-		$this->XhtmlFormValidationProtectionLayer->Connect($this->DatabaseTable);
-		$this->XhtmlFormValidationProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('PageID' => $passarray));
-		$temp =$this->XhtmlFormValidationProtectionLayer->pass ($this->DatabaseTable, 'getMultiRowField', array());
-		//$this->XhtmlFormValidationProtectionLayer->Disconnect($this->DatabaseTable);
 		
-		//print_r($temp);
+		reset($this->TableNames);
+		while (current($this->TableNames)) {
+			$this->XhtmlFormValidationProtectionLayer->Connect(current($this->TableNames));
+			if (current($this->TableNames) == 'HtmlTags') {
+				$this->XhtmlFormValidationProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
+				$this->LookupTable[current($this->TableNames)] = $this->XhtmlFormValidationProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			} else {
+				$this->XhtmlFormValidationProtectionLayer->pass (current($this->TableNames), 'setDatabaseRow', array('PageID' => $passarray));
+				$this->LookupTable[current($this->TableNames)] = $this->XhtmlFormValidationProtectionLayer->pass (current($this->TableNames), 'getMultiRowField', array());
+			}
+			//$this->XhtmlFormValidationProtectionLayer->Disconnect(current($this->TableNames));
+			next ($this->TableNames);
+		}
+		//print_r($this->LookupTable);
 	}
 	
-	public function CreateOutput($space){ 
+	/*public function CreateOutput($space){ 
 	
 	}
-	
+	*/
 	public function Verify($function, $functionarguments){
-		return TRUE;
+		if ($function == 'FORM') {
+			
+		} else {
+			return TRUE;
+		}
 	}
-	
+	/*
 	public function getOutput() {
-	
+		
 	}
-	
+	*/
 	public function getTableNames() {
 		return $this->TableNames;
 	}
