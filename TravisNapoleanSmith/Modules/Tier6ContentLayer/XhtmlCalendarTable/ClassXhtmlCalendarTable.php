@@ -402,6 +402,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($this->CalendarTableWidth[$i]) {
 			$this->Writer->writeAttribute('width', $this->CalendarTableWidth[$i]);
 		}
+		
 		// STANDARD ATTRIBUTES
 		if ($this->CalendarTableClass[$i]) {
 			$this->Writer->writeAttribute('class', $this->CalendarTableClass[$i]);
@@ -875,16 +876,22 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 						$day = $this->CurrentDay;
 					}
 					
-					$j = 0;
-					while ($j < 6) {
-						$newweek = $this->DayWeek($week, $day, $this->CurrentDayOfWeek, date('t'));
-						$newweek = $this->DayWeekAppointment($newweek, $day, $this->CurrentDayOfWeek, date('t'), $i);
-						if ($newweek) {
-							$this->TableWeek($newweek, $i);
-							$day = $day + 7;
-							$j++;
-						} else {
-							$j = 10;
+					$monthnumber = $this->getCalendarMonthNumber ($this->CalendarMonth[$i]);
+					$firstday = $this->FirstDayOfMonth ($monthnumber, $this->CalendarYear[$i]);
+					$lastday = $this->LastDayOfMonth ($monthnumber + 1, $this->CalendarYear[$i]);
+					$day = 1;
+					if (!$this->CalendarDay[$i]) {
+						$j = 0;
+						while ($j < 6) {
+							$newweek = $this->DayWeek($week, $day, $firstday, $lastday);
+							$newweek = $this->DayWeekAppointment($newweek, $day, $firstday, $lastday, $i);
+							if ($newweek) {
+								$this->TableWeek($newweek, $i);
+								$day = $day + 7;
+								$j++;
+							} else {
+								$j = 10;
+							}
 						}
 					}
 				} else {
