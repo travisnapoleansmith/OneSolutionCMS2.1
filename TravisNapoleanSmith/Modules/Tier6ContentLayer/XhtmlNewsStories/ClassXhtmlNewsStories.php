@@ -3,10 +3,13 @@
 class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $NewsStoriesTableName;
 	protected $NewsStoriesLookupTableName;
-	protected $NewsStoriesDatesTableName
+	protected $NewsStoriesDatesTableName;
 	protected $ContentLayerTablesName;
 	protected $ContentPrintPreviewTableName;
 	protected $ContentLayerModulesTableName;
+	
+	protected $NewsStoriesDatesTable;
+	protected $NewsStoriesTable = array();
 	
 	protected $ContentLayerModulesTable;
 	protected $PrintIdNumberArray;
@@ -56,7 +59,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $ContentOutput;
 	
 	public function __construct($tablenames, $database) {
-		$this->LayerModule = &$database;
+		$this->LayerModule =&$GLOBALS['Tier6Databases']; 
+		//$this->LayerModule = &$database;
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
@@ -69,11 +73,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 		$this->NewsStoriesTableName = current($tablenames);
 		$this->NewsStoriesLookupTableName = next($tablenames);
-		$this->NewsStoriesDatesTableName = next($tablesnames);
+		$this->NewsStoriesDatesTableName = next($tablenames);
 		
-		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
-		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
-		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
+		$this->ContentLayerTablesName = next($tablenames);
+		$this->ContentPrintPreviewTableName = next($tablenames);
+		$this->ContentLayerModulesTableName = next($tablenames);
 		
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
@@ -109,7 +113,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($this->ContentLayerModulesTableName);
-		
 	}
 	
 	public function getLayerModule() {
@@ -207,15 +210,16 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
-		//$this->PrintPreview = $PageID['printpreview'];
-		//$this->RevisionID = $PageID['RevisionID'];
-		//$this->CurrentVersion = $PageID['CurrentVersion'];
-		//unset($PageID['printpreview']);
+		$this->PrintPreview = $PageID['PrintPreview'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		unset($PageID['PrintPreview']);
 		
 		$passarray = array();
 		$passarray = $PageID;
-		
+
 		$this->LayerModule->Connect($this->NewsStoriesLookupTableName);
+		
 		
 		$this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		
@@ -230,68 +234,123 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 		$this->LayerModule->Disconnect($this->NewsStoriesLookupTableName);
 		
-		$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
-		
-		
-		$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
-		
-		/*$this->LayerModule->Connect($this->NewsStoriesTableName);
-		
-		$this->LayerModule->pass ($this->NewsStoriesTableName, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->LayerModule->pass ($this->NewsStoriesTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-
-		$this->ContainerObjectType = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContainerObjectType'));
-	    $this->ContainerObjectTypeName = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContainerObjectTypeName'));
-		$this->ContainerObjectID = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContainerObjectID'));
-		$this->ContainerObjectPrintPreview = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContainerObjectPrintPreview'));
-	    $this->Empty = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'Empty'));
-		
-		$this->StartTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'StartTagClass'));
-		
-		$this->Heading = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'Heading'));
-		$this->HeadingStartTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'HeadingStartTag'));
-		$this->HeadingEndTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'HeadingEndTag'));
-		$this->HeadingStartTagID = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'HeadingStartTagID'));
-		$this->HeadingStartTagClass = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'HeadingStartTagClass'));
-		$this->HeadingStartTagStyle = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'HeadingStartTagStyle'));
-	
-		$this->Content = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'Content'));
-		$this->ContentStartTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentStartTag'));
-		$this->ContentEndTag = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentEndTag'));
-		$this->ContentStartTagID = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentStartTagID'));
-		$this->ContentStartTagClass = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentStartTagClass'));
-		$this->ContentStartTagStyle = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentStartTagStyle'));
-		
-		$this->ContentPTagID = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentPTagID'));
-		$this->ContentPTagClass = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentPTagClass'));
-		$this->ContentPTagStyle = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'ContentPTagStyle'));
-		
-		$this->EnableDisable = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowField', array('rowfield' => 'Status'));
-		
-		$this->LayerModule->Disconnect($this->NewsStoriesTableName);
-		*/
-		/*if ($this->PrintPreview) {
-			$this->PrintIdNumberArray = array();
+		if ($this->NewsStoriesLookupNewsStoryPageID) {
 			$passarray = array();
-			$passarray['PageID'] = $PageID['PageID'];
-			$this->LayerModule->Connect($this->ContentPrintPreviewTableName);
+			$passarray['PageID'] = $this->NewsStoriesLookupNewsStoryPageID;
+			$this->LayerModule->Connect($this->NewsStoriesTableName);
 			
-			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
-			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-			$i = 1;
-			$hold = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
-			while ($hold) {
-				$this->PrintIdNumberArray["PrintPageID$i"] = $hold;
-				$i++;
-				$hold = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
+			$this->LayerModule->pass ($this->NewsStoriesTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->NewsStoriesTableName);
+			array_push($this->NewsStoriesTable, $this->LayerModule->pass ($this->NewsStoriesTableName, 'getMultiRowField', array()));
+		
+		} else {
+			$newpassarray = array();
+			if ($this->NewsStoriesLookupNewsStoryDay) {
+				if ($this->NewsStoriesLookupNewsStoryDay == 'Current') {
+					$newpassarray['NewsStoryDay'] = date('d');
+				} else {
+					$newpassarray['NewsStoryDay'] = $this->NewsStoriesLookupNewsStoryDay;
+				}
 			}
-			$this->LayerModule->Disconnect($this->ContentPrintPreviewTableName);
-		}*/
+			
+			if ($this->NewsStoriesLookupNewsStoryYear) {
+				if ($this->NewsStoriesLookupNewsStoryYear == 'Current') {
+					$newpassarray['NewsStoryYear'] = date('Y');
+				} else {
+					$newpassarray['NewsStoryYear'] = $this->NewsStoriesLookupNewsStoryYear;
+				}
+			}
+			//print date('m');
+			if ($this->NewsStoriesLookupNewsStoryMonth) {
+				if ($this->NewsStoriesLookupNewsStoryMonth == 'Current') {
+					$newpassarray['NewsStoryMonth'] = date('F');
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'LastMonth') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-1, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '2MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-2, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '3MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-3, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '4MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-4, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '5MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-5, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '6MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-6, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '7MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-7, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '8MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-8, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '9MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-9, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '10MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-10, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '11MonthsAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-11, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == '1YearAgo') {
+					$lastmonthtime = mktime(0, 0, 0, date('m')-12, date('d'), date('Y'));
+					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+					
+				} else {
+					$newpassarray['NewsStoryMonth'] = $this->NewsStoriesLookupNewsStoryMonth;
+				}
+			}
+			
+			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
+			
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
+			$this->NewsStoriesDatesTable = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
+			$this->NewsStoriesDatesTable = array_reverse($this->NewsStoriesDatesTable);
+			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
+						
+			while (current($this->NewsStoriesDatesTable)) {
+				$passarray = array();
+				$passarray['PageID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['PageID'];
+				//$passarray['ObjectID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['ObjectID'];
+				$this->LayerModule->Connect($this->NewsStoriesTableName);
+				
+				$this->LayerModule->pass ($this->NewsStoriesTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($this->NewsStoriesTableName);
+				array_push($this->NewsStoriesTable, $this->LayerModule->pass ($this->NewsStoriesTableName, 'getMultiRowField', array()));
+				next($this->NewsStoriesDatesTable);
+				
+			}
+			reset($this->NewsStoriesTable);
+		}
 	}
 	
 	protected function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
@@ -330,6 +389,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 		$module = &$this->LayerModule->getModules($ContainerObjectType, $ContainerObjectTypeName);
 		reset($databasetablename);
+		
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 		$module->setHttpUserAgent($this->HttpUserAgent);
 		$module->FetchDatabase($modulesidnumber);
@@ -337,6 +397,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 		if ($print == TRUE) {
 			if ($module->getOutput()) {
+				$this->Writer->writeRaw("\t");
 				$this->Writer->writeRaw($module->getOutput());
 				$this->Writer->writeRaw("\n");
 			}
@@ -345,27 +406,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $LayerModule, $LayerModule, $print) {
-		$contentidnumber = Array();
-		$contentidnumber['PageID'] = $PageID;
-		$contentidnumber['ObjectID'] = $ContainerObjectID;
-		$contentidnumber['printpreview'] = $PrintPreview;
-		$contentidnumber['RevisionID'] = $this->RevisionID;
-		$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
-		//$contentidnumber['GlobalWriter'] = &$this->Writer;
-		
-		$contentdatabase = Array();
-		$contentdatabase[$this->NewsStoriesTableName] = $LayerModule;
-		$contentdatabase[$this->ContentLayerTablesName] = $LayerModule;
-		$this->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
-		$this->FetchDatabase ($contentidnumber);
-		if ($print == TRUE) {
-			$this->buildOutput($this->Space);
-		} 
-	}
-	
 	protected function buildOutput ($Space) {
-		/*$this->Space = $Space;
+		$this->Space = $Space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
@@ -391,9 +433,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			if ($this->ContentStartTag == '<p>'){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
-				if (!$this->HeadingStartTag) {
-					$this->Writer->writeRaw("\n");
-				}
+				
 				$this->Writer->writeRaw("\t  ");
 				$this->Writer->startElement($this->ContentStartTag);
 					$this->ProcessStandardAttribute('ContentStartTag');
@@ -462,11 +502,44 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->Writer->writeRaw("\t");
 				$this->Writer->endElement();
 			}
-		}*/
+		}
+	}
+	
+	protected function buildObjectType() {
+		if ($this->ContainerObjectType) {
+			$temp = $this->ObjectID;
+			$temp++;
+			if ($this->ContainerObjectType) {
+				$containertype = $this->ContainerObjectType;
+				
+				if ($containertype ==  'XhtmlNewsStories') {
+					if ($this->ContainerObjectID) {
+						if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+							$this->buildOutput($this->Space);
+						}
+					}
+				} else if ($containertype == 'XhtmlMenu') {
+					if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
+						$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
+						require($filename);
+						$hold = bottompanel1();
+						$this->Writer->writeRaw($hold);
+						$this->Writer->writeRaw("\n");
+					}
+				} else {
+					if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
+						if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+							$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
+						}
+					}
+				}
+			}
+			$temp++;
+		}
 	}
 	
 	public function CreateOutput($space) {
-		/*$arguments = func_get_args();
+		$arguments = func_get_args();
 		$NoPrintPreview = $arguments[1];
 		
 		if ($NoPrintPreview) {
@@ -476,72 +549,51 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		} else {
 			$PrintPreview = TRUE;
 		}
-		$this->buildOutput($Space);
 		
-		if ($this->ContainerObjectType) {
-			$temp = $this->ObjectID;
-			$temp++;
-			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
-			while ($this->EnableDisable) {
-				if ($this->ContainerObjectType) {
-					$containertype = $this->ContainerObjectType;
-					
-					if ($containertype ==  'XhtmlContent') {
-						if ($this->ContainerObjectID) {
-							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, TRUE);
-							}
-						}
-					} else if ($containertype == 'XhtmlMenu') {
-						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
-							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
-							require($filename);
-							$hold = bottompanel1();
-							$this->Writer->writeRaw($hold);
-							$this->Writer->writeRaw("\n");
-						}
-					} else {
-						if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
-							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
-							}
-						}
-					}
-				}
-				$temp++;
-				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
+		while (current($this->NewsStoriesTable)) {
+			$i = 0;
+			while ($this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]) {
+				$this->PageID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['PageID'];
+				$this->ObjectID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ObjectID'];
+				
+				$this->ContainerObjectType = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContainerObjectType'];
+	   			$this->ContainerObjectTypeName = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContainerObjectTypeName'];
+				$this->ContainerObjectID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContainerObjectID'];
+				$this->ContainerObjectPrintPreview = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContainerObjectPrintPreview'];
+	   			$this->Empty = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['Empty'];
+				
+				$this->StartTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['StartTag'];
+				$this->EndTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['EndTag'];
+				$this->StartTagID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['StartTagID'];
+				$this->StartTagStyle = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['StartTagStyle'];
+				$this->StartTagClass = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['StartTagClass'];
+				
+				$this->Heading = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['Heading'];
+				$this->HeadingStartTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['HeadingStartTag'];
+				$this->HeadingEndTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['HeadingEndTag'];
+				$this->HeadingStartTagID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['HeadingStartTagID'];
+				$this->HeadingStartTagClass = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['HeadingStartTagClass'];
+				$this->HeadingStartTagStyle = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['HeadingStartTagStyle'];
+				
+				$this->Content = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['Content'];
+				$this->ContentStartTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentStartTag'];
+				$this->ContentEndTag = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentEndTag'];
+				$this->ContentStartTagID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentStartTagID'];
+				$this->ContentStartTagClass = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentStartTagClass'];
+				$this->ContentStartTagStyle = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentStartTagStyle'];
+				
+				$this->ContentPTagID = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentPTagID'];
+				$this->ContentPTagClass = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentPTagClass'];
+				$this->ContentPTagStyle = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['ContentPTagStyle'];
+				
+				$this->EnableDisable = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['Enable/Disable'];
+				$this->Status = $this->NewsStoriesTable[key($this->NewsStoriesTable)][$i]['Status'];
+				
+				$this->buildObjectType();
+				$i++;
 			}
+			next($this->NewsStoriesTable);
 			
-			if ($this->PrintPreview & !$NoPrintPreview) {
-				reset($this->PrintIdNumberArray);
-				next($this->PrintIdNumberArray);
-				while (current($this->PrintIdNumberArray)) {
-					$holdnow = current($this->PrintIdNumberArray);
-					$contentidnumber = Array();
-					$contentidnumber['PageID'] = $holdnow;
-					$contentidnumber['ObjectID'] = 0;
-					$contentidnumber['printpreview'] = TRUE;
-					//$contentidnumber['RevisionID'] = $this->RevisionID;
-					//$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
-					
-					$contentdatabase = Array();
-					$contentdatabase[$this->NewsStoriesTableName] = $this->NewsStoriesTableName;
-					$contentdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
-					$contentdatabase[$this->ContentPrintPreviewTableName] = $this->ContentPrintPreviewTableName;
-					
-					$content = new XhtmlContent($contentdatabase, $this->LayerModule);
-					$content->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
-					$content->setHttpUserAgent($this->HttpUserAgent);
-					$content->FetchDatabase ($contentidnumber);
-					$content->CreateOutput('    ', TRUE);
-					
-					$contentoutput = $content->getOutput();
-					$this->Writer->writeRaw($contentoutput);
-					$this->Writer->writeRaw("\n");
-					
-					next($this->PrintIdNumberArray);
-				}
-			}
 		}
 		$this->Writer->endDocument();
 		
@@ -549,7 +601,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->Writer->flush();
 		} else {
 			$this->ContentOutput = $this->Writer->flush();
-		}*/
+		}
 	}
 	
 	public function getOutput() {
