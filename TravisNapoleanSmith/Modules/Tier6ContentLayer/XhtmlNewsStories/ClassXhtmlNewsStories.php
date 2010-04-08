@@ -336,7 +336,9 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->NewsStoriesDatesTable = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
 			$this->NewsStoriesDatesTable = array_reverse($this->NewsStoriesDatesTable);
 			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
-						
+			
+			$this->NewsStoriesTable = array();
+			
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();
 				$passarray['PageID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['PageID'];
@@ -346,6 +348,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->LayerModule->pass ($this->NewsStoriesTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 				$this->LayerModule->Disconnect($this->NewsStoriesTableName);
 				array_push($this->NewsStoriesTable, $this->LayerModule->pass ($this->NewsStoriesTableName, 'getMultiRowField', array()));
+				
 				next($this->NewsStoriesDatesTable);
 				
 			}
