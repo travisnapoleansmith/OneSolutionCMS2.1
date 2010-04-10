@@ -37,9 +37,10 @@
 	$headerdatabase['PageAttributes'] = 'PageAttributes';
 	$headerdatabase['ContentLayerTheme'] = 'ContentLayerTheme';
 	
-	$databases = &$GLOBALS['Tier6Databases'];
+	//$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = NULL;
 	
-	$header = new XhtmlHeader($headerdatabase, $databases);
+	$header = new XhtmlHeader($headerdatabase, $databaseoptions);
 	$header->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'PageAttributes');
 	$header->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	
@@ -48,11 +49,5 @@
 	$header->setSiteName($sitename);
 	
 	$header->CreateOutput ($printpreview, $stylesheet);
-	$GLOBALS['Writer'] = $header->getPage();
-	
-	$headeroutput = $header->GetOutput();
-	
-	print "$headeroutput";
-	print "\n";
 	
 ?>

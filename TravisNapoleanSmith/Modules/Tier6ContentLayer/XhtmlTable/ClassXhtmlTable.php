@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XhtmlTableProtectionLayer;
-	
 	/*
 	protected $TableNames = array();
 	protected $SitemapTables = array();
@@ -15,28 +13,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	*/
 	protected $EnableDisable = array();
 	protected $Status = array();
-	
-	protected $Table;
-	
-	public function __construct($tablenames, $database) {
-		$this->XhtmlTableProtectionLayer = &$database;
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
+		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(4);
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
 		}
 		/*
 		while (current($tablenames)) {
@@ -59,11 +49,11 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XhtmlTableProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		/*
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XhtmlTableProtectionLayer->setDatabasetable (current($this->TableNames));
+			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}*/
 	}
@@ -75,10 +65,10 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XhtmlTableProtectionLayer->Connect(current($this->TableNames));
-			$this->XhtmlTableProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->XhtmlTableProtectionLayer->Disconnect(current($this->TableNames));
-			$this->SitemapTables[current($this->TableNames)] = $this->XhtmlTableProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->SitemapTables[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 			$i = 1;
 			while ($this->SitemapTables[current($this->TableNames)][$i]['PageID']) {
 				array_push($this->PageID, $this->SitemapTables[current($this->TableNames)][$i]['PageID']);
@@ -144,17 +134,10 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			next($this->Status);
 		}
 		$this->Writer->endElement();
-		$this->Writer->endDocument();
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->XhtmlCalendarTable = $this->Writer->flush();
 		}
 		*/
-	}
-	
-	public function getOutput() {
-		return $this->Table;
 	}
 }
 ?>

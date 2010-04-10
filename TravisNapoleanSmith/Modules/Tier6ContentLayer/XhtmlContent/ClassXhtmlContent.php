@@ -36,34 +36,30 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $ContentOutput;
 	
-	public function __construct($tablenames, $database) {
-		$this->LayerModule = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule =&$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 		
-		$this->NoAttributes = $tablenames['NoAttributes'];
-		unset($tablenames['NoAttributes']);
+		if ($databaseoptions['NoAttributes']) {
+			$this->NoAttributes = $databaseoptions['NoAttributes'];
+			unset($databaseoptions['NoAttributes']);
+		}
 		
 		$this->ContentTableName = $tablenames['Content'];
 		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
 		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
 		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
-			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(3);
-		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -287,13 +283,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 		$module->setHttpUserAgent($this->HttpUserAgent);
 		$module->FetchDatabase($modulesidnumber);
-		$module->CreateOutput('    ');
 		
 		if ($print == TRUE) {
-			if ($module->getOutput()) {
-				$this->Writer->writeRaw($module->getOutput());
-				$this->Writer->writeRaw("\n");
-			}
+			$module->CreateOutput('    ');
 		} else {
 			return $module;
 		}
@@ -306,7 +298,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$contentidnumber['printpreview'] = $PrintPreview;
 		$contentidnumber['RevisionID'] = $this->RevisionID;
 		$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
-		//$contentidnumber['GlobalWriter'] = &$this->Writer;
 		
 		$contentdatabase = Array();
 		$contentdatabase[$this->ContentTableName] = $LayerModule;
@@ -324,7 +315,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
-				$this->Writer->writeRaw("\n\t");
+				$this->Writer->writeRaw("\n");
 				$this->Writer->startElement($this->StartTag);
 					$this->ProcessStandardAttribute('StartTag');
 			}
@@ -332,7 +323,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			if ($this->HeadingStartTag){
 				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
 				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
-				$this->Writer->writeRaw("\n\t");
+				$this->Writer->writeRaw("\n");
 				$this->Writer->startElement($this->HeadingStartTag);
 					$this->ProcessStandardAttribute('HeadingStartTag');
 					$this->Writer->writeRaw($this->Heading);
@@ -348,7 +339,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				if (!$this->HeadingStartTag) {
 					$this->Writer->writeRaw("\n");
 				}
-				$this->Writer->writeRaw("\t  ");
+				$this->Writer->writeRaw(" ");
 				$this->Writer->startElement($this->ContentStartTag);
 					$this->ProcessStandardAttribute('ContentStartTag');
 					$this->Content = trim($this->Content);
@@ -360,14 +351,14 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						while (current($this->Content)) {
 							$this->Content[key($this->Content)] = trim(current($this->Content));
 							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
-							$this->Writer->writeRaw("\n\t     ");
+							$this->Writer->writeRaw("\n\t");
 							$this->Writer->writeRaw(current($this->Content));
-							$this->Writer->writeRaw("\n\t  ");
+							$this->Writer->writeRaw("\n  ");
 							$this->Writer->endElement();
 							next($this->Content);
 							if (current($this->Content)) {
 								$this->ContentEndTag = NULL;
-								$this->Writer->writeRaw("\t  ");
+								$this->Writer->writeRaw("  ");
 								$this->Writer->startElement('p');
 								$this->ProcessStandardAttribute('ContentPTag');
 							}
@@ -375,8 +366,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						}
 					} else {
 						$this->Content = $this->CreateWordWrap($this->Content);
-						$this->Content .= "\n\t  ";
-						$this->Writer->writeRaw("\n\t     ");
+						$this->Content .= "\n  ";
+						$this->Writer->writeRaw("\n\t");
 						$this->Writer->writeRaw($this->Content);
 					}
 			} else if ($this->ContentStartTag){
@@ -409,11 +400,12 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			}
 			
 			if ($this->ContentEndTag) {
+				$this->Writer->writeRaw("   ");
 				$this->Writer->endElement();
 			}
 			
 			if ($this->EndTag) {
-				$this->Writer->writeRaw("\t");
+				$this->Writer->writeRaw("   ");
 				$this->Writer->endElement();
 			}
 		}
@@ -497,12 +489,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				}
 			}
 		}
-		$this->Writer->endDocument();
-		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->ContentOutput = $this->Writer->flush();
 		}
 	}
 	

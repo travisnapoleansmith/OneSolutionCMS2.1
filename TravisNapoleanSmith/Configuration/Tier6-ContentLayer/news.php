@@ -26,9 +26,10 @@
 	$newsdatabase['NewsStories'] = 'NewsStories';
 	$newsdatabase['ContentLayerTables'] = 'ContentLayerTables';
 	
-	$databases = &$GLOBALS['Tier6Databases'];
-
-	$news = new XhtmlNews($newsdatabase, $databases);
+	//$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = NULL;
+	
+	$news = new XhtmlNews($newsdatabase, $databaseoptions);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStories');
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$news->FetchDatabase ($newsidnumber);
@@ -36,20 +37,22 @@
 	$rowcount = $news->getNewsButtonsRowCount();
 	
 	$newsoutput = $news->getOutput();
-	print "$newsoutput";
-	
+	//print "$newsoutput";
+	$GLOBALS['Writer']->writeRaw("   ");
+	$GLOBALS['Writer']->writeRaw($newsoutput);
 	if ($_GET['printpreview']) {
 		while ($rowcount > 1) {
 			$rowcount--;
 			$newsidnumber['PageID'] = $rowcount;
-			$news2 = new XhtmlNews($newsdatabase, $databases);
+			$news2 = new XhtmlNews($newsdatabase, $databaseoptions);
 			$news2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStories');
 			$news2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 			$news2->FetchDatabase ($newsidnumber);
 			$news2->CreateOutput('    ');
 			
 			$newsoutput2 = $news2->getOutput();
-			print "$newsoutput2";
+			//print "$newsoutput2";
+			$GLOBALS['Writer']->writeRaw($newsoutput2);
 		}
 	}
 	

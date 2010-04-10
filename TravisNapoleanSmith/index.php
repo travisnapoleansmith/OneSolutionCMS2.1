@@ -16,50 +16,61 @@
 	}
 	// Creates Header
 	require ('Configuration/Tier6-ContentLayer/header.php');
-
-	print "<body>\n";
+	
+	$Writer->startElement('body');
 	
 	if ($printpreview == FALSE) {
 		// Top Panel 2
-		print "\n<div id=\"TopPanel2\" class=\"TopPanel2\">\n";
-		require ('Configuration/Tier6-ContentLayer/toppanel2.php');
-		print "</div>\n\n";
-		
+		$Writer->startElement('div');
+			$Writer->writeAttribute('id', 'TopPanel2');
+			$Writer->writeAttribute('class', 'TopPanel2');
+			require ('Configuration/Tier6-ContentLayer/toppanel2.php');
+		$Writer->endElement(); // ENDS DIV
 	}
 	
 	// Main Menu 
 	//require ('Configuration/Tier6-ContentLayer/menu.php');
 	//require ('Administrators/updateMainMenu.php');
 	if ($printpreview == FALSE) {
-		require('menu.html');
+		$file = file_get_contents('menu.html');
+		$Writer->writeRaw($file);
 	}
 	
 	// Contain Container
-	print "<div id=\"textlayer1\">";
-
-	require('Configuration/Tier6-ContentLayer/content.php');
-	
-	if ($idnumberkeep == 1) {
-		// News Container
-		require ('Configuration/Tier6-ContentLayer/news.php');
-	}
-	
-	print "</div>\n\n";
+	$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'textlayer1');
+		require('Configuration/Tier6-ContentLayer/content.php');
+		
+		if ($idnumberkeep == 1) {
+			// News Container
+			require ('Configuration/Tier6-ContentLayer/news.php');
+		}
+		$Writer->writeRaw("  ");
+	$Writer->endElement(); // ENDS DIV
 	
 	if ($printpreview == FALSE && $idnumberkeep == 1) {
 		// Bottom Panel 2
-		print "<div id=\"BottomPanel1\" class=\"BottomPanel1\">\n";
-		require ('Configuration/Tier6-ContentLayer/bottompanel1news.php');
-		print "</div>\n\n";
+		$Writer->startElement('div');
+			$Writer->writeAttribute('id', 'BottomPanel1');
+			$Writer->writeAttribute('class', 'BottomPanel1');
+			$Writer->writeRaw("\n   ");
+			require ('Configuration/Tier6-ContentLayer/bottompanel1news.php');
+		$Writer->endElement(); // ENDS DIV
 	}
 	if ($printpreview == FALSE) {
-		print "<div id=\"BottomPanel2\" class=\"BottomPanel2\">\n";
-		// Bottom Panel 2
-		require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
-		print "</div>\n\n";
+		$Writer->startElement('div');
+			$Writer->writeAttribute('id', 'BottomPanel2');
+			$Writer->writeAttribute('class', 'BottomPanel2');
+			$Writer->writeRaw("\n   ");
+			// Bottom Panel 2
+			require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
+		$Writer->endElement(); // ENDS DIV
 	}
 	
+	
 	// Print Out End Of Body and HTML File
-	print "</body>\n";
-	print "</html>\n";
+	$Writer->endElement(); // ENDS BODY
+	$Writer->endElement(); // ENDS HTML
+	$output = $Writer->flush();
+	print "$output\n";
 ?>

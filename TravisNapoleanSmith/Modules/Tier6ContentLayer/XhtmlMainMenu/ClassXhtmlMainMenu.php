@@ -1,8 +1,6 @@
 <?php
 
-class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XhtmlMainMenuProtectionLayer;
-	
+class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {	
 	protected $TableNames = array();
 	protected $MainMenuTables = array();
 	
@@ -37,9 +35,8 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	
 	protected $MainMenu;
 	
-	public function __construct($tablenames, $database) {
-		
-		$this->XhtmlMainMenuProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
 		$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
@@ -118,11 +115,11 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XhtmlMainMenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XhtmlMainMenuProtectionLayer->setDatabasetable (current($this->TableNames));
+			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}
 	}
@@ -134,10 +131,10 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		
-		$this->XhtmlMainMenuProtectionLayer->Connect(current($this->TableNames));
-		$this->XhtmlMainMenuProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-		$this->XhtmlMainMenuProtectionLayer->Disconnect(current($this->TableNames));
-		$this->MainMenuTables[current($this->TableNames)] = $this->XhtmlMainMenuProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+		$this->LayerModule->Connect(current($this->TableNames));
+		$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+		$this->LayerModule->Disconnect(current($this->TableNames));
+		$this->MainMenuTables[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 		$i = 1;
 		$key = current($this->TableNames);
 		while ($this->MainMenuTables[current($this->TableNames)][$i]['PageID']) {
@@ -162,7 +159,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 				$listdatabase['Insert'] = $this->Insert;
 			}
 			
-			$databases = &$this->XhtmlMainMenuProtectionLayer;
+			$databases = &$this->LayerModule;
 			
 			$list = new XhtmlUnorderedList($listdatabase, $databases);
 			

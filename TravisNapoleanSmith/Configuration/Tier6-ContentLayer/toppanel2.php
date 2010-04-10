@@ -24,9 +24,8 @@
 	$listdatabase = Array();
 	$listdatabase['MenuTopPanel2'] = 'MenuTopPanel2';
 	
-	$databases = &$GLOBALS['Tier6Databases'];
-	
-	$list = new XhtmlMenu($listdatabase, $databases);
+	$databaseoptions = NULL;
+	$list = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list->FetchDatabase ($listidnumber);
@@ -36,74 +35,79 @@
 	
 	$listoutput = $list->getOutput();
 	
-	$list1 = new XhtmlMenu($listdatabase, $databases);
+	$list1 = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list1->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list1->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list1->FetchDatabase ($listidnumber);
-	$list1->CreateOutput('   ');
+	$list1->CreateOutput('     ');
 	
 	$listidnumber['ObjectID'] = 2;
 	
 	$listoutput1 = $list1->getOutput();
 		
-	$list2 = new XhtmlMenu($listdatabase, $databases);
+	$list2 = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list2->FetchDatabase ($listidnumber);
-	$list2->CreateOutput('   ');
+	$list2->CreateOutput('     ');
 	
 	$listidnumber['ObjectID'] = 3;
 	
 	$listoutput2 = $list2->getOutput();
 			
-	$list3 = new XhtmlMenu($listdatabase, $databases);
+	$list3 = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list3->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list3->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list3->FetchDatabase ($listidnumber);
-	$list3->CreateOutput('   ');
+	$list3->CreateOutput('     ');
 	
 	$listidnumber['ObjectID'] = 4;
 	
 	$listoutput3 = $list3->getOutput();
 	
-	$list4 = new XhtmlMenu($listdatabase, $databases);
+	$list4 = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list4->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list4->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list4->FetchDatabase ($listidnumber);
-	$list4->CreateOutput('   ');
+	$list4->CreateOutput('     ');
 	
 	$listidnumber['ObjectID'] = 5;
 	
 	$listoutput4 = $list4->getOutput();
 	
-	$list5 = new XhtmlMenu($listdatabase, $databases);
+	$list5 = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list5->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list5->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list5->FetchDatabase ($listidnumber);
-	$list5->CreateOutput('   ');
+	$list5->CreateOutput('     ');
 	
 	$listidnumber['ObjectID'] = 6;
 	
 	$listoutput5 = $list5->getOutput();
 	
 	if (isset($listoutput)){
-		print "  $listoutput";
+		$GLOBALS['Writer']->writeRaw($listoutput);
 	}
 	if (isset($listoutput1)) {
-		print "  $listoutput1";
+		$GLOBALS['Writer']->writeRaw("  ");
+		$GLOBALS['Writer']->writeRaw($listoutput1);
 	}
 	if (isset($listoutput2)) {
-		print "  $listoutput2";
+		$GLOBALS['Writer']->writeRaw("  ");
+		$GLOBALS['Writer']->writeRaw($listoutput2);
 	}
 	if (isset($listoutput3)) {
-		print "  $listoutput3";
+		$GLOBALS['Writer']->writeRaw("  ");
+		$GLOBALS['Writer']->writeRaw($listoutput3);
 	}
 	if (isset($listoutput4)) {
-		print "  $listoutput4";
+		$GLOBALS['Writer']->writeRaw("  ");
+		$GLOBALS['Writer']->writeRaw($listoutput4);
 	}
 	if (isset($listoutput5)) {
-		print "  $listoutput5";
+		$GLOBALS['Writer']->writeRaw("  ");
+		$GLOBALS['Writer']->writeRaw($listoutput5);
 	}
-	//print "\n";
+	$GLOBALS['Writer']->writeRaw("  ");
 	
 ?>

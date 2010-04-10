@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XhtmlCalendarTableProtectionLayer;
-	
 	/*
 	protected $TableNames = array();
 	protected $SitemapTables = array();
@@ -22,10 +20,8 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $CurrentDay;
 	protected $CurrentMonth;
 	protected $CurrentYear;
-	
-	protected $CalendarTable;
-	
-	public function __construct($tablenames, $database) {
+		
+	public function __construct($tablenames, $databaseoptions) {
 		$this->CurrentDate = date('D M d, Y');
 		$this->CurrentTime = date('h:i A T');
 		$this->CurrentDayOfWeek = date('D');
@@ -33,36 +29,24 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->CurrentMonth = date('M');
 		$this->CurrentYear = date('Y');
 		
-		$this->XhtmlCalendarTableProtectionLayer = &$database;
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
+		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(4);
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
 		}
 		/*
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
-		
-		$this->Writer->startDocument('1.0' , 'UTF-8');
-		$this->Writer->setIndent(4);
-		
-		$this->Writer->startElement('urlset');
-		$this->Writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 		*/
 	}
 	
@@ -73,11 +57,11 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XhtmlCalendarTableProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		/*
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XhtmlCalendarTableProtectionLayer->setDatabasetable (current($this->TableNames));
+			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}*/
 	}
@@ -89,10 +73,10 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XhtmlCalendarTableProtectionLayer->Connect(current($this->TableNames));
-			$this->XhtmlCalendarTableProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->XhtmlCalendarTableProtectionLayer->Disconnect(current($this->TableNames));
-			$this->SitemapTables[current($this->TableNames)] = $this->XhtmlCalendarTableProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->SitemapTables[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 			$i = 1;
 			while ($this->SitemapTables[current($this->TableNames)][$i]['PageID']) {
 				array_push($this->PageID, $this->SitemapTables[current($this->TableNames)][$i]['PageID']);
@@ -158,17 +142,10 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 			next($this->Status);
 		}
 		$this->Writer->endElement();
-		$this->Writer->endDocument();
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->XhtmlCalendarTable = $this->Writer->flush();
 		}
 		*/
-	}
-	
-	public function getOutput() {
-		return $this->CalendarTable;
 	}
 }
 ?>

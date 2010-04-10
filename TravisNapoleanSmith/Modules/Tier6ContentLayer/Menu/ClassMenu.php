@@ -5,7 +5,6 @@ class Menu
 	private $MenuDatabase;
 	private $MenuLookup;
 	private $idnumber;
-	private $MenuProtectionLayer;
 	private $Menus;
 	private $MenuItemList;
 	private $MenuMaxDeep;
@@ -15,8 +14,8 @@ class Menu
 	private $HttpUserAgent;
 	private $PageName;
 	
-	public function __construct($tablenames, $database) {
-		$this->MenuProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		$this->idnumber = current($tablenames);
 		$this->MenuDatabase = next($tablenames);
 		$this->MenuLookup = next($tablenames);
@@ -36,18 +35,18 @@ class Menu
 	}
 	
 	public function setDatabaseData($hostname, $user, $password, $databasename, $databasetable) {
-		$this->MenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable);
-		$this->MenuProtectionLayer->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'idnumber', 'ASC' => 'ASC'));
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable);
+		$this->LayerModule->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'idnumber', 'ASC' => 'ASC'));
 
 	}
 	
 	public function setDatabaseLookup($hostname, $user, $password, $databasename, $databasetable) {
-		$this->MenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable);
-		$this->MenuProtectionLayer->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'idnumber', 'ASC' => 'ASC'));
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable);
+		$this->LayerModule->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'idnumber', 'ASC' => 'ASC'));
 	}
 
 	public function setDynamicDatabaseButtons($hostname, $user, $password, $databasename, $databasetable, $name) {
-		$this->MenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename, $name);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename, $name);
 	}
 	
 	public function setMenuMaxDeep ($MenuMaxDeep) {
@@ -111,49 +110,49 @@ class Menu
 	public function FetchAll() {
 		$passarray = array();
 		$passarray['idnumber'] = $this->idnumber;
-		$this->MenuProtectionLayer->Connect($this->MenuDatabase);
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'setEntireTable', array());
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->MenuProtectionLayer->Disconnect($this->MenuDatabase);
+		$this->LayerModule->Connect($this->MenuDatabase);
+		$this->LayerModule->pass ($this->MenuDatabase, 'setEntireTable', array());
+		$this->LayerModule->pass ($this->MenuDatabase, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->MenuDatabase);
 		
-		$this->MenuProtectionLayer->Connect($this->MenuLookup);
-		$this->MenuProtectionLayer->pass ($this->MenuLookup, 'setEntireTable', array());
-		$this->MenuProtectionLayer->pass ($this->MenuLookup, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->MenuProtectionLayer->Disconnect($this->MenuLookup);
+		$this->LayerModule->Connect($this->MenuLookup);
+		$this->LayerModule->pass ($this->MenuLookup, 'setEntireTable', array());
+		$this->LayerModule->pass ($this->MenuLookup, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->MenuLookup);
 	}
 	
 	public function DynamicFetchAll($name) {
-		$this->MenuProtectionLayer->Connect($name);
-		$this->MenuProtectionLayer->pass ($name, 'setEntireTable', array());
-		$this->MenuProtectionLayer->Disconnect($name);
+		$this->LayerModule->Connect($name);
+		$this->LayerModule->pass ($name, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($name);
 	}
 
 	public function getTable($idnumber, $rowcolumn){
-		return $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
+		return $this->LayerModule->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
 	}
 	
 	public function getTableLookup($idnumber, $rowcolumn){
-		return $this->MenuProtectionLayer->pass($this->MenuLookup, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
+		return $this->LayerModule->pass($this->MenuLookup, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
 	}
 
 	public function getDynamicTable($idnumber, $rowcolumn, $name){
-		return $this->MenuProtectionLayer->pass($this->$name, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
+		return $this->LayerModule->pass($this->$name, 'getTable', array('idnumber' => $idnumber, 'rowcolumn' => $rowcolumn));
 	}
 	
 	public function walkTable() {
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'walktable', array());
+		$this->LayerModule->pass ($this->MenuDatabase, 'walktable', array());
 	}
 	
 	public function walkFieldName() {
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'walkfieldname', array());
+		$this->LayerModule->pass ($this->MenuDatabase, 'walkfieldname', array());
 	}
 
 	public function getFieldName($rownumber) {
-		return $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getRowFieldName', array('rownumber' => $rownumber));
+		return $this->LayerModule->pass ($this->MenuDatabase, 'getRowFieldName', array('rownumber' => $rownumber));
 	}
 	
 	public function walkDynamicTable($name) {
-		$this->MenuProtectionLayer->pass ($this->$name, 'walktable', array());
+		$this->LayerModule->pass ($this->$name, 'walktable', array());
 	}
 
 	private function fillIdMenuItems ($idnumber2, $idnumber) {
@@ -196,7 +195,7 @@ class Menu
 		
 		while ($this->getTable($idnumber2, $this->getFieldName($i))) {
 			$temp = $this->getFieldName($i);
-			$idnumber = $this->MenuProtectionLayer->pass ($this->$MenuName, 'getTable', array('idnumber' => $idnumber2, 'temp' => $temp));
+			$idnumber = $this->LayerModule->pass ($this->$MenuName, 'getTable', array('idnumber' => $idnumber2, 'temp' => $temp));
 			$InsertInformation = NULL;
 			
 			$this->MenuItemList[$idnumber2]->setInsertInformation($InsertInformation, $temp);
@@ -206,7 +205,7 @@ class Menu
 		}
 		
 		$temp = $this->getFieldName(0);
-		$idnumber = $this->MenuProtectionLayer->pass ($this->$MenuName, 'getTable', array('idnumber' => $idnumber2, 'temp' => $temp));
+		$idnumber = $this->LayerModule->pass ($this->$MenuName, 'getTable', array('idnumber' => $idnumber2, 'temp' => $temp));
 		$this->fillIdMenuItems($idnumber2, $idnumber);
 	}
 	
@@ -237,13 +236,13 @@ class Menu
 	
 	public function getIdFieldNumber ($idnumber, $i) {
 		$temp = $this->getFieldName($i);
-		$idnumber = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $idnumber, 'temp' => $temp));
+		$idnumber = $this->LayerModule->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $idnumber, 'temp' => $temp));
 		return $idnumber;
 	}
 	
 	private function createInsertInformation ($idnumber, $InsertInformation, $MenuItemListKey) {
 		$temp = $this->getFieldName($idnumber);
-		$idnumber = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $MenuItemListKey, 'temp' => $temp));
+		$idnumber = $this->LayerModule->pass ($this->MenuDatabase, 'getTable', array('idnumber' => $MenuItemListKey, 'temp' => $temp));
 		$this->MenuItemList[$MenuItemListKey]->setInsertInformation($InsertInformation, $temp);
 	}
 	
@@ -287,12 +286,12 @@ class Menu
 	}
 	
 	public function removeMenuItems($MenuNameDatabase, $search, $search2, $removal, $output, $idname) {
-		$menurowcount = $this->MenuProtectionLayer->pass ($MenuNameDatabase, 'getRowCount', array());
-		$this->MenuProtectionLayer->pass ($this->MenuLookup, 'searchEntireTable', array('search' => $search));
-		$menulookupkey = $this->MenuProtectionLayer->pass ($this->MenuLookup, 'getSearchResults', array('number' => '0', 'idnumber' => 'idnumber'));
+		$menurowcount = $this->LayerModule->pass ($MenuNameDatabase, 'getRowCount', array());
+		$this->LayerModule->pass ($this->MenuLookup, 'searchEntireTable', array('search' => $search));
+		$menulookupkey = $this->LayerModule->pass ($this->MenuLookup, 'getSearchResults', array('number' => '0', 'idnumber' => 'idnumber'));
 		if ($search2){
-			$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getSearchResults', array('search' => "$search2"));
-			$menulookupkey = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getSearchResults', array('number' => '0', 'idnumber' => 'idnumber'));
+			$this->LayerModule->pass ($this->MenuDatabase, 'getSearchResults', array('search' => "$search2"));
+			$menulookupkey = $this->LayerModule->pass ($this->MenuDatabase, 'getSearchResults', array('number' => '0', 'idnumber' => 'idnumber'));
 		}
 
 		$i = 1;
@@ -301,12 +300,12 @@ class Menu
 		
 		while ($i < 5){
 			$menulookupkey2 = $this->getTable($menulookupkey, $idMenuItemName);
-			$MenuItem0IdNumber = $this->MenuProtectionLayer->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => $idname));
-			$MenuItem0 = $this->MenuProtectionLayer->pass($MenuNameDatabase, 'getTable', array('j' => "$j", 'MenuItem' => 'MenuItem'));
+			$MenuItem0IdNumber = $this->LayerModule->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => $idname));
+			$MenuItem0 = $this->LayerModule->pass($MenuNameDatabase, 'getTable', array('j' => "$j", 'MenuItem' => 'MenuItem'));
 			$MenuItem0Link = $output . '?' . $idname . '=' . $MenuItem0IdNumber;
-			$MenuItem0Title = $this->MenuProtectionLayer->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'BubbleHeadline'));
-			$MenuItem0Year = $this->MenuProtectionLayer->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'StoryYear'));
-			$MenuItem0Month = $this->MenuProtectionLayer->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'StoryMonth'));
+			$MenuItem0Title = $this->LayerModule->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'BubbleHeadline'));
+			$MenuItem0Year = $this->LayerModule->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'StoryYear'));
+			$MenuItem0Month = $this->LayerModule->pass ($MenuNameDatabase, 'getTable', array('j' => "$j", 'idname' => 'StoryMonth'));
 			$this->updateMenuItem($menulookupkey2, 'MenuItem0', $MenuItem0);
 			$this->updateMenuItem($menulookupkey2, 'MenuItem0Link', $MenuItem0Link);
 			$this->updateMenuItem($menulookupkey2, 'MenuItem0Title', $MenuItem0Title);
@@ -318,11 +317,11 @@ class Menu
 	}
 
 	private function updateMenuItem($idnumber, $rowname, $information){
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'updateEntireTableEntry', array('idnumber' => $idnumber, 'rowname' => $rowname, 'information' => $information));
+		$this->LayerModule->pass ($this->MenuDatabase, 'updateEntireTableEntry', array('idnumber' => $idnumber, 'rowname' => $rowname, 'information' => $information));
 	}
 	
 	private function removeMenuItem($idnumber){
-		$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'removeEntireEntireTable', array('idnumber' => $idnumber));
+		$this->LayerModule->pass ($this->MenuDatabase, 'removeEntireEntireTable', array('idnumber' => $idnumber));
 	}
 	
 	private function transverseMenu($k, $MenuName){
@@ -344,7 +343,7 @@ class Menu
 			$i++;
 		}
 		$i = 1;
-		$rowcount = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getRowCount', array());
+		$rowcount = $this->LayerModule->pass ($this->MenuDatabase, 'getRowCount', array());
 		while ($i <= $rowcount){
 			$this->MenuItemList[$i]->createMenuItemListOutput(NULL);
 			$i++;
@@ -353,7 +352,7 @@ class Menu
 	}
 	
 	private function makeMenuSingle() {
-		$rowcount = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getRowCount', array());
+		$rowcount = $this->LayerModule->pass ($this->MenuDatabase, 'getRowCount', array());
 		$this->menuLoop($rowcount);
 		
 		// Output of Menu
@@ -379,8 +378,8 @@ class Menu
 		}
 		
 		while ($i <= $max) {
-			$idnumber = $this->MenuProtectionLayer->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'idnumber'));
-			$status = $this->MenuProtectionLayer->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'Status'));
+			$idnumber = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'idnumber'));
+			$status = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'Status'));
 			if ($status == 'Approved') {
 				$this->createMenuOutput($idnumber);
 			}
@@ -417,13 +416,13 @@ class Menu
 	
 	public function makeMenuItem($j, $MenuName) {
 		if ($this->PageName){
-			$this->MenuProtectionLayer->pass ($this->MenuDatabase, 'searchEntireTable', array('PageName' => $this->PageName));
-			$remove = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getSearchResultsArray', array());
+			$this->LayerModule->pass ($this->MenuDatabase, 'searchEntireTable', array('PageName' => $this->PageName));
+			$remove = $this->LayerModule->pass ($this->MenuDatabase, 'getSearchResultsArray', array());
 			$this->updateMenuItem($remove[0]['idnumber'], $remove[0]['keyname'], NULL);
 		}
 		
-		$rowcount = $this->MenuProtectionLayer->pass ($this->MenuDatabase, 'getRowCount', array());
-		$max = $this->MenuProtectionLayer->pass ($this->MenuLookup, 'getRowCount', array());
+		$rowcount = $this->LayerModule->pass ($this->MenuDatabase, 'getRowCount', array());
+		$max = $this->LayerModule->pass ($this->MenuLookup, 'getRowCount', array());
 		
 		$this->menuLoop($rowcount, $j, $MenuName);
 		

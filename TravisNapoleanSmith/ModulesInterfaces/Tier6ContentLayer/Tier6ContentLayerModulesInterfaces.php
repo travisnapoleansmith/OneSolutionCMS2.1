@@ -5,6 +5,5 @@ interface Tier6ContentLayerModules
 	public function setHttpUserAgent ($HttpUserAgent);
 	public function FetchDatabase ($idnumber);
 	public function CreateOutput($space);
-	public function getOutput();
 }
 ?>

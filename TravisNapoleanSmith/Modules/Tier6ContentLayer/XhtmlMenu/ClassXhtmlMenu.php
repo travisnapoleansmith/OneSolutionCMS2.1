@@ -4,7 +4,6 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $NewsID;
 	protected $ClassReplace;
 	protected $ClassClass;
-	protected $MenuProtectionLayer;
 	protected $DatabaseTableName;
 	
 	protected $newsflag;
@@ -22,8 +21,9 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $List;
 	
-	public function __construct($tablenames, $database) {
-		$this->MenuProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+		
 		$this->DatabaseTableName = current($tablenames);
 	}
 	
@@ -34,8 +34,8 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->MenuProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->MenuProtectionLayer->setDatabasetable ($databasetable);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($databasetable);
 	}
 	
 	public function FetchDatabase ($PageID) {
@@ -44,11 +44,11 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$ConnectionID['ObjectID'] = $PageID['ObjectID'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->MenuProtectionLayer->Connect($this->DatabaseTable);
+		$this->LayerModule->Connect($this->DatabaseTable);
 		
-		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $ConnectionID));
-		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
-		$this->MenuProtectionLayer->pass ($this->DatabaseTable, 'setEntireTable', array());
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $ConnectionID));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
 		
 		$this->PageID = current($PageID);
 		next($PageID);
@@ -62,27 +62,27 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->ClassClass = current($PageID);
 		}
 		
-		$this->StartTag = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTag'));
-		$this->EndTag = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('EndTag'));
-		$this->StartTagID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagID'));
-		$this->StartTagStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagStyle'));
-		$this->StartTagClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('StartTagClass'));
+		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('StartTag'));
+		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('EndTag'));
+		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('StartTagID'));
+		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('StartTagStyle'));
+		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('StartTagClass'));
 		
-		$this->MainDiv = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div'));
-		$this->MainDivID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivID'));
-		$this->MainDivClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivClass'));
-		$this->MainDivStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('DivStyle'));
+		$this->MainDiv = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div'));
+		$this->MainDivID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('DivID'));
+		$this->MainDivClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('DivClass'));
+		$this->MainDivStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('DivStyle'));
 		
-		$this->Div = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1'));
-		$this->DivTitle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Title'));
-		$this->DivID = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1ID'));
-		$this->DivClass = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Class'));
-		$this->DivStyle = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Div1Style'));
+		$this->Div = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div1'));
+		$this->DivTitle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div1Title'));
+		$this->DivID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div1ID'));
+		$this->DivClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div1Class'));
+		$this->DivStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Div1Style'));
 		
-		$this->EnableDisable = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Enable/Disable'));
-		$this->Status = $this->MenuProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('Status'));
+		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Enable/Disable'));
+		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('Status'));
 		
-		$this->MenuProtectionLayer->Disconnect($this->DatabaseTable);
+		$this->LayerModule->Disconnect($this->DatabaseTable);
 		
 	}
 	

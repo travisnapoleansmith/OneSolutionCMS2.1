@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XhtmlFormProtectionLayer;
-	
 	protected $TableNames = array();
 	protected $FormLookupTableName = array();
 		
@@ -376,28 +374,24 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $Form;
 	
-	public function __construct($tablenames, $database) {
-		$this->XhtmlFormProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->PrintPreview = $tablenames['PrintPreview'];
-		unset($tablenames['PrintPreview']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
+		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(4);
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
+		
+		if ($databaseoptions['PrintPreview']) {
+			$this->PrintPreview = $databaseoptions['PrintPreview'];
+			unset($databaseoptions['PrintPreview']);
 		}
 		
 		while (current($tablenames)) {
@@ -413,7 +407,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XhtmlFormProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function FetchDatabase ($PageID) {
@@ -427,10 +421,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		while (current($this->TableNames)) {
-			$this->XhtmlFormProtectionLayer->Connect(current($this->TableNames));
-			$this->XhtmlFormProtectionLayer->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->XhtmlFormProtectionLayer->Disconnect(current($this->TableNames));
-			$this->FormLookupTableName[key($this->TableNames)] = $this->XhtmlFormProtectionLayer->pass (current($this->TableNames), 'getMultiRowField', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->FormLookupTableName[key($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
 			$i = 0;
 			reset($this->FormLookupTableName);
 			while ($this->FormLookupTableName[current($this->TableNames)][$i]) {
@@ -837,10 +831,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$passarray['ObjectID'] = $objectid;
 		$passarray['RevisionID'] = $revisionid;
 		if ($tablename) {
-			$this->XhtmlFormProtectionLayer->Connect($tablename);
-			$this->XhtmlFormProtectionLayer->pass ($tablename, 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->XhtmlFormProtectionLayer->Disconnect($tablename);
-			$temp = $this->XhtmlFormProtectionLayer->pass ($tablename, 'getRowField', array('rowfield' => $field));
+			$this->LayerModule->Connect($tablename);
+			$this->LayerModule->pass ($tablename, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($tablename);
+			$temp = $this->LayerModule->pass ($tablename, 'getRowField', array('rowfield' => $field));
 			return $temp;
 		} else {
 			return NULL;
@@ -2111,11 +2105,11 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$passarray['ObjectType'] = $objecttype;
 		$passarray['ObjectTypeName'] = $objecttypename;
 
-		$this->XhtmlFormProtectionLayer->Connect('ContentLayerTables');
-		$this->XhtmlFormProtectionLayer->pass ('ContentLayerTables', 'setDatabaseRow', array('idnumber' => $passarray));
-		$this->XhtmlFormProtectionLayer->Disconnect('ContentLayerTables');
+		$this->LayerModule->Connect('ContentLayerTables');
+		$this->LayerModule->pass ('ContentLayerTables', 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect('ContentLayerTables');
 		
-		$hold = $this->XhtmlFormProtectionLayer->pass ('ContentLayerTables', 'getMultiRowField', array());
+		$hold = $this->LayerModule->pass ('ContentLayerTables', 'getMultiRowField', array());
 		
 		$idnumber = Array();
 		$idnumber['PageID'] = $pageid;
@@ -2132,17 +2126,18 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$name = 'DatabaseTable';
 			$name .= $i;
 		}
-			
-		$objectdatabase['NoAttributes'] = TRUE;
-		$databases = &$this->XhtmlFormProtectionLayer;
 		
-		$object = new $objecttype($objectdatabase, $databases);
+		$databaseoptions = array();
+		$databaseoptions['NoAttributes'] = TRUE;
+
+		$object = new $objecttype($objectdatabase, $databaseoptions);
 		$object->setDatabaseAll ($hostname, $user, $password, $databasename, $hold[0]['DatabaseTable1']);
 		$object->setHttpUserAgent($this->HttpUserAgent);
 		$object->FetchDatabase ($idnumber);
 		$object->CreateOutput('    ');
 		
 		$objectoutput = $object->getOutput();
+		print_r($objectoutput);
 	}
 	
 	public function CreateOutput($space) {
@@ -2268,17 +2263,9 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				next($this->FormStatus);
 			}
 		}
-		//print_r($this->FormFieldSetContainerObjectType);
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->Form = $this->Writer->flush();
 		}
-		
-	}
-	
-	public function getOutput() {
-		return $this->Form;
 	}
 }
 ?>

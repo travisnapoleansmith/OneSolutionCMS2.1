@@ -1,8 +1,6 @@
 <?php
 
 class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XmlProtectionLayer;
-	
 	protected $TableNames = array();
 	protected $XMLFeedTables = array();
 	
@@ -67,18 +65,9 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected $XmlFeed;
 	
-	public function __construct($tablenames, $database) {
-		$this->XmlProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-		
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
-		} else {
-			$this->Writer->openMemory();
-		}
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
@@ -86,12 +75,23 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		
 		$this->XMLLink = $GLOBALS['rsslink'];
 		
-		$this->Writer->startDocument('1.0' , 'UTF-8');
-		$this->Writer->setIndent(4);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->Writer->startElement('rss');
-		$this->Writer->writeAttribute('version', '2.0');
-		$this->Writer->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+			$this->Writer->startDocument('1.0' , 'UTF-8');
+			$this->Writer->setIndent(4);
+			
+			$this->Writer->startElement('rss');
+			$this->Writer->writeAttribute('version', '2.0');
+			$this->Writer->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -101,11 +101,11 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XmlProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XmlProtectionLayer->setDatabasetable (current($this->TableNames));
+			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}
 	}
@@ -116,10 +116,10 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XmlProtectionLayer->Connect(current($this->TableNames));
-			$this->XmlProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->XmlProtectionLayer->Disconnect(current($this->TableNames));
-			$this->XMLFeedTables[current($this->TableNames)] = $this->XmlProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->XMLFeedTables[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 			$i = 1;
 			while ($this->XMLFeedTables[current($this->TableNames)][$i]['XMLFeedName']) {
 				$key = $this->XMLFeedTables[current($this->TableNames)][$i]['XMLFeedName'];
@@ -210,14 +210,14 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$password = $this->Password;
 		$databasename = $this->DatabaseName;
 		
-		$this->XmlProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->XmlProtectionLayer->setDatabasetable($databasetable);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable($databasetable);
 		
-		$this->XmlProtectionLayer->Connect($databasetable);
-		$this->XmlProtectionLayer->pass ($databasetable, 'setEntireTable', array());
-		$this->XmlProtectionLayer->Disconnect($databasetable);
+		$this->LayerModule->Connect($databasetable);
+		$this->LayerModule->pass ($databasetable, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($databasetable);
 				
-		$this->XMLFeedTables[$databasetable] = $this->XmlProtectionLayer->pass ($databasetable, 'getEntireTable', array());
+		$this->XMLFeedTables[$databasetable] = $this->LayerModule->pass ($databasetable, 'getEntireTable', array());
 		
 		$this->StoryXMLItem[$databasetable] = array();
 	 	$this->StoryFeedItemTitle[$databasetable] = array();
@@ -528,10 +528,9 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 		$this->Writer->endElement();
 		$this->Writer->endDocument();
+		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->XmlFeed = $this->Writer->flush();
 		}
 		
 	}
@@ -623,10 +622,6 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			}
 			$i--;
 		}
-	}
-	
-	public function getOutput() {
-		return $this->XmlFeed;
 	}
 }
 ?>

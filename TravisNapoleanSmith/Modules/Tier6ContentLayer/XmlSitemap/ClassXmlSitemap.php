@@ -1,8 +1,6 @@
 <?php
 
 class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XmlProtectionLayer;
-	
 	protected $TableNames = array();
 	protected $SitemapTables = array();
 	
@@ -16,28 +14,31 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $XmlSitemap;
 	
-	public function __construct($tablenames, $database) {
-		$this->XmlProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-		
-		$this->Writer = new XMLWriter();
-		if ($this->FileName) {
-			$this->Writer->openURI($this->FileName);
-		} else {
-			$this->Writer->openMemory();
-		}
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
 		
-		$this->Writer->startDocument('1.0' , 'UTF-8');
-		$this->Writer->setIndent(4);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->Writer->startElement('urlset');
-		$this->Writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+			$this->Writer->startDocument('1.0' , 'UTF-8');
+			$this->Writer->setIndent(4);
+			
+			$this->Writer->startElement('urlset');
+			$this->Writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+			
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -47,11 +48,11 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XmlProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XmlProtectionLayer->setDatabasetable (current($this->TableNames));
+			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}
 	}
@@ -62,10 +63,10 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
-			$this->XmlProtectionLayer->Connect(current($this->TableNames));
-			$this->XmlProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->XmlProtectionLayer->Disconnect(current($this->TableNames));
-			$this->SitemapTables[current($this->TableNames)] = $this->XmlProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->SitemapTables[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 			$i = 1;
 			while ($this->SitemapTables[current($this->TableNames)][$i]['PageID']) {
 				array_push($this->PageID, $this->SitemapTables[current($this->TableNames)][$i]['PageID']);
@@ -131,16 +132,12 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		}
 		$this->Writer->endElement();
 		$this->Writer->endDocument();
+		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->XmlSitemap = $this->Writer->flush();
 		}
 		
 	}
 	
-	public function getOutput() {
-		return $this->XmlSitemap;
-	}
 }
 ?>

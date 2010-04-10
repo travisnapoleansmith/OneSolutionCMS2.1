@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $XhtmlCalendarTableProtectionLayer;
-	
 	protected $TableNames = array();
 	protected $CalendarLookupTableName = array();
 	protected $CalendarAppointments = array();
@@ -119,7 +117,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	protected $CalendarTable;
 	
-	public function __construct($tablenames, $database) {
+	public function __construct($tablenames, $databaseoptions) {
 		$this->CurrentDate = date('D M d, Y');
 		$this->CurrentTime = date('h:i A T');
 		$this->CurrentDayOfWeek = date('l');
@@ -146,35 +144,39 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->AppointmentDayColumns['End Time'] = 'End Time';
 		$this->AppointmentDayColumns['Appointment'] = 'Appointment';
 		
-		$this->XhtmlCalendarTableProtectionLayer = &$database;
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->PrintPreview = $tablenames['PrintPreview'];
-		unset($tablenames['PrintPreview']);
-		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
-			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(4);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
 		}
 		
-		$this->Day = $tablenames['Day'];
-		$this->Month = $tablenames['Month'];
-		$this->Year = $tablenames['Year'];
-		unset ($tablenames['Day']);
-		unset ($tablenames['Month']);
-		unset ($tablenames['Year']);
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
+		
+		if ($databaseoptions['PrintPreview']) {
+			$this->PrintPreview = $databaseoptions['PrintPreview'];
+			unset($databaseoptions['PrintPreview']);
+		}
+		
+		if ($databaseoptions['Day']) {
+			$this->Day = $databaseoptions['Day'];
+			unset($databaseoptions['Day']);
+		}
+		
+		if ($databaseoptions['Month']) {
+			$this->Month = $databaseoptions['Month'];
+			unset($databaseoptions['Month']);
+		}
+		
+		if ($databaseoptions['Year']) {
+			$this->Year = $databaseoptions['Year'];
+			unset($databaseoptions['Year']);
+		}
 		
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
@@ -189,7 +191,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->XhtmlCalendarTableProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	
 	public function FetchDatabase ($PageID) {
@@ -203,10 +205,10 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->ObjectID = $PageID['ObjectID'];
 		
 		while (current($this->TableNames)) {
-			$this->XhtmlCalendarTableProtectionLayer->Connect(current($this->TableNames));
-			$this->XhtmlCalendarTableProtectionLayer->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->XhtmlCalendarTableProtectionLayer->Disconnect(current($this->TableNames));
-			$this->CalendarLookupTableName[current($this->TableNames)] = $this->XhtmlCalendarTableProtectionLayer->pass (current($this->TableNames), 'getEntireTable', array());
+			$this->LayerModule->Connect(current($this->TableNames));
+			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
+			$this->LayerModule->Disconnect(current($this->TableNames));
+			$this->CalendarLookupTableName[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
 			$i = 1;
 			
 			while ($this->CalendarLookupTableName[current($this->TableNames)][$i]) {
@@ -228,12 +230,12 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				array_push($this->CalendarTableEnableDisable, $this->CalendarLookupTableName[current($this->TableNames)][$i]['Enable/Disable']);
 				array_push($this->CalendarTableStatus, $this->CalendarLookupTableName[current($this->TableNames)][$i]['Status']);
 				
-				$this->XhtmlCalendarTableProtectionLayer->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
+				$this->LayerModule->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
 				$j = $i-1;
-				$this->XhtmlCalendarTableProtectionLayer->Connect($this->CalendarTableNames[$j]);
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarTableNames[$j], 'setDatabaseField', array('idnumber' => $passarray));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarTableNames[$j], 'setDatabaseRow', array('idnumber' => $passarray));
-				$this->XhtmlCalendarTableProtectionLayer->Disconnect($this->CalendarTableNames[$j]);
+				$this->LayerModule->Connect($this->CalendarTableNames[$j]);
+				$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseField', array('idnumber' => $passarray));
+				$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($this->CalendarTableNames[$j]);
 				$this->processCalendars ($this->CalendarTableNames[$j]);
 				$i++;
 			}
@@ -264,22 +266,22 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$passarray = $pageid;
 		
 		while ($this->CalendarAppointmentNames[$i]) {
-			$this->XhtmlCalendarTableProtectionLayer->Connect($this->CalendarAppointmentNames[$i]);
+			$this->LayerModule->Connect($this->CalendarAppointmentNames[$i]);
 			if (!$pageid['Day']) {
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'Day`, `StartTimeAmPm`, `StartTime'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'Day`, `StartTimeAmPm`, `StartTime'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'Day`, `StartTimeAmPm`, `StartTime'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'Day`, `StartTimeAmPm`, `StartTime'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
 			} else {
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'StartTimeAmPm`, `StartTime'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'StartTimeAmPm`, `StartTime'));
-				$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'StartTimeAmPm`, `StartTime'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'StartTimeAmPm`, `StartTime'));
+				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
 			}
-			$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseField', array('idnumber' => $passarray));
-			$this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->XhtmlCalendarTableProtectionLayer->Disconnect($this->CalendarAppointmentNames[$i]);
-			$this->CalendarAppointments[$this->CalendarAppointmentNames[$i]] = $this->XhtmlCalendarTableProtectionLayer->pass ($this->CalendarAppointmentNames[$i], 'getMultiRowField', array());
+			$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseField', array('idnumber' => $passarray));
+			$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->CalendarAppointmentNames[$i]);
+			$this->CalendarAppointments[$this->CalendarAppointmentNames[$i]] = $this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'getMultiRowField', array());
 			$this->processAppointments($this->CalendarAppointmentNames[$i], $i);
 
 			$i++;
@@ -306,33 +308,33 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	}
 	
 	protected function processCalendars ($calendarname) {
-		array_push($this->CalendarPageID, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'PageID')));
-		array_push($this->CalendarObjectID, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'ObjectID')));
-		array_push($this->CalendarAppointmentNames, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarAppointmentName')));
-		array_push($this->CalendarDay, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'Day')));
-		array_push($this->CalendarMonth, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'Month')));
-		array_push($this->CalendarYear, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'Year')));
-		array_push($this->CalendarHeadingStartTag, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTag')));
-		array_push($this->CalendarHeadingEndTag, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingEndTag')));
-		array_push($this->CalendarHeadingStartTagID, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagID')));
-		array_push($this->CalendarHeadingStartTagStyle, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagStyle')));
-		array_push($this->CalendarHeadingStartTagClass, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagClass')));
+		array_push($this->CalendarPageID, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'PageID')));
+		array_push($this->CalendarObjectID, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'ObjectID')));
+		array_push($this->CalendarAppointmentNames, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarAppointmentName')));
+		array_push($this->CalendarDay, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'Day')));
+		array_push($this->CalendarMonth, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'Month')));
+		array_push($this->CalendarYear, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'Year')));
+		array_push($this->CalendarHeadingStartTag, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTag')));
+		array_push($this->CalendarHeadingEndTag, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingEndTag')));
+		array_push($this->CalendarHeadingStartTagID, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagID')));
+		array_push($this->CalendarHeadingStartTagStyle, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagStyle')));
+		array_push($this->CalendarHeadingStartTagClass, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'HeadingStartTagClass')));
 		
-		array_push($this->CalendarAlign, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarAlign')));
-		array_push($this->CalendarChar, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarChar')));
-		array_push($this->CalendarCharoff, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarCharoff')));
-		array_push($this->CalendarValign, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarValign')));
+		array_push($this->CalendarAlign, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarAlign')));
+		array_push($this->CalendarChar, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarChar')));
+		array_push($this->CalendarCharoff, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarCharoff')));
+		array_push($this->CalendarValign, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarValign')));
 		
-		array_push($this->CalendarClass, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarClass')));
-		array_push($this->CalendarDir, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarDir')));
-		array_push($this->CalendarID, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarID')));
-		array_push($this->CalendarLang, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarLang')));
-		array_push($this->CalendarStyle, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarStyle')));
-		array_push($this->CalendarTitle, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarTitle')));
-		array_push($this->CalendarXMLLang, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarXMLLang')));
+		array_push($this->CalendarClass, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarClass')));
+		array_push($this->CalendarDir, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarDir')));
+		array_push($this->CalendarID, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarID')));
+		array_push($this->CalendarLang, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarLang')));
+		array_push($this->CalendarStyle, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarStyle')));
+		array_push($this->CalendarTitle, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarTitle')));
+		array_push($this->CalendarXMLLang, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'CalendarXMLLang')));
 		
-		array_push($this->CalendarEnableDisable, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'Enable/Disable')));
-		array_push($this->CalendarStatus, $this->XhtmlCalendarTableProtectionLayer->pass ($calendarname, 'getRowField', array('rowfield' => 'Status')));
+		array_push($this->CalendarEnableDisable, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'Enable/Disable')));
+		array_push($this->CalendarStatus, $this->LayerModule->pass ($calendarname, 'getRowField', array('rowfield' => 'Status')));
 	}
 	
 	protected function processAppointments ($calendarappointmentname, $i) {
@@ -926,14 +928,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->CalendarTable = $this->Writer->flush();
 		}
-		
-	}
-	
-	public function getOutput() {
-		return $this->CalendarTable;
 	}
 }
 ?>

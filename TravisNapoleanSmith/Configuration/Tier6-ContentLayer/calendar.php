@@ -21,27 +21,19 @@
 	
 	$calendardatabase = Array();
 	$calendardatabase['XhtmlCalendarTable'] = 'XhtmlCalendarTable';
-	$calendardatabase['Day'] = NULL;
-	$calendardatabase['Month'] = NULL;
-	$calendardatabase['Year'] = NULL;
 	
-	$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = array();
+	$databaseoptions['Day'] = NULL;
+	$databaseoptions['Month'] = NULL;
+	$databaseoptions['Year'] = NULL;
 	
-	$calendartable = new XhtmlCalendarTable($calendardatabase, $databases);
+	$calendartable = new XhtmlCalendarTable($calendardatabase, $databaseoptions);
 	$calendartable->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');
 	$calendartable->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$calendartable->FetchDatabase ($calendaridnumber);
 	$calendartable->CreateOutput(NULL);
-	$output = $calendartable->getOutput();
 	
-	/*$calendaridnumber['PageID'] = 2;
-	$calendartable2 = new XhtmlCalendarTable($calendardatabase, $databases);
-	$calendartable2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');
-	$calendartable2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
-	$calendartable2->FetchDatabase ($calendaridnumber);
-	$calendartable2->CreateOutput(NULL);
-	$output2 = $calendartable2->getOutput();*/
-	//print_r($calendartable);
-	print "$output\n";
-	//print "$output2\n";
+	$output = $GLOBALS['Writer']->flush();
+	print "$output";
+	
 ?>

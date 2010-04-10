@@ -42,16 +42,17 @@
 	$contentdatabase['ContentPrintPreview'] = 'ContentPrintPreview';
 	$contentdatabase['ContentLayerModules'] = 'ContentLayerModules';
 		
-	$databases = &$GLOBALS['Tier6Databases'];
+	//$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = NULL;
 	
-	$content = new XhtmlContent($contentdatabase, $databases);
+	$content = new XhtmlContent($contentdatabase, $databaseoptions);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Content');
 	$content->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$content->FetchDatabase ($contentidnumber);
 	$content->CreateOutput('    ');
 	
-	$contentoutput = $content->getOutput();
+	//$contentoutput = $content->getOutput();
 
-	print "$contentoutput";
+	//print "$contentoutput";
 	
 ?>

@@ -1,8 +1,6 @@
 <?php
 
 class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $PictureProtectionLayer;
-	
 	protected $PictureID;
 	protected $PictureClass;
 	protected $PictureStyle;
@@ -11,30 +9,21 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $Width;
 	protected $Height;
-	
-	protected $Picture;
-	
-	public function __construct($tablenames, $database) {
-		$this->PictureProtectionLayer = &$database;
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
-			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(3);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
 		}
-		//print_r($this->Writer);
+		
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -44,8 +33,8 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->PictureProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->PictureProtectionLayer->setDatabasetable ($databasetable);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($databasetable);
 	}
 
 	public function FetchDatabase ($PageID) {
@@ -53,30 +42,30 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->ObjectID = $PageID['ObjectID'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->PictureProtectionLayer->Connect($this->DatabaseTable);
+		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->PictureProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->PictureProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->StartTag = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
+		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->PictureID = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureID'));
-		$this->PictureClass = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureClass'));
-		$this->PictureStyle = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureStyle'));
-		$this->PictureLink = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureLink'));
-		$this->PictureAltText = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureAltText'));
+		$this->PictureID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureID'));
+		$this->PictureClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureClass'));
+		$this->PictureStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureStyle'));
+		$this->PictureLink = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureLink'));
+		$this->PictureAltText = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PictureAltText'));
 		
-		$this->EnableDisable = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
-		$this->Width = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Width'));
-		$this->Height = $this->PictureProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Height'));
+		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
+		$this->Width = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Width'));
+		$this->Height = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Height'));
 		
-		$this->PictureProtectionLayer->Disconnect($this->DatabaseTable);
+		$this->LayerModule->Disconnect($this->DatabaseTable);
 				
 	}
 	
@@ -115,17 +104,10 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			}
 			
 		}
-		$this->Writer->endDocument();
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->Picture = $this->Writer->flush();
 		}
-	}
-	
-	public function getOutput() {
-		return $this->Picture;
 	}
 }
 ?>

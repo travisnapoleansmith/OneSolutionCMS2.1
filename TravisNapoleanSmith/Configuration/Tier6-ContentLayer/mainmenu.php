@@ -22,12 +22,13 @@
 	$mainmenudatabase['MainMenuLookup'] = 'MainMenuLookup';
 	$mainmenudatabase['MainMenu'] = 'MainMenu';
 	
+	$databaseoptions = array();
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
-		$mainmenudatabase['JavaScriptFileName'] = 'Tier7-BehavioralLayer/menu-jquery.js';
-		$mainmenudatabase['JavaScriptLibraryName'] = 'Tier7-BehavioralLayer/jquery-1.3.2.min.js';
+		$databaseoptions['JavaScriptFileName'] = 'Tier7-BehavioralLayer/menu-jquery.js';
+		$databaseoptions['JavaScriptLibraryName'] = 'Tier7-BehavioralLayer/jquery-1.3.2.min.js';
 	}
 	
-	$mainmenudatabase['MainMenuID'] = 'main-menu';
+	/*$mainmenudatabase['MainMenuID'] = 'main-menu';
 	$mainmenudatabase['MainMenuClass'] = NULL;
 	$mainmenudatabase['MainMenuStyle'] = NULL;
 	$mainmenudatabase['MainMenuInsert'] = NULL;
@@ -43,20 +44,40 @@
 	$mainmenudatabase['MainMenuBottomInsert'] = NULL;
 	
 	$mainmenudatabase['Insert'] = '<img src="Images/Main-Logo.png" alt="KC Photo and Video Logo" class="main-menu-image"/>';
+	*/
+	//$databases = &$GLOBALS['Tier6Databases'];
 	
-	$databases = &$GLOBALS['Tier6Databases'];
 	
-	$mainmenu = new XhtmlMainMenu($mainmenudatabase, $databases);
+	$databaseoptions['MainMenuID'] = 'main-menu';
+	$databaseoptions['MainMenuClass'] = NULL;
+	$databaseoptions['MainMenuStyle'] = NULL;
+	$databaseoptions['MainMenuInsert'] = NULL;
+	
+	$databaseoptions['MainMenuTopID'] = 'main-menu-top';
+	$databaseoptions['MainMenuTopClass'] = NULL;
+	$databaseoptions['MainMenuTopStyle'] = NULL;
+	$databaseoptions['MainMenuTopInsert'] = NULL;
+	
+	$databaseoptions['MainMenuBottomID'] = 'main-menu-bottom';
+	$databaseoptions['MainMenuBottomClass'] = NULL;
+	$databaseoptions['MainMenuBottomStyle'] = NULL;
+	$databaseoptions['MainMenuBottomInsert'] = NULL;
+	
+	$databaseoptions['Insert'] = '<img src="Images/Main-Logo.png" alt="KC Photo and Video Logo" class="main-menu-image"/>';
+	
+	$mainmenu = new XhtmlMainMenu($mainmenudatabase, $databaseoptions);
 	$mainmenu->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MainMenuLookupNew');
 	$mainmenu->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$mainmenu->FetchDatabase ($mainmenuidnumber);
 	$mainmenu->CreateOutput('    ');
 	
-	$mainmenuoutput = $mainmenu->getOutput();
+	//$mainmenuoutput = $mainmenu->getOutput();
+	$mainmenuoutput = $GLOBALS['Writer']->flush();
+	print "$flashoutput";
 	
-	if ($mainmenuoutput) {
-		$Writer->writeRaw($mainmenuoutput);
-		$Writer->writeRaw("\n");
-	}
+	//if ($mainmenuoutput) {
+		//$Writer->writeRaw($mainmenuoutput);
+		//$Writer->writeRaw("\n");
+	//}
 	//print "$mainmenuoutput\n";
 ?>

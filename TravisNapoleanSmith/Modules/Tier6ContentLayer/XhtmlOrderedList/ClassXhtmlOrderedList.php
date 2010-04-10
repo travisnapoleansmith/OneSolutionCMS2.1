@@ -1,7 +1,6 @@
 <?php
 
-class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6ContentLayerModOles {
-	protected $ListProtectionLayer;
+class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $DatabaseTableName;
 	
 	protected $Insert;
@@ -31,36 +30,40 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 	
 	protected $LiEnableDisable = array();
 	
-	protected $List;
+	//protected $List;
 	
-	public function __construct($tablenames, $database) {
-		$this->ListProtectionLayer = &$database;
+	public function __construct($tablenames, $databaseoptions) {
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
 		
-		$this->Insert = $tablenames['Insert'];
-		unset($tablenames['Insert']);
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
+		if ($databaseoptions['Insert']) {
+			$this->Insert = $databaseoptions['Insert'];
+			unset($databaseoptions['Insert']);
+		}
 		
-		$this->NoAttributes = $tablenames['NoAttributes'];
-		unset($tablenames['NoAttributes']);
+		if ($databaseoptions['NoAttributes']) {
+			$this->FileName = $databaseoptions['NoAttributes'];
+			unset($databaseoptions['NoAttributes']);
+		}
+		
+		//$this->Insert = $tablenames['Insert'];
+		//unset($tablenames['Insert']);
+		
+		//$this->NoAttributes = $tablenames['NoAttributes'];
+		//unset($tablenames['NoAttributes']);
 		
 		$this->DatabaseTableName = current($tablenames);
-		
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
-			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(3);
-		}
 		
 	}
 	
@@ -71,8 +74,8 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
 		
-		$this->ListProtectionLayer->setDatabaseAll ($hostname, $user, $password, $databasename);
-		$this->ListProtectionLayer->setDatabasetable ($databasetable);
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($databasetable);
 	}
 	
 	public function FetchDatabase ($PageID) {
@@ -81,26 +84,26 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 		$this->PrintPreview = $PageID['PrintPreview'];
 		unset ($PageID['PrintPreview']);
 		
-		$this->ListProtectionLayer->Connect($this->DatabaseTable);
+		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		$this->ListProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
-		$this->ListProtectionLayer->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->StartTag = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
-		$this->EndTag = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
-		$this->StartTagID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
-		$this->StartTagStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
-		$this->StartTagClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
+		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
+		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
+		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
+		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
+		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->Ol = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ol'));
-		$this->OlClass = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlClass'));
-		$this->OlDir = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlDir'));
-		$this->OlID = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlID'));
-		$this->OlLang = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlLang'));
-		$this->OlStyle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlStyle'));
-		$this->OlTitle = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlTitle'));
-		$this->OlXMLLang = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlXMLLang'));
+		$this->Ol = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ol'));
+		$this->OlClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlClass'));
+		$this->OlDir = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlDir'));
+		$this->OlID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlID'));
+		$this->OlLang = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlLang'));
+		$this->OlStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlStyle'));
+		$this->OlTitle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlTitle'));
+		$this->OlXMLLang = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlXMLLang'));
 
 		$this->BuildLiList('Li', 'Li');
 		$this->BuildLiList('LiChildID', 'LiChildID');
@@ -115,10 +118,10 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 		
 		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
 	
-		$this->EnableDisable = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
-		$this->Status = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
+		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
-		$this->ListProtectionLayer->Disconnect($this->DatabaseTable);
+		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
 	
 	protected function BuildLiList($LiList, $LiListField) {
@@ -132,8 +135,8 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 			$Field = 'Li';
 			$Field .= $i;
 			$FieldName = str_replace('Li', $Field, $LiListField);
-			while($this->ListProtectionLayer->pass ($this->DatabaseTable, 'searchFieldNames', array('rowfield' => $FieldName))) {
-				$temp = $this->ListProtectionLayer->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $FieldName));
+			while($this->LayerModule->pass ($this->DatabaseTable, 'searchFieldNames', array('rowfield' => $FieldName))) {
+				$temp = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => $FieldName));
 				array_push($this->$LiList, $temp);
 				$i++;
 				$Field = 'Li';
@@ -146,21 +149,23 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
-			if ($this->StartTag){
+			if ($this->StartTag && !$this->NoAttributes){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
 				$this->Writer->startElement($this->StartTag);
-					$this->ProcessStandardAttribute('StartTag');
+					if (!$this->NoAttributes) {
+						$this->ProcessStandardAttribute('StartTag');
+					}
 			}
-			if ($this->Ol){
-				$this->Writer->writeRaw("\n ");
-				$this->Writer->writeRaw($this->CreateWordWrap($this->Ol));
+			if ($this->Ul){
+				$this->Writer->writeRaw("\n    ");
+				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
 				$this->Writer->writeRaw("\n");
 			}
 			
 			$this->Writer->startElement('ol');
 				if (!$this->NoAttributes) {
-					$this->ProcessStandardAttribute('Ol');
+					$this->ProcessStandardAttribute('OL');
 				}
 			if (is_array($this->Li)) {
 				if (is_array($this->LiChildID)){
@@ -176,35 +181,34 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 												}
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
+												$this->Li[key($this->Li)] = trim (current($this->Li));
 												$this->Writer->writeRaw("\n\t");
 												$this->Writer->writeRaw(current($this->Li));
-												$this->Writer->writeRaw("\n  ");
+												$this->Writer->writeRaw("\n     ");
 											}
 											if (current($this->LiChildID)){
 												$listidnumber = array();
 												$listidnumber['PageID'] = $this->PageID;
 												$listidnumber['ObjectID'] = current($this->LiChildID);
-												$listdatabase = Array();
+												$listdatabase = array();
 												$listdatabase[$this->DatabaseTableName] = $this->DatabaseTableName;
+												$databaseoptions = array();
 												if ($this->NoAttributes) {
-													$listdatabase['NoAttributes'] = $this->NoAttributes;
+													$databaseoptions['NoAttributes'] = $this->NoAttributes;
 												}
-												//$listdatabase['GlobalWriter'] = $this->Writer;
-												$databases = &$this->ListProtectionLayer;
+												//$databases = &$this->LayerModule;
 												
-												$list = new XhtmlUnorderedList($listdatabase, $databases);
+												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 												$list->FetchDatabase ($listidnumber);
 												
-												$tempspace = $this->Space;
+												/*$tempspace = $this->Space;
 												$tempspace .= '    ';
 												$list->CreateOutput($tempspace);
-												
-												$listoutput = $list->getOutput();
-												$listoutput = str_replace("\n","\n$this->Space", $listoutput);
-												$this->Writer->writeRaw($listoutput);
+												$this->Writer->writeRaw("\n");
+												*/
 											}
 											
 											$this->Writer->endElement(); // ENDS LI
@@ -247,24 +251,17 @@ class XhtmlOrderedList extends Tier6ContentLayerModOlesAbstract implements Tier6
 				$this->Writer->writeRaw("\n ");
 			}
 			
-			if ($this->EndTag) {
+			if ($this->EndTag && !$this->NoAttributes) {
 				$this->Writer->endElement(); // ENDS END TAG
 			} else {
 				$this->Writer->endElement(); // ENDS END TAG
 			}
 			
 		}
-		$this->Writer->endDocument();
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		} else {
-			$this->List = $this->Writer->flush();
 		}
-	}
-	
-	public function getOutput() {
-		return $this->List;
 	}
 }
 ?>

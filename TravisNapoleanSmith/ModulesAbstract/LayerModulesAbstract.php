@@ -193,7 +193,8 @@ abstract class LayerModulesAbstract
 					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
 						$DatabaseTables = array();
 						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
-						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables);
+						$DatabaseOptions = NULL;
+						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions);
 					}
 				}
 				
@@ -206,8 +207,8 @@ abstract class LayerModulesAbstract
 		}
 	}
 	
-	protected function createModules($ObjectType, $ObjectTypeName, $DatabaseTables) {
-		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $this->LayerModule);
+	protected function createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions) {
+		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $DatabaseOptions);
 		
 		reset($DatabaseTables);
 		$this->Modules[$ObjectType][$ObjectTypeName]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($DatabaseTables));

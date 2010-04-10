@@ -56,21 +56,39 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $NewsStoriesDatesEnableDisable = array();
 	protected $NewsStoriesDatesStatus = array();
 	
-	protected $ContentOutput;
+	//protected $ContentOutput;
 	
-	public function __construct($tablenames, $database) {
+	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier6Databases']; 
 		//$this->LayerModule = &$database;
 		
-		$this->FileName = $tablenames['FileName'];
+		/*$this->FileName = $tablenames['FileName'];
 		unset($tablenames['FileName']);
 		
 		$this->GlobalWriter = $tablenames['GlobalWriter'];
 		unset($tablenames['GlobalWriter']);
+		*/
 		
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
+		
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
+		
+		if ($databaseoptions['NoAttributes']) {
+			$this->NoAttributes = $databaseoptions['NoAttributes'];
+			unset($databaseoptions['NoAttributes']);
+		}
+		/*
 		$this->NoAttributes = $tablenames['NoAttributes'];
 		unset($tablenames['NoAttributes']);
-		
+		*/
 		$this->NewsStoriesTableName = current($tablenames);
 		$this->NewsStoriesLookupTableName = next($tablenames);
 		$this->NewsStoriesDatesTableName = next($tablenames);
@@ -78,7 +96,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->ContentLayerTablesName = next($tablenames);
 		$this->ContentPrintPreviewTableName = next($tablenames);
 		$this->ContentLayerModulesTableName = next($tablenames);
-		
+		/*
 		if ($this->GlobalWriter) {
 			$this->Writer = $this->GlobalWriter;
 		} else {
@@ -89,7 +107,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->Writer->openMemory();
 			}
 			$this->Writer->setIndent(3);
-		}
+		}*/
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -598,17 +616,21 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			next($this->NewsStoriesTable);
 			
 		}
-		$this->Writer->endDocument();
+		/*$this->Writer->endDocument();
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
 		} else {
 			$this->ContentOutput = $this->Writer->flush();
+		}*/
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
 		}
 	}
-	
+	/*
 	public function getOutput() {
 		return $this->ContentOutput;
-	}
+	}*/
 }
 ?>
