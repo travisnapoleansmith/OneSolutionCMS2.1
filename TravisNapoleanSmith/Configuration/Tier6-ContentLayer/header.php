@@ -37,7 +37,6 @@
 	$headerdatabase['PageAttributes'] = 'PageAttributes';
 	$headerdatabase['ContentLayerTheme'] = 'ContentLayerTheme';
 	
-	//$databases = &$GLOBALS['Tier6Databases'];
 	$databaseoptions = NULL;
 	
 	$header = new XhtmlHeader($headerdatabase, $databaseoptions);

@@ -130,8 +130,8 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 			$returnstring = $endstring;
 			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
 			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
-			// END STRIP AHREF TAG FOR WORDWRAP
 			
+			// END STRIP AHREF TAG FOR WORDWRAP
 			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n$wordspacing");
 			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
 			

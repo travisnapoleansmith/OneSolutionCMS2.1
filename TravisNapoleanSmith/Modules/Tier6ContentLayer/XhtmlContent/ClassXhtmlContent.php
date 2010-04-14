@@ -310,7 +310,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	}
 	
 	protected function buildOutput ($Space) {
-		$this->Space = $Space;
+		/*$this->Space = $Space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
@@ -401,6 +401,106 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			
 			if ($this->ContentEndTag) {
 				$this->Writer->writeRaw("   ");
+				$this->Writer->endElement();
+			}
+			
+			if ($this->EndTag) {
+				$this->Writer->writeRaw("   ");
+				$this->Writer->endElement();
+			}
+		}*/
+		$this->Space = $Space;
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
+			if ($this->StartTag){
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->writeRaw("\n");
+				$this->Writer->startElement($this->StartTag);
+					$this->ProcessStandardAttribute('StartTag');
+			}
+			
+			if ($this->HeadingStartTag){
+				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
+				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
+				$this->Writer->startElement($this->HeadingStartTag);
+					$this->ProcessStandardAttribute('HeadingStartTag');
+					$this->Writer->writeRaw($this->Heading);
+			}
+			
+			if ($this->HeadingEndTag) {
+				$this->Writer->endElement();
+			}
+			
+			if ($this->ContentStartTag == '<p>'){
+				if (!$this->HeadingStartTag) {
+					$this->Writer->writeRaw("\n");
+				}
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				
+				$this->Writer->writeRaw(" ");
+				$this->Writer->startElement($this->ContentStartTag);
+					$this->ProcessStandardAttribute('ContentStartTag');
+					$this->Content = trim($this->Content);
+					if (strpos($this->Content, "\n\r")) {
+						$this->Content = explode("\n\r", $this->Content);
+						$i = 0;
+						$count = count($this->Content);
+						$count--;
+						while (current($this->Content)) {
+							$this->Content[key($this->Content)] = trim(current($this->Content));
+							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content), "\t  ");
+							$this->Writer->writeRaw("\n\t  ");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n\t");
+							$this->Writer->endElement();
+							next($this->Content);
+							if (current($this->Content)) {
+								$this->ContentEndTag = NULL;
+								$this->Writer->writeRaw("  ");
+								$this->Writer->startElement('p');
+								$this->ProcessStandardAttribute('ContentPTag');
+							}
+							$i++;
+						}
+					} else {
+						$this->Content = $this->CreateWordWrap($this->Content, "\t  ");
+						$this->Content .= "\n  ";
+						$this->Writer->writeRaw("\n\t  ");
+						$this->Writer->writeRaw($this->Content);
+					}
+			} else if ($this->ContentStartTag){
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				$this->Writer->startElement($this->ContentStartTag);
+					$this->ProcessStandardAttribute('ContentStartTag');
+					
+				$this->Content = trim($this->Content);
+				if (strpos($this->Content, "\n\r")) {
+					$this->Content = explode("\n\r", $this->Content);
+					
+					while (current($this->Content)) {
+						$this->Writer->startElement('p');
+							$this->ProcessStandardAttribute('ContentPTag');
+							$this->Writer->writeRaw("\n    ");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n  ");
+						$this->Writer->endElement();
+						next($this->Content);
+					}
+				} else {
+					
+					$this->Writer->startElement('p');
+					$this->ProcessStandardAttribute('ContentPTag');
+					$this->Writer->writeRaw("\n    ");
+					$this->Writer->writeRaw($this->Content);
+					$this->Writer->writeRaw("\n  ");
+					$this->Writer->endElement();
+				}
+			}
+			
+			if ($this->ContentEndTag) {
+				$this->Writer->writeRaw("      ");
 				$this->Writer->endElement();
 			}
 			

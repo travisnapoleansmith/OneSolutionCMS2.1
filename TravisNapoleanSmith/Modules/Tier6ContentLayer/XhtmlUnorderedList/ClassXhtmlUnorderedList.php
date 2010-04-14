@@ -4,6 +4,8 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	protected $DatabaseTableName;
 	
 	protected $Insert;
+	protected $NoGlobal;
+	protected $Indent;
 	
 	protected $Ul;
 	
@@ -35,8 +37,6 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		
-		
 		if ($databaseoptions['Insert']) {
 			$this->Insert = $databaseoptions['Insert'];
 			unset($databaseoptions['Insert']);
@@ -47,21 +47,30 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			unset($databaseoptions['NoAttributes']);
 		}
 		
+		if ($databaseoptions['NoGlobal']) {
+			$this->NoGlobal = $databaseoptions['NoGlobal'];
+			unset($databaseoptions['NoGlobal']);
+		}
+		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
 			unset($databaseoptions['FileName']);
 		}
 		
+		if ($databaseoptions['Indent']) {
+			$this->Indent = $databaseoptions['Indent'];
+			unset($databaseoptions['Indent']);
+		}
+		
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
-		} if ($this->NoAttibutes) {
+		} if ($this->NoAttibutes || $this->NoGlobal) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openMemory();
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
-		
 		
 		
 		$this->DatabaseTableName = current($tablenames);
@@ -157,8 +166,10 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 					if (!$this->NoAttributes) {
 						$this->ProcessStandardAttribute('StartTag');
 					}
+				
 			}
 			if ($this->Ul){
+				//$this->Writer->writeRaw("\n");
 				$this->Writer->writeRaw("\n    ");
 				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
 				$this->Writer->writeRaw("\n");
@@ -183,9 +194,17 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
 												$this->Li[key($this->Li)] = trim (current($this->Li));
-												$this->Writer->writeRaw("\n\t");
+												if ($this->Indent) {
+													$this->Writer->writeRaw("\n\t $this->Indent");
+												} else {
+													$this->Writer->writeRaw("\n\t ");
+												}
 												$this->Writer->writeRaw(current($this->Li));
-												$this->Writer->writeRaw("\n     ");
+												if (current($this->LiChildID)) {
+													$this->Writer->writeRaw("\n");
+												} else {
+													$this->Writer->writeRaw("\n     ");
+												}
 											}
 											if (current($this->LiChildID)){
 												$listidnumber = array();
@@ -197,22 +216,35 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 												if ($this->NoAttributes) {
 													$databaseoptions['NoAttributes'] = $this->NoAttributes;
 												}
-												//$databases = &$this->LayerModule;
 												
+												$databaseoptions['NoGlobal'] = FALSE;
+												if ($this->Indent) {
+													$databaseoptions['Indent'] = $this->Indent;
+													$databaseoptions['Indent'] .= "  ";
+												} else {
+													$databaseoptions['Indent'] = "  ";
+												}
 												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 												$list->FetchDatabase ($listidnumber);
 												
-												/*$tempspace = $this->Space;
+												$tempspace = $this->Space;
 												$tempspace .= '    ';
 												$list->CreateOutput($tempspace);
 												$this->Writer->writeRaw("\n");
-												*/
+												$this->Writer->writeRaw("   ");
+											} else {
+												$this->Writer->writeRaw("   ");
 											}
 											
+											if ($this->Indent) {
+												$this->Writer->writeRaw($this->Indent);
+											}
 											$this->Writer->endElement(); // ENDS LI
+											// CHANGED
+											//$this->Writer->writeRaw("\n");
 										}
 										next($this->Li);
 										next($this->LiChildID);
@@ -254,8 +286,6 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			
 			if ($this->EndTag && !$this->NoAttributes) {
 				$this->Writer->endElement(); // ENDS END TAG
-			} else {
-				$this->Writer->endElement(); // ENDS END TAG
 			}
 			
 		}
@@ -263,7 +293,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->Writer->flush();
 		}
 		
-		if ($this->NoAttributes) {
+		if ($this->NoAttributes || $this->NoGlobal) {
 			$this->List = $this->Writer->flush();
 		}
 		

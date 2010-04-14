@@ -549,6 +549,9 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	}
 	
 	protected function getCalendarMonthNumber ($month) {
+		if ($month == 'Current') {
+			$month = $this->CurrentMonth;
+		}
 		if ($month == 'January') {
 			return 1;
 		}
@@ -585,6 +588,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($month == 'December') {
 			return 12;
 		}
+		
 	}
 	
 	protected function TableWeek(array $week, $i) {
@@ -916,7 +920,6 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 						}
 					}
 				}
-				$this->Writer->endElement();  // ENDS TR TAG
 			$this->Writer->endElement(); // ENDS TABLE TAG
 			
 			if (!$this->CalendarDay[$i]) {

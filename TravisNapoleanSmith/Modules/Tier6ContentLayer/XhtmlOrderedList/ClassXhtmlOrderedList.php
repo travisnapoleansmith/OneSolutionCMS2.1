@@ -53,15 +53,24 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 		
 		if ($databaseoptions['NoAttributes']) {
-			$this->FileName = $databaseoptions['NoAttributes'];
+			$this->NoAttributes = $databaseoptions['NoAttributes'];
 			unset($databaseoptions['NoAttributes']);
 		}
 		
-		//$this->Insert = $tablenames['Insert'];
-		//unset($tablenames['Insert']);
+		if ($databaseoptions['NoGlobal']) {
+			$this->NoGlobal = $databaseoptions['NoGlobal'];
+			unset($databaseoptions['NoGlobal']);
+		}
 		
-		//$this->NoAttributes = $tablenames['NoAttributes'];
-		//unset($tablenames['NoAttributes']);
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
+		
+		if ($databaseoptions['Indent']) {
+			$this->Indent = $databaseoptions['Indent'];
+			unset($databaseoptions['Indent']);
+		}
 		
 		$this->DatabaseTableName = current($tablenames);
 		
@@ -182,9 +191,17 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 											if (current($this->Li)) {
 												$this->Li[key($this->Li)] = $this->CreateWordWrap(current($this->Li));
 												$this->Li[key($this->Li)] = trim (current($this->Li));
-												$this->Writer->writeRaw("\n\t");
+												if ($this->Indent) {
+													$this->Writer->writeRaw("\n\t $this->Indent");
+												} else {
+													$this->Writer->writeRaw("\n\t ");
+												}
 												$this->Writer->writeRaw(current($this->Li));
-												$this->Writer->writeRaw("\n     ");
+												if (current($this->LiChildID)) {
+													$this->Writer->writeRaw("\n");
+												} else {
+													$this->Writer->writeRaw("\n     ");
+												}
 											}
 											if (current($this->LiChildID)){
 												$listidnumber = array();
@@ -196,22 +213,35 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 												if ($this->NoAttributes) {
 													$databaseoptions['NoAttributes'] = $this->NoAttributes;
 												}
-												//$databases = &$this->LayerModule;
 												
+												$databaseoptions['NoGlobal'] = FALSE;
+												if ($this->Indent) {
+													$databaseoptions['Indent'] = $this->Indent;
+													$databaseoptions['Indent'] .= "  ";
+												} else {
+													$databaseoptions['Indent'] = "  ";
+												}
 												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 												$list->FetchDatabase ($listidnumber);
 												
-												/*$tempspace = $this->Space;
+												$tempspace = $this->Space;
 												$tempspace .= '    ';
 												$list->CreateOutput($tempspace);
 												$this->Writer->writeRaw("\n");
-												*/
+												$this->Writer->writeRaw("   ");
+											} else {
+												$this->Writer->writeRaw("   ");
 											}
 											
+											if ($this->Indent) {
+												$this->Writer->writeRaw($this->Indent);
+											}
 											$this->Writer->endElement(); // ENDS LI
+											// CHANGED
+											//$this->Writer->writeRaw("\n");
 										}
 										next($this->Li);
 										next($this->LiChildID);

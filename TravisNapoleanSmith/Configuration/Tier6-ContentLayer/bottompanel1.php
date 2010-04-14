@@ -28,9 +28,9 @@
 		$listdatabase = Array();
 		$listdatabase['MenuBottomPanel1'] = 'MenuBottomPanel1';
 		
-		$databases = &$GLOBALS['Tier6Databases'];
+		$databaseoptions = NULL;
 		
-		$list = new XhtmlMenu($listdatabase, $databases);
+		$list = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list->FetchDatabase ($listidnumber);
@@ -39,7 +39,7 @@
 		
 		$listoutput = $list->getOutput();
 		
-		$list1 = new XhtmlMenu($listdatabase, $databases);
+		$list1 = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list1->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list1->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list1->FetchDatabase ($listidnumber);
@@ -49,7 +49,7 @@
 		
 		$listoutput1 = $list1->getOutput();
 			
-		$list2 = new XhtmlMenu($listdatabase, $databases);
+		$list2 = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list2->FetchDatabase ($listidnumber);
@@ -59,7 +59,7 @@
 		
 		$listoutput2 = $list2->getOutput();
 				
-		$list3 = new XhtmlMenu($listdatabase, $databases);
+		$list3 = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list3->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list3->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list3->FetchDatabase ($listidnumber);
@@ -69,7 +69,7 @@
 		
 		$listoutput3 = $list3->getOutput();
 		
-		$list4 = new XhtmlMenu($listdatabase, $databases);
+		$list4 = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list4->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list4->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list4->FetchDatabase ($listidnumber);
@@ -79,7 +79,7 @@
 		
 		$listoutput4 = $list4->getOutput();
 		
-		$list5 = new XhtmlMenu($listdatabase, $databases);
+		$list5 = new XhtmlMenu($listdatabase, $databaseoptions);
 		$list5->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 		$list5->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 		$list5->FetchDatabase ($listidnumber);

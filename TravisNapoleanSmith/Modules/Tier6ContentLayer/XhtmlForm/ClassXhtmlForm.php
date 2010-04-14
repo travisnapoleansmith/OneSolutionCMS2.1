@@ -2137,7 +2137,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$object->CreateOutput('    ');
 		
 		$objectoutput = $object->getOutput();
-		print_r($objectoutput);
 	}
 	
 	public function CreateOutput($space) {

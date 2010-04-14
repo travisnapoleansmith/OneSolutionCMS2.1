@@ -33,60 +33,135 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	protected $EnableDisable = array();
 	protected $Status = array();
 	
-	protected $MainMenu;
+	//protected $MainMenu;
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
-		$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
+		//$this->FileName = $tablenames['FileName'];
+		//unset($tablenames['FileName']);
 		
-		$this->JavaScriptFileName = $tablenames['JavaScriptFileName'];
-		unset($tablenames['JavaScriptFileName']);
+		if ($databaseoptions['JavaScriptFileName']) {
+			$this->JavaScriptFileName = $databaseoptions['JavaScriptFileName'];
+			unset($databaseoptions['JavaScriptFileName']);
+		}
 		
-		$this->JavaScriptLibraryName = $tablenames['JavaScriptLibraryName'];
-		unset($tablenames['JavaScriptLibraryName']);
+		//$this->JavaScriptFileName = $tablenames['JavaScriptFileName'];
+		//unset($tablenames['JavaScriptFileName']);
 		
-		$this->MainMenuID = $tablenames['MainMenuID'];
-		unset($tablenames['MainMenuID']);
+		if ($databaseoptions['JavaScriptLibraryName']) {
+			$this->JavaScriptLibraryName = $databaseoptions['JavaScriptLibraryName'];
+			unset($databaseoptions['JavaScriptLibraryName']);
+		}
 		
-		$this->MainMenuClass = $tablenames['MainMenuClass'];
-		unset($tablenames['MainMenuClass']);
+		//$this->JavaScriptLibraryName = $tablenames['JavaScriptLibraryName'];
+		//unset($tablenames['JavaScriptLibraryName']);
 		
-		$this->MainMenuStyle = $tablenames['MainMenuStyle'];
-		unset($tablenames['MainMenuStyle']);
+		if ($databaseoptions['MainMenuID']) {
+			$this->MainMenuID = $databaseoptions['MainMenuID'];
+			unset($databaseoptions['MainMenuID']);
+		}
 		
-		$this->MainMenuInsert = $tablenames['MainMenuInsert'];
-		unset($tablenames['MainMenuInsert']);
+		//$this->MainMenuID = $tablenames['MainMenuID'];
+		//unset($tablenames['MainMenuID']);
 		
-		$this->MainMenuTopID = $tablenames['MainMenuTopID'];
-		unset($tablenames['MainMenuTopID']);
+		if ($databaseoptions['MainMenuClass']) {
+			$this->MainMenuClass = $databaseoptions['MainMenuClass'];
+			unset($databaseoptions['MainMenuClass']);
+		}
 		
-		$this->MainMenuTopClass = $tablenames['MainMenuTopClass'];
-		unset($tablenames['MainMenuTopClass']);
+		//$this->MainMenuClass = $tablenames['MainMenuClass'];
+		//unset($tablenames['MainMenuClass']);
 		
-		$this->MainMenuTopStyle = $tablenames['MainMenuTopStyle'];
-		unset($tablenames['MainMenuTopStyle']);
+		if ($databaseoptions['MainMenuStyle']) {
+			$this->MainMenuStyle = $databaseoptions['MainMenuStyle'];
+			unset($databaseoptions['MainMenuStyle']);
+		}
 		
-		$this->MainMenuTopInsert = $tablenames['MainMenuTopInsert'];
-		unset($tablenames['MainMenuTopInsert']);
+		//$this->MainMenuStyle = $tablenames['MainMenuStyle'];
+		//unset($tablenames['MainMenuStyle']);
 		
-		$this->MainMenuBottomID = $tablenames['MainMenuBottomID'];
-		unset($tablenames['MainMenuBottomID']);
+		if ($databaseoptions['MainMenuInsert']) {
+			$this->MainMenuInsert = $databaseoptions['MainMenuInsert'];
+			unset($databaseoptions['MainMenuInsert']);
+		}
 		
-		$this->MainMenuBottomClass = $tablenames['MainMenuBottomClass'];
-		unset($tablenames['MainMenuBottomClass']);
+		//$this->MainMenuInsert = $tablenames['MainMenuInsert'];
+		//unset($tablenames['MainMenuInsert']);
 		
-		$this->MainMenuBottomStyle = $tablenames['MainMenuBottomStyle'];
-		unset($tablenames['MainMenuBottomStyle']);
+		if ($databaseoptions['MainMenuTopID']) {
+			$this->MainMenuTopID = $databaseoptions['MainMenuTopID'];
+			unset($databaseoptions['MainMenuTopID']);
+		}
 		
-		$this->MainMenuBottomInsert = $tablenames['MainMenuBottomInsert'];
-		unset($tablenames['MainMenuBottomInsert']);
+		//$this->MainMenuTopID = $tablenames['MainMenuTopID'];
+		//unset($tablenames['MainMenuTopID']);
 		
-		$this->Insert = $tablenames['Insert'];
-		unset($tablenames['Insert']);
+		if ($databaseoptions['MainMenuTopClass']) {
+			$this->MainMenuTopClass = $databaseoptions['MainMenuTopClass'];
+			unset($databaseoptions['MainMenuTopClass']);
+		}
 		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
+		//$this->MainMenuTopClass = $tablenames['MainMenuTopClass'];
+		//unset($tablenames['MainMenuTopClass']);
+		
+		if ($databaseoptions['MainMenuTopStyle']) {
+			$this->MainMenuTopStyle = $databaseoptions['MainMenuTopStyle'];
+			unset($databaseoptions['MainMenuTopStyle']);
+		}
+		
+		//$this->MainMenuTopStyle = $tablenames['MainMenuTopStyle'];
+		//unset($tablenames['MainMenuTopStyle']);
+		
+		if ($databaseoptions['MainMenuTopInsert']) {
+			$this->MainMenuTopInsert = $databaseoptions['MainMenuTopInsert'];
+			unset($databaseoptions['MainMenuTopInsert']);
+		}
+		
+		//$this->MainMenuTopInsert = $tablenames['MainMenuTopInsert'];
+		//unset($tablenames['MainMenuTopInsert']);
+		
+		if ($databaseoptions['MainMenuBottomID']) {
+			$this->MainMenuBottomID = $databaseoptions['MainMenuBottomID'];
+			unset($databaseoptions['MainMenuBottomID']);
+		}
+		
+		//$this->MainMenuBottomID = $tablenames['MainMenuBottomID'];
+		//unset($tablenames['MainMenuBottomID']);
+		
+		if ($databaseoptions['MainMenuBottomClass']) {
+			$this->MainMenuBottomClass = $databaseoptions['MainMenuBottomClass'];
+			unset($databaseoptions['MainMenuBottomClass']);
+		}
+		
+		//$this->MainMenuBottomClass = $tablenames['MainMenuBottomClass'];
+		//unset($tablenames['MainMenuBottomClass']);
+		
+		if ($databaseoptions['MainMenuBottomStyle']) {
+			$this->MainMenuBottomStyle = $databaseoptions['MainMenuBottomStyle'];
+			unset($databaseoptions['MainMenuBottomStyle']);
+		}
+		
+		//$this->MainMenuBottomStyle = $tablenames['MainMenuBottomStyle'];
+		//unset($tablenames['MainMenuBottomStyle']);
+		
+		if ($databaseoptions['MainMenuBottomInsert']) {
+			$this->MainMenuBottomInsert = $databaseoptions['MainMenuBottomInsert'];
+			unset($databaseoptions['MainMenuBottomInsert']);
+		}
+		
+		//$this->MainMenuBottomInsert = $tablenames['MainMenuBottomInsert'];
+		//unset($tablenames['MainMenuBottomInsert']);
+		
+		if ($databaseoptions['Insert']) {
+			$this->Insert = $databaseoptions['Insert'];
+			unset($databaseoptions['Insert']);
+		}
+		
+		//$this->Insert = $tablenames['Insert'];
+		//unset($tablenames['Insert']);
+		
+		/*$this->GlobalWriter = $tablenames['GlobalWriter'];
 		unset($tablenames['GlobalWriter']);
 		
 		if ($this->GlobalWriter) {
@@ -100,7 +175,19 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			}
 			$this->Writer->setIndent(4);
 		}
+		*/
 		
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
+		
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
@@ -125,7 +212,6 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	}
 	
 	public function FetchDatabase ($PageID) {
-		
 		unset ($PageID['PrintPreview']);
 		$passarray = array();
 		$passarray = &$PageID;
@@ -155,19 +241,20 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			$listdatabase = Array();
 			$listdatabase[current($this->TableNames)] = current($this->TableNames);
 			
+			$databaseoptions = array();
 			if ($this->Insert) {
-				$listdatabase['Insert'] = $this->Insert;
+				$databaseoptions['Insert'] = $this->Insert;
 			}
+
+			//$databases = &$this->LayerModule;
+			//$databaseoptions['NoGlobal'] = 'NoGlobal';
 			
-			$databases = &$this->LayerModule;
-			
-			$list = new XhtmlUnorderedList($listdatabase, $databases);
-			
+			$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
 			$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($this->TableNames));
 			$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 			$list->FetchDatabase ($listidnumber);
-			$list->CreateOutput('    ');
-			
+			//$list->CreateOutput('    ');
+			//$objectoutput = $object->getOutput();
 			$this->MainMenuTables[current($this->TableNames)] = $list;
 			$i++;
 		}
@@ -215,11 +302,13 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			$LookupMenuItemName = $this->LookupMenuItemName[$i];
 			$LookupEnableDisable = $this->LookupEnableDisable[$i];
 			$LookupStatus = $this->LookupStatus[$i];
-			$Output = $this->MainMenuTables[current($this->TableNames)]->getOutput();
+			//$Output = $this->MainMenuTables[current($this->TableNames)]->getOutput();
 			
 			if ($LookupEnableDisable == 'Enable' & $LookupStatus == 'Approved') {
 				$this->Writer->writeRaw("\n");
-				$this->Writer->writeRaw($Output);
+				$this->MainMenuTables[current($this->TableNames)]->CreateOutput('    ');
+				//$this->Writer->writeRaw("\n      ");
+				//$this->Writer->writeRaw($Output);
 			}
 			$i++;
 		}
@@ -238,7 +327,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		}
 		
 		if ($this->MainMenuID || $this->MainMenuClass || $this->MainMenuStyle || $this->MainMenuInsert) {
-			$this->Writer->writeRaw("\n");
+			$this->Writer->writeRaw("\n     ");
 			$this->Writer->fullEndElement();
 		}
 		
@@ -248,18 +337,22 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			$this->Writer->writeAttribute('src', $this->JavaScriptFileName);
 			$this->Writer->fullEndElement();
 		}
-		$this->Writer->endDocument();
+		$this->Writer->writeRaw("\n");
+		/*$this->Writer->endDocument();
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
 		} else {
 			$this->MainMenu = $this->Writer->flush();
+		}*/
+		if ($this->FileName) {
+			$this->Writer->flush();
 		}
 		
 	}
-	
+	/*
 	public function getOutput() {
 		return $this->MainMenu;
-	}
+	}*/
 }
 ?>

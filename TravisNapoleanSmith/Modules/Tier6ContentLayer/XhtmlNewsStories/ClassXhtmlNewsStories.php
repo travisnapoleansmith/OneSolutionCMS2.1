@@ -56,18 +56,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $NewsStoriesDatesEnableDisable = array();
 	protected $NewsStoriesDatesStatus = array();
 	
-	//protected $ContentOutput;
-	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier6Databases']; 
-		//$this->LayerModule = &$database;
-		
-		/*$this->FileName = $tablenames['FileName'];
-		unset($tablenames['FileName']);
-		
-		$this->GlobalWriter = $tablenames['GlobalWriter'];
-		unset($tablenames['GlobalWriter']);
-		*/
 		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
@@ -85,10 +75,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->NoAttributes = $databaseoptions['NoAttributes'];
 			unset($databaseoptions['NoAttributes']);
 		}
-		/*
-		$this->NoAttributes = $tablenames['NoAttributes'];
-		unset($tablenames['NoAttributes']);
-		*/
+		
 		$this->NewsStoriesTableName = current($tablenames);
 		$this->NewsStoriesLookupTableName = next($tablenames);
 		$this->NewsStoriesDatesTableName = next($tablenames);
@@ -96,18 +83,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->ContentLayerTablesName = next($tablenames);
 		$this->ContentPrintPreviewTableName = next($tablenames);
 		$this->ContentLayerModulesTableName = next($tablenames);
-		/*
-		if ($this->GlobalWriter) {
-			$this->Writer = $this->GlobalWriter;
-		} else {
-			$this->Writer = new XMLWriter();
-			if ($this->FileName) {
-				$this->Writer->openURI($this->FileName);
-			} else {
-				$this->Writer->openMemory();
-			}
-			$this->Writer->setIndent(3);
-		}*/
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -278,7 +253,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 					$newpassarray['NewsStoryYear'] = $this->NewsStoriesLookupNewsStoryYear;
 				}
 			}
-			//print date('m');
 			if ($this->NewsStoriesLookupNewsStoryMonth) {
 				if ($this->NewsStoriesLookupNewsStoryMonth == 'Current') {
 					$newpassarray['NewsStoryMonth'] = date('F');
@@ -343,6 +317,22 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 					$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
 					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
 					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last30Days') {
+					$newpassarray['NewsStoryMonth'] = date('F');
+					$newpassarray['NewsStoryYear'] = date('Y');
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last60Days') {
+					$newpassarray['NewsStoryMonth'] = date('F');
+					$newpassarray['NewsStoryYear'] = date('Y');
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last90Days') {
+					$newpassarray['NewsStoryMonth'] = date('F');
+					$newpassarray['NewsStoryYear'] = date('Y');
+					
+				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last120Days') {
+					$newpassarray['NewsStoryMonth'] = date('F');
+					$newpassarray['NewsStoryYear'] = date('Y');
+					
 				} else {
 					$newpassarray['NewsStoryMonth'] = $this->NewsStoriesLookupNewsStoryMonth;
 				}
@@ -354,8 +344,15 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->NewsStoriesDatesTable = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
 			$this->NewsStoriesDatesTable = array_reverse($this->NewsStoriesDatesTable);
 			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
-			
-			$this->NewsStoriesTable = array();
+			if ($this->NewsStoriesLookupNewsStoryMonth == 'Last30Days') {
+				$this->buildLastDays(2, 30);
+			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last60Days') {
+				$this->buildLastDays(3, 60);
+			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last90Days') {
+				$this->buildLastDays(4, 90);
+			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last120Days') {
+				$this->buildLastDays(5, 120);
+			} 
 			
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();
@@ -372,6 +369,45 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			}
 			reset($this->NewsStoriesTable);
 		}
+	}
+	
+	protected function buildLastDays($MonthNumber, $Days) {
+		$i = 1;
+		while ($i < $MonthNumber) {
+			$lastmonthtime = mktime(0, 0, 0, date('m')-$i, date('d'), date('Y'));
+			$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
+			$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
+			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
+			
+			$hold = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
+			$hold = array_reverse($hold);
+			if ($this->NewsStoriesDatesTable[0] == NULL) {
+				$this->NewsStoriesDatesTable = $hold;
+			} else {
+				$this->NewsStoriesDatesTable = array_merge($this->NewsStoriesDatesTable, $hold);
+			}
+			$i++;
+		}
+		$lastmonthtime = mktime(0, 0, 0, date('m'), date('d')-$Days, date('Y'));
+		$earlydate = date('j', $lastmonthtime);
+		$earlymonth = date('F', $lastmonthtime);
+		$earlyyear = date('Y', $lastmonthtime);
+		
+		$i = 0;
+		while ($this->NewsStoriesDatesTable[$i]) {
+			if ($this->NewsStoriesDatesTable[$i]['NewsStoryYear'] == $earlyyear) {
+				if ($this->NewsStoriesDatesTable[$i]['NewsStoryMonth'] == $earlymonth) {
+					if ($this->NewsStoriesDatesTable[$i]['NewsStoryDay'] <= $earlydate) {
+						unset($this->NewsStoriesDatesTable[$i]);
+					}
+				}
+			}
+			$i++;
+		}
+		$this->NewsStoriesDatesTable = array_merge($this->NewsStoriesDatesTable);
+		reset($this->NewsStoriesDatesTable);
 	}
 	
 	protected function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
@@ -433,7 +469,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
-				$this->Writer->writeRaw("\n\t");
+				$this->Writer->writeRaw("\n");
 				$this->Writer->startElement($this->StartTag);
 					$this->ProcessStandardAttribute('StartTag');
 			}
@@ -441,7 +477,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			if ($this->HeadingStartTag){
 				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
 				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
-				$this->Writer->writeRaw("\n\t");
 				$this->Writer->startElement($this->HeadingStartTag);
 					$this->ProcessStandardAttribute('HeadingStartTag');
 					$this->Writer->writeRaw($this->Heading);
@@ -455,7 +490,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
 				
-				$this->Writer->writeRaw("\t  ");
+				$this->Writer->writeRaw(" ");
 				$this->Writer->startElement($this->ContentStartTag);
 					$this->ProcessStandardAttribute('ContentStartTag');
 					$this->Content = trim($this->Content);
@@ -467,23 +502,23 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 						while (current($this->Content)) {
 							$this->Content[key($this->Content)] = trim(current($this->Content));
 							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
-							$this->Writer->writeRaw("\n\t     ");
+							$this->Writer->writeRaw("\n\t");
 							$this->Writer->writeRaw(current($this->Content));
-							$this->Writer->writeRaw("\n\t  ");
+							$this->Writer->writeRaw("\n  ");
 							$this->Writer->endElement();
 							next($this->Content);
 							if (current($this->Content)) {
 								$this->ContentEndTag = NULL;
-								$this->Writer->writeRaw("\t  ");
+								$this->Writer->writeRaw("  ");
 								$this->Writer->startElement('p');
 								$this->ProcessStandardAttribute('ContentPTag');
 							}
 							$i++;
 						}
 					} else {
-						$this->Content = $this->CreateWordWrap($this->Content);
-						$this->Content .= "\n\t  ";
-						$this->Writer->writeRaw("\n\t     ");
+						$this->Content = $this->CreateWordWrap($this->Content, "\t  ");
+						$this->Content .= "\n  ";
+						$this->Writer->writeRaw("\n\t  ");
 						$this->Writer->writeRaw($this->Content);
 					}
 			} else if ($this->ContentStartTag){
@@ -506,6 +541,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 						next($this->Content);
 					}
 				} else {
+					
 					$this->Writer->startElement('p');
 					$this->ProcessStandardAttribute('ContentPTag');
 					$this->Writer->writeRaw("\n    ");
@@ -516,11 +552,12 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			}
 			
 			if ($this->ContentEndTag) {
+				$this->Writer->writeRaw("      ");
 				$this->Writer->endElement();
 			}
 			
 			if ($this->EndTag) {
-				$this->Writer->writeRaw("\t");
+				$this->Writer->writeRaw("   ");
 				$this->Writer->endElement();
 			}
 		}
@@ -612,25 +649,18 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				
 				$this->buildObjectType();
 				$i++;
+				
 			}
 			next($this->NewsStoriesTable);
+			if (current($this->NewsStoriesTable)) {
+				$this->Writer->writeRaw("\n");
+			}
 			
 		}
-		/*$this->Writer->endDocument();
-		
-		if ($this->FileName) {
-			$this->Writer->flush();
-		} else {
-			$this->ContentOutput = $this->Writer->flush();
-		}*/
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}
 	}
-	/*
-	public function getOutput() {
-		return $this->ContentOutput;
-	}*/
 }
 ?>
