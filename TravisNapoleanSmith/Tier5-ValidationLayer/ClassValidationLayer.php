@@ -71,12 +71,18 @@ class ValidationLayer extends LayerModulesAbstract
 			next($this->Modules);
 		}
 		
-		if ($hold) {
-			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
-			if ($hold2) {
-				return $hold2;
-			} else {
-				return FALSE;
+		if ($function == 'FORM') {
+			if ($hold) {
+				return $hold;
+			}
+		} else {
+			if ($hold) {
+				$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
+				if ($hold2) {
+					return $hold2;
+				} else {
+					return FALSE;
+				}
 			}
 		}
 	}

@@ -65,6 +65,8 @@
 	$Tier4Databases->createDatabaseTable('ProtectionLayerModulesSettings');
 	$Tier4Databases->createDatabaseTable('ProtectionLayerTables');
 	
+	$Tier4Databases->createDatabaseTable('States');
+	
 	$Tier4Databases->createDatabaseTable('ValidationLayerModules');
 	$Tier4Databases->createDatabaseTable('ValidationLayerModulesSettings');
 	$Tier4Databases->createDatabaseTable('ValidationLayerTables');
@@ -76,6 +78,8 @@
 	$Tier4Databases->createDatabaseTable('XMLNewsSitemap');
 	$Tier4Databases->createDatabaseTable('XMLNewsYearMonthSitemap');
 	$Tier4Databases->createDatabaseTable('XMLSitemap');
+	
+	$Tier4Databases->createDatabaseTable('Zipcodes');
 	
 	$Tier4Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 	$Tier4Databases->buildModules('AuthenticationLayerModules', 'AuthenticationLayerTables');
