@@ -4,6 +4,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $TableNames = array();
 	protected $FormLookupTableName = array();
 		
+	protected $FormSession;
+	
 	// Xhtml Form Required Attributes
 	protected $FormAction = array();
 	
@@ -392,6 +394,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		if ($databaseoptions['PrintPreview']) {
 			$this->PrintPreview = $databaseoptions['PrintPreview'];
 			unset($databaseoptions['PrintPreview']);
+		}
+		
+		if ($databaseoptions['FormSession']) {
+			$this->FormSession = $databaseoptions['FormSession'];
 		}
 		
 		while (current($tablenames)) {
@@ -843,7 +849,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected function buildFormInput($objectid) {
 		reset($this->FormLookupTableName['FormInput']);
-		
 		reset($this->FormInputPageID);
 		reset($this->FormInputObjectID);
 		
@@ -933,6 +938,9 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					
 					if (current($this->FormInputName)) {
 						$this->Writer->writeAttribute('name', current($this->FormInputName));
+						if ($this->FormSession[current($this->FormInputName)]) {
+							$this->FormInputValue[key($this->FormInputValue)] = $this->FormSession[current($this->FormInputName)];
+						}
 					} else if (current($this->FormInputNameDynamic)) {
 						$tablename = current($this->FormInputNameTableName);
 						$field = current($this->FormInputNameField);

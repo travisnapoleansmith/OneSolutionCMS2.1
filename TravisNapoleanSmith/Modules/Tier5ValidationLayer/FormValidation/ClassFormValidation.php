@@ -52,8 +52,6 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 	public function Verify($function, $functionarguments){
 		if ($function == 'FORM') {
 			$hold = array();
-			print_r($functionarguments);
-			print_r($this->LookupTable);
 			reset ($this->LookupTable['FormValidation']);
 			while (current($this->LookupTable['FormValidation'])) {
 				if ($this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldAttribute']) {
@@ -69,13 +67,19 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 						
 						$temp = $this->$functionname($functionarguments[$key], $minlength, $maxlength, $minvalue, $maxvalue);
 						if ($temp) {
-							$hold[$key] = $temp;
-						}
+							$hold['Error'][$key] = $temp;
+						} 
+						
+						$hold['FilteredInput'][$key] = $functionarguments[$key];
 					}
 				}
 				next ($this->LookupTable['FormValidation']);
 			}
-			return $hold;
+			if ($hold) {
+				return $hold;
+			} else {
+				return NULL;
+			}
 		} else {
 			return TRUE;
 		}
@@ -96,71 +100,73 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		}
 	}
 	
-	protected function ProcessAlpha($value, $minlength, $maxlength, $minvalue, $maxvalue) {
+	protected function ProcessAlpha(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		if (!$value) {
 			return 'Input must contain characters only no numbers or symbols like - or ;.';
 		}
 		
 		$value = filter_var($value, FILTER_SANITIZE_STRING);
-		$this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldName'] = $value;
 		
 		if (preg_match('#[0-9]#', $value)) {
 			return "Input must be contain characters only no numbers are allowed and must be between $minlength characters and $maxlength characters long!";
 		}
 		
 		$length = strlen($value);
-		
-		if ($length < $minlength) {
-			return "Input is too short must be $minlength characters!";
+		if ($minlength) {
+			if ($length < $minlength) {
+				return "Input is too short must be $minlength characters!";
+			}
 		}
 		
-		if ($length > $maxlength) {
-			return "Input is too long must be no longer than $maxlength characters!";
+		if ($maxlength) {
+			if ($length > $maxlength) {
+				return "Input is too long must be no longer than $maxlength characters!";
+			}
 		}
 	}
 	
-	protected function ProcessAlphaNum($value, $minlength, $maxlength, $minvalue, $maxvalue) {
+	protected function ProcessAlphaNum(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		if (!$value) {
 			return 'Input must contain at least one character.';
 		}
 		
 		$value = filter_var($value, FILTER_SANITIZE_STRING);
-		$this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldName'] = $value;
 		
 		$length = strlen($value);
-		if ($length < $minlength) {
-			return "Input is too short must be $minlength characters!";
+		if ($minlength) {
+			if ($length < $minlength) {
+				return "Input is too short must be $minlength characters!";
+			}
 		}
-		
-		if ($length > $maxlength) {
-			return "Input is too long must be no longer than $maxlength characters!";
+		if ($maxlength) {
+			if ($length > $maxlength) {
+				return "Input is too long must be no longer than $maxlength characters!";
+			}
 		}
 	}
 	
-	protected function ProcessEmailAddress($value, $minlength, $maxlength, $minvalue, $maxvalue) {
+	protected function ProcessEmailAddress(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		if (!$value) {
 			return 'Input must be contain an email address.';
 		}
 		
 		$value = filter_var($value, FILTER_SANITIZE_EMAIL);
-		$this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldName'] = $value;
 		
-		$value = filter_var($value, FILTER_VALIDATE_EMAIL);
-		if (!$value) {
+		$value2 = filter_var($value, FILTER_VALIDATE_EMAIL);
+		if (!$value2) {
 			return "Input is not a valid email address. Valid email addresses look something like this: example@example.com !";
 		}
 	}
 	
-	protected function ProcessUrlAddress($value, $minlength, $maxlength, $minvalue, $maxvalue) {
+	protected function ProcessUrlAddress(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		if (!$value) {
 			return 'Input must be contain a url address such as http://www.example.com/.';
 		}
 		
 		$value = filter_var($value, FILTER_SANITIZE_URL);
-		$this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldName'] = $value;
 		
-		$value = filter_var($value, FILTER_VALIDATE_URL);
-		if (!$value) {
+		$value2 = filter_var($value, FILTER_VALIDATE_URL);
+		if (!$value2) {
 			return "Input is not a valid url address. Valid url addresses look something like this: http://www.example.com !";
 		}
 	}
@@ -204,12 +210,60 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		}
 	}
 	
-	protected function ProcessHtmlTag($value, $minlength, $maxlength, $minvalue, $maxvalue) {
-		print "$value\n";
-		print "$minlength\n";
-		print "$maxlength\n";
-		print "$minvalue\n";
-		print "$maxvalue\n";
+	protected function ProcessHtmlTag(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
+		$length = strlen($value);
+		if ($minlength) {
+			if ($length < $minlength) {
+				return "Input is too short must be $minlength characters!";
+			}
+		}
+		
+		if ($maxlength) {
+			if ($length > $maxlength) {
+				return "Input is too long must be no longer than $maxlength characters!";
+			}
+		}
+		
+		if (!$value) {
+			return 'Input must contain at least one character.';
+		}
+		
+		require_once 'Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core.Encoding', 'UTF-8');
+		$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
+		
+		$allowed = array();
+		$deny = array();
+		
+		reset ($this->LookupTable['HtmlTags']);
+		while (current($this->LookupTable['HtmlTags'])) {
+			if ($this->LookupTable['HtmlTags'][key($this->LookupTable['HtmlTags'])]['Permit'] == 'Allow') {
+				$allowed = $this->LookupTable['HtmlTags'][key($this->LookupTable['HtmlTags'])];
+				next($this->LookupTable['HtmlTags']);
+			} else if ($this->LookupTable['HtmlTags'][key($this->LookupTable['HtmlTags'])]['Permit'] == 'Deny') {
+				$deny = $this->LookupTable['HtmlTags'][key($this->LookupTable['HtmlTags'])];
+				next($this->LookupTable['HtmlTags']);
+			} else {
+				next ($this->LookupTable['HtmlTags']);
+			}
+		}
+		unset($allowed['Permit']);
+		$allowed = array_filter($allowed);
+		$allowed = implode(',', $allowed);
+		$allowed = explode(',', $allowed);
+		
+		unset($deny['Permit']);
+		$deny = array_filter($deny);
+		$deny = implode(',', $deny);
+		$deny = explode(',', $deny);
+		
+		$config->set('HTML.AllowedElements', $allowed);
+		$config->set('HTML.ForbiddenElements', $deny);
+		$purifier = new HTMLPurifier($config);
+		$purehtml = $purifier->purify($value);
+		
+		$value = $purehtml;
 	}
 	
 	public function getTableNames() {
