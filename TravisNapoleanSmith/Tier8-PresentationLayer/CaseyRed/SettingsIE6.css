@@ -89,5 +89,5 @@ table.Calendar {
 /*IE PNG FIX*/
 
 img, div, ul, li { 
-	behavior: url(IEPngFix/iepngfix.htc);
+	behavior: url(Libraries/Tier7BehavioralLayer/IEPngFix/iepngfix.htc);
 }
