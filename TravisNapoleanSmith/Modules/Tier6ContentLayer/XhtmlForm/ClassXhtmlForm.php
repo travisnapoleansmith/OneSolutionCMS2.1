@@ -401,7 +401,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 		
 		while (current($tablenames)) {
-			$this->TableNames[key($tablenames)] = current($tablenames);
+			$this->TableNames[current($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
 	}

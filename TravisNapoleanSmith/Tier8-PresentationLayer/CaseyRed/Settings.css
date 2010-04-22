@@ -23,6 +23,37 @@ table.Calendar {
 	text-align: center;
 }
 
+fieldset.ShortForm {
+	position: relative;
+	width: 350px;
+	left: 100px;
+}
+
+label.ShortForm {
+	position: relative;
+	top: 10px;
+	margin-bottom: 10px;
+}
+
+input.ShortForm {
+	position: relative;
+	left: 20px;
+	width: 200px;
+	top: -8px;
+	margin-bottom: 10px;
+	left: 100px;
+}
+
+button.ShortForm {
+	position: relative;
+	left: 125px;
+	background-color:#741D01;
+	border-color: #FFFFFF;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	height: 25px;
+}
+
 .image {
 	position: relative;
 	top: 0px;
