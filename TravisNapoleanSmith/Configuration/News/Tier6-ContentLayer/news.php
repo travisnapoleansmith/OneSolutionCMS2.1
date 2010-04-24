@@ -42,15 +42,15 @@
 		$newsidnumber['PageID'] = $_GET['StoryMonth'];
 	}
 
-	$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = NULL;
 	
-	$news = new XhtmlNews($newsdatabase, $databases);
+	$news = new XhtmlNews($newsdatabase, $databaseoptions);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $newsname);
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$news->FetchDatabase ($newsidnumber);
 	$news->CreateOutput('    ');
 	
-	$newsoutput = $news->getOutput();
-	print "  $newsoutput";
+	$newsoutput2 = $news->getOutput();
+	$GLOBALS['Writer']->writeRaw($newsoutput2);
 	
 ?>

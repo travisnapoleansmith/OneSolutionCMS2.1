@@ -15,15 +15,14 @@ class ContentLayer extends LayerModulesAbstract
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier5Databases'];
 		
+		$this->Layers['Tier5Databases'] = &$GLOBALS['Tier5Databases'];
+		$this->Layers['Tier4Databases'] = &$GLOBALS['Tier4Databases'];
+		$this->Layers['Tier3Databases'] = &$GLOBALS['Tier3Databases'];
+		$this->Layers['Tier2Databases'] = &$GLOBALS['Tier2Databases'];
+		
 		$this->PageID = $_GET['PageID'];
 		
 		$this->SessionName = $_GET['SessionID'];
-		/*if ($this->SessionName) {
-			session_name($this->SessionName);
-		} else {
-			session_name('random');
-		}
-		session_start();*/
 	}
 	
 	public function setModules() {

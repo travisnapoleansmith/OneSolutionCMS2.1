@@ -49,9 +49,9 @@
 		$stylesheet = FALSE;
 	}
 	
-	$databases = &$GLOBALS['Tier6Databases'];
+	$databaseoptions = NULL;
 	
-	$header = new XhtmlHeader($headerdatabase, $databases);
+	$header = new XhtmlHeader($headerdatabase, $databaseoptions);
 	$header->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $headername);
 	$header->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	
@@ -60,13 +60,5 @@
 	$header->setSiteName($sitename);
 	
 	$header->CreateOutput ($printpreview, $stylesheet);
-	$headeroutput = $header->GetOutput();
-	if ($headeroutput) {
-		print "$headeroutput";
-		print "\n";
-	} else {
-		//print "I AM HERE!";
-		//header("HTTP/1.0 404 Not Found");
-	}
 	
 ?>

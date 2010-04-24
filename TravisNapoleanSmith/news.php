@@ -17,36 +17,50 @@
 	// Creates Header
 	require_once ('Configuration/News/Tier6-ContentLayer/header.php');
 
-	print "<body>\n";
+	$Writer->startElement('body');
 	
 	if ($printpreview == FALSE) {
 		// Top Panel 2
-		print "\n<div id=\"TopPanel2\" class=\"TopPanel2\">\n";
-		require ('Configuration/News/Tier6-ContentLayer/toppanel2.php');
-		print "</div>\n\n";
-		
+		$Writer->startElement('div');
+			$Writer->writeAttribute('id', 'TopPanel2');
+			$Writer->writeAttribute('class', 'TopPanel2');
+			require ('Configuration/News/Tier6-ContentLayer/toppanel2.php');
+		$Writer->endElement(); // ENDS DIV
 	}
 	
-	// Main Menu
+	// Main Menu 
+	//require ('Configuration/Tier6-ContentLayer/menu.php');
+	//require ('Administrators/updateMainMenu.php');
 	if ($printpreview == FALSE) {
-		require_once('menu.html');
+		$file = file_get_contents('menu.html');
+		$Writer->writeRaw($file);
 	}
 	
 	// Contain Container
-	print "<div id=\"textlayer1\">\n";
-	
-	// News Container
-	require_once ('Configuration/News/Tier6-ContentLayer/news.php');
-	
-	// Picture Container
-	require_once ('Configuration/News/Tier6-ContentLayer/picture.php');
-	
-	print "</div>\n\n";
+	$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'textlayer1');
+		// News Container
+		require('Configuration/News/Tier6-ContentLayer/news.php');
+		
+		// Picture Container
+		require_once ('Configuration/News/Tier6-ContentLayer/picture.php');
+		$Writer->writeRaw("  ");
+	$Writer->endElement(); // ENDS DIV
 	
 	if ($printpreview == FALSE) {
-		print "<div id=\"BottomPanel2\" class=\"BottomPanel2\">\n";
-		// Bottom Panel 2
-		require ('Configuration/News/Tier6-ContentLayer/bottompanel2.php');
-		print "</div>\n\n";
+		$Writer->startElement('div');
+			$Writer->writeAttribute('id', 'BottomPanel2');
+			$Writer->writeAttribute('class', 'BottomPanel2');
+			$Writer->writeRaw("\n   ");
+			// Bottom Panel 2
+			require ('Configuration/News/Tier6-ContentLayer/bottompanel2.php');
+		$Writer->endElement(); // ENDS DIV
 	}
+	
+	
+	// Print Out End Of Body and HTML File
+	$Writer->endElement(); // ENDS BODY
+	$Writer->endElement(); // ENDS HTML
+	$output = $Writer->flush();
+	print "$output\n";
 ?>

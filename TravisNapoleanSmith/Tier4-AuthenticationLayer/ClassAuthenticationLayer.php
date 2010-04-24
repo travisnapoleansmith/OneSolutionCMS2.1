@@ -18,6 +18,9 @@ class AuthenticationLayer extends LayerModulesAbstract
 		$this->PageID = $_GET['PageID'];
 		
 		$this->SessionName = $_GET['SessionID'];
+		
+		$this->Layers['Tier3Databases'] = &$GLOBALS['Tier3Databases'];
+		$this->Layers['Tier2Databases'] = &$GLOBALS['Tier2Databases'];
 	}
 	
 	public function setModules() {
