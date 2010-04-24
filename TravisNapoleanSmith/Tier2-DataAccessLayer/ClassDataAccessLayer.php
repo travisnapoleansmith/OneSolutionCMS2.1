@@ -15,6 +15,8 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->DatabaseDeny = &$GLOBALS['Tier2DatabaseDeny'];
 		
 		$this->PageID = $_GET['PageID'];
+		
+		$this->SessionName = $_GET['SessionID'];
 	}
 	
 	public function setModules() {

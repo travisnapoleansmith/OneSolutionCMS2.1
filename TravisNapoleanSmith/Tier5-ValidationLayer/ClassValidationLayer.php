@@ -16,6 +16,8 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->LayerModule = &$GLOBALS['Tier4Databases'];
 		
 		$this->PageID = $_GET['PageID'];
+		
+		$this->SessionName = $_GET['SessionID'];
 	}
 	
 	public function setModules() {

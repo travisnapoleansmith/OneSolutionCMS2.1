@@ -16,6 +16,14 @@ class ContentLayer extends LayerModulesAbstract
 		$this->LayerModule = &$GLOBALS['Tier5Databases'];
 		
 		$this->PageID = $_GET['PageID'];
+		
+		$this->SessionName = $_GET['SessionID'];
+		/*if ($this->SessionName) {
+			session_name($this->SessionName);
+		} else {
+			session_name('random');
+		}
+		session_start();*/
 	}
 	
 	public function setModules() {

@@ -396,8 +396,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			unset($databaseoptions['PrintPreview']);
 		}
 		
-		if ($databaseoptions['FormSession']) {
-			$this->FormSession = $databaseoptions['FormSession'];
+		if ($databaseoptions['XhtmlFormSession']) {
+			$this->FormSession = $databaseoptions['XhtmlFormSession'];
 		}
 		
 		while (current($tablenames)) {

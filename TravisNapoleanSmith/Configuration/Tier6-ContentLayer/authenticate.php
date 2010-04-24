@@ -49,7 +49,7 @@
 	
 	
 	$databaseoptions = array();
-	$databaseoptions['FormSession'] = $_SESSION['POST']['FilteredInput'];
+	$databaseoptions['XhtmlFormSession'] = $_SESSION['POST']['FilteredInput'];
 	
 	$form = new XhtmlForm($formdatabase, $databaseoptions);
 	$form->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Form');

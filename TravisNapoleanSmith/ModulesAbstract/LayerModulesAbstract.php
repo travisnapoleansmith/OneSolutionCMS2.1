@@ -13,6 +13,9 @@ abstract class LayerModulesAbstract
 	protected $PageID;
 	protected $ObjectID;
 	
+	protected $SessionName;
+	protected $SessionTypeName;
+	
 	protected $Hostname;
 	protected $User;
 	protected $Password;
@@ -122,6 +125,17 @@ abstract class LayerModulesAbstract
 	}
 	
 	public function buildModules($LayerModuleTableName, $LayerTableName) {
+		if ($this->SessionName) {
+			$passarray = array();
+			$passarray['SessionName'] = $this->SessionName;
+			
+			$this->LayerModule->Connect('Sessions');
+			$this->LayerModule->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect('Sessions');
+			
+			$this->SessionTypeName = $this->LayerModule->pass ('Sessions', 'getMultiRowField', array());
+			$this->SessionTypeName = $this->SessionTypeName[0];
+		}
 		$this->LayerModuleTableName = $LayerModuleTableName;
 		$this->LayerTableName = $LayerTableName;
 		$passarray = array();
@@ -193,7 +207,13 @@ abstract class LayerModulesAbstract
 					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
 						$DatabaseTables = array();
 						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
-						$DatabaseOptions = NULL;
+						$DatabaseOptions = array();
+						if ($this->SessionTypeName['SessionTypeName'] == $ObjectTypeName) {
+							$DatabaseOptionsName = $ObjectType;
+							$DatabaseOptionsName .= 'Session';
+							
+							$DatabaseOptions[$DatabaseOptionsName] = $_SESSION['POST'][$this->SessionTypeName['SessionValue']];
+						}
 						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions);
 					}
 				}

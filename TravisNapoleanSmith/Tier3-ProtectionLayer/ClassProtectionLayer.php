@@ -16,6 +16,8 @@ class ProtectionLayer extends LayerModulesAbstract
 		$this->LayerModule = &$GLOBALS['Tier2Databases'];
 		
 		$this->PageID = $_GET['PageID'];
+		
+		$this->SessionName = $_GET['SessionID'];
 	}
 	
 	public function setModules() {
