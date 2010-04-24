@@ -56,6 +56,11 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			unset($databaseoptions['NoAttributes']);
 		}
 		
+		if ($databaseoptions['Insert']) {
+			$this->Insert = $databaseoptions['Insert'];
+			unset($databaseoptions['Insert']);
+		}
+		
 		$this->ContentTableName = $tablenames['Content'];
 		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
 		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
@@ -504,9 +509,11 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->Writer->endElement();
 			}
 			
-			if ($this->EndTag) {
-				$this->Writer->writeRaw("   ");
-				$this->Writer->endElement();
+			if (!$this->Insert) {
+				if ($this->EndTag) {
+					$this->Writer->writeRaw("   ");
+					$this->Writer->endElement();
+				}
 			}
 		}
 	}
@@ -557,6 +564,22 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$temp++;
 				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
 			}
+			if ($this->Insert) {
+				reset($this->Insert);
+				while (current($this->Insert)) {
+					$this->Writer->startElement('p');
+					$this->Writer->writeAttribute('style', 'position: relative; left: 20px;');
+					$this->Writer->text(key($this->Insert));
+					$this->Writer->writeRaw(":\n\t<br /> \n\t  ");
+					$this->Writer->text(current($this->Insert));
+					$this->Writer->writeRaw("\n\t");
+					$this->Writer->endElement();
+					next ($this->Insert);
+				}
+				$this->Writer->writeRaw("   ");
+				$this->Writer->endElement();
+				
+			} 
 			
 			if ($this->PrintPreview & !$NoPrintPreview) {
 				reset($this->PrintIdNumberArray);
