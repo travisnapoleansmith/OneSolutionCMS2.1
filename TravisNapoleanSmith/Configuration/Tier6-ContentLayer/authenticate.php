@@ -33,7 +33,6 @@
 	$formdatabase['FormTextArea'] = 'FormTextArea';
 	
 	if ($_SESSION['POST']['Error']) {
-		print "HERE\n";
 		$errormessagearray = $_SESSION['POST']['Error'];
 		reset($errormessagearray);
 		while (current($errormessagearray)) {
@@ -47,7 +46,14 @@
 		}
 		
 	} else if ($_SESSION['POST']['UserAccounts']['Error']) {
-		print "ERROR\n";
+		$errormessage = $_SESSION['POST']['UserAccounts']['Error'];
+		
+		$Writer->startElement('p');
+		$Writer->text('Authentication Error');
+		$Writer->writeRaw(":\n   <br /> \n    ");
+		$Writer->text($errormessage);
+		$Writer->writeRaw("\n  ");
+		$Writer->endElement();
 	}
 	
 	

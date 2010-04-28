@@ -1,6 +1,15 @@
 <?php
 	require_once ('Configuration/includes.php');
 	if (isset($_POST['Login'])) {
+		if (session_name()) {
+			session_unregister('UserAuthentication');
+		}
+		$sessionname = 'UserAuthentication';
+		$sessionname .= time();
+		session_name($sessionname);
+			
+		session_start();
+		
 		// Fetch Current Page ID - Based On ID Number
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = 2;
@@ -12,31 +21,17 @@
 		$Tier5Databases->setPageID($loginidnumber['PageID']);
 		$hold = $Tier5Databases->pass('FormValidation', 'FORM', $_POST);
 		if ($hold['Error']) {
-			if (session_name()) {
-				session_unregister('UserAuthentication');
-			}
-			session_name('UserAuthentication');
-			
-			session_start();
 			$_SESSION['POST'] = $hold;
-			header("Location: session.php?SessionID=UserAuthentication");
+			header("Location: session.php?SessionID=$sessionname");
 		} 
 		$hold = NULL;
-		//$hold = $Tier4Databases->pass('UserAccounts', 'AUTHENTICATE', $_POST);
-		/*if ($hold['Error']) {
-			if (session_name()) {
-				session_unregister('UserAuthentication');
-			}
-			session_name('UserAuthentication');
-			
-			session_start();
+		$hold = $Tier4Databases->pass('UserAccounts', 'AUTHENTICATE', $_POST);
+		if ($hold['Error']) {
 			$_SESSION['POST']['UserAccounts'] = $hold;
-			header("Location: session.php?SessionID=UserAuthentication");
-		}*/
+			header("Location: session.php?SessionID=$sessionname");
+		}
 		
-		//print_r($hold);
-		/*print_r($_POST);*/
-		print "I AM HERE\n";
+		print "I AM IN\n";
 	} else {
 		header('HTTP/1.1 401 Unauthorized');
 		header('WWW-Authenticate: Basic realm="PHP Secured"');

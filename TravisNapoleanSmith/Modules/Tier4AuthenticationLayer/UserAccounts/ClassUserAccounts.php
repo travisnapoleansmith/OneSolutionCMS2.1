@@ -51,30 +51,16 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$UserName = $passarray['UserName'];
 			
 			$pass = NULL;
-			/*$pass = array();
-			$pass['rowname'] = 'Attempts';
-			$pass['rowvalue'] = $Attempts;
-			$pass['rownumbername'] = 'UserName';
-			$pass['rownumber'] = $UserName;
-			*/
-			//($rowname, $rowvalue, $rownumbername, $rownumber)
 			$pass = "`Attempts` = \"$Attempts\" WHERE `UserName` = \"$UserName\"";
-			//print_r($pass);		
 			$this->LayerModule->Connect('UserAccounts');
-			//$this->LayerModule->pass ('UserAccounts', 'updateRow', array('PageID' => $pass));
 			$this->LayerModule->pass ('UserAccounts', 'updateTable', array('PageID' => $pass));
 			$this->LayerModule->Disconnect('UserAccounts');
 			
-			//print_r($this->LayerModule);
 		} else {
 			$passarray['PageID'] = $PageID;
 		}
 		$passarray['Reset'] = 'No';
 		$passarray['Enable/Disable'] = 'Enable';
-		//$string = $this->createPassword ($PageID['Password']);
-		//$this->createSalt ($string);
-		//print "$string\n";
-		//print_r($passarray);
 		
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
@@ -86,9 +72,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$this->LayerModule->Disconnect(current($this->TableNames));
 			next ($this->TableNames);
 		}
-		
-		//print_r($this->LookupTable);
-		
+				
 	}
 	
 	public function Verify($function, $functionarguments){
