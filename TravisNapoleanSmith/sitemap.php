@@ -7,10 +7,8 @@
 	
 	$sitemapdatabase = Array();
 	$sitemapdatabase['XMLSitemap'] = 'XMLSitemap';
-	$sitemapdatabase['XMLNewsYearMonthSitemap'] = 'XMLNewsYearMonthSitemap';
-	$sitemapdatabase['XMLNewsSitemap'] = 'XMLNewsSitemap';
 	
-	$databaseoptions = NULL;
+	$databaseoptions = array();
 	$databaseoptions['FileName'] = 'sitemap.xml';
 	
 	$sitemap = new XmlSitemap($sitemapdatabase, $databaseoptions);
@@ -18,14 +16,15 @@
 	$sitemap->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$sitemap->FetchDatabase ($sitemapidnumber);
 	$sitemap->CreateOutput('    ');
-		
+	
+	$sitemapoutput = $sitemap->getOutput();
+	
 	// Removing Caching by the browser!
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 	
-	if (!$databaseoptions['FileName']) {
-		$sitemapoutput = $GLOBALS['Writer']->flush();
-		print "$sitemapoutput";
+	if ($sitemapoutput) {
+		print "$sitemapoutput\n";
 	} else {
 		header("Location: sitemap.xml");
 	}

@@ -116,6 +116,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
+			$this->LayerModule->createDatabaseTable(current($this->TableNames));
 			$this->LayerModule->Connect(current($this->TableNames));
 			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
 			$this->LayerModule->Disconnect(current($this->TableNames));
@@ -209,6 +210,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$user = $this->User;
 		$password = $this->Password;
 		$databasename = $this->DatabaseName;
+		$this->LayerModule->createDatabaseTable($databasetable);
 		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable($databasetable);

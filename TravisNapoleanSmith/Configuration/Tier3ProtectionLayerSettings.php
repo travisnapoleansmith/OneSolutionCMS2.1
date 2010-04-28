@@ -94,4 +94,5 @@
 	$Tier3DatabaseAllow['walkfieldname'] = 'walkfieldname';
 	$Tier3DatabaseAllow['walktable'] = 'walktable';
 	$Tier3DatabaseAllow['walkidsearch'] = 'walkidsearch';
+	
 ?>

@@ -67,15 +67,23 @@ class ProtectionLayer extends LayerModulesAbstract
 		$hold = NULL;
 		while (current($this->Modules)) {
 			$tempobject = current($this->Modules[key($this->Modules)]);
-			$databasetables = $tempobject->getTableNames();
-			$tempobject->FetchDatabase ($this->PageID);
-			$tempobject->CreateOutput($this->Space);
-			$tempobject->getOutput();
+			//$databasetables = $tempobject->getTableNames();
+			if ($function == 'PROTECT') {
+				$tempobject->FetchDatabase ($functionarguments);
+			} else {
+				$tempobject->FetchDatabase ($this->PageID);
+			}
+			//$tempobject->CreateOutput($this->Space);
+			//$tempobject->getOutput();
 			$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
 		
-		if ($hold) {
+		if ($function == 'PROTECT') {
+			if ($hold) {
+				return $hold;
+			}
+		} else {
 			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 			if ($hold2) {
 				return $hold2;
@@ -95,7 +103,7 @@ class ProtectionLayer extends LayerModulesAbstract
 							if ($hold) {
 								return $hold;
 							}
-						} else if ($this->DatabaseDeny[$function]) {
+						} else if ($this->DatabaseDeny[$function] || $function = 'PROTECT') {
 							$hold = $this->checkPass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;

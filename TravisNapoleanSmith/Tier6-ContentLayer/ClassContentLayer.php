@@ -78,13 +78,11 @@ class ContentLayer extends LayerModulesAbstract
 			next($this->Modules);
 		}
 		
-		if ($hold) {
-			$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
-			if ($hold2) {
-				return $hold2;
-			} else {
-				return FALSE;
-			}
+		$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
+		if ($hold2) {
+			return $hold2;
+		} else {
+			return FALSE;
 		}
 	}
 	

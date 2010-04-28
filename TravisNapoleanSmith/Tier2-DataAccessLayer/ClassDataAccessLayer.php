@@ -86,13 +86,11 @@ class DataAccessLayer extends LayerModulesAbstract
 			next($this->Modules);
 		}
 		
-		if ($hold) {
-			$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
-			if ($hold2) {
-				return $hold2;
-			} else {
-				return FALSE;
-			}
+		$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
+		if ($hold2) {
+			return $hold2;
+		} else {
+			return FALSE;
 		}
 	}
 	
@@ -229,8 +227,6 @@ class DataAccessLayer extends LayerModulesAbstract
 						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
 						reset($DatabaseTables);
 						while (current($DatabaseTables)) {
-							//print current($DatabaseTables);
-							//print "\n";
 							$this->createDatabaseTable(current($DatabaseTables));
 							reset($this->Layers);
 							while (current($this->Layers)) {
@@ -239,7 +235,6 @@ class DataAccessLayer extends LayerModulesAbstract
 							}
 							next ($DatabaseTables);
 						}
-						//print_r($DatabaseTables);
 						$DatabaseOptions = array();
 						if ($this->SessionTypeName['SessionTypeName'] == $ObjectTypeName) {
 							$DatabaseOptionsName = $ObjectType;

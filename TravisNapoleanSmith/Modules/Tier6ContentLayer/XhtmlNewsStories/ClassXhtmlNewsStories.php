@@ -338,6 +338,9 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				}
 			}
 			
+			$newpassarray['Enable/Disable'] = 'Enable';
+			$newpassarray['Status'] = 'Approved';
+			
 			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
 			
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
@@ -564,7 +567,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	}
 	
 	protected function buildObjectType() {
-		if ($this->ContainerObjectType) {
+		if ($this->ContainerObjectType && $this->EnableDisable == 'Enable' && $this->Status == 'Approved') {
 			$temp = $this->ObjectID;
 			$temp++;
 			if ($this->ContainerObjectType) {

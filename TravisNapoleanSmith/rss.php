@@ -8,7 +8,7 @@
 	$feeddatabase = Array();
 	$feeddatabase['XMLFeeds'] = 'XMLFeeds';
 	
-	$databaseoptions = NULL;
+	$databaseoptions = array();
 	$databaseoptions['FileName'] = 'rss.xml';
 	
 	$feed = new XmlFeed($feeddatabase, $databaseoptions);
@@ -16,12 +16,13 @@
 	$feed->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$feed->FetchDatabase ($feedidnumber);
 	$feed->CreateOutput('    ');
-		
+	
+	$feedoutput = $feed->getOutput();
+	
 	// Removing Caching by the browser!
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-	if (!$databaseoptions['FileName']) {
-		$feedoutput = $GLOBALS['Writer']->flush();
+	if ($feedoutput) {
 		print "$feedoutput\n";
 	} else {
 		header("Location: rss.xml");

@@ -33,6 +33,7 @@
 	$formdatabase['FormTextArea'] = 'FormTextArea';
 	
 	if ($_SESSION['POST']['Error']) {
+		print "HERE\n";
 		$errormessagearray = $_SESSION['POST']['Error'];
 		reset($errormessagearray);
 		while (current($errormessagearray)) {
@@ -45,6 +46,8 @@
 			next ($errormessagearray);
 		}
 		
+	} else if ($_SESSION['POST']['UserAccounts']['Error']) {
+		print "ERROR\n";
 	}
 	
 	

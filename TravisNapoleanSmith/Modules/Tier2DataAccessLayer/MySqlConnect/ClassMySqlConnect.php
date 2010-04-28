@@ -47,14 +47,16 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$results = mysql_list_tables($this->databasename, $this->link);
 			$this->tablenamequery = $results;
 			$this->tablenames = Array();
+			$rows = mysql_num_rows($results);
 			$i = 0;
-			while (mysql_tablename($results, $i)) {
+			while ($i < $rows) {
 				array_push($this->tablenames, mysql_tablename($results, $i));
 				$i++;
 			}
 		}
+		$rows = mysql_num_rows($results);
 		$i = 0;
-		while (mysql_tablename($results, $i)) {
+		while ($i < $rows) {
 			$temp = mysql_tablename($results, $i);
 			if ($temp == $this->databasetable) {
 				return $temp;
@@ -164,7 +166,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('UPDATE');
-		
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -843,7 +844,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		
 		if ($this->tableresult) {
 			$this->rownumber = mysql_num_rows($this->tableresult);
-			mysql_data_seek($this->tableresult, 0);
+			//mysql_data_seek($this->tableresult, 0);
 		}
 		$this->rownumber = $this->rownumber + 0;
 		$this->i = 1;

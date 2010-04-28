@@ -63,6 +63,7 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$passarray = &$PageID;
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
+			$this->LayerModule->createDatabaseTable(current($this->TableNames));
 			$this->LayerModule->Connect(current($this->TableNames));
 			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
 			$this->LayerModule->Disconnect(current($this->TableNames));
