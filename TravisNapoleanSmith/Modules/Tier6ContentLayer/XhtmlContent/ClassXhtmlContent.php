@@ -569,9 +569,12 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				while (current($this->Insert)) {
 					$this->Writer->startElement('p');
 					$this->Writer->writeAttribute('style', 'position: relative; left: 20px;');
-					$this->Writer->text(key($this->Insert));
-					$this->Writer->writeRaw(":\n\t<br /> \n\t  ");
-					$this->Writer->text(current($this->Insert));
+						$this->Writer->startElement('span');
+						$this->Writer->writeAttribute('style', 'color: #FFCC00;');
+						$this->Writer->text(key($this->Insert));
+						$this->Writer->writeRaw(":\n\t<br /> \n\t  ");
+						$this->Writer->endElement();
+					$this->Writer->writeRaw(current($this->Insert));
 					$this->Writer->writeRaw("\n\t");
 					$this->Writer->endElement();
 					next ($this->Insert);

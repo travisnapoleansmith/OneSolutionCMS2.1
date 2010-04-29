@@ -17,7 +17,7 @@ class ValidationLayer extends LayerModulesAbstract
 		
 		$this->PageID = $_GET['PageID'];
 		
-		$this->SessionName = $_GET['SessionID'];
+		$this->SessionName['SessionID'] = $_GET['SessionID'];
 		
 		$this->Layers['Tier4Databases'] = &$GLOBALS['Tier4Databases'];
 		$this->Layers['Tier3Databases'] = &$GLOBALS['Tier3Databases'];

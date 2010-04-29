@@ -22,7 +22,7 @@ class ContentLayer extends LayerModulesAbstract
 		
 		$this->PageID = $_GET['PageID'];
 		
-		$this->SessionName = $_GET['SessionID'];
+		$this->SessionName['SessionID'] = $_GET['SessionID'];
 	}
 	
 	public function setModules() {

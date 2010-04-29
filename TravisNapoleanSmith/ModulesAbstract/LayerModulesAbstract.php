@@ -16,7 +16,7 @@ abstract class LayerModulesAbstract
 	protected $PageID;
 	protected $ObjectID;
 	
-	protected $SessionName;
+	protected $SessionName = array();
 	protected $SessionTypeName;
 	
 	protected $Hostname;
@@ -129,9 +129,9 @@ abstract class LayerModulesAbstract
 	
 	public function buildModules($LayerModuleTableName, $LayerTableName, $LayerModuleTableNameSetting) {
 		if ($this->SessionName) {
+			reset($this->SessionName);
 			$passarray = array();
-			$passarray['SessionName'] = $this->SessionName;
-			
+			$passarray['SessionName'] = key($this->SessionName);
 			$this->createDatabaseTable('Sessions');
 		
 			reset($this->Layers);
@@ -234,8 +234,6 @@ abstract class LayerModulesAbstract
 						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
 						reset($DatabaseTables);
 						while (current($DatabaseTables)) {
-							//print current($DatabaseTables);
-							//print "\n";
 							$this->createDatabaseTable(current($DatabaseTables));
 							reset($this->Layers);
 							while (current($this->Layers)) {
@@ -244,7 +242,6 @@ abstract class LayerModulesAbstract
 							}
 							next ($DatabaseTables);
 						}
-						//print_r($DatabaseTables);
 						$DatabaseOptions = array();
 						if ($this->SessionTypeName['SessionTypeName'] == $ObjectTypeName) {
 							$DatabaseOptionsName = $ObjectType;

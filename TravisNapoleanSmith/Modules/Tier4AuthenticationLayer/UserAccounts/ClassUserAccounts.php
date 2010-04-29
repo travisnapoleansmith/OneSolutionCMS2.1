@@ -80,7 +80,13 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$hold = array();
 			if ($this->LookupTable['UserAccounts'][0]) {
 				if ($this->LookupTable['UserAccounts'][0]['Attempts'] > $this->MaxAttempts) {
-					$hold['Error'] = "You account has been locked because of too many attempts.  The maximum number of tries is $this->MaxAttempts.";
+					$hold['Error']['Attempts'] = "You account has been locked because of too many attempts.  The maximum number of tries is $this->MaxAttempts.";
+					reset($functionarguments);
+					while (current($functionarguments)) {
+						$key = key($functionargments);
+						$hold['FilteredInput'][$key] = current($functionalarguments);
+						next($functionarguments);
+					}
 					return $hold;
 				} else {
 					$UserName = $this->LookupTable['UserAccounts'][0]['UserName'];
@@ -92,7 +98,13 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 					return TRUE;
 				}
 			} else {
-				$hold['Error'] = 'Either the user account does not exist or the password is not correct, please try again!';
+				$hold['Error']['User Account / Password'] = 'Either the user account does not exist <br /> or the password is not correct, please try again!';
+				reset($functionarguments);
+				while (current($functionarguments)) {
+					$key = key($functionarguments);
+					$hold['FilteredInput'][$key] = current($functionarguments);
+					next($functionarguments);
+				}
 				return $hold;
 			}
 		} else {

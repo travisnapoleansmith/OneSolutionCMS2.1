@@ -37,6 +37,7 @@
 	require_once '../Modules/Tier3ProtectionLayer/UserPermissions/ClassUserPermissions.php';
 	
 	// Tier 4 Modules
+	require_once '../Modules/Tier4AuthenticationLayer/UserAccounts/ClassUserAccounts.php';
 	
 	// Tier 5 Modules
 	require_once '../Modules/Tier5ValidationLayer/FormValidation/ClassFormValidation.php';
