@@ -53,7 +53,6 @@
 		$Writer->startElement('div');
 			$Writer->writeAttribute('id', 'BottomPanel1');
 			$Writer->writeAttribute('class', 'BottomPanel1');
-			$Writer->writeRaw("\n   ");
 			require ('Configuration/Tier6-ContentLayer/bottompanel1news.php');
 		$Writer->endElement(); // ENDS DIV
 	}
@@ -61,7 +60,6 @@
 		$Writer->startElement('div');
 			$Writer->writeAttribute('id', 'BottomPanel2');
 			$Writer->writeAttribute('class', 'BottomPanel2');
-			$Writer->writeRaw("\n   ");
 			// Bottom Panel 2
 			require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
 		$Writer->endElement(); // ENDS DIV

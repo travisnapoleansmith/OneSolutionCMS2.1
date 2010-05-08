@@ -25,6 +25,23 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
 		$this->DatabaseTableName = current($tablenames);
+		
+		if ($databaseoptions['FileName']) {
+			$this->FileName = $databaseoptions['FileName'];
+			unset($databaseoptions['FileName']);
+		}
+		
+		if ($databaseoptions['NoAttributes']) {
+			$this->NoAttributes = $databaseoptions['NoAttributes'];
+			unset($databaseoptions['NoAttributes']);
+		}
+		
+		if ($this->FileName) {
+			$this->Writer = new XMLWriter();
+			$this->Writer->openURI($this->FileName);
+		} else {
+			$this->Writer = &$GLOBALS['Writer'];
+		}
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -97,140 +114,36 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			}
 			if ($this->StartTag){
-				if ($this->StartTagID) {
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'id="';
-					$this->StartTag .= $this->StartTagID;
-					$this->StartTag .= '"';
-					
-					if ($this->StartTagStyle) {
-						$this->StartTag .= ' style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '"';
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->startElement($this->StartTag);
+					if (!$this->NoAttributes) {
+						$this->ProcessStandardAttribute('StartTag');
 					}
-					if ($this->StartTagClass) {
-						$this->StartTag .= ' class="';
-						$this->StartTag .= $this->StartTagClass;
-						$this->StartTag .= '"';
-						$this->StartTag .= ">\n";
-					} else {
-						$this->StartTag .= ">\n";
-					}
-					$this->List .= $this->StartTag;
-				} else if ($this->StartTagClass){
-					$temp = strrpos($this->StartTag, '>');
-					$this->StartTag[$temp] = ' ';
-				
-					if ($this->StartTagStyle) {
-						$this->StartTag .= 'style="';
-						$this->StartTag .= $this->StartTagStyle;
-						$this->StartTag .= '" ';
-					}
-					
-					$this->StartTag .= 'class="';
-					$this->StartTag .= $this->StartTagClass;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">\n";
-					$this->List .= $this->StartTag;
-				} else if ($this->StartTagStyle){
-					$temp = strrpos($this->StartTag, '>');
-					
-					$this->StartTag[$temp] = ' ';
-					$this->StartTag .= 'style="';
-					$this->StartTag .= $this->StartTagStyle;
-					$this->StartTag .= '"';
-					$this->StartTag .= ">";
-					
-					$this->List .= $this->StartTag;
-					$this->List .= "\n";
-				} else {
-					$this->List .= $this->StartTag;
-					$this->List .= "\n";
-				}
+			}
+			
+			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
+				$this->Writer->startElement('div');
+				$this->ProcessStandardAttribute('MainDiv');
 			}
 			
 			if ($this->MainDiv) {
-				if($this->Space) {
-					$this->List .= $this->Space;
-					$this->List .= $this->MainDiv;
-					$this->List .= "\n";
-				} else {
-					$this->List .= '  ';
-					$this->List .= $this->MainDiv;
-					$this->List .= "\n";
-				}
+				$this->MainDiv = $this->CreateWordWrap($this->MainDiv);
+				$this->Writer->writeRaw("\n$this->Space    ");
+				$this->Writer->writeRaw($this->MainDiv);
+				$this->Writer->writeRaw("\n$this->Space ");
 			}
 			
-			if ($this->Space) {
-				$this->List .= $this->Space;
-			} else {
-				$this->List .= '    ';
-			}
-			
-			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
-				$this->List .= '<div';
-			}
-			
-			if ($this->MainDivID) {
-				$this->List .= ' id="';
-				$this->List .= $this->MainDivID;
-				$this->List .= "\"";
-			}
-			
-			if ($this->MainDivClass) {
-				$this->List .= ' class="';
-				$this->List .= $this->MainDivClass;
-				$this->List .= '"';
-			}
-			
-			if ($this->MainDivStyle) {
-				$this->List .= ' style="';
-				$this->List .= $this->MainDivStyle;
-				$this->List .= '"';
-			}
-			
-			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
-				$this->List .= ">\n";
-			}
-			
-			if($this->Space) {
+			/*if($this->Space) {
 				$this->List .= $this->Space;
 				$this->List .= $this->Space;
 			} else {
 				$this->List .= '  ';
-			}
+			}*/
 			
 			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
-				$this->List .= '<div';
-			}
-			
-			if ($this->DivID) {
-				$this->List .= ' id="';
-				$this->List .= $this->DivID;
-				$this->List .= '"';
-			}
-			
-			if ($this->DivClass) {
-				$this->List .= ' class="';
-				$this->List .= $this->DivClass;
-				$this->List .= '"';
-			}
-			
-			if ($this->DivStyle) {
-				$this->List .= ' style="';
-				$this->List .= $this->DivStyle;
-				$this->List .= '"';
-			}
-			
-			if ($this->DivTitle) {
-				$this->List .= ' title="';
-				$this->List .= $this->DivTitle;
-				$this->List .= '"';
-			}
-			
-			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
-				$this->List .= ">\n";
+				$this->Writer->startElement('div');
+				$this->ProcessStandardAttribute('Div');
 			}
 			
 			if ($this->NewsID) {
@@ -240,46 +153,31 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			}
 			
 			if ($this->Div) {
-				if($this->Space) {
-					$this->List .= $this->Space;
-					$this->List .= $this->Space;
-					$this->List .= $this->Space;
-					$this->Div = $this->CreateWordWrap($this->Div);
-					$this->List .= $this->Div;
-					$this->List .= "\n";
-				} else {
-					$this->List .= '    ';
-					$this->Div = $this->CreateWordWrap($this->Div);
-					$this->List .= $this->Div;
-					$this->List .= "\n";
-				}
+				$this->Div = $this->CreateWordWrap($this->Div);
+				$this->Writer->writeRaw("\n$this->Space    ");
+				$this->Writer->writeRaw($this->Div);
+				$this->Writer->writeRaw("\n$this->Space ");
 			}
 			
-			if($this->Space) {
-				$this->List .= $this->Space;
-				$this->List .= $this->Space;
-			} else {
-				$this->List .= '  ';
-			}
 			if (!is_null($this->Div) || $this->DivID || $this->DivClass || $this->DivStyle || $this->DivTitle) {
-				$this->List .= "</div>\n";
-			}
-			
-			if($this->Space) {
-				$this->List .= $this->Space;
-			} else {
-				$this->List .= '  ';
+				$this->Writer->endElement(); // ENDS DIV
 			}
 			
 			if (!is_null($this->MainDiv || $this->MainDivID || $this->MainDivClass || $this->MainDivStyle)){
-				$this->List .= "</div>\n";
+				$this->Writer->endElement(); // ENDS DIV
 			}
 			
 			if ($this->EndTag) {
-				$this->List .= "  ";
-				$this->List .= $this->EndTag;
-				$this->List .= "\n";
+				$this->Writer->endElement(); // ENDS END TAG
 			}
+			
+		}
+		if ($this->FileName) {
+			$this->Writer->flush();
+		}
+		
+		if ($this->NoAttributes) {
+			$this->List = $this->Writer->flush();
 		}
 	}
 	

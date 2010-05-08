@@ -26,7 +26,6 @@
 	$newsdatabase['NewsStories'] = 'NewsStories';
 	$newsdatabase['ContentLayerTables'] = 'ContentLayerTables';
 	
-	//$databases = &$GLOBALS['Tier6Databases'];
 	$databaseoptions = NULL;
 	
 	$news = new XhtmlNews($newsdatabase, $databaseoptions);

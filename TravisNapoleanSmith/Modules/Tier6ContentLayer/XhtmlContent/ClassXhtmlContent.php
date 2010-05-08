@@ -549,9 +549,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
 							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
 							require($filename);
-							$hold = bottompanel1();
-							$this->Writer->writeRaw($hold);
 							$this->Writer->writeRaw("\n");
+							
 						}
 					} else {
 						if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
