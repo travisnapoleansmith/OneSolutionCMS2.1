@@ -24,6 +24,8 @@
 	
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$flash = new XhtmlFlash($flashdatabase, $databaseoptions);
 	$flash->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Flash');
 	$flash->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

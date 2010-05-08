@@ -28,6 +28,9 @@
 	
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$Writer = $GLOBALS['Writer'];
+	
 	$news = new XhtmlNews($newsdatabase, $databaseoptions);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStories');
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -54,5 +57,7 @@
 			$GLOBALS['Writer']->writeRaw($newsoutput2);
 		}
 	}
+	$Writer->writeRaw("  ");
+	//$Writer->endElement(); // ENDS DIV
 	
 ?>

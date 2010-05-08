@@ -35,6 +35,8 @@
 	//$databases = &$GLOBALS['Tier6Databases'];
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$form = new XhtmlForm($formdatabase, $databaseoptions);
 	$form->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Form');
 	$form->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

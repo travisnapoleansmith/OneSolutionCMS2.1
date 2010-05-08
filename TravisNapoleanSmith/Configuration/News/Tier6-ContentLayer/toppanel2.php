@@ -24,6 +24,8 @@
 	
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$list = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuTopPanel2');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

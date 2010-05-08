@@ -11,64 +11,35 @@
 
 	$idnumberkeep = $idnumber;
 
+	$Tier6Databases->setDatabaseTableName('ContentLayer');
+	
 	if ($_GET['printpreview']) {
 		$printpreview = TRUE;
-	}
-	// Creates Header
-	require ('Configuration/Tier6-ContentLayer/header.php');
-	
-	$Writer->startElement('body');
-	
-	if ($printpreview == FALSE) {
-		// Top Panel 2
-		$Writer->startElement('div');
-			$Writer->writeAttribute('id', 'TopPanel2');
-			$Writer->writeAttribute('class', 'TopPanel2');
-			require ('Configuration/Tier6-ContentLayer/toppanel2.php');
-		$Writer->endElement(); // ENDS DIV
+	} else {
+		$printpreview = FALSE;
 	}
 	
-	// Main Menu 
-	//require ('Configuration/Tier6-ContentLayer/menu.php');
-	//require ('Administrators/updateMainMenu.php');
-	if ($printpreview == FALSE) {
-		$file = file_get_contents('menu.html');
-		$Writer->writeRaw($file);
-	}
+	$Tier6Databases->setPrintPreview($printpreview);
 	
-	// Contain Container
-	$Writer->startElement('div');
-		$Writer->writeAttribute('id', 'textlayer1');
-		require('Configuration/Tier6-ContentLayer/content.php');
-		
-		if ($idnumberkeep == 1) {
-			// News Container
-			require ('Configuration/Tier6-ContentLayer/news.php');
-		}
-		$Writer->writeRaw("  ");
-	$Writer->endElement(); // ENDS DIV
+	// Fetch Current Page ID - Based On ID Number
+	$contentidnumber = Array();
+	$contentidnumber['PageID'] = $idnumber;
+	$contentidnumber['RevisionID'] = 0;
+	$contentidnumber['CurrentVersion'] = 'true';
+	$contentidnumber['Enable/Disable'] = 'Enable';
+	$contentidnumber['Status'] = 'Approved';
 	
-	if ($printpreview == FALSE && $idnumberkeep == 1) {
-		// Bottom Panel 2
-		$Writer->startElement('div');
-			$Writer->writeAttribute('id', 'BottomPanel1');
-			$Writer->writeAttribute('class', 'BottomPanel1');
-			require ('Configuration/Tier6-ContentLayer/bottompanel1news.php');
-		$Writer->endElement(); // ENDS DIV
-	}
-	if ($printpreview == FALSE) {
-		$Writer->startElement('div');
-			$Writer->writeAttribute('id', 'BottomPanel2');
-			$Writer->writeAttribute('class', 'BottomPanel2');
-			// Bottom Panel 2
-			require ('Configuration/Tier6-ContentLayer/bottompanel2.php');
-		$Writer->endElement(); // ENDS DIV
-	}
-	
+	$Tier6Databases->FetchDatabase($contentidnumber);
+	$Tier6Databases->CreateOutput(NULL);
 	
 	// Print Out End Of Body and HTML File
 	$Writer->endElement(); // ENDS BODY
 	$Writer->endElement(); // ENDS HTML
+	
 	$output = $Writer->flush();
-	print "$output\n";
+	if ($output) {
+		print "$output\n";
+	} else {
+		header("HTTP/1.0 404 Not Found");
+	}
 ?>

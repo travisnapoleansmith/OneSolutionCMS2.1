@@ -29,6 +29,8 @@
 		
 		$databases = &$GLOBALS['Tier6Databases'];
 		
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		
 		$picture = new XhtmlPicture($picturedatabase, $databases);
 		$picture->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Picture');
 		$picture->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

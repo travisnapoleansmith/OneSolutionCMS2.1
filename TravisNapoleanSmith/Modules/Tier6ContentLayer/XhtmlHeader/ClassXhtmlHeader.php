@@ -160,7 +160,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('ScriptVBScriptSheetCharset', 'ScriptVBScriptSheetCharset');
 		$this->FillArray('ScriptVBScriptSheetCode', 'ScriptVBScriptSheetCode');
 		$this->FillArray('ScriptVBScriptSheetDefer', 'ScriptVBScriptSheetDefer');
-		
 	}
 	
 	protected function FillArray($arrayname, $arrayvalue) {

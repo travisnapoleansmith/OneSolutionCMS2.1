@@ -45,12 +45,22 @@
 	//$databases = &$GLOBALS['Tier6Databases'];
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$Writer = $GLOBALS['Writer'];
+	
+	//$Writer->startElement('div');
+		//$Writer->writeAttribute('id', 'textlayer1');
+		
 	$content = new XhtmlContent($contentdatabase, $databaseoptions);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Content');
 	$content->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$content->FetchDatabase ($contentidnumber);
 	$content->CreateOutput('    ');
 	
+	/*if ($contentidnumber['PageID'] != 1) {
+			$Writer->writeRaw("  ");
+		$Writer->endElement(); // ENDS DIV
+	}*/
 	//$contentoutput = $content->getOutput();
 
 	//print "$contentoutput";

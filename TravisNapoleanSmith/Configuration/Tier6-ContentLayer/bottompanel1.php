@@ -33,6 +33,8 @@
 	$GLOBALS['Writer']->writeAttribute('id', 'BottomPanel1');
 	$GLOBALS['Writer']->writeAttribute('class', 'BottomPanel1-1');
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$list = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel1');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

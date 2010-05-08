@@ -18,7 +18,7 @@
 	if ($_GET['PageID']){
 		$formidnumber['PageID'] = $_GET['PageID'];
 	}
-	
+		
 	$formdatabase = Array();
 	$formdatabase['Form'] = 'Form';
 	$formdatabase['FormButton'] = 'FormButton';
@@ -59,6 +59,8 @@
 	
 	$databaseoptions = array();
 	$databaseoptions['XhtmlFormSession'] = $_SESSION['POST']['FilteredInput'];
+	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	
 	$form = new XhtmlForm($formdatabase, $databaseoptions);
 	$form->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Form');

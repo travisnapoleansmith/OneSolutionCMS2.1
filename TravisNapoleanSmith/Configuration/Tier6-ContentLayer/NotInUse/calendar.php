@@ -27,6 +27,8 @@
 	$databaseoptions['Month'] = NULL;
 	$databaseoptions['Year'] = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$calendartable = new XhtmlCalendarTable($calendardatabase, $databaseoptions);
 	$calendartable->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');
 	$calendartable->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

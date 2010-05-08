@@ -7,6 +7,11 @@ class ContentLayer extends LayerModulesAbstract
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
+	protected $PrintPreview;
+	
+	protected $DatabaseTableName;
+	protected $ContentLayerDatabase;
+	
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
@@ -23,6 +28,12 @@ class ContentLayer extends LayerModulesAbstract
 		$this->PageID = $_GET['PageID'];
 		
 		$this->SessionName['SessionID'] = $_GET['SessionID'];
+		
+		$this->Writer = &$GLOBALS['Writer'];
+	}
+	
+	public function setPrintPreview($PrintPreview) {
+		$this->PrintPreview = $PrintPreview;
 	}
 	
 	public function setModules() {
@@ -39,6 +50,10 @@ class ContentLayer extends LayerModulesAbstract
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+	}
+	
+	public function setDatabaseTableName ($databasetablename) {
+		$this->DatabaseTableName = $databasetablename;
 	}
 	
 	public function ConnectAll () {
@@ -117,6 +132,90 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		} else {
 			array_push($this->ErrorMessage,'pass: Function Arguments Cannot Be Null!');
+		}
+	}
+	
+	public function FetchDatabase($PageID) {
+		$this->PageID = $PageID;
+		$passarray = array();
+		$passarray = $PageID;
+
+		$this->LayerModule->Connect($this->DatabaseTableName);
+		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbyname', array('OrderName' => 'ObjectID'));
+		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbytype', array('OrderType' => 'ASC'));
+		$this->LayerModule->pass ($this->DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->DatabaseTableName);
+		
+		$this->ContentLayerDatabase = $this->LayerModule->pass ($this->DatabaseTableName, 'getMultiRowField', array());
+	}
+	
+	public function CreateOutput($Space) {
+		reset($this->ContentLayerDatabase);
+		
+		while (current($this->ContentLayerDatabase)) {
+			$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
+			$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
+			$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
+			$ObjectTypeConfiguration = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
+			$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
+			
+			$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
+			$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
+			$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
+			$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
+			$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
+			
+			$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
+			
+			if ($EnableDisable == 'Enable') {
+				if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
+					if ($StartTag) {
+						$StartTag = str_replace('<','', $StartTag);
+						$StartTag = str_replace('>','', $StartTag);
+						
+						$this->Writer->startElement($StartTag);
+						
+						if ($StartTagID) {
+							$this->Writer->writeAttribute('id', $StartTagID);
+						}
+						
+						if ($StartTagStyle) {
+							$this->Writer->writeAttribute('style', $StartTagStyle);
+						}
+						
+						if ($StartTagClass) {
+							$this->Writer->writeAttribute('class', $StartTagClass);
+						}
+						$this->Writer->writeRaw("\n");
+					}
+					
+					if ($ObjectTypeConfiguration) {
+						if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
+							$file = file_get_contents($ObjectTypeConfiguration);
+							$this->Writer->writeRaw($file);
+						} else {
+							require ("$ObjectTypeConfiguration");
+						}
+					} else {
+						$idnumber = array();
+						$idnumber['PageID'] = $this->PageID['PageID'];
+						$idnumber['ObjectID'] = 1;
+						
+						$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
+						$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
+						$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
+					}
+					
+					if ($EndTag) {
+						$this->Writer->endElement(); // ENDS END TAG
+					}
+				}
+				
+				if ($ObjectType == 'XhtmlHeader') {
+					$this->Writer->startElement('body');
+				}
+			}
+			next($this->ContentLayerDatabase);
 		}
 	}
 		

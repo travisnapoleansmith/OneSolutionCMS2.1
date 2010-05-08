@@ -38,6 +38,7 @@
 	$headerdatabase['ContentLayerTheme'] = 'ContentLayerTheme';
 	
 	$databaseoptions = NULL;
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	
 	$header = new XhtmlHeader($headerdatabase, $databaseoptions);
 	$header->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'PageAttributes');

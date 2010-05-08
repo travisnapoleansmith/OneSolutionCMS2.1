@@ -44,6 +44,8 @@
 
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$news = new XhtmlNews($newsdatabase, $databaseoptions);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $newsname);
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

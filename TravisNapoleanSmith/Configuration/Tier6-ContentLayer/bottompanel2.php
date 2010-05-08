@@ -26,6 +26,13 @@
 	
 	$databaseoptions = NULL;
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$Writer = $GLOBALS['Writer'];
+	
+	//$Writer->startElement('div');
+		//$Writer->writeAttribute('id', 'BottomPanel2');
+		//$Writer->writeAttribute('class', 'BottomPanel2');
+	
 	$list = new XhtmlMenu($listdatabase, $databaseoptions);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel2');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -57,4 +64,6 @@
 	$list3->CreateOutput('    ');
 	
 	$listidnumber['ObjectID'] = 4;
+	
+	//$Writer->endElement(); // ENDS DIV
 ?>

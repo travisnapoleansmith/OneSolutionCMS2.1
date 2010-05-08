@@ -65,6 +65,8 @@
 	
 	$databaseoptions['Insert'] = '<img src="Images/Main-Logo.png" alt="KC Photo and Video Logo" class="main-menu-image"/>';
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$mainmenu = new XhtmlMainMenu($mainmenudatabase, $databaseoptions);
 	$mainmenu->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MainMenuLookupNew');
 	$mainmenu->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

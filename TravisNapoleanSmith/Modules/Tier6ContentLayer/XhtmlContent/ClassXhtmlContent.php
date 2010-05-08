@@ -37,7 +37,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $ContentOutput;
 	
 	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule =&$GLOBALS['Tier6Databases'];
+		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
@@ -600,7 +600,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$contentdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
 					$contentdatabase[$this->ContentPrintPreviewTableName] = $this->ContentPrintPreviewTableName;
 					
-					$content = new XhtmlContent($contentdatabase, $this->LayerModule);
+					$databaseoptions = NULL;
+					
+					$content = new XhtmlContent($contentdatabase, $databaseoptions);
 					$content->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 					$content->setHttpUserAgent($this->HttpUserAgent);
 					$content->FetchDatabase ($contentidnumber);

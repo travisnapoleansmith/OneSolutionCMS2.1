@@ -25,6 +25,8 @@
 		
 		$databases = &$GLOBALS['Tier6Databases'];
 		
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		
 		/*if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
 			print "\n";
 			print "<script type=\"text/javascript\" src=\"";

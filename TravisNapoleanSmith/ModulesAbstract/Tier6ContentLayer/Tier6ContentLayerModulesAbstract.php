@@ -211,12 +211,6 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	}
 	
 	protected function ProcessArrayStandardAttribute($startingvariablename) {
-		/*$hold = 'FormInputLang';
-		print current($this->$hold);
-		$variablehold = $startingvariablename . 'AccessKey';
-		if ($this->$variablehold) {
-			$this->Writer->writeAttribute('lang', current($this->$variablehold));
-		}*/
 		$variablehold = $startingvariablename . 'AccessKey';
 		if ($this->$variablehold) {
 			if (current($this->$variablehold)) {

@@ -24,6 +24,8 @@
 	$listdatabase['NoAttributes'] = TRUE;
 	$databases = &$GLOBALS['Tier6Databases'];
 	
+	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	
 	$list = new XhtmlUnorderedList($listdatabase, $databases);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'List');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

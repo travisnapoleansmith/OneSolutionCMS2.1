@@ -29,6 +29,8 @@
 		
 		$databaseoptions = NULL;
 		
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		
 		$picture = new XhtmlPicture($picturedatabase, $databaseoptions);
 		$picture->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Picture');
 		$picture->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);

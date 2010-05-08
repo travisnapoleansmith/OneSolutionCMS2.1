@@ -2,6 +2,8 @@
 
 abstract class LayerModulesAbstract 
 {
+	protected $Writer;
+	
 	protected $Layers = array();
 	
 	protected $LayerModule;
@@ -9,6 +11,8 @@ abstract class LayerModulesAbstract
 	protected $LayerModuleTable;
 	protected $LayerModuleTableName;
 	protected $LayerModuleTableNameSetting;
+	
+	protected $LayerModuleSetting = array();
 	
 	protected $LayerTable;
 	protected $LayerTableName;
@@ -109,6 +113,10 @@ abstract class LayerModulesAbstract
 		return $this->ModulesLocation;
 	}
 	
+	public function getLayerModuleTable (){
+		return $this->LayerModuleTable;
+	}
+	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		/*
 		$this->Hostname = $hostname;
@@ -170,7 +178,7 @@ abstract class LayerModulesAbstract
 		$this->LayerModule->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect($this->LayerModuleTableName);
 		
-		$this->LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
+		$LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
 
 		$this->LayerModule->Connect($this->LayerTableName);
 		$this->LayerModule->pass ($this->LayerTableName, 'setEntireTable', array());
@@ -178,16 +186,18 @@ abstract class LayerModulesAbstract
 		
 		$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
 				
-		if ($LayerModuleTableName && $this->LayerModuleTable && $LayerTableName && $this->LayerTable) {
-			$moduletable = current($this->LayerModuleTable);
-			$keymoduletable = key($this->LayerModuleTable);
+		if ($LayerModuleTableName && $LayerModuleTable && $LayerTableName && $this->LayerTable) {
+			$moduletable = current($LayerModuleTable);
+			$keymoduletable = key($LayerModuleTable);
 			while ($moduletable) {
-				$ObjectType = $this->LayerModuleTable[$keymoduletable]['ObjectType'];
-				$ObjectTypeName = $this->LayerModuleTable[$keymoduletable]['ObjectTypeName'];
-				$ObjectTypeLocation = $this->LayerModuleTable[$keymoduletable]['ObjectTypeLocation'];
+				$ObjectType = $LayerModuleTable[$keymoduletable]['ObjectType'];
+				$ObjectTypeName = $LayerModuleTable[$keymoduletable]['ObjectTypeName'];
+				$ObjectTypeLocation = $LayerModuleTable[$keymoduletable]['ObjectTypeLocation'];
+				$ObjectTypeConfiguration = $LayerModuleTable[$keymoduletable]['ObjectTypeConfiguration'];
+				$ObjectTypePrintPreview = $LayerModuleTable[$keymoduletable]['ObjectTypePrintPreview'];
 				$ModuleFileName = array();
-				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $this->LayerModuleTable);
-				$EnableDisable = $this->LayerModuleTable[$keymoduletable]['Enable/Disable'];
+				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $LayerModuleTable);
+				$EnableDisable = $LayerModuleTable[$keymoduletable]['Enable/Disable'];
 				
 				reset ($this->LayerTable);
 				$layertable = current($this->LayerTable);
@@ -226,6 +236,11 @@ abstract class LayerModulesAbstract
 						$filename = current($ModuleFileName);
 					}
 					
+					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'] = $ObjectTypeLocation;
+					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'] = $ObjectTypeConfiguration;
+					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'] = $ObjectTypePrintPreview;
+					$this->LayerModuleTable[$ObjectType][$ObjectTypeName] += $ModuleFileName;
+					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'] = $EnableDisable;
 				}
 				
 				if (is_array($layertable)) {
@@ -253,9 +268,9 @@ abstract class LayerModulesAbstract
 					}
 				}
 				
-				next($this->LayerModuleTable);
-				$moduletable = current($this->LayerModuleTable);
-				$keymoduletable = key($this->LayerModuleTable);
+				next($LayerModuleTable);
+				$moduletable = current($LayerModuleTable);
+				$keymoduletable = key($LayerModuleTable);
 			}
 		} else {
 			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');
@@ -277,7 +292,7 @@ abstract class LayerModulesAbstract
 			$name .= $i;
 			$hold = $databasetable[$tablesname][$name];
 			while (array_key_exists($name, $databasetable[$tablesname])) {
-				array_push($array, $hold);
+				$array[$name] = $hold;
 				$i++;
 				$name = $arrayname;
 				$name .= $i;
