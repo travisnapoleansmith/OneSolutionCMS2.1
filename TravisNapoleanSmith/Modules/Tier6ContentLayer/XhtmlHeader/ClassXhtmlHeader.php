@@ -139,6 +139,10 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		
 		$this->ThemeName = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'ThemeName'));
 		
+		if ($this->ThemeName) {
+			$GLOBALS['ThemeName'] = $this->ThemeName;
+		}
+		
 		if ($this->HttpUserAgent) {
 			$this->IEStyleSheetBuild('IE6StyleSheet');
 			$this->IEStyleSheetBuild('IE7StyleSheet');
