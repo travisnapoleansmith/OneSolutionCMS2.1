@@ -77,12 +77,12 @@ class DataAccessLayer extends LayerModulesAbstract
 		reset($this->Modules);
 		$hold = NULL;
 		while (current($this->Modules)) {
-			$tempobject = current($this->Modules[key($this->Modules)]);
-			$databasetables = $tempobject->getTableNames();
-			$tempobject->FetchDatabase ($this->PageID);
-			$tempobject->CreateOutput($this->Space);
-			$tempobject->getOutput();
-			$hold = $tempobject->Verify($function, $functionarguments);
+			//$tempobject = current($this->Modules[key($this->Modules)]);
+			//$databasetables = $tempobject->getTableNames();
+			//$tempobject->FetchDatabase ($this->PageID);
+			//$tempobject->CreateOutput($this->Space);
+			//$tempobject->getOutput();
+			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
 		

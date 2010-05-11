@@ -216,6 +216,11 @@ class ContentLayer extends LayerModulesAbstract
 				}
 			}
 			next($this->ContentLayerDatabase);
+
+			if (!current($this->ContentLayerDatabase)) {
+				$this->Writer->endElement(); // ENDS BODY
+				$this->Writer->endElement(); // ENDS HTML
+			}
 		}
 	}
 		

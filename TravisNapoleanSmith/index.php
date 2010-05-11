@@ -32,10 +32,6 @@
 	$Tier6Databases->FetchDatabase($contentidnumber);
 	$Tier6Databases->CreateOutput(NULL);
 	
-	// Print Out End Of Body and HTML File
-	$Writer->endElement(); // ENDS BODY
-	$Writer->endElement(); // ENDS HTML
-	
 	$output = $Writer->flush();
 	if ($output) {
 		print "$output\n";
