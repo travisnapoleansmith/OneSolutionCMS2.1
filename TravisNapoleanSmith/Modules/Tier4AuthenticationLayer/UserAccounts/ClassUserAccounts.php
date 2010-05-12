@@ -9,6 +9,12 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier4Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['UserAccounts'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['UserAccounts'][$hold];
+		$this->ErrorMessage = array();
+		
 		if ($databaseoptions['MaxAttempts']) {
 			$this->MaxAttempts = $databaseoptions['MaxAttempts'];
 		} else {

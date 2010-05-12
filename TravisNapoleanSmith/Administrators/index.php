@@ -22,9 +22,7 @@
 	$Page->writeAttribute('lang', 'en-US');
 	$Page->writeAttribute('xml:lang', 'en-US');
 	$Page->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-	$Page->endElement(); //Ends HTML
 	
-	$Page->startElement('html');
 	$Page->startElement('head');
 	
 	$Page->startElement('meta');
@@ -86,9 +84,7 @@
 	
 	$Page->endElement(); //Ends BODY
 	$Page->endElement(); //Ends HTML
-	//ENDS BODY
 	
-	$Page->endDocument();
 	$pageoutput = $Page->flush();
 	print $pageoutput;
 	

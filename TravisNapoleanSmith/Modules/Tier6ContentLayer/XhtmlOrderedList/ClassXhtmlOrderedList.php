@@ -35,6 +35,11 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold];
+		$this->ErrorMessage = array();
+		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
 			unset($databaseoptions['FileName']);

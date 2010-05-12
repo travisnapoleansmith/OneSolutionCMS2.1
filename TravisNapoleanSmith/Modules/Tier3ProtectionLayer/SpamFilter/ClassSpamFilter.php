@@ -5,6 +5,12 @@ class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3Pro
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier3Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['SpamFilter'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['SpamFilter'][$hold];
+		$this->ErrorMessage = array();
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

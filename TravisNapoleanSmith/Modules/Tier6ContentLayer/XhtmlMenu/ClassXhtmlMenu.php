@@ -24,6 +24,11 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlMenu'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlMenu'][$hold];
+		$this->ErrorMessage = array();
+		
 		$this->DatabaseTableName = current($tablenames);
 		
 		if ($databaseoptions['FileName']) {

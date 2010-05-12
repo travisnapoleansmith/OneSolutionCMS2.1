@@ -5,6 +5,12 @@ class UserPermissions extends Tier3ProtectionLayerModulesAbstract implements Tie
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier3Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['UserPermissions'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['UserPermissions'][$hold];
+		$this->ErrorMessage = array();
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

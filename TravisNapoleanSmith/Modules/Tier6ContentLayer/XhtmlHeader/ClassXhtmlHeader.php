@@ -49,6 +49,11 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlHeader'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlHeader'][$hold];
+		$this->ErrorMessage = array();
+		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
 			unset($databaseoptions['FileName']);

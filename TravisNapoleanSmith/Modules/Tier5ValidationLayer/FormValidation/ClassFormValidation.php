@@ -6,6 +6,12 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 	protected $LookupTable = array();
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier5Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['FormValidation'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['FormValidation'][$hold];
+		$this->ErrorMessage = array();
+		
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);

@@ -3,17 +3,23 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 {
 	public function MySqlConnect () {
 		$this->idsearch = Array();
-		$this->errormessage = Array();
+		
+		$hold = array();
+		if (!is_array($GLOBALS['ErrorMessage']['MySqlConnect'])) {
+			$GLOBALS['ErrorMessage']['MySqlConnect'] = array();
+		}
+		array_push($GLOBALS['ErrorMessage']['MySqlConnect'], $hold);
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['MySqlConnect'][key($GLOBALS['ErrorMessage']['MySqlConnect'])];
 	}
 	
 	public function Connect () {
 		if (!($this->link = mysql_connect($this->hostname, $this->user, $this->password))) {
-			array_push($this->errormessage,'Connect: Could not connect to server');
+			array_push($this->ErrorMessage,'Connect: Could not connect to server');
 		}
 		
 		if ($this->link) {
 			if (!mysql_select_db($this->databasename, $this->link)) {
-				array_push($this->errormessage,'Connect: Could not select database');
+				array_push($this->ErrorMessage,'Connect: Could not select database');
 			}
 		}
 	}
@@ -35,7 +41,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			}
 			$i++;
 		}
-		array_push($this->errormessage,'checkDatabaseName: Database Name does not exist'); 
+		array_push($this->ErrorMessage,'checkDatabaseName: Database Name does not exist'); 
 		return FALSE;
 	}
 	
@@ -63,7 +69,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			}
 			$i++;
 		}
-		array_push($this->errormessage,'checkTableName: Table Name does not exist');
+		array_push($this->ErrorMessage,'checkTableName: Table Name does not exist');
 		return FALSE;
 	}
 	
@@ -79,7 +85,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		} else if (strpos($userdata2, 'ALL PRIVILEGES ON')){
 			return TRUE;
 		} else {
-			array_push($this->errormessage,'checkPermissions: Permission has been denied');
+			array_push($this->ErrorMessage,'checkPermissions: Permission has been denied');
 			return FALSE;
 		}
 	}
@@ -95,7 +101,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			if ($userdata == $field) {
 				return $userdata;
 			} else {
-				array_push($this->errormessage,'checkField: Field does not exist');
+				array_push($this->ErrorMessage,'checkField: Field does not exist');
 				return FALSE;
 			}
 		}
@@ -110,10 +116,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				$query = 'CREATE DATABASE ' . $this->databasename .'';
 				$result = mysql_query($query);
 			} else {
-				array_push($this->errormessage,'createDatabase: Permission has been denied!');
+				array_push($this->ErrorMessage,'createDatabase: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'createDatabase: Database name exists!');
+			array_push($this->ErrorMessage,'createDatabase: Database name exists!');
 		}
 	}
 	
@@ -126,10 +132,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				$query = 'DROP DATABASE ' . $this->databasename .'';
 				$result = mysql_query($query);
 			} else {
-				array_push($this->errormessage,'deleteDatabase: Permission has been denied!');
+				array_push($this->ErrorMessage,'deleteDatabase: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'deleteDatabase: Database name does not exist!');
+			array_push($this->ErrorMessage,'deleteDatabase: Database name does not exist!');
 		}
 	}
 	
@@ -146,19 +152,19 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							$query = 'CREATE TABLE ' . $this->databasetable . ' ( ' . $tablestring . ' ); ';
 							$result = mysql_query($query);
 						} else {
-							array_push($this->errormessage,'createTable: Table String cannot be NULL!');
+							array_push($this->ErrorMessage,'createTable: Table String cannot be NULL!');
 						}
 					} else {
-						array_push($this->errormessage,'createTable: Table String cannot be an Array!');
+						array_push($this->ErrorMessage,'createTable: Table String cannot be an Array!');
 					}
 				} else {
-					array_push($this->errormessage,'createTable: Table name exists!');
+					array_push($this->ErrorMessage,'createTable: Table name exists!');
 				}
 			} else {
-				array_push($this->errormessage,'createTable: Permission has been denied!');
+				array_push($this->ErrorMessage,'createTable: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'createTable: Database name does not exist!');
+			array_push($this->ErrorMessage,'createTable: Database name does not exist!');
 		}
 	}
 	
@@ -181,16 +187,16 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							}
 						}
 					} else {
-						array_push($this->errormessage,'updateTable: Table string cannot be NULL!');
+						array_push($this->ErrorMessage,'updateTable: Table string cannot be NULL!');
 					}
 				} else {
-					array_push($this->errormessage,'updateTable: Table name does not exist!');
+					array_push($this->ErrorMessage,'updateTable: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'updateTable: Permission has been denied!');
+				array_push($this->ErrorMessage,'updateTable: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'updateTable: Database name does not exist!');
+			array_push($this->ErrorMessage,'updateTable: Database name does not exist!');
 		}
 	}
 	
@@ -205,13 +211,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 					$query = 'DROP TABLE ' . $this->databasetable . '';
 					$result = mysql_query($query);
 				} else {
-					array_push($this->errormessage,'deleteTable: Table name does not exist!');
+					array_push($this->ErrorMessage,'deleteTable: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'deleteTable: Permission has been denied!');
+				array_push($this->ErrorMessage,'deleteTable: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'deleteTable: Database name does not exist!');
+			array_push($this->ErrorMessage,'deleteTable: Database name does not exist!');
 		}
 	}
 	
@@ -255,7 +261,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										$result = mysql_query($query);
 										if (!$result) {
 											$temp = key($rowvalue);
-											array_push($this->errormessage,"createRow: Row Value [$temp] exists in the Database!");
+											array_push($this->ErrorMessage,"createRow: Row Value [$temp] exists in the Database!");
 										}
 										
 										next($rowname);
@@ -265,18 +271,18 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										$insertrow = NULL;
 									}
 								} else {
-									array_push($this->errormessage,'createRow: Row Value cannot be NULL!');
+									array_push($this->ErrorMessage,'createRow: Row Value cannot be NULL!');
 								}
 							} else {
-								array_push($this->errormessage,'createRow: Row Name cannot be NULL!');
+								array_push($this->ErrorMessage,'createRow: Row Name cannot be NULL!');
 							}
 						} else if (is_array($rowvalue)){
-							array_push($this->errormessage,'createRow: Row Name is a 3 dimmensional Array but Row Value must be an Array!');
+							array_push($this->ErrorMessage,'createRow: Row Name is a 3 dimmensional Array but Row Value must be an Array!');
 						} else {
-							array_push($this->errormessage,'createRow: Row Name is a 3 Dimmensional Array but Row Value must be a 3 Dimmensional Array!');
+							array_push($this->ErrorMessage,'createRow: Row Name is a 3 Dimmensional Array but Row Value must be a 3 Dimmensional Array!');
 						}
 					} else if (is_array($rowvalue[0])) {
-						array_push($this->errormessage,'createRow: Row Value is a 3 Dimmensional Array but Row Name must be a 3 Dimmensional Array!');
+						array_push($this->ErrorMessage,'createRow: Row Value is a 3 Dimmensional Array but Row Name must be a 3 Dimmensional Array!');
 					} else if (is_array($rowname)) {
 						if (is_array($rowvalue)) {
 							if ($rowname != NULL) {
@@ -303,28 +309,28 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									$result = mysql_query($query);
 									
 									if (!$result) {
-										array_push($this->errormessage,'createRow: Row Value exists in the Database!');
+										array_push($this->ErrorMessage,'createRow: Row Value exists in the Database!');
 									}
 								} else {
-									array_push($this->errormessage,'createRow: Row Value cannot be NULL!');
+									array_push($this->ErrorMessage,'createRow: Row Value cannot be NULL!');
 								}
 							} else {
-								array_push($this->errormessage,'createRow: Row Name cannot be NULL!');
+								array_push($this->ErrorMessage,'createRow: Row Name cannot be NULL!');
 							}
 						} else {
-							array_push($this->errormessage,'createRow: Row Value must be an Array!');
+							array_push($this->ErrorMessage,'createRow: Row Value must be an Array!');
 						}
 					} else {
-						array_push($this->errormessage,'createRow: Row Name must be an Array!');
+						array_push($this->ErrorMessage,'createRow: Row Name must be an Array!');
 					}
 				} else {
-					array_push($this->errormessage,'createRow: Table name does not exist!');
+					array_push($this->ErrorMessage,'createRow: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'createRow: Permission has been denied!');
+				array_push($this->ErrorMessage,'createRow: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'createRow: Database name does not exist!');
+			array_push($this->ErrorMessage,'createRow: Database name does not exist!');
 		}
 	}
 	
@@ -347,25 +353,25 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rowname . '` = "' . $rowvalue . '" WHERE `' . $rownumbername .'` = "' . $rownumber . '" ';
 													$result = mysql_query($query);
 												} else {
-													array_push($this->errormessage,'updateRow: Row Number cannot be NULL!');
+													array_push($this->ErrorMessage,'updateRow: Row Number cannot be NULL!');
 												}
 											} else {
-												array_push($this->errormessage,'updateRow: Row Number Name cannot be NULL!');
+												array_push($this->ErrorMessage,'updateRow: Row Number Name cannot be NULL!');
 											}
 										} else {
-											array_push($this->errormessage,'updateRow: Row Value cannot be NULL!');
+											array_push($this->ErrorMessage,'updateRow: Row Value cannot be NULL!');
 										}
 									} else {
-										array_push($this->errormessage,'updateRow: Row Name cannot be NULL!');
+										array_push($this->ErrorMessage,'updateRow: Row Name cannot be NULL!');
 									}
 								} else {
-									array_push($this->errormessage,'updateRow: Row Name is not an Array, Row Value is not an Array, Row Number Name is not an Array so Row Number cannot be an Array!');
+									array_push($this->ErrorMessage,'updateRow: Row Name is not an Array, Row Value is not an Array, Row Number Name is not an Array so Row Number cannot be an Array!');
 								}
 							} else {
-								array_push($this->errormessage,'updateRow: Row Name is not an Array, Row Value is not an Array so Row Number Name cannot be an Array!');
+								array_push($this->ErrorMessage,'updateRow: Row Name is not an Array, Row Value is not an Array so Row Number Name cannot be an Array!');
 							}
 						} else {
-							array_push($this->errormessage, 'updateRow: Row Name is not an Array so Row Value cannot be an Array!');
+							array_push($this->ErrorMessage, 'updateRow: Row Name is not an Array so Row Value cannot be an Array!');
 						}
 					} else {
 						if (is_array($rowvalue)){
@@ -381,23 +387,23 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										next($rownumber);
 									}
 								} else {
-									array_push($this->errormessage,'updateRow: Row Name is an Array, Row Value is an Array, Row Number Name is an Array and Row Number must be an Array!');
+									array_push($this->ErrorMessage,'updateRow: Row Name is an Array, Row Value is an Array, Row Number Name is an Array and Row Number must be an Array!');
 								}
 							} else {
-								array_push($this->errormessage,'updateRow: Row Name is an Array, Row Value is an Array and Row Number Name must be an Array!');
+								array_push($this->ErrorMessage,'updateRow: Row Name is an Array, Row Value is an Array and Row Number Name must be an Array!');
 							}
 						} else {
-							array_push($this->errormessage,'updateRow: Row Name is an Array and Row Value must be an Array!');
+							array_push($this->ErrorMessage,'updateRow: Row Name is an Array and Row Value must be an Array!');
 						}
 					}
 				} else {
-					array_push($this->errormessage,'updateRow: Table name does not exist!');
+					array_push($this->ErrorMessage,'updateRow: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'updateRow: Permission has been denied!');
+				array_push($this->ErrorMessage,'updateRow: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'updateRow: Database name does not exist!');
+			array_push($this->ErrorMessage,'updateRow: Database name does not exist!');
 		}
 	}
 	
@@ -416,18 +422,18 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . $rowname . ' = ' . $rowvalue . '';
 									$result = mysql_query($query);
 								} else {
-									array_push($this->errormessage,'deleteRow: Row Name has a value but Row Value cannot be NULL!');
+									array_push($this->ErrorMessage,'deleteRow: Row Name has a value but Row Value cannot be NULL!');
 								}
 							} else {
 								if ($rowvalue == NULL) {
 									$query = 'DELETE FROM ' . $this->databasetable . ' ';
 									$result = mysql_query($query);
 								} else {
-									array_push($this->errormessage,'deleteRow: Row Name is NULL but Row Value cannot have a value!');
+									array_push($this->ErrorMessage,'deleteRow: Row Name is NULL but Row Value cannot have a value!');
 								}
 							}
 						} else {
-							array_push($this->errormessage,'deleteRow: Row Value cannot be an Array!');
+							array_push($this->ErrorMessage,'deleteRow: Row Value cannot be an Array!');
 						}
 					} else {
 						if (is_array($rowvalue)) {
@@ -440,26 +446,26 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										next($rowvalue);
 									}
 								} else {
-									array_push($this->errormessage,'deleteRow: Row Name is an array and has a value. Row Value is an array but cannot be NULL!');
+									array_push($this->ErrorMessage,'deleteRow: Row Name is an array and has a value. Row Value is an array but cannot be NULL!');
 								}
 							} else {
 								if ($rowvalue == NULL) {
 									$query = 'DELETE FROM ' . $this->databasetable . ' ';
 									$result = mysql_query($query);
 								} else {
-									array_push($this->errormessage,'deleteRow: Row Name is an array and is NULL but Row Value is an array but cannot have a value!');
+									array_push($this->ErrorMessage,'deleteRow: Row Name is an array and is NULL but Row Value is an array but cannot have a value!');
 								}
 							}
 						}
 					}
 				} else {
-					array_push($this->errormessage,'deleteRow: Table name does not exist!');
+					array_push($this->ErrorMessage,'deleteRow: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'deleteRow: Permission has been denied!');
+				array_push($this->ErrorMessage,'deleteRow: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'deleteRow: Database name does not exist!');
+			array_push($this->ErrorMessage,'deleteRow: Database name does not exist!');
 		}
 	}
 	
@@ -481,40 +487,40 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' FIRST; ';
 												$result = mysql_query($query);
 												if (!$result) {
-													array_push($this->errormessage,"createField: FIRST: Field String exists in the Database!");
+													array_push($this->ErrorMessage,"createField: FIRST: Field String exists in the Database!");
 												}
 											} else {
-												array_push($this->errormessage,'createField: Field Flag has been set to FIRST and Field Flag Column has to be NULL!');
+												array_push($this->ErrorMessage,'createField: Field Flag has been set to FIRST and Field Flag Column has to be NULL!');
 											}
 										} else if ($fieldflag == 'AFTER') {
 											if ($fieldflagcolumn != NULL) {
 												$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' AFTER `' . $fieldflagcolumn .'` ; ';
 												$result = mysql_query($query);
 												if (!$result) {
-													array_push($this->errormessage,"createField: AFTER: Field String exists in the Database!");
+													array_push($this->ErrorMessage,"createField: AFTER: Field String exists in the Database!");
 												}
 											} else {
-												array_push($this->errormessage,'createField: Field Flag has been set to AFTER and Field Flag Column cannot be NULL!');
+												array_push($this->ErrorMessage,'createField: Field Flag has been set to AFTER and Field Flag Column cannot be NULL!');
 											}
 										} else { 
-											array_push($this->errormessage,'createField: Field Flag can only be FIRST or AFTER');
+											array_push($this->ErrorMessage,'createField: Field Flag can only be FIRST or AFTER');
 										}
 									} else {
 										$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' ; ';
 										$result = mysql_query($query);
 										if (!$result) {
-											array_push($this->errormessage,"createField: Field String exists in the Database!");
+											array_push($this->ErrorMessage,"createField: Field String exists in the Database!");
 										}
 									}
 								} else {
-									array_push($this->errormessage,'createField: Field String cannot be NULL!');
+									array_push($this->ErrorMessage,'createField: Field String cannot be NULL!');
 								}
 							} else {
 								
-								array_push($this->errormessage,'createField: Field Flag Column cannot be an Array!');
+								array_push($this->ErrorMessage,'createField: Field Flag Column cannot be an Array!');
 							}
 						} else {
-							array_push($this->errormessage,'createField: Field Flag cannot be an Array!');
+							array_push($this->ErrorMessage,'createField: Field Flag cannot be an Array!');
 						}
 					} else {
 						if (is_array($fieldflag)) {
@@ -528,10 +534,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													$result = mysql_query($query);
 													if (!$result) {
 														$temp = key($fieldstring);
-														array_push($this->errormessage,"createField: FIRST: Field String [$temp] exists in the Database!");
+														array_push($this->ErrorMessage,"createField: FIRST: Field String [$temp] exists in the Database!");
 													}
 												} else {
-													array_push($this->errormessage,"createField: Field Flag [current($fieldflag)] has been set to FIRST and Field Flag Column [current($fieldflagcolumn)]has to be NULL!");
+													array_push($this->ErrorMessage,"createField: Field Flag [current($fieldflag)] has been set to FIRST and Field Flag Column [current($fieldflagcolumn)]has to be NULL!");
 												}
 											} else if (current($fieldflag) == 'AFTER') {
 												if ($fieldflagcolumn != NULL) {
@@ -539,20 +545,20 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													$result = mysql_query($query);
 													if (!$result) {
 														$temp = key($fieldstring);
-														array_push($this->errormessage,"createField: AFTER: Field String [$temp] and Field Flag Column [$temp] exists in the Database!");
+														array_push($this->ErrorMessage,"createField: AFTER: Field String [$temp] and Field Flag Column [$temp] exists in the Database!");
 													}
 												} else {
-													array_push($this->errormessage,'createField: Field Flag [current($fieldflag)] has been set to AFTER and Field Flag Column [current($fieldflagcolumn)] cannot be NULL!');
+													array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] has been set to AFTER and Field Flag Column [current($fieldflagcolumn)] cannot be NULL!');
 												}
 											} else { 
-												array_push($this->errormessage,'createField: Field Flag [current($fieldflag)] can only be FIRST or AFTER');
+												array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] can only be FIRST or AFTER');
 											}
 										} else {
 											$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . current($fieldstring) . ' ; ';
 											$result = mysql_query($query);
 											if (!$result) {
 												$temp = key($fieldstring);
-												array_push($this->errormessage,"createField: Field String [$temp] exists in the Database!");
+												array_push($this->ErrorMessage,"createField: Field String [$temp] exists in the Database!");
 											}
 										}
 										next($fieldstring);
@@ -560,23 +566,23 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										next($fieldflagcolumn);
 									}
 								} else {
-									array_push($this->errormessage,'createField: Field String cannot be NULL!');
+									array_push($this->ErrorMessage,'createField: Field String cannot be NULL!');
 								}
 							} else {
-								array_push($this->errormessage,'createField: Field String is an Array. Field Flag is an Array so Field Flag Column must be an Array!');
+								array_push($this->ErrorMessage,'createField: Field String is an Array. Field Flag is an Array so Field Flag Column must be an Array!');
 							}
 						} else {
-							array_push($this->errormessage,'createField: Field String is an Array so Field Flag must be an Array!');
+							array_push($this->ErrorMessage,'createField: Field String is an Array so Field Flag must be an Array!');
 						}
 					}
 				} else {
-					array_push($this->errormessage,'createField: Table name does not exist!');
+					array_push($this->ErrorMessage,'createField: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'createField: Permission has been denied!');
+				array_push($this->ErrorMessage,'createField: Permission has been denied!');
 			} 
 		} else {
-			array_push($this->errormessage,'createField: Database name does not exist!');
+			array_push($this->ErrorMessage,'createField: Database name does not exist!');
 		}
 	}
 	
@@ -642,21 +648,21 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$query2 = 'ALTER TABLE `' . $this->databasetable . '` CHANGE `' . $field .'` `' . $fieldchange . '` ' . $changestring . ' ;';
 											$result2 = mysql_query($query2);
 										} else {
-											array_push($this->errormessage,'updateField: Field Change - Field name exists!');
+											array_push($this->ErrorMessage,'updateField: Field Change - Field name exists!');
 										}
 									} else {
-										array_push($this->errormessage,'updateField: Field Change cannot be NULL!');
+										array_push($this->ErrorMessage,'updateField: Field Change cannot be NULL!');
 									}
 								} else {
 									
-									array_push($this->errormessage,'updateField: Field Change cannot be an Array!');
+									array_push($this->ErrorMessage,'updateField: Field Change cannot be an Array!');
 								}
 								
 							} else {
-								array_push($this->errormessage,'updateField: Field name does not exist!');
+								array_push($this->ErrorMessage,'updateField: Field name does not exist!');
 							}
 						} else {
-							array_push($this->errormessage,'updateField: Field cannot be NULL!');
+							array_push($this->ErrorMessage,'updateField: Field cannot be NULL!');
 						}
 					} else {
 						if ($field != NULL) {
@@ -714,33 +720,33 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												$result2 = mysql_query($query2);												
 											} else {
 												$temp = key($fieldchange);
-												array_push($this->errormessage,"updateField: Field is an Array and Field Change [$temp] - Field name exists!");
+												array_push($this->ErrorMessage,"updateField: Field is an Array and Field Change [$temp] - Field name exists!");
 											}
 										} else {
-											array_push($this->errormessage,'updateField: Field is an Array so Field Change cannot be NULL!');
+											array_push($this->ErrorMessage,'updateField: Field is an Array so Field Change cannot be NULL!');
 										}
 									} else {
-										array_push($this->errormessage,'updateField: Field is an Array so Field Change must be an Array!');
+										array_push($this->ErrorMessage,'updateField: Field is an Array so Field Change must be an Array!');
 									}
 								} else {
 									$temp = key($field);
-									array_push($this->errormessage,"updateField: Field [$temp] is an Array and Field name does not exist!");
+									array_push($this->ErrorMessage,"updateField: Field [$temp] is an Array and Field name does not exist!");
 								}
 								next($field);
 								next($fieldchange);
 							}
 						} else {
-							array_push($this->errormessage,'updateField: Field is an Array and cannot be NULL!');
+							array_push($this->ErrorMessage,'updateField: Field is an Array and cannot be NULL!');
 						}
 					}
 				} else {
-					array_push($this->errormessage,'updateField: Table name does not exist!');
+					array_push($this->ErrorMessage,'updateField: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'updateField: Permission has been denied!');
+				array_push($this->ErrorMessage,'updateField: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'updateField: Database name does not exist!');
+			array_push($this->ErrorMessage,'updateField: Database name does not exist!');
 		}
 	}
 	
@@ -759,10 +765,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 								$query = 'ALTER TABLE `' . $this->databasetable . '` DROP `' . $field . '` ; ';
 								$result = mysql_query($query);
 							} else {
-								array_push($this->errormessage,'deleteField: Field does not exist!');
+								array_push($this->ErrorMessage,'deleteField: Field does not exist!');
 							}
 						} else {
-							array_push($this->errormessage,'deleteField: Field cannot be NULL!');
+							array_push($this->ErrorMessage,'deleteField: Field cannot be NULL!');
 						}
 					} else {
 						if ($field != NULL) {
@@ -773,21 +779,21 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									$result = mysql_query($query);
 									next($field);
 								} else {
-									array_push($this->errormessage,'deleteField: Field is an Array but does not exist!');
+									array_push($this->ErrorMessage,'deleteField: Field is an Array but does not exist!');
 								}
 							}
 						} else {
-							array_push($this->errormessage,'deleteField: Field is an Array but cannot be NULL!');
+							array_push($this->ErrorMessage,'deleteField: Field is an Array but cannot be NULL!');
 						}
 					}
 				} else {
-					array_push($this->errormessage,'deleteField: Table name does not exist!');
+					array_push($this->ErrorMessage,'deleteField: Table name does not exist!');
 				}
 			} else {
-				array_push($this->errormessage,'deleteField: Permission has been denied!');
+				array_push($this->ErrorMessage,'deleteField: Permission has been denied!');
 			}
 		} else {
-			array_push($this->errormessage,'deleteField: Database name does not exist!');
+			array_push($this->ErrorMessage,'deleteField: Database name does not exist!');
 		}
 		
 	}
@@ -829,7 +835,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				}
 			}
 		} else {
-			array_push($this->errormessage,'setDatabaseRow: Idnumber must be an Array!');
+			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
 	
@@ -883,7 +889,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				$this->database = mysql_fetch_assoc($this->rowresult);
 			}
 		} else {
-			array_push($this->errormessage,'setDatabaseRow: Idnumber must be an Array!');
+			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
 }

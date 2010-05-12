@@ -13,4 +13,6 @@
 	$Writer = new XMLWriter();
 	$Writer->openMemory();
 	$Writer->setIndent(4);
+	
+	$ErrorMessage = array();
 ?>

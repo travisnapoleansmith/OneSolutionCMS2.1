@@ -17,6 +17,11 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlTable'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlTable'][$hold];
+		$this->ErrorMessage = array();
+		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
 			unset($databaseoptions['FileName']);

@@ -5,6 +5,12 @@ class SqlInjection extends Tier3ProtectionLayerModulesAbstract implements Tier3P
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier3Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['SqlInjection'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['SqlInjection'][$hold];
+		$this->ErrorMessage = array();
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

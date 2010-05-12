@@ -37,6 +37,11 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlUnorderedList'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlUnorderedList'][$hold];
+		$this->ErrorMessage = array();
+		
 		if ($databaseoptions['Insert']) {
 			$this->Insert = $databaseoptions['Insert'];
 			unset($databaseoptions['Insert']);

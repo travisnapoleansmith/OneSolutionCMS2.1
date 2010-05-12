@@ -5,6 +5,12 @@ class Revisions extends Tier3ProtectionLayerModulesAbstract implements Tier3Prot
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier3Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['Revisions'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['Revisions'][$hold];
+		$this->ErrorMessage = array();
+		
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

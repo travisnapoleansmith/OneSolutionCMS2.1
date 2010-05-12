@@ -145,6 +145,10 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->AppointmentDayColumns['Appointment'] = 'Appointment';
 		
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold];
+		$this->ErrorMessage = array();
 		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];

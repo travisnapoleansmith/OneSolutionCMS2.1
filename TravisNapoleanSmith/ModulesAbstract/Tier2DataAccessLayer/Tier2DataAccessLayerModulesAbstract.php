@@ -26,7 +26,6 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	protected $database;
 	protected $i;
 	protected $idsearch;
-	protected $errormessage;
 	
 	abstract protected function checkDatabaseName ();
 	abstract protected function checkTableName ();
@@ -96,14 +95,6 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	
 	public function getHostname () {
 		return $this->hostname;
-	}
-	
-	public function getError ($idnumber) {
-		return $this->errormessage[$idnumber];
-	}
-	
-	public function getErrorArray() {
-		return $this->errormessage;
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

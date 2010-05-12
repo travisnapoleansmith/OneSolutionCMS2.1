@@ -5,6 +5,11 @@ class Audit extends Tier3ProtectionLayerModulesAbstract implements Tier3Protecti
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule =&$GLOBALS['Tier3Databases'];
+		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['Audit'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['Audit'][$hold];
+		$this->ErrorMessage = array();
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

@@ -38,6 +38,10 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+		$hold = $tablenames['Content'];
+		$GLOBALS['ErrorMessage']['XhtmlContent'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlContent'][$hold];
+		$this->ErrorMessage = array();
 		
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];

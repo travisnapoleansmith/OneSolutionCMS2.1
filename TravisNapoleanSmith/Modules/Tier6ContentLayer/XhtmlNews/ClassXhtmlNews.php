@@ -32,6 +32,11 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
+		$hold = current($tablenames);
+		$GLOBALS['ErrorMessage']['XhtmlNews'][$hold] = NULL;
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlNews'][$hold];
+		$this->ErrorMessage = array();
+		
 		$this->NewsButtonsTableName = current($tablenames);
 		$this->NewsStoriesTableName = next($tablenames);
 		$this->ContentLayerTablesName = next($tablenames);
