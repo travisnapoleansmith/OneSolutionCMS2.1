@@ -98,12 +98,12 @@ class ValidationLayer extends LayerModulesAbstract
 			if (is_array($functionarguments)) {
 				if (!is_null($function)) {
 					if (!is_array($function)) {
-						if ($this->DatabaseAllow[$function]) {
+						if ($this->DatabaseAllow[$function] || $function == 'AUTHENTICATE' || $function == 'PROTECT') {
 							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}
-						} else if ($this->DatabaseDeny[$function] || $function = 'FORM') {
+						} else if ($this->DatabaseDeny[$function] || $function == 'FORM') {
 							$hold = $this->checkPass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;

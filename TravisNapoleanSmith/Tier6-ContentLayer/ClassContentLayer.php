@@ -138,6 +138,15 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function FetchDatabase($PageID) {
+		if (!$PageID['PageID']) {
+			if ($_GET['PageID']) {
+				$PageID['PageID'] = $_GET['PageID'];
+			} else {
+				$StartID = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['StartID']['SettingAttribute'];
+				$PageID['PageID'] = $StartID;
+			}
+		}
+		
 		$this->PageID = $PageID;
 		$passarray = array();
 		$passarray = $PageID;
@@ -173,21 +182,20 @@ class ContentLayer extends LayerModulesAbstract
 			
 			if ($EnableDisable == 'Enable') {
 				if ($Authenticate == 'true') {
-					$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-					
-					if ($_GET['DestinationPageID']) {
-						$DestinationPageID = $_GET['DestinationPageID'];
-						$AuthenticationPage .= '&DestinationPageID=';
-						$PageID = $this->PageID['PageID'];
-						$AuthenticationPage .= $DestinationPageID;
-					} else {
-						$AuthenticationPage .= '&DestinationPageID=';
-						$PageID = $this->PageID['PageID'];
-						$AuthenticationPage .= $PageID;
+					if (!$_COOKIE['LoggedIn']) {
+						$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+						
+						if ($_GET['DestinationPageID']) {
+							$DestinationPageID = $_GET['DestinationPageID'];
+							setcookie('DestinationPageID', $DestinationPageID);
+						} else {
+							$PageID = $this->PageID['PageID'];
+							setcookie('DestinationPageID', $PageID);
+						}
+						header("Location: $AuthenticationPage");
 					}
-					header("Location: $AuthenticationPage");
 				}
-				
+
 				if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
 					if ($StartTag) {
 						$StartTag = str_replace('<','', $StartTag);
@@ -242,6 +250,93 @@ class ContentLayer extends LayerModulesAbstract
 				$this->Writer->endElement(); // ENDS HTML
 			}
 		}
+	}
+	
+	public function Login() {
+		if ($_COOKIE['SessionID']) {
+			session_name($_COOKIE['SessionID']);
+			session_start();
+			$_SESSION = array();
+			if (ini_get('session.use_cookies')) {
+				$params = session_get_cookie_params();
+				setcookie(session_name(), '', time()-1000,
+					$params['path'], $params['domain'],
+					$params['secure'], $params['httponly']
+				);
+			}
+			session_destroy();
+		}
+		
+		$sessionname = 'UserAuthentication';
+		$sessionname .= time();
+		setcookie('SessionID', $sessionname);
+		session_name($sessionname);
+		session_start();
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = 1;
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$DestinationPageID = NULL;
+		if ($_GET['DestinationPageID']) {
+			$DestinationPageID = $_GET['DestinationPageID'];
+		}
+		
+		$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+		
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $AuthenticationPage&SessionID=$sessionname");
+		} else {
+			$hold = NULL;
+			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST);
+			if ($hold['Error']) {
+				$_SESSION['POST'] = $hold;
+				header("Location: $AuthenticationPage&SessionID=$sessionname");
+			} else {
+				$username = $_POST['UserName'];
+				setcookie("UserName", $username);
+				setcookie("LoggedIn", TRUE, time()+3600);
+				if ($DestinationPageID) {
+					header("Location: index.php?PageID=$DestinationPageID");
+				} else {
+					header("Location: index.php");
+				}
+			}
+		}
+	}
+	
+	public function Logoff() {
+		setcookie("UserName", '', time()-1000);
+		setcookie("LoggedIn", '', time()-1000);
+		
+		$DestinationPageID = NULL;
+		if ($_GET['DestinationPageID']) {
+			$DestinationPageID = $_GET['DestinationPageID'];
+		}
+		
+		if ($DestinationPageID) {
+			header("Location: index.php?PageID=$DestinationPageID");
+		} else {
+			$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+			header("Location: $AuthenticationPage");
+		}
+	}
+	
+	public function Register() {
+	
+	}
+	
+	public function ChangePassword() {
+	
+	}
+	
+	public function ResetUser() {
+	
 	}
 		
 }

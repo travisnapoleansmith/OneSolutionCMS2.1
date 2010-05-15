@@ -101,12 +101,12 @@ class AuthenticationLayer extends LayerModulesAbstract
 			if (is_array($functionarguments)) {
 				if (!is_null($function)) {
 					if (!is_array($function)) {
-						if ($this->DatabaseAllow[$function]) {
+						if ($this->DatabaseAllow[$function] || $function == 'PROTECT') {
 							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
 							}
-						} else if ($this->DatabaseDeny[$function] || $function = 'AUTHENTICATE') {
+						} else if ($this->DatabaseDeny[$function] || $function == 'AUTHENTICATE') {
 							$hold = $this->checkPass($databasetable, $function, $functionarguments);
 							if ($hold) {
 								return $hold;
