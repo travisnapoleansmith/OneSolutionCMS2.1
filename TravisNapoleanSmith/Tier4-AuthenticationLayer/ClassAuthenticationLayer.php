@@ -10,7 +10,9 @@ class AuthenticationLayer extends LayerModulesAbstract
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
-		$this->ErrorMessage = Array();
+		$GLOBALS['ErrorMessage']['AuthenticationLayer'] = array();
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['AuthenticationLayer'];
+		
 		$this->DatabaseAllow = &$GLOBALS['Tier4DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier4DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier3Databases'];

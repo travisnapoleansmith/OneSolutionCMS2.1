@@ -10,7 +10,9 @@ class ProtectionLayer extends LayerModulesAbstract
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
-		$this->ErrorMessage = Array();
+		$GLOBALS['ErrorMessage']['ProtectionLayer'] = array();
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['ProtectionLayer'];
+		
 		$this->DatabaseAllow = &$GLOBALS['Tier3DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier3DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier2Databases'];

@@ -10,7 +10,9 @@ class ValidationLayer extends LayerModulesAbstract
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
-		$this->ErrorMessage = Array();
+		$GLOBALS['ErrorMessage']['ValidationLayer'] = array();
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['ValidationLayer'];
+		
 		$this->DatabaseAllow = &$GLOBALS['Tier5DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier5DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier4Databases'];

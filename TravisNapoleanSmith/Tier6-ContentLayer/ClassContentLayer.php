@@ -15,7 +15,9 @@ class ContentLayer extends LayerModulesAbstract
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
-		$this->ErrorMessage = Array();
+		$GLOBALS['ErrorMessage']['ContentLayer'] = array();
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['ContentLayer'];
+		
 		$this->DatabaseAllow = &$GLOBALS['Tier6DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
 		$this->LayerModule = &$GLOBALS['Tier5Databases'];
@@ -159,6 +161,8 @@ class ContentLayer extends LayerModulesAbstract
 			$ObjectTypeConfiguration = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
 			$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
 			
+			$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
+			
 			$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
 			$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
 			$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
@@ -168,6 +172,22 @@ class ContentLayer extends LayerModulesAbstract
 			$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
 			
 			if ($EnableDisable == 'Enable') {
+				if ($Authenticate == 'true') {
+					$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+					
+					if ($_GET['DestinationPageID']) {
+						$DestinationPageID = $_GET['DestinationPageID'];
+						$AuthenticationPage .= '&DestinationPageID=';
+						$PageID = $this->PageID['PageID'];
+						$AuthenticationPage .= $DestinationPageID;
+					} else {
+						$AuthenticationPage .= '&DestinationPageID=';
+						$PageID = $this->PageID['PageID'];
+						$AuthenticationPage .= $PageID;
+					}
+					header("Location: $AuthenticationPage");
+				}
+				
 				if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
 					if ($StartTag) {
 						$StartTag = str_replace('<','', $StartTag);

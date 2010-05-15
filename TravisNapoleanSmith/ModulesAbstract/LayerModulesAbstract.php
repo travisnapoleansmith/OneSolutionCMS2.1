@@ -186,6 +186,18 @@ abstract class LayerModulesAbstract
 		
 		$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
 				
+		$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
+		$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+		
+		$LayerModuleSetting = $this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
+		$ModuleSetting = array();
+		$InnerKey = array();
+		$InnerKey['ObjectTypeName'] = 'ObjectTypeName';
+		$InnerKey['Setting'] = 'Setting';
+		$this->LayerModuleSetting = $this->buildArray($ModuleSetting, $InnerKey, 'ObjectType', $LayerModuleSetting);
+		//print_r($this->LayerModuleSetting);
+				
 		if ($LayerModuleTableName && $LayerModuleTable && $LayerTableName && $this->LayerTable) {
 			$moduletable = current($LayerModuleTable);
 			$keymoduletable = key($LayerModuleTable);
@@ -196,7 +208,7 @@ abstract class LayerModulesAbstract
 				$ObjectTypeConfiguration = $LayerModuleTable[$keymoduletable]['ObjectTypeConfiguration'];
 				$ObjectTypePrintPreview = $LayerModuleTable[$keymoduletable]['ObjectTypePrintPreview'];
 				$ModuleFileName = array();
-				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $LayerModuleTable);
+				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $LayerModuleTable, 'Numerical');
 				$EnableDisable = $LayerModuleTable[$keymoduletable]['Enable/Disable'];
 				
 				reset ($this->LayerTable);
@@ -246,7 +258,7 @@ abstract class LayerModulesAbstract
 				if (is_array($layertable)) {
 					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
 						$DatabaseTables = array();
-						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable);
+						$DatabaseTables = $this->buildArray($DatabaseTables, 'DatabaseTable', $keylayertable, $this->LayerTable, 'Numerical');
 						reset($DatabaseTables);
 						while (current($DatabaseTables)) {
 							$this->createDatabaseTable(current($DatabaseTables));
@@ -263,6 +275,17 @@ abstract class LayerModulesAbstract
 							$DatabaseOptionsName .= 'Session';
 							
 							$DatabaseOptions[$DatabaseOptionsName] = $_SESSION['POST'][$this->SessionTypeName['SessionValue']];
+						}
+						
+						if ($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]) {
+							reset($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]);
+							while (current($this->LayerModuleSetting[$ObjectType][$ObjectTypeName])) {
+								$temp = current($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]);
+								$Setting = $temp['Setting'];
+								$SettingAttribute = $temp['SettingAttribute'];
+								$DatabaseOptions[$Setting] = $SettingAttribute;
+								next($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]);
+							}
 						}
 						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions);
 					}
@@ -285,29 +308,66 @@ abstract class LayerModulesAbstract
 		
 	}
 	
-	protected function buildArray($array, $arrayname, $tablesname, $databasetable) {
+	protected function buildArray($array, $innerkey, $outerkey, $databasetable) {
 		if (is_array($array)) {
-			$i = 1;
-			$name = $arrayname;
-			$name .= $i;
-			$hold = $databasetable[$tablesname][$name];
-			while (array_key_exists($name, $databasetable[$tablesname])) {
-				$array[$name] = $hold;
-				$i++;
-				$name = $arrayname;
-				$name .= $i;
-				$hold = $databasetable[$tablesname][$name];
+			$numargs = func_num_args();
+			$numerical = NULL;
+			if ($numargs == 5) {
+				$args = func_get_args();
+				$numberical = $args[4];
 			}
-			reset ($array);
+
+			if ($numberical == 'Numerical') {
+				$i = 1;
+				$name = $innerkey;
+				$name .= $i;
+				$hold = $databasetable[$outerkey][$name];
+				while (array_key_exists($name, $databasetable[$outerkey])) {
+					$array[$name] = $hold;
+					$i++;
+					$name = $innerkey;
+					$name .= $i;
+					$hold = $databasetable[$outerkey][$name];
+				}
+				reset ($array);
 			
-			$temp2 = NULL;
-			while (array_key_exists(key($array), $array)) {
-				if (!current($array)) {
-					$temp = key($array);
-					next($array);
-					unset($array[$temp]);
-				} else {
-					next($array);
+				$temp2 = NULL;
+				while (array_key_exists(key($array), $array)) {
+					if (!current($array)) {
+						$temp = key($array);
+						next($array);
+						unset($array[$temp]);
+					} else {
+						next($array);
+					}
+				}
+			} else {
+				if (is_array($databasetable)) {
+					reset($databasetable);
+					if (is_array($innerkey)) {
+						while (current($databasetable)) {
+							$key1 = $databasetable[key($databasetable)][$outerkey];
+							
+							reset($innerkey);
+							$key2 = $databasetable[key($databasetable)][current($innerkey)];
+							next($innerkey);
+							
+							while (current($innerkey)) {
+								$key3 = $databasetable[key($databasetable)][current($innerkey)];
+								$array[$key1][$key2][$key3] = $databasetable[key($databasetable)];
+								next($innerkey);
+							}
+							
+							next($databasetable);
+						}
+					} else {
+						while (current($databasetable)) {
+							$key1 = $databasetable[key($databasetable)][$outerkey];
+							$key2 = $databasetable[key($databasetable)][$innerkey];
+							$array[$key1][$key2] = $databasetable[key($databasetable)];
+							next($databasetable);
+						}
+					}
 				}
 			}
 			

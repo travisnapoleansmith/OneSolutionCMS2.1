@@ -11,7 +11,9 @@ class DataAccessLayer extends LayerModulesAbstract
 		
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
-		$this->ErrorMessage = Array();
+		$GLOBALS['ErrorMessage']['DataAccessLayer'] = array();
+		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['DataAccessLayer'];
+		
 		$this->DatabaseAllow = &$GLOBALS['Tier2DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier2DatabaseDeny'];
 		
