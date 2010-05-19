@@ -69,7 +69,6 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 					if (isset($functionarguments[$key])) {
 						$functionname = 'Process';
 						$functionname .= $attrib;
-						
 						$temp = $this->$functionname($functionarguments[$key], $minlength, $maxlength, $minvalue, $maxvalue);
 						if ($temp) {
 							$hold['Error'][$key] = $temp;
@@ -113,7 +112,7 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		$value = filter_var($value, FILTER_SANITIZE_STRING);
 		
 		if (preg_match('#[0-9]#', $value)) {
-			return "Input must be contain characters only no numbers are allowed and must be between $minlength characters and $maxlength characters long!";
+			return "Input must be contain characters only no numbers are allowed.<br /> They must be between $minlength characters and $maxlength characters long!";
 		}
 		
 		$length = strlen($value);
@@ -156,10 +155,15 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		}
 		
 		$value = filter_var($value, FILTER_SANITIZE_EMAIL);
-		
+
 		$value2 = filter_var($value, FILTER_VALIDATE_EMAIL);
 		if (!$value2) {
-			return "Input is not a valid email address. Valid email addresses look something like this: example@example.com !";
+			return "Input is not a valid email address. <br /> Valid email addresses look something like this: example@example.com !";
+		} else {
+			list($UserName, $MailDomain) = split('@', $value2);
+			if (!checkdnsrr($MailDomain, 'MX')) {
+				return "Input is not a valid email address. <br /> Valid email addresses look something like this: example@example.com ! <br /> The email address entered is on a non-exisitng domain! ";
+			}
 		}
 	}
 	
@@ -172,18 +176,18 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		
 		$value2 = filter_var($value, FILTER_VALIDATE_URL);
 		if (!$value2) {
-			return "Input is not a valid url address. Valid url addresses look something like this: http://www.example.com !";
+			return "Input is not a valid url address. <br /> Valid url addresses look something like this: http://www.example.com !";
 		}
 	}
 	
 	protected function ProcessIPAddress($value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		if (!$value) {
-			return 'Input must be contain an ip address. Valid ip address look something like this: 192.168.100.1 .';
+			return 'Input must be contain an ip address. <br /> Valid ip address look something like this: 192.168.100.1 .';
 		}
 		
 		$value = filter_var($value, FILTER_VALIDATE_IP);
 		if (!$value) {
-			return "Input is not a valid ip address. Valid ip addresses look something like this: 192.168.100.1 !";
+			return "Input is not a valid ip address. <br /> Valid ip addresses look something like this: 192.168.100.1 !";
 		}
 	}
 	
@@ -211,7 +215,7 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		$this->LayerModule->pass ('States', 'setDatabaseRow', array('PageID' => $passarray));
 		$this->LookupTable['States'] = $this->LayerModule->pass ('States', 'getMultiRowField', array());
 		if (!$this->LookupTable['States'][0]) {
-			return "$value is not a valid state, please try again! Please use the states abbreviation.  For example use NY for New York";
+			return "$value is not a valid state, please try again! <br /> Please use the states abbreviation.  <br /> For example use NY for New York";
 		}
 	}
 	

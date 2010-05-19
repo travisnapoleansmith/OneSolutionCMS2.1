@@ -85,13 +85,14 @@ class ContentLayer extends LayerModulesAbstract
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
+		
 		while (current($this->Modules)) {
 			$tempobject = current($this->Modules[key($this->Modules)]);
 			$databasetables = $tempobject->getTableNames();
 			$tempobject->FetchDatabase ($this->PageID);
 			$tempobject->CreateOutput($this->Space);
 			$tempobject->getOutput();
-			$hold = $tempobject->Verify($function, $functionarguments);
+			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
 		
@@ -109,12 +110,34 @@ class ContentLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
-							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
+							$args = func_num_args();
+							if ($args > 3) {
+								$hookarguments = func_get_args(4);
+								if (is_array($hookarguments)) {
+									$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments, $hookargments);
+								} else {
+									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+								}
+							} else {
+								$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
+							}
+							
 							if ($hold) {
 								return $hold;
 							}
 						} else if ($this->DatabaseDeny[$function]) {
-							$hold = $this->checkPass($databasetable, $function, $functionarguments);
+							$args = func_num_args();
+							if ($args > 3) {
+								$hookarguments = func_get_args(4);
+								if (is_array($hookarguments)) {
+									$hold = $this->checkPass($databasetable, $function, $functionarguments, $hookargments);
+								} else {
+									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+								}
+							} else {
+								$hold = $this->checkPass($databasetable, $function, $functionarguments);
+							}
+							
 							if ($hold) {
 								return $hold;
 							} else {
@@ -162,7 +185,6 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function CreateOutput($Space) {
 		reset($this->ContentLayerDatabase);
-		
 		while (current($this->ContentLayerDatabase)) {
 			$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
 			$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
@@ -252,8 +274,50 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
-	public function Login() {
+	protected function SessionStart($SessionName) {
+		/*if ($_COOKIE['SessionID']) {
+			session_name($_COOKIE['SessionID']);
+			session_start();
+			$_SESSION = array();
+			if (ini_get('session.use_cookies')) {
+				$params = session_get_cookie_params();
+				setcookie(session_name(), '', time()-1000,
+					$params['path'], $params['domain'],
+					$params['secure'], $params['httponly']
+				);
+			}
+			session_destroy();
+		}*/
 		if ($_COOKIE['SessionID']) {
+			$this->SessionDestroy($_COOKIE['SessionID']);
+		}
+		$sessionname = $SessionName;
+		$sessionname .= time();
+		setcookie('SessionID', $sessionname);
+		session_name($sessionname);
+		session_start();
+		
+		return $sessionname;
+	}
+	
+	protected function SessionDestroy($SessionName) {
+		if ($SessionName) {
+			session_name($SessionName);
+			session_start();
+			$_SESSION = array();
+			if (ini_get('session.use_cookies')) {
+				$params = session_get_cookie_params();
+				setcookie(session_name(), '', time()-1000,
+					$params['path'], $params['domain'],
+					$params['secure'], $params['httponly']
+				);
+			}
+			session_destroy();
+		}
+	}
+	
+	public function Login() {
+		/*if ($_COOKIE['SessionID']) {
 			session_name($_COOKIE['SessionID']);
 			session_start();
 			$_SESSION = array();
@@ -272,9 +336,11 @@ class ContentLayer extends LayerModulesAbstract
 		setcookie('SessionID', $sessionname);
 		session_name($sessionname);
 		session_start();
+		*/
+		$sessionname = $this->SessionStart('UserAuthentication');
 		
 		$loginidnumber = Array();
-		$loginidnumber['PageID'] = 1;
+		$loginidnumber['PageID'] = $_POST['Login'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
@@ -328,11 +394,52 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function Register() {
+		$sessionname = $this->SessionStart('UserRegistration');
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = $_POST['Register'];
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$RegisterPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Register']['SettingAttribute'];
+		
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $RegisterPage&SessionID=$sessionname");
+		} else {
+			$hold = NULL;
+			$passarray = array();
+			$passarray['checkUserName'] = $_POST['UserName'];
+			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+			if ($hold['checkUserName']) {
+				$hold['Error']['UserName'] = 'User Name already exists, please try again!';
+				$_SESSION['POST'] = $hold;
+				header("Location: $RegisterPage&SessionID=$sessionname");
+			} else {
+				$location = 'http://kcphotovideoversion1.travisnapoleansmith.com/Administrators/newuser.php?UserName=dogcatbird';
+				$passarray = array();
+				$passarray['createUserAccount'] = array('UserName' => $_POST['UserName'], 'EmailAddress' => $_POST['Email']);
+				$passarray['generateNewUserEmail'] = array('EmailAddress' => $_POST['Email'], 'Location' => $location);
+				$this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+			}
+			
+			//$this->SessionDestroy($sessionname);
+			
+			$RegisterRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['RegisterRedirect']['SettingAttribute'];
+			header("Location: $RegisterRedirectPage");
+		}
+	}
 	
+	public function NewUserChangePassword() {
+		print_r($_GET);
 	}
 	
 	public function ChangePassword() {
-	
+		
 	}
 	
 	public function ResetUser() {

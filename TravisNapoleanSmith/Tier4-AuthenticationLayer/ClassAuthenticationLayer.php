@@ -68,18 +68,41 @@ class AuthenticationLayer extends LayerModulesAbstract
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
-		while (current($this->Modules)) {
-			$tempobject = current($this->Modules[key($this->Modules)]);
-			$databasetables = $tempobject->getTableNames();
-			if ($function == 'AUTHENTICATE') {
-				$tempobject->FetchDatabase ($functionarguments);
+		$args = func_num_args();
+		if ($args > 3) {
+			$hookargumentsarray = func_get_args();
+			$hookarguments = $hookargumentsarray[3];
+			if (is_array($hookarguments)) {
+				while (current($this->Modules)) {
+					$tempobject = current($this->Modules[key($this->Modules)]);
+					$databasetables = $tempobject->getTableNames();
+					if ($function == 'AUTHENTICATE') {
+						$tempobject->FetchDatabase ($functionarguments);
+					} else {
+						$tempobject->FetchDatabase ($this->PageID);
+					}
+					//$tempobject->CreateOutput($this->Space);
+					//$tempobject->getOutput();
+					$hold = $tempobject->Verify($function, $functionarguments, $hookarguments);
+					next($this->Modules);
+				}
 			} else {
-				$tempobject->FetchDatabase ($this->PageID);
+				array_push($this->ErrorMessage,'checkPass: Hook Arguments Must Be An Array!');
 			}
-			//$tempobject->CreateOutput($this->Space);
-			//$tempobject->getOutput();
-			$hold = $tempobject->Verify($function, $functionarguments);
-			next($this->Modules);
+		} else {
+			while (current($this->Modules)) {
+				$tempobject = current($this->Modules[key($this->Modules)]);
+				$databasetables = $tempobject->getTableNames();
+				if ($function == 'AUTHENTICATE') {
+					$tempobject->FetchDatabase ($functionarguments);
+				} else {
+					$tempobject->FetchDatabase ($this->PageID);
+				}
+				//$tempobject->CreateOutput($this->Space);
+				//$tempobject->getOutput();
+				$hold = $tempobject->Verify($function, $functionarguments);
+				next($this->Modules);
+			}
 		}
 		
 		if ($function == 'AUTHENTICATE') {
@@ -102,12 +125,36 @@ class AuthenticationLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function] || $function == 'PROTECT') {
-							$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
+							$args = func_num_args();
+							if ($args > 3) {
+								$hookargumentsarray = func_get_args();
+								$hookarguments = $hookargumentsarray[3];
+								if (is_array($hookarguments)) {
+									$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments, $hookarguments);
+								} else {
+									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+								}
+							} else {
+								$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
+							}
+							
 							if ($hold) {
 								return $hold;
 							}
 						} else if ($this->DatabaseDeny[$function] || $function == 'AUTHENTICATE') {
-							$hold = $this->checkPass($databasetable, $function, $functionarguments);
+							$args = func_num_args();
+							if ($args > 3) {
+								$hookargumentsarray = func_get_args();
+								$hookarguments = $hookargumentsarray[3];
+								if (is_array($hookarguments)) {
+									$hold = $this->checkPass($databasetable, $function, $functionarguments, $hookarguments);
+								} else {
+									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+								}
+							} else {
+								$hold = $this->checkPass($databasetable, $function, $functionarguments);
+							}
+							
 							if ($hold) {
 								return $hold;
 							} else {

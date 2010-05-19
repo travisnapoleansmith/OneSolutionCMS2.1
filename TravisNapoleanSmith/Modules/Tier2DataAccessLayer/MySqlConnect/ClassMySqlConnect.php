@@ -228,7 +228,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 
 		$insertrow = NULL;
 		$insertrowvalue = NULL;
-		
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -307,7 +306,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									}
 									$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
 									$result = mysql_query($query);
-									
 									if (!$result) {
 										array_push($this->ErrorMessage,'createRow: Row Value exists in the Database!');
 									}
