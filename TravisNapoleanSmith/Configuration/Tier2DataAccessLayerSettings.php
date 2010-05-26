@@ -49,6 +49,7 @@
 	
 	// Row Methods
 	$Tier2DatabaseDeny['createRow'] = 'createRow';
+	$Tier2DatabaseDeny['updateRow'] = 'updateRow';
 	$Tier2DatabaseDeny['deleteRow'] = 'deleteRow';
 	
 	// Field Methods

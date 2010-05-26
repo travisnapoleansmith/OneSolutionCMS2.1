@@ -420,22 +420,59 @@ class ContentLayer extends LayerModulesAbstract
 				$_SESSION['POST'] = $hold;
 				header("Location: $RegisterPage&SessionID=$sessionname");
 			} else {
-				$location = 'http://kcphotovideoversion1.travisnapoleansmith.com/Administrators/newuser.php?UserName=dogcatbird';
+				$hold = array();
+				$PasswordCreationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordCreation']['SettingAttribute'];
+				$EmailVerificationLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['EmailVerificationLocation']['SettingAttribute'];
+				
+				$location = $EmailVerificationLocation;
+				$location .= $PasswordCreationPage;
+				
 				$passarray = array();
 				$passarray['createUserAccount'] = array('UserName' => $_POST['UserName'], 'EmailAddress' => $_POST['Email']);
 				$passarray['generateNewUserEmail'] = array('EmailAddress' => $_POST['Email'], 'Location' => $location);
-				$this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+				$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+				if ($hold['Error']) {
+					$_SESSION['POST'] = $hold;
+					header("Location: $RegisterPage&SessionID=$sessionname");
+				} else {
+					//$this->SessionDestroy($sessionname);
+					$RegisterRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['RegisterRedirect']['SettingAttribute'];
+					header("Location: $RegisterRedirectPage");
+				}
 			}
 			
-			//$this->SessionDestroy($sessionname);
-			
-			$RegisterRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['RegisterRedirect']['SettingAttribute'];
-			header("Location: $RegisterRedirectPage");
 		}
 	}
 	
 	public function NewUserChangePassword() {
-		print_r($_GET);
+		$sessionname = $this->SessionStart('PasswordCreation');
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = $_POST['PasswordCreation'];
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$PasswordCreationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordCreation']['SettingAttribute'];
+		$PasswordChangedPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordChanged']['SettingAttribute'];
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $PasswordCreationPage&SessionID=$sessionname");
+		} else {
+			$hold = array();
+			$passarray = array();
+			$passarray['createNewUserPassword'] = array('UserName' => $_POST['UserName'], 'Password' => $_POST['Password'], 'UserCode' => $_POST['UserCode']);
+			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+			if ($hold['Error']) {
+				$_SESSION['POST'] = $hold;
+				header("Location: $PasswordCreationPage&SessionID=$sessionname");
+			} else {
+				header("Location: $PasswordChangedPage&SessionID=$sessionname");
+			}
+		}		
 	}
 	
 	public function ChangePassword() {

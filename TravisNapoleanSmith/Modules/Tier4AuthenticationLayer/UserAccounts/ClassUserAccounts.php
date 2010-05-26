@@ -7,6 +7,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	protected $Attempts;
 	protected $MaxAttempts;
 	protected $NewUserSalt;
+	protected $Salt;
 	
 	public function __construct($tablenames, $databaseoptions) {
 		$this->LayerModule = &$GLOBALS['Tier4Databases'];
@@ -97,7 +98,13 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 						$functionname = key($hookarguments);
 						if (is_array(current($hookarguments))) {
 							$hooks = current($hookarguments);
-							$hold[$functionname] = call_user_func_array(array($this, $functionname), $hooks);
+							$temp = call_user_func_array(array($this, $functionname), $hooks);
+							if ($temp['Error']) {
+								$hold['Error'] = $temp['Error'];
+							} 
+							
+							$hold[$functionname] = $temp;
+						
 						} else {
 							$functionparameters = current($hookarguments);
 							$hold[$functionname] = $this->$functionname($functionparameters);
@@ -111,7 +118,6 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 				}
 				return $hold;
 			} else {
-				
 				if ($this->LookupTable['UserAccounts'][0]) {
 					if ($this->LookupTable['UserAccounts'][0]['Attempts'] > $this->MaxAttempts) {
 						$hold['Error']['Attempts'] = "You account has been locked because of too many attempts.  <br /> The maximum number of tries is $this->MaxAttempts.";
@@ -175,7 +181,8 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	}
 	
 	protected function createPassword ($password) {
-		$salt = $this->createSalt($password);
+		$this->Salt = $this->createSalt($password);
+		$salt = $this->Salt;
 		
 		$password .= $salt;
 		$hold = hash('SHA256', $password);
@@ -199,6 +206,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	
 	protected function createUserAccount($username, $emailaddress) {
 		$this->NewUserSalt = $this->createSalt(' ');
+		$hold = array();
 		if ($username && $emailaddress) {
 			$passarray = array();
 			$passarray1 = array();
@@ -238,20 +246,109 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$this->LayerModule->pass ('UserAccounts', 'createRow', $passarray);
 			$this->LayerModule->Disconnect('UserAccounts');
 		} else {
-		
+			$hold['Error']['General Error Message'] = 'Either the User Account is blank or the Email Address is blank!';
+			return $hold;
 		}
 	}
 	
 	protected function generateNewUserEmail($emailaccount, $location) {
 		$sitename = $GLOBALS['sitename'];
-		$location .= '&NewUserCode=';
-		$location .= $this->NewUserSalt;
+		$UserCode = $this->NewUserSalt;
 		
 		$message = "Welcome to $sitename! To activate your account you have to click the link ";
-		$message .= 'below and enter your email address and a new password.';
+		$message .= 'below and enter your user account, user code, and a new password.';
+		$message .= "\n User Code is $UserCode";
 		$message .= "\n $location";
 		
 		mail($emailaccount, "New User Registration - $sitename", $message);
+	}
+	
+	protected function generateChangedPasswordEmail($emailaccount) {
+		$sitename = $GLOBALS['sitename'];
+		
+		$message = "$sitename has received a request to change your password.  The password has been changed, ";
+		$message .= 'if you did not make this request, please contact our support team for more information!';
+		
+		mail($emailaccount, "Password Changed - $sitename", $message);
+	}
+	
+	protected function createNewUserPassword($username, $password, $usercode) {
+		$hold = array();
+		if ($username && $password && $usercode) {
+			$passarray = array();
+			$passarray['UserName'] = $username;
+			$passarray['NewUser'] = 'Yes';
+			$passarray['Salt'] = $usercode;
+			
+			$this->LayerModule->Connect('UserAccounts');
+			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
+			$this->LayerModule->Disconnect('UserAccounts');
+			
+			$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
+			if ($results[0]) {
+				if (!is_null($results[0]['Password'])) {
+					$hold['Error']['Password'] = 'Password has already been set for this account, <br /> if you need to reset your password go to password reset!';
+					return $hold;
+				} else {
+					$PasswordEncrypt = $this->createPassword($password);
+					$Salt = $this->Salt;
+					$EmailAccount = $results[0]['EmailAccount'];
+					
+					$passarray = array();
+					$passarray1 = array();
+					$passarray2 = array();
+					$passarray3 = array();
+					$passarray4 = array();
+					
+					$passarray1[0] = 'Password';
+					$passarray1[1] = 'Salt';
+					$passarray1[2] = 'Attempts';
+					$passarray1[3] = 'NewUser';
+					
+					$passarray2[0] = $PasswordEncrypt;
+					$passarray2[1] = $Salt;
+					$passarray2[2] = 0;
+					$passarray2[3] = 'No';
+					
+					$passarray3[0] = 'UserName';
+					$passarray3[1] = 'UserName';
+					$passarray3[2] = 'UserName';
+					$passarray3[3] = 'UserName';
+					
+					$passarray4[0] = $username;
+					$passarray4[1] = $username;
+					$passarray4[2] = $username;
+					$passarray4[3] = $username;
+					
+					$passarray['rowname'] = $passarray1;
+					$passarray['rowvalue'] = $passarray2;
+					$passarray['rownumbername'] = $passarray3;
+					$passarray['rownumber'] = $passarray4;
+					
+					$this->LayerModule->Connect('UserAccounts');
+					$this->LayerModule->pass ('UserAccounts', 'updateRow', $passarray);
+					$this->LayerModule->Disconnect('UserAccounts');
+					
+					$this->generateChangedPasswordEmail($EmailAccount);
+				}
+			} else {
+				$hold['Error']['General Error Message'] = 'Either the User Account does not exist, the User Code is incorrect or <br /> this is not a new account!';
+				return $hold;
+			}
+		}
+	}
+	
+	public function resetUserPassword($username, $emailaccount) {
+		$hold = array();
+		if ($username && $emailaccount) {
+			
+		} else {
+		
+		}
+	}
+	
+	public function changeUserPassword($username, $password) {
+	
 	}
 	
 	public function getTableNames() {
