@@ -474,6 +474,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				
 				} else if (current($this->TableNames) == 'FormTextArea') {
 					$this->processFormTextArea($i);
+				
 				}
 				$i++;
 			}
@@ -1462,6 +1463,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormButton' && current($this->FormFieldSetContainerObjectType) == 'Button') {
 						$this->buildFormButton(current($this->FormFieldSetContainerObjectID));
 					}
+					
+					if (current($this->FormFieldSetContainerObjectTypeName) == 'FormCaptcha' && current($this->FormFieldSetContainerObjectType) == 'Captcha') {
+						$this->buildFormCaptcha();
+					}
 				}
 				
 			}
@@ -2106,6 +2111,46 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		if ($flag) {
 			$this->Writer->endElement(); // ENDS OPTGROUP
 		}
+	}
+	
+	protected function buildFormCaptcha() {
+		$randomtext1 = md5(time());
+		$randomtext2 = sha1($randomtext1);
+		$randomtext1 = sha1(time());
+		$randomtext1 = substr($randomtext1, 0, 5);
+		$randomtext2 = substr($randomtext2, 0, 7);
+		
+		$randomtext = $randomtext1;
+		$randomtext .= ' ';
+		$randomtext .= $randomtext2;
+		
+		$image = imagecreate(125, 25);
+		$background = imagecolorallocate($image, 0, 0, 255);
+		$textcolor = imagecolorallocate($image, 255, 255, 255);
+		$linecolor = imagecolorallocate($image, 200, 50, 35);
+		
+		imagesetthickness ($image, 1);
+		$i = 0;
+		$max = 5;
+		$x = 0;
+		$y = 15;
+		while ($i < 10) {
+			imageline($image, $x, 0, $y, 29, $linecolor);
+			$i++;
+			$x+=15;
+			$y+=15;
+		}
+		imagestring($image, 4, 10, 5, $randomtext, $textcolor);
+		
+		imagepng($image, 'demo.png');
+		$cookiekey = md5($randomtext);
+		$cookiekey = sha1($cookiekey);
+		setcookie('CaptchaKey', $cookiekey);
+		
+		//print "$cookiekey\n";
+		//print_r($_COOKIE);
+		//imagepng($image);
+		
 	}
 	
 	protected function buildObjects($pageid, $objectid, $objecttypename, $objecttype) {
