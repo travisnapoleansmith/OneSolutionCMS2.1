@@ -275,6 +275,30 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		$value = $purehtml;
 	}
 	
+	protected function ProcessCaptcha(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
+		$captchaimage = $_COOKIE['CaptchaImage'];
+		setcookie('CaptchaImage', ' ');
+		
+		if (is_file("CAPTCHAIMAGE/$captchaimage")) {
+			unlink("CAPTCHAIMAGE/$captchaimage");
+		}
+		
+		if (!$value) {
+			return 'Input must be contain the two words in the image with a space between them!';
+		}
+		
+		$captchakey = $_COOKIE['CaptchaKey'];
+		$captchavalue = md5($value);
+		$captchavalue = sha1($captchavalue);
+		
+		setcookie('CaptchaKey', ' ');
+		
+		if ($captchakey != $captchavalue) {
+			return 'Input does not match with the two words in the image, please try again!';
+		}
+		
+	}
+	
 	public function getTableNames() {
 		return $this->TableNames;
 	}

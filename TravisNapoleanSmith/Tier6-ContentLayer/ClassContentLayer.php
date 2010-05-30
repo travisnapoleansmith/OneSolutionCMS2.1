@@ -470,6 +470,7 @@ class ContentLayer extends LayerModulesAbstract
 				$_SESSION['POST'] = $hold;
 				header("Location: $PasswordCreationPage&SessionID=$sessionname");
 			} else {
+				$this->SessionDestroy($sessionname);
 				header("Location: $PasswordChangedPage&SessionID=$sessionname");
 			}
 		}		
@@ -479,7 +480,47 @@ class ContentLayer extends LayerModulesAbstract
 		
 	}
 	
-	public function ResetUser() {
+	public function ResetPassword() {
+		$sessionname = $this->SessionStart('PasswordReset');
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = $_POST['PasswordReset'];
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$EmailVerificationLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['EmailVerificationLocation']['SettingAttribute'];
+		$PasswordResetPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordReset']['SettingAttribute'];
+		$PasswordResetChangePage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetChange']['SettingAttribute'];
+		$PasswordResetLocationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetLocation']['SettingAttribute'];
+		
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $PasswordResetPage&SessionID=$sessionname");
+		} else {
+			$hold = array();
+			
+			$location = $EmailVerificationLocation;
+			$location .= $PasswordResetLocationPage;
+				
+			$passarray = array();
+			$passarray['resetUserPassword'] = array('UserName' => $_POST['UserName'], 'Email' => $_POST['Email'], 'Location' => $location);
+			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+			
+			if ($hold['Error']) {
+				$_SESSION['POST'] = $hold;
+				header("Location: $PasswordResetPage&SessionID=$sessionname");
+			} else {
+				$this->SessionDestroy($sessionname);
+				header("Location: $PasswordResetChangePage");
+			}
+		}
+	}
+	
+	public function ChangeResetPassword() {
 	
 	}
 		

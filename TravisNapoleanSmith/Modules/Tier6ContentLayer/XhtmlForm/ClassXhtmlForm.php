@@ -1216,7 +1216,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					}
 					
-					$this->Writer->endElement(); // ENDS TEXTAREA
+					$this->Writer->fullEndElement(); // ENDS TEXTAREA
 					$this->Writer->endElement(); // ENDS DIV
 				}
 			}
@@ -1701,7 +1701,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 		
 		if ($flag) {
-			$this->Writer->endElement(); // ENDS SELECT
+			$this->Writer->fullEndElement(); // ENDS SELECT
 		}
 	}
 	
@@ -2124,7 +2124,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$randomtext .= ' ';
 		$randomtext .= $randomtext2;
 		
-		$image = imagecreate(125, 25);
+		$image = imagecreate(70, 50);
 		$background = imagecolorallocate($image, 0, 0, 255);
 		$textcolor = imagecolorallocate($image, 255, 255, 255);
 		$linecolor = imagecolorallocate($image, 200, 50, 35);
@@ -2134,23 +2134,90 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$max = 5;
 		$x = 0;
 		$y = 15;
-		while ($i < 10) {
-			imageline($image, $x, 0, $y, 29, $linecolor);
+		while ($i < 5) {
+			imageline($image, $x, 0, $y, 60, $linecolor);
 			$i++;
 			$x+=15;
 			$y+=15;
 		}
-		imagestring($image, 4, 10, 5, $randomtext, $textcolor);
 		
-		imagepng($image, 'demo.png');
-		$cookiekey = md5($randomtext);
-		$cookiekey = sha1($cookiekey);
-		setcookie('CaptchaKey', $cookiekey);
+		$this->randomizeStringImage ($randomtext1, $image, $textcolor, 3, 5, -3, 5, 7);
+		$this->randomizeStringImage ($randomtext2, $image, $textcolor, 2, 3, -3, 25, 27);
 		
-		//print "$cookiekey\n";
-		//print_r($_COOKIE);
-		//imagepng($image);
+		$indexkey = md5($randomtext);
+		$indexkey = sha1($indexkey);
 		
+		$imagekey = $indexkey;
+		$imagekey = substr($imagekey, 0, 10);
+		$imagename = 'captchaimage-';
+		$imagename .= $imagekey;
+		$imagename .= '.png';
+		setcookie ('CaptchaImage', $imagename);
+		imagepng($image, "CAPTCHAIMAGE/$imagename");
+		
+		$captchakey = $indexkey;
+		setcookie('CaptchaKey', $captchakey);
+		
+		$this->Writer->startElement('div');
+			$this->Writer->writeRaw("\n");
+			$this->Writer->startElement('label');
+			$this->ProcessArrayStandardAttribute('FormFieldSet');
+			$this->Writer->text('Image Verification - ');
+			$this->Writer->endElement(); // ENDS LABEL;
+		$this->Writer->endElement(); // ENDS DIV;
+		
+		$this->Writer->startElement('div');
+			$this->Writer->writeRaw("\n");
+			$this->Writer->startElement('label');
+			$this->ProcessArrayStandardAttribute('FormFieldSet');
+			$this->Writer->text('Enter Two Words Below, ');
+			$this->Writer->endElement(); // ENDS LABEL;
+		$this->Writer->endElement(); // ENDS DIV;
+		
+		$this->Writer->startElement('div');
+			$this->Writer->writeRaw("\n");
+			$this->Writer->startElement('label');
+			$this->ProcessArrayStandardAttribute('FormFieldSet');
+			$this->Writer->text('Put Space After First Word!');
+				$this->Writer->startElement('br');
+				$this->Writer->endElement(); // ENDS BR;
+			$this->Writer->endElement(); // ENDS LABEL;
+		$this->Writer->endElement(); // ENDS DIV;
+		
+		$this->Writer->startElement('div');
+			$this->Writer->writeRaw("\n");
+			$this->Writer->startElement('label');
+			$this->ProcessArrayStandardAttribute('FormFieldSet');
+				$this->Writer->startElement('img');
+				$this->Writer->writeAttribute('src', "CAPTCHAIMAGE/$imagename");
+				$this->Writer->endElement(); // ENDS IMG
+			$this->Writer->endElement(); // ENDS LABEL;
+		$this->Writer->endElement(); // ENDS DIV;
+		
+		$this->Writer->startElement('div');
+			$this->Writer->writeRaw("\n");
+			$this->Writer->startElement('input');
+			$this->Writer->writeAttribute('type', 'text');
+			$this->Writer->writeAttribute('name', 'CAPTCHA');
+			$this->ProcessArrayStandardAttribute('FormFieldSet');
+			$this->Writer->endElement(); // ENDS LABEL;
+		$this->Writer->endElement(); // ENDS DIV;
+		
+	}
+	
+	protected function randomizeStringImage ($inputstring, $image, $textcolor, $fontodd, $fonteven, $x, $yodd, $yeven) {
+		$inputstring = str_split($inputstring);
+		reset ($inputstring);
+		while (isset($inputstring[key($inputstring)])) {
+			$x += 9;
+			$key = key($inputstring);
+			if ($key % 2) {
+				imagestring($image, $fontodd, $x, $yodd, current($inputstring), $textcolor);
+			} else {
+				imagestring($image, $fonteven, $x, $yeven, current($inputstring), $textcolor);
+			}
+			next($inputstring);
+		}
 	}
 	
 	protected function buildObjects($pageid, $objectid, $objecttypename, $objecttype) {

@@ -59,6 +59,27 @@ button.ShortForm {
 	height: 25px;
 }
 
+textarea.ShortForm {
+	position: relative;
+	left: 100px;
+	top: -8px;
+}
+
+select.ShortForm {
+	position: relative;
+	left: 100px;
+	top: -18px;
+}
+
+input.BodyText {
+	top: -30px;
+	height: 10px;
+	color: #000000;
+	padding-left: 0px;
+	padding-right: 0px;
+	text-indent: 0px;
+}
+
 .image {
 	position: relative;
 	top: 0px;
