@@ -49,8 +49,12 @@ class DataAccessLayer extends LayerModulesAbstract
 	}
 	
 	public function Connect ($key) {
-		$this->DatabaseTable[$key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $key);
-		$this->DatabaseTable[$key]->Connect();
+		if ($key != NULL) {
+			$this->DatabaseTable[$key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $key);
+			$this->DatabaseTable[$key]->Connect();
+		} else {
+			array_push($this->ErrorMessage,'Connect: Key Cannot Be Null!');
+		}
 	}
 	
 	public function DisconnectAll () {
@@ -64,7 +68,11 @@ class DataAccessLayer extends LayerModulesAbstract
 	}
 	
 	public function Disconnect ($key) {
-		$this->DatabaseTable[$key]->Disconnect();
+		if ($key != NULL) {
+			$this->DatabaseTable[$key]->Disconnect();
+		} else {
+			array_push($this->ErrorMessage,'Disconnect: Key Cannot Be Null!');
+		}
 	}
 	
 	public function buildDatabase() {
@@ -87,8 +95,14 @@ class DataAccessLayer extends LayerModulesAbstract
 			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}
-		
-		$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $functionarguments);
+		if ($functionarguments[0]) {
+			$PassArguments = array();
+			$PassArguments[0] = $functionarguments;
+		} else {
+			$PassArguments = $functionarguments;
+		}
+		//print_r($functionarguments);
+		$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $PassArguments);
 		if ($hold2) {
 			return $hold2;
 		} else {
@@ -102,6 +116,12 @@ class DataAccessLayer extends LayerModulesAbstract
 				if (!is_null($function)) {
 					if (!is_array($function)) {
 						if ($this->DatabaseAllow[$function]) {
+							if ($functionarguments[0]) {
+								$PassArguments = array();
+								$PassArguments[0] = $functionarguments;
+							} else {
+								$PassArguments = $functionarguments;
+							}
 							$hold = call_user_func_array(array($this->DatabaseTable["$databasetable"], "$function"), $functionarguments);
 							if ($hold) {
 								return $hold;
@@ -114,7 +134,7 @@ class DataAccessLayer extends LayerModulesAbstract
 								return FALSE;
 							}
 						} else {
-							array_push($this->ErrorMessage,'pass: MySqlConnect Member Does Not Exist!');
+							array_push($this->ErrorMessage,"pass: $function from $databasetable - MySqlConnect Member Does Not Exist!");
 						}
 					} else {
 						array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be An Array!');

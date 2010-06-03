@@ -670,5 +670,225 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->Writer->flush();
 		}
 	}
+	
+	public function getLastNewsPageID() {
+		$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
+		$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
+		
+		$hold = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getEntireTable', array());
+		$count = count($hold);
+		$hold2 = $hold[$count]['PageID'];
+		return $hold2;
+	}
+	
+	public function createNewsStory(array $NewsStory) {
+		if ($NewsStory != NULL) {
+			if (count($NewsStory) == count($NewsStory, COUNT_RECURSIVE)) {
+				$passarray = array();
+				$passarray1 = array();
+				$passarray2 = array();
+				
+				$passarray1[0] = 'PageID';
+				$passarray1[1] = 'ObjectID';
+				$passarray1[2] = 'ContainerObjectType';
+				$passarray1[3] = 'ContainerObjectTypeName';
+				$passarray1[4] = 'ContainerObjectID';
+				$passarray1[5] = 'ContainerObjectPrintPreview';
+				$passarray1[6] = 'CurrentVersion';
+				$passarray1[7] = 'RevisionID';
+				$passarray1[8] = 'Empty';
+				$passarray1[9] = 'StartTag';
+				$passarray1[10] = 'EndTag';
+				$passarray1[11] = 'StartTagID';
+				$passarray1[12] = 'StartTagStyle';
+				$passarray1[13] = 'StartTagClass';
+				$passarray1[14] = 'Heading';
+				$passarray1[15] = 'HeadingStartTag';
+				$passarray1[16] = 'HeadingEndTag';
+				$passarray1[17] = 'HeadingStartTagID';
+				$passarray1[18] = 'HeadingStartTagStyle';
+				$passarray1[19] = 'HeadingStartTagClass';
+				$passarray1[20] = 'Content';
+				$passarray1[21] = 'ContentStartTag';
+				$passarray1[22] = 'ContentEndTag';
+				$passarray1[23] = 'ContentStartTagID';
+				$passarray1[24] = 'ContentStartTagStyle';
+				$passarray1[25] = 'ContentStartTagClass';
+				$passarray1[26] = 'Enable/Disable';
+				$passarray1[27] = 'Status';
+				
+				$passarray2[0] = $NewsStory['PageID'];
+				$passarray2[1] = $NewsStory['ObjectID'];
+				$passarray2[2] = $NewsStory['ContainerObjectType'];
+				$passarray2[3] = $NewsStory['ContainerObjectName'];
+				$passarray2[4] = $NewsStory['ContainerObjectID'];
+				$passarray2[5] = $NewsStory['ContainerObjectPrintPreview'];
+				$passarray2[6] = $NewsStory['CurrentVersion'];
+				$passarray2[7] = $NewsStory['RevisionID'];
+				$passarray2[8] = $NewsStory['Empty'];
+				$passarray2[9] = $NewsStory['StartTag'];
+				$passarray2[10] = $NewsStory['EndTag'];
+				$passarray2[11] = $NewsStory['StartTagID'];
+				$passarray2[12] = $NewsStory['StartTagStyle'];
+				$passarray2[13] = $NewsStory['StartTagClass'];
+				$passarray2[14] = $NewsStory['Heading'];
+				$passarray2[15] = $NewsStory['HeadingStartTag'];
+				$passarray2[16] = $NewsStory['HeadingEndTag'];
+				$passarray2[17] = $NewsStory['HeadingStartTagID'];
+				$passarray2[18] = $NewsStory['HeadingStartTagStyle'];
+				$passarray2[19] = $NewsStory['HeadingStartTagClass'];
+				$passarray2[20] = $NewsStory['Content'];
+				$passarray2[21] = $NewsStory['ContentStartTag'];
+				$passarray2[22] = $NewsStory['ContentEndTag'];
+				$passarray2[23] = $NewsStory['ContentStartTagID'];
+				$passarray2[24] = $NewsStory['ContentStartTagStyle'];
+				$passarray2[25] = $NewsStory['ContentStartTagClass'];
+				$passarray2[26] = $NewsStory['Enable/Disable'];
+				$passarray2[27] = $NewsStory['Status'];
+				
+				$passarray['rowname'] = $passarray1;
+				$passarray['rowvalue'] = $passarray2;
+				
+				$this->LayerModule->Connect($this->NewsStoriesTableName);
+				$this->LayerModule->pass ($this->NewsStoriesTableName, 'createRow', $passarray);
+				$this->LayerModule->Disconnect($this->NewsStoriesTableName);
+				
+			} else {
+				reset($NewsStory);
+				
+				while (current($NewsStory)) {
+					$passarray = array();
+					$passarray1 = array();
+					$passarray2 = array();
+					
+					$passarray1[0] = 'PageID';
+					$passarray1[1] = 'ObjectID';
+					$passarray1[2] = 'ContainerObjectType';
+					$passarray1[3] = 'ContainerObjectTypeName';
+					$passarray1[4] = 'ContainerObjectID';
+					$passarray1[5] = 'ContainerObjectPrintPreview';
+					$passarray1[6] = 'CurrentVersion';
+					$passarray1[7] = 'RevisionID';
+					$passarray1[8] = 'Empty';
+					$passarray1[9] = 'StartTag';
+					$passarray1[10] = 'EndTag';
+					$passarray1[11] = 'StartTagID';
+					$passarray1[12] = 'StartTagStyle';
+					$passarray1[13] = 'StartTagClass';
+					$passarray1[14] = 'Heading';
+					$passarray1[15] = 'HeadingStartTag';
+					$passarray1[16] = 'HeadingEndTag';
+					$passarray1[17] = 'HeadingStartTagID';
+					$passarray1[18] = 'HeadingStartTagStyle';
+					$passarray1[19] = 'HeadingStartTagClass';
+					$passarray1[20] = 'Content';
+					$passarray1[21] = 'ContentStartTag';
+					$passarray1[22] = 'ContentEndTag';
+					$passarray1[23] = 'ContentStartTagID';
+					$passarray1[24] = 'ContentStartTagStyle';
+					$passarray1[25] = 'ContentStartTagClass';
+					$passarray1[26] = 'Enable/Disable';
+					$passarray1[27] = 'Status';
+					
+					$passarray2[0] = $NewsStory[key($NewsStory)]['PageID'];
+					$passarray2[1] = $NewsStory[key($NewsStory)]['ObjectID'];
+					$passarray2[2] = $NewsStory[key($NewsStory)]['ContainerObjectType'];
+					$passarray2[3] = $NewsStory[key($NewsStory)]['ContainerObjectName'];
+					$passarray2[4] = $NewsStory[key($NewsStory)]['ContainerObjectID'];
+					$passarray2[5] = $NewsStory[key($NewsStory)]['ContainerObjectPrintPreview'];
+					$passarray2[6] = $NewsStory[key($NewsStory)]['CurrentVersion'];
+					$passarray2[7] = $NewsStory[key($NewsStory)]['RevisionID'];
+					$passarray2[8] = $NewsStory[key($NewsStory)]['Empty'];
+					$passarray2[9] = $NewsStory[key($NewsStory)]['StartTag'];
+					$passarray2[10] = $NewsStory[key($NewsStory)]['EndTag'];
+					$passarray2[11] = $NewsStory[key($NewsStory)]['StartTagID'];
+					$passarray2[12] = $NewsStory[key($NewsStory)]['StartTagStyle'];
+					$passarray2[13] = $NewsStory[key($NewsStory)]['StartTagClass'];
+					$passarray2[14] = $NewsStory[key($NewsStory)]['Heading'];
+					$passarray2[15] = $NewsStory[key($NewsStory)]['HeadingStartTag'];
+					$passarray2[16] = $NewsStory[key($NewsStory)]['HeadingEndTag'];
+					$passarray2[17] = $NewsStory[key($NewsStory)]['HeadingStartTagID'];
+					$passarray2[18] = $NewsStory[key($NewsStory)]['HeadingStartTagStyle'];
+					$passarray2[19] = $NewsStory[key($NewsStory)]['HeadingStartTagClass'];
+					$passarray2[20] = $NewsStory[key($NewsStory)]['Content'];
+					$passarray2[21] = $NewsStory[key($NewsStory)]['ContentStartTag'];
+					$passarray2[22] = $NewsStory[key($NewsStory)]['ContentEndTag'];
+					$passarray2[23] = $NewsStory[key($NewsStory)]['ContentStartTagID'];
+					$passarray2[24] = $NewsStory[key($NewsStory)]['ContentStartTagStyle'];
+					$passarray2[25] = $NewsStory[key($NewsStory)]['ContentStartTagClass'];
+					$passarray2[26] = $NewsStory[key($NewsStory)]['Enable/Disable'];
+					$passarray2[27] = $NewsStory[key($NewsStory)]['Status'];
+					
+					$passarray['rowname'] = $passarray1;
+					$passarray['rowvalue'] = $passarray2;
+					
+					$this->LayerModule->Connect($this->NewsStoriesTableName);
+					$this->LayerModule->pass ($this->NewsStoriesTableName, 'createRow', $passarray);
+					$this->LayerModule->Disconnect($this->NewsStoriesTableName);
+					next($NewsStory);
+				}
+			}
+		}
+	}
+	
+	public function updateNewsStory($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStory($PageID) {
+		
+	}
+	
+	public function createNewsStoryDate(array $NewsStory) {
+		if ($NewsStory != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			
+			$passarray1[0] = 'PageID';
+			$passarray1[1] = 'ObjectID';
+			$passarray1[2] = 'NewsStoryDay';
+			$passarray1[3] = 'NewsStoryMonth';
+			$passarray1[4] = 'NewsStoryYear';
+			$passarray1[5] = 'Enable/Disable';
+			$passarray1[6] = 'Status';
+			
+			$passarray2[0] = $NewsStory['PageID'];
+			$passarray2[1] = $NewsStory['ObjectID'];
+			$passarray2[2] = $NewsStory['NewsStoryDay'];
+			$passarray2[3] = $NewsStory['NewsStoryMonth'];
+			$passarray2[4] = $NewsStory['NewsStoryYear'];
+			$passarray2[5] = $NewsStory['Enable/Disable'];
+			$passarray2[6] = $NewsStory['Status'];
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			
+			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'createRow', $passarray);
+			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
+		}
+	}
+	
+	public function updateNewsStoryDate($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStoryDate($PageID) {
+		
+	}
+	
+	public function createNewsStoryLookup($PageID, array $NewsStory) {
+		
+	}
+	
+	public function updateNewsStoryLookup($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStoryLookup($PageID) {
+		
+	}
 }
 ?>

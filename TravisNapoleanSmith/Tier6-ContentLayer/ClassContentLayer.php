@@ -86,15 +86,16 @@ class ContentLayer extends LayerModulesAbstract
 		reset($this->Modules);
 		$hold = NULL;
 		
-		while (current($this->Modules)) {
+		/*while (current($this->Modules)) {
+			
 			$tempobject = current($this->Modules[key($this->Modules)]);
-			$databasetables = $tempobject->getTableNames();
-			$tempobject->FetchDatabase ($this->PageID);
-			$tempobject->CreateOutput($this->Space);
-			$tempobject->getOutput();
+			//$databasetables = $tempobject->getTableNames();
+			//$tempobject->FetchDatabase ($this->PageID);
+			//$tempobject->CreateOutput($this->Space);
+			//$tempobject->getOutput();
 			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
-		}
+		}*/
 		
 		$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 		if ($hold2) {
@@ -275,19 +276,6 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	protected function SessionStart($SessionName) {
-		/*if ($_COOKIE['SessionID']) {
-			session_name($_COOKIE['SessionID']);
-			session_start();
-			$_SESSION = array();
-			if (ini_get('session.use_cookies')) {
-				$params = session_get_cookie_params();
-				setcookie(session_name(), '', time()-1000,
-					$params['path'], $params['domain'],
-					$params['secure'], $params['httponly']
-				);
-			}
-			session_destroy();
-		}*/
 		if ($_COOKIE['SessionID']) {
 			$this->SessionDestroy($_COOKIE['SessionID']);
 		}
@@ -317,26 +305,6 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function Login() {
-		/*if ($_COOKIE['SessionID']) {
-			session_name($_COOKIE['SessionID']);
-			session_start();
-			$_SESSION = array();
-			if (ini_get('session.use_cookies')) {
-				$params = session_get_cookie_params();
-				setcookie(session_name(), '', time()-1000,
-					$params['path'], $params['domain'],
-					$params['secure'], $params['httponly']
-				);
-			}
-			session_destroy();
-		}
-		
-		$sessionname = 'UserAuthentication';
-		$sessionname .= time();
-		setcookie('SessionID', $sessionname);
-		session_name($sessionname);
-		session_start();
-		*/
 		$sessionname = $this->SessionStart('UserAuthentication');
 		
 		$loginidnumber = Array();
@@ -522,6 +490,52 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function ChangeResetPassword() {
 	
+	}
+	
+	public function FormSubmitValidate($SessionName, $PageName) {
+		$sessionname = $this->SessionStart($SessionName);
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = $_POST[$SessionName];
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $PageName&SessionID=$sessionname");
+		} else {
+			return $hold;
+		}
+	}
+	
+	public function FormSubmit($SessionName, $PageName, $ObjectType, $Function, array $Arguments) {
+		
+	}
+	
+	public function ModulePass($ModuleType, $ModuleName, $Function, array $Arguments) {
+		if ($ModuleType != NULL && $ModuleName != NULL && $Function != NULL) {
+			$PassArguments = array();
+			$PassArguments[0] = $Arguments;
+			$hold = call_user_func_array(array($this->Modules[$ModuleType][$ModuleName], $Function), $PassArguments);
+			if ($hold) {
+				return $hold;
+			}
+		}
+	}
+	
+	public function LayerModulePass($Function, array $Arguments) {
+		if ($Function != NULL) {
+			$PassArguments = array();
+			$PassArguments[0] = $Arguments;
+			$hold = call_user_func_array(array($this->LayerModule, $Function), $PassArguments);
+			if ($hold) {
+				return $hold;
+			}
+		}
 	}
 		
 }

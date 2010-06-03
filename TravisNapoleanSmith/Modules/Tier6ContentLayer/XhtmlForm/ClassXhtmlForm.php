@@ -217,6 +217,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	// Xhtml Form Select
 	protected $FormSelectPageID = array();
 	protected $FormSelectObjectID = array();
+	protected $FormSelectStopObjectID = array();
 	protected $FormSelectContainerObjectType = array();
 	protected $FormSelectContainerObjectTypeName = array();
 	protected $FormSelectContainerObjectID = array();
@@ -762,6 +763,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected function processFormSelect($i) {
 		array_push($this->FormSelectPageID, $this->FormLookupTableName['FormSelect'][$i]['PageID']);
 		array_push($this->FormSelectObjectID, $this->FormLookupTableName['FormSelect'][$i]['ObjectID']);
+		array_push($this->FormSelectStopObjectID, $this->FormLookupTableName['FormSelect'][$i]['StopObjectID']);
 		array_push($this->FormSelectContainerObjectType, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectType']);
 		array_push($this->FormSelectContainerObjectTypeName, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectTypeName']);
 		array_push($this->FormSelectContainerObjectID, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectID']);
@@ -1591,6 +1593,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 		reset($this->FormSelectPageID);
 		reset($this->FormSelectObjectID);
+		reset($this->FormSelectStopObjectID);
 		reset($this->FormSelectContainerObjectType);
 		reset($this->FormSelectContainerObjectTypeName);
 		reset($this->FormSelectContainerObjectID);
@@ -1622,54 +1625,12 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 		$flag = NULL;
 		
-		while (current($this->FormLookupTableName['FormSelect'])) {
-			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
-				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
-					$this->Writer->startElement('select');
-					$flag = TRUE;
-				}
-				
-				if (current($this->FormSelectPageID) == $this->PageID) {
-						$this->ProcessArrayStandardAttribute('FormSelect');
-						
-						if (current($this->FormSelectDisabled)) {
-							$this->Writer->writeAttribute('disabled', current($this->FormSelectDisabled));
-						}
-						
-						if (current($this->FormSelectMultiple)) {
-							$this->Writer->writeAttribute('multiple', current($this->FormSelectMultiple));
-						}
-						
-						if (current($this->FormSelectSize)) {
-							$this->Writer->writeAttribute('size', current($this->FormSelectSize));
-						}
-						
-						if (current($this->FormSelectName)) {
-							$this->Writer->writeAttribute('name', current($this->FormSelectName));
-						} else if (current($this->FormSelectNameDynamic)) {
-							$tablename = current($this->FormSelectNameTableName);
-							$field = current($this->FormSelectNameField);
-							$pageid = current($this->FormSelectNamePageID);
-							$objectid = current($this->FormSelectNameObjectID);
-							$revisionid = current($this->FormSelectNameRevisionID);
-							$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
-							if ($hold) {
-								$this->Writer->writeAttribute('name', $hold);
-							}
-						}
-					if (current($this->FormSelectContainerObjectTypeName) == 'FormOptGroup' && current($this->FormSelectContainerObjectType) == 'OptGroup') {
-						$this->buildFormOptGroup(current($this->FormSelectContainerObjectID));
-					} else if (current($this->FormSelectContainerObjectTypeName) == 'FormOption' && current($this->FormSelectContainerObjectType) == 'Option') {
-						$this->buildFormOption(current($this->FormSelectContainerObjectID));
-					} else if (current($this->FormSelectContainerObjectType)) {
-						$this->buildObjects(current($this->FormSelectContainerObjectID), 1, current($this->FormSelectContainerObjectTypeName), current($this->FormSelectContainerObjectType));
-					}
-				}
-			}
+		while (current($this->FormSelectObjectID) != $objectid) {
 			next($this->FormLookupTableName['FormSelect']);
 			
 			next($this->FormSelectPageID);
 			next($this->FormSelectObjectID);
+			next($this->FormSelectStopObjectID);
 			next($this->FormSelectContainerObjectType);
 			next($this->FormSelectContainerObjectTypeName);
 			next($this->FormSelectContainerObjectID);
@@ -1700,6 +1661,85 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->FormSelectStatus);
 		}
 		
+		while (current($this->FormSelectObjectID) != current($this->FormSelectStopObjectID)) {
+			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
+				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
+					$this->Writer->startElement('select');
+					$flag = TRUE;
+				}
+				
+				if (current($this->FormSelectPageID) == $this->PageID) {
+					$this->ProcessArrayStandardAttribute('FormSelect');
+					
+					if (current($this->FormSelectDisabled)) {
+						$this->Writer->writeAttribute('disabled', current($this->FormSelectDisabled));
+					}
+					
+					if (current($this->FormSelectMultiple)) {
+						$this->Writer->writeAttribute('multiple', current($this->FormSelectMultiple));
+					}
+					
+					if (current($this->FormSelectSize)) {
+						$this->Writer->writeAttribute('size', current($this->FormSelectSize));
+					}
+					
+					if (current($this->FormSelectName)) {
+						$this->Writer->writeAttribute('name', current($this->FormSelectName));
+					} else if (current($this->FormSelectNameDynamic)) {
+						$tablename = current($this->FormSelectNameTableName);
+						$field = current($this->FormSelectNameField);
+						$pageid = current($this->FormSelectNamePageID);
+						$objectid = current($this->FormSelectNameObjectID);
+						$revisionid = current($this->FormSelectNameRevisionID);
+						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+						if ($hold) {
+							$this->Writer->writeAttribute('name', $hold);
+						}
+					}
+					if (current($this->FormSelectContainerObjectTypeName) == 'FormOptGroup' && current($this->FormSelectContainerObjectType) == 'OptGroup') {
+						$this->buildFormOptGroup(current($this->FormSelectContainerObjectID));
+					} else if (current($this->FormSelectContainerObjectTypeName) == 'FormOption' && current($this->FormSelectContainerObjectType) == 'Option') {
+						$this->buildFormOption(current($this->FormSelectContainerObjectID));
+					} else if (current($this->FormSelectContainerObjectType)) {
+						$this->buildObjects(current($this->FormSelectContainerObjectID), 1, current($this->FormSelectContainerObjectTypeName), current($this->FormSelectContainerObjectType));
+					}
+				}
+			}
+			next($this->FormLookupTableName['FormSelect']);
+			
+			next($this->FormSelectPageID);
+			next($this->FormSelectObjectID);
+			next($this->FormSelectStopObjectID);
+			next($this->FormSelectContainerObjectType);
+			next($this->FormSelectContainerObjectTypeName);
+			next($this->FormSelectContainerObjectID);
+			
+			next($this->FormSelectDisabled);
+			next($this->FormSelectMultiple);
+			
+			next($this->FormSelectName);
+			next($this->FormSelectNameDynamic);
+			next($this->FormSelectNameTableName);
+			next($this->FormSelectNameField);
+			next($this->FormSelectNamePageID);
+			next($this->FormSelectNameObjectID);
+			next($this->FormSelectNameRevisionID);
+			
+			next($this->FormSelectSize);
+			
+			next($this->FormSelectClass);
+			next($this->FormSelectDir);
+			next($this->FormSelectID);
+			next($this->FormSelectLang);
+			next($this->FormSelectStyle);
+			next($this->FormSelectTabIndex);
+			next($this->FormSelectTitle);
+			next($this->FormSelectXMLLang);
+			
+			next($this->FormSelectEnableDisable);
+			next($this->FormSelectStatus);
+		}
+				
 		if ($flag) {
 			$this->Writer->fullEndElement(); // ENDS SELECT
 		}

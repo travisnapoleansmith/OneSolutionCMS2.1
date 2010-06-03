@@ -225,7 +225,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('INSERT');
-
+		
 		$insertrow = NULL;
 		$insertrowvalue = NULL;
 		if ($databasenamecheck) {
@@ -286,6 +286,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 						if (is_array($rowvalue)) {
 							if ($rowname != NULL) {
 								if ($rowvalue != NULL) {
+									
 									while (isset($rowname[key($rowname)])) {
 										$insertrow .= "`";
 										$insertrow .= current($rowname);
