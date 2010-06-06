@@ -68,8 +68,9 @@ textarea.ShortForm {
 select.ShortForm {
 	position: relative;
 	left: 100px;
-	top: -12px;
-	margin-bottom: -10px;
+	top: -10px;
+	margin-bottom: -5px;
+	margin-top: 5px;
 }
 
 input.BodyText {

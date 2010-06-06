@@ -117,6 +117,10 @@ abstract class LayerModulesAbstract
 		return $this->LayerModuleTable;
 	}
 	
+	public function getLayerModuleSetting () {
+		return $this->LayerModuleSetting;
+	}
+	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		/*
 		$this->Hostname = $hostname;
@@ -374,6 +378,63 @@ abstract class LayerModulesAbstract
 			return $array;
 		} else {
 			return NULL;
+		}
+	}
+	
+	protected function addModuleContent(array $Keys, array $Content, $DatabaseTableName) {
+		if ($Keys != NULL && $Content != NULL && $DatabaseTableName) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$i = 0;
+			reset($Keys);
+			while (current($Keys)) {
+				$passarray1[$i] = current($Keys);
+				$i++;
+				next($Keys);
+			}
+			
+			if (count($Content) == count($Content, COUNT_RECURSIVE)) {
+				$i = 0;
+				reset($Content);
+				while (key($Content)) {
+					$passarray2[$i] = $Content[$passarray1[$i]];
+					$i++;
+					next($Content);
+				}
+				
+				$passarray['rowname'] = $passarray1;
+				$passarray['rowvalue'] = $passarray2;
+				
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+
+			} else {
+				$i = 0;
+				reset($Content);
+				while ($Content[key($Content)]) {
+					$j = 0;
+					$hold = $Content[key($Content)];
+					reset($hold);
+					while (key($hold)) {
+						$passarray2[$j] = current($hold);
+						next($hold);
+						$j++;
+					}
+					$passarray['rowname'] = $passarray1;
+					$passarray['rowvalue'] = $passarray2;
+
+					$this->LayerModule->Connect($DatabaseTableName);
+					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
+					$this->LayerModule->Disconnect($DatabaseTableName);
+					
+					$i++;
+					next($Content);
+				}
+			}
+		} else {
+			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
 	}
 	

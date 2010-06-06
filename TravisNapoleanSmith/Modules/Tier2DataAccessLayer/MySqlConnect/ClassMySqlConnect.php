@@ -240,13 +240,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$insertrow .= "`";
 											$insertrow .= current($rowname[key($rowname)]);
 											$insertrow .= "`";
-											$insertrowvalue .= "'";
-											if (current($rowvalue[key($rowvalue)]) == NULL) {
+											
+											if (is_null(current($rowvalue[key($rowvalue)]))) {
 												$insertrowvalue .= 'NULL';
 											} else {
+												$insertrowvalue .= "'";
 												$insertrowvalue .= current($rowvalue[key($rowvalue)]);
+												$insertrowvalue .= "'";
 											}
-											$insertrowvalue .= "'";
 											
 											next($rowname[key($rowname)]);
 											next($rowvalue[key($rowvalue)]);
@@ -291,13 +292,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										$insertrow .= "`";
 										$insertrow .= current($rowname);
 										$insertrow .= "`";
-										$insertrowvalue .= "'";
-										if (current($rowvalue) == NULL) {
+										
+										if (is_null(current($rowvalue))) {
 											$insertrowvalue .= 'NULL';
 										} else {
+											$insertrowvalue .= "'";
 											$insertrowvalue .= current($rowvalue);
+											$insertrowvalue .= "'";
 										}
-										$insertrowvalue .= "'";
+										
 										next($rowname);
 										next($rowvalue);
 										if (current($rowname)) {

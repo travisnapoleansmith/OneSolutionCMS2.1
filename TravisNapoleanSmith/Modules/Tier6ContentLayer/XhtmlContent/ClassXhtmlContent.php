@@ -463,6 +463,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 							$this->Writer->writeRaw(current($this->Content));
 							$this->Writer->writeRaw("\n\t");
 							$this->Writer->endElement();
+							
 							next($this->Content);
 							if (current($this->Content)) {
 								$this->ContentEndTag = NULL;

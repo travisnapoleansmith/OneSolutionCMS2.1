@@ -494,7 +494,6 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function FormSubmitValidate($SessionName, $PageName) {
 		$sessionname = $this->SessionStart($SessionName);
-		
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST[$SessionName];
 		if ($_GET['PageID']){
@@ -508,7 +507,11 @@ class ContentLayer extends LayerModulesAbstract
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
 		} else {
-			return $hold;
+			if ($hold) {
+				return $hold;
+			} else {
+				return FALSE;
+			}
 		}
 	}
 	

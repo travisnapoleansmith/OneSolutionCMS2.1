@@ -114,5 +114,31 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$this->Writer->flush();
 		}
 	}
+	
+	public function createPicture(array $Picture) {
+		if ($Picture != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'StartTag';
+			$Keys[3] = 'EndTag';
+			$Keys[4] = 'StartTagID';
+			$Keys[5] = 'StartTagStyle';
+			$Keys[6] = 'StartTagClass';
+			$Keys[7] = 'PictureID';
+			$Keys[8] = 'PictureClass';
+			$Keys[9] = 'PictureStyle';
+			$Keys[10] = 'PictureLink';
+			$Keys[11] = 'PictureAltText';
+			$Keys[12] = 'Width';
+			$Keys[13] = 'Height';
+			$Keys[14] = 'Enable/Disable';
+			$Keys[15] = 'Status';
+			
+			$this->addModuleContent($Keys, $Picture, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'createPicture: Picture cannot be NULL!');
+		}
+	}
 }
 ?>

@@ -69,6 +69,7 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 					if (isset($functionarguments[$key])) {
 						$functionname = 'Process';
 						$functionname .= $attrib;
+						$functionarguments[$key] = stripslashes($functionarguments[$key]);
 						$temp = $this->$functionname($functionarguments[$key], $minlength, $maxlength, $minvalue, $maxvalue);
 						if ($temp) {
 							$hold['Error'][$key] = $temp;
@@ -79,6 +80,7 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 				}
 				next ($this->LookupTable['FormValidation']);
 			}
+			
 			if ($hold) {
 				return $hold;
 			} else {
@@ -237,7 +239,12 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 			return 'Input must contain at least one character.';
 		}
 		
-		require_once 'Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
+		if (file_exists('Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php')) {
+			require_once 'Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
+		} else if (file_exists('../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php')) {
+			require_once '../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
+		}
+		
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('Core.Encoding', 'UTF-8');
 		$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
@@ -273,6 +280,9 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		$purehtml = $purifier->purify($value);
 		
 		$value = $purehtml;
+		if (!$value) {
+			return 'Input has invalid XHTML tag';
+		}
 	}
 	
 	protected function ProcessCaptcha(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
