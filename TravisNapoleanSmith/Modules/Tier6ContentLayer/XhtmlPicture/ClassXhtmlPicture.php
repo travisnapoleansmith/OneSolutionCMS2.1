@@ -45,6 +45,8 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset ($PageID['PrintPreview']);
 		
 		$this->LayerModule->Connect($this->DatabaseTable);

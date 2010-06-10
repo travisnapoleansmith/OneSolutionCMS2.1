@@ -96,6 +96,11 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['PrintPreview'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		
+		unset($PageID['RevisionID']);
+		unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
 		
 		$this->LayerModule->Connect($this->DatabaseTable);

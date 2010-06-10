@@ -4,12 +4,20 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $NewsStoriesTableName;
 	protected $NewsStoriesLookupTableName;
 	protected $NewsStoriesDatesTableName;
+	protected $NewsStoriesVersionTableName;
+	
 	protected $ContentLayerTablesName;
 	protected $ContentPrintPreviewTableName;
 	protected $ContentLayerModulesTableName;
 	
 	protected $NewsStoriesDatesTable;
 	protected $NewsStoriesTable = array();
+	
+	protected $FormOptionTableName;
+	protected $FormOptionTable;
+	
+	protected $FormSelectTableName;
+	protected $FormSelectTable;
 	
 	protected $ContentLayerModulesTable;
 	protected $PrintIdNumberArray;
@@ -84,10 +92,14 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->NewsStoriesTableName = current($tablenames);
 		$this->NewsStoriesLookupTableName = next($tablenames);
 		$this->NewsStoriesDatesTableName = next($tablenames);
+		$this->NewsStoriesVersionTableName = next($tablenames);
 		
 		$this->ContentLayerTablesName = next($tablenames);
 		$this->ContentPrintPreviewTableName = next($tablenames);
 		$this->ContentLayerModulesTableName = next($tablenames);
+		
+		$this->FormOptionTableName = next($tablenames);
+		$this->FormSelectTableName = next($tablenames);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -212,6 +224,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset($PageID['PrintPreview']);
+		unset($PageID['RevisionID']);
+		unset($PageID['CurrentVersion']);
 		
 		$passarray = array();
 		$passarray = $PageID;
@@ -762,6 +776,128 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	}
 	
 	public function deleteNewsStoryDate($PageID) {
+		
+	}
+	
+	public function createNewsStoryVersion(array $NewsStory) {
+		if ($NewsStory != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'RevisionID';
+			$Keys[2] = 'CurrentVersion';
+			$Keys[3] = 'UserAccessGroup';
+			$Keys[4] = 'Owner';
+			$Keys[5] = 'LastChangeUser';
+			$Keys[6] = 'CreationDateTime';
+			$Keys[7] = 'LastChangeDateTime';
+			
+			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
+		} else {
+			array_push($this->ErrorMessage,'createNewsStoryVersion: News Story Version cannot be NULL!');
+		}
+	}
+	
+	public function updateNewsStoryVersion($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStoryVersion($PageID) {
+		
+	}
+	
+	public function createNewsStoryFormOption(array $NewsStory) {
+		if ($NewsStory != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'FormOptionText';
+			$Keys[3] = 'FormOptionTextDynamic';
+			$Keys[4] = 'FormOptionTextTableName';
+			$Keys[5] = 'FormOptionTextField';
+			$Keys[6] = 'FormOptionTextPageID';
+			$Keys[7] = 'FormOptionTextObjectID';
+			$Keys[8] = 'FormOptionTextRevisionID';
+			$Keys[9] = 'FormOptionDisabled';
+			$Keys[10] = 'FormOptionLabel';
+			$Keys[11] = 'FormOptionLabelDynamic';
+			$Keys[12] = 'FormOptionLabelTableName';
+			$Keys[13] = 'FormOptionLabelField';
+			$Keys[14] = 'FormOptionLabelPageID';
+			$Keys[15] = 'FormOptionLabelObjectID';
+			$Keys[16] = 'FormOptionLabelRevisionID';
+			$Keys[17] = 'FormOptionSelected';
+			$Keys[18] = 'FormOptionValue';
+			$Keys[19] = 'FormOptionValueDynamic';
+			$Keys[20] = 'FormOptionValueTableName';
+			$Keys[21] = 'FormOptionValueField';
+			$Keys[22] = 'FormOptionValuePageID';
+			$Keys[23] = 'FormOptionValueObjectID';
+			$Keys[24] = 'FormOptionValueRevisionID';
+			$Keys[25] = 'FormOptionClass';
+			$Keys[26] = 'FormOptionDir';
+			$Keys[27] = 'FormOptionID';
+			$Keys[28] = 'FormOptionLang';
+			$Keys[29] = 'FormOptionStyle';
+			$Keys[30] = 'FormOptionTitle';
+			$Keys[31] = 'FormOptionXMLLang';
+			$Keys[32] = 'Enable/Disable';
+			$Keys[33] = 'Status';
+			
+			$this->addModuleContent($Keys, $NewsStory, $this->FormOptionTableName);
+		} else {
+			array_push($this->ErrorMessage,'createNewsStoryFormOption: Form Option cannot be NULL!');
+		}
+	}
+	
+	public function updateNewsStoryFormOption($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStoryFormOption($PageID) {
+		
+	}
+	
+	public function createNewsStoryFormSelect(array $NewsStory) {
+		if ($NewsStory != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'StopObjectID';
+			$Keys[3] = 'ContainerObjectType';
+			$Keys[4] = 'ContainerObjectTypeName';
+			$Keys[5] = 'ContainerObjectID';
+			$Keys[6] = 'FormSelectDisabled';
+			$Keys[7] = 'FormSelectMultiple';
+			$Keys[8] = 'FormSelectName';
+			$Keys[9] = 'FormSelectNameDynamic';
+			$Keys[10] = 'FormSelectNameTableName';
+			$Keys[11] = 'FormSelectNameField';
+			$Keys[12] = 'FormSelectNamePageID';
+			$Keys[13] = 'FormSelectNameObjectID';
+			$Keys[14] = 'FormSelectNameRevisionID';
+			$Keys[15] = 'FormSelectSize';
+			$Keys[16] = 'FormSelectClass';
+			$Keys[17] = 'FormSelectDir';
+			$Keys[18] = 'FormSelectID';
+			$Keys[19] = 'FormSelectLang';
+			$Keys[20] = 'FormSelectStyle';
+			$Keys[21] = 'FormSelectTabIndex';
+			$Keys[22] = 'FormSelectTitle';
+			$Keys[23] = 'FormSelectXMLLang';
+			$Keys[24] = 'Enable/Disable';
+			$Keys[25] = 'Status';
+			
+			$this->addModuleContent($Keys, $NewsStory, $this->FormSelectTableName);
+		} else {
+			array_push($this->ErrorMessage,'createNewsStoryFormOption: Form Option cannot be NULL!');
+		}
+	}
+	
+	public function updateNewsStoryFormSelect($PageID, array $NewsStory) {
+		
+	}
+	
+	public function deleteNewsStoryFormSelect($PageID) {
 		
 	}
 	

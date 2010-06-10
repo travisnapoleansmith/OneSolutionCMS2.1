@@ -1,12 +1,19 @@
 <?php
 	require_once ('Configuration/includes.php');
-	$PageName = 'index.php?PageID=';
-	$PageName .= $_POST['AddNewsStory'];
-	$hold = $Tier6Databases->FormSubmitValidate('AddNewsStory', $PageName);
 	
-	if ($hold) {
-		$Options = $Tier6Databases->getLayerModuleSetting();
-		
+	$hold = $_POST['NewsStory'];
+	$hold = explode(' ', $hold);
+	$PageID = $hold[0];
+	$_POST['PageID'] = $PageID;
+	unset($hold);
+	print_r($PageID);
+	print "\n";
+	print_r($_POST);
+	//$PageName = 'index.php?PageID=';
+	//$PageName .= $_POST['AddNewsStory'];
+	//$hold = $Tier6Databases->FormSubmitValidate('AddNewsStory', $PageName);
+	
+	/*if ($hold) {
 		$DateTime = date('Y-m-d H:i:s');
 		
 		$LastPageID = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getLastNewsPageID', array());
@@ -143,101 +150,14 @@
 		$NewsVersion['CreationDateTime'] = $DateTime;
 		$NewsVersion['LastChangeDateTime'] = $DateTime;
 		
-		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
-		$FormSelect = array();
-		$FormSelect['PageID'] = $NewsArticleUpdateSelectPage;
-		$FormSelect['ObjectID'] = $NewPageID;
-		$FormSelect['StopObjectID'] = NULL;
-		$FormSelect['ContainerObjectType'] = 'Option';
-		$FormSelect['ContainerObjectTypeName'] = 'FormOption';
-		$FormSelect['ContainerObjectID'] = $NewPageID;
-		$FormSelect['FormSelectDisabled'] = NULL;
-		$FormSelect['FormSelectMultiple'] = NULL;
-		$FormSelect['FormSelectName'] = 'NewsStory';
-		$FormSelect['FormSelectNameDynamic'] = NULL;
-		$FormSelect['FormSelectNameTableName'] = NULL;
-		$FormSelect['FormSelectNameField'] = NULL;
-		$FormSelect['FormSelectNamePageID'] = NULL;
-		$FormSelect['FormSelectNameObjectID'] = NULL;
-		$FormSelect['FormSelectNameRevisionID'] = NULL;
-		$FormSelect['FormSelectSize'] = NULL;
-		$FormSelect['FormSelectClass'] = 'ShortForm';
-		$FormSelect['FormSelectDir'] = 'ltr';
-		$FormSelect['FormSelectID'] = NULL;
-		$FormSelect['FormSelectLang'] = 'en-us';
-		$FormSelect['FormSelectStyle'] = 'width: 245px;';
-		$FormSelect['FormSelectTabIndex'] = NULL;
-		$FormSelect['FormSelectTitle'] = NULL;
-		$FormSelect['FormSelectXMLLang'] = 'en-us';
-		$FormSelect['Enable/Disable'] = 'Enable';
-		$FormSelect['Status'] = 'Approved';
-		
-		$FormOptionText = $NewPageID;
-		$FormOptionText .= ' - ';
-		$FormOptionText .= $_POST['NewsMonth'];
-		$FormOptionText .= ' ';
-		$FormOptionText .= $_POST['NewsDay'];
-		$FormOptionText .= ', ';
-		$FormOptionText .= $_POST['NewsYear'];
-		$FormOptionText .= ' - ';
-		
-		$temp = $hold['FilteredInput']['Heading'];
-		$temp = explode(' ', $temp);
-		if ($temp[0] == 'Men\'s' | $temp[0] == 'Women\'s') {
-			$FormOptionText .= addslashes($temp[0]);
-			$FormOptionText .= ' ';
-			$FormOptionText .= $temp[1];
-		} else {
-			$FormOptionText .= $temp[0];
-		}
-		unset($temp);
-		
-		$FormOption = array();
-		$FormOption['PageID'] = $NewsArticleUpdateSelectPage;
-		$FormOption['ObjectID'] = $NewPageID;
-		$FormOption['FormOptionText'] = $FormOptionText;
-		$FormOption['FormOptionTextDynamic'] = 'false';
-		$FormOption['FormOptionTextTableName'] = NULL;
-		$FormOption['FormOptionTextField'] = NULL;
-		$FormOption['FormOptionTextPageID'] = NULL;
-		$FormOption['FormOptionTextObjectID'] = NULL;
-		$FormOption['FormOptionTextRevisionID'] = NULL;
-		$FormOption['FormOptionDisabled'] = NULL;
-		$FormOption['FormOptionLabel'] = NULL;
-		$FormOption['FormOptionLabelDynamic'] = NULL;
-		$FormOption['FormOptionLabelTableName'] = NULL;
-		$FormOption['FormOptionLabelField'] = NULL;
-		$FormOption['FormOptionLabelPageID'] = NULL;
-		$FormOption['FormOptionLabelObjectID'] = NULL;
-		$FormOption['FormOptionLabelRevisionID'] = NULL;
-		$FormOption['FormOptionSelected'] = NULL;
-		$FormOption['FormOptionValue'] = NULL;
-		$FormOption['FormOptionValueDynamic'] = NULL;
-		$FormOption['FormOptionValueTableName'] = NULL;
-		$FormOption['FormOptionValueField'] = NULL;
-		$FormOption['FormOptionValuePageID'] = NULL;
-		$FormOption['FormOptionValueObjectID'] = NULL;
-		$FormOption['FormOptionValueRevisionID'] = NULL;
-		$FormOption['FormOptionClass'] = NULL;
-		$FormOption['FormOptionDir'] = 'ltr';
-		$FormOption['FormOptionID'] = NULL;
-		$FormOption['FormOptionLang'] = 'en-us';
-		$FormOption['FormOptionStyle'] = NULL;
-		$FormOption['FormOptionTitle'] = NULL;
-		$FormOption['FormOptionXMLLang'] = 'en-us';
-		$FormOption['Enable/Disable'] = 'Enable';
-		$FormOption['Status'] = 'Approved';
-		
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStory', $NewsStory);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
 		$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
-		
+
+		$Options = $Tier6Databases->getLayerModuleSetting();
 		$NewsArticleCreatedPage = $Options['XhtmlNewsStories']['news']['NewsArticleCreatedPage']['SettingAttribute'];
-		
 		header("Location: $NewsArticleCreatedPage&NewNewsPageID=$NewPageID");
-	}
+	}*/
 	
 ?>

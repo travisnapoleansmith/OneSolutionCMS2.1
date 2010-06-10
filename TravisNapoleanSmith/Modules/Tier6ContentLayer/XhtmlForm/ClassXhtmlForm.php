@@ -424,6 +424,11 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function FetchDatabase ($PageID) {
 		$this->PrintPreview = $PageID['PrintPreview'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		
+		unset($PageID['RevisionID']);
+		unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
 		$passarray = array();
 		$passarray = &$PageID;
@@ -1201,6 +1206,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					
 					$this->ProcessArrayStandardAttribute('FormTextArea');
 					
+					if ($this->FormSession[current($this->FormTextAreaName)]) {
+						$this->FormTextAreaText[key($this->FormTextAreaText)] = $this->FormSession[current($this->FormTextAreaName)];
+					}
+					
 					if (current($this->FormTextAreaText)) {
 						$this->Writer->text(current($this->FormTextAreaText));
 					} else if (current($this->FormTextAreaTextDynamic)) {
@@ -1661,7 +1670,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->FormSelectStatus);
 		}
 		
-		while (current($this->FormSelectObjectID) != current($this->FormSelectStopObjectID)) {
+		//while (current($this->FormSelectObjectID) != current($this->FormSelectStopObjectID)) {
+		while (current($this->FormSelectObjectID)) {
 			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
 				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
 					$this->Writer->startElement('select');
@@ -1697,14 +1707,21 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					}
 					if (current($this->FormSelectContainerObjectTypeName) == 'FormOptGroup' && current($this->FormSelectContainerObjectType) == 'OptGroup') {
-						$this->buildFormOptGroup(current($this->FormSelectContainerObjectID));
+						$this->buildFormOptGroup(current($this->FormSelectContainerObjectID), current($this->FormSelectName));
 					} else if (current($this->FormSelectContainerObjectTypeName) == 'FormOption' && current($this->FormSelectContainerObjectType) == 'Option') {
-						$this->buildFormOption(current($this->FormSelectContainerObjectID));
+						$this->buildFormOption(current($this->FormSelectContainerObjectID), current($this->FormSelectName));
 					} else if (current($this->FormSelectContainerObjectType)) {
 						$this->buildObjects(current($this->FormSelectContainerObjectID), 1, current($this->FormSelectContainerObjectTypeName), current($this->FormSelectContainerObjectType));
 					}
 				}
 			}
+			
+			if (current($this->FormSelectStopObjectID)) {
+				if (current($this->FormSelectObjectID) == current($this->FormSelectStopObjectID)) {
+					end($this->FormSelectObjectID);
+				}
+			}
+			
 			next($this->FormLookupTableName['FormSelect']);
 			
 			next($this->FormSelectPageID);
@@ -1896,7 +1913,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 	}
 	
-	protected function buildFormOption($objectid) {
+	protected function buildFormOption($objectid, $formselectname) {
 		reset($this->FormLookupTableName['FormOption']);
 		
 		reset($this->FormOptionPageID);
@@ -1963,6 +1980,14 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
 						if ($hold) {
 							$this->Writer->writeAttribute('label', $hold);
+						}
+					}
+					
+					if ($this->FormSession[$formselectname]) {
+						$SessionInfo = $this->FormSession[$formselectname];
+						$CurrentInfo = current($this->FormOptionText);
+						if ($SessionInfo == $CurrentInfo) {
+							$this->FormOptionSelected[key($this->FormOptionSelected)] = 'selected';
 						}
 					}
 					
@@ -2050,7 +2075,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 	}
 	
-	protected function buildFormOptGroup($objectid) {
+	protected function buildFormOptGroup($objectid, $formselectname) {
 		reset($this->FormLookupTableName['FormOptGroup']);
 		
 		reset($this->FormOptGroupPageID);
@@ -2113,7 +2138,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					
 					if (current($this->FormOptGroupContainerObjectTypeName) == 'FormOption' && current($this->FormOptGroupContainerObjectType) == 'Option') {
-						$this->buildFormOption(current($this->FormOptGroupContainerObjectID));
+						$this->buildFormOption(current($this->FormOptGroupContainerObjectID), $formselectname);
 					}
 				}
 			}

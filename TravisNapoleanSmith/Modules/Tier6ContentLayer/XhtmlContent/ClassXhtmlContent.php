@@ -13,8 +13,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $ContainerObjectTypeName;
 	protected $ContainerObjectID;
 	protected $ContainerObjectPrintPreview;
-	protected $RevisionID;
-	protected $CurrentVersion;
+	//protected $RevisionID;
+	//protected $CurrentVersion;
 	protected $Empty;
 	
 	protected $Heading;
@@ -258,7 +258,10 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$modulesidnumber['PageID'] = $PageID;
 		$modulesidnumber['ObjectID'] = $ObjectID;
 		$modulesidnumber['PrintPreview'] = $this->PrintPreview;
-		
+		$modulesidnumber['RevisionID'] = $this->RevisionID;
+		$modulesidnumber['CurrentVersion'] = $this->CurrentVersion;
+
+		//print_r($modulesidnumber);
 		$ContentLayerTableArray = Array();
 		$ContentLayerTableArray['ObjectType'] = $ContainerObjectType;
 		$ContentLayerTableArray['ObjectTypeName'] = $ContainerObjectTypeName;
@@ -597,8 +600,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$contentidnumber['PageID'] = $holdnow;
 					$contentidnumber['ObjectID'] = 0;
 					$contentidnumber['printpreview'] = TRUE;
-					//$contentidnumber['RevisionID'] = $this->RevisionID;
-					//$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
+					$contentidnumber['RevisionID'] = $this->RevisionID;
+					$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
 					
 					$contentdatabase = Array();
 					$contentdatabase[$this->ContentTableName] = $this->ContentTableName;

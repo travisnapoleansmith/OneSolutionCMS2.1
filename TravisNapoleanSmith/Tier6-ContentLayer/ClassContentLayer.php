@@ -12,6 +12,9 @@ class ContentLayer extends LayerModulesAbstract
 	protected $DatabaseTableName;
 	protected $ContentLayerDatabase;
 	
+	protected $ContentLayerVersionTableName;
+	protected $ContentLayerVersionDatabase;
+	
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
@@ -32,6 +35,10 @@ class ContentLayer extends LayerModulesAbstract
 		$this->SessionName['SessionID'] = $_GET['SessionID'];
 		
 		$this->Writer = &$GLOBALS['Writer'];
+	}
+	
+	public function setVersionTable($VersionTableName) {
+		$this->ContentLayerVersionTableName = $VersionTableName;
 	}
 	
 	public function setPrintPreview($PrintPreview) {
@@ -182,96 +189,125 @@ class ContentLayer extends LayerModulesAbstract
 		$this->LayerModule->Disconnect($this->DatabaseTableName);
 		
 		$this->ContentLayerDatabase = $this->LayerModule->pass ($this->DatabaseTableName, 'getMultiRowField', array());
+		
+		$passarray = array();
+		$passarray['PageID'] = $this->PageID['PageID'];
+		$passarray['RevisionID'] = $this->PageID['RevisionID'];
+		$passarray['CurrentVersion'] = $this->PageID['CurrentVersion'];
+		
+		$this->LayerModule->Connect($this->ContentLayerVersionTableName);
+		$this->LayerModule->pass ($this->ContentLayerVersionTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->ContentLayerVersionTableName);
+		
+		$this->ContentLayerVersionDatabase = $this->LayerModule->pass ($this->ContentLayerVersionTableName, 'getMultiRowField', array());
+		
 	}
 	
 	public function CreateOutput($Space) {
-		reset($this->ContentLayerDatabase);
-		while (current($this->ContentLayerDatabase)) {
-			$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
-			$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
-			$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
-			$ObjectTypeConfiguration = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
-			$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
-			
-			$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
-			
-			$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
-			$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
-			$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
-			$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
-			$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
-			
-			$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
-			
-			if ($EnableDisable == 'Enable') {
-				if ($Authenticate == 'true') {
-					if (!$_COOKIE['LoggedIn']) {
-						$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-						
-						if ($_GET['DestinationPageID']) {
-							$DestinationPageID = $_GET['DestinationPageID'];
-							setcookie('DestinationPageID', $DestinationPageID);
-						} else {
-							$PageID = $this->PageID['PageID'];
-							setcookie('DestinationPageID', $PageID);
+		if ($this->ContentLayerVersionTableName) {
+			reset($this->ContentLayerDatabase);
+			while (current($this->ContentLayerDatabase)) {
+				$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
+				$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
+				$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
+				$ObjectTypeConfiguration = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
+				$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
+				
+				$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
+				
+				$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
+				$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
+				$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
+				$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
+				$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
+				
+				$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
+				
+				if ($EnableDisable == 'Enable') {
+					if ($Authenticate == 'true') {
+						if (!$_COOKIE['LoggedIn']) {
+							$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+							
+							if ($_GET['DestinationPageID']) {
+								$DestinationPageID = $_GET['DestinationPageID'];
+								setcookie('DestinationPageID', $DestinationPageID);
+							} else {
+								$PageID = $this->PageID['PageID'];
+								setcookie('DestinationPageID', $PageID);
+							}
+							header("Location: $AuthenticationPage");
 						}
-						header("Location: $AuthenticationPage");
-					}
-				}
-
-				if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
-					if ($StartTag) {
-						$StartTag = str_replace('<','', $StartTag);
-						$StartTag = str_replace('>','', $StartTag);
-						
-						$this->Writer->startElement($StartTag);
-						
-						if ($StartTagID) {
-							$this->Writer->writeAttribute('id', $StartTagID);
-						}
-						
-						if ($StartTagStyle) {
-							$this->Writer->writeAttribute('style', $StartTagStyle);
-						}
-						
-						if ($StartTagClass) {
-							$this->Writer->writeAttribute('class', $StartTagClass);
-						}
-						$this->Writer->writeRaw("\n");
 					}
 					
-					if ($ObjectTypeConfiguration) {
-						if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
-							$file = file_get_contents($ObjectTypeConfiguration);
-							$this->Writer->writeRaw($file);
-						} else {
-							require ("$ObjectTypeConfiguration");
+					$UserAccessGroup = $this->ContentLayerVersionDatabase[0]['UserAccessGroup'];
+					$CurrentAccessGroup = $_COOKIE[$UserAccessGroup];
+					if ($UserAccessGroup == 'Guest' || $UserAccessGroup == ($CurrentAccessGroup == 'Yes')) {
+						if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
+							if ($StartTag) {
+								$StartTag = str_replace('<','', $StartTag);
+								$StartTag = str_replace('>','', $StartTag);
+								
+								$this->Writer->startElement($StartTag);
+								
+								if ($StartTagID) {
+									$this->Writer->writeAttribute('id', $StartTagID);
+								}
+								
+								if ($StartTagStyle) {
+									$this->Writer->writeAttribute('style', $StartTagStyle);
+								}
+								
+								if ($StartTagClass) {
+									$this->Writer->writeAttribute('class', $StartTagClass);
+								}
+								$this->Writer->writeRaw("\n");
+							}
+							
+							if ($ObjectTypeConfiguration) {
+								if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
+									$file = file_get_contents($ObjectTypeConfiguration);
+									$this->Writer->writeRaw($file);
+								} else {
+									require ("$ObjectTypeConfiguration");
+								}
+							} else {
+								$idnumber = array();
+								$idnumber['PageID'] = $this->PageID['PageID'];
+								$idnumber['ObjectID'] = 1;
+								$idnumber['RevisionID'] = $this->PageID['RevisionID'];
+								$idnumber['CurrentVersion'] = $this->PageID['CurrentVersion'];
+								$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
+								$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
+								$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
+							}
+							
+							if ($EndTag) {
+								$this->Writer->endElement(); // ENDS END TAG
+							}
+						}
+						
+						if ($ObjectType == 'XhtmlHeader') {
+							$this->Writer->startElement('body');
 						}
 					} else {
-						$idnumber = array();
-						$idnumber['PageID'] = $this->PageID['PageID'];
-						$idnumber['ObjectID'] = 1;
-						
-						$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
-						$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
-						$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
-					}
-					
-					if ($EndTag) {
-						$this->Writer->endElement(); // ENDS END TAG
+						if (!$_COOKIE['LoggedIn']) {
+							exit;
+						} else {
+							$DenyRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['DenyRedirect']['SettingAttribute'];
+							header("Location: $DenyRedirectPage");
+							exit;
+						}
 					}
 				}
-				
-				if ($ObjectType == 'XhtmlHeader') {
-					$this->Writer->startElement('body');
+				next($this->ContentLayerDatabase);
+	
+				if (!current($this->ContentLayerDatabase)) {
+					$this->Writer->endElement(); // ENDS BODY
+					$this->Writer->endElement(); // ENDS HTML
 				}
 			}
-			next($this->ContentLayerDatabase);
-
-			if (!current($this->ContentLayerDatabase)) {
-				$this->Writer->endElement(); // ENDS BODY
-				$this->Writer->endElement(); // ENDS HTML
-			}
+		} else {
+			array_push($this->ErrorMessage,'CreateOutput: Content Layer Version Table Name Cannot Be Null!');
 		}
 	}
 	
@@ -332,13 +368,27 @@ class ContentLayer extends LayerModulesAbstract
 				$_SESSION['POST'] = $hold;
 				header("Location: $AuthenticationPage&SessionID=$sessionname");
 			} else {
+				$passarray = array();
+				$passarray['getUserInfo'] = array(array());
+				$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+				$UserInfo = $hold['getUserInfo']['UserAccounts'][0];
+				unset($UserInfo['Password']);
+				unset($UserInfo['Salt']);
+
 				$username = $_POST['UserName'];
 				setcookie("UserName", $username);
 				setcookie("LoggedIn", TRUE, time()+3600);
+				setcookie('Administrator', $UserInfo['Administrator'], time()+3600);
+				setcookie('ContentCreator', $UserInfo['ContentCreator'], time()+3600);
+				setcookie('Editor', $UserInfo['Editor'], time()+3600);
+				setcookie('User', $UserInfo['User'], time()+3600);
+				setcookie('Guest', $UserInfo['Guest'], time()+3600);
 				if ($DestinationPageID) {
 					header("Location: index.php?PageID=$DestinationPageID");
+					exit;
 				} else {
 					header("Location: index.php");
+					exit;
 				}
 			}
 		}
@@ -347,6 +397,11 @@ class ContentLayer extends LayerModulesAbstract
 	public function Logoff() {
 		setcookie("UserName", '', time()-1000);
 		setcookie("LoggedIn", '', time()-1000);
+		setcookie('Administrator', '', time()-1000);
+		setcookie('ContentCreator', '', time()-1000);
+		setcookie('Editor', '', time()-1000);
+		setcookie('User', '', time()-1000);
+		setcookie('Guest', '', time()-1000);
 		
 		$DestinationPageID = NULL;
 		if ($_GET['DestinationPageID']) {
@@ -355,9 +410,11 @@ class ContentLayer extends LayerModulesAbstract
 		
 		if ($DestinationPageID) {
 			header("Location: index.php?PageID=$DestinationPageID");
+			exit;
 		} else {
 			$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
 			header("Location: $AuthenticationPage");
+			exit;
 		}
 	}
 	
@@ -387,6 +444,7 @@ class ContentLayer extends LayerModulesAbstract
 				$hold['Error']['UserName'] = 'User Name already exists, please try again!';
 				$_SESSION['POST'] = $hold;
 				header("Location: $RegisterPage&SessionID=$sessionname");
+				exit;
 			} else {
 				$hold = array();
 				$PasswordCreationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordCreation']['SettingAttribute'];
@@ -402,10 +460,12 @@ class ContentLayer extends LayerModulesAbstract
 				if ($hold['Error']) {
 					$_SESSION['POST'] = $hold;
 					header("Location: $RegisterPage&SessionID=$sessionname");
+					exit;
 				} else {
 					//$this->SessionDestroy($sessionname);
 					$RegisterRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['RegisterRedirect']['SettingAttribute'];
 					header("Location: $RegisterRedirectPage");
+					exit;
 				}
 			}
 			
@@ -429,6 +489,7 @@ class ContentLayer extends LayerModulesAbstract
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PasswordCreationPage&SessionID=$sessionname");
+			exit;
 		} else {
 			$hold = array();
 			$passarray = array();
@@ -437,9 +498,11 @@ class ContentLayer extends LayerModulesAbstract
 			if ($hold['Error']) {
 				$_SESSION['POST'] = $hold;
 				header("Location: $PasswordCreationPage&SessionID=$sessionname");
+				exit;
 			} else {
 				$this->SessionDestroy($sessionname);
 				header("Location: $PasswordChangedPage&SessionID=$sessionname");
+				exit;
 			}
 		}		
 	}
@@ -468,6 +531,7 @@ class ContentLayer extends LayerModulesAbstract
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PasswordResetPage&SessionID=$sessionname");
+			exit;
 		} else {
 			$hold = array();
 			
@@ -481,9 +545,11 @@ class ContentLayer extends LayerModulesAbstract
 			if ($hold['Error']) {
 				$_SESSION['POST'] = $hold;
 				header("Location: $PasswordResetPage&SessionID=$sessionname");
+				exit;
 			} else {
 				$this->SessionDestroy($sessionname);
 				header("Location: $PasswordResetChangePage");
+				exit;
 			}
 		}
 	}
@@ -506,6 +572,7 @@ class ContentLayer extends LayerModulesAbstract
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
+			exit;
 		} else {
 			if ($hold) {
 				return $hold;

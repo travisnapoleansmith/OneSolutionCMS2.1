@@ -31,6 +31,10 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		}
 	}
 	
+	public function getUserInfo() {
+		return $this->LookupTable;
+	}
+	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;

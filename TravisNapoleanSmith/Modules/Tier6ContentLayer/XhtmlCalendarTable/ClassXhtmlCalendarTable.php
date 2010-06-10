@@ -207,6 +207,11 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		
+		unset($PageID['RevisionID']);
+		unset($PageID['CurrentVersion']);
 		
 		while (current($this->TableNames)) {
 			$this->LayerModule->Connect(current($this->TableNames));

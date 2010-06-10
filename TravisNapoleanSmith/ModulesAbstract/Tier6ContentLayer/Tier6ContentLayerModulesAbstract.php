@@ -7,6 +7,9 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	protected $FileName;
 	protected $NoAttributes;
 	
+	protected $RevisionID;
+	protected $CurrentVersion;
+	
 	protected $StartTag;
 	protected $EndTag;
 	protected $StartTagID;
@@ -21,6 +24,14 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	public function getEmpty() {
 		return $this->Empty;
 	}
+	
+	public function getRevisionID() {
+		return $this->RevisionID;
+	}
+	
+	public function getCurrentVersion() {
+		return $this->CurrentVersion;
+	}	
 	
 	public function getStartTag() {
 		return $this->StartTag;

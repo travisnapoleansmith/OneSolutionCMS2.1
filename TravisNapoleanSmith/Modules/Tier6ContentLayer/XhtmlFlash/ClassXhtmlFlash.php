@@ -105,6 +105,11 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		
+		unset($PageID['RevisionID']);
+		unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
 		
 		$this->LayerModule->Connect($this->DatabaseTable);
