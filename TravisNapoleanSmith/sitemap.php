@@ -11,7 +11,9 @@
 	$databaseoptions = array();
 	$databaseoptions['FileName'] = 'sitemap.xml';
 	
-	$sitemap = new XmlSitemap($sitemapdatabase, $databaseoptions);
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
+	
+	$sitemap = new XmlSitemap($sitemapdatabase, $databaseoptions, $Tier6Databases);
 	$sitemap->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XMLSitemap');
 	$sitemap->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$sitemap->FetchDatabase ($sitemapidnumber);

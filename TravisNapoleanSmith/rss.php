@@ -11,7 +11,9 @@
 	$databaseoptions = array();
 	$databaseoptions['FileName'] = 'rss.xml';
 	
-	$feed = new XmlFeed($feeddatabase, $databaseoptions);
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
+	
+	$feed = new XmlFeed($feeddatabase, $databaseoptions, $Tier6Databases);
 	$feed->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XMLFeeds');
 	$feed->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$feed->FetchDatabase ($feedidnumber);
