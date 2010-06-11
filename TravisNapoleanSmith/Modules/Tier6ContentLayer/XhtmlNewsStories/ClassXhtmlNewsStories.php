@@ -108,7 +108,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->Password = $password; 
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-
+		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($this->NewsStoriesTableName);
 		
@@ -478,7 +478,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$modulesdatabase[current($databasetablename)] = current($databasetablename);
 			next($databasetablename);
 		}
-		$module = &$this->LayerModule->getModules($ContainerObjectType, $ContainerObjectTypeName);
+		$temp = &$GLOBALS['Tier6Databases'];
+		$module = &$temp->getModules($ContainerObjectType, $ContainerObjectTypeName);
 		reset($databasetablename);
 		
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));

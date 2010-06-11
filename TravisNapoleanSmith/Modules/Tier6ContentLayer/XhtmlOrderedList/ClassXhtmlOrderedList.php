@@ -231,7 +231,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 												} else {
 													$databaseoptions['Indent'] = "  ";
 												}
-												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
+												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions, $this->LayerModule);
 												
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
