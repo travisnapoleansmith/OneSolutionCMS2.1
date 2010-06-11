@@ -21,15 +21,15 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $CurrentMonth;
 	protected $CurrentYear;
 		
-	public function __construct($tablenames, $databaseoptions) {
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
+		
 		$this->CurrentDate = date('D M d, Y');
 		$this->CurrentTime = date('h:i A T');
 		$this->CurrentDayOfWeek = date('D');
 		$this->CurrentDay = date('d');
 		$this->CurrentMonth = date('M');
 		$this->CurrentYear = date('Y');
-		
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlCalendarDiv'][$hold] = NULL;

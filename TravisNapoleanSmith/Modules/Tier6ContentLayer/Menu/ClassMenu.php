@@ -14,8 +14,8 @@ class Menu
 	private $HttpUserAgent;
 	private $PageName;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		$this->idnumber = current($tablenames);
 		$this->MenuDatabase = next($tablenames);
 		$this->MenuLookup = next($tablenames);

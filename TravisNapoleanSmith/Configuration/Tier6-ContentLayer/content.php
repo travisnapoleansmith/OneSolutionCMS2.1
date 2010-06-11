@@ -47,11 +47,12 @@
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
 	//$Writer->startElement('div');
 		//$Writer->writeAttribute('id', 'textlayer1');
 		
-	$content = new XhtmlContent($contentdatabase, $databaseoptions);
+	$content = new XhtmlContent($contentdatabase, $databaseoptions, $Tier6Databases);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Content');
 	$content->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$content->FetchDatabase ($contentidnumber);

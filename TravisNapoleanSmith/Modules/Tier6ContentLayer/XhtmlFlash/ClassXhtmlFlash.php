@@ -70,8 +70,8 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $IsIE;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlFlash'][$hold] = NULL;

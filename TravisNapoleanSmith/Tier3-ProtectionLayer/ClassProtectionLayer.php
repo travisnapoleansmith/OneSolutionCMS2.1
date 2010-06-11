@@ -15,13 +15,17 @@ class ProtectionLayer extends LayerModulesAbstract
 		
 		$this->DatabaseAllow = &$GLOBALS['Tier3DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier3DatabaseDeny'];
-		$this->LayerModule = &$GLOBALS['Tier2Databases'];
+		
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		
+		$this->LayerModule = &new DataAccessLayer();
+		$this->LayerModule->createDatabaseTable('ContentLayer');
+		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+		$this->LayerModule->buildModules('DataAccessLayerModules', 'DataAccessLayerTables', 'DataAccessLayerModulesSettings');
 		
 		$this->PageID = $_GET['PageID'];
 		
 		$this->SessionName['SessionID'] = $_GET['SessionID'];
-		
-		$this->Layers['Tier2Databases'] = &$GLOBALS['Tier2Databases'];
 	}
 	
 	public function setModules() {
@@ -37,6 +41,7 @@ class ProtectionLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
+		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	

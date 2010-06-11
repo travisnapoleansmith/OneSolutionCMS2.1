@@ -52,8 +52,9 @@
 	$databaseoptions = NULL;
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
-	$header = new XhtmlHeader($headerdatabase, $databaseoptions);
+	$header = new XhtmlHeader($headerdatabase, $databaseoptions, $Tier6Databases);
 	$header->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $headername);
 	$header->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	

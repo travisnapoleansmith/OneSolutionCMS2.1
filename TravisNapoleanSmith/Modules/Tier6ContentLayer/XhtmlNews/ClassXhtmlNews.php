@@ -29,8 +29,8 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $NewsButtonsRowCount;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlNews'][$hold] = NULL;
@@ -448,7 +448,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$newsdatabase[$this->NewsStoriesTableName] = $this->NewsStoriesTableName;
 					$newsdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
 					
-					$news = new XhtmlNews($newsdatabase, $this->LayerModule);
+					$news = new XhtmlNews($newsdatabase, $this->LayerModule, $this->LayerModule);
 					$news->setHttpUserAgent($this->HttpUserAgent);
 					$news->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 					$news->FetchDatabase ($newsidnumber);

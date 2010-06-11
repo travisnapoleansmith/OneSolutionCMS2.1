@@ -14,8 +14,8 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $XmlSitemap;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XmlSitemap'][$hold] = NULL;

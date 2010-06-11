@@ -65,8 +65,8 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected $XmlFeed;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XmlFeed'][$hold] = NULL;

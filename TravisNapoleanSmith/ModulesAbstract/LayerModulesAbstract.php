@@ -146,11 +146,12 @@ abstract class LayerModulesAbstract
 			$passarray['SessionName'] = key($this->SessionName);
 			$this->createDatabaseTable('Sessions');
 		
-			reset($this->Layers);
-			while (current($this->Layers)) {
-				$this->Layers[key($this->Layers)]->createDatabaseTable('Sessions');
-				next($this->Layers);
-			}
+			//reset($this->Layers);
+			//while (current($this->Layers)) {
+				//$this->Layers[key($this->Layers)]->createDatabaseTable('Sessions');
+				//next($this->Layers);
+			//}
+			$this->LayerModule->createDatabaseTable('Sessions');
 			
 			$this->LayerModule->Connect('Sessions');
 			$this->LayerModule->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
@@ -167,13 +168,9 @@ abstract class LayerModulesAbstract
 		$this->createDatabaseTable($this->LayerModuleTableName);
 		$this->createDatabaseTable($this->LayerTableName);
 		
-		reset($this->Layers);
-		while (current($this->Layers)) {
-			$this->Layers[key($this->Layers)]->createDatabaseTable($this->LayerModuleTableNameSetting);
-			$this->Layers[key($this->Layers)]->createDatabaseTable($this->LayerModuleTableName);
-			$this->Layers[key($this->Layers)]->createDatabaseTable($this->LayerTableName);
-			next($this->Layers);
-		}
+		$this->LayerModule->createDatabaseTable($this->LayerModuleTableNameSetting);
+		$this->LayerModule->createDatabaseTable($this->LayerModuleTableName);
+		$this->LayerModule->createDatabaseTable($this->LayerTableName);
 		
 		$passarray = array();
 		$passarray['Enable/Disable'] = 'Enable';
@@ -200,7 +197,6 @@ abstract class LayerModulesAbstract
 		$InnerKey['ObjectTypeName'] = 'ObjectTypeName';
 		$InnerKey['Setting'] = 'Setting';
 		$this->LayerModuleSetting = $this->buildArray($ModuleSetting, $InnerKey, 'ObjectType', $LayerModuleSetting);
-		//print_r($this->LayerModuleSetting);
 				
 		if ($LayerModuleTableName && $LayerModuleTable && $LayerTableName && $this->LayerTable) {
 			$moduletable = current($LayerModuleTable);
@@ -266,11 +262,6 @@ abstract class LayerModulesAbstract
 						reset($DatabaseTables);
 						while (current($DatabaseTables)) {
 							$this->createDatabaseTable(current($DatabaseTables));
-							reset($this->Layers);
-							while (current($this->Layers)) {
-								$this->Layers[key($this->Layers)]->createDatabaseTable(current($DatabaseTables));
-								next($this->Layers);
-							}
 							next ($DatabaseTables);
 						}
 						$DatabaseOptions = array();
@@ -305,7 +296,7 @@ abstract class LayerModulesAbstract
 	}
 	
 	protected function createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions) {
-		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $DatabaseOptions);
+		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $DatabaseOptions, $this->LayerModule);
 		
 		reset($DatabaseTables);
 		$this->Modules[$ObjectType][$ObjectTypeName]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($DatabaseTables));

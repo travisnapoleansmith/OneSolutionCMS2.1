@@ -23,12 +23,12 @@ class ContentLayer extends LayerModulesAbstract
 		
 		$this->DatabaseAllow = &$GLOBALS['Tier6DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
-		$this->LayerModule = &$GLOBALS['Tier5Databases'];
 		
-		$this->Layers['Tier5Databases'] = &$GLOBALS['Tier5Databases'];
-		$this->Layers['Tier4Databases'] = &$GLOBALS['Tier4Databases'];
-		$this->Layers['Tier3Databases'] = &$GLOBALS['Tier3Databases'];
-		$this->Layers['Tier2Databases'] = &$GLOBALS['Tier2Databases'];
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		$this->LayerModule = &new ValidationLayer();
+		$this->LayerModule->createDatabaseTable('ContentLayer');
+		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+		$this->LayerModule->buildModules('ValidationLayerModules', 'ValidationLayerTables', 'ValidationLayerModulesSettings');
 		
 		$this->PageID = $_GET['PageID'];
 		
@@ -58,7 +58,9 @@ class ContentLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
+		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		
 	}
 	
 	public function setDatabaseTableName ($databasetablename) {

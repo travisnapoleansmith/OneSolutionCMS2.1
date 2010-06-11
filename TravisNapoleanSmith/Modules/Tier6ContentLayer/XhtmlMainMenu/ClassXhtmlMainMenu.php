@@ -35,8 +35,8 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	
 	//protected $MainMenu;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlMainMenu'][$hold] = NULL;
@@ -254,7 +254,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			//$databases = &$this->LayerModule;
 			//$databaseoptions['NoGlobal'] = 'NoGlobal';
 			
-			$list = new XhtmlUnorderedList($listdatabase, $databaseoptions);
+			$list = new XhtmlUnorderedList($listdatabase, $databaseoptions, $this->LayerModule);
 			$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($this->TableNames));
 			$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 			$list->FetchDatabase ($listidnumber);

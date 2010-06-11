@@ -45,8 +45,9 @@
 	$databaseoptions = NULL;
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
-	$news = new XhtmlNews($newsdatabase, $databaseoptions);
+	$news = new XhtmlNews($newsdatabase, $databaseoptions, $Tier6Databases);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], $newsname);
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$news->FetchDatabase ($newsidnumber);

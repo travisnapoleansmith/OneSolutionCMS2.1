@@ -30,8 +30,9 @@
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
-	$news = new XhtmlNews($newsdatabase, $databaseoptions);
+	$news = new XhtmlNews($newsdatabase, $databaseoptions, $Tier6Databases);
 	$news->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStories');
 	$news->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$news->FetchDatabase ($newsidnumber);
@@ -46,7 +47,7 @@
 		while ($rowcount > 1) {
 			$rowcount--;
 			$newsidnumber['PageID'] = $rowcount;
-			$news2 = new XhtmlNews($newsdatabase, $databaseoptions);
+			$news2 = new XhtmlNews($newsdatabase, $databaseoptions, $Tier6Databases);
 			$news2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'NewsStories');
 			$news2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 			$news2->FetchDatabase ($newsidnumber);

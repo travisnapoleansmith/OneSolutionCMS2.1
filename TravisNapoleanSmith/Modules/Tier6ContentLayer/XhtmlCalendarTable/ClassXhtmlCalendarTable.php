@@ -117,7 +117,9 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	protected $CalendarTable;
 	
-	public function __construct($tablenames, $databaseoptions) {
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
+		
 		$this->CurrentDate = date('D M d, Y');
 		$this->CurrentTime = date('h:i A T');
 		$this->CurrentDayOfWeek = date('l');
@@ -144,7 +146,6 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->AppointmentDayColumns['End Time'] = 'End Time';
 		$this->AppointmentDayColumns['Appointment'] = 'Appointment';
 		
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold];

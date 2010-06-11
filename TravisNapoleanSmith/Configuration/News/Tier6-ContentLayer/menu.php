@@ -23,6 +23,7 @@
 		$menudatabase['MainMenuLookup'] = 'MainMenuLookup';
 		
 		$databases = &$GLOBALS['Tier6Databases'];
+		$Tier6Databases = $GLOBALS['Tier6Databases'];
 		
 		/*if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
 			print "\n";
@@ -34,7 +35,7 @@
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		
 		// Main Menu	
-		$MainMenu = new Menu($menudatabase, $databases);
+		$MainMenu = new Menu($menudatabase, $databases, $Tier6Databases);
 		
 		
 		$MainMenu->setDatabaseAll($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3]);

@@ -28,12 +28,13 @@
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
+	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
 	//$Writer->startElement('div');
 		//$Writer->writeAttribute('id', 'BottomPanel2');
 		//$Writer->writeAttribute('class', 'BottomPanel2');
 	
-	$list = new XhtmlMenu($listdatabase, $databaseoptions);
+	$list = new XhtmlMenu($listdatabase, $databaseoptions, $Tier6Databases);
 	$list->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel2');
 	$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list->FetchDatabase ($listidnumber);
@@ -41,7 +42,7 @@
 
 	$listidnumber['ObjectID'] = 1;
 		
-	$list1 = new XhtmlMenu($listdatabase, $databaseoptions);
+	$list1 = new XhtmlMenu($listdatabase, $databaseoptions, $Tier6Databases);
 	$list1->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel2');
 	$list1->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list1->FetchDatabase ($listidnumber);
@@ -49,7 +50,7 @@
 	
 	$listidnumber['ObjectID'] = 2;
 			
-	$list2 = new XhtmlMenu($listdatabase, $databaseoptions);
+	$list2 = new XhtmlMenu($listdatabase, $databaseoptions, $Tier6Databases);
 	$list2->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel2');
 	$list2->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list2->FetchDatabase ($listidnumber);
@@ -57,7 +58,7 @@
 	
 	$listidnumber['ObjectID'] = 3;
 				
-	$list3 = new XhtmlMenu($listdatabase, $databaseoptions);
+	$list3 = new XhtmlMenu($listdatabase, $databaseoptions, $Tier6Databases);
 	$list3->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'MenuBottomPanel2');
 	$list3->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$list3->FetchDatabase ($listidnumber);

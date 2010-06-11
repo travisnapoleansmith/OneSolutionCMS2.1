@@ -11,8 +11,8 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	protected $ResetSalt;
 	protected $Salt;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier4Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['UserAccounts'][$hold] = NULL;
@@ -41,7 +41,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+		//print get_class($this->LayerModule);
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 		

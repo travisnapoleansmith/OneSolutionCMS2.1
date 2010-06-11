@@ -15,15 +15,17 @@ class ValidationLayer extends LayerModulesAbstract
 		
 		$this->DatabaseAllow = &$GLOBALS['Tier5DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier5DatabaseDeny'];
-		$this->LayerModule = &$GLOBALS['Tier4Databases'];
+		
+		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+		
+		$this->LayerModule = &new AuthenticationLayer();
+		$this->LayerModule->createDatabaseTable('ContentLayer');
+		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
+		$this->LayerModule->buildModules('AuthenticationLayerModules', 'AuthenticationLayerTables', 'AuthenticationLayerModulesSettings');	
 		
 		$this->PageID = $_GET['PageID'];
 		
 		$this->SessionName['SessionID'] = $_GET['SessionID'];
-		
-		$this->Layers['Tier4Databases'] = &$GLOBALS['Tier4Databases'];
-		$this->Layers['Tier3Databases'] = &$GLOBALS['Tier3Databases'];
-		$this->Layers['Tier2Databases'] = &$GLOBALS['Tier2Databases'];
 	}
 	
 	public function setModules() {
@@ -39,6 +41,7 @@ class ValidationLayer extends LayerModulesAbstract
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
+		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 	}
 	

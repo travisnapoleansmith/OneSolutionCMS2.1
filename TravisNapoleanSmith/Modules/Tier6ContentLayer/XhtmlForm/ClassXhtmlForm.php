@@ -377,8 +377,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $Form;
 	
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlForm'][$hold] = NULL;
@@ -2320,7 +2320,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$databaseoptions = array();
 		$databaseoptions['NoAttributes'] = TRUE;
 
-		$object = new $objecttype($objectdatabase, $databaseoptions);
+		$object = new $objecttype($objectdatabase, $databaseoptions, $this->LayerModule);
 		$object->setDatabaseAll ($hostname, $user, $password, $databasename, $hold[0]['DatabaseTable1']);
 		$object->setHttpUserAgent($this->HttpUserAgent);
 		$object->FetchDatabase ($idnumber);

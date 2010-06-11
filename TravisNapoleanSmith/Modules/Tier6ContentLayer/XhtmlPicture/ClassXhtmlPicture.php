@@ -10,8 +10,8 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $Width;
 	protected $Height;
 		
-	public function __construct($tablenames, $databaseoptions) {
-		$this->LayerModule = &$GLOBALS['Tier6Databases'];
+	public function __construct($tablenames, $databaseoptions, $layermodule) {
+		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlPicture'][$hold] = NULL;
