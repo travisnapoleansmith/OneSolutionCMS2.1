@@ -56,14 +56,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $NewsStoriesLookupEnableDisable;
 	protected $NewsStoriesLookupStatus;
 	
-	protected $NewsStoriesDatesPageID = array();
-	protected $NewsStoriesDatesObjectID = array();
-	protected $NewsStoriesDatesNewsStoryDay = array();
-	protected $NewsStoriesDatesNewsStoryMonth = array();
-	protected $NewsStoriesDatesNewsStoryYear = array();
-	protected $NewsStoriesDatesEnableDisable = array();
-	protected $NewsStoriesDatesStatus = array();
-	
 	public function __construct($tablenames, $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
@@ -248,6 +240,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 		if ($this->NewsStoriesLookupNewsStoryPageID || $this->NewsStoriesLookupNewsStoryDay == 'LastStory') {
 			$passarray = array();
+			if ($_GET['NewsRevisionID']) {
+				$passarray['RevisionID'] = $_GET['NewsRevisionID'];
+			} else {
+				$passarray['CurrentVersion'] = $this->CurrentVersion;
+			}
 			if ($this->NewsStoriesLookupNewsStoryDay == 'LastStory') {
 				if ($_GET['NewNewsPageID']) {
 					$passarray['PageID'] = $_GET['NewNewsPageID']; 
@@ -269,6 +266,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 
 		} else {
 			$newpassarray = array();
+			if ($_GET['NewsRevisionID']) {
+				$newpassarray['RevisionID'] = $_GET['NewsRevisionID'];
+			} else {
+				$newpassarray['CurrentVersion'] = $this->CurrentVersion;
+			}
 			if ($this->NewsStoriesLookupNewsStoryDay) {
 				if ($this->NewsStoriesLookupNewsStoryDay == 'Current') {
 					$newpassarray['NewsStoryDay'] = date('d');
@@ -391,6 +393,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();
 				$passarray['PageID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['PageID'];
+				if ($_GET['NewsRevisionID']) {
+					$passarray['RevisionID'] = $_GET['NewsRevisionID'];
+				} else {
+					$passarray['CurrentVersion'] = $this->CurrentVersion;
+				}
 				//$passarray['ObjectID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['ObjectID'];
 				$this->LayerModule->Connect($this->NewsStoriesTableName);
 				
@@ -411,6 +418,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$lastmonthtime = mktime(0, 0, 0, date('m')-$i, date('d'), date('Y'));
 			$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
 			$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
+			$newpassarray['CurrentVersion'] = $this->CurrentVersion;
 			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
 			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
@@ -747,11 +755,15 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	public function updateNewsStory($PageID, array $NewsStory) {
-		
+	public function updateNewsStory(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->NewsStoriesTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStory: PageID cannot be NULL!');
+		}
 	}
 	
-	public function deleteNewsStory($PageID) {
+	public function deleteNewsStory(array $PageID) {
 		
 	}
 	
@@ -760,11 +772,13 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Keys = array();
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'NewsStoryDay';
-			$Keys[3] = 'NewsStoryMonth';
-			$Keys[4] = 'NewsStoryYear';
-			$Keys[5] = 'Enable/Disable';
-			$Keys[6] = 'Status';
+			$Keys[2] = 'RevisionID';
+			$Keys[3] = 'CurrentVersion';
+			$Keys[4] = 'NewsStoryDay';
+			$Keys[5] = 'NewsStoryMonth';
+			$Keys[6] = 'NewsStoryYear';
+			$Keys[7] = 'Enable/Disable';
+			$Keys[8] = 'Status';
 			
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesDatesTableName);
 		} else {
@@ -772,11 +786,15 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	public function updateNewsStoryDate($PageID, array $NewsStory) {
-		
+	public function updateNewsStoryDate(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->NewsStoriesDatesTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryDate: PageID cannot be NULL!');
+		}
 	}
 	
-	public function deleteNewsStoryDate($PageID) {
+	public function deleteNewsStoryDate(array $PageID) {
 		
 	}
 	
@@ -798,11 +816,15 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	public function updateNewsStoryVersion($PageID, array $NewsStory) {
-		
+	public function updateNewsStoryVersion(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->NewsStoriesVersionTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryVersion: PageID cannot be NULL!');
+		}
 	}
 	
-	public function deleteNewsStoryVersion($PageID) {
+	public function deleteNewsStoryVersion(array $PageID) {
 		
 	}
 	
@@ -850,11 +872,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	public function updateNewsStoryFormOption($PageID, array $NewsStory) {
+	public function updateNewsStoryFormOption(array $PageID) {
 		
 	}
 	
-	public function deleteNewsStoryFormOption($PageID) {
+	public function deleteNewsStoryFormOption(array $PageID) {
 		
 	}
 	
@@ -894,23 +916,23 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
-	public function updateNewsStoryFormSelect($PageID, array $NewsStory) {
+	public function updateNewsStoryFormSelect(array $PageID) {
 		
 	}
 	
-	public function deleteNewsStoryFormSelect($PageID) {
+	public function deleteNewsStoryFormSelect(array $PageID) {
 		
 	}
 	
-	public function createNewsStoryLookup($PageID, array $NewsStory) {
+	public function createNewsStoryLookup(array $NewsStory) {
 		
 	}
 	
-	public function updateNewsStoryLookup($PageID, array $NewsStory) {
+	public function updateNewsStoryLookup(array $PageID) {
 		
 	}
 	
-	public function deleteNewsStoryLookup($PageID) {
+	public function deleteNewsStoryLookup(array $PageID) {
 		
 	}
 }

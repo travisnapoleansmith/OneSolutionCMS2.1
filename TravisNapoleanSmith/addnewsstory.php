@@ -108,6 +108,8 @@
 		$NewsDate = array();
 		$NewsDate['PageID'] = $NewPageID;
 		$NewsDate['ObjectID'] = 1;
+		$NewsDate['RevisionID'] = 0;
+		$NewsDate['CurrentVersion'] = 'true';
 		$NewsDate['NewsStoryDay'] = $_POST['NewsDay'];
 		$NewsDate['NewsStoryMonth'] = $_POST['NewsMonth'];
 		$NewsDate['NewsStoryYear'] = $_POST['NewsYear'];

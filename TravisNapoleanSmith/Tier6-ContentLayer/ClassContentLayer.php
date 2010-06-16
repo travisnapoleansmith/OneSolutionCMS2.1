@@ -26,6 +26,7 @@ class ContentLayer extends LayerModulesAbstract
 		
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		$this->LayerModule = &new ValidationLayer();
+		$this->LayerModule->setPriorLayerModule($this);
 		$this->LayerModule->createDatabaseTable('ContentLayer');
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 		$this->LayerModule->buildModules('ValidationLayerModules', 'ValidationLayerTables', 'ValidationLayerModulesSettings');
@@ -313,7 +314,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
-	protected function SessionStart($SessionName) {
+	public function SessionStart($SessionName) {
 		if ($_COOKIE['SessionID']) {
 			$this->SessionDestroy($_COOKIE['SessionID']);
 		}
@@ -326,7 +327,7 @@ class ContentLayer extends LayerModulesAbstract
 		return $sessionname;
 	}
 	
-	protected function SessionDestroy($SessionName) {
+	public function SessionDestroy($SessionName) {
 		if ($SessionName) {
 			session_name($SessionName);
 			session_start();

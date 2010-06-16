@@ -7,6 +7,7 @@ abstract class LayerModulesAbstract
 	protected $Layers = array();
 	
 	protected $LayerModule;
+	protected $PriorLayerModule;
 	
 	protected $LayerModuleTable;
 	protected $LayerModuleTableName;
@@ -36,6 +37,10 @@ abstract class LayerModulesAbstract
 	protected $Space;
 	
 	protected $ErrorMessage = array();
+	
+	public function setPriorLayerModule(self &$PriorLayerModule) {
+		$this->PriorLayerModule = &$PriorLayerModule;
+	}
 	
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
@@ -427,6 +432,74 @@ abstract class LayerModulesAbstract
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
+	}
+	
+	protected function updateModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'CurrentVersion';
+			
+			$passarray2[0] = 'false';
+			
+			$passarray3[0][0] = 'PageID';
+			$passarray3[0][1] = 'CurrentVersion';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			$passarray4[0][1] = 'true';
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateModuleContent: PageID cannot be NULL!');
+		}
+	}
+	
+	protected function deleteModuleContent(array $PageID, $DatabaseTableName) {
+		
+	}
+	
+	protected function installModule($ModuleType, $ModuleName, $ModuleInstallFile) {
+		
+	}
+	
+	protected function upgradeModule($ModuleType, $ModuleName, $ModuleUpgradeFile) {
+		
+	}
+	
+	protected function deleteModule($ModuleType, $ModuleName, $ModuleDeleteFile) {
+		
+	}
+	
+	protected function enableModule($ModuleType, $ModuleName) {
+		
+	}
+	
+	protected function disableModule($ModuleType, $ModuleName) {
+		
+	}
+	
+	public function getRecord($PageID) {
+		$passarray = array();
+		$passarray = $PageID['PageID'];
+		$DatabaseVariableName = $PageID['DatabaseVariableName'];
+		$this->LayerModule->Connect($this->$DatabaseVariableName);
+		$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		$this->LayerModule->Disconnect($this->$DatabaseVariableName);
+		
+		$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+
+		return $hold;
 	}
 	
 }

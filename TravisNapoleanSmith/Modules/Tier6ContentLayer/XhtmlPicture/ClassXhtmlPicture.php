@@ -122,25 +122,39 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$Keys = array();
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'StartTag';
-			$Keys[3] = 'EndTag';
-			$Keys[4] = 'StartTagID';
-			$Keys[5] = 'StartTagStyle';
-			$Keys[6] = 'StartTagClass';
-			$Keys[7] = 'PictureID';
-			$Keys[8] = 'PictureClass';
-			$Keys[9] = 'PictureStyle';
-			$Keys[10] = 'PictureLink';
-			$Keys[11] = 'PictureAltText';
-			$Keys[12] = 'Width';
-			$Keys[13] = 'Height';
-			$Keys[14] = 'Enable/Disable';
-			$Keys[15] = 'Status';
+			$Keys[2] = 'RevisionID';
+			$Keys[3] = 'CurrentVersion';
+			$Keys[4] = 'StartTag';
+			$Keys[5] = 'EndTag';
+			$Keys[6] = 'StartTagID';
+			$Keys[7] = 'StartTagStyle';
+			$Keys[8] = 'StartTagClass';
+			$Keys[9] = 'PictureID';
+			$Keys[10] = 'PictureClass';
+			$Keys[11] = 'PictureStyle';
+			$Keys[12] = 'PictureLink';
+			$Keys[13] = 'PictureAltText';
+			$Keys[14] = 'Width';
+			$Keys[15] = 'Height';
+			$Keys[16] = 'Enable/Disable';
+			$Keys[17] = 'Status';
 			
 			$this->addModuleContent($Keys, $Picture, $this->DatabaseTable);
 		} else {
 			array_push($this->ErrorMessage,'createPicture: Picture cannot be NULL!');
 		}
+	}
+	
+	public function updatePicture(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'updatePicture: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deletePicture(array $PageID) {
+	
 	}
 }
 ?>

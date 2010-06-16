@@ -19,6 +19,7 @@ class ValidationLayer extends LayerModulesAbstract
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		
 		$this->LayerModule = &new AuthenticationLayer();
+		$this->LayerModule->setPriorLayerModule($this);
 		$this->LayerModule->createDatabaseTable('ContentLayer');
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 		$this->LayerModule->buildModules('AuthenticationLayerModules', 'AuthenticationLayerTables', 'AuthenticationLayerModulesSettings');	

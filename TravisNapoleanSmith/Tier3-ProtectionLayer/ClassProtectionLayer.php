@@ -19,6 +19,7 @@ class ProtectionLayer extends LayerModulesAbstract
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		
 		$this->LayerModule = &new DataAccessLayer();
+		$this->LayerModule->setPriorLayerModule($this);
 		$this->LayerModule->createDatabaseTable('ContentLayer');
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 		$this->LayerModule->buildModules('DataAccessLayerModules', 'DataAccessLayerTables', 'DataAccessLayerModulesSettings');

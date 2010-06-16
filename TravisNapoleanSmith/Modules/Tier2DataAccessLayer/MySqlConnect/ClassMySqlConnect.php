@@ -380,14 +380,35 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							if (is_array($rownumbername)) {
 								if (is_array($rownumber)) {
 									while (isset($rowname[key($rowname)])) {
-										$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE `' . current($rownumbername) .'` = "' . current($rownumber) . '" ';
-										$result = mysql_query($query);
-										
+										if (is_array($rownumbername[key($rownumbername)]) || is_array($rownumber[key($rownumber)])) {
+											$namearray = $rownumbername[key($rownumbername)];
+											$valuearray = $rownumber[key($rownumber)];
+											reset($namearray);
+											reset($valuearray);
+											while (isset($namearray[key($namearray)])) {
+												$string .= '`';
+												$string .= current($namearray);
+												$string .= '` = \'';
+												$string .= current($valuearray);
+												$string .= '\'';
+												next($namearray);
+												next($valuearray);
+												if (isset($namearray[key($namearray)])) {
+													$string .= ' AND ';
+												}
+											}
+											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE ' . $string . ' ';
+											$result = mysql_query($query);
+										} else {
+											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE `' . current($rownumbername) .'` = "' . current($rownumber) . '" ';
+											$result = mysql_query($query);
+										}
 										next($rowname);
 										next($rowvalue);
 										next($rownumbername);
 										next($rownumber);
 									}
+									
 								} else {
 									array_push($this->ErrorMessage,'updateRow: Row Name is an Array, Row Value is an Array, Row Number Name is an Array and Row Number must be an Array!');
 								}
