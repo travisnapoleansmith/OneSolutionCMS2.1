@@ -405,7 +405,6 @@ abstract class LayerModulesAbstract
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
 				$this->LayerModule->Disconnect($DatabaseTableName);
-
 			} else {
 				$i = 0;
 				reset($Content);
@@ -424,7 +423,6 @@ abstract class LayerModulesAbstract
 					$this->LayerModule->Connect($DatabaseTableName);
 					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
 					$this->LayerModule->Disconnect($DatabaseTableName);
-					
 					$i++;
 					next($Content);
 				}
@@ -461,12 +459,246 @@ abstract class LayerModulesAbstract
 			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
 			$this->LayerModule->Disconnect($DatabaseTableName);
 		} else {
-			array_push($this->ErrorMessage,'updateModuleContent: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
 	
 	protected function deleteModuleContent(array $PageID, $DatabaseTableName) {
-		
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Enable/Disable';
+			
+			$passarray2[0] = 'Disable';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function enableModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Enable/Disable';
+			
+			$passarray2[0] = 'Enable';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'enableModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function disableModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Enable/Disable';
+			
+			$passarray2[0] = 'Disable';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'disableModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function approvedModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Status';
+			
+			$passarray2[0] = 'Approved';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'approvedModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function notApprovedModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Status';
+			
+			$passarray2[0] = 'Not-Approved';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'notApprovedModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function spamModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Status';
+			
+			$passarray2[0] = 'Spam';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'spamModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
+	}
+	
+	protected function pendingModuleContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'Status';
+			
+			$passarray2[0] = 'Pending';
+			
+			$passarray3[0][0] = 'PageID';
+			
+			$passarray4[0][0] = $PageID['PageID'];
+			
+			if ($PageID['ObjectID']) {
+				$passarray3[0][1] = 'ObjectID';
+				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'pendingModuleContent: PageID and DatabaseTableName cannot be NULL!');
+		}
 	}
 	
 	protected function installModule($ModuleType, $ModuleName, $ModuleInstallFile) {

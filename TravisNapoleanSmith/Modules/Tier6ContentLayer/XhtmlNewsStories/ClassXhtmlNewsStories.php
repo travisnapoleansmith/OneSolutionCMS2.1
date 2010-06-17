@@ -763,8 +763,37 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
+	public function updateNewsStoryStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->NewsStoriesTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->NewsStoriesTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->NewsStoriesTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->NewsStoriesTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->NewsStoriesTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->NewsStoriesTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryStatus: PageID cannot be NULL!');
+		}
+	}
+	
 	public function deleteNewsStory(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->NewsStoriesTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStory: PageID cannot be NULL!');
+		}
 	}
 	
 	public function createNewsStoryDate(array $NewsStory) {
@@ -794,8 +823,37 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
+	public function updateNewsStoryDateStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->NewsStoriesDatesTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryDateStatus: PageID cannot be NULL!');
+		}
+	}
+	
 	public function deleteNewsStoryDate(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->NewsStoriesDatesTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStoryDate: PageID cannot be NULL!');
+		}
 	}
 	
 	public function createNewsStoryVersion(array $NewsStory) {
@@ -824,8 +882,37 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		}
 	}
 	
+	public function updateNewsStoryVersionStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->NewsStoriesVersionTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryVersionStatus: PageID cannot be NULL!');
+		}
+	}
+	
 	public function deleteNewsStoryVersion(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->NewsStoriesVersionTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStoryVersion: PageID cannot be NULL!');
+		}
 	}
 	
 	public function createNewsStoryFormOption(array $NewsStory) {
@@ -876,8 +963,38 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 	}
 	
+	public function updateNewsStoryFormOptionStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			$PassID['ObjectID'] = $PageID['ObjectID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->FormOptionTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->FormOptionTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->FormOptionTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->FormOptionTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->FormOptionTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->FormOptionTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryFormOptionStatus: PageID cannot be NULL!');
+		}
+	}
+	
 	public function deleteNewsStoryFormOption(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->FormOptionTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStoryFormOption: PageID cannot be NULL!');
+		}
 	}
 	
 	public function createNewsStoryFormSelect(array $NewsStory) {
@@ -920,8 +1037,38 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		
 	}
 	
+	public function updateNewsStoryFormSelectStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			$PassID['ObjectID'] = $PageID['ObjectID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->FormSelectTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->FormSelectTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->FormSelectTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->FormSelectTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->FormSelectTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->FormSelectTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryFormSelectStatus: PageID cannot be NULL!');
+		}
+	}
+	
 	public function deleteNewsStoryFormSelect(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->FormSelectTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStoryFormSelect: PageID cannot be NULL!');
+		}
 	}
 	
 	public function createNewsStoryLookup(array $NewsStory) {

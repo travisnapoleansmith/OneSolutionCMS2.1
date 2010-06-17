@@ -180,7 +180,7 @@
 		$Tier6Databases->SessionDestroy($sessionname);
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
-		header("Location: $NewsArticleUpdateSelectPage");
+		header("Location: index.php?PageID=$NewsArticleUpdateSelectPage");
 	}
 	
 ?>

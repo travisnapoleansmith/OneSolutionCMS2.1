@@ -154,7 +154,36 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	}
 	
 	public function deletePicture(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'deletePicture: PageID cannot be NULL!');
+		}
+	}
 	
+	public function updatePictureStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->DatabaseTable);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->DatabaseTable);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updatePictureStatus: PageID cannot be NULL!');
+		}
 	}
 }
 ?>

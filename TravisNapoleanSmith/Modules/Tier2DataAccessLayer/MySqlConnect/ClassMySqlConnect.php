@@ -238,14 +238,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									while (isset($rowname[key($rowname)])) {
 										while(current($rowname[key($rowname)])) {
 											$insertrow .= "`";
-											$insertrow .= current($rowname[key($rowname)]);
+											$insertrow .= mysql_real_escape_string(current($rowname[key($rowname)]));
 											$insertrow .= "`";
 											
 											if (is_null(current($rowvalue[key($rowvalue)]))) {
 												$insertrowvalue .= 'NULL';
 											} else {
 												$insertrowvalue .= "'";
-												$insertrowvalue .= current($rowvalue[key($rowvalue)]);
+												$insertrowvalue .= mysql_real_escape_string(current($rowvalue[key($rowvalue)]));
 												$insertrowvalue .= "'";
 											}
 											
@@ -256,7 +256,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												$insertrowvalue .= ' , ';
 											}
 										}
-										
 										$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
 										$result = mysql_query($query);
 										if (!$result) {
@@ -290,14 +289,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									
 									while (isset($rowname[key($rowname)])) {
 										$insertrow .= "`";
-										$insertrow .= current($rowname);
+										$insertrow .= mysql_real_escape_string(current($rowname));
 										$insertrow .= "`";
 										
 										if (is_null(current($rowvalue))) {
 											$insertrowvalue .= 'NULL';
 										} else {
 											$insertrowvalue .= "'";
-											$insertrowvalue .= current($rowvalue);
+											$insertrowvalue .= mysql_real_escape_string(current($rowvalue));
 											$insertrowvalue .= "'";
 										}
 										
@@ -352,6 +351,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										if ($rowvalue != NULL) {
 											if ($rownumbername != NULL) {
 												if ($rownumber != NULL) {
+													$rownumber = mysql_real_escape_string($rownumber);
 													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rowname . '` = "' . $rowvalue . '" WHERE `' . $rownumbername .'` = "' . $rownumber . '" ';
 													$result = mysql_query($query);
 												} else {
@@ -387,9 +387,9 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											reset($valuearray);
 											while (isset($namearray[key($namearray)])) {
 												$string .= '`';
-												$string .= current($namearray);
+												$string .= mysql_real_escape_string(current($namearray));
 												$string .= '` = \'';
-												$string .= current($valuearray);
+												$string .= mysql_real_escape_string(current($valuearray));
 												$string .= '\'';
 												next($namearray);
 												next($valuearray);
@@ -400,7 +400,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE ' . $string . ' ';
 											$result = mysql_query($query);
 										} else {
-											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE `' . current($rownumbername) .'` = "' . current($rownumber) . '" ';
+											$rownumberstring = NULL;
+											$rownumberstring = mysql_real_escape_string(current($rownumber));
+											$rownumbernamestring = NULL;
+											$rownumbernamestring = mysql_real_escape_string(current($rownumbername));
+											$rownamestring = NULL;
+											$rownamestring = mysql_real_escape_string(current($rowname));
+											$rowvaluestring = NULL;
+											$rowvaluestring = mysql_real_escape_string(current($rowvaluestring));
+											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = "' . $rowvaluestring . '" WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
 											$result = mysql_query($query);
 										}
 										next($rowname);

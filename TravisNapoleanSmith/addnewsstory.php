@@ -237,6 +237,20 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
 		
+		$NewsArticleDeleteSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $NewsArticleDeleteSelectPage;
+		$FormOption['PageID'] = $NewsArticleDeleteSelectPage;
+		
+		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		
+		$NewsArticleEnableDisableSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisableSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $NewsArticleEnableDisableSelectPage;
+		$FormOption['PageID'] = $NewsArticleEnableDisableSelectPage;
+		
+		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		
 		$NewsArticleCreatedPage = $Options['XhtmlNewsStories']['news']['NewsArticleCreatedPage']['SettingAttribute'];
 		
 		header("Location: $NewsArticleCreatedPage&NewNewsPageID=$NewPageID");
