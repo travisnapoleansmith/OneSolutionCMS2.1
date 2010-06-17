@@ -264,6 +264,7 @@ class ContentLayer extends LayerModulesAbstract
 									$this->Writer->writeAttribute('class', $StartTagClass);
 								}
 								$this->Writer->writeRaw("\n");
+								
 							}
 							
 							if ($ObjectTypeConfiguration) {
@@ -282,11 +283,14 @@ class ContentLayer extends LayerModulesAbstract
 								$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 								$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
 								$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
+								
 							}
+							
 							
 							if ($EndTag) {
 								$this->Writer->endElement(); // ENDS END TAG
 							}
+							
 						}
 						
 						if ($ObjectType == 'XhtmlHeader') {
@@ -303,7 +307,7 @@ class ContentLayer extends LayerModulesAbstract
 					}
 				}
 				next($this->ContentLayerDatabase);
-	
+				
 				if (!current($this->ContentLayerDatabase)) {
 					$this->Writer->endElement(); // ENDS BODY
 					$this->Writer->endElement(); // ENDS HTML

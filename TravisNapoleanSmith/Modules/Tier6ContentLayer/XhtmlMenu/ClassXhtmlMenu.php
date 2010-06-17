@@ -112,12 +112,13 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	  	$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->NewsID) {
-				if (strstr($this->Div, $this->NewsID) | $this->NewsID == -1) {
+				if (strpos ($this->Div, $this->NewsID) | $this->NewsID == -1) {
 					$this->StartTagClass = str_replace($this->ClassReplace, '', $this->StartTagClass);
 					$this->StartTagClass = str_replace(' ','', $this->StartTagClass);
 					$this->StartTagClass = $this->ClassClass ."$this->StartTagClass";
 				}
 			}
+			
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
 				$this->StartTag = str_replace('>','', $this->StartTag);
@@ -139,7 +140,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->Writer->writeRaw("\n$this->Space ");
 			}
 			
-			/*if($this->Space) {
+			/*DONT USE THIS! if($this->Space) {
 				$this->List .= $this->Space;
 				$this->List .= $this->Space;
 			} else {
@@ -151,8 +152,9 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				$this->ProcessStandardAttribute('Div');
 			}
 			
+			
 			if ($this->NewsID) {
-				if (strstr($this->Div, $this->NewsID) | $this->NewsID == -1) {
+				if (strpos ($this->Div, $this->NewsID) | $this->NewsID == -1) {
 					$this->Div = strip_tags($this->Div);
 				}
 			}
