@@ -65,10 +65,11 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			unset($databaseoptions['Insert']);
 		}
 		
-		$this->ContentTableName = $tablenames['Content'];
-		$this->ContentLayerTablesName = $tablenames['ContentLayerTables'];
-		$this->ContentPrintPreviewTableName = $tablenames['ContentPrintPreview'];
-		$this->ContentLayerModulesTableName = $tablenames['ContentLayerModules'];
+		reset($tablenames);
+		$this->ContentTableName = current($tablenames);
+		$this->ContentLayerTablesName = next($tablenames);
+		$this->ContentPrintPreviewTableName = next($tablenames);
+		$this->ContentLayerModulesTableName = next($tablenames);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -634,5 +635,102 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	public function getOutput() {
 		return $this->ContentOutput;
 	}
+	
+	public function getLastContentPageID() {
+		$this->LayerModule->Connect($this->ContentTableName);
+		$this->LayerModule->pass ($this->ContentTableName, 'setOrderbyname', array('orderbyname' => 'PageID` DESC, `ObjectID` DESC, `RevisionID'));
+		$this->LayerModule->pass ($this->ContentTableName, 'setOrderbytype', array('orderbytype' => 'DESC'));
+		$this->LayerModule->pass ($this->ContentTableName, 'setLimit', array('limit' => 1));
+		$this->LayerModule->pass ($this->ContentTableName, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($this->ContentTableName);
+		
+		$hold = $this->LayerModule->pass ($this->ContentTableName, 'getEntireTable', array());
+		
+		$hold2 = $hold[1]['PageID'];
+		return $hold2;
+	}
+	
+	public function createContent(array $Content) {
+		if ($Content != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'ContainerObjectType';
+			$Keys[3] = 'ContainerObjectTypeName';
+			$Keys[4] = 'ContainerObjectID';
+			$Keys[5] = 'ContainerObjectPrintPreview';
+			$Keys[6] = 'RevisionID';
+			$Keys[7] = 'CurrentVersion';
+			$Keys[8] = 'Empty';
+			$Keys[9] = 'StartTag';
+			$Keys[10] = 'EndTag';
+			$Keys[11] = 'StartTagID';
+			$Keys[12] = 'StartTagStyle';
+			$Keys[13] = 'StartTagClass';
+			$Keys[14] = 'Heading';
+			$Keys[15] = 'HeadingStartTag';
+			$Keys[16] = 'HeadingEndTag';
+			$Keys[17] = 'HeadingStartTagID';
+			$Keys[18] = 'HeadingStartTagStyle';
+			$Keys[19] = 'HeadingStartTagClass';
+			$Keys[20] = 'Content';
+			$Keys[21] = 'ContentStartTag';
+			$Keys[22] = 'ContentEndTag';
+			$Keys[23] = 'ContentStartTagID';
+			$Keys[24] = 'ContentStartTagStyle';
+			$Keys[25] = 'ContentStartTagClass';
+			$Keys[26] = 'ContentPTagID';
+			$Keys[27] = 'ContentPTagStyle';
+			$Keys[28] = 'ContentPTagClass';
+			$Keys[29] = 'Enable/Disable';
+			$Keys[30] = 'Status';
+			
+			$this->addModuleContent($Keys, $Content, $this->ContentTableName);
+		} else {
+			array_push($this->ErrorMessage,'createContent: Content cannot be NULL!');
+		}
+	}
+	
+	public function updateContent(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->ContentTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateContent: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateContentStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->ContentTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->ContentTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->ContentTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->ContentTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->ContentTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->ContentTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateContentStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteContent(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->ContentTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteContent: PageID cannot be NULL!');
+		}
+	}
+	
 }
 ?>

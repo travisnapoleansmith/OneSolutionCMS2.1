@@ -5,6 +5,7 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	protected $idnumber;
 	protected $orderbyname;
 	protected $orderbytype;
+	protected $limit;
 	protected $databasename;
 	protected $user;
 	protected $password;
@@ -55,6 +56,14 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	
 	public function getOrderbytype () {
 		return $this->orderbytype;
+	}
+	
+	public function setLimit ($limit) {
+		$this->limit = $limit;
+	}
+	
+	public function getLimit () {
+		return $this->limit;
 	}
 	
 	public function setDatabasename ($databasename){

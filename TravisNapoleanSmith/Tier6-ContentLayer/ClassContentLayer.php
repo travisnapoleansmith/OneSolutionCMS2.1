@@ -614,6 +614,139 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
+	
+	public function createContentVersion(array $Content, $DatabaseTableName) {
+		if ($Content != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'RevisionID';
+			$Keys[2] = 'CurrentVersion';
+			$Keys[3] = 'UserAccessGroup';
+			$Keys[4] = 'Owner';
+			$Keys[5] = 'LastChangeUser';
+			$Keys[6] = 'CreationDateTime';
+			$Keys[7] = 'LastChangeDateTime';
+			
+			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'createContentVersion: Content Version and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function updateContentVersion(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$this->updateModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateContentVersion: PageID and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function updateContentVersionStatus(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $DatabaseTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $DatabaseTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateContentVersionStatus: PageID and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function deleteContentVersion(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$this->deleteModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteContentVersion: PageID and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function createContent(array $Content, $DatabaseTableName) {
+		if ($Content != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'ObjectType';
+			$Keys[3] = 'ObjectTypeName';
+			$Keys[4] = 'ContainerObjectID';
+			$Keys[5] = 'RevisionID';
+			$Keys[6] = 'CurrentVersion';
+			$Keys[7] = 'Authenticate';
+			$Keys[8] = 'StartTag';
+			$Keys[9] = 'EndTag';
+			$Keys[10] = 'StartTagID';
+			$Keys[11] = 'StartTagStyle';
+			$Keys[12] = 'StartTagClass';
+			$Keys[13] = 'Enable/Disable';
+			$Keys[14] = 'Status';
+			
+			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'createContent: Content Version and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function updateContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$this->updateModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateContent: PageID and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function updateContentStatus(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $DatabaseTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $DatabaseTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateContentStatus: PageID and Database Table Name cannot be NULL!');
+		}
+	}
+	
+	public function deleteContent(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$this->deleteModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteContent: PageID and Database Table Name cannot be NULL!');
+		}
+	}
 		
 }
 

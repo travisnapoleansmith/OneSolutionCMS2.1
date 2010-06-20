@@ -853,6 +853,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			} else {
 				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
 			}
+			
+			if ($this->limit) {
+				$this->rowquery .= ' LIMIT ';
+				$this->rowquery .= $this->limit;
+			}
 			$this->rowresult = mysql_query($this->rowquery);
 			
 			if ($this->rowresult) {
@@ -876,6 +881,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		} else {
 			$this->tablequery = 'SELECT * FROM ' . $this->databasetable . ' ';
 		}
+		if ($this->limit) {
+			$this->tablequery .= ' LIMIT ';
+			$this->tablequery .= $this->limit;
+		}
+		
 		$this->tableresult = mysql_query($this->tablequery);
 		
 		if ($this->tableresult) {
@@ -914,7 +924,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			} else {
 				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
 			}
-
+			
+			if ($this->limit) {
+				$this->rowquery .= ' LIMIT ';
+				$this->rowquery .= $this->limit;
+			}
 			$this->rowresult = mysql_query($this->rowquery);
 			if ($this->rowresult) {
 				$this->database = mysql_fetch_assoc($this->rowresult);

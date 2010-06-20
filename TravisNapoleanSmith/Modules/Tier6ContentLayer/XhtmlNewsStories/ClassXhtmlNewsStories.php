@@ -1072,15 +1072,55 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	}
 	
 	public function createNewsStoryLookup(array $NewsStory) {
-		
+		if ($NewsStory != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'NewsStoryPageID';
+			$Keys[3] = 'NewsStoryDay';
+			$Keys[4] = 'NewsStoryMonth';
+			$Keys[5] = 'NewsStoryYear';
+			$Keys[6] = 'Enable/Disable';
+			$Keys[7] = 'Status';
+			
+			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesLookupTableName);
+		} else {
+			array_push($this->ErrorMessage,'createNewsStoryLookup: News Story Version cannot be NULL!');
+		}
 	}
 	
 	public function updateNewsStoryLookup(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			$PassID['ObjectID'] = $PageID['ObjectID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->NewsStoriesLookupTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryLookup: PageID cannot be NULL!');
+		}
 	}
 	
 	public function deleteNewsStoryLookup(array $PageID) {
-		
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->NewsStoriesLookupTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteNewsStoryLookup: PageID cannot be NULL!');
+		}
 	}
 }
 ?>

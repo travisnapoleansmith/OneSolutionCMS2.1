@@ -191,5 +191,74 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	public function getOutput() {
 		return $this->List;
 	}
+	
+	public function createMenu(array $Menu) {
+		if ($Menu != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'StartTag';
+			$Keys[3] = 'EndTag';
+			$Keys[4] = 'StartTagID';
+			$Keys[5] = 'StartTagStyle';
+			$Keys[6] = 'StartTagClass';
+			$Keys[7] = 'Div';
+			$Keys[8] = 'DivID';
+			$Keys[9] = 'DivStyle';
+			$Keys[10] = 'DivClass';
+			$Keys[11] = 'Div1';
+			$Keys[12] = 'Div1Title';
+			$Keys[13] = 'Div1ID';
+			$Keys[14] = 'Div1Style';
+			$Keys[15] = 'Div1Class';
+			$Keys[16] = 'Enable/Disable';
+			$Keys[17] = 'Status';
+			
+			$this->addModuleContent($Keys, $Menu, $this->DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'createMenu: Menu cannot be NULL!');
+		}
+	}
+	
+	public function updateMenu(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateMenu: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateMenuStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->DatabaseTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->DatabaseTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->DatabaseTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->DatabaseTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->DatabaseTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->DatabaseTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateMenuStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteMenu(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteMenu: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

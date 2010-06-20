@@ -578,5 +578,93 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 	}
 	
+	public function createHeader(array $Header) {
+		if ($Header != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'PageTitle';
+			$Keys[2] = 'PageIcon';
+			$Keys[3] = 'Rss2.0';
+			$Keys[4] = 'Rss0.92';
+			$Keys[5] = 'Atom0.3';
+			$Keys[6] = 'BaseHref';
+			$Keys[7] = 'MetaName1';
+			$Keys[8] = 'MetaName2';
+			$Keys[9] = 'MetaName3';
+			$Keys[10] = 'MetaName4';
+			$Keys[11] = 'MetaName5';
+			$Keys[12] = 'MetaNameContent1';
+			$Keys[13] = 'MetaNameContent2';
+			$Keys[14] = 'MetaNameContent3';
+			$Keys[15] = 'MetaNameContent4';
+			$Keys[16] = 'MetaNameContent5';
+			$Keys[17] = 'HttpEquivType1';
+			$Keys[18] = 'HttpEquivType2';
+			$Keys[19] = 'HttpEquivType3';
+			$Keys[20] = 'HttpEquivType4';
+			$Keys[21] = 'HttpEquivType5';
+			$Keys[22] = 'HttpEquivTypeContent1';
+			$Keys[23] = 'HttpEquivTypeContent2';
+			$Keys[24] = 'HttpEquivTypeContent3';
+			$Keys[25] = 'HttpEquivTypeContent4';
+			$Keys[26] = 'HttpEquivTypeContent5';
+			$Keys[27] = 'LinkCharset1';
+			$Keys[28] = 'LinkCharset2';
+			$Keys[29] = 'LinkCharset3';
+			$Keys[30] = 'LinkCharset4';
+			$Keys[31] = 'LinkCharset5';
+			$Keys[32] = 'LinkHref1';
+			$Keys[33] = 'LinkHref2';
+			$Keys[34] = 'LinkHref3';
+			$Keys[35] = 'LinkHref4';
+			$Keys[36] = 'LinkHref5';
+			$Keys[37] = 'LinkHreflang1';
+			$Keys[38] = 'LinkHreflang2';
+			$Keys[39] = 'LinkHreflang3';
+			$Keys[40] = 'LinkHreflang4';
+			$Keys[41] = 'LinkHreflang5';
+			$Keys[42] = 'LinkMedia1';
+			$Keys[43] = 'LinkMedia2';
+			$Keys[44] = 'LinkMedia3';
+			$Keys[45] = 'LinkMedia4';
+			$Keys[46] = 'LinkMedia5';
+			$Keys[47] = 'LinkRel1';
+			$Keys[48] = 'LinkRel2';
+			$Keys[49] = 'LinkRel3';
+			$Keys[50] = 'LinkRel4';
+			$Keys[51] = 'LinkRel5';
+			$Keys[52] = 'LinkRev1';
+			$Keys[53] = 'LinkRev2';
+			$Keys[54] = 'LinkRev3';
+			$Keys[55] = 'LinkRev4';
+			$Keys[56] = 'LinkRev5';
+			$Keys[57] = 'LinkType1';
+			$Keys[58] = 'LinkType2';
+			$Keys[59] = 'LinkType3';
+			$Keys[60] = 'LinkType4';
+			$Keys[61] = 'LinkType5';
+			
+			$this->addModuleContent($Keys, $Header, current($this->TableNames));
+		} else {
+			array_push($this->ErrorMessage,'createHeader: Header cannot be NULL!');
+		}
+	}
+	
+	public function updateHeader(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, current($this->TableNames));
+		} else {
+			array_push($this->ErrorMessage,'updateHeader: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteHeader(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, current($this->TableNames));
+		} else {
+			array_push($this->ErrorMessage,'deleteHeader: PageID cannot be NULL!');
+		}
+	}
+	
 }
 ?>
