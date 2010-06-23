@@ -28,6 +28,15 @@
 		if ($hold) {
 			
 			$DateTime = date('Y-m-d H:i:s');
+			$FeedDateTime = date('D, d m Y H:i:s T');
+			$EmbeddedLink = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getTag', array('Tag' => 'a', 'Content' => $hold['FilteredInput']['Content']));
+			$EmbeddedLink = $EmbeddedLink[0][0];
+			$StrippedHeading = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Heading']));
+			$StrippedHeading = $StrippedHeading['Content'];
+			$StrippedContent = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Content']));
+			$StrippedContent = $StrippedContent['Content'];
+			
+			$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
 			
 			$NewsStory = array();
 			
@@ -160,6 +169,24 @@
 			$NewsVersion['CreationDateTime'] = $CreationDateTime;
 			$NewsVersion['LastChangeDateTime'] = $DateTime;
 			
+			$NewsFeed = array();
+			$NewsFeed['XMLItem'] = $LastNewsFeedItem;
+			$NewsFeed['FeedItemTitle'] = htmlspecialchars_decode($StrippedHeading, ENT_QUOTES);
+			$NewsFeed['FeedItemLink'] = $GLOBALS['sitelink'];
+			$NewsFeed['FeedItemDescription'] = htmlspecialchars_decode($StrippedContent, ENT_QUOTES);
+			$NewsFeed['FeedItemAuthor'] = $GLOBALS['author'];
+			$NewsFeed['FeedItemCategory'] = htmlspecialchars_decode($hold['FilteredInput']['Category'], ENT_QUOTES);
+			$NewsFeed['FeedItemComments'] = NULL;
+			$NewsFeed['FeedItemEnclosure'] = 'false';
+			$NewsFeed['FeedItemEnclosureLength'] = NULL;
+			$NewsFeed['FeedItemEnclosureType'] = NULL;
+			$NewsFeed['FeedItemEnclosureUrl'] = NULL;
+			$NewsFeed['FeedItemGuid'] = $EmbeddedLink;
+			$NewsFeed['FeedItemPubDate'] = $FeedDateTime;
+			$NewsFeed['FeedItemSource'] = NULL;
+			$NewsFeed['Enable/Disable'] = $_POST['EnableDisable'];
+			$NewsFeed['Status'] = $_POST['Status'];
+			
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStory', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryVersion', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryDate', array('PageID' => $PageID));
@@ -169,6 +196,8 @@
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
 			$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
+			
+			$Tier6Databases->ModulePass('XmlFeed', 'feed', 'updateStoryFeed', $NewsFeed);
 			
 			$Tier6Databases->SessionDestroy($sessionname);
 			$Options = $Tier6Databases->getLayerModuleSetting();

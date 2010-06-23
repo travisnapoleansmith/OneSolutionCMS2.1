@@ -440,15 +440,42 @@ abstract class LayerModulesAbstract
 			$passarray3 = array();
 			$passarray4 = array();
 			
-			$passarray1[0] = 'CurrentVersion';
+			if ($PageID['PageID']) {
+				$passarray1[0] = 'CurrentVersion';
+				$passarray2[0] = 'false';
+			} 
 			
-			$passarray2[0] = 'false';
+			if ($PageID['XMLItem']) {
+				$passarray1[0][0] = 'XMLItem';
+				$passarray2[0][0] = $PageID['XMLItem'];
+				
+				if ($PageID['FeedItemTitle']) {
+					$passarray1[0] = 'FeedItemTitle';
+					$passarray2[0] = $PageID['FeedItemTitle'];
+				}
+				
+				if ($PageID['FeedItemDescription']) {
+					$passarray1[1] = 'FeedItemDescription';
+					$passarray2[1] = $PageID['FeedItemDescription'];
+				}
+			}
 			
-			$passarray3[0][0] = 'PageID';
-			$passarray3[0][1] = 'CurrentVersion';
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				$passarray4[0][0] = $PageID['PageID'];
+				
+				$passarray3[0][1] = 'CurrentVersion';
+				$passarray4[0][1] = 'true';
+				
+			} 
 			
-			$passarray4[0][0] = $PageID['PageID'];
-			$passarray4[0][1] = 'true';
+			if ($PageID['XMLItem']) {
+				$passarray3[0] = 'XMLItem';
+				$passarray4[0] = $PageID['XMLItem'];
+				
+				$passarray3[1] = 'XMLItem';
+				$passarray4[1] = $PageID['XMLItem'];
+			}
 			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;

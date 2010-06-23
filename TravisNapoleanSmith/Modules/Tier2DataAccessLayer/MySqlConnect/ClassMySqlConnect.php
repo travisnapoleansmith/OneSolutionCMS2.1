@@ -407,7 +407,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$rownamestring = NULL;
 											$rownamestring = mysql_real_escape_string(current($rowname));
 											$rowvaluestring = NULL;
-											$rowvaluestring = mysql_real_escape_string(current($rowvaluestring));
+											$rowvaluestring = mysql_real_escape_string(current($rowvalue));
+											
 											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = "' . $rowvaluestring . '" WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
 											$result = mysql_query($query);
 										}
@@ -892,6 +893,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$this->rownumber = mysql_num_rows($this->tableresult);
 			//mysql_data_seek($this->tableresult, 0);
 		}
+				
 		$this->rownumber = $this->rownumber + 0;
 		$this->i = 1;
 		$this->BuildingEntireTable();
@@ -899,6 +901,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	
 	protected function BuildingEntireTable(){
 		$i = 1;
+		if ($this->entiretable) {
+			$this->entiretable = NULL;
+			$this->entiretable = array();
+		}
 		while ($i <= $this->rownumber){
 			$this->entiretable[$i] = mysql_fetch_array($this->tableresult, MYSQL_ASSOC);
 			$i++;

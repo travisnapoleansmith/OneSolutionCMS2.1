@@ -8,6 +8,16 @@
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		
 		$DateTime = date('Y-m-d H:i:s');
+		$FeedDateTime = date('D, d m Y H:i:s T');
+		$EmbeddedLink = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getTag', array('Tag' => 'a', 'Content' => $hold['FilteredInput']['Content']));
+		$EmbeddedLink = $EmbeddedLink[0][0];
+		$StrippedHeading = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Heading']));
+		$StrippedHeading = $StrippedHeading['Content'];
+		$StrippedContent = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Content']));
+		$StrippedContent = $StrippedContent['Content'];
+		
+		$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
+		$NewNewsFeedItem = ++$LastNewsFeedItem;
 		
 		$LastPageID = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getLastNewsPageID', array());
 		$NewPageID = ++$LastPageID;
@@ -136,6 +146,7 @@
 		$NewsImage['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsImage['Status'] = $_POST['Status'];
 		
+		$NewsVersion = array();
 		$NewsVersion['PageID'] = $NewPageID;
 		$NewsVersion['RevisionID'] = 0;
 		$NewsVersion['CurrentVersion'] = 'true';
@@ -144,6 +155,24 @@
 		$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];
 		$NewsVersion['CreationDateTime'] = $DateTime;
 		$NewsVersion['LastChangeDateTime'] = $DateTime;
+		
+		$NewsFeed = array();
+		$NewsFeed['XMLItem'] = $NewNewsFeedItem;
+		$NewsFeed['FeedItemTitle'] = htmlspecialchars_decode($StrippedHeading, ENT_QUOTES);
+		$NewsFeed['FeedItemLink'] = $GLOBALS['sitelink'];
+		$NewsFeed['FeedItemDescription'] = htmlspecialchars_decode($StrippedContent, ENT_QUOTES);
+		$NewsFeed['FeedItemAuthor'] = $GLOBALS['author'];
+		$NewsFeed['FeedItemCategory'] = htmlspecialchars_decode($hold['FilteredInput']['Category'], ENT_QUOTES);
+		$NewsFeed['FeedItemComments'] = NULL;
+		$NewsFeed['FeedItemEnclosure'] = 'false';
+		$NewsFeed['FeedItemEnclosureLength'] = NULL;
+		$NewsFeed['FeedItemEnclosureType'] = NULL;
+		$NewsFeed['FeedItemEnclosureUrl'] = NULL;
+		$NewsFeed['FeedItemGuid'] = $EmbeddedLink;
+		$NewsFeed['FeedItemPubDate'] = $FeedDateTime;
+		$NewsFeed['FeedItemSource'] = NULL;
+		$NewsFeed['Enable/Disable'] = $_POST['EnableDisable'];
+		$NewsFeed['Status'] = $_POST['Status'];
 		
 		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
 		$FormSelect = array();
@@ -251,9 +280,12 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
 		
+		$Tier6Databases->ModulePass('XmlFeed', 'feed', 'createStoryFeed', $NewsFeed);
+		
 		$NewsArticleCreatedPage = $Options['XhtmlNewsStories']['news']['NewsArticleCreatedPage']['SettingAttribute'];
 		
 		header("Location: $NewsArticleCreatedPage&NewNewsPageID=$NewPageID");
+		
 	}
 	
 ?>

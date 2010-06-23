@@ -73,6 +73,23 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		return $this->HttpUserAgent;
 	}
 	
+	public function getStripTagsContent($Content) {
+		if (is_array($Content)) {
+			reset($Content);
+			while (current($Content)) {
+				$Content[key($Content)] = $this->getStripTagsContent(current($Content));
+				next($Content);
+			}
+			return $Content;
+		} else {
+			return $this->StripTagsContent($Content);
+		}
+	}
+	
+	public function getTag($Content) {
+		return $this->SearchContentForTag($Content['Tag'], $Content['Content']);
+	}
+	
 	/*protected function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
@@ -110,47 +127,78 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	}
 	*/
 	
-	protected function CreateWordWrap($wordwrapstring) {
+	protected function CreateWordWrap($WordWrapString) {
 		$args = func_get_args();
 		if ($args[1]) {
-			$wordspacing = $args[1];
+			$WordSpacing = $args[1];
 		} else {
-			$wordspacing = "\t";
+			$WordSpacing = "\t";
 		}
-		if (stristr($wordwrapstring, '<a href')) {
+		if (stristr($WordWrapString, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
-			$firstpos = strpos($wordwrapstring, '<a href');
-			$lastpos = strpos($wordwrapstring, '</a>');
-			$lastpos = $lastpos + 3;
+			$FirstPos = strpos($WordWrapString, '<a href');
+			$LastPos = strpos($WordWrapString, '</a>');
+			$LastPos = $LastPos + 3;
 			
 			// Split a string into an array - character by character
-			$newwordwrapstring = Array();
+			$NewWordWrapString = Array();
 			$j = 0;
-			$end = strlen($wordwrapstring);
-			while ($j <= $end) {
-				array_push ($newwordwrapstring, $wordwrapstring[$j]);
+			$End = strlen($WordWrapString);
+			while ($j <= $End) {
+				array_push ($NewWordWrapString, $WordWrapString[$j]);
 				$j++;
 			}
 			
-			$j = $firstpos;
-			while ($j <= $lastpos) {
-				$endstring .= $newwordwrapstring[$j];
+			$j = $FirstPos;
+			while ($j <= $LastPos) {
+				$EndString .= $NewWordWrapString[$j];
 				$j++;
 			}
 			
-			$returnstring = $endstring;
-			$returnstring = str_replace (' ', '<SPACE>', $returnstring);
-			$wordwrapstring = str_replace ($endstring, $returnstring, $wordwrapstring);
+			$ReturnString = $EndString;
+			$ReturnString = str_replace (' ', '<SPACE>', $ReturnString);
+			$WordWrapString = str_replace ($EndString, $ReturnString, $WordWrapString);
 			
-			// END STRIP AHREF TAG FOR WORDWRAP
-			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n$wordspacing");
-			$wordwrapstring = str_replace ($returnstring, $endstring, $wordwrapstring);
+			// End STRIP AHREF TAG FOR WORDWRAP
+			$WordWrapString = wordwrap($WordWrapString, 85, "\n$WordSpacing");
+			$WordWrapString = str_replace ($ReturnString, $EndString, $WordWrapString);
 			
 		} else {
-			$wordwrapstring = wordwrap($wordwrapstring, 85, "\n$wordspacing");
+			$WordWrapString = wordwrap($WordWrapString, 85, "\n$WordSpacing");
 		}
 		
-		return $wordwrapstring;
+		return $WordWrapString;
+	}
+	
+	protected function StripTagsContent($Content) {
+		if (!is_array($Content)) {
+			if (!is_null($Content)) {
+				$Pattern = "/(<(.*?)>(.*?)<\/(.*?)>)/";
+				$StrippedContent = preg_split($Pattern, $Content);
+				$StrippedContent = implode($StrippedContent);
+				$StrippedContent = strip_tags($StrippedContent);
+			
+				return $StrippedContent;
+			} else {
+				array_push($this->ErrorMessage,'StripTagsContent: Content cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'StripTagsContent: Content cannot be an array!');
+		}
+	}
+	
+	protected function SearchContentForTag($Tag, $Content) {
+		if (!is_array($Content) && !is_array($Tag)) {
+			if (!is_null($Content) && !is_null($Tag)) {
+				$Pattern = "/(<$Tag(.*?)>(.*?)<\/$Tag>)/";
+				preg_match_all($Pattern, $Content, $SearchContent);
+				return $SearchContent;
+			} else {
+				array_push($this->ErrorMessage,'SearchContentForTag: Tag and Content cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'SearchContentForTag: Tag and Content cannot be an array!');
+		}
 	}
 	
 	protected function CheckUserString() {

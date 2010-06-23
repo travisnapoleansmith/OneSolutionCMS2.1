@@ -630,5 +630,66 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$i--;
 		}
 	}
+	
+	public function getLastStoryFeedItem() {
+		if (empty($this->XMLFeedTables)) {
+			$this->FetchDatabase(NULL);
+		}
+		
+		$KeyName = $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName'];
+		$this->LayerModule->Connect($KeyName);
+		$this->LayerModule->pass ($KeyName, 'setOrderbyname', array('orderbyname' => 'XMLItem'));
+		$this->LayerModule->pass ($KeyName, 'setOrderbytype', array('orderbytype' => 'DESC'));
+		$this->LayerModule->pass ($KeyName, 'setLimit', array('limit' => 1));
+		$this->LayerModule->pass ($KeyName, 'setEntireTable', array());
+		
+		$this->LayerModule->Disconnect($KeyName);
+		
+		$hold = $this->LayerModule->pass ($KeyName, 'getEntireTable', array());
+		$hold2 = $hold[1]['XMLItem'];
+		return $hold2;
+	}
+	
+	public function createStoryFeed(array $Story) {
+		if ($Story != NULL) {
+			$Keys = array();
+			$Keys[0] = 'XMLItem';
+			$Keys[1] = 'FeedItemTitle';
+			$Keys[2] = 'FeedItemLink';
+			$Keys[3] = 'FeedItemDescription';
+			$Keys[4] = 'FeedItemAuthor';
+			$Keys[5] = 'FeedItemCategory';
+			$Keys[6] = 'FeedItemComments';
+			$Keys[7] = 'FeedItemEnclosure';
+			$Keys[8] = 'FeedItemEnclosureLength';
+			$Keys[9] = 'FeedItemEnclosureType';
+			$Keys[10] = 'FeedItemEnclosureUrl';
+			$Keys[11] = 'FeedItemGuid';
+			$Keys[12] = 'FeedItemPubDate';
+			$Keys[13] = 'FeedItemSource';
+			$Keys[14] = 'Enable/Disable';
+			$Keys[15] = 'Status';
+			
+			$this->addModuleContent($Keys, $Story, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+		} else {
+			array_push($this->ErrorMessage,'createStoryFeed: Header cannot be NULL!');
+		}
+	}
+	
+	public function updateStoryFeed(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+		} else {
+			array_push($this->ErrorMessage,'updateStoryFeed: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteStoryFeed(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+		} else {
+			array_push($this->ErrorMessage,'deleteStoryFeed: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

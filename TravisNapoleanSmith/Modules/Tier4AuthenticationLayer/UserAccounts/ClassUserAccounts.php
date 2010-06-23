@@ -232,7 +232,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$passarray1[12] = 'Enable/Disable';
 			
 			$passarray2[0] = $username;
-			$passarray2[1] = '';
+			$passarray2[1] = NULL;
 			$passarray2[2] = $this->NewUserSalt;
 			$passarray2[3] = $emailaddress;
 			$passarray2[4] = 500;
