@@ -8,7 +8,7 @@
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		
 		$DateTime = date('Y-m-d H:i:s');
-		$FeedDateTime = date('D, d m Y H:i:s T');
+		$FeedDateTime = date('D, d M Y H:i:s T');
 		$EmbeddedLink = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getTag', array('Tag' => 'a', 'Content' => $hold['FilteredInput']['Content']));
 		$EmbeddedLink = $EmbeddedLink[0][0];
 		$StrippedHeading = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Heading']));
@@ -150,6 +150,7 @@
 		$NewsVersion['PageID'] = $NewPageID;
 		$NewsVersion['RevisionID'] = 0;
 		$NewsVersion['CurrentVersion'] = 'true';
+		$NewsVersion['XMLItem'] = $NewNewsFeedItem;
 		$NewsVersion['UserAccessGroup'] = 'Guest';
 		$NewsVersion['Owner'] = $_COOKIE['UserName'];
 		$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];
@@ -203,9 +204,8 @@
 		$FormSelect['Enable/Disable'] = 'Enable';
 		$FormSelect['Status'] = 'Approved';
 		
-		$FormOptionText = $NewPageID;
-		$FormOptionText .= ' - ';
-		$FormOptionText .= $_POST['NewsMonth'];
+		$FormOptionValue = $NewPageID;
+		$FormOptionText = $_POST['NewsMonth'];
 		$FormOptionText .= ' ';
 		$FormOptionText .= $_POST['NewsDay'];
 		$FormOptionText .= ', ';
@@ -220,6 +220,10 @@
 			$FormOptionText .= $temp[1];
 		} else {
 			$FormOptionText .= $temp[0];
+			if ($temp[1]) {
+				$FormOptionText .= ' ';
+				$FormOptionText .= $temp[1];
+			}
 		}
 		unset($temp);
 		
@@ -242,7 +246,7 @@
 		$FormOption['FormOptionLabelObjectID'] = NULL;
 		$FormOption['FormOptionLabelRevisionID'] = NULL;
 		$FormOption['FormOptionSelected'] = NULL;
-		$FormOption['FormOptionValue'] = NULL;
+		$FormOption['FormOptionValue'] = $FormOptionValue;
 		$FormOption['FormOptionValueDynamic'] = NULL;
 		$FormOption['FormOptionValueTableName'] = NULL;
 		$FormOption['FormOptionValueField'] = NULL;

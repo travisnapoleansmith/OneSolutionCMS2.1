@@ -502,9 +502,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Disable';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -533,12 +539,15 @@ abstract class LayerModulesAbstract
 			$passarray4 = array();
 			
 			$passarray1[0] = 'Enable/Disable';
-			
 			$passarray2[0] = 'Enable';
-			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -570,9 +579,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Disable';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -604,9 +619,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Approved';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -638,9 +659,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Not-Approved';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -672,9 +699,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Spam';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
@@ -706,9 +739,15 @@ abstract class LayerModulesAbstract
 			
 			$passarray2[0] = 'Pending';
 			
-			$passarray3[0][0] = 'PageID';
-			
-			$passarray4[0][0] = $PageID['PageID'];
+			if ($PageID['PageID']) {
+				$passarray3[0][0] = 'PageID';
+				
+				$passarray4[0][0] = $PageID['PageID'];
+			} else if ($PageID['XMLItem']) {
+				$passarray3[0][0] = 'XMLItem';
+				
+				$passarray4[0][0] = $PageID['XMLItem'];
+			}
 			
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';

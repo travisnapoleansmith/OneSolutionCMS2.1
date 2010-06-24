@@ -3,6 +3,9 @@
 	$PageName = 'index.php?PageID=';
 	$PageName .= $_POST['AddNewsPage'];
 	
+	//print_r($_POST);
+	//print_r($PageName);
+	
 	$hold = $Tier6Databases->FormSubmitValidate('AddNewsPage', $PageName);
 	$_POST['NewsDay'] = str_replace(' ','', $_POST['NewsDay']); 
 	$_POST['NewsMonth'] = str_replace(' ','', $_POST['NewsMonth']); 
@@ -12,6 +15,21 @@
 	$hold['FilteredInput']['NewsYear'] = $_POST['NewsYear'];
 	
 	if ($hold) {
+		$sessionname = $Tier6Databases->SessionStart('CreateNewsPage');
+		
+		$DateTime = date('Y-m-d H:i:s');
+		$SiteName = $GLOBALS['sitename'];
+		
+		$LastPageID = $Tier6Databases->ModulePass('XhtmlContent', 'content', 'getLastContentPageID', array());
+		$NewPageID = ++$LastPageID;
+		
+		$NewPage = '../index.php?PageID=';
+		$NewPage .= $NewPageID;
+		
+		$_SESSION['POST']['Error']['Link'] = '<a href=\'';
+		$_SESSION['POST']['Error']['Link'] .= $NewPage;
+		$_SESSION['POST']['Error']['Link'] .= '\'>New News Page</a>';
+		
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		
 		if ($_POST['Heading'] == 'Null' | $_POST['Heading'] == 'NULL') {
@@ -44,12 +62,6 @@
 			$hold['FilteredInput']['BottomText'] = NULL;
 		}
 		
-		print_r($_POST);
-		$DateTime = date('Y-m-d H:i:s');
-		$SiteName = $GLOBALS['sitename'];
-		
-		$LastPageID = $Tier6Databases->ModulePass('XhtmlContent', 'content', 'getLastContentPageID', array());
-		$NewPageID = ++$LastPageID;
 		$Content = array();
 		
 		$PageID = array();
@@ -277,6 +289,7 @@
 		$ContentLayerVersion['PageID'] = $NewPageID;
 		$ContentLayerVersion['RevisionID'] = 0;
 		$ContentLayerVersion['CurrentVersion'] = 'true';
+		$ContentLayerVersion['ContentPageType'] = 'NewsStoryPage';
 		$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 		$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
 		$ContentLayerVersion['LastChangeUser'] = $_COOKIE['UserName'];
@@ -577,13 +590,15 @@
 		$FormOption['Enable/Disable'] = 'Enable';
 		$FormOption['Status'] = 'Approved';
 		*/
-		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
-		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryLookup', $NewsStoryLookup);
-		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
-		$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
-		$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
-
+		
+		
+		//$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
+		//$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
+		//$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryLookup', $NewsStoryLookup);
+		//$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
+		//$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
+		//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
+		
 
 		//$NewsArticleDeleteSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
 		//$FormSelect['PageID'] = $NewsArticleDeleteSelectPage;
@@ -599,9 +614,12 @@
 		//$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
 		//$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
 		
-		//$NewsArticleCreatedPage = $Options['XhtmlNewsStories']['news']['NewsArticleCreatedPage']['SettingAttribute'];
+		$NewsPageCreatedPage = $Options['XhtmlNewsStories']['news']['NewsPageCreatedPage']['SettingAttribute'];
 		
 		//header("Location: $NewsArticleCreatedPage&NewNewsPageID=$NewPageID");
+		
+		header("Location: $NewsPageCreatedPage&SessionID=$sessionname");
+		exit;
 		
 	}
 	

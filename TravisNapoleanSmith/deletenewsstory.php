@@ -10,12 +10,15 @@
 	$PageID['PageID'] = $_POST['PageID'];
 	
 	$Options = $Tier6Databases->getLayerModuleSetting();
-	
+	$hold = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getNewsStoryVersionRow', array('PageID' => $PageID));
+	$XMLFeedPageID = array();
+	$XMLFeedPageID['XMLItem'] = $hold[0]['XMLItem'];
 	if (!is_null($PageID)) {
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStory', array('PageID' => $PageID));
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryVersion', array('PageID' => $PageID));
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryDate', array('PageID' => $PageID));
 		$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'deletePicture', array('PageID' => $PageID));
+		$Tier6Databases->ModulePass('XmlFeed', 'feed', 'deleteStoryFeed', $XMLFeedPageID);
 		
 		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
 		$NewsPageID = array();

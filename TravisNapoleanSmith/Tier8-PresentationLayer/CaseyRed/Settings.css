@@ -14,6 +14,24 @@ img#background {
 	z-index: -5;
 }
 
+.Picture1 {
+	position: relative;
+	width: 300px;
+	left: 0px;
+	/*float: clear;*/
+	/*float: left;*/
+}
+
+.Picture2 {
+	position: relative;
+	width: 300px;
+	/*left: 300px;*/
+	/*top: -265px;*/
+	float: right;
+	float: clear;
+	/*margin-bottom: -265px;*/
+}
+
 .YouTube {
 	position: relative;
 	left: 40px;

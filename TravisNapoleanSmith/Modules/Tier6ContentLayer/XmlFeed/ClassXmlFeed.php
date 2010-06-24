@@ -651,6 +651,10 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	}
 	
 	public function createStoryFeed(array $Story) {
+		if (empty($this->XMLFeedTables)) {
+			$this->FetchDatabase(NULL);
+		}
+		
 		if ($Story != NULL) {
 			$Keys = array();
 			$Keys[0] = 'XMLItem';
@@ -677,6 +681,10 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	}
 	
 	public function updateStoryFeed(array $PageID) {
+		if (empty($this->XMLFeedTables)) {
+			$this->FetchDatabase(NULL);
+		}
+		
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
 		} else {
@@ -685,10 +693,43 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	}
 	
 	public function deleteStoryFeed(array $PageID) {
+		if (empty($this->XMLFeedTables)) {
+			$this->FetchDatabase(NULL);
+		}
+		
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
 		} else {
 			array_push($this->ErrorMessage,'deleteStoryFeed: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateStoryFeedStatus(array $PageID) {
+		if (empty($this->XMLFeedTables)) {
+			$this->FetchDatabase(NULL);
+		}
+		
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['XMLItem'] = $PageID['XMLItem'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryDateStatus: PageID cannot be NULL!');
 		}
 	}
 }

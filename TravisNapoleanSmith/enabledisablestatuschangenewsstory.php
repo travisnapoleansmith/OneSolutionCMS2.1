@@ -9,6 +9,13 @@
 	
 	$PageID = array();
 	$PageID['PageID'] = $_POST['PageID'];
+	
+	$hold = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getNewsStoryVersionRow', $PageID);
+	$XMLFeedPageID = array();
+	$XMLFeedPageID['XMLItem'] = $hold[0]['XMLItem'];
+	$XMLFeedPageID['EnableDisable'] = $_POST['EnableDisable'];
+	$XMLFeedPageID['Status'] = $_POST['Status'];
+
 	$PageID['EnableDisable'] = $_POST['EnableDisable'];
 	$PageID['Status'] = $_POST['Status'];
 	$Options = $Tier6Databases->getLayerModuleSetting();
@@ -18,6 +25,7 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryVersionStatus', $PageID);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryDateStatus', $PageID);
 		$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'updatePictureStatus', $PageID);
+		$Tier6Databases->ModulePass('XmlFeed', 'feed', 'updateStoryFeedStatus', $XMLFeedPageID);
 		
 		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
 		$NewsPageID = array();
@@ -35,7 +43,7 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryFormSelectStatus', $NewsPageID);
 		
 		$NewsArticleEnableDisablePage = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisablePage']['SettingAttribute'];
-		header("Location: $NewsArticleEnableDisablePage");*/
+		header("Location: $NewsArticleEnableDisablePage");
 	} else {
 		$NewsArticleEnableDisableSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisableSelectPage']['SettingAttribute'];
 		header("Location: index.php?PageID=$NewsArticleEnableDisableSelectPage");

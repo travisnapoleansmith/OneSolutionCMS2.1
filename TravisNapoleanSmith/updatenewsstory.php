@@ -163,6 +163,7 @@
 			$NewsVersion['PageID'] = $PageID;
 			$NewsVersion['RevisionID'] = $NewRevisionID;
 			$NewsVersion['CurrentVersion'] = 'true';
+			$NewsVersion['XMLItem'] = $LastNewsFeedItem;
 			$NewsVersion['UserAccessGroup'] = $UserAccessGroup;
 			$NewsVersion['Owner'] = $Owner;
 			$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];

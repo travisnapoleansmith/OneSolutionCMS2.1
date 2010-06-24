@@ -717,6 +717,15 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		return $hold2;
 	}
 	
+	public function getNewsStoryVersionRow($PageID) {
+		$this->LayerModule->Connect($this->NewsStoriesVersionTableName);
+		$this->LayerModule->pass ($this->NewsStoriesVersionTableName, 'setDatabaseRow', array('idnumber' => $PageID));
+		$this->LayerModule->Disconnect($this->NewsStoriesVersionTableName);
+		
+		$hold = $this->LayerModule->pass ($this->NewsStoriesVersionTableName, 'getMultiRowField', array());
+		return $hold;
+	}
+	
 	public function createNewsStory(array $NewsStory) {
 		if ($NewsStory != NULL) {
 			$Keys = array();
@@ -862,11 +871,12 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'RevisionID';
 			$Keys[2] = 'CurrentVersion';
-			$Keys[3] = 'UserAccessGroup';
-			$Keys[4] = 'Owner';
-			$Keys[5] = 'LastChangeUser';
-			$Keys[6] = 'CreationDateTime';
-			$Keys[7] = 'LastChangeDateTime';
+			$Keys[3] = 'XMLItem';
+			$Keys[4] = 'UserAccessGroup';
+			$Keys[5] = 'Owner';
+			$Keys[6] = 'LastChangeUser';
+			$Keys[7] = 'CreationDateTime';
+			$Keys[8] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
 		} else {

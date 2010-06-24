@@ -622,6 +622,7 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'RevisionID';
 			$Keys[2] = 'CurrentVersion';
+			$Keys[3] = 'ContentPageType';
 			$Keys[3] = 'UserAccessGroup';
 			$Keys[4] = 'Owner';
 			$Keys[5] = 'LastChangeUser';
