@@ -145,5 +145,79 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		
 	}
 	
+	public function createSitemapItem(array $Item) {
+		if ($Item != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'Loc';
+			$Keys[2] = 'Lastmod';
+			$Keys[3] = 'ChangeFreq';
+			$Keys[4] = 'Priority';
+			$Keys[5] = 'Enable/Disable';
+			$Keys[6] = 'Status';
+			
+			reset($this->TableNames);
+			while (current($this->TableNames)) {
+				$this->addModuleContent($Keys, $Item, current($this->TableNames));
+				next($this->TableNames);
+			}
+		} else {
+			array_push($this->ErrorMessage,'createStoryFeed: Header cannot be NULL!');
+		}
+	}
+	
+	public function updateSitemapItem(array $PageID) {
+		if ($PageID != NULL) {
+			while (current($this->TableNames)) {
+				$this->updateModuleContent($PageID, current($this->TableNames));
+				next($this->TableNames);
+			}
+			
+		} else {
+			array_push($this->ErrorMessage,'updateStoryFeed: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteSitemapItem(array $PageID) {
+		if ($PageID != NULL) {
+			while (current($this->TableNames)) {
+				$this->deleteModuleContent($PageID, current($this->TableNames));
+				next($this->TableNames);
+			}
+			
+		} else {
+			array_push($this->ErrorMessage,'deleteStoryFeed: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateSitemapItemStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['XMLItem'] = $PageID['XMLItem'];
+			
+			while (current($this->TableNames)) {
+				if ($PageID['EnableDisable'] == 'Enable') {
+					$this->enableModuleContent($PassID, current($this->TableNames));
+				} else if ($PageID['EnableDisable'] == 'Disable') {
+					$this->disableModuleContent($PassID, current($this->TableNames));
+				}
+				
+				if ($PageID['Status'] == 'Approved') {
+					$this->approvedModuleContent($PassID, current($this->TableNames));
+				} else if ($PageID['Status'] == 'Not-Approved') {
+					$this->notApprovedModuleContent($PassID, current($this->TableNames));
+				} else if ($PageID['Status'] == 'Pending') {
+					$this->pendingModuleContent($PassID, current($this->TableNames));
+				} else if ($PageID['Status'] == 'Spam') {
+					$this->spamModuleContent($PassID, current($this->TableNames));
+				}
+				next($this->TableNames);
+			}
+				
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryDateStatus: PageID cannot be NULL!');
+		}
+	}
+	
 }
 ?>

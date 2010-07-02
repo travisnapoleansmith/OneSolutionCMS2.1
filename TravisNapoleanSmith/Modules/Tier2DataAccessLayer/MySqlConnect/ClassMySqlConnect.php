@@ -286,7 +286,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 						if (is_array($rowvalue)) {
 							if ($rowname != NULL) {
 								if ($rowvalue != NULL) {
-									
 									while (isset($rowname[key($rowname)])) {
 										$insertrow .= "`";
 										$insertrow .= mysql_real_escape_string(current($rowname));
@@ -307,6 +306,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$insertrowvalue .= ' , ';
 										}
 									}
+									
 									$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
 									$result = mysql_query($query);
 									if (!$result) {
@@ -828,6 +828,65 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'deleteField: Database name does not exist!');
 		}
 		
+	}
+	
+	public function sortTable($sortorder) {
+		$databasenamecheck = $this->checkDatabaseName();
+		$tablenamecheck = $this->checkTableName();
+		$permissionscheck = $this->checkPermissions ('ALTER');
+		if (!is_array($sortorder)) {
+			$fieldcheck = $this->checkField($sortorder);
+		}
+		if ($databasenamecheck) {
+			if ($permissionscheck) {
+				if ($tablenamecheck) {
+					if (!is_array($sortorder)) {
+						if ($sortorder != NULL) {
+							if ($fieldcheck) {
+								$query = 'ALTER TABLE `' . $this->databasetable . '` ORDER BY `' . $sortorder . '` ; ';
+								$result = mysql_query($query);
+							} else {
+								array_push($this->ErrorMessage,'sortTable: Field does not exist!');
+							}
+						} else {
+							array_push($this->ErrorMessage,'sortTable: Field cannot be NULL!');
+						}
+					} else {
+						if ($sortorder != NULL) {
+							$string = NULL;
+							reset($sortorder);
+							while (isset($sortorder[key($sortorder)])) {
+								
+								$fieldcheck = $this->checkField(current($sortorder));
+								if ($fieldcheck) {
+									$string .= '`';
+									$string .= current($sortorder);
+									$string .= '`';
+									next($sortorder);
+									if (current($sortorder)) {
+										$string .= ', ';
+									}
+								} else {
+									array_push($this->ErrorMessage,'sortTable: Field is an Array but does not exist!');
+								}
+							}
+							if ($string != NULL) {
+								$query = 'ALTER TABLE `' . $this->databasetable . '` ORDER BY ' . $string . ' ; ';
+								$result = mysql_query($query);
+							}
+						} else {
+							array_push($this->ErrorMessage,'sortTable: Field is an Array but cannot be NULL!');
+						}
+					}
+				} else {
+					array_push($this->ErrorMessage,'sortTable: Table name does not exist!');
+				}
+			} else {
+				array_push($this->ErrorMessage,'sortTable: Permission has been denied!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'sortTable: Database name does not exist!');
+		}
 	}
 	
 	public function setDatabaseRow ($idnumber) {

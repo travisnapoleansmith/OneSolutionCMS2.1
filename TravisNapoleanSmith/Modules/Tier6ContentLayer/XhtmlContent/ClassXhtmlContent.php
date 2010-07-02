@@ -732,5 +732,79 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		}
 	}
 	
+	public function createContentPrintPreview(array $Content) {
+		if ($Content != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'PrintPageID1';
+			$Keys[2] = 'PrintPageID2';
+			$Keys[3] = 'PrintPageID3';
+			$Keys[4] = 'PrintPageID4';
+			$Keys[5] = 'PrintPageID5';
+			$Keys[6] = 'PrintPageID6';
+			$Keys[7] = 'PrintPageID7';
+			$Keys[8] = 'PrintPageID8';
+			$Keys[9] = 'PrintPageID9';
+			$Keys[10] = 'PrintPageID10';
+			$Keys[11] = 'PrintPageID11';
+			$Keys[12] = 'PrintPageID12';
+			$Keys[13] = 'PrintPageID13';
+			$Keys[14] = 'PrintPageID14';
+			$Keys[15] = 'PrintPageID15';
+			$Keys[16] = 'PrintPageID16';
+			$Keys[17] = 'PrintPageID17';
+			$Keys[18] = 'PrintPageID18';
+			$Keys[19] = 'PrintPageID19';
+			$Keys[20] = 'PrintPageID20';
+			$Keys[21] = 'Enable/Disable';
+			$Keys[22] = 'Status';
+			
+			$this->addModuleContent($Keys, $Content, $this->ContentPrintPreviewTableName);
+		} else {
+			array_push($this->ErrorMessage,'createContentPrintPreview: Content cannot be NULL!');
+		}
+	}
+	
+	public function updateContentPrintPreview(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->ContentPrintPreviewTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateContentPrintPreview: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateContentPrintPreviewStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->ContentPrintPreviewTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateContentPrintPreviewStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteContentPrintPreview(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->ContentPrintPreviewTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteContentPrintPreview: PageID cannot be NULL!');
+		}
+	}
+	
 }
 ?>

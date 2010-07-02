@@ -16,26 +16,58 @@ img#background {
 
 .Picture1 {
 	position: relative;
-	width: 300px;
-	left: 0px;
-	/*float: clear;*/
-	/*float: left;*/
+	width: 600px;
+	height: auto;
+	top: 0px;
+	padding-bottom: 20px;
 }
 
-.Picture2 {
+.PictureLeft {
 	position: relative;
-	width: 300px;
-	/*left: 300px;*/
-	/*top: -265px;*/
-	float: right;
-	float: clear;
-	/*margin-bottom: -265px;*/
+	width: 275px;
+	top: 0px;
+	left: 30px;
+	height: 100%;
 }
 
-.YouTube {
+.PictureRight {
+	position: absolute;
+	width: 275px;
+	top: 0px;
+	left: 310px;
+}
+
+.PictureCenter {
+	position: relative;
+	left: 30%;
+	top: 0px;
+	width: 275px;
+}
+
+.TextSideLeft {
+	position: relative;
+	width: 260px;
+	left: -20px;
+}
+
+.TextSideRight {
+	position: relative;
+	width: 260px;
+	left: -15px;
+}
+
+.YouTube1 {
 	position: relative;
 	left: 40px;
-	top: 10px;
+	top: 0px;	
+	margin-bottom: 20px;
+}
+
+.YouTube2 {
+	position: relative;
+	left: 50px;
+	top: 20px;
+	margin-bottom: 40px;
 }
 
 table.Calendar {

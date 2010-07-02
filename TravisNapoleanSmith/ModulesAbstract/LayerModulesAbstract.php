@@ -427,6 +427,31 @@ abstract class LayerModulesAbstract
 					next($Content);
 				}
 			}
+			
+			if ($Keys['RevisionID']) {
+				$passarray['RevisionID'] = 'RevisionID';
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'RevisionID'));
+			}
+			
+			if ($Keys['ObjectID']) {
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'ObjectID'));
+			}
+			
+			if ($Keys['PageID']) {
+				$passarray['PageID'] = 'PageID';
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'PageID'));
+			}
+			
+			if ($Keys['XMLFeedName']) {
+				$passarray['XMLFeedName'] = 'XMLFeedName';
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'XMLFeedName'));
+			}
+			
+			if ($Keys['XMLItem']) {
+				$passarray['XMLItem'] = 'XMLItem';
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'XMLItem'));
+			}
+
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
@@ -798,6 +823,40 @@ abstract class LayerModulesAbstract
 		$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
 
 		return $hold;
+	}
+	
+	public function updateModuleSetting($ObjectType, $ObjectTypeName, $ModuleSetting, $ModuleSettingAttribute) {
+		if ($ModuleSetting != NULL && $ModuleSettingAttribute != NULL && $ObjectType != NULL && $ObjectTypeName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$passarray1[0] = 'SettingAttribute';
+			
+			$passarray2[0] = $ModuleSettingAttribute;
+			
+			
+			$passarray3[0][0] = 'ObjectType';
+			$passarray3[0][1] = 'ObjectTypeName';
+			$passarray3[0][2] = 'Setting';
+				
+			$passarray4[0][0] = $ObjectType;
+			$passarray4[0][1] = $ObjectTypeName;
+			$passarray4[0][2] = $ModuleSetting;
+			
+			$passarray['rowname'] = $passarray1;
+			$passarray['rowvalue'] = $passarray2;
+			$passarray['rownumbername'] = $passarray3;
+			$passarray['rownumber'] = $passarray4;
+			
+			$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
+			$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'updateRow', $passarray);
+			$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+		} else {
+			array_push($this->ErrorMessage,'updateModuleSetting: ObjectType, ObjectTypeName, ModuleSetting and ModuleSettingAttribute cannot be NULL!');
+		}
 	}
 	
 }
