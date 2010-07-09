@@ -15,7 +15,7 @@
 	$contentidnumber['PageID'] = 1;
 	$contentidnumber['ObjectID'] = 0;
 	//$contentidnumber['RevisionID'] = 0;
-	$contentidnumber['CurrentVersion'] = 'true';
+	//$contentidnumber['CurrentVersion'] = 'true';
 			
 	if ($_GET['PageID']){
 		$contentidnumber['PageID'] = $_GET['PageID'];
@@ -28,6 +28,8 @@
 	
 	if ($_GET['CurrentVersion']){
 		$contentidnumber['CurrentVersion'] = $_GET['CurrentVersion'];
+	} else {
+		$contentidnumber['CurrentVersion'] = 'true';
 	}
 
 	if ($_GET['printpreview']) {

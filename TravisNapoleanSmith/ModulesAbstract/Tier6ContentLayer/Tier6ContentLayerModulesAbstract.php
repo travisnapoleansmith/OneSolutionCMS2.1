@@ -86,10 +86,17 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		}
 	}
 	
-	public function getTag($Content) {
+	public function getTag(array $Content) {
 		return $this->SearchContentForTag($Content['Tag'], $Content['Content']);
 	}
 	
+	public function removeTag(array $Content) {
+		return $this->SearchReplaceTag($Content['Tag'], $Content['Content']);
+	}
+	
+	public function addWordSpace(array $Content) {
+		return $this->SearchReplaceWordSpace($Content['Content']);
+	}
 	/*protected function CreateWordWrap($wordwrapstring) {
 		if (stristr($wordwrapstring, '<a href')) {
 			// Strip AHef Tags for wordwrap then put them back in
@@ -198,6 +205,50 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 			}
 		} else {
 			array_push($this->ErrorMessage,'SearchContentForTag: Tag and Content cannot be an array!');
+		}
+	}
+	
+	protected function SearchReplaceTag ($Tag, $Content) {
+		if (!is_array($Content)) {
+			if (!is_null($Content) && !is_null($Tag)) {
+				if (is_array($Tag)) {
+					reset($Tag);
+					while (current($Tag)) {
+						$tag = current($Tag);
+						$Pattern = "/(<$tag(.*?)>)/";
+						$Content = preg_replace($Pattern, '', $Content);
+						$Pattern = "/(<\/$tag>)/";
+						$Content = preg_replace($Pattern, '', $Content);
+						next($Tag);
+					}
+					return $Content;
+				} else {
+					$Pattern = "/(<$Tag(.*?)>)/";
+					$Content = preg_replace($Pattern, '', $Content);
+					$Pattern = "/(<\/$Tag>)/";
+					$Content = preg_replace($Pattern, '', $Content);
+					return $Content;
+				}
+			} else {
+					array_push($this->ErrorMessage,'SearchReplaceTag: Tag and Content cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'SearchReplaceTag: Content cannot be an array!');
+		}
+	}
+	
+	protected function SearchReplaceWordSpace($Content) {
+		if (!is_array($Content)) {
+			if (!is_null($Content)) {
+				$Pattern = "/(?<!\ )[A-Z]|[0-9]+/";
+				$Content = preg_replace($Pattern, ' $0', $Content);
+				$Content = trim($Content);
+				return $Content;
+			} else {
+				array_push($this->ErrorMessage,'SearchReplaceWordSpace: Content cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'SearchReplaceWordSpace: Content cannot be an array!');
 		}
 	}
 	

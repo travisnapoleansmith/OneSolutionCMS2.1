@@ -168,18 +168,19 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	public function updateSitemapItem(array $PageID) {
 		if ($PageID != NULL) {
+			reset($this->TableNames);
 			while (current($this->TableNames)) {
-				$this->updateModuleContent($PageID, current($this->TableNames));
+				$this->updateRecord($PageID['PageID'], $PageID['Content'], current($this->TableNames));
 				next($this->TableNames);
 			}
-			
 		} else {
-			array_push($this->ErrorMessage,'updateStoryFeed: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateSitemapItem: PageID cannot be NULL!');
 		}
 	}
 	
 	public function deleteSitemapItem(array $PageID) {
 		if ($PageID != NULL) {
+			reset($this->TableNames);
 			while (current($this->TableNames)) {
 				$this->deleteModuleContent($PageID, current($this->TableNames));
 				next($this->TableNames);

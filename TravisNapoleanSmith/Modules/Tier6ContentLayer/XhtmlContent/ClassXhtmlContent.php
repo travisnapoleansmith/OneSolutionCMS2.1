@@ -311,7 +311,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
 		$contentidnumber['printpreview'] = $PrintPreview;
-		$contentidnumber['RevisionID'] = $this->RevisionID;
+		if ($this->RevisionID) {
+			$contentidnumber['RevisionID'] = $this->RevisionID;
+		}
 		$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
 		
 		$contentdatabase = Array();
@@ -603,7 +605,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					$contentidnumber['PageID'] = $holdnow;
 					$contentidnumber['ObjectID'] = 0;
 					$contentidnumber['printpreview'] = TRUE;
-					$contentidnumber['RevisionID'] = $this->RevisionID;
+					if ($this->RevisionID) {
+						$contentidnumber['RevisionID'] = $this->RevisionID;
+					}
 					$contentidnumber['CurrentVersion'] = $this->CurrentVersion;
 					
 					$contentdatabase = Array();
@@ -767,7 +771,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function updateContentPrintPreview(array $PageID) {
 		if ($PageID != NULL) {
-			$this->updateModuleContent($PageID, $this->ContentPrintPreviewTableName);
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], $this->ContentPrintPreviewTableName);
 		} else {
 			array_push($this->ErrorMessage,'updateContentPrintPreview: PageID cannot be NULL!');
 		}

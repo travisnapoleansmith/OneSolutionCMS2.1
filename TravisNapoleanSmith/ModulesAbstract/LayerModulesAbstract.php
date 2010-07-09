@@ -815,14 +815,93 @@ abstract class LayerModulesAbstract
 	public function getRecord($PageID) {
 		$passarray = array();
 		$passarray = $PageID['PageID'];
-		$DatabaseVariableName = $PageID['DatabaseVariableName'];
-		$this->LayerModule->Connect($this->$DatabaseVariableName);
-		$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
-		$this->LayerModule->Disconnect($this->$DatabaseVariableName);
+		$args = func_get_args();
+		if ($args[1]) {
+			$DatabaseName = $args[1];
+			$this->LayerModule->createDatabaseTable($DatabaseName);
+			
+			$this->LayerModule->Connect($DatabaseName);
+			$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($DatabaseName);
+
+			$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
+		} else {
+			$DatabaseVariableName = $PageID['DatabaseVariableName'];
+			
+			$this->LayerModule->Connect($this->$DatabaseVariableName);
+			$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->$DatabaseVariableName);
+
+			$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+		}
 		
-		$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
 
 		return $hold;
+	}
+	
+	protected function updateRecord(array $PageID, array $Content, $DatabaseTableName) {
+		if ($PageID != NULL && $Content != NULL && $DatabaseTableName != NULL) {
+			$passarray = array();
+			$passarray1 = array();
+			$passarray2 = array();
+			$passarray3 = array();
+			$passarray4 = array();
+			
+			$j = 0;
+			while (key($PageID)) {
+				$passarray3[0][$j] = key($PageID);
+				$passarray4[0][$j] = current($PageID);
+				$j++;
+				next ($PageID);
+			}
+			
+			$flag = FALSE;
+			reset ($Content);
+			$i = 0;
+			while (key($Content)) {
+				if (is_array($Content[key($Content)])) {
+					$hold = $Content[key($Content)];
+					reset($hold);
+					$j = 0;
+					while (key($hold)) {
+						$passarray1[$j] = key($hold);
+						$passarray2[$j] = current($hold);
+						next($hold);
+						$j++;
+					}
+					
+					$passarray['rowname'] = $passarray1;
+					$passarray['rowvalue'] = $passarray2;
+					$passarray['rownumbername'] = $passarray3;
+					$passarray['rownumber'] = $passarray4;
+					
+					$this->LayerModule->Connect($DatabaseTableName);
+					$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+					$this->LayerModule->Disconnect($DatabaseTableName);
+					
+				} else {
+					$passarray1[$i] = key($Content);
+					$passarray2[$i] = current($Content);
+					$flag = TRUE;
+				}
+				reset ($PageID);
+				
+				$i++;
+				next ($Content);
+			}
+			if ($flag) {
+				$passarray['rowname'] = $passarray1;
+				$passarray['rowvalue'] = $passarray2;
+				$passarray['rownumbername'] = $passarray3;
+				$passarray['rownumber'] = $passarray4;
+				
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateRecord: PageID, Content and DatabaseTableName cannot be NULL!');
+		}
 	}
 	
 	public function updateModuleSetting($ObjectType, $ObjectTypeName, $ModuleSetting, $ModuleSettingAttribute) {

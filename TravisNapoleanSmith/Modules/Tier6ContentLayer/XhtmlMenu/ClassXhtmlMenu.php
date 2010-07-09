@@ -222,7 +222,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function updateMenu(array $PageID) {
 		if ($PageID != NULL) {
-			$this->updateModuleContent($PageID, $this->DatabaseTableName);
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], $this->DatabaseTableName);
 		} else {
 			array_push($this->ErrorMessage,'updateMenu: PageID cannot be NULL!');
 		}

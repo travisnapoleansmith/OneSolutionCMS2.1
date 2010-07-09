@@ -161,6 +161,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	// Xhtml Form Field Set
 	protected $FormFieldSetPageID = array();
 	protected $FormFieldSetObjectID = array();
+	protected $FormFieldSetStopObjectID = array();
 	protected $FormFieldSetContainerObjectType = array();
 	protected $FormFieldSetContainerObjectTypeName = array();
 	protected $FormFieldSetContainerObjectID = array();
@@ -561,6 +562,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected function processFormFieldSet($i) {
 		array_push($this->FormFieldSetPageID, $this->FormLookupTableName['FormFieldSet'][$i]['PageID']);
 		array_push($this->FormFieldSetObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['ObjectID']);
+		array_push($this->FormFieldSetStopObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['StopObjectID']);
 		array_push($this->FormFieldSetContainerObjectType, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectType']);
 		array_push($this->FormFieldSetContainerObjectTypeName, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectTypeName']);
 		array_push($this->FormFieldSetContainerObjectID, $this->FormLookupTableName['FormFieldSet'][$i]['ContainerObjectID']);
@@ -1396,6 +1398,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 		reset($this->FormFieldSetPageID);
 		reset($this->FormFieldSetObjectID);
+		reset($this->FormFieldSetStopObjectID);
 		reset($this->FormFieldSetContainerObjectType);
 		reset($this->FormFieldSetContainerObjectTypeName);
 		reset($this->FormFieldSetContainerObjectID);
@@ -1423,7 +1426,39 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 		$flag = NULL;
 		
-		while (current($this->FormLookupTableName['FormFieldSet'])) {
+		while (current($this->FormFieldSetObjectID) != $objectid) {
+			next($this->FormLookupTableName['FormFieldSet']);
+		
+			next($this->FormFieldSetPageID);
+			next($this->FormFieldSetObjectID);
+			next($this->FormFieldSetStopObjectID);
+			next($this->FormFieldSetContainerObjectType);
+			next($this->FormFieldSetContainerObjectTypeName);
+			next($this->FormFieldSetContainerObjectID);
+			
+			next($this->FormFieldSetTextStartTag);
+			next($this->FormFieldSetTextEndTag);
+			next($this->FormFieldSetText);
+			next($this->FormFieldSetTextDynamic);
+			next($this->FormFieldSetTextTableName);
+			next($this->FormFieldSetTextField);
+			next($this->FormFieldSetTextPageID);
+			next($this->FormFieldSetTextObjectID);
+			next($this->FormFieldSetTextRevisionID);
+			
+			next($this->FormFieldSetClass);
+			next($this->FormFieldSetDir);
+			next($this->FormFieldSetID);
+			next($this->FormFieldSetLang);
+			next($this->FormFieldSetStyle);
+			next($this->FormFieldSetTitle);
+			next($this->FormFieldSetXMLLang);
+			
+			next($this->FormFieldSetEnableDisable);
+			next($this->FormFieldSetStatus);
+		}
+		
+		while (current($this->FormFieldSetObjectID)) {
 			if (current($this->FormFieldSetEnableDisable) == 'Enable' && current($this->FormFieldSetStatus) == 'Approved') {
 				if (current($this->FormFieldSetObjectID) == $objectid && current($this->FormFieldSetPageID) == $this->PageID) {
 					$this->Writer->startElement('fieldset');
@@ -1482,10 +1517,17 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				
 			}
 			
+			if (current($this->FormFieldSetStopObjectID)) {
+				if (current($this->FormFieldSetObjectID) == current($this->FormFieldSetStopObjectID)) {
+					end($this->FormFieldSetObjectID);
+				}
+			}
+			
 			next($this->FormLookupTableName['FormFieldSet']);
 		
 			next($this->FormFieldSetPageID);
 			next($this->FormFieldSetObjectID);
+			next($this->FormFieldSetStopObjectID);
 			next($this->FormFieldSetContainerObjectType);
 			next($this->FormFieldSetContainerObjectTypeName);
 			next($this->FormFieldSetContainerObjectID);
@@ -2255,6 +2297,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->ProcessArrayStandardAttribute('FormFieldSet');
 				$this->Writer->startElement('img');
 				$this->Writer->writeAttribute('src', "CAPTCHAIMAGE/$imagename");
+				$this->Writer->writeAttribute('alt', 'Captcha Verification');
 				$this->Writer->endElement(); // ENDS IMG
 			$this->Writer->endElement(); // ENDS LABEL;
 		$this->Writer->endElement(); // ENDS DIV;

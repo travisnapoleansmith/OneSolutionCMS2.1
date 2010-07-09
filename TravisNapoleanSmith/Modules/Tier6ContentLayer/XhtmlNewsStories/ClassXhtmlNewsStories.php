@@ -455,6 +455,16 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
 		$modulesidnumber = Array();
 		$modulesidnumber['PageID'] = $PageID;
+		if ($this->CurrentVersion) {
+			$modulesidnumber['CurrentVersion'] = $this->CurrentVersion;
+			
+		} else {
+			$temp = $this->getNewsStoryVersionRow($modulesidnumber);
+			$temp = array_reverse($temp);
+			$modulesidnumber['RevisionID'] = $temp[0]['RevisionID'];
+			
+		}
+		
 		$modulesidnumber['ObjectID'] = $ObjectID;
 		$modulesidnumber['PrintPreview'] = $this->PrintPreview;
 		
@@ -489,7 +499,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$temp = &$GLOBALS['Tier6Databases'];
 		$module = &$temp->getModules($ContainerObjectType, $ContainerObjectTypeName);
 		reset($databasetablename);
-		
+
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 		$module->setHttpUserAgent($this->HttpUserAgent);
 		$module->FetchDatabase($modulesidnumber);
@@ -1100,6 +1110,14 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	}
 	
 	public function updateNewsStoryLookup(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], $this->NewsStoriesLookupTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateNewsStoryLookup: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateNewsStoryLookupStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];

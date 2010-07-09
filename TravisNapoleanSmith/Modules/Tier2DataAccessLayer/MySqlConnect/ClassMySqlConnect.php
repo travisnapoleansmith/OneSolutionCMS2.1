@@ -379,12 +379,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 						if (is_array($rowvalue)){
 							if (is_array($rownumbername)) {
 								if (is_array($rownumber)) {
+									
 									while (isset($rowname[key($rowname)])) {
 										if (is_array($rownumbername[key($rownumbername)]) || is_array($rownumber[key($rownumber)])) {
 											$namearray = $rownumbername[key($rownumbername)];
 											$valuearray = $rownumber[key($rownumber)];
 											reset($namearray);
 											reset($valuearray);
+											$string = NULL;
 											while (isset($namearray[key($namearray)])) {
 												$string .= '`';
 												$string .= mysql_real_escape_string(current($namearray));
@@ -397,7 +399,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													$string .= ' AND ';
 												}
 											}
-											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . current($rowvalue) . '" WHERE ' . $string . ' ';
+											$rowvaluestring = NULL;
+											$rowvaluestring = current($rowvalue);
+											$rowvaluestring = mysql_real_escape_string($rowvaluestring);
+											if ($rowvaluestring) {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . $rowvaluestring . '" WHERE ' . $string . ' ';
+											} else {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = NULL WHERE ' . $string . ' ';
+											}
+											
 											$result = mysql_query($query);
 										} else {
 											$rownumberstring = NULL;
@@ -408,14 +418,21 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$rownamestring = mysql_real_escape_string(current($rowname));
 											$rowvaluestring = NULL;
 											$rowvaluestring = mysql_real_escape_string(current($rowvalue));
-											
-											$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = "' . $rowvaluestring . '" WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+											if ($rowvaluestring) {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = "' . $rowvaluestring . '" WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+											} else {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = NULL WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+											}
 											$result = mysql_query($query);
 										}
 										next($rowname);
 										next($rowvalue);
-										next($rownumbername);
-										next($rownumber);
+										if (!next($rownumbername)) {
+											reset($rownumbername);
+										}
+										if (!next($rownumber)) {
+											reset($rownumber);
+										}
 									}
 									
 								} else {

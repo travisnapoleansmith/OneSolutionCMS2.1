@@ -652,7 +652,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	
 	public function updateHeader(array $PageID) {
 		if ($PageID != NULL) {
-			$this->updateModuleContent($PageID, current($this->TableNames));
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], current($this->TableNames));
 		} else {
 			array_push($this->ErrorMessage,'updateHeader: PageID cannot be NULL!');
 		}

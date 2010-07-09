@@ -575,7 +575,12 @@ class ContentLayer extends LayerModulesAbstract
 		
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		
+		if ($hold['FilteredInput']['Priority']) {
+				$hold['FilteredInput']['Priority'] *= 10;
+			}
+			if ($hold['FilteredInput']['Frequency']) {
+				$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
+			}
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
@@ -612,6 +617,20 @@ class ContentLayer extends LayerModulesAbstract
 			if ($hold) {
 				return $hold;
 			}
+		}
+	}
+	
+	public function getContentVersionRow(array $PageID, $DatabaseTableName) {
+		if ($PageID != NULL & $DatabaseTableName != NULL) {
+			$this->createDatabaseTable($DatabaseTableName);
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $PageID));
+			$this->LayerModule->Disconnect($DatabaseTableName);
+			
+			$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
+			return $hold;
+		} else {
+			array_push($this->ErrorMessage,'getContentVersionRow: PageID and Database Table Name cannot be NULL!');
 		}
 	}
 	

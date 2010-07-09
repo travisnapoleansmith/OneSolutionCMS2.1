@@ -24,10 +24,14 @@
 	// Fetch Current Page ID - Based On ID Number
 	$contentidnumber = Array();
 	$contentidnumber['PageID'] = $idnumber;
-	$contentidnumber['RevisionID'] = 0;
-	$contentidnumber['CurrentVersion'] = 'true';
 	$contentidnumber['Enable/Disable'] = 'Enable';
 	$contentidnumber['Status'] = 'Approved';
+	
+	if (isset($_GET['RevisionID'])){
+		$contentidnumber['RevisionID'] = $_GET['RevisionID'];
+	} else {
+		$contentidnumber['CurrentVersion'] = 'true';
+	}
 	
 	$Tier6Databases->FetchDatabase($contentidnumber);
 	$Tier6Databases->CreateOutput(NULL);
