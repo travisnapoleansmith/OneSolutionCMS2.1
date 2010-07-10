@@ -34,13 +34,13 @@
 		$NewsPageID['EnableDisable'] = $_POST['EnableDisable'];
 		$NewsPageID['Status'] = $_POST['Status'];
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryFormOptionStatus', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryFormSelectStatus', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $NewsPageID);
 		
 		$NewsArticleDeleteSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
 		$NewsPageID['PageID'] = $NewsArticleDeleteSelectPage;
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryFormOptionStatus', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryFormSelectStatus', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $NewsPageID);
 		
 		$NewsArticleEnableDisablePage = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisablePage']['SettingAttribute'];
 		header("Location: $NewsArticleEnableDisablePage");

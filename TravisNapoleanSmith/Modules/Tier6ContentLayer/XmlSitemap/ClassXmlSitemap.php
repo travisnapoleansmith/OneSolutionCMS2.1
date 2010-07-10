@@ -194,8 +194,9 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	public function updateSitemapItemStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
-			$PassID['XMLItem'] = $PageID['XMLItem'];
+			$PassID['PageID'] = $PageID['PageID'];
 			
+			reset($this->TableNames);
 			while (current($this->TableNames)) {
 				if ($PageID['EnableDisable'] == 'Enable') {
 					$this->enableModuleContent($PassID, current($this->TableNames));
@@ -216,7 +217,7 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 				
 		} else {
-			array_push($this->ErrorMessage,'updateNewsStoryDateStatus: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateSitemapItemStatus: PageID cannot be NULL!');
 		}
 	}
 	

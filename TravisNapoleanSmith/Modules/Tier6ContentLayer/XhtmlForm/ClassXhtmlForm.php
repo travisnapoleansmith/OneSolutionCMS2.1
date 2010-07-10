@@ -2499,5 +2499,170 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->Writer->flush();
 		}
 	}
+	
+	public function createFormSelect(array $Content) {
+		if ($Content != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'StopObjectID';
+			$Keys[3] = 'ContainerObjectType';
+			$Keys[4] = 'ContainerObjectTypeName';
+			$Keys[5] = 'ContainerObjectID';
+			$Keys[6] = 'FormSelectDisabled';
+			$Keys[7] = 'FormSelectMultiple';
+			$Keys[8] = 'FormSelectName';
+			$Keys[9] = 'FormSelectNameDynamic';
+			$Keys[10] = 'FormSelectNameTableName';
+			$Keys[11] = 'FormSelectNameField';
+			$Keys[12] = 'FormSelectNamePageID';
+			$Keys[13] = 'FormSelectNameObjectID';
+			$Keys[14] = 'FormSelectNameRevisionID';
+			$Keys[15] = 'FormSelectSize';
+			$Keys[16] = 'FormSelectClass';
+			$Keys[17] = 'FormSelectDir';
+			$Keys[18] = 'FormSelectID';
+			$Keys[19] = 'FormSelectLang';
+			$Keys[20] = 'FormSelectStyle';
+			$Keys[21] = 'FormSelectTabIndex';
+			$Keys[22] = 'FormSelectTitle';
+			$Keys[23] = 'FormSelectXMLLang';
+			$Keys[24] = 'Enable/Disable';
+			$Keys[25] = 'Status';
+			
+			$this->addModuleContent($Keys, $Content, $this->TableNames['FormSelect']);
+		} else {
+			array_push($this->ErrorMessage,'createFormSelect: Content cannot be NULL!');
+		}
+	}
+	
+	public function updateFormSelect(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], $this->TableNames['FormSelect']);
+		} else {
+			array_push($this->ErrorMessage,'updateFormSelect: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateFormSelectStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			$PassID['ObjectID'] = $PageID['ObjectID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->TableNames['FormSelect']);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->TableNames['FormSelect']);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->TableNames['FormSelect']);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->TableNames['FormSelect']);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->TableNames['FormSelect']);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->TableNames['FormSelect']);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateFormSelectStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteFormSelect(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->TableNames['FormSelect']);
+		} else {
+			array_push($this->ErrorMessage,'deleteFormSelect: PageID cannot be NULL!');
+		}
+	}
+	
+	public function createFormOption(array $Content) {
+		if ($Content != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'FormOptionText';
+			$Keys[3] = 'FormOptionTextDynamic';
+			$Keys[4] = 'FormOptionTextTableName';
+			$Keys[5] = 'FormOptionTextField';
+			$Keys[6] = 'FormOptionTextPageID';
+			$Keys[7] = 'FormOptionTextObjectID';
+			$Keys[8] = 'FormOptionTextRevisionID';
+			$Keys[9] = 'FormOptionDisabled';
+			$Keys[10] = 'FormOptionLabel';
+			$Keys[11] = 'FormOptionLabelDynamic';
+			$Keys[12] = 'FormOptionLabelTableName';
+			$Keys[13] = 'FormOptionLabelField';
+			$Keys[14] = 'FormOptionLabelPageID';
+			$Keys[15] = 'FormOptionLabelObjectID';
+			$Keys[16] = 'FormOptionLabelRevisionID';
+			$Keys[17] = 'FormOptionSelected';
+			$Keys[18] = 'FormOptionValue';
+			$Keys[19] = 'FormOptionValueDynamic';
+			$Keys[20] = 'FormOptionValueTableName';
+			$Keys[21] = 'FormOptionValueField';
+			$Keys[22] = 'FormOptionValuePageID';
+			$Keys[23] = 'FormOptionValueObjectID';
+			$Keys[24] = 'FormOptionValueRevisionID';
+			$Keys[25] = 'FormOptionClass';
+			$Keys[26] = 'FormOptionDir';
+			$Keys[27] = 'FormOptionID';
+			$Keys[28] = 'FormOptionLang';
+			$Keys[29] = 'FormOptionStyle';
+			$Keys[30] = 'FormOptionTitle';
+			$Keys[31] = 'FormOptionXMLLang';
+			$Keys[32] = 'Enable/Disable';
+			$Keys[33] = 'Status';
+			
+			$this->addModuleContent($Keys, $Content, $this->TableNames['FormOption']);
+		} else {
+			array_push($this->ErrorMessage,'createFormOption: Content cannot be NULL!');
+		}
+	}
+	
+	public function updateFormOption(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateRecord($PageID['PageID'], $PageID['Content'], $this->TableNames['FormOption']);
+		} else {
+			array_push($this->ErrorMessage,'updateFormSelect: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateFormOptionStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			$PassID['ObjectID'] = $PageID['ObjectID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->TableNames['FormOption']);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->TableNames['FormOption']);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->TableNames['FormOption']);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->TableNames['FormOption']);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->TableNames['FormOption']);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->TableNames['FormOption']);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateFormOptionStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteFormOption(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->TableNames['FormOption']);
+		} else {
+			array_push($this->ErrorMessage,'deleteFormOption: PageID cannot be NULL!');
+		}
+	}
+	
 }
 ?>

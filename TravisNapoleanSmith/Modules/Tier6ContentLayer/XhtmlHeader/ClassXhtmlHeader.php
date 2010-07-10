@@ -129,6 +129,9 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('LinkRev', 'LinkRev');
 		$this->FillArray('LinkType', 'LinkType');
 		
+		$this->EnableDisable = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Status'));
+		
 		next($this->TableNames);
 		
 		$passarray = array();
@@ -392,186 +395,188 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	}
 	
 	public function CreateOutput ($space) {
-		$arguments = func_get_args();
-		$printpreviewflag = $arguments[0];
-		$stylesheet = $arguments[1];
-		
-		// USING NEW XMLWRITER
-		// STARTS HEADER
-		$this->Writer->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
-		$this->Writer->endDTD();
-		
-		$this->Writer->startElement('html');
-		$this->Writer->writeAttribute('lang', 'en-US');
-		$this->Writer->writeAttribute('xml:lang', 'en-US');
-		$this->Writer->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-		
-		$this->Writer->startElement('head');
-		
-		$this->Writer->startElement('meta');
-		$this->Writer->writeAttribute('http-equiv', 'Content-Type');
-		$this->Writer->writeAttribute('content', 'text/html; charset=iso-8859-1');
-		$this->Writer->endElement(); //ENDS META
-		
-		$this->Writer->startElement('title');
-		if ($printpreviewflag) {
-			$this->Writer->text('Print Preview');
-			if ($this->PageTitle || $this->SiteName) {
-				$this->Writer->text(' - ');
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
+			$arguments = func_get_args();
+			$printpreviewflag = $arguments[0];
+			$stylesheet = $arguments[1];
+			
+			// USING NEW XMLWRITER
+			// STARTS HEADER
+			$this->Writer->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
+			$this->Writer->endDTD();
+			
+			$this->Writer->startElement('html');
+			$this->Writer->writeAttribute('lang', 'en-US');
+			$this->Writer->writeAttribute('xml:lang', 'en-US');
+			$this->Writer->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+			
+			$this->Writer->startElement('head');
+			
+			$this->Writer->startElement('meta');
+			$this->Writer->writeAttribute('http-equiv', 'Content-Type');
+			$this->Writer->writeAttribute('content', 'text/html; charset=iso-8859-1');
+			$this->Writer->endElement(); //ENDS META
+			
+			$this->Writer->startElement('title');
+			if ($printpreviewflag) {
+				$this->Writer->text('Print Preview');
+				if ($this->PageTitle || $this->SiteName) {
+					$this->Writer->text(' - ');
+				}
 			}
-		}
-		
-		if ($this->PageTitle) {
-			$this->Writer->writeRaw($this->PageTitle);
-		}
-		
-		if ($this->SiteName) {
+			
 			if ($this->PageTitle) {
-				$this->Writer->text(' - ');
+				$this->Writer->writeRaw($this->PageTitle);
 			}
-			$this->Writer->text($this->SiteName);
-		}
-		$this->Writer->endElement(); // ENDS TITLE TAG
-		$this->Writer->writeRaw("\n");
-		
-		if ($this->PageIcon){
-			$this->TagSheet('link', 'icon', 'image/x-icon', NULL, NULL, NULL, NULL, $this->PageIcon, NULL, NULL);
-		}
-		
-		if ($stylesheet && !$printpreviewflag){
-			$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $stylesheet, NULL, NULL);
-		} 
-		
-		if ($this->StyleSheet && !$printpreviewflag && !$stylesheet) {
-			$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->StyleSheet, NULL, NULL);
-		}
-		
-		if ($this->IE6StyleSheet && !$printpreviewflag && !$stylesheet) {
-			if (strstr($this->HttpUserAgent, 'MSIE 6.0')) {
-				$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE6StyleSheet, NULL, NULL);
+			
+			if ($this->SiteName) {
+				if ($this->PageTitle) {
+					$this->Writer->text(' - ');
+				}
+				$this->Writer->text($this->SiteName);
 			}
-		}
-		
-		if ($this->IE7StyleSheet && !$printpreviewflag && !$stylesheet) {
-			if (strstr($this->HttpUserAgent,'MSIE 7.0')) {
-				$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE7StyleSheet, NULL, NULL);
-			}
-		}
-		
-		if ($this->IE8StyleSheet && !$printpreviewflag && !$stylesheet) {
-			if (strstr($this->HttpUserAgent,'MSIE 8.0')) {
-				$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE8StyleSheet, NULL, NULL);
-			}
-		}
-		
-		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
+			$this->Writer->endElement(); // ENDS TITLE TAG
 			$this->Writer->writeRaw("\n");
-		}
-		
-		if ($this->Rss2_0) {
-			$this->TagSheet('link', 'alternate', 'application/rss+xml', NULL, NULL, 'RSS 2.0', NULL, $this->Rss2_0, NULL, NULL);
-		}
-		
-		if ($this->Rss0_92) {
-			$this->TagSheet('link', 'alternate', 'text/xml', NULL, NULL, 'RSS .92', NULL, $this->RSS0_92, NULL, NULL);
-		}
-		
-		if ($this->Atom0_3) {
-			$this->TagSheet('link', 'alternate', 'application/atom+xml', NULL, NULL, 'Atom 0.3', NULL, $this->Atom0_3, NULL, NULL);
-		}
-		
-		if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
-			$this->Writer->writeRaw("\n");
-		}
-		
-		if ($this->BaseHref) {
-			$this->TagSheet('base', NULL, NULL, NULL, NULL, NULL, NULL, $this->BaseHref, NULL, NULL);
-		}
-		
-		if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
-			$this->Writer->writeRaw("\n");
-			$metaarray[0] = 'MetaName';
-			$metaarray[1] = 'MetaNameContent';
-			$metanamesarray[0] = 'name';
-			$metanamesarray[1] = 'content';
-			$this->PrintArray($metaarray, 'meta', $metanamesarray);
-		}
-		
-		if (!empty($this->HttpEquivType) && !empty($this->HttpEquivTypeContent)) {
-			$httpequivtypearray[0] = 'HttpEquivType';
-			$httpequivtypearray[1] = 'HttpEquivTypeContent';
-			$httpequivnamesarray[0] = 'http-equiv';
-			$httpequivnamesarray[1] = 'content';
-			$this->PrintArray($httpequivtypearray, 'meta', $httpequivnamesarray);
-		}
-
-		if (!empty($this->LinkCharset) || !empty($this->LinkHref) || !empty($this->LinkMedia) || !empty($this->LinkRel) || !empty($this->LinkRev) || !empty($this->LinkType)) {
-			$linkarray = Array();
-			$linknamearray = Array();
-			if (!empty($this->LinkCharset)) {
-				array_push($linkarray, 'LinkCharset');
-				array_push($linknamearray, 'charset');
+			
+			if ($this->PageIcon){
+				$this->TagSheet('link', 'icon', 'image/x-icon', NULL, NULL, NULL, NULL, $this->PageIcon, NULL, NULL);
 			}
-			if (!empty($this->LinkHref)) {
-				array_push($linkarray, 'LinkHref');
-				array_push($linknamearray, 'href');
+			
+			if ($stylesheet && !$printpreviewflag){
+				$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $stylesheet, NULL, NULL);
+			} 
+			
+			if ($this->StyleSheet && !$printpreviewflag && !$stylesheet) {
+				$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->StyleSheet, NULL, NULL);
 			}
-			if (!empty($this->LinkHreflang)){
-				array_push($linkarray, 'LinkHreflang');
-				array_push($linknamearray, 'hreflang');
+			
+			if ($this->IE6StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent, 'MSIE 6.0')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE6StyleSheet, NULL, NULL);
+				}
 			}
-			if (!empty($this->LinkMedia)) {
-				array_push($linkarray, 'LinkMedia');
-				array_push($linknamearray, 'media');
+			
+			if ($this->IE7StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'MSIE 7.0')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE7StyleSheet, NULL, NULL);
+				}
 			}
-			if (!empty($this->LinkRel)) {
-				array_push($linkarray, 'LinkRel');
-				array_push($linknamearray, 'rel');
+			
+			if ($this->IE8StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'MSIE 8.0')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE8StyleSheet, NULL, NULL);
+				}
 			}
-			if (!empty($this->LinkRev)) {
-				array_push($linkarray, 'LinkRev');
-				array_push($linknamearray, 'rev');
+			
+			if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
+				$this->Writer->writeRaw("\n");
 			}
-			if (!empty($this->LinkType)) {
-				array_push($linkarray, 'LinkType');
-				array_push($linknamearray, 'type');
+			
+			if ($this->Rss2_0) {
+				$this->TagSheet('link', 'alternate', 'application/rss+xml', NULL, NULL, 'RSS 2.0', NULL, $this->Rss2_0, NULL, NULL);
 			}
-			$this->PrintArray($linkarray, 'link', $linknamearray);
+			
+			if ($this->Rss0_92) {
+				$this->TagSheet('link', 'alternate', 'text/xml', NULL, NULL, 'RSS .92', NULL, $this->RSS0_92, NULL, NULL);
+			}
+			
+			if ($this->Atom0_3) {
+				$this->TagSheet('link', 'alternate', 'application/atom+xml', NULL, NULL, 'Atom 0.3', NULL, $this->Atom0_3, NULL, NULL);
+			}
+			
+			if ($this->Rss2_0 || $this->Rss0_92 || $this->Atom0_3) {
+				$this->Writer->writeRaw("\n");
+			}
+			
+			if ($this->BaseHref) {
+				$this->TagSheet('base', NULL, NULL, NULL, NULL, NULL, NULL, $this->BaseHref, NULL, NULL);
+			}
+			
+			if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
+				$this->Writer->writeRaw("\n");
+				$metaarray[0] = 'MetaName';
+				$metaarray[1] = 'MetaNameContent';
+				$metanamesarray[0] = 'name';
+				$metanamesarray[1] = 'content';
+				$this->PrintArray($metaarray, 'meta', $metanamesarray);
+			}
+			
+			if (!empty($this->HttpEquivType) && !empty($this->HttpEquivTypeContent)) {
+				$httpequivtypearray[0] = 'HttpEquivType';
+				$httpequivtypearray[1] = 'HttpEquivTypeContent';
+				$httpequivnamesarray[0] = 'http-equiv';
+				$httpequivnamesarray[1] = 'content';
+				$this->PrintArray($httpequivtypearray, 'meta', $httpequivnamesarray);
+			}
+	
+			if (!empty($this->LinkCharset) || !empty($this->LinkHref) || !empty($this->LinkMedia) || !empty($this->LinkRel) || !empty($this->LinkRev) || !empty($this->LinkType)) {
+				$linkarray = Array();
+				$linknamearray = Array();
+				if (!empty($this->LinkCharset)) {
+					array_push($linkarray, 'LinkCharset');
+					array_push($linknamearray, 'charset');
+				}
+				if (!empty($this->LinkHref)) {
+					array_push($linkarray, 'LinkHref');
+					array_push($linknamearray, 'href');
+				}
+				if (!empty($this->LinkHreflang)){
+					array_push($linkarray, 'LinkHreflang');
+					array_push($linknamearray, 'hreflang');
+				}
+				if (!empty($this->LinkMedia)) {
+					array_push($linkarray, 'LinkMedia');
+					array_push($linknamearray, 'media');
+				}
+				if (!empty($this->LinkRel)) {
+					array_push($linkarray, 'LinkRel');
+					array_push($linknamearray, 'rel');
+				}
+				if (!empty($this->LinkRev)) {
+					array_push($linkarray, 'LinkRev');
+					array_push($linknamearray, 'rev');
+				}
+				if (!empty($this->LinkType)) {
+					array_push($linkarray, 'LinkType');
+					array_push($linknamearray, 'type');
+				}
+				$this->PrintArray($linkarray, 'link', $linknamearray);
+			}
+			
+			if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
+				$this->TagSheet('link', NULL, 'text/javascript', NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL);
+			}
+			
+			if (!empty($this->PrintPreviewStyleSheet) && $printpreviewflag && !$stylesheet) {
+				$this->TagSheet('link', NULL, 'text/css', NULL, NULL, NULL, NULL, $this->PrintPreviewStyleSheet, NULL, NULL);
+			}
+			
+			if (!empty($this->ScriptStyleSheet) && !$printpreviewflag && !$stylesheet) {
+				$this->TagSheet('script', NULL, 'text/css', $this->ScriptStyleSheetCharset, NULL, NULL, $this->ScriptStyleSheet, NULL, NULL, 'script');
+			}
+			
+			if (!empty($this->ScriptStyleSheetCode) && !$printpreviewflag && !$stylesheet) {
+				$this->TagSheet('script', null, 'text/css', NULL, $this->ScriptStyleSheetDefer, NULL, NULL, NULL, $this->ScriptStyleSheetCode, 'script');
+			}
+			
+			if (!empty($this->ScriptJavaScriptSheet) && !$printpreviewflag) {
+				$this->TagSheet('script', NULL, 'text/javascript', $this->ScriptJavaScriptSheetCharset, NULL, NULL, $this->ScriptJavaScriptSheet, NULL, NULL, 'script');
+			}
+			
+			if (!empty($this->ScriptJavaScriptSheetCode) && !$printpreviewflag) {
+				$this->TagSheet('script', null, 'text/javascript', NULL, $this->ScriptJavaScriptSheetDefer, NULL, NULL, NULL, $this->ScriptJavaScriptSheetCode, 'script');
+			}
+			
+			if (!empty($this->ScriptVBScriptSheet) && !$printpreviewflag) {
+				$this->TagSheet('script', NULL, 'text/vbscript', $this->ScriptVBScriptSheetCharset, NULL, NULL, $this->ScriptVBScriptSheet, NULL, NULL, 'script');
+			}
+			
+			if (!empty($this->ScriptVBScriptSheetCode) && !$printpreviewflag) {
+				$this->TagSheet('script', null, 'text/vbscript', NULL, $this->ScriptVBScriptSheetDefer, NULL, NULL, NULL, $this->ScriptVBScriptSheetCode, 'script');
+			}
+			
+			$this->Writer->endElement(); // END HEAD TAG
 		}
-		
-		if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
-			$this->TagSheet('link', NULL, 'text/javascript', NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL);
-		}
-		
-		if (!empty($this->PrintPreviewStyleSheet) && $printpreviewflag && !$stylesheet) {
-			$this->TagSheet('link', NULL, 'text/css', NULL, NULL, NULL, NULL, $this->PrintPreviewStyleSheet, NULL, NULL);
-		}
-		
-		if (!empty($this->ScriptStyleSheet) && !$printpreviewflag && !$stylesheet) {
-			$this->TagSheet('script', NULL, 'text/css', $this->ScriptStyleSheetCharset, NULL, NULL, $this->ScriptStyleSheet, NULL, NULL, 'script');
-		}
-		
-		if (!empty($this->ScriptStyleSheetCode) && !$printpreviewflag && !$stylesheet) {
-			$this->TagSheet('script', null, 'text/css', NULL, $this->ScriptStyleSheetDefer, NULL, NULL, NULL, $this->ScriptStyleSheetCode, 'script');
-		}
-		
-		if (!empty($this->ScriptJavaScriptSheet) && !$printpreviewflag) {
-			$this->TagSheet('script', NULL, 'text/javascript', $this->ScriptJavaScriptSheetCharset, NULL, NULL, $this->ScriptJavaScriptSheet, NULL, NULL, 'script');
-		}
-		
-		if (!empty($this->ScriptJavaScriptSheetCode) && !$printpreviewflag) {
-			$this->TagSheet('script', null, 'text/javascript', NULL, $this->ScriptJavaScriptSheetDefer, NULL, NULL, NULL, $this->ScriptJavaScriptSheetCode, 'script');
-		}
-		
-		if (!empty($this->ScriptVBScriptSheet) && !$printpreviewflag) {
-			$this->TagSheet('script', NULL, 'text/vbscript', $this->ScriptVBScriptSheetCharset, NULL, NULL, $this->ScriptVBScriptSheet, NULL, NULL, 'script');
-		}
-		
-		if (!empty($this->ScriptVBScriptSheetCode) && !$printpreviewflag) {
-			$this->TagSheet('script', null, 'text/vbscript', NULL, $this->ScriptVBScriptSheetDefer, NULL, NULL, NULL, $this->ScriptVBScriptSheetCode, 'script');
-		}
-		
-		$this->Writer->endElement(); // END HEAD TAG
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
@@ -643,6 +648,8 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$Keys[59] = 'LinkType3';
 			$Keys[60] = 'LinkType4';
 			$Keys[61] = 'LinkType5';
+			$Keys[62] = 'Enable/Disable';
+			$Keys[63] = 'Status';
 			
 			$this->addModuleContent($Keys, $Header, current($this->TableNames));
 		} else {
@@ -663,6 +670,31 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->deleteModuleContent($PageID, current($this->TableNames));
 		} else {
 			array_push($this->ErrorMessage,'deleteHeader: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateHeaderStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, current($this->TableNames));
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, current($this->TableNames));
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, current($this->TableNames));
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, current($this->TableNames));
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, current($this->TableNames));
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, current($this->TableNames));
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateHeaderStatus: PageID cannot be NULL!');
 		}
 	}
 	

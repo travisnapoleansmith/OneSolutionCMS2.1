@@ -245,6 +245,8 @@
 		$Header['LinkType3'] = NULL;
 		$Header['LinkType4'] = NULL;
 		$Header['LinkType5'] = NULL;
+		$Header['Enable/Disable'] = $_POST['EnableDisable'];
+		$Header['Status'] = $_POST['Status'];
 		
 		$NewsStoryLookup = array();
 		$NewsStoryLookup['PageID'] = $NewPageID;
@@ -636,22 +638,22 @@
 		$FormSelect['PageID'] = $UpdateNewsPage;
 		$FormOption['PageID'] = $UpdateNewsPage;
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$DeleteNewsPage = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
 		$FormSelect['PageID'] = $DeleteNewsPage;
 		$FormOption['PageID'] = $DeleteNewsPage;
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$EnableDisableStatusChangeNewsPage = $Options['XhtmlNewsStories']['news']['EnableDisableStatusChangeNewsPage']['SettingAttribute'];
 		$FormSelect['PageID'] = $EnableDisableStatusChangeNewsPage;
 		$FormOption['PageID'] = $EnableDisableStatusChangeNewsPage;
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$NewsPageCreatedPage = $Options['XhtmlNewsStories']['news']['NewsPageCreatedPage']['SettingAttribute'];
 		

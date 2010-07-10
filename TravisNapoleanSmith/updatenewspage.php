@@ -12,6 +12,7 @@
 	$NewUpdateNewsPage = $NewUpdateNewsPage[1];
 	
 	$PageID = $_SESSION['POST']['FilteredInput']['PageID'];
+	$FormOptionObjectID = $_SESSION['POST']['FilteredInput']['FormOptionObjectID'];
 	$RevisionID = $_SESSION['POST']['FilteredInput']['RevisionID'];
 	$CreationDateTime = $_SESSION['POST']['FilteredInput']['CreationDateTime'];
 	$Owner = $_SESSION['POST']['FilteredInput']['Owner'];
@@ -20,6 +21,7 @@
 	$NewRevisionID = $RevisionID + 1;
 	
 	$_POST['PageID'] = $PageID;
+	$_POST['FormOptionObjectID'] = $FormOptionObjectID;
 	$_POST['RevisionID'] = $RevisionID;
 	$_POST['CreationDateTime'] = $CreationDateTime;
 	$_POST['Owner'] = $Owner;
@@ -255,13 +257,15 @@
 			//$Header['LinkType3'] = NULL;
 			//$Header['LinkType4'] = NULL;
 			//$Header['LinkType5'] = NULL;
+			//$Header['Enable/Disable'] = $_POST['EnableDisable'];
+			//$Header['Status'] = $_POST['Status'];
 			
 			$NewsStoryLookup = array();
 			//$NewsStoryLookup['PageID'] = $PageID;
 			//$NewsStoryLookup['ObjectID'] = 1;
 			//$NewsStoryLookup['NewsStoryPageID'] = NULL;
 			$NewsStoryLookup['NewsStoryDay'] = $_POST['NewsDay'];
-			$NewsStoryLookup['NewsStoryMonth'] = $_POST['NewsMonth'];
+			$NewsStoryLookup['NewsStoryMonth'] = str_replace(' ', '', $_POST['NewsMonth']);
 			$NewsStoryLookup['NewsStoryYear'] = $_POST['NewsYear'];
 			//$NewsStoryLookup['Enable/Disable'] = $_POST['EnableDisable'];
 			//$NewsStoryLookup['Status'] = $_POST['Status'];
@@ -563,6 +567,54 @@
 			//$ContentPrintPreview['PrintPageID20'] = NULL;
 			//$ContentPrintPreview['Enable/Disable'] = $_POST['EnableDisable'];
 			//$ContentPrintPreview['Status'] = $_POST['Status'];
+			
+			$FormOptionID = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
+			$FormOptionText = $hold['FilteredInput']['PageTitle'];
+			//$FormOptionValue = $NewNewsPage;
+			//$FormOptionValue .= ' - ';
+			//$FormOptionValue .= $NewPageID;
+			
+			$FormOption = array();
+			//$FormOption['PageID'] = $UpdateNewsPage;
+			//$FormOption['ObjectID'] = $NewNewsPage;
+			$FormOption['FormOptionText'] = $FormOptionText;
+			//$FormOption['FormOptionTextDynamic'] = 'false';
+			//$FormOption['FormOptionTextTableName'] = NULL;
+			//$FormOption['FormOptionTextField'] = NULL;
+			//$FormOption['FormOptionTextPageID'] = NULL;
+			//$FormOption['FormOptionTextObjectID'] = NULL;
+			//$FormOption['FormOptionTextRevisionID'] = NULL;
+			//$FormOption['FormOptionDisabled'] = NULL;
+			//$FormOption['FormOptionLabel'] = NULL;
+			//$FormOption['FormOptionLabelDynamic'] = NULL;
+			//$FormOption['FormOptionLabelTableName'] = NULL;
+			//$FormOption['FormOptionLabelField'] = NULL;
+			//$FormOption['FormOptionLabelPageID'] = NULL;
+			//$FormOption['FormOptionLabelObjectID'] = NULL;
+			//$FormOption['FormOptionLabelRevisionID'] = NULL;
+			//$FormOption['FormOptionSelected'] = NULL;
+			//$FormOption['FormOptionValue'] = $FormOptionValue;
+			//$FormOption['FormOptionValueDynamic'] = NULL;
+			//$FormOption['FormOptionValueTableName'] = NULL;
+			//$FormOption['FormOptionValueField'] = NULL;
+			//$FormOption['FormOptionValuePageID'] = NULL;
+			//$FormOption['FormOptionValueObjectID'] = NULL;
+			//$FormOption['FormOptionValueRevisionID'] = NULL;
+			//$FormOption['FormOptionClass'] = NULL;
+			//$FormOption['FormOptionDir'] = 'ltr';
+			//$FormOption['FormOptionID'] = NULL;
+			//$FormOption['FormOptionLang'] = 'en-us';
+			//$FormOption['FormOptionStyle'] = NULL;
+			//$FormOption['FormOptionTitle'] = NULL;
+			//$FormOption['FormOptionXMLLang'] = 'en-us';
+			//$FormOption['Enable/Disable'] = 'Enable';
+			//$FormOption['Status'] = 'Approved';
+			
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
+			$FormOptionID = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
+			$FormOptionID = $Options['XhtmlNewsStories']['news']['EnableDisableStatusChangeNewsPage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeader', array('PageID' => array('PageID' => $PageID), 'Content' => $Header));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryLookup', array('PageID' => array('PageID' => $PageID, 'ObjectID' => 1), 'Content' => $NewsStoryLookup));

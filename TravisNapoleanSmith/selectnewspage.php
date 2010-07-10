@@ -5,6 +5,7 @@
 	$hold = explode(' ', $hold);
 	$PageID = $hold[2];
 	$_POST['PageID'] = $PageID;
+	$_POST['FormOptionObjectID'] = $hold[0];
 	unset($hold);
 	
 	$PageID = array();
@@ -73,6 +74,7 @@
 	$sessionname = $Tier6Databases->SessionStart('UpdateNewsPage');
     
 	$_SESSION['POST']['FilteredInput']['PageID'] = $_POST['PageID'];
+	$_SESSION['POST']['FilteredInput']['FormOptionObjectID'] = $_POST['FormOptionObjectID'];
 	$_SESSION['POST']['FilteredInput']['RevisionID'] = $NewsPageVersion[0]['RevisionID'];
 	$_SESSION['POST']['FilteredInput']['CreationDateTime'] = $NewsPageVersion[0]['CreationDateTime'];
 	$_SESSION['POST']['FilteredInput']['Owner'] = $NewsPageVersion[0]['Owner'];
@@ -105,7 +107,5 @@
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdateNewsPage = $Options['XhtmlNewsStories']['news']['UpdateNewsPage']['SettingAttribute'];
 	header("Location: $UpdateNewsPage&SessionID=$sessionname");
-	//print_r($_POST);
-	//print_r($_SESSION);
 	
 ?>

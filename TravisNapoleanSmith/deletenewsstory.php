@@ -24,13 +24,13 @@
 		$NewsPageID = array();
 		$NewsPageID['PageID'] = $NewsArticleUpdateSelectPage;
 		$NewsPageID['ObjectID'] = $PageID;
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryFormOption', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryFormSelect', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', $NewsPageID);
 		
 		$NewsArticleDeleteSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
 		$NewsPageID['PageID'] = $NewsArticleDeleteSelectPage;
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryFormOption', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryFormSelect', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', $NewsPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', $NewsPageID);
 		
 		$NewsArticleDeletePage = $Options['XhtmlNewsStories']['news']['NewsArticleDeletePage']['SettingAttribute'];
 		header("Location: $NewsArticleDeletePage");

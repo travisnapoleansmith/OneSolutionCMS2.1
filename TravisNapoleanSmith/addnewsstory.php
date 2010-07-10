@@ -267,22 +267,22 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
 		$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$NewsArticleDeleteSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
 		$FormSelect['PageID'] = $NewsArticleDeleteSelectPage;
 		$FormOption['PageID'] = $NewsArticleDeleteSelectPage;
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$NewsArticleEnableDisableSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisableSelectPage']['SettingAttribute'];
 		$FormSelect['PageID'] = $NewsArticleEnableDisableSelectPage;
 		$FormOption['PageID'] = $NewsArticleEnableDisableSelectPage;
 		
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormOption', $FormOption);
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryFormSelect', $FormSelect);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
 		$Tier6Databases->ModulePass('XmlFeed', 'feed', 'createStoryFeed', $NewsFeed);
 		
