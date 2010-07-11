@@ -545,8 +545,12 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->Writer->startElement($this->ContentStartTag);
 					$this->ProcessStandardAttribute('ContentStartTag');
 					$this->Content = trim($this->Content);
-					if (strpos($this->Content, "\n\r")) {
-						$this->Content = explode("\n\r", $this->Content);
+					if (strpos($this->Content, "\n\r") | strpos($this->Content, "\n\n") ) {
+						if (strpos($this->Content, "\n\n")) {
+							$this->Content = explode("\n\n", $this->Content);
+						} else {
+							$this->Content = explode("\n\r", $this->Content);
+						}
 						$i = 0;
 						$count = count($this->Content);
 						$count--;

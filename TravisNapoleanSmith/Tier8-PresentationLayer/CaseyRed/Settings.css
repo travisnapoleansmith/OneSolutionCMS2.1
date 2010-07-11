@@ -81,8 +81,10 @@ table.Calendar {
 
 fieldset.ShortForm {
 	position: relative;
-	width: 350px;
-	left: 100px;
+	width: 400px;
+	left: 80px;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 label.ShortForm {
@@ -93,17 +95,19 @@ label.ShortForm {
 
 input.ShortForm {
 	position: relative;
-	width: 200px;
+	width: 255px;
 	top: -8px;
 	margin-bottom: 10px;
-	left: 100px;
+	left: 115px;
 }
 
 button.ShortForm {
 	position: relative;
-	left: 125px;
+	left: 35%;
+	right: 35%;
 	background-color:#741D01;
 	border-color: #FFFFFF;
+	top: 10px;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	height: 25px;
@@ -111,13 +115,13 @@ button.ShortForm {
 
 textarea.ShortForm {
 	position: relative;
-	left: 100px;
+	left: 115px;
 	top: -8px;
 }
 
 select.ShortForm {
 	position: relative;
-	left: 100px;
+	left: 115px;
 	top: -10px;
 	margin-bottom: -5px;
 	margin-top: 5px;

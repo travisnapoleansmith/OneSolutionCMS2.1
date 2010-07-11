@@ -113,7 +113,7 @@
 		$Content[0]['ContentStartTagClass'] = 'BodyText';
 		$Content[0]['ContentPTagID'] = NULL;
 		$Content[0]['ContentPTagStyle'] = NULL;
-		$Content[0]['ContentPTagClass'] = NULL;
+		$Content[0]['ContentPTagClass'] = 'BodyText';
 		$Content[0]['Enable/Disable'] = $_POST['EnableDisable'];
 		$Content[0]['Status'] = $_POST['Status'];
 		

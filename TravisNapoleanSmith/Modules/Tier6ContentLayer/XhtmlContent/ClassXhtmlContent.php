@@ -459,8 +459,12 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->Writer->startElement($this->ContentStartTag);
 					$this->ProcessStandardAttribute('ContentStartTag');
 					$this->Content = trim($this->Content);
-					if (strpos($this->Content, "\n\r")) {
-						$this->Content = explode("\n\r", $this->Content);
+					if (strpos($this->Content, "\n\r") | strpos($this->Content, "\n\n") ) {
+						if (strpos($this->Content, "\n\n")) {
+							$this->Content = explode("\n\n", $this->Content);
+						} else {
+							$this->Content = explode("\n\r", $this->Content);
+						}
 						$i = 0;
 						$count = count($this->Content);
 						$count--;
@@ -507,7 +511,6 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						next($this->Content);
 					}
 				} else {
-					
 					$this->Writer->startElement('p');
 					$this->ProcessStandardAttribute('ContentPTag');
 					$this->Writer->writeRaw("\n    ");
