@@ -306,6 +306,7 @@
 		$ContentLayerVersion['ContentPageType'] = 'NewsStoryPage';
 		$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 		$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
+		$ContentLayerVersion['Creator'] = $_COOKIE['UserName'];
 		$ContentLayerVersion['LastChangeUser'] = $_COOKIE['UserName'];
 		$ContentLayerVersion['CreationDateTime'] = $DateTime;
 		$ContentLayerVersion['LastChangeDateTime'] = $DateTime;
@@ -554,9 +555,9 @@
 		$ContentPrintPreview['Enable/Disable'] = $_POST['EnableDisable'];
 		$ContentPrintPreview['Status'] = $_POST['Status'];
 		
-		$UpdateNewsPage = $Options['XhtmlNewsStories']['news']['UpdateNewsPage']['SettingAttribute'];
+		$UpdateNewsPageSelect = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
 		$FormSelect = array();
-		$FormSelect['PageID'] = $UpdateNewsPage;
+		$FormSelect['PageID'] = $UpdateNewsPageSelect;
 		$FormSelect['ObjectID'] = $NewNewsPage;
 		$FormSelect['StopObjectID'] = 9999;
 		$FormSelect['ContainerObjectType'] = 'Option';
@@ -589,7 +590,7 @@
 		$FormOptionValue .= $NewPageID;
 		
 		$FormOption = array();
-		$FormOption['PageID'] = $UpdateNewsPage;
+		$FormOption['PageID'] = $UpdateNewsPageSelect;
 		$FormOption['ObjectID'] = $NewNewsPage;
 		$FormOption['FormOptionText'] = $FormOptionText;
 		$FormOption['FormOptionTextDynamic'] = 'false';
@@ -634,9 +635,9 @@
 		
 		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
 
-		$UpdateNewsPage = $Options['XhtmlNewsStories']['news']['UpdateNewsPage']['SettingAttribute'];
-		$FormSelect['PageID'] = $UpdateNewsPage;
-		$FormOption['PageID'] = $UpdateNewsPage;
+		$UpdateNewsPageSelect = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
+		$FormSelect['PageID'] = $UpdateNewsPageSelect;
+		$FormOption['PageID'] = $UpdateNewsPageSelect;
 		
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);

@@ -50,6 +50,15 @@
 	color: #FFCC00;
 	font-size: 14px;
 	padding-left: 20px;
+	padding-right: 15px;
+	padding-bottom: 10px;
+	text-indent: 10px;
+}
+
+.BodyTextButton{
+	color: #FFCC00;
+	font-size: 14px;
+	padding-left: 20px;
 	padding-right: 30px;
 	padding-bottom: 10px;
 	text-indent: 10px;

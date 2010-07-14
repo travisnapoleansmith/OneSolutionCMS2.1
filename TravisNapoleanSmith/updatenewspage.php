@@ -320,6 +320,7 @@
 			$ContentLayerVersion['ContentPageType'] = 'NewsStoryPage';
 			$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 			$ContentLayerVersion['Owner'] = $Owner;
+			$ContentLayerVersion['Creator'] =  $_COOKIE['UserName'];
 			$ContentLayerVersion['LastChangeUser'] = $_COOKIE['UserName'];
 			$ContentLayerVersion['CreationDateTime'] = $CreationDateTime;
 			$ContentLayerVersion['LastChangeDateTime'] = $DateTime;

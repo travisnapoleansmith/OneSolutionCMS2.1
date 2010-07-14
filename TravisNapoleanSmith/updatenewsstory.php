@@ -166,6 +166,7 @@
 			$NewsVersion['XMLItem'] = $LastNewsFeedItem;
 			$NewsVersion['UserAccessGroup'] = $UserAccessGroup;
 			$NewsVersion['Owner'] = $Owner;
+			$NewsVersion['Creator'] = $_COOKIE['UserName'];
 			$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];
 			$NewsVersion['CreationDateTime'] = $CreationDateTime;
 			$NewsVersion['LastChangeDateTime'] = $DateTime;

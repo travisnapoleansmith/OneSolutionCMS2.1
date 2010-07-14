@@ -644,9 +644,10 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[3] = 'ContentPageType';
 			$Keys[3] = 'UserAccessGroup';
 			$Keys[4] = 'Owner';
-			$Keys[5] = 'LastChangeUser';
-			$Keys[6] = 'CreationDateTime';
-			$Keys[7] = 'LastChangeDateTime';
+			$Keys[5] = 'Creator';
+			$Keys[6] = 'LastChangeUser';
+			$Keys[7] = 'CreationDateTime';
+			$Keys[8] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {

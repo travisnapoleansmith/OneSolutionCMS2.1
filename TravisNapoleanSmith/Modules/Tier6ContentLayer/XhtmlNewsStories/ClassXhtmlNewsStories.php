@@ -886,9 +886,10 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Keys[3] = 'XMLItem';
 			$Keys[4] = 'UserAccessGroup';
 			$Keys[5] = 'Owner';
-			$Keys[6] = 'LastChangeUser';
-			$Keys[7] = 'CreationDateTime';
-			$Keys[8] = 'LastChangeDateTime';
+			$Keys[6] = 'Creator';
+			$Keys[7] = 'LastChangeUser';
+			$Keys[8] = 'CreationDateTime';
+			$Keys[9] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
 		} else {
