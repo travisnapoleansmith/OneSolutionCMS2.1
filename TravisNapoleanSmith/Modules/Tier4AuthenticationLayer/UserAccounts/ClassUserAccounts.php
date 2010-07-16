@@ -422,8 +422,76 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		}
 	}
 	
-	public function changeUserPassword($username, $password) {
-	
+	public function changeUserPassword($username, $password, $usercode) {
+		$hold = array();
+		if ($username && $password && $usercode) {
+			$passarray = array();
+			$passarray['UserName'] = $username;
+			$passarray['NewUser'] = 'No';
+			$passarray['Reset'] = 'Yes';
+			$passarray['Salt'] = $usercode;
+			
+			$this->LayerModule->Connect('UserAccounts');
+			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
+			$this->LayerModule->Disconnect('UserAccounts');
+			
+			$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
+
+			if ($results[0]) {
+				if (!is_null($results[0]['Password'])) {
+					$hold['Error']['Password'] = 'Password has already been set for this account, <br /> if you need to reset your password go to password reset!';
+					return $hold;
+				} else {
+					$PasswordEncrypt = $this->createPassword($password);
+					$Salt = $this->Salt;
+					$EmailAccount = $results[0]['EmailAccount'];
+					
+					$passarray = array();
+					$passarray1 = array();
+					$passarray2 = array();
+					$passarray3 = array();
+					$passarray4 = array();
+					
+					$passarray1[0] = 'Password';
+					$passarray1[1] = 'Salt';
+					$passarray1[2] = 'Attempts';
+					$passarray1[3] = 'NewUser';
+					$passarray1[4] = 'Reset';
+					
+					$passarray2[0] = $PasswordEncrypt;
+					$passarray2[1] = $Salt;
+					$passarray2[2] = 0;
+					$passarray2[3] = 'No';
+					$passarray2[4] = 'No';
+					
+					$passarray3[0] = 'UserName';
+					$passarray3[1] = 'UserName';
+					$passarray3[2] = 'UserName';
+					$passarray3[3] = 'UserName';
+					$passarray3[4] = 'UserName';
+					
+					$passarray4[0] = $username;
+					$passarray4[1] = $username;
+					$passarray4[2] = $username;
+					$passarray4[3] = $username;
+					$passarray4[4] = $username;
+					
+					$passarray['rowname'] = $passarray1;
+					$passarray['rowvalue'] = $passarray2;
+					$passarray['rownumbername'] = $passarray3;
+					$passarray['rownumber'] = $passarray4;
+					
+					$this->LayerModule->Connect('UserAccounts');
+					$this->LayerModule->pass ('UserAccounts', 'updateRow', $passarray);
+					$this->LayerModule->Disconnect('UserAccounts');
+					
+					$this->generateChangedPasswordEmail($EmailAccount);
+				}
+			} else {
+				$hold['Error']['General Error Message'] = 'Either the User Account does not exist, the User Code is incorrect or <br /> this is a new account!';
+				return $hold;
+			}
+		}
 	}
 	
 	public function getTableNames() {

@@ -508,7 +508,7 @@ class ContentLayer extends LayerModulesAbstract
 				exit;
 			} else {
 				$this->SessionDestroy($sessionname);
-				header("Location: $PasswordChangedPage&SessionID=$sessionname");
+				header("Location: $PasswordChangedPage");
 				exit;
 			}
 		}		
@@ -562,7 +562,39 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function ChangeResetPassword() {
-	
+		$sessionname = $this->SessionStart('PasswordResetChange');
+		
+		$loginidnumber = Array();
+		$loginidnumber['PageID'] = $_POST['PasswordResetChange'];
+		if ($_GET['PageID']){
+			$loginidnumber['PageID'] = $_GET['PageID'];
+		}
+		
+		$PasswordResetChangePage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetChangePage']['SettingAttribute'];
+		$PasswordResetLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetLocation']['SettingAttribute'];
+		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
+		if ($hold['Error']) {
+			$_SESSION['POST'] = $hold;
+			header("Location: $PasswordResetLocation&SessionID=$sessionname");
+			exit;
+		} else {
+			$hold = array();
+			$passarray = array();
+			$passarray['changeUserPassword'] = array('UserName' => $_POST['UserName'], 'Password' => $_POST['Password'], 'UserCode' => $_POST['UserCode']);
+			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+			if ($hold['Error']) {
+				$_SESSION['POST'] = $hold;
+				header("Location: $PasswordResetLocation&SessionID=$sessionname");
+				exit;
+			} else {
+				$this->SessionDestroy($sessionname);
+				header("Location: $PasswordResetChangePage");
+				exit;
+			}
+		}		
+		
 	}
 	
 	public function FormSubmitValidate($SessionName, $PageName) {
