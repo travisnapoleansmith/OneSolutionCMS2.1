@@ -483,6 +483,26 @@ abstract class LayerModulesAbstract
 					$passarray1[1] = 'FeedItemDescription';
 					$passarray2[1] = $PageID['FeedItemDescription'];
 				}
+				
+				if ($PageID['FeedItemAuthor']) {
+					$passarray1[2] = 'FeedItemAuthor';
+					$passarray2[2] = $PageID['FeedItemAuthor'];
+				}
+				
+				if ($PageID['FeedItemCategory']) {
+					$passarray1[3] = 'FeedItemCategory';
+					$passarray2[3] = $PageID['FeedItemCategory'];
+				}
+				
+				if ($PageID['FeedItemGuid']) {
+					$passarray1[4] = 'FeedItemGuid';
+					$passarray2[4] = $PageID['FeedItemGuid'];
+				}
+				
+				if ($PageID['FeedItemPubDate']) {
+					$passarray1[5] = 'FeedItemPubDate';
+					$passarray2[5] = $PageID['FeedItemPubDate'];
+				}
 			}
 			
 			if ($PageID['PageID']) {
@@ -500,6 +520,18 @@ abstract class LayerModulesAbstract
 				
 				$passarray3[1] = 'XMLItem';
 				$passarray4[1] = $PageID['XMLItem'];
+				
+				$passarray3[2] = 'XMLItem';
+				$passarray4[2] = $PageID['XMLItem'];
+				
+				$passarray3[3] = 'XMLItem';
+				$passarray4[3] = $PageID['XMLItem'];
+				
+				$passarray3[4] = 'XMLItem';
+				$passarray4[4] = $PageID['XMLItem'];
+				
+				$passarray3[5] = 'XMLItem';
+				$passarray4[5] = $PageID['XMLItem'];
 			}
 			
 			$passarray['rowname'] = $passarray1;
@@ -815,6 +847,7 @@ abstract class LayerModulesAbstract
 	public function getRecord($PageID) {
 		$passarray = array();
 		$passarray = $PageID['PageID'];
+		
 		$args = func_get_args();
 		if ($args[1]) {
 			$DatabaseName = $args[1];
@@ -823,8 +856,9 @@ abstract class LayerModulesAbstract
 			$this->LayerModule->Connect($DatabaseName);
 			$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($DatabaseName);
-
+			
 			$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
+			
 		} else {
 			$DatabaseVariableName = $PageID['DatabaseVariableName'];
 			

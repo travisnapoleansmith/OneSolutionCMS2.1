@@ -27,8 +27,13 @@
 	$passarray['DatabaseVariableName'] = 'NewsStoriesVersionTableName';
 	$NewsVersion = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getRecord', $passarray);
 	
+	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
+	unset($passarray['PageID']);
+	$passarray['PageID'] = array('XMLItem' => $PageID['PageID']);
+	$NewsFeed = $Tier6Databases->getRecord($passarray, 'XMLNewsFeed');
+	
 	$sessionname = $Tier6Databases->SessionStart('UpdateNewsStory');
-
+	$LastNewsVersion = end($NewsVersion);
 	$_SESSION['POST']['FilteredInput']['PageID'] = $_POST['PageID'];
 	$_SESSION['POST']['FilteredInput']['RevisionID'] = $NewsStory[0]['RevisionID'];
 	$_SESSION['POST']['FilteredInput']['CreationDateTime'] = $NewsVersion[0]['CreationDateTime'];
@@ -41,10 +46,12 @@
 	$_SESSION['POST']['FilteredInput']['NewsDay'] = $NewsDate[0]['NewsStoryDay'];
 	$_SESSION['POST']['FilteredInput']['NewsMonth'] = $NewsDate[0]['NewsStoryMonth'];
 	$_SESSION['POST']['FilteredInput']['NewsYear'] = $NewsDate[0]['NewsStoryYear'];
+	$_SESSION['POST']['FilteredInput']['Category'] = $NewsFeed[0]['FeedItemCategory'];
+	$_SESSION['POST']['FilteredInput']['MenuName'] = $LastNewsVersion['StoryMenuName'];
 	$_SESSION['POST']['FilteredInput']['EnableDisable'] = 'Enable';
 	$_SESSION['POST']['FilteredInput']['Status'] = 'Approved';
 	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$NewsArticleUpdatePage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdatePage']['SettingAttribute'];
-	header("Location: $NewsArticleUpdatePage&SessionID=$sessionname");	
+	header("Location: $NewsArticleUpdatePage&SessionID=$sessionname");
 ?>

@@ -16,8 +16,13 @@
 		$StrippedContent = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Content']));
 		$StrippedContent = $StrippedContent['Content'];
 		
-		$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
-		$NewNewsFeedItem = ++$LastNewsFeedItem;
+		if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
+			$_POST['MenuName'] = NULL;
+			$hold['FilteredInput']['MenuName'] = NULL;
+		}
+		
+		//$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
+		//$NewNewsFeedItem = ++$LastNewsFeedItem;
 		
 		$LastPageID = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getLastNewsPageID', array());
 		$NewPageID = ++$LastPageID;
@@ -145,12 +150,13 @@
 		$NewsImage['Height'] = NULL;
 		$NewsImage['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsImage['Status'] = $_POST['Status'];
-		
+				
 		$NewsVersion = array();
 		$NewsVersion['PageID'] = $NewPageID;
 		$NewsVersion['RevisionID'] = 0;
 		$NewsVersion['CurrentVersion'] = 'true';
 		$NewsVersion['XMLItem'] = $NewNewsFeedItem;
+		$NewsVersion['StoryMenuName'] = $hold['FilteredInput']['MenuName'];
 		$NewsVersion['UserAccessGroup'] = 'Guest';
 		$NewsVersion['Owner'] = $_COOKIE['UserName'];
 		$NewsVersion['Creator'] = $_COOKIE['UserName'];
@@ -159,10 +165,10 @@
 		$NewsVersion['LastChangeDateTime'] = $DateTime;
 		
 		$NewsFeed = array();
-		$NewsFeed['XMLItem'] = $NewNewsFeedItem;
-		$NewsFeed['FeedItemTitle'] = htmlspecialchars_decode($StrippedHeading, ENT_QUOTES);
+		$NewsFeed['XMLItem'] = $NewPageID;
+		$NewsFeed['FeedItemTitle'] = htmlspecialchars($StrippedHeading, ENT_NOQUOTES);
 		$NewsFeed['FeedItemLink'] = $GLOBALS['sitelink'];
-		$NewsFeed['FeedItemDescription'] = htmlspecialchars_decode($StrippedContent, ENT_QUOTES);
+		$NewsFeed['FeedItemDescription'] = htmlspecialchars($StrippedContent, ENT_NOQUOTES);
 		$NewsFeed['FeedItemAuthor'] = $GLOBALS['author'];
 		$NewsFeed['FeedItemCategory'] = htmlspecialchars_decode($hold['FilteredInput']['Category'], ENT_QUOTES);
 		$NewsFeed['FeedItemComments'] = NULL;

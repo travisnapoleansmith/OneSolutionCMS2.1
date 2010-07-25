@@ -373,9 +373,11 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$newpassarray['Status'] = 'Approved';
 			
 			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
-			
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setOrderbyname', array('orderbyname' => 'NewsStoryDay`, `NewsStoryMonth`, `NewsStoryYear'));
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setOrderbytype', array('orderbytype' => 'ASC'));
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
 			$this->NewsStoriesDatesTable = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
+			
 			$this->NewsStoriesDatesTable = array_reverse($this->NewsStoriesDatesTable);
 			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
 			if ($this->NewsStoriesLookupNewsStoryMonth == 'Last30Days') {
@@ -884,12 +886,13 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Keys[1] = 'RevisionID';
 			$Keys[2] = 'CurrentVersion';
 			$Keys[3] = 'XMLItem';
-			$Keys[4] = 'UserAccessGroup';
-			$Keys[5] = 'Owner';
-			$Keys[6] = 'Creator';
-			$Keys[7] = 'LastChangeUser';
-			$Keys[8] = 'CreationDateTime';
-			$Keys[9] = 'LastChangeDateTime';
+			$Keys[4] = 'StoryMenuName';
+			$Keys[5] = 'UserAccessGroup';
+			$Keys[6] = 'Owner';
+			$Keys[7] = 'Creator';
+			$Keys[8] = 'LastChangeUser';
+			$Keys[9] = 'CreationDateTime';
+			$Keys[10] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
 		} else {

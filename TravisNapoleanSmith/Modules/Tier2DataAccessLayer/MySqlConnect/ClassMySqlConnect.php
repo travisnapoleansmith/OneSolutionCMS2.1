@@ -352,7 +352,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											if ($rownumbername != NULL) {
 												if ($rownumber != NULL) {
 													$rownumber = mysql_real_escape_string($rownumber);
-													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rowname . '` = "' . $rowvalue . '" WHERE `' . $rownumbername .'` = "' . $rownumber . '" ';
+													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rowname . '` = \'' . $rowvalue . '\' WHERE `' . $rownumbername .'` = "' . $rownumber . '" ';
 													$result = mysql_query($query);
 												} else {
 													array_push($this->ErrorMessage,'updateRow: Row Number cannot be NULL!');
@@ -403,7 +403,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$rowvaluestring = current($rowvalue);
 											$rowvaluestring = mysql_real_escape_string($rowvaluestring);
 											if ($rowvaluestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = "' . $rowvaluestring . '" WHERE ' . $string . ' ';
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = \'' . $rowvaluestring . '\' WHERE ' . $string . ' ';
 											} else {
 												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = NULL WHERE ' . $string . ' ';
 											}
@@ -419,7 +419,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$rowvaluestring = NULL;
 											$rowvaluestring = mysql_real_escape_string(current($rowvalue));
 											if ($rowvaluestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = "' . $rowvaluestring . '" WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = \'' . $rowvaluestring . '\' WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
 											} else {
 												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = NULL WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
 											}

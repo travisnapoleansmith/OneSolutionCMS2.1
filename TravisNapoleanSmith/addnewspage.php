@@ -303,7 +303,8 @@
 		$ContentLayerVersion['PageID'] = $NewPageID;
 		$ContentLayerVersion['RevisionID'] = 0;
 		$ContentLayerVersion['CurrentVersion'] = 'true';
-		$ContentLayerVersion['ContentPageType'] = 'NewsStoryPage';
+		$ContentLayerVersion['ContentPageType'] = 'NewsPage';
+		$ContentLayerVersion['ContentPageMenuName'] = NULL;
 		$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 		$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
 		$ContentLayerVersion['Creator'] = $_COOKIE['UserName'];

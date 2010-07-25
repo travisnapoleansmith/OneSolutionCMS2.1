@@ -1713,7 +1713,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 		
 		//while (current($this->FormSelectObjectID) != current($this->FormSelectStopObjectID)) {
-		while (current($this->FormSelectObjectID)) {
+		while (isset($this->FormSelectObjectID[key($this->FormSelectObjectID)])) {
 			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
 				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
 					$this->Writer->startElement('select');
