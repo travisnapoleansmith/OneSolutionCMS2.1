@@ -195,7 +195,9 @@ class ContentLayer extends LayerModulesAbstract
 		
 		$passarray = array();
 		$passarray['PageID'] = $this->PageID['PageID'];
-		$passarray['RevisionID'] = $this->PageID['RevisionID'];
+		if ($this->PageID['RevisionID']) {
+			$passarray['RevisionID'] = $this->PageID['RevisionID'];
+		}
 		$passarray['CurrentVersion'] = $this->PageID['CurrentVersion'];
 		
 		$this->LayerModule->Connect($this->ContentLayerVersionTableName);
@@ -203,6 +205,11 @@ class ContentLayer extends LayerModulesAbstract
 		$this->LayerModule->Disconnect($this->ContentLayerVersionTableName);
 		
 		$this->ContentLayerVersionDatabase = $this->LayerModule->pass ($this->ContentLayerVersionTableName, 'getMultiRowField', array());
+		
+		if (!isset($this->PageID['RevisionID'])) {
+			$this->RevisionID = $this->ContentLayerVersionDatabase[0]['RevisionID'];
+			$_GET['RevisionID'] = $this->RevisionID;
+		}
 		
 	}
 	
@@ -606,13 +613,16 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
+		
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
 		if ($hold['FilteredInput']['Priority']) {
-				$hold['FilteredInput']['Priority'] *= 10;
-			}
-			if ($hold['FilteredInput']['Frequency']) {
-				$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
-			}
+			$hold['FilteredInput']['Priority'] *= 10;
+		}
+		
+		if ($hold['FilteredInput']['Frequency']) {
+			$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
+		}
+		
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
@@ -675,12 +685,13 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[2] = 'CurrentVersion';
 			$Keys[3] = 'ContentPageType';
 			$Keys[4] = 'ContentPageMenuName';
-			$Keys[5] = 'UserAccessGroup';
-			$Keys[6] = 'Owner';
-			$Keys[7] = 'Creator';
-			$Keys[8] = 'LastChangeUser';
-			$Keys[9] = 'CreationDateTime';
-			$Keys[10] = 'LastChangeDateTime';
+			$Keys[5] = 'ContentPageMenuTitle';
+			$Keys[6] = 'UserAccessGroup';
+			$Keys[7] = 'Owner';
+			$Keys[8] = 'Creator';
+			$Keys[9] = 'LastChangeUser';
+			$Keys[10] = 'CreationDateTime';
+			$Keys[11] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {

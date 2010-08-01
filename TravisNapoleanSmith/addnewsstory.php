@@ -157,6 +157,7 @@
 		$NewsVersion['CurrentVersion'] = 'true';
 		$NewsVersion['XMLItem'] = $NewNewsFeedItem;
 		$NewsVersion['StoryMenuName'] = $hold['FilteredInput']['MenuName'];
+		$NewsVersion['StoryMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 		$NewsVersion['UserAccessGroup'] = 'Guest';
 		$NewsVersion['Owner'] = $_COOKIE['UserName'];
 		$NewsVersion['Creator'] = $_COOKIE['UserName'];
@@ -269,7 +270,7 @@
 		$FormOption['FormOptionXMLLang'] = 'en-us';
 		$FormOption['Enable/Disable'] = 'Enable';
 		$FormOption['Status'] = 'Approved';
-		
+
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStory', $NewsStory);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);

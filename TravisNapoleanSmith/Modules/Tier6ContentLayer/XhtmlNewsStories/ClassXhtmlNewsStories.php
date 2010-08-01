@@ -222,7 +222,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 
 		$this->LayerModule->Connect($this->NewsStoriesLookupTableName);
 		
-		
 		$this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		
 		$this->NewsStoriesLookupPageID = $this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'getRowField', array('rowfield' => 'PageID'));
@@ -887,12 +886,13 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Keys[2] = 'CurrentVersion';
 			$Keys[3] = 'XMLItem';
 			$Keys[4] = 'StoryMenuName';
-			$Keys[5] = 'UserAccessGroup';
-			$Keys[6] = 'Owner';
-			$Keys[7] = 'Creator';
-			$Keys[8] = 'LastChangeUser';
-			$Keys[9] = 'CreationDateTime';
-			$Keys[10] = 'LastChangeDateTime';
+			$Keys[5] = 'StoryMenuTitle';
+			$Keys[6] = 'UserAccessGroup';
+			$Keys[7] = 'Owner';
+			$Keys[8] = 'Creator';
+			$Keys[9] = 'LastChangeUser';
+			$Keys[10] = 'CreationDateTime';
+			$Keys[11] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
 		} else {

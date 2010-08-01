@@ -48,6 +48,7 @@
 	$_SESSION['POST']['FilteredInput']['NewsYear'] = $NewsDate[0]['NewsStoryYear'];
 	$_SESSION['POST']['FilteredInput']['Category'] = $NewsFeed[0]['FeedItemCategory'];
 	$_SESSION['POST']['FilteredInput']['MenuName'] = $LastNewsVersion['StoryMenuName'];
+	$_SESSION['POST']['FilteredInput']['MenuTitle'] = $LastNewsVersion['StoryMenuTitle'];
 	$_SESSION['POST']['FilteredInput']['EnableDisable'] = 'Enable';
 	$_SESSION['POST']['FilteredInput']['Status'] = 'Approved';
 	

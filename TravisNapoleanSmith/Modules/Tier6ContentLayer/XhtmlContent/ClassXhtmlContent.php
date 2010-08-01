@@ -259,10 +259,17 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$modulesidnumber['PageID'] = $PageID;
 		$modulesidnumber['ObjectID'] = $ObjectID;
 		$modulesidnumber['PrintPreview'] = $this->PrintPreview;
-		$modulesidnumber['RevisionID'] = $this->RevisionID;
-		$modulesidnumber['CurrentVersion'] = $this->CurrentVersion;
-
-		//print_r($modulesidnumber);
+		
+		if ($this->RevisionID) {
+			$modulesidnumber['RevisionID'] = $this->RevisionID;
+		} 
+		
+		if ($this->CurrentVersion) {
+			$modulesidnumber['CurrentVersion'] = $this->CurrentVersion;
+		} else {
+			$modulesidnumber['CurrentVersion'] = 'true';
+		}
+		
 		$ContentLayerTableArray = Array();
 		$ContentLayerTableArray['ObjectType'] = $ContainerObjectType;
 		$ContentLayerTableArray['ObjectTypeName'] = $ContainerObjectTypeName;

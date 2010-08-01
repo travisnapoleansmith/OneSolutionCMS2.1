@@ -69,7 +69,8 @@
 			$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
 			$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
 			$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
-			while (isset($_POST[$PhotoSetHeading])) {
+			$PhotoSetOrder = "PhotoSet$i" . 'Order';
+			while (isset($_POST[$PhotoSetImage1Src])) {
 				if ($_POST[$PhotoSetHeading] == 'Null' | $_POST[$PhotoSetHeading] == 'NULL') {
 					$_POST[$PhotoSetHeading] = NULL;
 					$hold['FilteredInput'][$PhotoSetHeading] = NULL;
@@ -130,6 +131,12 @@
 					$_POST[$PhotoSetBottomText] = NULL;
 					$hold['FilteredInput'][$PhotoSetBottomText] = NULL;
 				}
+				
+				if ($_POST[$PhotoSetOrder] == 'Null' | $_POST[$PhotoSetOrder] == 'NULL') {
+					$_POST[$PhotoSetOrder] = NULL;
+					$hold['FilteredInput'][$PhotoSetOrder] = NULL;
+				}
+				
 				$i++;
 				$PhotoSetHeading = "PhotoSet$i" . 'Heading';
 				$PhotoSetTopText = "PhotoSet$i" . 'TopText';
@@ -140,6 +147,7 @@
 				$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
 				$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
 				$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
+				$PhotoSetOrder = "PhotoSet$i" . 'Order';
 				
 			}
 			
@@ -153,9 +161,162 @@
 				$hold['FilteredInput']['BottomHeading'] = NULL;
 			}
 			
+			if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
+				$_POST['MenuName'] = NULL;
+				$hold['FilteredInput']['MenuName'] = NULL;
+			}
+			
+			if ($_POST['MenuTitle'] == 'Null' | $_POST['MenuTitle'] == 'NULL') {
+				$_POST['MenuTitle'] = NULL;
+				$hold['FilteredInput']['MenuTitle'] = NULL;
+			}
+			
 			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 			$_SESSION['POST']['Error']['Link'] .= $NewPage;
 			$_SESSION['POST']['Error']['Link'] .= '\'>New Photos Page</a>';
+			
+			
+			$temp = $hold['FilteredInput'];
+			
+			$i = 1;
+			$PhotoSetHeading = "PhotoSet$i" . 'Heading';
+			$PhotoSetTopText = "PhotoSet$i" . 'TopText';
+			$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
+			$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
+			$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
+			$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
+			$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
+			$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
+			$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
+			$PhotoSetOrder = "PhotoSet$i" . 'Order';
+			
+			while (isset($temp[$PhotoSetImage1Src])) {
+				$temp[$i][$PhotoSetHeading] = $temp[$PhotoSetHeading];
+				$temp[$i][$PhotoSetTopText] = $temp[$PhotoSetTopText];
+				$temp[$i][$PhotoSetImage1Src] = $temp[$PhotoSetImage1Src];
+				$temp[$i][$PhotoSetImage1Text] = $temp[$PhotoSetImage1Text];
+				$temp[$i][$PhotoSetImage1Alt] = $temp[$PhotoSetImage1Alt];
+				$temp[$i][$PhotoSetImage2Src] = $temp[$PhotoSetImage2Src];
+				$temp[$i][$PhotoSetImage2Text] = $temp[$PhotoSetImage2Text];
+				$temp[$i][$PhotoSetImage2Alt] = $temp[$PhotoSetImage2Alt];
+				$temp[$i][$PhotoSetBottomText] = $temp[$PhotoSetBottomText];
+				$temp[$i][$PhotoSetOrder] = $temp[$PhotoSetOrder];
+				
+				unset($temp[$PhotoSetHeading]);
+				unset($temp[$PhotoSetTopText]);
+				unset($temp[$PhotoSetImage1Src]);
+				unset($temp[$PhotoSetImage1Text]);
+				unset($temp[$PhotoSetImage1Alt]);
+				unset($temp[$PhotoSetImage2Src]);
+				unset($temp[$PhotoSetImage2Text]);
+				unset($temp[$PhotoSetImage2Alt]);
+				unset($temp[$PhotoSetBottomText]);
+				unset($temp[$PhotoSetOrder]);
+				
+				$i++;
+				$PhotoSetHeading = "PhotoSet$i" . 'Heading';
+				$PhotoSetTopText = "PhotoSet$i" . 'TopText';
+				$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
+				$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
+				$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
+				$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
+				$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
+				$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
+				$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
+				$PhotoSetOrder = "PhotoSet$i" . 'Order';
+			}
+			
+			foreach ($temp as $key => $value) {
+				if (is_null($value)) {
+					unset($temp[$key]);
+				}
+			}
+			
+			$newtemp = array();
+			
+			for ($i = 1; $temp[$i]; $i++) {
+				$PhotoSetOrder = "PhotoSet$i" . 'Order';
+				if ($temp[$i][$PhotoSetOrder] != $i && $temp[$i][$PhotoSetOrder]) {
+					$index = $temp[$i][$PhotoSetOrder];
+					while($newtemp[$index]) {
+						$index++;
+					}
+					
+					foreach ($temp[$i] as $key => $value) {
+						$key = explode($i, $key);
+						
+						$key[0] .= $index;
+						if ($i == 1 & $key[1] == 'Image') {
+							$key[1] .= '1';
+						}
+						
+						if ($i == 2 & $key[1] == 'Image') {
+							$key[1] .= '2';
+						}
+						
+						$key = implode($key);
+						$newtemp[$index][$key] = $value;
+					}
+					
+					unset($temp[$i]);
+				} else if ($temp[$i]) {
+					$index = $i;
+					while($newtemp[$index]) {
+						$index++;
+					}
+					
+					foreach ($temp[$i] as $key => $value) {
+						$key = explode($i, $key);
+						$key[0] .= $index;
+						$key = implode($key);
+						$newtemp[$index][$key] = $value;
+					}
+					
+					unset($temp[$i]);
+				}
+			}
+			
+			ksort($newtemp);
+			
+			$newtemp = array_combine(range(1, count($newtemp)), array_values($newtemp));
+			
+			for ($i = 1; $newtemp[$i]; $i++) {
+				reset($newtemp[$i]);
+				$name = key($newtemp[$i]);
+				$name = str_replace('PhotoSet', '', $name);
+				$name = str_replace('Heading', '', $name); 
+				$number = $name;
+				foreach ($newtemp[$i] as $key => $value) {
+					if ($number != $i) {
+						$key2 = str_replace($number, $i, $key);
+						$newtemp[$i][$key2] = $value;
+						unset($newtemp[$i][$key]);
+					}
+				}
+			}
+			
+			for ($i = 1; $newtemp[$i]; $i++) {
+				foreach ($newtemp[$i] as $key => $value) {
+					$temp[$key] = $value;
+				}
+			}
+			
+			foreach ($_POST as $key => $value) {
+				if ($value != NULL) {
+					$_POST[$key] == NULL;
+				}
+			}
+			
+			foreach ($hold['FilteredInput'] as $key => $value) {
+				if ($value != NULL) {
+					$hold['FilteredInput'][$key] == NULL;
+				}
+			}
+			
+			foreach ($temp as $key => $value) {
+				$_POST[$key] = $value;
+				$hold['FilteredInput'][$key] = $value;
+			}
 			
 			$Content = array();
 			
@@ -767,7 +928,8 @@
 			$ContentLayerVersion['RevisionID'] = $NewRevisionID;
 			$ContentLayerVersion['CurrentVersion'] = 'true';
 			$ContentLayerVersion['ContentPageType'] = 'PhotosPage';
-			$ContentLayerVersion['ContentPageMenuName'] = NULL;
+			$ContentLayerVersion['ContentPageMenuName'] = $hold['FilteredInput']['MenuName'];
+			$ContentLayerVersion['ContentPageMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 			$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 			$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
 			$ContentLayerVersion['Creator'] = $_COOKIE['UserName'];
@@ -984,7 +1146,7 @@
 			$ContentLayer[12]['Enable/Disable'] = $_POST['EnableDisable'];
 			$ContentLayer[12]['Status'] = $_POST['Status'];
 			
-			
+			$_POST['Priority'] = $_POST['Priority'] / 10;
 			$Sitemap = array();
 			//$Sitemap['PageID'] = $NewPageID;
 			//$Sitemap['Loc'] = $Location;
@@ -1068,6 +1230,10 @@
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlPicture']['picture']['EnableDisableStatusChangePhotosPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
+			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $NewPageID), 'Content' => $FormOption));
+			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $NewPageID), 'Content' => $FormOption));
 			
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeader', array('PageID' => $PageID, 'Content' => $Header));
 			
@@ -1102,7 +1268,6 @@
 			$CreatedUpdatePhotosPage = $Options['XhtmlPicture']['picture']['CreatedUpdatePhotosPage']['SettingAttribute'];
 			header("Location: $CreatedUpdatePhotosPage&SessionID=$sessionname");
 			exit;
-			
 		}
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);

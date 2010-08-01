@@ -190,10 +190,12 @@
 	$_SESSION['POST']['FilteredInput']['Priority'] = $Sitemap[0]['Priority'];
 	$_SESSION['POST']['FilteredInput']['Frequency'] = ucfirst($Sitemap[0]['ChangeFreq']);
 	
+	$_SESSION['POST']['FilteredInput']['MenuName'] = $PhotosPageVersion[0]['ContentPageMenuName'];
+	$_SESSION['POST']['FilteredInput']['MenuTitle'] = $PhotosPageVersion[0]['ContentPageMenuTitle'];
 	
 	$_SESSION['POST']['FilteredInput']['EnableDisable'] = 'Enable';
 	$_SESSION['POST']['FilteredInput']['Status'] = 'Approved';
-	
+
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdatePhotosPage = $Options['XhtmlPicture']['picture']['UpdatePhotosPage']['SettingAttribute'];
 	header("Location: $UpdatePhotosPage&SessionID=$sessionname");

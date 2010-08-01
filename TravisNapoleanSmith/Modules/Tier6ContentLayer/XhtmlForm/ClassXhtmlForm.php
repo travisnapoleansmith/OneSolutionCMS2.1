@@ -2000,6 +2000,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		reset($this->FormOptionEnableDisable);
 		reset($this->FormOptionStatus);
 		
+		$DestroyArray = array();
+		
 		while (current($this->FormLookupTableName['FormOption'])) {
 			if (current($this->FormOptionObjectID) == $objectid && current($this->FormOptionPageID) == $this->PageID) {
 				if (current($this->FormOptionEnableDisable) == 'Enable' && current($this->FormOptionStatus) == 'Approved') {
@@ -2025,11 +2027,12 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						}
 					}
 					
-					if ($this->FormSession[$formselectname]) {
+					if (isset($this->FormSession[$formselectname])) {
 						$SessionInfo = $this->FormSession[$formselectname];
 						$CurrentInfo = current($this->FormOptionText);
 						if ($SessionInfo == $CurrentInfo) {
 							$this->FormOptionSelected[key($this->FormOptionSelected)] = 'selected';
+							$DestroyArray[key($this->FormOptionSelected)] = key($this->FormOptionSelected);
 						}
 					}
 					
@@ -2114,6 +2117,12 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			
 			next($this->FormOptionEnableDisable);
 			next($this->FormOptionStatus);
+		}
+		
+		reset($DestroyArray);
+		if (current($DestroyArray)) {
+			$this->FormOptionSelected[key($DestroyArray)] = NULL;
+			next($DestroyArray);
 		}
 	}
 	

@@ -170,6 +170,7 @@
 			$NewsVersion['CurrentVersion'] = 'true';
 			$NewsVersion['XMLItem'] = $LastNewsFeedItem;
 			$NewsVersion['StoryMenuName'] = $hold['FilteredInput']['MenuName'];
+			$NewsVersion['StoryMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 			$NewsVersion['UserAccessGroup'] = $UserAccessGroup;
 			$NewsVersion['Owner'] = $Owner;
 			$NewsVersion['Creator'] = $_COOKIE['UserName'];

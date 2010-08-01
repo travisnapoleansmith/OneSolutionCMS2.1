@@ -89,6 +89,16 @@
 				$hold['FilteredInput']['BottomText'] = NULL;
 			}
 			
+			if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
+				$_POST['MenuName'] = NULL;
+				$hold['FilteredInput']['MenuName'] = NULL;
+			}
+			
+			if ($_POST['MenuTitle'] == 'Null' | $_POST['MenuTitle'] == 'NULL') {
+				$_POST['MenuTitle'] = NULL;
+				$hold['FilteredInput']['MenuTitle'] = NULL;
+			}
+			
 			$Content = array();
 			
 			$Content[0]['PageID'] = $PageID;
@@ -318,7 +328,8 @@
 			$ContentLayerVersion['RevisionID'] = $NewRevisionID;
 			$ContentLayerVersion['CurrentVersion'] = 'true';
 			$ContentLayerVersion['ContentPageType'] = 'NewsPage';
-			$ContentLayerVersion['ContentPageMenuName'] = NULL;
+			$ContentLayerVersion['ContentPageMenuName'] = $hold['FilteredInput']['MenuName'];
+			$ContentLayerVersion['ContentPageMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 			$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 			$ContentLayerVersion['Owner'] = $Owner;
 			$ContentLayerVersion['Creator'] =  $_COOKIE['UserName'];
@@ -617,6 +628,11 @@
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlNewsStories']['news']['EnableDisableStatusChangeNewsPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
+			
+			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
+			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
 			
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeader', array('PageID' => array('PageID' => $PageID), 'Content' => $Header));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryLookup', array('PageID' => array('PageID' => $PageID, 'ObjectID' => 1), 'Content' => $NewsStoryLookup));

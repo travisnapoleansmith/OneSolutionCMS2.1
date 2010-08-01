@@ -74,6 +74,16 @@
 			$hold['FilteredInput']['BottomText'] = NULL;
 		}
 		
+		if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
+			$_POST['MenuName'] = NULL;
+			$hold['FilteredInput']['MenuName'] = NULL;
+		}
+		
+		if ($_POST['MenuTitle'] == 'Null' | $_POST['MenuTitle'] == 'NULL') {
+			$_POST['MenuTitle'] = NULL;
+			$hold['FilteredInput']['MenuTitle'] = NULL;
+		}
+		
 		$Content = array();
 		
 		$PageID = array();
@@ -304,7 +314,8 @@
 		$ContentLayerVersion['RevisionID'] = 0;
 		$ContentLayerVersion['CurrentVersion'] = 'true';
 		$ContentLayerVersion['ContentPageType'] = 'NewsPage';
-		$ContentLayerVersion['ContentPageMenuName'] = NULL;
+		$ContentLayerVersion['ContentPageMenuName'] = $hold['FilteredInput']['MenuName'];
+		$ContentLayerVersion['ContentPageMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 		$ContentLayerVersion['UserAccessGroup'] = 'Guest';
 		$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
 		$ContentLayerVersion['Creator'] = $_COOKIE['UserName'];
@@ -654,6 +665,25 @@
 		$FormSelect['PageID'] = $EnableDisableStatusChangeNewsPage;
 		$FormOption['PageID'] = $EnableDisableStatusChangeNewsPage;
 		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$FormOptionValue = $NewPageID;
+		$FormOptionValue .= ' - ';
+		$FormOptionValue .= 'NULL';
+		
+		$MainMenuSelectPage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $MainMenuSelectPage;
+		$FormSelect['ObjectID'] = $NewPageID;
+		$FormSelect['ContainerObjectID'] = $NewPageID;
+		$FormOption['PageID'] = $MainMenuSelectPage;
+		$FormOption['ObjectID'] = $NewPageID;
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+		$FormSelect['PageID'] = $MainMenuUpdatePage;
+		$FormOption['PageID'] = $MainMenuUpdatePage;
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		

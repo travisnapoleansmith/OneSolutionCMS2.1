@@ -101,6 +101,9 @@
 	$_SESSION['POST']['FilteredInput']['Priority'] = $Sitemap[0]['Priority'];
 	$_SESSION['POST']['FilteredInput']['Frequency'] = ucfirst($Sitemap[0]['ChangeFreq']);
 	
+	$_SESSION['POST']['FilteredInput']['MenuName'] = $NewsPageVersion[0]['ContentPageMenuName'];
+	$_SESSION['POST']['FilteredInput']['MenuTitle'] = $NewsPageVersion[0]['ContentPageMenuTitle'];
+	
 	$_SESSION['POST']['FilteredInput']['EnableDisable'] = 'Enable';
 	$_SESSION['POST']['FilteredInput']['Status'] = 'Approved';
 	
