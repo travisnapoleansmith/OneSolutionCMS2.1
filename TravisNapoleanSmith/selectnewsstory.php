@@ -28,8 +28,10 @@
 	$NewsVersion = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getRecord', $passarray);
 	
 	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
-	unset($passarray['PageID']);
-	$passarray['PageID'] = array('XMLItem' => $PageID['PageID']);
+	unset($passarray);
+	$passarray = array();
+	$passarray['XMLItem'] = $PageID['PageID'];
+	
 	$NewsFeed = $Tier6Databases->getRecord($passarray, 'XMLNewsFeed');
 	
 	$sessionname = $Tier6Databases->SessionStart('UpdateNewsStory');

@@ -21,6 +21,10 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	protected $Status;
 	protected $HttpUserAgent;
 	
+	protected $ContentTableName;
+	protected $ContentObjectName;
+	protected $VersionRowMethodName;
+	
 	public function getEmpty() {
 		return $this->Empty;
 	}
@@ -413,6 +417,319 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		$variablehold = $startingvariablename . 'XMLLang';
 		if ($this->$variablehold) {
 			$this->Writer->writeAttribute('xml:lang', $this->$variablehold);
+		}
+	}
+	
+	public function CreateOutput($space) {
+		$arguments = func_get_args();
+		$NoPrintPreview = $arguments[1];
+		
+		if ($NoPrintPreview) {
+			$PrintPreview = TRUE;
+		} else if ($this->PrintPreview){
+			$PrintPreview = $this->PrintPreview;
+		} else {
+			$PrintPreview = TRUE;
+		}
+		
+		try {
+			if (is_null($this->ContentTableName)) {
+				throw new Exception('<i>CreateOutput</i>: Content Table Name is not set.  It MUST NOT be NULL!');
+			}
+		} catch (Exception $e) {
+			print '<b>FATAL ERROR: </b>';
+			print $e->getMessage();
+			print "\n";
+			exit();
+		}
+		
+		while (current($this->{$this->ContentTableName})) {
+			$i = 0;
+			while ($this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]) {
+				$this->PageID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['PageID'];
+				$this->ObjectID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ObjectID'];
+				
+				$this->ContainerObjectType = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContainerObjectType'];
+	   			$this->ContainerObjectTypeName = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContainerObjectTypeName'];
+				$this->ContainerObjectID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContainerObjectID'];
+				$this->ContainerObjectPrintPreview = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContainerObjectPrintPreview'];
+	   			$this->Empty = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['Empty'];
+				
+				$this->StartTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['StartTag'];
+				$this->EndTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['EndTag'];
+				$this->StartTagID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['StartTagID'];
+				$this->StartTagStyle = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['StartTagStyle'];
+				$this->StartTagClass = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['StartTagClass'];
+				
+				$this->Heading = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['Heading'];
+				$this->HeadingStartTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['HeadingStartTag'];
+				$this->HeadingEndTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['HeadingEndTag'];
+				$this->HeadingStartTagID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['HeadingStartTagID'];
+				$this->HeadingStartTagClass = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['HeadingStartTagClass'];
+				$this->HeadingStartTagStyle = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['HeadingStartTagStyle'];
+				
+				$this->Content = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['Content'];
+				$this->ContentStartTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentStartTag'];
+				$this->ContentEndTag = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentEndTag'];
+				$this->ContentStartTagID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentStartTagID'];
+				$this->ContentStartTagClass = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentStartTagClass'];
+				$this->ContentStartTagStyle = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentStartTagStyle'];
+				
+				$this->ContentPTagID = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentPTagID'];
+				$this->ContentPTagClass = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentPTagClass'];
+				$this->ContentPTagStyle = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['ContentPTagStyle'];
+				
+				$this->EnableDisable = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['Enable/Disable'];
+				$this->Status = $this->{$this->ContentTableName}[key($this->{$this->ContentTableName})][$i]['Status'];
+				
+				$this->buildObjectType();
+				$i++;
+				
+			}
+			next($this->{$this->ContentTableName});
+			if (current($this->{$this->ContentTableName})) {
+				$this->Writer->writeRaw("\n");
+			}
+			
+		}
+		
+		if ($this->FileName) {
+			$this->Writer->flush();
+		}
+	}
+	
+	protected function buildObjectType() {
+		if ($this->ContainerObjectType && $this->EnableDisable == 'Enable' && $this->Status == 'Approved') {
+			$temp = $this->ObjectID;
+			$temp++;
+			if ($this->ContainerObjectType) {
+				try {
+					if (is_null($this->ContentObjectName)) {
+						throw new Exception('<i>buildObjectType</i>: Content Object Name is not set.  It MUST NOT be NULL!');
+					}
+				} catch (Exception $e) {
+					print '<b>FATAL ERROR: </b>';
+					print $e->getMessage();
+					print "\n";
+					exit();
+				}	
+				
+				$containertype = $this->ContainerObjectType;
+				
+				if ($containertype == $this->ContentObjectName) {
+					if ($this->ContainerObjectID) {
+						if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+							$this->buildOutput($this->Space);
+						}
+					}
+				} else if ($containertype == 'XhtmlMenu') {
+					if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
+						$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
+						require($filename);
+						$hold = bottompanel1();
+						$this->Writer->writeRaw($hold);
+						$this->Writer->writeRaw("\n");
+					}
+				} else {
+					if (!is_null($this->ContainerObjectID) | $this->ContainerObjectID == 0) {
+						if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
+							$this->buildObject($this->PageID, $this->ContainerObjectID, $this->ContainerObjectType, $this->ContainerObjectTypeName, TRUE);
+						}
+					}
+				}
+			}
+			
+			if ($this->Insert) {
+				reset($this->Insert);
+				while (current($this->Insert)) {
+					$this->Writer->startElement('p');
+					$this->Writer->writeAttribute('style', 'position: relative; left: 20px;');
+						$this->Writer->startElement('span');
+						$this->Writer->writeAttribute('style', 'color: #FFCC00;');
+						$this->Writer->text(key($this->Insert));
+						$this->Writer->writeRaw(":\n\t<br /> \n\t  ");
+						$this->Writer->endElement();
+					$this->Writer->writeRaw(current($this->Insert));
+					$this->Writer->writeRaw("\n\t");
+					$this->Writer->endElement();
+					next ($this->Insert);
+				}
+				$this->Writer->writeRaw("   ");
+				$this->Writer->endElement();
+				
+			} 
+			
+			$temp++;
+		}
+	}
+	
+	protected function buildOutput ($Space) {
+		$this->Space = $Space;
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
+			if ($this->StartTag){
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->writeRaw("\n");
+				$this->Writer->startElement($this->StartTag);
+					$this->ProcessStandardAttribute('StartTag');
+			}
+			
+			if ($this->HeadingStartTag){
+				$this->HeadingStartTag = str_replace('<','', $this->HeadingStartTag);
+				$this->HeadingStartTag = str_replace('>','', $this->HeadingStartTag);
+				$this->Writer->startElement($this->HeadingStartTag);
+					$this->ProcessStandardAttribute('HeadingStartTag');
+					$this->Writer->writeRaw($this->Heading);
+			}
+			
+			if ($this->HeadingEndTag) {
+				$this->Writer->endElement();
+			}
+			
+			if ($this->ContentStartTag == '<p>'){
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				
+				$this->Writer->writeRaw(" ");
+				$this->Writer->startElement($this->ContentStartTag);
+					$this->ProcessStandardAttribute('ContentStartTag');
+					$this->Content = trim($this->Content);
+					if (strpos($this->Content, "\n\r") | strpos($this->Content, "\n\n") ) {
+						if (strpos($this->Content, "\n\n")) {
+							$this->Content = explode("\n\n", $this->Content);
+						} else {
+							$this->Content = explode("\n\r", $this->Content);
+						}
+						
+						$i = 0;
+						$count = count($this->Content);
+						$count--;
+						while (current($this->Content)) {
+							$this->Content[key($this->Content)] = trim(current($this->Content));
+							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
+							$this->Writer->writeRaw("\n\t");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n  ");
+							$this->Writer->endElement();
+							next($this->Content);
+							if (current($this->Content)) {
+								$this->ContentEndTag = NULL;
+								$this->Writer->writeRaw("  ");
+								$this->Writer->startElement('p');
+								$this->ProcessStandardAttribute('ContentPTag');
+							}
+							$i++;
+						}
+					} else {
+						$this->Content = $this->CreateWordWrap($this->Content, "\t  ");
+						$this->Content .= "\n  ";
+						$this->Writer->writeRaw("\n\t  ");
+						$this->Writer->writeRaw($this->Content);
+					}
+			} else if ($this->ContentStartTag){
+				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
+				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
+				$this->Writer->startElement($this->ContentStartTag);
+					$this->ProcessStandardAttribute('ContentStartTag');
+					
+				$this->Content = trim($this->Content);
+				if (strpos($this->Content, "\n\r")) {
+					$this->Content = explode("\n\r", $this->Content);
+					
+					while (current($this->Content)) {
+						$this->Writer->startElement('p');
+							$this->ProcessStandardAttribute('ContentPTag');
+							$this->Writer->writeRaw("\n    ");
+							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw("\n  ");
+						$this->Writer->endElement();
+						next($this->Content);
+					}
+				} else {
+					$this->Writer->startElement('p');
+					$this->ProcessStandardAttribute('ContentPTag');
+					$this->Writer->writeRaw("\n    ");
+					$this->Writer->writeRaw($this->Content);
+					$this->Writer->writeRaw("\n  ");
+					$this->Writer->endElement();
+				}
+			}
+			
+			if ($this->ContentEndTag) {
+				$this->Writer->writeRaw("      ");
+				$this->Writer->endElement();
+			}
+			
+			if ($this->EndTag) {
+				$this->Writer->writeRaw("   ");
+				$this->Writer->endElement();
+			}
+		}
+	}
+	
+	protected function buildObject($PageID, $ObjectID, $ContainerObjectType, $ContainerObjectTypeName, $print) {
+		$modulesidnumber = Array();
+		$modulesidnumber['PageID'] = $PageID;
+		
+		if ($this->CurrentVersion) {
+			$modulesidnumber['CurrentVersion'] = $this->CurrentVersion;
+			
+		} else {
+			if (isset($this->VersionRowMethodName)) {
+				$temp = $this->{$this->VersionRowMethodName}($modulesidnumber);
+				$temp = array_reverse($temp);
+				$modulesidnumber['RevisionID'] = $temp[0]['RevisionID'];
+			}
+		}
+		
+		$modulesidnumber['ObjectID'] = $ObjectID;
+		$modulesidnumber['PrintPreview'] = $this->PrintPreview;
+		
+		$ContentLayerTableArray = Array();
+		$ContentLayerTableArray['ObjectType'] = $ContainerObjectType;
+		$ContentLayerTableArray['ObjectTypeName'] = $ContainerObjectTypeName;
+		
+		$this->LayerModule->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
+		$this->LayerModule->setDatabaseTable ($this->ContentLayerTablesName);
+		$this->LayerModule->Connect($this->ContentLayerTablesName);
+		
+		$this->LayerModule->pass ($this->ContentLayerTablesName, 'setDatabaseRow', array('idnumber' => $ContentLayerTableArray));
+		$this->LayerModule->Disconnect($this->ContentLayerTablesName);
+		
+		$hold = 'DatabaseTable';
+		$i = 1;
+		$databasetablename = Array();
+		$hold .= $i;
+		
+		while ($this->LayerModule->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold))) {
+			array_push($databasetablename, $this->LayerModule->pass ($this->ContentLayerTablesName, 'getRowField', array('rowfield' => $hold)));
+			$i++;
+			$hold = 'DatabaseTable';
+			$hold .= $i;
+		}
+			
+		$modulesdatabase = Array();
+		while (current($databasetablename)) {
+			$modulesdatabase[current($databasetablename)] = current($databasetablename);
+			next($databasetablename);
+		}
+		$temp = &$GLOBALS['Tier6Databases'];
+		$module = &$temp->getModules($ContainerObjectType, $ContainerObjectTypeName);
+		reset($databasetablename);
+
+		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
+		$module->setHttpUserAgent($this->HttpUserAgent);
+		$module->FetchDatabase($modulesidnumber);
+		$module->CreateOutput('    ');
+		
+		if ($print == TRUE) {
+			if ($module->getOutput()) {
+				$this->Writer->writeRaw("\t");
+				$this->Writer->writeRaw($module->getOutput());
+				$this->Writer->writeRaw("\n");
+			}
+		} else {
+			return $module;
 		}
 	}
 	

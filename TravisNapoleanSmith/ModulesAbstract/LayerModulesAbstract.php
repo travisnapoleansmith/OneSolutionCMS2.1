@@ -844,21 +844,36 @@ abstract class LayerModulesAbstract
 		
 	}
 	
+	public function getTable($TableName) {
+		if (is_string($TableName)) {
+			$this->LayerModule->createDatabaseTable($TableName);
+			$this->LayerModule->Connect($TableName);
+			$this->LayerModule->pass ($TableName, 'setEntireTable', array());
+			$this->LayerModule->Disconnect($TableName);
+			
+			$hold = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
+			
+			return $hold;
+		}
+	}
+	
 	public function getRecord($PageID) {
 		$passarray = array();
 		$passarray = $PageID['PageID'];
 		
 		$args = func_get_args();
 		if ($args[1]) {
+			
 			$DatabaseName = $args[1];
 			$this->LayerModule->createDatabaseTable($DatabaseName);
-			
+			if (is_array($PageID)) {
+				$passarray = $PageID;
+			}
 			$this->LayerModule->Connect($DatabaseName);
 			$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($DatabaseName);
 			
 			$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
-			
 		} else {
 			$DatabaseVariableName = $PageID['DatabaseVariableName'];
 			

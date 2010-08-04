@@ -15,7 +15,7 @@
 	$passarray = array();
 	$passarray['PageID'] = $PageID;
 	unset($passarray['DatabaseVariableName']);
-	$PhotosPageVersion = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion');
+	$PhotosPageVersion = $Tier6Databases->getRecord($PageID, 'ContentLayerVersion');
 	$PageVersion = $PhotosPageVersion[0]['RevisionID'];
 	
 	$PageID['RevisionID'] = $PageVersion;
@@ -28,15 +28,13 @@
 	$passarray['DatabaseVariableName'] = 'DatabaseTable';
 	$PhotosLookupTable = $Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'getRecord', $passarray);
 	
-	unset($passarray['PageID']['CurrentVersion']);
-	unset($passarray['PageID']['RevisionID']);
-	unset($passarray['DatabaseVariableName']);
+	unset($passarray);
+	$passarray = array();
+	$passarray['PageID'] = $PageID['PageID'];
 	$PhotosPageHeader = $Tier6Databases->getRecord($passarray, 'PageAttributes');
 	
-	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
-	$HeaderPanel1 = $Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'getRecord', $passarray);
+	$HeaderPanel1 = $Tier6Databases->getRecord($passarray, 'HeaderPanel1');
 	
-	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
 	$Sitemap = $Tier6Databases->getRecord($passarray, 'XMLSitemap');
 	
 	$Sitemap[0]['Priority'] *= 10;

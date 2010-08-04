@@ -196,6 +196,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$this->LayerModule->Connect($this->ContentTableName);
 		$passarray = array();
 		$passarray = $PageID;
+		
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 
@@ -433,6 +434,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				$this->Writer->endElement();
 			}
 		}*/
+		
 		$this->Space = $Space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved' & (($this->PrintPreview & $this->ContainerObjectPrintPreview == 'true') | !$this->PrintPreview)) {
 			if ($this->StartTag){
@@ -606,6 +608,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 				
 			} 
 			
+			// MUST BE INTEGRATED INTO Tier6ContentLayerModulesAbstract's CreateOutput
 			if ($this->PrintPreview & !$NoPrintPreview) {
 				reset($this->PrintIdNumberArray);
 				next($this->PrintIdNumberArray);

@@ -15,7 +15,7 @@
 	$passarray = array();
 	$passarray['PageID'] = $PageID;
 	unset($passarray['DatabaseVariableName']);
-	$NewsPageVersion = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion');
+	$NewsPageVersion = $Tier6Databases->getRecord($PageID, 'ContentLayerVersion');
 	$PageVersion = $NewsPageVersion[0]['RevisionID'];
 	
 	$PageID['RevisionID'] = $PageVersion;
@@ -25,25 +25,12 @@
 	$passarray['DatabaseVariableName'] = 'ContentTableName';
 	$NewsPage = $Tier6Databases->ModulePass('XhtmlContent', 'content', 'getRecord', $passarray);
 	
-	unset($passarray['PageID']['CurrentVersion']);
-	unset($passarray['PageID']['RevisionID']);
-	unset($passarray['DatabaseVariableName']);
-	$NewsPageHeader = $Tier6Databases->getRecord($passarray, 'PageAttributes');
-	$passarray['DatabaseVariableName'] = 'NewsStoriesLookupTableName';
-	$NewsStoriesLookupTable = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getRecord', $passarray);
+	//$passarray['DatabaseVariableName'] = 'NewsStoriesLookupTableName';
 	
-	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
-	$HeaderPanel1 = $Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'getRecord', $passarray);
-	
-	$passarray['DatabaseVariableName'] = 'DatabaseTableName';
-	$Sitemap = $Tier6Databases->getRecord($passarray, 'XMLSitemap');
-	
-	$Sitemap[0]['Priority'] *= 10;
-	
-	$hold = array();
-	$hold['Tag'] = 'h1';
-	$hold['Content'] = $HeaderPanel1[1]['Div1'];
-	$Header = $Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'removeTag', $hold);
+	unset($passarray);
+	$passarray = array();
+	$passarray['PageID'] = $PageID['PageID'];
+	$NewsStoriesLookupTable = $Tier6Databases->getRecord($passarray, 'NewsStoriesLookup');
 	
 	$NewsDay = $NewsStoriesLookupTable[0]['NewsStoryDay'];
 	if (is_null($NewsDay)) {
@@ -71,6 +58,22 @@
 		$NewsYear = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'addWordSpace', $hold);
 	} 
 	
+	$HeaderPanel1 = $Tier6Databases->getRecord($passarray, 'HeaderPanel1');
+	
+	$NewsPageHeader = $Tier6Databases->getRecord($passarray, 'PageAttributes');
+
+	unset($passarray);
+	$passarray = array();
+	$passarray['PageID'] = $PageID['PageID'];
+	$Sitemap = $Tier6Databases->getRecord($passarray, 'XMLSitemap');
+	
+	$Sitemap[0]['Priority'] *= 10;
+	
+	$hold = array();
+	$hold['Tag'] = 'h1';
+	$hold['Content'] = $HeaderPanel1[1]['Div1'];
+	$Header = $Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'removeTag', $hold);
+		
 	$sessionname = $Tier6Databases->SessionStart('UpdateNewsPage');
     
 	$_SESSION['POST']['FilteredInput']['PageID'] = $_POST['PageID'];

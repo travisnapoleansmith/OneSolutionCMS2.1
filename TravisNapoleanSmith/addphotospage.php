@@ -1268,6 +1268,9 @@
 		$FormSelect['PageID'] = $MainMenuSelectPage;
 		$FormSelect['ObjectID'] = $NewPageID;
 		$FormSelect['ContainerObjectID'] = $NewPageID;
+		$FormSelect['FormSelectName'] = 'MenuItem1';
+		$FormSelect['StopObjectID'] = NULL;
+		$FormSelect['FormSelectStyle'] = NULL;
 		$FormOption['PageID'] = $MainMenuSelectPage;
 		$FormOption['ObjectID'] = $NewPageID;
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
@@ -1279,6 +1282,19 @@
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		
+		$j = $NewPageID;
+		for ($i = 2; $i < 16; $i++) {
+			$j += 10000;
+			$FormSelect['ObjectID'] = $j;
+			$FormSelect['FormSelectName'] = 'MenuItem';
+			$FormSelect['FormSelectName'] .= $i;
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		}
+		
+		$j += 10000;
+		$FormSelect['ObjectID'] = $j;
+		$FormSelect['FormSelectName'] = 'TopMenu';
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		$PhotosPageCreatedPage = $Options['XhtmlPicture']['picture']['PhotosPageCreatedPage']['SettingAttribute'];
 		
 		header("Location: $PhotosPageCreatedPage&SessionID=$sessionname");
