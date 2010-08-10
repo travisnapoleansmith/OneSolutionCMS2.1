@@ -16,6 +16,13 @@
 	if ($_GET['PageID']){
 		$idnumber['PageID'] = $_GET['PageID'];
 	}
+	
+	if (isset($_GET['RevisionID'])){
+		$idnumber['RevisionID'] = $_GET['RevisionID'];
+	} else {
+		$idnumber['CurrentVersion'] = 'true';
+	}
+	
 	if ($_GET['Theme']){
 		$idnumber['Theme'] = $_GET['Theme'];
 	}

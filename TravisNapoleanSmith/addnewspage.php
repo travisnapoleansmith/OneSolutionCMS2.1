@@ -194,6 +194,8 @@
 		
 		$Header = array();
 		$Header['PageID'] = $NewPageID;
+		$Header['RevisionID'] = 0;
+		$Header['CurrentVersion'] = 'true';
 		$Header['PageTitle'] = $hold['FilteredInput']['PageTitle'];
 		$Header['PageIcon'] = 'favicon.ico';
 		$Header['Rss2.0'] = 'rss.php';
