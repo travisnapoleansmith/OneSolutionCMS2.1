@@ -873,7 +873,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							$string = NULL;
 							reset($sortorder);
 							while (isset($sortorder[key($sortorder)])) {
-								
 								$fieldcheck = $this->checkField(current($sortorder));
 								if ($fieldcheck) {
 									$string .= '`';

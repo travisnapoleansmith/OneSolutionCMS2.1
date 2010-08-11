@@ -1,14 +1,18 @@
 <?php
-	$servername = 'tnscurrent.db.4823674.hostedresource.com';
-	$username = 'tnscurrent';
-	$password = 'GMT461z020414';
-	$databasename = 'tnscurrent';
+	$SETTINGS = parse_ini_file('settings.ini', true);
+	
+	$servername = $SETTINGS['DATABASE CONNECTION']['SERVERNAME'];
+	$username = $SETTINGS['DATABASE CONNECTION']['USERNAME'];
+	$password = $SETTINGS['DATABASE CONNECTION']['PASSWORD'];
+	$databasename = $SETTINGS['DATABASE CONNECTION']['DATABASENAME'];
 	
 	$credentaillogonarray = Array ($servername, $username, $password, $databasename);
 	
-	$sitename = 'Travis Napolean Smith.com';
+	$sitename = $SETTINGS['SITE SETTINGS']['SITENAME'];
 	
-	$rsslink = 'http://beta.travisnapoleansmith.com/rss.php';
+	$rsslink = $SETTINGS['SITE SETTINGS']['RSSLINK'];
+	$sitelink = $SETTINGS['SITE SETTINGS']['SITELINK'];
+	$author = $SETTINGS['SITE SETTINGS']['AUTHOR'];
 	
 	$Writer = new XMLWriter();
 	$Writer->openMemory();

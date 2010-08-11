@@ -674,7 +674,14 @@
 		$UpdateNewsPageSelect = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
 		header("Location: index.php?PageID=$UpdateNewsPageSelect");
 	}*/
-	
+	/*$SortOrder = array();
+	$SortOrder['ObjectID'] = 'ObjectID';
+	$DatabaseTableName = 'FormOption';
+	$Tier6Databases->sortTable($SortOrder, $DatabaseTableName);
+	$SortOrder = array();
+	$SortOrder['PageID'] = 'PageID';
+	$Tier6Databases->sortTable($SortOrder, $DatabaseTableName);
+	*/
 	print_r($_POST);
 	
 ?>

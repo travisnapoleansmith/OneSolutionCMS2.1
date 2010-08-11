@@ -219,6 +219,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $FormSelectPageID = array();
 	protected $FormSelectObjectID = array();
 	protected $FormSelectStopObjectID = array();
+	protected $FormSelectContinueObjectID = array();
 	protected $FormSelectContainerObjectType = array();
 	protected $FormSelectContainerObjectTypeName = array();
 	protected $FormSelectContainerObjectID = array();
@@ -771,6 +772,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		array_push($this->FormSelectPageID, $this->FormLookupTableName['FormSelect'][$i]['PageID']);
 		array_push($this->FormSelectObjectID, $this->FormLookupTableName['FormSelect'][$i]['ObjectID']);
 		array_push($this->FormSelectStopObjectID, $this->FormLookupTableName['FormSelect'][$i]['StopObjectID']);
+		array_push($this->FormSelectContinueObjectID, $this->FormLookupTableName['FormSelect'][$i]['ContinueObjectID']);
+		
 		array_push($this->FormSelectContainerObjectType, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectType']);
 		array_push($this->FormSelectContainerObjectTypeName, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectTypeName']);
 		array_push($this->FormSelectContainerObjectID, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectID']);
@@ -1645,6 +1648,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		reset($this->FormSelectPageID);
 		reset($this->FormSelectObjectID);
 		reset($this->FormSelectStopObjectID);
+		reset($this->FormSelectContinueObjectID);
 		reset($this->FormSelectContainerObjectType);
 		reset($this->FormSelectContainerObjectTypeName);
 		reset($this->FormSelectContainerObjectID);
@@ -1682,6 +1686,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->FormSelectPageID);
 			next($this->FormSelectObjectID);
 			next($this->FormSelectStopObjectID);
+			next($this->FormSelectContinueObjectID);
 			next($this->FormSelectContainerObjectType);
 			next($this->FormSelectContainerObjectTypeName);
 			next($this->FormSelectContainerObjectID);
@@ -1764,43 +1769,122 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			}
 			
-			next($this->FormLookupTableName['FormSelect']);
-			
-			next($this->FormSelectPageID);
-			next($this->FormSelectObjectID);
-			next($this->FormSelectStopObjectID);
-			next($this->FormSelectContainerObjectType);
-			next($this->FormSelectContainerObjectTypeName);
-			next($this->FormSelectContainerObjectID);
-			
-			next($this->FormSelectDisabled);
-			next($this->FormSelectMultiple);
-			
-			next($this->FormSelectName);
-			next($this->FormSelectNameDynamic);
-			next($this->FormSelectNameTableName);
-			next($this->FormSelectNameField);
-			next($this->FormSelectNamePageID);
-			next($this->FormSelectNameObjectID);
-			next($this->FormSelectNameRevisionID);
-			
-			next($this->FormSelectSize);
-			
-			next($this->FormSelectClass);
-			next($this->FormSelectDir);
-			next($this->FormSelectID);
-			next($this->FormSelectLang);
-			next($this->FormSelectStyle);
-			next($this->FormSelectTabIndex);
-			next($this->FormSelectTitle);
-			next($this->FormSelectXMLLang);
-			
-			next($this->FormSelectEnableDisable);
-			next($this->FormSelectStatus);
+			if (current($this->FormSelectContinueObjectID)) {
+				$ContinueObjectID = current($this->FormSelectContinueObjectID);
+				$ObjectID = current($this->FormSelectObjectID);
+				
+				reset($this->FormLookupTableName['FormSelect']);
+				
+				reset($this->FormSelectPageID);
+				reset($this->FormSelectObjectID);
+				reset($this->FormSelectStopObjectID);
+				reset($this->FormSelectContinueObjectID);
+				reset($this->FormSelectContainerObjectType);
+				reset($this->FormSelectContainerObjectTypeName);
+				reset($this->FormSelectContainerObjectID);
+				
+				reset($this->FormSelectDisabled);
+				reset($this->FormSelectMultiple);
+				
+				reset($this->FormSelectName);
+				reset($this->FormSelectNameDynamic);
+				reset($this->FormSelectNameTableName);
+				reset($this->FormSelectNameField);
+				reset($this->FormSelectNamePageID);
+				reset($this->FormSelectNameObjectID);
+				reset($this->FormSelectNameRevisionID);
+				
+				reset($this->FormSelectSize);
+				
+				reset($this->FormSelectClass);
+				reset($this->FormSelectDir);
+				reset($this->FormSelectID);
+				reset($this->FormSelectLang);
+				reset($this->FormSelectStyle);
+				reset($this->FormSelectTabIndex);
+				reset($this->FormSelectTitle);
+				reset($this->FormSelectXMLLang);
+				
+				reset($this->FormSelectEnableDisable);
+				reset($this->FormSelectStatus);
+				
+				while (current($this->FormSelectObjectID) != $ContinueObjectID) {
+					next($this->FormLookupTableName['FormSelect']);
+					
+					next($this->FormSelectPageID);
+					next($this->FormSelectObjectID);
+					next($this->FormSelectStopObjectID);
+					next($this->FormSelectContinueObjectID);
+					next($this->FormSelectContainerObjectType);
+					next($this->FormSelectContainerObjectTypeName);
+					next($this->FormSelectContainerObjectID);
+					
+					next($this->FormSelectDisabled);
+					next($this->FormSelectMultiple);
+					
+					next($this->FormSelectName);
+					next($this->FormSelectNameDynamic);
+					next($this->FormSelectNameTableName);
+					next($this->FormSelectNameField);
+					next($this->FormSelectNamePageID);
+					next($this->FormSelectNameObjectID);
+					next($this->FormSelectNameRevisionID);
+					
+					next($this->FormSelectSize);
+					
+					next($this->FormSelectClass);
+					next($this->FormSelectDir);
+					next($this->FormSelectID);
+					next($this->FormSelectLang);
+					next($this->FormSelectStyle);
+					next($this->FormSelectTabIndex);
+					next($this->FormSelectTitle);
+					next($this->FormSelectXMLLang);
+					
+					next($this->FormSelectEnableDisable);
+					next($this->FormSelectStatus);
+				}
+
+			} else {
+				next($this->FormLookupTableName['FormSelect']);
+				
+				next($this->FormSelectPageID);
+				next($this->FormSelectObjectID);
+				next($this->FormSelectStopObjectID);
+				next($this->FormSelectContinueObjectID);
+				next($this->FormSelectContainerObjectType);
+				next($this->FormSelectContainerObjectTypeName);
+				next($this->FormSelectContainerObjectID);
+				
+				next($this->FormSelectDisabled);
+				next($this->FormSelectMultiple);
+				
+				next($this->FormSelectName);
+				next($this->FormSelectNameDynamic);
+				next($this->FormSelectNameTableName);
+				next($this->FormSelectNameField);
+				next($this->FormSelectNamePageID);
+				next($this->FormSelectNameObjectID);
+				next($this->FormSelectNameRevisionID);
+				
+				next($this->FormSelectSize);
+				
+				next($this->FormSelectClass);
+				next($this->FormSelectDir);
+				next($this->FormSelectID);
+				next($this->FormSelectLang);
+				next($this->FormSelectStyle);
+				next($this->FormSelectTabIndex);
+				next($this->FormSelectTitle);
+				next($this->FormSelectXMLLang);
+				
+				next($this->FormSelectEnableDisable);
+				next($this->FormSelectStatus);
+			}
 		}
 				
 		if ($flag) {
-			$this->Writer->fullEndElement(); // ENDS SELECT
+			$this->Writer->endElement(); // ENDS SELECT
 		}
 	}
 	
@@ -2001,7 +2085,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		reset($this->FormOptionStatus);
 		
 		$DestroyArray = array();
-		
 		while (current($this->FormLookupTableName['FormOption'])) {
 			if (current($this->FormOptionObjectID) == $objectid && current($this->FormOptionPageID) == $this->PageID) {
 				if (current($this->FormOptionEnableDisable) == 'Enable' && current($this->FormOptionStatus) == 'Approved') {
@@ -2026,10 +2109,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 							$this->Writer->writeAttribute('label', $hold);
 						}
 					}
-					
 					if (isset($this->FormSession[$formselectname])) {
 						$SessionInfo = $this->FormSession[$formselectname];
 						$CurrentInfo = current($this->FormOptionText);
+						
 						if ($SessionInfo == $CurrentInfo) {
 							$this->FormOptionSelected[key($this->FormOptionSelected)] = 'selected';
 							$DestroyArray[key($this->FormOptionSelected)] = key($this->FormOptionSelected);
@@ -2515,6 +2598,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'ObjectID';
 			$Keys[2] = 'StopObjectID';
+			$Keys[3] = 'ContinueObjectID';
 			$Keys[3] = 'ContainerObjectType';
 			$Keys[4] = 'ContainerObjectTypeName';
 			$Keys[5] = 'ContainerObjectID';

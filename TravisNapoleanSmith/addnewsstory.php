@@ -188,6 +188,7 @@
 		$FormSelect['PageID'] = $NewsArticleUpdateSelectPage;
 		$FormSelect['ObjectID'] = $NewPageID;
 		$FormSelect['StopObjectID'] = NULL;
+		$FormSelect['ContinueObjectID'] = NULL;
 		$FormSelect['ContainerObjectType'] = 'Option';
 		$FormSelect['ContainerObjectTypeName'] = 'FormOption';
 		$FormSelect['ContainerObjectID'] = $NewPageID;

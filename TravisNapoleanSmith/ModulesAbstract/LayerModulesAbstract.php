@@ -428,30 +428,68 @@ abstract class LayerModulesAbstract
 				}
 			}
 			
-			if ($Keys['RevisionID']) {
-				$passarray['RevisionID'] = 'RevisionID';
-				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'RevisionID'));
+			if (in_array('ObjectID', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['ObjectID'] = 'ObjectID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
 			
-			if ($Keys['ObjectID']) {
-				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'ObjectID'));
+			if (in_array('RevisionID', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['RevisionID'] = 'RevisionID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
 			
-			if ($Keys['PageID']) {
-				$passarray['PageID'] = 'PageID';
-				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'PageID'));
+			if (in_array('PageID', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['PageID'] = 'PageID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
 			
-			if ($Keys['XMLFeedName']) {
-				$passarray['XMLFeedName'] = 'XMLFeedName';
-				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'XMLFeedName'));
+			if (in_array('XMLFeedName', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['XMLFeedName'] = 'XMLFeedName';
+				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
 			
-			if ($Keys['XMLItem']) {
-				$passarray['XMLItem'] = 'XMLItem';
-				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('sortorder' => 'XMLItem'));
+			if (in_array('XMLItem', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['XMLItem'] = 'XMLItem';
+				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-
+			
+			/*
+			if (in_array('ObjectID', $Keys) & in_array('PageID', $Keys)) {
+				print "dog\n";
+				$SortOrder = array();
+				$SortOrder['ObjectID'] = 'ObjectID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+				$SortOrder = array();
+				$SortOrder['PageID'] = 'PageID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+			}
+			
+			if ($Keys['RevisionID'] & $Keys['PageID']) {
+				$SortOrder = array();
+				$SortOrder['RevisionID'] = 'RevisionID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+				$SortOrder = array();
+				$SortOrder['PageID'] = 'PageID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+			}
+			
+			if ($Keys['RevisionID'] & $Keys['PageID'] & $Keys['ObjectID']) {
+				$SortOrder = array();
+				$SortOrder['RevisionID'] = 'RevisionID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+				$SortOrder = array();
+				$SortOrder['ObjectID'] = 'ObjectID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+				$SortOrder = array();
+				$SortOrder['PageID'] = 'PageID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+			}
+			*/
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
@@ -870,6 +908,31 @@ abstract class LayerModulesAbstract
 				$passarray = $PageID;
 			}
 			$this->LayerModule->Connect($DatabaseName);
+			if ($args[2]) {
+				$hold = NULL;
+				$trip = FALSE;
+				foreach ($args[3] as $key => $value) {
+					if ($value != NULL) {
+						if ($trip) {
+							$hold .= '`, `';
+							$hold .= $value;
+						} else {
+							$hold .= $value;
+							$trip = TRUE;
+						}
+					}
+				}
+				
+				if ($hold) {
+					$this->LayerModule->pass ($DatabaseName, 'setOrderbyname', array('orderbyname' => $hold));
+				}
+
+				if ($args[4] == 'ASC' | $args[4] == 'DESC') {
+					$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => $args[4]));
+				} else if ($args[3]){
+					$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => 'ASC'));
+				}
+			}
 			$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($DatabaseName);
 			
@@ -984,6 +1047,17 @@ abstract class LayerModulesAbstract
 			$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
 		} else {
 			array_push($this->ErrorMessage,'updateModuleSetting: ObjectType, ObjectTypeName, ModuleSetting and ModuleSettingAttribute cannot be NULL!');
+		}
+	}
+	
+	public function sortTable(array $SortOrder, $DatabaseTableName) {
+		if ($DatabaseTableName != NULL) {
+			$this->LayerModule->createDatabaseTable($DatabaseTableName);
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('SortOrder'=> $SortOrder));
+			$this->LayerModule->Disconnect($DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'sortTable: SortOrder cannot be NULL!');
 		}
 	}
 	

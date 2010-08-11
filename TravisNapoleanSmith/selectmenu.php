@@ -7,17 +7,8 @@
 	$MenuID = $hold[2];
 	unset($hold);
 	
-	if ($MenuID == 'NULL') {
-		$sessionname = $Tier6Databases->SessionStart('UpdateMenu');
-		$_SESSION['POST']['Error']['Menu Selection'] = 'The item that was selected doesn\'t have a submenu. <br /> ';
-		$_SESSION['POST']['Error']['Menu Selection'] .= 'Please select an item that has a submenu!';
-		$SelectMenu = $_POST['SelectMenu'];
-		header("Location: index.php?PageID=$SelectMenu&SessionID=$sessionname");
-		exit();
-	} else {
-		$_POST['PageID'] = $PageID;
-		$_POST['UlMenuID'] = $MenuID;
-	}
+	$_POST['PageID'] = $PageID;
+	$_POST['UlMenuID'] = $MenuID;
 	
 	$passarray = array();
 	$passarray['PageID'] = 1;
@@ -25,7 +16,11 @@
 	$Menu = $Tier6Databases->getRecord($passarray, 'MainMenu');
 	
 	unset($passarray);
-	$PageAttributes = $Tier6Databases->getTable('PageAttributes');
+	$passarray = array();
+	$passarray['CurrentVersion'] = 'true';
+	$PageAttributes = $Tier6Databases->getRecord($passarray, 'PageAttributes', TRUE, array('1' => 'PageID'), 'ASC');
+	$PageAttributes = array_combine(range(1, count($PageAttributes)), array_values($PageAttributes));
+	
 	$TopMenuName = $PageAttributes[$PageID]['PageTitle'];
 	$sessionname = $Tier6Databases->SessionStart('UpdateMenu');
     
@@ -46,23 +41,27 @@
 		$MenuItemName = $Menu[0][$LiNameSelect];
 		if (strstr($MenuItemName, 'index.php">')) {
 			$MenuItemName = 1;
-		} else {
+		} else if (strstr($MenuItemName, 'index.php')) {
 			$ReplaceMenuItemName = str_replace('<a href="index.php?PageID=', '', $MenuItemName);
 			$MenuItemName = strip_tags($MenuItemName);
 			$ReplaceMenuItemName = str_replace('">' . "$MenuItemName", '', $ReplaceMenuItemName);
 			$ReplaceMenuItemName = strip_tags($ReplaceMenuItemName);
 			$MenuItemName = $ReplaceMenuItemName;
 			unset($ReplaceMenuItemName);
+		} else {
+			$MenuName = strip_tags($MenuItemName, 'br');
 		}
 		
-		if ($MenuItemName) {
+		if ($MenuName) {
+			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = $MenuName;
+		} else if ($MenuItemName) {
 			$MenuItemName = $PageAttributes[$MenuItemName]['PageTitle'];
 			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = $MenuItemName;
 		} else {
 			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = 'NULL';
 		}
+		
 	}
-	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
 	header("Location: index.php?PageID=$MainMenuUpdatePage&SessionID=$sessionname");

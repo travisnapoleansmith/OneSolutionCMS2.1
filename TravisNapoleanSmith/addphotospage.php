@@ -1162,6 +1162,7 @@
 		$FormSelect['PageID'] = $UpdatePhotosPageSelect;
 		$FormSelect['ObjectID'] = $NewPhotosPage;
 		$FormSelect['StopObjectID'] = 9999;
+		$FormSelect['ContinueObjectID'] = NULL;
 		$FormSelect['ContainerObjectType'] = 'Option';
 		$FormSelect['ContainerObjectTypeName'] = 'FormOption';
 		$FormSelect['ContainerObjectID'] = $NewPhotosPage;
