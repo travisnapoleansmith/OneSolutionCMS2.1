@@ -2,6 +2,13 @@
 	// General Settings
 	require_once '../Configuration/settings.php';
 	
+	// Allow and Deny Settings 
+	require_once '../Configuration/Tier2DataAccessLayerSettings.php';
+	require_once '../Configuration/Tier3ProtectionLayerSettings.php';
+	require_once '../Configuration/Tier4AuthenticationLayerSettings.php';
+	require_once '../Configuration/Tier5ValidationLayerSettings.php';
+	require_once '../Configuration/Tier6ContentLayerSettings.php';
+	
 	// All Tier Abstract
 	require_once '../ModulesAbstract/LayerModulesAbstract.php';
 	
@@ -43,38 +50,8 @@
 	require_once '../Modules/Tier5ValidationLayer/FormValidation/ClassFormValidation.php';
 	
 	// Tier 6 Modules
-	require_once '../Modules/Tier6ContentLayer/XhtmlCalendarTable/ClassXhtmlCalendarTable.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlContent/ClassXhtmlContent.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlForm/ClassXhtmlForm.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlHeader/ClassXhtmlHeader.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlUnorderedList/ClassXhtmlUnorderedList.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlMainMenu/ClassXhtmlMainMenu.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlMenu/ClassXhtmlMenu.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlNews/ClassXhtmlNews.php';
-	require_once '../Modules/Tier6ContentLayer/XhtmlPicture/ClassXhtmlPicture.php';
-	
-	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItem.php'; 
-	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenuItemList.php';
-	require_once '../Modules/Tier6ContentLayer/Menu/ClassMenu.php';
-	
-	require_once '../Modules/Tier6ContentLayer/XmlFeed/ClassXmlFeed.php';
-	require_once '../Modules/Tier6ContentLayer/XmlSitemap/ClassXmlSitemap.php';
-	
-	// Tier 2 Data Access Layer Settings
-	require_once '../Configuration/Tier2DataAccessLayerSettings.php';
-	
-	// Tier 3 Protection Layer Settings
-	require_once '../Configuration/Tier3ProtectionLayerSettings.php';
-	
-	// Tier 4 Authentication Layer Settings
-	require_once '../Configuration/Tier4AuthenticationLayerSettings.php';
-	
-	// Tier 5 Validation Layer Settings
-	require_once '../Configuration/Tier5ValidationLayerSettings.php';
 	
 	// Tier 6 Content Layer Settings
-	require_once '../Configuration/Tier6ContentLayerDatabaseSettings.php';
-	require_once '../Configuration/Tier6ContentLayerSettings.php';
+	require_once 'Configuration/Tier6ContentLayerDatabaseSettings.php';
 	
 ?>
