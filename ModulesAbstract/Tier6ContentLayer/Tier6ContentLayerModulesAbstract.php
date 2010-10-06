@@ -587,82 +587,99 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 			}
 			
 			if ($this->ContentStartTag == '<p>'){
+				if (!$this->HeadingStartTag) {
+					$this->Writer->writeRaw("\n");
+				}
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
 				
 				$this->Writer->writeRaw(" ");
-				$this->Writer->startElement($this->ContentStartTag);
-					$this->ProcessStandardAttribute('ContentStartTag');
-					$this->Content = trim($this->Content);
-					if (strpos($this->Content, "\n\r") | strpos($this->Content, "\n\n") ) {
-						if (strpos($this->Content, "\n\n")) {
-							$this->Content = explode("\n\n", $this->Content);
+				if ($this->Content) {
+					$this->Writer->startElement($this->ContentStartTag);
+						$this->ProcessStandardAttribute('ContentStartTag');
+						$this->Content = trim($this->Content);
+						if (strpos($this->Content, "\n\r") | strpos($this->Content, "\n\n") ) {
+							if (strpos($this->Content, "\n\n")) {
+								$this->Content = explode("\n\n", $this->Content);
+							} else {
+								$this->Content = explode("\n\r", $this->Content);
+							}
+							$i = 0;
+							$count = count($this->Content);
+							$count--;
+							while (current($this->Content)) {
+								$this->Content[key($this->Content)] = trim(current($this->Content));
+								$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content), "\t  ");
+								$this->Writer->writeRaw("\n\t  ");
+								$this->Writer->writeRaw(current($this->Content));
+								$this->Writer->writeRaw("\n\t");
+								$this->Writer->endElement();
+								
+								next($this->Content);
+								if (current($this->Content)) {
+									$this->ContentEndTag = NULL;
+									$this->Writer->writeRaw("  ");
+									$this->Writer->startElement('p');
+									$this->ProcessStandardAttribute('ContentPTag');
+								}
+								$i++;
+							}
 						} else {
-							$this->Content = explode("\n\r", $this->Content);
+							$this->Content = $this->CreateWordWrap($this->Content, "\t  ");
+							$this->Content .= "\n  ";
+							$this->Writer->writeRaw("\n\t  ");
+							$this->Writer->writeRaw($this->Content);
 						}
 						
-						$i = 0;
-						$count = count($this->Content);
-						$count--;
-						while (current($this->Content)) {
-							$this->Content[key($this->Content)] = trim(current($this->Content));
-							$this->Content[key($this->Content)] = $this->CreateWordWrap(current($this->Content));
-							$this->Writer->writeRaw("\n\t");
-							$this->Writer->writeRaw(current($this->Content));
-							$this->Writer->writeRaw("\n  ");
+						if ($this->ContentEndTag) {
+							$this->Writer->writeRaw("      ");
 							$this->Writer->endElement();
-							next($this->Content);
-							if (current($this->Content)) {
-								$this->ContentEndTag = NULL;
-								$this->Writer->writeRaw("  ");
-								$this->Writer->startElement('p');
-								$this->ProcessStandardAttribute('ContentPTag');
-							}
-							$i++;
 						}
-					} else {
-						$this->Content = $this->CreateWordWrap($this->Content, "\t  ");
-						$this->Content .= "\n  ";
-						$this->Writer->writeRaw("\n\t  ");
-						$this->Writer->writeRaw($this->Content);
-					}
+				}
 			} else if ($this->ContentStartTag){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
-				$this->Writer->startElement($this->ContentStartTag);
-					$this->ProcessStandardAttribute('ContentStartTag');
-					
-				$this->Content = trim($this->Content);
-				if (strpos($this->Content, "\n\r")) {
-					$this->Content = explode("\n\r", $this->Content);
-					
-					while (current($this->Content)) {
-						$this->Writer->startElement('p');
+				if ($this->Content) {
+					$this->Writer->startElement($this->ContentStartTag);
+						$this->ProcessStandardAttribute('ContentStartTag');
+
+						$this->Content = trim($this->Content);
+						if (strpos($this->Content, "\n\r")) {
+							$this->Content = explode("\n\r", $this->Content);
+							while (current($this->Content)) {
+								$this->Writer->startElement('p');
+									$this->ProcessStandardAttribute('ContentPTag');
+									$this->Writer->writeRaw("\n    ");
+									$this->Writer->writeRaw(current($this->Content));
+									$this->Writer->writeRaw("\n  ");
+								$this->Writer->endElement();
+								next($this->Content);
+							}
+						} else if (strpos($this->Content, "\n\n")) {
+							$this->Content = explode("\n\n", $this->Content);
+							while (current($this->Content)) {
+								$this->Writer->startElement('p');
+									$this->ProcessStandardAttribute('ContentPTag');
+									$this->Writer->writeRaw("\n    ");
+									$this->Writer->writeRaw(current($this->Content));
+									$this->Writer->writeRaw("\n  ");
+								$this->Writer->endElement();
+								next($this->Content);
+							}
+						} else {
+							$this->Writer->startElement('p');
 							$this->ProcessStandardAttribute('ContentPTag');
 							$this->Writer->writeRaw("\n    ");
-							$this->Writer->writeRaw(current($this->Content));
+							$this->Writer->writeRaw($this->Content);
 							$this->Writer->writeRaw("\n  ");
-						$this->Writer->endElement();
-						next($this->Content);
-					}
-				} else {
-					$this->Writer->startElement('p');
-					$this->ProcessStandardAttribute('ContentPTag');
-					$this->Writer->writeRaw("\n    ");
-					$this->Writer->writeRaw($this->Content);
-					$this->Writer->writeRaw("\n  ");
-					$this->Writer->endElement();
+							$this->Writer->endElement();
+						}
+						
+						if ($this->ContentEndTag) {
+							$this->Writer->writeRaw("      ");
+							$this->Writer->endElement();
+						}
 				}
-			}
-			
-			if ($this->ContentEndTag) {
-				$this->Writer->writeRaw("      ");
-				$this->Writer->endElement();
-			}
-			
-			if ($this->EndTag) {
-				$this->Writer->writeRaw("   ");
-				$this->Writer->endElement();
 			}
 		}
 	}

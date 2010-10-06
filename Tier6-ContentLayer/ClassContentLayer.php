@@ -686,12 +686,13 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[3] = 'ContentPageType';
 			$Keys[4] = 'ContentPageMenuName';
 			$Keys[5] = 'ContentPageMenuTitle';
-			$Keys[6] = 'UserAccessGroup';
-			$Keys[7] = 'Owner';
-			$Keys[8] = 'Creator';
-			$Keys[9] = 'LastChangeUser';
-			$Keys[10] = 'CreationDateTime';
-			$Keys[11] = 'LastChangeDateTime';
+			$Keys[6] = 'ContentPageMenuParentObjectID';
+			$Keys[7] = 'UserAccessGroup';
+			$Keys[8] = 'Owner';
+			$Keys[9] = 'Creator';
+			$Keys[10] = 'LastChangeUser';
+			$Keys[11] = 'CreationDateTime';
+			$Keys[12] = 'LastChangeDateTime';
 			
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {

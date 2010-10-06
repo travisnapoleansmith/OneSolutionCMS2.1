@@ -14,6 +14,15 @@ img#background {
 	z-index: -5;
 }
 
+hr.SponsorsRule {
+	position: relative;
+	background-color: #ffffff;
+	height: 2px;
+	width: 170px;
+	left: 1px;
+	border: 0;
+}
+
 .Picture1 {
 	position: relative;
 	width: 600px;

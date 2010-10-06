@@ -7,9 +7,9 @@
 	session_start();
 	
 	$Options = $Tier6Databases->getLayerModuleSetting();
-	$UpdateContentPage = $Options['XhtmlContent']['content']['UpdateContentPage']['SettingAttribute'];
-	$NewUpdateContentPage = explode('=', $UpdateContentPage);
-	$NewUpdateContentPage = $NewUpdateContentPage[1];
+	$UpdateBlockquotePage = $Options['XhtmlContent']['content']['UpdateBlockquotePage']['SettingAttribute'];
+	$NewUpdateBlockquotePage = explode('=', $UpdateBlockquotePage);
+	$NewUpdateBlockquotePage = $NewUpdateBlockquotePage[1];
 	
 	$PageID = $_SESSION['POST']['FilteredInput']['PageID'];
 	$FormOptionObjectID = $_SESSION['POST']['FilteredInput']['FormOptionObjectID'];
@@ -32,7 +32,7 @@
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
 		$PageName = $UpdateContentPage;
 
-		$hold = $Tier6Databases->FormSubmitValidate('UpdateContentPage', $PageName);
+		$hold = $Tier6Databases->FormSubmitValidate('UpdateBlockquotePage', $PageName);
 		if ($hold) {
 			$DateTime = date('Y-m-d H:i:s');
 			$Date = date('Y-m-d');
@@ -46,7 +46,7 @@
 			
 			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 			$_SESSION['POST']['Error']['Link'] .= $NewPage;
-			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Content Page</a>';
+			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Blockquote Page</a>';
 			
 			
 			
@@ -65,8 +65,8 @@
 				$hold['FilteredInput']['Description'] = NULL;
 			}
 			
-			if ($_POST['Content'] == 'Null' | $_POST['Content'] == 'NULL') {
-				$_POST['Content'] = NULL;
+			if ($_POST['Blockquote'] == 'Null' | $_POST['Blockquote'] == 'NULL') {
+				$_POST['Blockquote'] = NULL;
 				$hold['FilteredInput']['Content'] = NULL;
 			}
 			
@@ -102,18 +102,18 @@
 			$Content[0]['HeadingStartTagID'] = NULL;
 			$Content[0]['HeadingStartTagStyle'] = NULL;
 			$Content[0]['HeadingStartTagClass'] = 'BodyHeading';
-			$Content[0]['Content'] = $hold['FilteredInput']['Content'];
+			$Content[0]['Content'] = $hold['FilteredInput']['Blockquote'];
 			
-			if ($hold['FilteredInput']['Content'] != NULL) {
-				$Content[0]['ContentStartTag'] = '<p>';
-				$Content[0]['ContentEndTag'] = '</p>';
+			if ($hold['FilteredInput']['Blockquote'] != NULL) {
+				$Content[0]['ContentStartTag'] = '<blockquote>';
+				$Content[0]['ContentEndTag'] = '</blockquote>';
 			} else {
 				$Content[0]['ContentStartTag'] = NULL;
 				$Content[0]['ContentEndTag'] = NULL;
 			}
 			$Content[0]['ContentStartTagID'] = NULL;
 			$Content[0]['ContentStartTagStyle'] = NULL;
-			$Content[0]['ContentStartTagClass'] = 'BodyText';
+			$Content[0]['ContentStartTagClass'] = NULL;
 			$Content[0]['ContentPTagID'] = NULL;
 			$Content[0]['ContentPTagStyle'] = NULL;
 			$Content[0]['ContentPTagClass'] = 'BodyText';
@@ -267,7 +267,7 @@
 			$ContentLayerVersion['PageID'] = $PageID;
 			$ContentLayerVersion['RevisionID'] = $NewRevisionID;
 			$ContentLayerVersion['CurrentVersion'] = 'true';
-			$ContentLayerVersion['ContentPageType'] = 'ContentPage';
+			$ContentLayerVersion['ContentPageType'] = 'BlockquotePage';
 			$ContentLayerVersion['ContentPageMenuName'] = $hold['FilteredInput']['MenuName'];
 			$ContentLayerVersion['ContentPageMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
 			$ContentLayerVersion['ContentPageMenuParentObjectID'] = $MenuParentObjectID;
@@ -522,7 +522,7 @@
 			//$ContentPrintPreview['Enable/Disable'] = $_POST['EnableDisable'];
 			//$ContentPrintPreview['Status'] = $_POST['Status'];
 			
-			$FormOptionID = $Options['XhtmlContent']['content']['UpdateContentPageSelect']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlContent']['content']['UpdateBlockquotePageSelect']['SettingAttribute'];
 			$FormOptionText = $hold['FilteredInput']['PageTitle'];
 			//$FormOptionValue = $NewNewsPage;
 			//$FormOptionValue .= ' - ';
@@ -565,9 +565,9 @@
 			//$FormOption['Status'] = 'Approved';
 			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
-			$FormOptionID = $Options['XhtmlContent']['content']['DeleteContentPage']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlContent']['content']['DeleteBlockquotePage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
-			$FormOptionID = $Options['XhtmlContent']['content']['EnableDisableStatusChangeContentPage']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlContent']['content']['EnableDisableStatusChangeBlockquotePage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			
 			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
@@ -591,24 +591,24 @@
 			$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 			
 			$Tier6Databases->SessionDestroy($sessionname);
-			$sessionname = $Tier6Databases->SessionStart('UpdatedContentPage');
+			$sessionname = $Tier6Databases->SessionStart('UpdatedBlockquotePage');
 			
 			$Page = '../index.php?PageID=';
 			$Page .= $PageID;
 		
 			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 			$_SESSION['POST']['Error']['Link'] .= $Page;
-			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Content Page</a>';
+			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Blockquote Page</a>';
 			
-			$CreatedUpdateContentPage = $Options['XhtmlContent']['content']['CreatedUpdateContentPage']['SettingAttribute'];
-			header("Location: $CreatedUpdateContentPage&SessionID=$sessionname");
+			$CreatedUpdateBlockquotePage = $Options['XhtmlContent']['content']['CreatedUpdateBlockquotePage']['SettingAttribute'];
+			header("Location: $CreatedUpdateBlockquotePage&SessionID=$sessionname");
 		}
 		
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);
 		$Options = $Tier6Databases->getLayerModuleSetting();
-		$UpdateContentPageSelect = $Options['XhtmlContent']['content']['UpdateContentPageSelect']['SettingAttribute'];
-		header("Location: index.php?PageID=$UpdateContentPageSelect");
+		$UpdateBlockquotePageSelect = $Options['XhtmlContent']['content']['UpdateBlockquotePageSelect']['SettingAttribute'];
+		header("Location: index.php?PageID=$UpdateBlockquotePageSelect");
 	}
 	
 ?>
