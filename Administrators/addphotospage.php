@@ -148,7 +148,7 @@
 		
 		$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 		$_SESSION['POST']['Error']['Link'] .= $NewPage;
-		$_SESSION['POST']['Error']['Link'] .= '\'>New News Page</a>';
+		$_SESSION['POST']['Error']['Link'] .= '\'>New Photos Page</a>';
 		
 		$temp = $hold['FilteredInput'];
 		
