@@ -13,6 +13,8 @@
 	$Tier5DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
 	$Tier5DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
 	$Tier5DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier5DatabaseAllow['setLimit'] = 'setLimit';
+	$Tier5DatabaseAllow['getLimit'] = 'getLimit';
 	$Tier5DatabaseAllow['setDatabasename'] = 'setDatabasename';
 	$Tier5DatabaseAllow['getDatabasename'] = 'getDatabasename';
 	$Tier5DatabaseAllow['setUser'] = 'setUser';
@@ -33,10 +35,10 @@
 	$Tier5DatabaseAllow['Disconnect'] = 'Disconnect';
 	
 	// Basic checks and verifies
-	$Tier5DatabaseDeny['checkDatabaseName'] = 'checkDatabaseName';
-	$Tier5DatabaseDeny['checkTableName'] = 'checkTableName';
-	$Tier5DatabaseDeny['checkPermissions'] = 'checkPermissions';
-	$Tier5DatabaseDeny['checkField'] = 'checkField';
+	$Tier5DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
+	$Tier5DatabaseAllow['checkTableName'] = 'checkTableName';
+	$Tier5DatabaseAllow['checkPermissions'] = 'checkPermissions';
+	$Tier5DatabaseAllow['checkField'] = 'checkField';
 	
 	// Basic Setup of Database
 	$Tier5DatabaseDeny['createDatabase'] = 'createDatabase';
@@ -55,6 +57,9 @@
 	// Field Methods
 	$Tier5DatabaseDeny['updateField'] = 'updateField';
 	$Tier5DatabaseDeny['deleteField'] = 'deleteField';
+	
+	// Maintenance Methods
+	$Tier5DatabaseDeny['sortTable'] = 'sortTable';
 	
 	// Setting Database Row
 	$Tier5DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';

@@ -21,21 +21,18 @@
 	
 	$calendardatabase = Array();
 	$calendardatabase['XhtmlCalendarTable'] = 'XhtmlCalendarTable';
+	$calendardatabase['Day'] = NULL;
+	$calendardatabase['Month'] = NULL;
+	$calendardatabase['Year'] = NULL;
 	
-	$databaseoptions = array();
-	$databaseoptions['Day'] = NULL;
-	$databaseoptions['Month'] = NULL;
-	$databaseoptions['Year'] = NULL;
+	$databases = &$GLOBALS['Tier6Databases'];
 	
-	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
-	
-	$calendartable = new XhtmlCalendarTable($calendardatabase, $databaseoptions);
+	$calendartable = new XhtmlCalendarTable($calendardatabase, $databases);
 	$calendartable->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'XhtmlCalendarTable');
 	$calendartable->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$calendartable->FetchDatabase ($calendaridnumber);
 	$calendartable->CreateOutput(NULL);
-	
-	$output = $GLOBALS['Writer']->flush();
-	print "$output";
-	
+	$output = $calendartable->getOutput();
+	//print_r($calendartable);
+	print "$output\n";
 ?>

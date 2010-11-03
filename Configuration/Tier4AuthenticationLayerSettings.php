@@ -13,6 +13,8 @@
 	$Tier4DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
 	$Tier4DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
 	$Tier4DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier4DatabaseAllow['setLimit'] = 'setLimit';
+	$Tier4DatabaseAllow['getLimit'] = 'getLimit';
 	$Tier4DatabaseAllow['setDatabasename'] = 'setDatabasename';
 	$Tier4DatabaseAllow['getDatabasename'] = 'getDatabasename';
 	$Tier4DatabaseAllow['setUser'] = 'setUser';
@@ -55,6 +57,9 @@
 	// Field Methods
 	$Tier4DatabaseDeny['updateField'] = 'updateField';
 	$Tier4DatabaseDeny['deleteField'] = 'deleteField';
+	
+	// Maintenance Methods
+	$Tier4DatabaseDeny['sortTable'] = 'sortTable';
 	
 	// Setting Database Row
 	$Tier4DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';

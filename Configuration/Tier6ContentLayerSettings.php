@@ -13,6 +13,8 @@
 	$Tier6DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
 	$Tier6DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
 	$Tier6DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier6DatabaseAllow['setLimit'] = 'setLimit';
+	$Tier6DatabaseAllow['getLimit'] = 'getLimit';
 	$Tier6DatabaseAllow['setDatabasename'] = 'setDatabasename';
 	$Tier6DatabaseAllow['getDatabasename'] = 'getDatabasename';
 	$Tier6DatabaseAllow['setUser'] = 'setUser';

@@ -1165,7 +1165,7 @@
 		$FormSelect['StopObjectID'] = 9999;
 		$FormSelect['ContinueObjectID'] = NULL;
 		$FormSelect['ContainerObjectType'] = 'Option';
-		$FormSelect['ContainerObjectTypeName'] = 'FormOption';
+		$FormSelect['ContainerObjectTypeName'] = 'AdministratorFormOption';
 		$FormSelect['ContainerObjectID'] = $NewPhotosPage;
 		$FormSelect['FormSelectDisabled'] = NULL;
 		$FormSelect['FormSelectMultiple'] = NULL;

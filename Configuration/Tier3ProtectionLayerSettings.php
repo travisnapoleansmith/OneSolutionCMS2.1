@@ -13,6 +13,8 @@
 	$Tier3DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
 	$Tier3DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
 	$Tier3DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier3DatabaseAllow['setLimit'] = 'setLimit';
+	$Tier3DatabaseAllow['getLimit'] = 'getLimit';
 	$Tier3DatabaseAllow['setDatabasename'] = 'setDatabasename';
 	$Tier3DatabaseAllow['getDatabasename'] = 'getDatabasename';
 	$Tier3DatabaseAllow['setUser'] = 'setUser';
@@ -56,6 +58,9 @@
 	$Tier3DatabaseDeny['updateField'] = 'updateField';
 	$Tier3DatabaseDeny['deleteField'] = 'deleteField';
 	
+	// Maintenance Methods
+	$Tier3DatabaseDeny['sortTable'] = 'sortTable';
+	
 	// Setting Database Row
 	$Tier3DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
 	
@@ -95,5 +100,4 @@
 	$Tier3DatabaseAllow['walkfieldname'] = 'walkfieldname';
 	$Tier3DatabaseAllow['walktable'] = 'walktable';
 	$Tier3DatabaseAllow['walkidsearch'] = 'walkidsearch';
-	
 ?>

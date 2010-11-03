@@ -108,8 +108,8 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
 		
-		unset($PageID['RevisionID']);
-		unset($PageID['CurrentVersion']);
+		//unset($PageID['RevisionID']);
+		//unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
 		
 		$this->LayerModule->Connect($this->DatabaseTable);

@@ -14,8 +14,6 @@
 	$contentidnumber = Array();
 	$contentidnumber['PageID'] = 1;
 	$contentidnumber['ObjectID'] = 0;
-	//$contentidnumber['RevisionID'] = 0;
-	//$contentidnumber['CurrentVersion'] = 'true';
 			
 	if ($_GET['PageID']){
 		$contentidnumber['PageID'] = $_GET['PageID'];
@@ -23,15 +21,14 @@
 	
 	if (isset($_GET['RevisionID'])){
 		$contentidnumber['RevisionID'] = $_GET['RevisionID'];
-		unset($contentidnumber['CurrentVersion']);
+	} else {
+		$contentidnumber['CurrentVersion'] = 'true';
 	}
 	
 	if ($_GET['CurrentVersion']){
 		$contentidnumber['CurrentVersion'] = $_GET['CurrentVersion'];
-	} else {
-		$contentidnumber['CurrentVersion'] = 'true';
 	}
-
+	
 	if ($_GET['printpreview']) {
 		$contentidnumber['printpreview'] = TRUE;
 	} else {
@@ -48,24 +45,38 @@
 	$databaseoptions = NULL;
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
-	$Writer = $GLOBALS['Writer'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
-	//$Writer->startElement('div');
-		//$Writer->writeAttribute('id', 'textlayer1');
-		
 	$content = new XhtmlContent($contentdatabase, $databaseoptions, $Tier6Databases);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Content');
 	$content->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$content->FetchDatabase ($contentidnumber);
-	$content->CreateOutput('    ');
+	//$content->CreateOutput('    ');
 	
-	/*if ($contentidnumber['PageID'] != 1) {
-			$Writer->writeRaw("  ");
-		$Writer->endElement(); // ENDS DIV
-	}*/
 	//$contentoutput = $content->getOutput();
-
+	//if ($contentoutput) {
+		$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'main-content-top');
+		$Writer->fullEndElement();
+		
+		//$Writer->writeRaw($contentoutput);
+		$content->CreateOutput('    ');
+		$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'main-content-bottom');
+		$Writer->fullEndElement();
+	//} else {
+		/*$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'main-content-top');
+		$Writer->fullEndElement();
+		
+		$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'main-content-middle-empty');
+		$Writer->fullEndElement();
+		
+		$Writer->startElement('div');
+		$Writer->writeAttribute('id', 'main-content-bottom-empty');
+		$Writer->fullEndElement();
+	}*/
 	//print "$contentoutput";
 	
 ?>

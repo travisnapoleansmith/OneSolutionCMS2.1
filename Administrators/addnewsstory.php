@@ -190,7 +190,7 @@
 		$FormSelect['StopObjectID'] = NULL;
 		$FormSelect['ContinueObjectID'] = NULL;
 		$FormSelect['ContainerObjectType'] = 'Option';
-		$FormSelect['ContainerObjectTypeName'] = 'FormOption';
+		$FormSelect['ContainerObjectTypeName'] = 'AdministratorFormOption';
 		$FormSelect['ContainerObjectID'] = $NewPageID;
 		$FormSelect['FormSelectDisabled'] = NULL;
 		$FormSelect['FormSelectMultiple'] = NULL;

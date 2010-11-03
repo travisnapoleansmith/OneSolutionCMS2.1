@@ -22,18 +22,21 @@
 	$flashdatabase = Array();
 	$flashdatabase['Flash'] = 'Flash';
 	
-	$databaseoptions = NULL;
+	$databases = &$GLOBALS['Tier6Databases'];
 	
-	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
-	
-	$flash = new XhtmlFlash($flashdatabase, $databaseoptions);
+	$flash = new XhtmlFlash($flashdatabase, $databases);
 	$flash->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'Flash');
 	$flash->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$flash->FetchDatabase ($flashidnumber);
-	$flash->CreateOutput('  ');
+	//$flash->BuildFlashVarsText();
+	$flash->CreateOutput('    ');
 	
-	$flashoutput = $GLOBALS['Writer']->flush();
-	print "$flashoutput";
+	//print_r($flash);
+	$flashoutput = $flash->getOutput();
+	//print "<div id=\"textlayer1\">\n";
+	print "  $flashoutput";
+	///print "\n";
+	//print "</div>\n";
 	
 /*
   <div id="textlayer1">

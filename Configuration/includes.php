@@ -50,7 +50,7 @@
 	require_once 'Configuration/Tier5ValidationLayerSettings.php';
 	
 	// Tier 6 Content Layer Settings
-	require_once 'Configuration/Tier6ContentLayerSettings.php';
 	require_once 'Configuration/Tier6ContentLayerDatabaseSettings.php';
+	require_once 'Configuration/Tier6ContentLayerSettings.php';
 	
 ?>

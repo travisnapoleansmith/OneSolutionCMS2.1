@@ -13,6 +13,8 @@
 	$Tier2DatabaseAllow['getOrderbyname'] = 'getOrderbyname';
 	$Tier2DatabaseAllow['setOrderbytype'] = 'setOrderbytype';
 	$Tier2DatabaseAllow['getOrderbytype'] = 'getOrderbytype';
+	$Tier2DatabaseAllow['setLimit'] = 'setLimit';
+	$Tier2DatabaseAllow['getLimit'] = 'getLimit';
 	$Tier2DatabaseAllow['setDatabasename'] = 'setDatabasename';
 	$Tier2DatabaseAllow['getDatabasename'] = 'getDatabasename';
 	$Tier2DatabaseAllow['setUser'] = 'setUser';
@@ -55,6 +57,9 @@
 	// Field Methods
 	$Tier2DatabaseDeny['updateField'] = 'updateField';
 	$Tier2DatabaseDeny['deleteField'] = 'deleteField';
+	
+	// Maintenance Methods
+	$Tier2DatabaseDeny['sortTable'] = 'sortTable';
 	
 	// Setting Database Row
 	$Tier2DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';

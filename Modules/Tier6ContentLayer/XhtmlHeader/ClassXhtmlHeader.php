@@ -27,6 +27,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $IE6StyleSheet;
 	protected $IE7StyleSheet;
 	protected $IE8StyleSheet;
+	protected $IE9StyleSheet;
 	protected $PrintPreviewStyleSheet;
 	
 	protected $JavaScriptSheet;
@@ -157,6 +158,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->IEStyleSheetBuild('IE6StyleSheet');
 			$this->IEStyleSheetBuild('IE7StyleSheet');
 			$this->IEStyleSheetBuild('IE8StyleSheet');
+			$this->IEStyleSheetBuild('IE9StyleSheet');
 		}
 		
 		$this->FillArray('StyleSheet', 'StyleSheet');
@@ -467,6 +469,12 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			if ($this->IE8StyleSheet && !$printpreviewflag && !$stylesheet) {
 				if (strstr($this->HttpUserAgent,'MSIE 8.0')) {
 					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE8StyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->IE9StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'MSIE 9.0')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE9StyleSheet, NULL, NULL);
 				}
 			}
 			
