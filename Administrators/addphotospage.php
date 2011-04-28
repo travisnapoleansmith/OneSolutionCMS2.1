@@ -31,119 +31,94 @@
 		$Location = 'index.php?PageID=';
 		$Location .= $NewPageID;
 		
-		
-		if ($_POST['Heading'] == 'Null' | $_POST['Heading'] == 'NULL') {
-			$_POST['Heading'] = NULL;
-			$hold['FilteredInput']['Heading'] = NULL;
+		$temp = $Tier6Databases->PostCheck ('Heading', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
 		}
 		
-		if ($_POST['TopText'] == 'Null' | $_POST['TopText'] == 'NULL') {
-			$_POST['TopText'] = NULL;
-			$hold['FilteredInput']['TopText'] = NULL;
+		$temp = $Tier6Databases->PostCheck ('Keywords', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
 		}
 		
-		$i = 1;
-		$PhotoSetHeading = "PhotoSet$i" . 'Heading';
-		$PhotoSetTopText = "PhotoSet$i" . 'TopText';
-		$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
-		$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
-		$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
-		$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
-		$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
-		$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
-		$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
-		while (isset($_POST[$PhotoSetHeading])) {
-			if ($_POST[$PhotoSetHeading] == 'Null' | $_POST[$PhotoSetHeading] == 'NULL') {
-				$_POST[$PhotoSetHeading] = NULL;
-				$hold['FilteredInput'][$PhotoSetHeading] = NULL;
-			}
+		$temp = $Tier6Databases->PostCheck ('Description', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
+		}
 			
-			if ($_POST[$PhotoSetTopText] == 'Null' | $_POST[$PhotoSetTopText] == 'NULL') {
-				$_POST[$PhotoSetTopText] = NULL;
-				$hold['FilteredInput'][$PhotoSetTopText] = NULL;
-			}
-			
-			if ($_POST[$PhotoSetImage1Src] == 'Null' | $_POST[$PhotoSetImage1Src] == 'NULL') {
-				$_POST[$PhotoSetImage1Src] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage1Src] = NULL;
-			} else {
-				if ($_POST[$PhotoSetImage1Alt] == 'Null' | $_POST[$PhotoSetImage1Alt] == 'NULL') {
-					$_SESSION['POST']['Error'][$PhotoSetImage1Alt] = 'Image 1 Alt must be set and cannot be NULL!';
-					$_SESSION['POST']['FilteredInput'] = $hold['FilteredInput'];
-					$AddPhotosPage = $Options['XhtmlPicture']['picture']['AddPhotosPage']['SettingAttribute'];
-					header("Location: index.php?PageID=$AddPhotosPage&SessionID=$sessionname");
-					exit;
-				}
-			}
-			
-			if ($_POST[$PhotoSetImage1Text] == 'Null' | $_POST[$PhotoSetImage1Text] == 'NULL') {
-				$_POST[$PhotoSetImage1Text] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage1Text] = NULL;
-			}
-			
-			if ($_POST[$PhotoSetImage1Alt] == 'Null' | $_POST[$PhotoSetImage1Alt] == 'NULL') {
-				$_POST[$PhotoSetImage1Alt] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage1Alt] = NULL;
-			}
-			
-			if ($_POST[$PhotoSetImage2Src] == 'Null' | $_POST[$PhotoSetImage2Src] == 'NULL') {
-				$_POST[$PhotoSetImage2Src] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage2Src] = NULL;
-			} else {
-				if ($_POST[$PhotoSetImage2Alt] == 'Null' | $_POST[$PhotoSetImage2Alt] == 'NULL') {
-					$_SESSION['POST']['Error'][$PhotoSetImage2Alt] = 'Image 2 Alt must be set and cannot be NULL!';
-					$_SESSION['POST']['FilteredInput'] = $hold['FilteredInput'];
-					$AddPhotosPage = $Options['XhtmlPicture']['picture']['AddPhotosPage']['SettingAttribute'];
-					header("Location: index.php?PageID=$AddPhotosPage&SessionID=$sessionname");
-					exit;
-				}
-			}
-			
-			if ($_POST[$PhotoSetImage2Text] == 'Null' | $_POST[$PhotoSetImage2Text] == 'NULL') {
-				$_POST[$PhotoSetImage2Text] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage2Text] = NULL;
-			}
-			
-			if ($_POST[$PhotoSetImage2Alt] == 'Null' | $_POST[$PhotoSetImage2Alt] == 'NULL') {
-				$_POST[$PhotoSetImage2Alt] = NULL;
-				$hold['FilteredInput'][$PhotoSetImage2Alt] = NULL;
-			}
-			
-			if ($_POST[$PhotoSetBottomText] == 'Null' | $_POST[$PhotoSetBottomText] == 'NULL') {
-				$_POST[$PhotoSetBottomText] = NULL;
-				$hold['FilteredInput'][$PhotoSetBottomText] = NULL;
-			}
-			$i++;
-			$PhotoSetHeading = "PhotoSet$i" . 'Heading';
-			$PhotoSetTopText = "PhotoSet$i" . 'TopText';
-			$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
-			$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
-			$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
-			$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
-			$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
-			$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
-			$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
-			
+		$temp = $Tier6Databases->PostCheck ('TopText', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
 		}
 		
-		if ($_POST['BottomText'] == 'Null' | $_POST['BottomText'] == 'NULL') {
-			$_POST['BottomText'] = NULL;
-			$hold['FilteredInput']['BottomText'] = NULL;
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Heading');
+		if ($temp != NULL) {
+			$hold = $temp;
 		}
 		
-		if ($_POST['BottomHeading'] == 'Null' | $_POST['BottomHeading'] == 'NULL') {
-			$_POST['BottomHeading'] = NULL;
-			$hold['FilteredInput']['BottomHeading'] = NULL;
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'TopText');
+		if ($temp != NULL) {
+			$hold = $temp;
 		}
 		
-		if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
-			$_POST['MenuName'] = NULL;
-			$hold['FilteredInput']['MenuName'] = NULL;
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image1Src');
+		if ($temp != NULL) {
+			$hold = $temp;
 		}
 		
-		if ($_POST['MenuTitle'] == 'Null' | $_POST['MenuTitle'] == 'NULL') {
-			$_POST['MenuTitle'] = NULL;
-			$hold['FilteredInput']['MenuTitle'] = NULL;
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image1Text');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image1Alt');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image2Src');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image2Text');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Image2Alt');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'BottomText');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->MultiPostCheck('PhotoSet', 1, $hold, NULL, NULL, 'Order');
+		if ($temp != NULL) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->PostCheck ('BottomText', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->PostCheck ('BottomHeading', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->PostCheck ('MenuName', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
+		}
+		
+		$temp = $Tier6Databases->PostCheck ('MenuTitle', 'FilteredInput', $hold);
+		if (!is_null($temp)) {
+			$hold = $temp;
 		}
 		
 		$_SESSION['POST']['Error']['Link'] = '<a href=\'';
@@ -152,145 +127,67 @@
 		
 		$temp = $hold['FilteredInput'];
 		
-		$i = 1;
-		$PhotoSetHeading = "PhotoSet$i" . 'Heading';
-		$PhotoSetTopText = "PhotoSet$i" . 'TopText';
-		$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
-		$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
-		$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
-		$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
-		$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
-		$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
-		$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
-		$PhotoSetOrder = "PhotoSet$i" . 'Order';
+		$Start = array();
+		$Start ['Heading'] = 'Heading';
+		$Start ['TopText'] = 'TopText';
+		$Start ['Image1Src'] = 'Image1Src';
+		$Start ['Image1Text'] = 'Image1Text';
+		$Start ['Image1Alt'] = 'Image1Alt';
+		$Start ['Image2Src'] = 'Image2Src';
+		$Start ['Image2Text'] = 'Image2Text';
+		$Start ['Image2Alt'] = 'Image2Alt';
+		$Start ['BottomText'] = 'BottomText';
+		$Start ['Order'] = 'Order';
 		
-		while (isset($temp[$PhotoSetImage1Src])) {
-			$temp[$i][$PhotoSetHeading] = $temp[$PhotoSetHeading];
-			$temp[$i][$PhotoSetTopText] = $temp[$PhotoSetTopText];
-			$temp[$i][$PhotoSetImage1Src] = $temp[$PhotoSetImage1Src];
-			$temp[$i][$PhotoSetImage1Text] = $temp[$PhotoSetImage1Text];
-			$temp[$i][$PhotoSetImage1Alt] = $temp[$PhotoSetImage1Alt];
-			$temp[$i][$PhotoSetImage2Src] = $temp[$PhotoSetImage2Src];
-			$temp[$i][$PhotoSetImage2Text] = $temp[$PhotoSetImage2Text];
-			$temp[$i][$PhotoSetImage2Alt] = $temp[$PhotoSetImage2Alt];
-			$temp[$i][$PhotoSetBottomText] = $temp[$PhotoSetBottomText];
-			$temp[$i][$PhotoSetOrder] = $temp[$PhotoSetOrder];
-			
-			unset($temp[$PhotoSetHeading]);
-			unset($temp[$PhotoSetTopText]);
-			unset($temp[$PhotoSetImage1Src]);
-			unset($temp[$PhotoSetImage1Text]);
-			unset($temp[$PhotoSetImage1Alt]);
-			unset($temp[$PhotoSetImage2Src]);
-			unset($temp[$PhotoSetImage2Text]);
-			unset($temp[$PhotoSetImage2Alt]);
-			unset($temp[$PhotoSetBottomText]);
-			unset($temp[$PhotoSetOrder]);
-			
-			$i++;
-			$PhotoSetHeading = "PhotoSet$i" . 'Heading';
-			$PhotoSetTopText = "PhotoSet$i" . 'TopText';
-			$PhotoSetImage1Src = "PhotoSet$i" . 'Image1Src';
-			$PhotoSetImage1Text = "PhotoSet$i" . 'Image1Text';
-			$PhotoSetImage1Alt = "PhotoSet$i" . 'Image1Alt';
-			$PhotoSetImage2Src = "PhotoSet$i" . 'Image2Src';
-			$PhotoSetImage2Text = "PhotoSet$i" . 'Image2Text';
-			$PhotoSetImage2Alt = "PhotoSet$i" . 'Image2Alt';
-			$PhotoSetBottomText = "PhotoSet$i" . 'BottomText';
-			$PhotoSetOrder = "PhotoSet$i" . 'Order';
-		}
-		
-		foreach ($temp as $key => $value) {
-			if (is_null($value)) {
-				unset($temp[$key]);
-			}
-		}
-		
-		$newtemp = array();
+		$StartKey = 'PhotoSet';
+		$ConditionKey = 'Image1Src';
+		$StartNumber = 1;
+		$Sort = 'Order';
+		$temp = $Tier6Databases->MultiArrayBuild($Start, $StartKey, $ConditionKey, $StartNumber, $hold['FilteredInput'], $Sort);
 		
 		for ($i = 1; $temp[$i]; $i++) {
-			$PhotoSetOrder = "PhotoSet$i" . 'Order';
-			if ($temp[$i][$PhotoSetOrder] != $i && $temp[$i][$PhotoSetOrder]) {
-				$index = $temp[$i][$PhotoSetOrder];
-				while($newtemp[$index]) {
-					$index++;
-				}
-				
-				foreach ($temp[$i] as $key => $value) {
-					$key = explode($i, $key);
-					
-					$key[0] .= $index;
-					if ($i == 1 & $key[1] == 'Image') {
-						$key[1] .= '1';
-					}
-					
-					if ($i == 2 & $key[1] == 'Image') {
-						$key[1] .= '2';
-					}
-					
-					$key = implode($key);
-					$newtemp[$index][$key] = $value;
-				}
-				
-				unset($temp[$i]);
-			} else if ($temp[$i]) {
-				$index = $i;
-				while($newtemp[$index]) {
-					$index++;
-				}
-				
-				foreach ($temp[$i] as $key => $value) {
-					$key = explode($i, $key);
-					$key[0] .= $index;
-					$key = implode($key);
-					$newtemp[$index][$key] = $value;
-				}
-				
-				unset($temp[$i]);
-			}
-		}
-		
-		ksort($newtemp);
-		
-		$newtemp = array_combine(range(1, count($newtemp)), array_values($newtemp));
-		
-		for ($i = 1; $newtemp[$i]; $i++) {
-			reset($newtemp[$i]);
-			$name = key($newtemp[$i]);
-			$name = str_replace('PhotoSet', '', $name);
-			$name = str_replace('Heading', '', $name); 
-			$number = $name;
-			foreach ($newtemp[$i] as $key => $value) {
-				if ($number != $i) {
-					$key2 = str_replace($number, $i, $key);
-					$newtemp[$i][$key2] = $value;
-					unset($newtemp[$i][$key]);
-				}
-			}
-		}
-		
-		for ($i = 1; $newtemp[$i]; $i++) {
-			foreach ($newtemp[$i] as $key => $value) {
+			foreach ($temp[$i] as $key => $value) {
 				$temp[$key] = $value;
 			}
+			
+			unset ($temp[$i]);
 		}
 		
-		foreach ($_POST as $key => $value) {
-			if ($value != NULL) {
-				$_POST[$key] == NULL;
-			}
-		}
+		$hold['FilteredInput'] = $temp;
 		
-		foreach ($hold['FilteredInput'] as $key => $value) {
-			if ($value != NULL) {
-				$hold['FilteredInput'][$key] == NULL;
-			}
-		}
+		// General Defines
+		define(NewPageID, $NewPageID);
+		define(CurrentVersionTrueFalse, 'true');
+		define(ContentPageType, 'PhotosPage');
 		
-		foreach ($temp as $key => $value) {
-			$_POST[$key] = $value;
-			$hold['FilteredInput'][$key] = $value;
-		}
+		define(ContentPageMenuName, $hold['FilteredInput']['MenuName']);
+		define(ContentPageMenuTitle, $hold['FilteredInput']['MenuTitle']);
+		
+		define(UserAccessGroup, 'Guest');
+		define(Owner, $_COOKIE['UserName']);
+		define(Creator, $_COOKIE['UserName']);
+		define(LastChangeUser, $_COOKIE['UserName']);
+		define(CreationDateTime, $DateTime);
+		define(LastChangeDateTime, $DateTime);
+		
+		define(PublishDate, NULL);
+		define(UnpublishDate, NULL);
+		
+		define(EnableDisable, $_POST['EnableDisable']);
+		define(Status, $_POST['Status']);
+		
+		// XmlSitemap Defines
+		define(Loc, $Location);
+		define(Lastmod, $Date);
+		define(ChangeFreq, $_POST['Frequency']);
+		define(Priority, $_POST['Priority']);
+		
+		// XhtmlHeader Defines
+		define(PageTitle, $hold['FilteredInput']['PageTitle']);
+		define(PageIcon, 'favicon.ico');
+		define(RSS, 'rss.php');
+		define(Keywords, $hold['FilteredInput']['Keywords']);
+		define(Description, $hold['FilteredInput']['Description']);
 		
 		$Content = array();
 		
@@ -788,75 +685,9 @@
 		}
 		$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 		$Content[$i]['Status'] = $_POST['Status'];		
-		//$Content = array_reverse($Content);
 		
-		$Header = array();
-		$Header['PageID'] = $NewPageID;
-		$Header['RevisionID'] = 0;
-		$Header['CurrentVersion'] = 'true';
-		$Header['PageTitle'] = $hold['FilteredInput']['PageTitle'];
-		$Header['PageIcon'] = 'favicon.ico';
-		$Header['Rss2.0'] = 'rss.php';
-		$Header['Rss0.92'] = NULL;
-		$Header['Atom0.3'] = NULL;
-		$Header['BaseHref'] = NULL;
-		$Header['MetaName1'] = 'keywords';
-		$Header['MetaName2'] = 'description';
-		$Header['MetaName3'] = NULL;
-		$Header['MetaName4'] = NULL;
-		$Header['MetaName5'] = NULL;
-		$Header['MetaNameContent1'] = $hold['FilteredInput']['Keywords'];
-		$Header['MetaNameContent2'] = $hold['FilteredInput']['Description'];
-		$Header['MetaNameContent3'] = NULL;
-		$Header['MetaNameContent4'] = NULL;
-		$Header['MetaNameContent5'] = NULL;
-		$Header['HttpEquivType1'] = NULL;
-		$Header['HttpEquivType2'] = NULL;
-		$Header['HttpEquivType3'] = NULL;
-		$Header['HttpEquivType4'] = NULL;
-		$Header['HttpEquivType5'] = NULL;
-		$Header['HttpEquivTypeContent1'] = NULL;
-		$Header['HttpEquivTypeContent2'] = NULL;
-		$Header['HttpEquivTypeContent3'] = NULL;
-		$Header['HttpEquivTypeContent4'] = NULL;
-		$Header['HttpEquivTypeContent5'] = NULL;
-		$Header['LinkCharset1'] = NULL;
-		$Header['LinkCharset2'] = NULL;
-		$Header['LinkCharset3'] = NULL;
-		$Header['LinkCharset4'] = NULL;
-		$Header['LinkCharset5'] = NULL;
-		$Header['LinkHref1'] = NULL;
-		$Header['LinkHref2'] = NULL;
-		$Header['LinkHref3'] = NULL;
-		$Header['LinkHref4'] = NULL;
-		$Header['LinkHref5'] = NULL;
-		$Header['LinkHreflang1'] = NULL;
-		$Header['LinkHreflang2'] = NULL;
-		$Header['LinkHreflang3'] = NULL;
-		$Header['LinkHreflang4'] = NULL;
-		$Header['LinkHreflang5'] = NULL;
-		$Header['LinkMedia1'] = NULL;
-		$Header['LinkMedia2'] = NULL;
-		$Header['LinkMedia3'] = NULL;
-		$Header['LinkMedia4'] = NULL;
-		$Header['LinkMedia5'] = NULL;
-		$Header['LinkRel1'] = NULL;
-		$Header['LinkRel2'] = NULL;
-		$Header['LinkRel3'] = NULL;
-		$Header['LinkRel4'] = NULL;
-		$Header['LinkRel5'] = NULL;
-		$Header['LinkRev1'] = NULL;
-		$Header['LinkRev2'] = NULL;
-		$Header['LinkRev3'] = NULL;
-		$Header['LinkRev4'] = NULL;
-		$Header['LinkRev5'] = NULL;
-		$Header['LinkType1'] = NULL;
-		$Header['LinkType2'] = NULL;
-		$Header['LinkType3'] = NULL;
-		$Header['LinkType4'] = NULL;
-		$Header['LinkType5'] = NULL;
-		$Header['Enable/Disable'] = $_POST['EnableDisable'];
-		$Header['Status'] = $_POST['Status'];
+		$Header = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
+		$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 		
 		$HeaderPanel1 = array();
 		$HeaderPanel1[0]['PageID'] = $NewPageID;
@@ -899,264 +730,22 @@
 		$HeaderPanel1[1]['Enable/Disable'] = $_POST['EnableDisable'];
 		$HeaderPanel1[1]['Status'] = $_POST['Status'];
 		
-		$ContentLayerVersion = array();
-		$ContentLayerVersion['PageID'] = $NewPageID;
-		$ContentLayerVersion['RevisionID'] = 0;
-		$ContentLayerVersion['CurrentVersion'] = 'true';
-		$ContentLayerVersion['ContentPageType'] = 'PhotosPage';
-		$ContentLayerVersion['ContentPageMenuName'] = $hold['FilteredInput']['MenuName'];
-		$ContentLayerVersion['ContentPageMenuTitle'] = $hold['FilteredInput']['MenuTitle'];
-		$ContentLayerVersion['ContentPageMenuParentObjectID'] = NULL;
-		$ContentLayerVersion['UserAccessGroup'] = 'Guest';
-		$ContentLayerVersion['Owner'] = $_COOKIE['UserName'];
-		$ContentLayerVersion['Creator'] = $_COOKIE['UserName'];
-		$ContentLayerVersion['LastChangeUser'] = $_COOKIE['UserName'];
-		$ContentLayerVersion['CreationDateTime'] = $DateTime;
-		$ContentLayerVersion['LastChangeDateTime'] = $DateTime;
+		$ContentLayerVersion = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayerVersion.ini',FALSE);
+		$ContentLayerVersion = $Tier6Databases->EmptyStringToNullArray($ContentLayerVersion);
 		
-		$ContentLayer = array();
-		$ContentLayer[0]['PageID'] = $NewPageID;
-		$ContentLayer[0]['ObjectID'] = 0;
-		$ContentLayer[0]['ObjectType'] = 'XhtmlHeader';
-		$ContentLayer[0]['ObjectTypeName'] = 'header';
-		$ContentLayer[0]['ContainerObjectID'] = 0;
-		$ContentLayer[0]['RevisionID'] = 0;
-		$ContentLayer[0]['CurrentVersion'] = 'true';
-		$ContentLayer[0]['Authenticate'] = 'false';
-		$ContentLayer[0]['StartTag'] = NULL;
-		$ContentLayer[0]['EndTag'] = NULL;
-		$ContentLayer[0]['StartTagID'] = NULL;
-		$ContentLayer[0]['StartTagStyle'] = NULL;
-		$ContentLayer[0]['StartTagClass'] = NULL;
-		$ContentLayer[0]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[0]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[1]['PageID'] = $NewPageID;
-		$ContentLayer[1]['ObjectID'] = 1;
-		$ContentLayer[1]['ObjectType'] = 'BACKGROUND';
-		$ContentLayer[1]['ObjectTypeName'] = 'background';
-		$ContentLayer[1]['ContainerObjectID'] = 0;
-		$ContentLayer[1]['RevisionID'] = 0;
-		$ContentLayer[1]['CurrentVersion'] = 'true';
-		$ContentLayer[1]['Authenticate'] = 'false';
-		$ContentLayer[1]['StartTag'] = NULL;
-		$ContentLayer[1]['EndTag'] = NULL;
-		$ContentLayer[1]['StartTagID'] = NULL;
-		$ContentLayer[1]['StartTagStyle'] = NULL;
-		$ContentLayer[1]['StartTagClass'] = NULL;
-		$ContentLayer[1]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[1]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[2]['PageID'] = $NewPageID;
-		$ContentLayer[2]['ObjectID'] = 2;
-		$ContentLayer[2]['ObjectType'] = 'CONTENT';
-		$ContentLayer[2]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[2]['ContainerObjectID'] = 0;
-		$ContentLayer[2]['RevisionID'] = 0;
-		$ContentLayer[2]['CurrentVersion'] = 'true';
-		$ContentLayer[2]['Authenticate'] = 'false';
-		$ContentLayer[2]['StartTag'] = '<div>';
-		$ContentLayer[2]['EndTag'] = NULL;
-		$ContentLayer[2]['StartTagID'] = 'content';
-		$ContentLayer[2]['StartTagStyle'] = NULL;
-		$ContentLayer[2]['StartTagClass'] = NULL;
-		$ContentLayer[2]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[2]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[3]['PageID'] = $NewPageID;
-		$ContentLayer[3]['ObjectID'] = 3;
-		$ContentLayer[3]['ObjectType'] = 'CONTENT';
-		$ContentLayer[3]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[3]['ContainerObjectID'] = 0;
-		$ContentLayer[3]['RevisionID'] = 0;
-		$ContentLayer[3]['CurrentVersion'] = 'true';
-		$ContentLayer[3]['Authenticate'] = 'false';
-		$ContentLayer[3]['StartTag'] = '<div>';
-		$ContentLayer[3]['EndTag'] = NULL;
-		$ContentLayer[3]['StartTagID'] = 'container-box';
-		$ContentLayer[3]['StartTagStyle'] = NULL;
-		$ContentLayer[3]['StartTagClass'] = NULL;
-		$ContentLayer[3]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[3]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[4]['PageID'] = $NewPageID;
-		$ContentLayer[4]['ObjectID'] = 4;
-		$ContentLayer[4]['ObjectType'] = 'CONTENT';
-		$ContentLayer[4]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[4]['ContainerObjectID'] = 0;
-		$ContentLayer[4]['RevisionID'] = 0;
-		$ContentLayer[4]['CurrentVersion'] = 'true';
-		$ContentLayer[4]['Authenticate'] = 'false';
-		$ContentLayer[4]['StartTag'] = '<div>';
-		$ContentLayer[4]['EndTag'] = NULL;
-		$ContentLayer[4]['StartTagID'] = 'content-side';
-		$ContentLayer[4]['StartTagStyle'] = NULL;
-		$ContentLayer[4]['StartTagClass'] = NULL;
-		$ContentLayer[4]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[4]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[5]['PageID'] = $NewPageID;
-		$ContentLayer[5]['ObjectID'] = 5;
-		$ContentLayer[5]['ObjectType'] = 'XhtmlMenu';
-		$ContentLayer[5]['ObjectTypeName'] = 'headerpanel1';
-		$ContentLayer[5]['ContainerObjectID'] = 0;
-		$ContentLayer[5]['RevisionID'] = 0;
-		$ContentLayer[5]['CurrentVersion'] = 'true';
-		$ContentLayer[5]['Authenticate'] = 'false';
-		$ContentLayer[5]['StartTag'] = NULL;
-		$ContentLayer[5]['EndTag'] = NULL;
-		$ContentLayer[5]['StartTagID'] = NULL;
-		$ContentLayer[5]['StartTagStyle'] = NULL;
-		$ContentLayer[5]['StartTagClass'] = NULL;
-		$ContentLayer[5]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[5]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[6]['PageID'] = $NewPageID;
-		$ContentLayer[6]['ObjectID'] = 6;
-		$ContentLayer[6]['ObjectType'] = 'XhtmlMainMenu';
-		$ContentLayer[6]['ObjectTypeName'] = 'mainmenu';
-		$ContentLayer[6]['ContainerObjectID'] = 0;
-		$ContentLayer[6]['RevisionID'] = 0;
-		$ContentLayer[6]['CurrentVersion'] = 'true';
-		$ContentLayer[6]['Authenticate'] = 'false';
-		$ContentLayer[6]['StartTag'] = NULL;
-		$ContentLayer[6]['EndTag'] = NULL;
-		$ContentLayer[6]['StartTagID'] = NULL;
-		$ContentLayer[6]['StartTagStyle'] = NULL;
-		$ContentLayer[6]['StartTagClass'] = NULL;
-		$ContentLayer[6]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[6]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[7]['PageID'] = $NewPageID;
-		$ContentLayer[7]['ObjectID'] = 7;
-		$ContentLayer[7]['ObjectType'] = 'XhtmlContent';
-		$ContentLayer[7]['ObjectTypeName'] = 'content';
-		$ContentLayer[7]['ContainerObjectID'] = 0;
-		$ContentLayer[7]['RevisionID'] = 0;
-		$ContentLayer[7]['CurrentVersion'] = 'true';
-		$ContentLayer[7]['Authenticate'] = 'false';
-		$ContentLayer[7]['StartTag'] = '<div>';
-		$ContentLayer[7]['EndTag'] = '</div>';
-		$ContentLayer[7]['StartTagID'] = 'main-content';
-		$ContentLayer[7]['StartTagStyle'] = NULL;
-		$ContentLayer[7]['StartTagClass'] = NULL;
-		$ContentLayer[7]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[7]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[8]['PageID'] = $NewPageID;
-		$ContentLayer[8]['ObjectID'] = 8;
-		$ContentLayer[8]['ObjectType'] = 'CONTENT';
-		$ContentLayer[8]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[8]['ContainerObjectID'] = 0;
-		$ContentLayer[8]['RevisionID'] = 0;
-		$ContentLayer[8]['CurrentVersion'] = 'true';
-		$ContentLayer[8]['Authenticate'] = 'false';
-		$ContentLayer[8]['StartTag'] = NULL;
-		$ContentLayer[8]['EndTag'] = '</div>';
-		$ContentLayer[8]['StartTagID'] = NULL;
-		$ContentLayer[8]['StartTagStyle'] = NULL;
-		$ContentLayer[8]['StartTagClass'] = NULL;
-		$ContentLayer[8]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[8]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[9]['PageID'] = $NewPageID;
-		$ContentLayer[9]['ObjectID'] = 9;
-		$ContentLayer[9]['ObjectType'] = 'XhtmlContent';
-		$ContentLayer[9]['ObjectTypeName'] = 'adpanel1';
-		$ContentLayer[9]['ContainerObjectID'] = 0;
-		$ContentLayer[9]['RevisionID'] = 0;
-		$ContentLayer[9]['CurrentVersion'] = 'true';
-		$ContentLayer[9]['Authenticate'] = 'false';
-		$ContentLayer[9]['StartTag'] = NULL;
-		$ContentLayer[9]['EndTag'] = NULL;
-		$ContentLayer[9]['StartTagID'] = NULL;
-		$ContentLayer[9]['StartTagStyle'] = NULL;
-		$ContentLayer[9]['StartTagClass'] = NULL;
-		$ContentLayer[9]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[9]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[10]['PageID'] = $NewPageID;
-		$ContentLayer[10]['ObjectID'] = 10;
-		$ContentLayer[10]['ObjectType'] = 'FOOTER';
-		$ContentLayer[10]['ObjectTypeName'] = 'footer';
-		$ContentLayer[10]['ContainerObjectID'] = 0;
-		$ContentLayer[10]['RevisionID'] = 0;
-		$ContentLayer[10]['CurrentVersion'] = 'true';
-		$ContentLayer[10]['Authenticate'] = 'false';
-		$ContentLayer[10]['StartTag'] = NULL;
-		$ContentLayer[10]['EndTag'] = NULL;
-		$ContentLayer[10]['StartTagID'] = NULL;
-		$ContentLayer[10]['StartTagStyle'] = NULL;
-		$ContentLayer[10]['StartTagClass'] = NULL;
-		$ContentLayer[10]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[10]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[11]['PageID'] = $NewPageID;
-		$ContentLayer[11]['ObjectID'] = 11;
-		$ContentLayer[11]['ObjectType'] = 'CONTENT';
-		$ContentLayer[11]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[11]['ContainerObjectID'] = 0;
-		$ContentLayer[11]['RevisionID'] = 0;
-		$ContentLayer[11]['CurrentVersion'] = 'true';
-		$ContentLayer[11]['Authenticate'] = 'false';
-		$ContentLayer[11]['StartTag'] = NULL;
-		$ContentLayer[11]['EndTag'] = '</div>';
-		$ContentLayer[11]['StartTagID'] = NULL;
-		$ContentLayer[11]['StartTagStyle'] = NULL;
-		$ContentLayer[11]['StartTagClass'] = NULL;
-		$ContentLayer[11]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[11]['Status'] = $_POST['Status'];
-		
-		$ContentLayer[12]['PageID'] = $NewPageID;
-		$ContentLayer[12]['ObjectID'] = 12;
-		$ContentLayer[12]['ObjectType'] = 'CONTENT';
-		$ContentLayer[12]['ObjectTypeName'] = 'contentdummy';
-		$ContentLayer[12]['ContainerObjectID'] = 0;
-		$ContentLayer[12]['RevisionID'] = 0;
-		$ContentLayer[12]['CurrentVersion'] = 'true';
-		$ContentLayer[12]['Authenticate'] = 'false';
-		$ContentLayer[12]['StartTag'] = NULL;
-		$ContentLayer[12]['EndTag'] = '</div>';
-		$ContentLayer[12]['StartTagID'] = NULL;
-		$ContentLayer[12]['StartTagStyle'] = NULL;
-		$ContentLayer[12]['StartTagClass'] = NULL;
-		$ContentLayer[12]['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentLayer[12]['Status'] = $_POST['Status'];
+		$ContentLayer = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayer.ini',TRUE);
+		$ContentLayer = $Tier6Databases->EmptyStringToNullArray($ContentLayer);
 		
 		$_POST['Priority'] = $_POST['Priority'] / 10;
-		$Sitemap = array();
-		$Sitemap['PageID'] = $NewPageID;
-		$Sitemap['Loc'] = $Location;
-		$Sitemap['Lastmod'] = $Date;
-		$Sitemap['ChangeFreq'] = $_POST['Frequency'];
-		$Sitemap['Priority'] = $_POST['Priority'];
-		$Sitemap['Enable/Disable'] = $_POST['EnableDisable'];
-		$Sitemap['Status'] = $_POST['Status'];
 		
-		$ContentPrintPreview = array();
-		$ContentPrintPreview['PageID'] = $NewPageID;
-		$ContentPrintPreview['PrintPageID1'] = $NewPageID;
-		$ContentPrintPreview['PrintPageID2'] = NULL;
-		$ContentPrintPreview['PrintPageID3'] = NULL;
-		$ContentPrintPreview['PrintPageID4'] = NULL;
-		$ContentPrintPreview['PrintPageID5'] = NULL;
-		$ContentPrintPreview['PrintPageID6'] = NULL;
-		$ContentPrintPreview['PrintPageID7'] = NULL;
-		$ContentPrintPreview['PrintPageID8'] = NULL;
-		$ContentPrintPreview['PrintPageID9'] = NULL;
-		$ContentPrintPreview['PrintPageID10'] = NULL;
-		$ContentPrintPreview['PrintPageID11'] = NULL;
-		$ContentPrintPreview['PrintPageID12'] = NULL;
-		$ContentPrintPreview['PrintPageID13'] = NULL;
-		$ContentPrintPreview['PrintPageID14'] = NULL;
-		$ContentPrintPreview['PrintPageID15'] = NULL;
-		$ContentPrintPreview['PrintPageID16'] = NULL;
-		$ContentPrintPreview['PrintPageID17'] = NULL;
-		$ContentPrintPreview['PrintPageID18'] = NULL;
-		$ContentPrintPreview['PrintPageID19'] = NULL;
-		$ContentPrintPreview['PrintPageID20'] = NULL;
-		$ContentPrintPreview['Enable/Disable'] = $_POST['EnableDisable'];
-		$ContentPrintPreview['Status'] = $_POST['Status'];
+		$Sitemap = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XmlSitemap/AddXmlSitemap.ini',FALSE);
+		$Sitemap = $Tier6Databases->EmptyStringToNullArray($Sitemap);
+		
+		$ContentPrintPreview = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlContent/AddPrintPreview.ini',FALSE);
+		$ContentPrintPreview = $Tier6Databases->EmptyStringToNullArray($ContentPrintPreview);
+		
+		$MainMenuItemLookup = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
+		$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
 		
 		$UpdatePhotosPageSelect = $Options['XhtmlPictures']['picture']['UpdatePhotosPageSelect']['SettingAttribute'];
 		$FormSelect = array();
@@ -1241,6 +830,8 @@
 		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContentPrintPreview', $ContentPrintPreview);
 		$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 		
+		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
+		
 		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
 
 		$UpdatePhotosPageSelect = $Options['XhtmlPicture']['picture']['UpdatePhotosPageSelect']['SettingAttribute'];
@@ -1303,6 +894,7 @@
 		
 		header("Location: $PhotosPageCreatedPage&SessionID=$sessionname");
 		exit;
+		
 	}
 	
 ?>

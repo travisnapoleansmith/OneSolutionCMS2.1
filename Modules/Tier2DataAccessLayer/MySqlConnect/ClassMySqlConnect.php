@@ -13,6 +13,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	}
 	
 	public function Connect () {
+		if ($this->hostname == NULL | $this->user == NULL | $this->password == NULL | $this->databasename) {
+			$this->hostname = $GLOBALS['credentaillogonarray'][0];
+			$this->user = $GLOBALS['credentaillogonarray'][1];
+			$this->password = $GLOBALS['credentaillogonarray'][2];
+			$this->databasename = $GLOBALS['credentaillogonarray'][3];
+		}
+		
 		if (!($this->link = mysql_connect($this->hostname, $this->user, $this->password))) {
 			array_push($this->ErrorMessage,'Connect: Could not connect to server');
 		}
@@ -934,6 +941,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				$this->rowquery .= ' LIMIT ';
 				$this->rowquery .= $this->limit;
 			}
+			
 			$this->rowresult = mysql_query($this->rowquery);
 			
 			if ($this->rowresult) {
@@ -1018,5 +1026,22 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
+	
+	public function BuildFieldNames($TableName) {
+		if ($TableName) {
+			$this->databasetable = $TableName;
+		}
+		
+		$this->Connect();
+		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` ';
+		$result = mysql_query($query);
+
+		$this->rowfieldnames = array();
+		while ($row = mysql_fetch_array ($result)) {
+			array_push($this->rowfieldnames, $row['Field']);
+			$row = NULL;
+		}
+	}
+	
 }
 ?>

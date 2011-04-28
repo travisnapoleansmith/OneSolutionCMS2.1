@@ -1,4 +1,5 @@
 <?php
+	error_reporting(0);
 	$sessionname = $_GET['SessionID'];
 
 	if ($sessionname) {

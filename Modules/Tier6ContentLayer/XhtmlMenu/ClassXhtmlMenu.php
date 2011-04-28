@@ -194,26 +194,8 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function createMenu(array $Menu) {
 		if ($Menu != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'StartTag';
-			$Keys[3] = 'EndTag';
-			$Keys[4] = 'StartTagID';
-			$Keys[5] = 'StartTagStyle';
-			$Keys[6] = 'StartTagClass';
-			$Keys[7] = 'Div';
-			$Keys[8] = 'DivID';
-			$Keys[9] = 'DivStyle';
-			$Keys[10] = 'DivClass';
-			$Keys[11] = 'Div1';
-			$Keys[12] = 'Div1Title';
-			$Keys[13] = 'Div1ID';
-			$Keys[14] = 'Div1Style';
-			$Keys[15] = 'Div1Class';
-			$Keys[16] = 'Enable/Disable';
-			$Keys[17] = 'Status';
-			
+			$this->LayerModule->pass ($this->DatabaseTableName, 'BuildFieldNames', array('TableName' => $this->DatabaseTableName));
+			$Keys = $this->LayerModule->pass ($this->DatabaseTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Menu, $this->DatabaseTableName);
 		} else {
 			array_push($this->ErrorMessage,'createMenu: Menu cannot be NULL!');

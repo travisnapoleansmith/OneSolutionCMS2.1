@@ -1,6 +1,5 @@
 <?php
 	require_once ('Configuration/includes.php');
-	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	
 	$passarray = array();
@@ -19,6 +18,18 @@
 	}
 	unset($PageVersionTemp);
 	
+	$passarray = array();
+	$passarray['PageID'] = 1;
+	$passarray['ObjectID'] = 1;
+	$FirstMenuRecord = $Tier6Databases->getRecord($passarray, 'MainMenu', TRUE, array('1' => 'PageID'), 'ASC');
+	$FirstMenuLiChildID = array();
+	for ($i = 1; $i < 16; $i++) {
+		$LiChildID = 'Li' . $i . 'ChildID';
+		if ($FirstMenuRecord[0][$LiChildID] != NULL) {
+			$FirstMenuLiChildID[$LiChildID] = $FirstMenuRecord[0][$LiChildID];
+		}
+	}
+	
 	$i = 1;
 	$Name = 'MenuItem';
 	$Name .= $i;
@@ -29,7 +40,12 @@
 			$hold = $_POST[$Name];
 			$hold = explode(' ', $hold);
 			$MenuItem[$Name]['PageID'] = $hold[0];
-			$MenuItem[$Name]['SubMenuID'] = $hold[2];
+			if ($hold[4]) {
+				$MenuItem[$Name]['PageLocation'] = $hold[4];
+			} 
+			
+			$MenuItem[$Name]['SubMenuID'] = $PageVersion[$hold[0]]['ContentPageMenuObjectID'];
+			
 			$MenuItem[$Name]['MenuName'] = $PageVersion[$hold[0]]['ContentPageMenuName'];
 			$MenuItem[$Name]['MenuTitle'] = $PageVersion[$hold[0]]['ContentPageMenuTitle'];
 		}
@@ -41,121 +57,67 @@
 	$hold = $_POST['TopMenuHidden'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[0];
-	$LiPageID = $hold[2];
+	$LiParentID = $hold[2];
+	$PageLocation = $hold[4];
+	$LiPageID = $PageVersion[$PageID]['ContentPageMenuObjectID'];
 	
-	if ($LiPageID | $LiPageID != 'NULL') {
-		$MainMenu = array();
-		$MainMenu['PageID'] = 1;
+	$MainMenu = array();
+	$MainMenu['PageID'] = 1;
+	
+	$MainMenuItemLookup = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
+	$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
+	
+	if ($LiPageID != NULL) {
+		//$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
+		// UPDATE MAIN MENU RECORD
+		//print "$LiParentID\n";
+		print "Update Record\n";
+		
 		$MainMenu['ObjectID'] = $LiPageID;
-		if ($LiPageID == 1) {
-			//$MainMenu['StartTag'] = '<div>';
-			//$MainMenu['EndTag'] = '</div>';
-			//$MainMenu['StartTagID'] = 'main-menu-middle';
-			//$MainMenu['StartTagStyle'] = NULL;
-			//$MainMenu['StartTagClass'] = NULL;
+		$FINALLiClass = NULL;
+		
+		for ($i = 1; $i < 16; $i++) {
+			$Li = "Li$i";
+			$LiClass = $Li . 'Class';
+			//$LiDir = $Li . 'Dir';
+			$LiChildID = $Li . 'ChildID';
+			$LiID = $Li . 'ID';
+			//$LiLang = $Li . 'Lang';
+			//$LiStyle = $Li . 'Style';
+			$LiTitle = $Li . 'Title';
+			//$LiXMLLang = $Li . 'XMLLang';
+			//$LiEnableDisable = $Li . 'Enable/Disable';
 			
-			//$MainMenu['Ul'] = NULL;
-			//$MainMenu['UlClass'] = 'main-menu';
-			//$MainMenu['UlDir'] = NULL;
-			//$MainMenu['UlID'] = 'menu';
-			//$MainMenu['UlLang'] = NULL;
-			//$MainMenu['UlStyle'] = NULL;
-			//$MainMenu['UlTitle'] = NULL;
-			//$MainMenu['UlXMLLang'] = NULL;
-			
-			for ($i = 1; $i < 16; $i++) {
-				$Li = "Li$i";
-				$LiClass = $Li . 'Class';
-				$LiDir = $Li . 'Dir';
-				$LiChildID = $Li . 'ChildID';
-				$LiID = $Li . 'ID';
-				$LiLang = $Li . 'Lang';
-				$LiStyle = $Li . 'Style';
-				$LiTitle = $Li . 'Title';
-				$LiXMLLang = $Li . 'XMLLang';
-				$LiEnableDisable = $Li . 'Enable/Disable';
-				
-				$MenuItemName = 'MenuItem' . $i;
-				if ($MenuItem[$MenuItemName]) {
-					$LiItem = '<a href=\'index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '\'>';
-					$LiItem .= $MenuItem[$MenuItemName]['MenuName'] . '</a>';
-					
-					$MainMenu[$Li] = $LiItem;
-				} else {
-					$MainMenu[$Li] = NULL;
-				}
-				$MainMenu[$LiClass] = 'menuparent MenuText MenuLi';
-				$MainMenu[$LiDir] = NULL;
-				if ($MenuItem[$MenuItemName]['SubMenuID'] | $MenuItem[$MenuItemName]['SubMenuID'] != 'NULL') {
-					if ($MenuItem[$MenuItemName]['SubMenuID'] == "1") {
-						$MainMenu[$LiChildID] = NULL;
+			$MenuItemName = 'MenuItem' . $i;
+			if ($MenuItem[$MenuItemName]) {
+				if (isset($MenuItem[$MenuItemName]['PageLocation'])) {
+					if (strstr($MenuItem[$MenuItemName]['MenuName'], '<br />') || strstr($MenuItem[$MenuItemName]['MenuName'], '<br/>')) {
+						$LiItem = '<br /><a href="' . $MenuItem[$MenuItemName]['PageLocation'] . '">';
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br />', '', $MenuItem[$MenuItemName]['MenuName']);
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br/>', '', $MenuItem[$MenuItemName]['MenuName']);
 					} else {
-						$MainMenu[$LiChildID] = $MenuItem[$MenuItemName]['SubMenuID'];
+						$LiItem = '<a href=\'' . $MenuItem[$MenuItemName]['PageLocation'] . '\'>';
 					}
 				} else {
-					$MainMenu[$LiChildID] = NULL;
+					if (strstr($MenuItem[$MenuItemName]['MenuName'], '<br />') || strstr($MenuItem[$MenuItemName]['MenuName'], '<br/>')) {
+						$LiItem = '<br /><a href="index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '">';
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br />', '', $MenuItem[$MenuItemName]['MenuName']);
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br/>', '', $MenuItem[$MenuItemName]['MenuName']);
+					} else {
+						$LiItem = '<a href="index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '">';
+					}
 				}
-				//$MainMenu[$LiID] = 'MenuItem1';
-				//$MainMenu[$LiLang] = NULL;
-				//$MainMenu[$LiStyle] = NULL;
-				if ($MenuItem[$MenuItemName]['MenuTitle']) {
-					$MainMenu[$LiTitle] = $MenuItem[$MenuItemName]['MenuTitle'];
-				} else {
-					$MainMenu[$LiTitle] = NULL;
-				}
-				//$MainMenu[$LiXMLLang] = NULL;
-				//$MainMenu[$LiEnableDisable] = 'Enable';
+				$LiItem .= $MenuItem[$MenuItemName]['MenuName'] . '</a>';
+				
+				$MainMenu[$Li] = $LiItem;
+			} else {
+				$MainMenu[$Li] = NULL;
 			}
-		} else {
-			//$MainMenu['StartTag'] = NULL;
-			//$MainMenu['EndTag'] = NULL;
-			//$MainMenu['StartTagID'] = NULL;
-			//$MainMenu['StartTagStyle'] = NULL;
-			//$MainMenu['StartTagClass'] = NULL;
-			
-			//$MainMenu['Ul'] = NULL;
-			//$MainMenu['UlClass'] = 'mainmenuul';
-			//$MainMenu['UlDir'] = NULL;
-			//$MainMenu['UlID'] = 'submenu1';
-			//$MainMenu['UlLang'] = NULL;
-			//$MainMenu['UlStyle'] = NULL;
-			//$MainMenu['UlTitle'] = NULL;
-			//$MainMenu['UlXMLLang'] = NULL;
-			
-			for ($i = 1; $i < 16; $i++) {
-				$Li = "Li$i";
-				$LiClass = $Li . 'Class';
-				$LiDir = $Li . 'Dir';
-				$LiChildID = $Li . 'ChildID';
-				$LiID = $Li . 'ID';
-				$LiLang = $Li . 'Lang';
-				$LiStyle = $Li . 'Style';
-				$LiTitle = $Li . 'Title';
-				$LiXMLLang = $Li . 'XMLLang';
-				$LiEnableDisable = $Li . 'Enable/Disable';
-				
-				$MenuItemName = 'MenuItem' . $i;
-				if ($MenuItem[$MenuItemName]) {
-					$LiItem = '<a href=\'index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '\'>';
-					$LiItem .= $MenuItem[$MenuItemName]['MenuName'] . '</a>';
-					
-					$MainMenu[$Li] = $LiItem;
-				} else {
-					$MainMenu[$Li] = NULL;
-				}
-				
-				$j = $i;
-				$j++;
-				$NextMenuItemName = 'MenuItem' . $j;
-				if ($MenuItem[$NextMenuItemName]) {
-					$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot';
-				} else {
-					$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot MenuLiSubFinal';
-				}
-				
-				$MainMenu[$LiDir] = NULL;
-				if ($MenuItem[$MenuItemName]['SubMenuID'] | $MenuItem[$MenuItemName]['SubMenuID'] != 'NULL') {
-					if ($MenuItem[$MenuItemName]['SubMenuID'] == "1") {
+			//$MainMenu[$LiClass] = 'menuparent MenuText MenuLi';
+			//$MainMenu[$LiDir] = NULL;
+			if ($MenuItem[$MenuItemName]['SubMenuID'] | $MenuItem[$MenuItemName]['SubMenuID'] != 'NULL') {
+				if (is_numeric($MenuItem[$MenuItemName]['SubMenuID'])) {
+					if ($MenuItem[$MenuItemName]['SubMenuID'] == 1) {
 						$MainMenu[$LiChildID] = NULL;
 					} else {
 						$MainMenu[$LiChildID] = $MenuItem[$MenuItemName]['SubMenuID'];
@@ -163,53 +125,97 @@
 				} else {
 					$MainMenu[$LiChildID] = NULL;
 				}
-				//$MainMenu[$LiID] = NULL;
-				//$MainMenu[$LiLang] = NULL;
-				//$MainMenu[$LiStyle] = NULL;
-				if ($MenuItem[$MenuItemName]['MenuTitle']) {
-					$MainMenu[$LiTitle] = $MenuItem[$MenuItemName]['MenuTitle'];
+			} else {
+				$MainMenu[$LiChildID] = NULL;
+			}
+			
+			if ($LiPageID != 1) {
+				if ($MainMenu[$Li] != NULL) {
+					if ($Index = array_search($LiPageID, $FirstMenuLiChildID)) {
+						$Index = str_replace('ChildID', 'ID', $Index);
+						$MainMenu[$LiID] = $FirstMenuRecord[0][$Index] . '-' . $i;
+						$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot';
+					} else {
+						$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub';
+					}
+					$FINALLiClass = $LiClass;
 				} else {
-					$MainMenu[$LiTitle] = NULL;
+					$MainMenu[$LiClass] = NULL;
 				}
-				//$MainMenu[$LiXMLLang] = NULL;
-				//$MainMenu[$LiEnableDisable] = 'Enable';
+			}
+			
+			//$MainMenu[$LiID] = 'MenuItem1';
+			//$MainMenu[$LiLang] = NULL;
+			//$MainMenu[$LiStyle] = NULL;
+			if ($MenuItem[$MenuItemName]['MenuTitle']) {
+				$MainMenu[$LiTitle] = $MenuItem[$MenuItemName]['MenuTitle'];
+			} else {
+				$MainMenu[$LiTitle] = NULL;
+			}
+			//$MainMenu[$LiXMLLang] = NULL;
+			//$MainMenu[$LiEnableDisable] = 'Enable';
+		}
+		
+		if ($LiPageID != 1) {
+			if ($FINALLiClass != NULL) {
+				if (array_search($LiPageID, $FirstMenuLiChildID)) {
+					$MainMenu[$FINALLiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot MenuLiSubFinal';
+				} else {
+					$MainMenu[$FINALLiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubFinal';
+				}
 			}
 		}
-	} else {
-		//print_r($PageVersion[$PageID]);
 		
+		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuItem', $MainMenu);
+		print_r($MainMenu);
+		
+	} else {
+		// ADD NEW RECORD TO MAIN MENU
+		print "NEW RECORD\n";
 		$LiIDHold = $PageVersion[$PageID]['ContentPageMenuParentObjectID'];
 		$Name = $PageVersion[$PageID]['ContentPageMenuName'];
 		
 		$passarray = array();
-		$passarray['PageID'] = 1;
-		$passarray['ObjectID'] = $LiIDHold;
-		$MenuPage = $Tier6Databases->getRecord($passarray, 'MainMenu');
+		if ($LiIDHold == NULL) {
+			$MenuPage = array();
+		} else {
+			$passarray['PageID'] = 1;
+			$passarray['ObjectID'] = $LiIDHold;
+			$MenuPage = $Tier6Databases->getRecord($passarray, 'MainMenu');
+		}
 		
 		$passarray = array();
 		$passarray['PageID'] = 1;
 		$MenuPageALL = $Tier6Databases->getRecord($passarray, 'MainMenu');
-		//print_r($MenuPageALL);
 		
 		$LiItem = '<a href="index.php?PageID=' . $PageID . '">';
 		$LiItem .= $Name . '</a>';
 		
-		$LiIDKey = array_search($LiItem, $MenuPage[0]);
-		if (!$LiIDKey) {
-			$LiItem = '<a href=\'index.php?PageID=' . $PageID . '\'>';
+		if ($MenuPage != NULL) {
+			$LiIDKey = array_search($LiItem, $MenuPage[0]);
+			if (!$LiIDKey) {
+				$LiItem = '<a href="index.php?PageID=' . $PageID . '">';
+				$LiItem .= $Name . '</a>';
+			}
+			if ($LiIDKey) {
+				$LiIDKey = $LiIDKey . 'ID';
+			}
+		
+		} else {
+			$LiItem = '<a href="index.php?PageID=' . $PageID . '">';
 			$LiItem .= $Name . '</a>';
 		}
-		$LiIDKey = $LiIDKey . 'ID';
-		//print_r($LiIDKey);
-		//print "\n";
-		//print_r($MenuPage);
 		
 		$i = 1;
-		$UlIDTemp = $MenuPage[0]['UlID'];
+		/*if ($MenuPage != NULL) {
+			$UlIDTemp = $MenuPage[0]['UlID'];
+		} else {
+			$UlIDTemp = 'submenu';
+		}
 		$UlID = $UlIDTemp;
 		$UlID .= '-' . $i;
-
-		do {
+		*/
+		/*do {
 			foreach ($MenuPageALL as $key => $value) {
 				$UlIDKey = array_search($UlID, $MenuPageALL[$key]);
 				if ($UlIDKey) {
@@ -222,31 +228,44 @@
 				$UlID = $UlIDTemp . '-' . $i;
 			}
 		} while ($UlIDKey);
-		//print_r($UlIDKey);
-		
+		*/
 		$LiPageID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuLastMenuItem']['SettingAttribute'];
 		$LiPageID++;
 		
-		$MainMenu = array();
-		$MainMenu['PageID'] = 1;
 		$MainMenu['ObjectID'] = $LiPageID;
 		
-		$MainMenu['StartTag'] = NULL;
-		$MainMenu['EndTag'] = NULL;
-		$MainMenu['StartTagID'] = NULL;
-		$MainMenu['StartTagStyle'] = NULL;
-		$MainMenu['StartTagClass'] = NULL;
-		
-		$MainMenu['Ul'] = NULL;
-		//$UlID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUlIDSubMenu']['SettingAttribute'];
-		//$UlID++;
-		$MainMenu['UlClass'] = 'mainmenuul';
-		$MainMenu['UlDir'] = NULL;
-		$MainMenu['UlID'] = $UlID;
-		$MainMenu['UlLang'] = NULL;
-		$MainMenu['UlStyle'] = NULL;
-		$MainMenu['UlTitle'] = NULL;
-		$MainMenu['UlXMLLang'] = NULL;
+		if ($LiPageID == 1) {
+			$MainMenu['StartTag'] = '<div>';
+			$MainMenu['EndTag'] = '</div>';
+			$MainMenu['StartTagID'] = 'main-menu-middle';
+			$MainMenu['StartTagStyle'] = NULL;
+			$MainMenu['StartTagClass'] = NULL;
+			
+			$MainMenu['Ul'] = NULL;
+			$MainMenu['UlClass'] = 'main-menu';
+			$MainMenu['UlDir'] = NULL;
+			$MainMenu['UlID'] = 'menu';
+			$MainMenu['UlLang'] = NULL;
+			$MainMenu['UlStyle'] = NULL;
+			$MainMenu['UlTitle'] = NULL;
+			$MainMenu['UlXMLLang'] = NULL;
+		} else {
+			$MainMenu['StartTag'] = NULL;
+			$MainMenu['EndTag'] = NULL;
+			$MainMenu['StartTagID'] = NULL;
+			$MainMenu['StartTagStyle'] = NULL;
+			$MainMenu['StartTagClass'] = NULL;
+			
+			$MainMenu['Ul'] = NULL;
+			$MainMenu['UlClass'] = 'mainmenuul';
+			$MainMenu['UlDir'] = NULL;
+			$MainMenu['UlID'] = $UlID;
+			$MainMenu['UlLang'] = NULL;
+			$MainMenu['UlStyle'] = NULL;
+			$MainMenu['UlTitle'] = NULL;
+			$MainMenu['UlXMLLang'] = NULL;
+		}
+		$flag = FALSE;
 		
 		for ($i = 1; $i < 16; $i++) {
 			$Li = "Li$i";
@@ -262,7 +281,23 @@
 			
 			$MenuItemName = 'MenuItem' . $i;
 			if ($MenuItem[$MenuItemName]) {
-				$LiItem = '<a href=\'index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '\'>';
+				if (isset($MenuItem[$MenuItemName]['PageLocation'])) {
+					if (strstr($MenuItem[$MenuItemName]['MenuName'], '<br />') || strstr($MenuItem[$MenuItemName]['MenuName'], '<br/>')) {
+						$LiItem = '<br /><a href="' . $MenuItem[$MenuItemName]['PageLocation'] . '">';
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br />', '', $MenuItem[$MenuItemName]['MenuName']);
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br/>', '', $MenuItem[$MenuItemName]['MenuName']);
+					} else {
+						$LiItem = '<a href=\'' . $MenuItem[$MenuItemName]['PageLocation'] . '\'>';
+					}
+				} else {
+					if (strstr($MenuItem[$MenuItemName]['MenuName'], '<br />') || strstr($MenuItem[$MenuItemName]['MenuName'], '<br/>')) {
+						$LiItem = '<br /><a href="index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '">';
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br />', '', $MenuItem[$MenuItemName]['MenuName']);
+						$MenuItem[$MenuItemName]['MenuName'] = str_replace('<br/>', '', $MenuItem[$MenuItemName]['MenuName']);
+					} else {
+						$LiItem = '<a href="index.php?PageID=' . $MenuItem[$MenuItemName]['PageID'] . '">';
+					}
+				}
 				$LiItem .= $MenuItem[$MenuItemName]['MenuName'] . '</a>';
 				
 				$MainMenu[$Li] = $LiItem;
@@ -273,22 +308,37 @@
 			$j = $i;
 			$j++;
 			$NextMenuItemName = 'MenuItem' . $j;
+			
 			if ($MenuItem[$NextMenuItemName]) {
 				$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot';
 			} else {
-				$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot MenuLiSubFinal';
+				if ($flag == FALSE) {
+					$MainMenu[$LiClass] = 'menuparent MenuTextSub MenuLiSub MenuLiSubRoot MenuLiSubFinal';
+					$flag = TRUE;
+				} else {
+					$MainMenu[$LiClass] = NULL;
+				}
 			}
 			
 			$MainMenu[$LiDir] = NULL;
 			if ($MenuItem[$MenuItemName]['SubMenuID']) {
-				$MainMenu[$LiChildID] = $MenuItem[$MenuItemName]['SubMenuID'];
+				if ($MenuItem[$MenuItemName]['SubMenuID'] == 0) {
+					$MainMenu[$LiChildID] = NULL;
+				} else {
+					$MainMenu[$LiChildID] = $MenuItem[$MenuItemName]['SubMenuID'];
+				}
 			} else {
 				$MainMenu[$LiChildID] = NULL;
 			}
 			
-			if ($LiIDKey) {
-				$MainMenu[$LiID] = $MenuPage[0][$LiIDKey] . '-' . $i;
+			if ($LiPageID == 1) {
+				$MainMenu[$LiID] = 'MenuItem' . $i;
 			} else {
+				/*if ($LiIDKey) {
+					$MainMenu[$LiID] = $MenuPage[0][$LiIDKey] . '-' . $i;
+				} else {
+					$MainMenu[$LiID] = NULL;
+				}*/
 				$MainMenu[$LiID] = NULL;
 			}
 			$MainMenu[$LiLang] = NULL;
@@ -303,11 +353,159 @@
 			$MainMenu[$LiXMLLang] = NULL;
 			$MainMenu[$LiEnableDisable] = 'Enable';
 		}
+		
+		$MainMenu['Enable/Disable'] = 'Enable';
+		$MainMenu['Status'] = 'Approved';
+		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMenuItem', $MainMenu);
+		
+		$Tier6Databases->updateContentVersion(array('PageID' => $PageID), 'ContentLayerVersion', array('ContentPageMenuObjectID' => $LiPageID));
 	}
+	
+	// LEFT OFF HERE!!!!!!!!!!!!!!!!
+	// NEED TO UPDATE PAGE VERSION TABLE FOR THE CURRENT PAGE $PageID so that the ID from LiPageID goes into ContentPageMenuParentObjectID
+	// THIS MUST HAPPEN NO MATTER NEW MENU IS CREATED OR UPDATING AN EXISTING MENU
+	
+	//$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $MainMenuItemLookup);
+	
+	// General Defines
+	define(NewPageID, $PageID);
+	$MainMenuItemLookup = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
+	$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
+	
+	for ($i = 0; $i < 16; $i++) {
+		$KeyName = 'MenuItem' . $i;
+		$ChildKey = 'Child' . $i;
+		if ($MenuItem[$KeyName] != NULL) {
+			$MainMenuItemLookup[$ChildKey] = $MenuItem[$KeyName]['PageID'];
+		}
+	}
+	
+	$passarray = array();
+	$passarray['PageID'] = 1;
+	$passarray['ObjectID'] = $PageID;
+	$OldMainMenuLookup = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup', TRUE, array('1' => 'PageID'), 'ASC');
+	$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $MainMenuItemLookup);
+	print_r($OldMainMenuLookup);
+	
+	for ($i = 1; $i < 16; $i++) {
+		$KeyName = 'Child' . $i;
+		$ParentIDName = 'MenuItem' . $i;
+		if ($OldMainMenuLookup[0][$KeyName] != NULL) {
+			$passarray = array();
+			$passarray['PageID'] = 1;
+			$passarray['ObjectID'] = $OldMainMenuLookup[0][$KeyName];
+			$passarray['ParentID'] = NULL;
+			$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectID', $passarray);
+		}
+		
+		if ($MainMenuItemLookup[$KeyName] != NULL) {
+			$passarray = array();
+			$passarray['PageID'] = 1;
+			$passarray['ObjectID'] = $MainMenuItemLookup[$KeyName];
+			$passarray['ParentID'] = $PageID;
+			$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectID', $passarray);
+		}
+		
+		if ($PageID == 1) {
+			if ($i > 1) {
+				if ($OldMainMenuLookup[0][$KeyName] != NULL) {
+					$passarray = array();
+					$passarray['PageID'] = 1;
+					$passarray['ObjectID'] = $OldMainMenuLookup[0][$KeyName];
+					$passarray['ParentIDName'] = NULL;
+					$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectIDName', $passarray);
+				}
+				if ($MainMenuItemLookup[$KeyName] != NULL) {
+					$passarray = array();
+					$passarray['PageID'] = 1;
+					$passarray['ObjectID'] = $MainMenuItemLookup[$KeyName];
+					$passarray['ParentIDName'] = $ParentIDName;
+					$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectIDName', $passarray);
+				}
+			}
+		} else {
+			if ($MainMenuItemLookup[$KeyName] != NULL) {
+				$passarray = array();
+				$passarray['PageID'] = 1;
+				$passarray['ObjectID'] = $OldMainMenuLookup[0]['ObjectID'];
+				$passarray['ParentIDName'] = $OldMainMenuLookup[0]['ParentIDName'];
+				$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectIDName', $passarray);
+				
+				$passarray = array();
+				$passarray['PageID'] = 1;
+				$passarray['ObjectID'] = $OldMainMenuLookup[0]['ObjectID'];
+				$passarray['ParentID'] = $OldMainMenuLookup[0]['ParentObjectID'];
+				$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectID', $passarray);
+			}
+			
+			//--------->>>>>START HERE <---------------
+			
+			
+			// START HERE - 
+			// BEEN WORKING TO UPDATE NEW PARENTOBJECTIDNAME BUT NEED TO SET THE OLD ONES TO NULL AND UPDATE THE MAINMENU TABLE FOR THE CSS ID.
+			// WHEN FINISHED, I HAVE TO MAKE SURE THAT ANYTHING UNDER SITEMAP WILL STILL BE UPDATEABLE IN THE DATABASE.  IT SHOWS UP FINE IN THE MENU BUT
+			// NOT IN THE ADMIN PANEL.  MUST ALSO STOP USERS FROM HAVING TWO MENU ITEMS UNDER TWO DIFFERENT PARTS OF THE MENU.  MEANING THAT NEWS PAGE 
+			// CAN ONLY BE USED ONCE FOR THE ENTIRE MENU.  ETHER FIX THAT OR MAKE THE MENU DO TWO OR MORE ITEMS SPOTS FOR EACH PAGE!
+			
+			if ($OldMainMenuLookup[0]['ParentIDName'] != NULL) {
+				$ParentIDName = $OldMainMenuLookup[0]['ParentIDName'] . '-' . $i;
+				if ($MainMenuItemLookup[$KeyName] != NULL) {
+					$passarray = array();
+					$passarray['PageID'] = 1;
+					$passarray['ObjectID'] = $MainMenuItemLookup[$KeyName];
+					$passarray['ParentIDName'] = $ParentIDName;
+					$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectIDName', $passarray);
+					
+					$passarray = array();
+					$passarray['PageID'] = 1;
+					$passarray['ObjectID'] = $MainMenuItemLookup[$KeyName];
+					$SubMainMenuLookup = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup', TRUE, array('1' => 'PageID'), 'ASC');
+					
+					for ($j = 1; $j < 16; $j++) {
+						$SubKeyName = 'Child' . $j;
+						$SubParentIDName = $ParentIDName .'-' . $j;
+						
+						if ($SubMainMenuLookup[0][$SubKeyName] != NULL) {
+							$passarray = array();
+							$passarray['PageID'] = 1;
+							$passarray['ObjectID'] = $SubMainMenuLookup[0][$SubKeyName];
+							$passarray['ParentIDName'] = $SubParentIDName;
+							$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuMenuItemLookupChildsParentObjectIDName', $passarray);
+							//print "PASSARRAY\n";
+							//print_r($passarray);
+						}
+						
+					}
+					
+					//print "SUB MAIN MENU LOOKUP\n";
+					//print_r($SubMainMenuLookup);
+				}
+				//print "$ParentIDName\n";
+			}
+			//$ParentMainMenuLookup = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup', TRUE, array('1' => 'PageID'), 'ASC');
+			
+			
+		}
+		
+	}
+	
+	print "MAIN MENU ITEM LOOKUP\n";
+	print_r($MainMenuItemLookup);
+	
+	print "OLD MAIN MENU ITEM LOOKUP\n";
+	print_r($OldMainMenuLookup);
+	
+	print "PageID To Update - $PageID\n";
+	print "LiPageID To Update In 'ContentPageMenuParentObjectID' - $LiPageID\n\n";
+	print "PageVersion For PageID\n";
+	print_r($PageVersion[$PageID]);
+	
+	
+	
 	//$MainMenu['Enable/Disable'] = 'Enable';
 	//$MainMenu['Status'] = 'Approved';
 	
-	print_r($MainMenu);
+	//////////////print_r($MainMenu);
 	/*
 	$sessionname = NULL;
 	$sessionname = $_COOKIE['SessionID'];
@@ -990,7 +1188,7 @@
 	$SortOrder['PageID'] = 'PageID';
 	$Tier6Databases->sortTable($SortOrder, $DatabaseTableName);
 	*/
-	print_r($_POST);
+	//print_r($_POST);
 	//print_r($PageVersion);
 	print_r($MenuItem);
 ?>

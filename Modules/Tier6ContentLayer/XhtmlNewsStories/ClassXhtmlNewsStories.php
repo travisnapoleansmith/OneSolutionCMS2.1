@@ -477,36 +477,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	public function createNewsStory(array $NewsStory) {
 		if ($NewsStory != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'ContainerObjectType';
-			$Keys[3] = 'ContainerObjectTypeName';
-			$Keys[4] = 'ContainerObjectID';
-			$Keys[5] = 'ContainerObjectPrintPreview';
-			$Keys[6] = 'RevisionID';
-			$Keys[7] = 'CurrentVersion';
-			$Keys[8] = 'Empty';
-			$Keys[9] = 'StartTag';
-			$Keys[10] = 'EndTag';
-			$Keys[11] = 'StartTagID';
-			$Keys[12] = 'StartTagStyle';
-			$Keys[13] = 'StartTagClass';
-			$Keys[14] = 'Heading';
-			$Keys[15] = 'HeadingStartTag';
-			$Keys[16] = 'HeadingEndTag';
-			$Keys[17] = 'HeadingStartTagID';
-			$Keys[18] = 'HeadingStartTagStyle';
-			$Keys[19] = 'HeadingStartTagClass';
-			$Keys[20] = 'Content';
-			$Keys[21] = 'ContentStartTag';
-			$Keys[22] = 'ContentEndTag';
-			$Keys[23] = 'ContentStartTagID';
-			$Keys[24] = 'ContentStartTagStyle';
-			$Keys[25] = 'ContentStartTagClass';
-			$Keys[26] = 'Enable/Disable';
-			$Keys[27] = 'Status';
-			
+			$this->LayerModule->pass ($this->NewsStoriesTableName, 'BuildFieldNames', array('TableName' => $this->NewsStoriesTableName));
+			$Keys = $this->LayerModule->pass ($this->NewsStoriesTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesTableName);
 		} else {
 			array_push($this->ErrorMessage,'createNewsStory: News Story cannot be NULL!');
@@ -556,17 +528,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	public function createNewsStoryDate(array $NewsStory) {
 		if ($NewsStory != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'RevisionID';
-			$Keys[3] = 'CurrentVersion';
-			$Keys[4] = 'NewsStoryDay';
-			$Keys[5] = 'NewsStoryMonth';
-			$Keys[6] = 'NewsStoryYear';
-			$Keys[7] = 'Enable/Disable';
-			$Keys[8] = 'Status';
-			
+			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'BuildFieldNames', array('TableName' => $this->NewsStoriesDatesTableName));
+			$Keys = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesDatesTableName);
 		} else {
 			array_push($this->ErrorMessage,'createNewsStoryDate: News Story Date cannot be NULL!');
@@ -616,20 +579,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	public function createNewsStoryVersion(array $NewsStory) {
 		if ($NewsStory != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'RevisionID';
-			$Keys[2] = 'CurrentVersion';
-			$Keys[3] = 'XMLItem';
-			$Keys[4] = 'StoryMenuName';
-			$Keys[5] = 'StoryMenuTitle';
-			$Keys[6] = 'UserAccessGroup';
-			$Keys[7] = 'Owner';
-			$Keys[8] = 'Creator';
-			$Keys[9] = 'LastChangeUser';
-			$Keys[10] = 'CreationDateTime';
-			$Keys[11] = 'LastChangeDateTime';
-			
+			$this->LayerModule->pass ($this->NewsStoriesVersionTableName, 'BuildFieldNames', array('TableName' => $this->NewsStoriesVersionTableName));
+			$Keys = $this->LayerModule->pass ($this->NewsStoriesVersionTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesVersionTableName);
 		} else {
 			array_push($this->ErrorMessage,'createNewsStoryVersion: News Story Version cannot be NULL!');
@@ -679,16 +630,8 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	public function createNewsStoryLookup(array $NewsStory) {
 		if ($NewsStory != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'NewsStoryPageID';
-			$Keys[3] = 'NewsStoryDay';
-			$Keys[4] = 'NewsStoryMonth';
-			$Keys[5] = 'NewsStoryYear';
-			$Keys[6] = 'Enable/Disable';
-			$Keys[7] = 'Status';
-			
+			$this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'BuildFieldNames', array('TableName' => $this->NewsStoriesLookupTableName));
+			$Keys = $this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $NewsStory, $this->NewsStoriesLookupTableName);
 		} else {
 			array_push($this->ErrorMessage,'createNewsStoryLookup: News Story Version cannot be NULL!');

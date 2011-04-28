@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simpleviewergallery
+	
+	galleryStyle="MODERN"
+	title="2010 Baseball"
+	textColor="FFFFFF"
+	frameColor="FFFFFF"
+	frameWidth="2"
+	thumbPosition="RIGHT"
+	thumbColumns="3"
+	thumbRows="5"
+	showOpenButton="FALSE"
+	showFullscreenButton="FALSE"	
+	maxImageWidth="300"
+	maxImageHeight="300"
+	useFlickr="false"
+	flickrUserName=""
+	flickrTags=""
+	languageCode="EN"
+	languageList=""		
+	imagePath="images/"
+	thumbPath="thumbs/"
+	
+>
+
+<image imageURL="../../../../Images/baseball/2010/padres_v_as_1.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Hockey Plus Loreman's Padres Shane Perrotte (#2) slides in safe at second base with the steal. During a hard fought playoff game against the Fourth Ward Athletics. <a href="http://kcphotovideo.exposuremanager.com/g/072609_hockey_plusloremans_padres_vs_fourth_ward_as">Gallery</a></caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_as_2.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Airborne Speedway/Hockey Plus Padres Matt Rivers (88) game one starting pitcher deliveries the fastball for strike against the Fourth Ward Athletics. The Padres would gone to sweep the Athletics 18-2 f/5 and 14-1 f/5. <a href="http://kcphotovideo.exposuremanager.com/g/072609_hockey_plusloremans_padres_vs_fourth_ward_as">Gallery</a></caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_cards_2.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Airborne Speedway/Hockey Plus Padres Joey Painter (12) slides in safe at second base during the second game of the doubleheader against the Plattsburgh Cardinals. The Cardinals would go on to sweep the Padres 8-1 and 3-0. <a href="http://kcphotovideo.exposuremanager.com/g/051610_airborne_speedway_hockey_plus_padres_vs_plattsburgh_cardinals">Gallery</a></caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_cards_3.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Airborne Speedway/Hockey Plus Padres Chris Markwicka (7) sends a long fly to left field for the hit. <a href="http://kcphotovideo.exposuremanager.com/g/051610_airborne_speedway_hockey_plus_padres_vs_plattsburgh_cardinals">Gallery</a></caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_1.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Padres vs TJAXX</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_2.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Padres vs TJAXX</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_3.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Padres vs TJAXX</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_fre_1.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs Fredonia</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_fre_2.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs Fredonia</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_fre_3.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs Fredonia</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_np_1.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs New Paltz</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_np_2.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs New Paltz</caption>	
+</image>
+<image imageURL="../../../../Images/baseball/2010/platts_v_np_3.jpg" thumbURL="" linkURL="" linkTarget="" >
+	<caption>Plattsburgh State vs New Paltz</caption>	
+</image>
+</simpleviewergallery>

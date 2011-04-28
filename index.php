@@ -1,5 +1,4 @@
-<?php	
-	//error_reporting('E_ERROR');
+<?php
 	// Includes all files
 	require_once ('Configuration/includes.php');
 	
@@ -10,6 +9,7 @@
 	}
 
 	$idnumberkeep = $idnumber;
+	$printpreview = NULL;
 
 	$Tier6Databases->setDatabaseTableName('ContentLayer');
 	
@@ -35,9 +35,10 @@
 	
 	$Tier6Databases->FetchDatabase($contentidnumber);
 	$Tier6Databases->CreateOutput(NULL);
-	
+		
 	$output = $Writer->flush();
 	if ($output) {
+		//header ("Content-type: application/xhtml+xml"); 
 		print "$output\n";
 	} else {
 		header("HTTP/1.0 404 Not Found");

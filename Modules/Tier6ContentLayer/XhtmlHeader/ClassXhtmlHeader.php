@@ -24,10 +24,20 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	
 	protected $ThemeName;
 	protected $StyleSheet;
+	
 	protected $IE6StyleSheet;
 	protected $IE7StyleSheet;
 	protected $IE8StyleSheet;
 	protected $IE9StyleSheet;
+	
+	protected $BlackberryOS5StyleSheet;
+	protected $BlackberryOS6StyleSheet;
+	protected $BlackberryPlaybookStyleSheet;
+	protected $AppleiPhoneStyleSheet;
+	protected $AppleiPadStyleSheet;
+	protected $AppleiPodStyleSheet;
+	protected $AndroidStyleSheet;
+	
 	protected $PrintPreviewStyleSheet;
 	
 	protected $JavaScriptSheet;
@@ -71,6 +81,8 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
+		
+		$this->HttpAccept = $_SERVER['HTTP_ACCEPT'];
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -155,10 +167,18 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 		
 		if ($this->HttpUserAgent) {
-			$this->IEStyleSheetBuild('IE6StyleSheet');
-			$this->IEStyleSheetBuild('IE7StyleSheet');
-			$this->IEStyleSheetBuild('IE8StyleSheet');
-			$this->IEStyleSheetBuild('IE9StyleSheet');
+			$this->StyleSheetBuild('IE6StyleSheet');
+			$this->StyleSheetBuild('IE7StyleSheet');
+			$this->StyleSheetBuild('IE8StyleSheet');
+			$this->StyleSheetBuild('IE9StyleSheet');
+			
+			$this->StyleSheetBuild('BlackberryOS5StyleSheet');
+			$this->StyleSheetBuild('BlackberryOS6StyleSheet');
+			$this->StyleSheetBuild('BlackberryPlaybookStyleSheet');
+			$this->StyleSheetBuild('AppleiPhoneStyleSheet');
+			$this->StyleSheetBuild('AppleiPadStyleSheet');
+			$this->StyleSheetBuild('AppleiPodStyleSheet');
+			$this->StyleSheetBuild('AndroidStyleSheet');
 		}
 		
 		$this->FillArray('StyleSheet', 'StyleSheet');
@@ -278,15 +298,15 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		}
 	}
 	
-	protected function IEStyleSheetBuild($IEStyleSheetName){
+	protected function StyleSheetBuild($StyleSheetName){
 		$i = 1;
-		$temp = $IEStyleSheetName;
+		$temp = $StyleSheetName;
 		$temp .= $i;
-		$this->$IEStyleSheetName = Array ();
+		$this->$StyleSheetName = Array ();
 		while ($this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp))) {
-			array_push($this->$IEStyleSheetName, $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp)));
+			array_push($this->$StyleSheetName, $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp)));
 			$i++;
-			$temp = $IEStyleSheetName;
+			$temp = $StyleSheetName;
 			$temp .= $i;
 		}
 	}
@@ -404,6 +424,14 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$printpreviewflag = $arguments[0];
 			$stylesheet = $arguments[1];
 			
+			// Determines if the browser will support XHTML or not and outputs the proper header for XHTML or HTML
+			if (isset($this->HttpAccept)) {
+				if (stristr($this->HttpAccept, 'application/xhtml+xml')) {
+					header ('Content-type: application/xhtml+xml');
+				} else {
+					header ('Content-type: text/html');
+				}
+			}
 			// USING NEW XMLWRITER
 			// STARTS HEADER
 			$this->Writer->startDTD('html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"');
@@ -475,6 +503,48 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			if ($this->IE9StyleSheet && !$printpreviewflag && !$stylesheet) {
 				if (strstr($this->HttpUserAgent,'MSIE 9.0')) {
 					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->IE9StyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->BlackberryOS5StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'BlackBerry') && strstr($this->HttpUserAgent, '/5.')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->BlackberryOS5StyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->BlackberryOS6StyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'BlackBerry') && strstr($this->HttpUserAgent, 'Version/6')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->BlackberryOS6StyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->BlackberryPlaybookStyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'PlayBook')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->BlackberryPlaybookStyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->AppleiPhoneStyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'iPhone')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->AppleiPhoneStyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->AppleiPadStyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'iPad')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->AppleiPadStyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->AppleiPodStyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'iPod')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->AppleiPodStyleSheet, NULL, NULL);
+				}
+			}
+			
+			if ($this->AndroidStyleSheet && !$printpreviewflag && !$stylesheet) {
+				if (strstr($this->HttpUserAgent,'Android')) {
+					$this->TagSheet('link', 'stylesheet', 'text/css', NULL, NULL, NULL, NULL, $this->AndroidStyleSheet, NULL, NULL);
 				}
 			}
 			
@@ -595,74 +665,8 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	
 	public function createHeader(array $Header) {
 		if ($Header != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'RevisionID';
-			$Keys[2] = 'CurrentVersion';
-			$Keys[3] = 'PageTitle';
-			$Keys[4] = 'PageIcon';
-			$Keys[5] = 'Rss2.0';
-			$Keys[6] = 'Rss0.92';
-			$Keys[7] = 'Atom0.3';
-			$Keys[8] = 'BaseHref';
-			$Keys[9] = 'MetaName1';
-			$Keys[10] = 'MetaName2';
-			$Keys[11] = 'MetaName3';
-			$Keys[12] = 'MetaName4';
-			$Keys[13] = 'MetaName5';
-			$Keys[14] = 'MetaNameContent1';
-			$Keys[15] = 'MetaNameContent2';
-			$Keys[16] = 'MetaNameContent3';
-			$Keys[17] = 'MetaNameContent4';
-			$Keys[18] = 'MetaNameContent5';
-			$Keys[19] = 'HttpEquivType1';
-			$Keys[20] = 'HttpEquivType2';
-			$Keys[21] = 'HttpEquivType3';
-			$Keys[22] = 'HttpEquivType4';
-			$Keys[23] = 'HttpEquivType5';
-			$Keys[24] = 'HttpEquivTypeContent1';
-			$Keys[25] = 'HttpEquivTypeContent2';
-			$Keys[26] = 'HttpEquivTypeContent3';
-			$Keys[27] = 'HttpEquivTypeContent4';
-			$Keys[28] = 'HttpEquivTypeContent5';
-			$Keys[29] = 'LinkCharset1';
-			$Keys[30] = 'LinkCharset2';
-			$Keys[31] = 'LinkCharset3';
-			$Keys[32] = 'LinkCharset4';
-			$Keys[33] = 'LinkCharset5';
-			$Keys[34] = 'LinkHref1';
-			$Keys[35] = 'LinkHref2';
-			$Keys[36] = 'LinkHref3';
-			$Keys[37] = 'LinkHref4';
-			$Keys[38] = 'LinkHref5';
-			$Keys[39] = 'LinkHreflang1';
-			$Keys[40] = 'LinkHreflang2';
-			$Keys[41] = 'LinkHreflang3';
-			$Keys[42] = 'LinkHreflang4';
-			$Keys[43] = 'LinkHreflang5';
-			$Keys[44] = 'LinkMedia1';
-			$Keys[45] = 'LinkMedia2';
-			$Keys[46] = 'LinkMedia3';
-			$Keys[47] = 'LinkMedia4';
-			$Keys[48] = 'LinkMedia5';
-			$Keys[49] = 'LinkRel1';
-			$Keys[50] = 'LinkRel2';
-			$Keys[51] = 'LinkRel3';
-			$Keys[52] = 'LinkRel4';
-			$Keys[53] = 'LinkRel5';
-			$Keys[54] = 'LinkRev1';
-			$Keys[55] = 'LinkRev2';
-			$Keys[56] = 'LinkRev3';
-			$Keys[57] = 'LinkRev4';
-			$Keys[58] = 'LinkRev5';
-			$Keys[59] = 'LinkType1';
-			$Keys[60] = 'LinkType2';
-			$Keys[61] = 'LinkType3';
-			$Keys[62] = 'LinkType4';
-			$Keys[63] = 'LinkType5';
-			$Keys[64] = 'Enable/Disable';
-			$Keys[65] = 'Status';
-			
+			$this->LayerModule->pass (current($this->TableNames), 'BuildFieldNames', array('TableName' => current($this->TableNames)));
+			$Keys = $this->LayerModule->pass (current($this->TableNames), 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Header, current($this->TableNames));
 		} else {
 			array_push($this->ErrorMessage,'createHeader: Header cannot be NULL!');

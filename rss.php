@@ -9,7 +9,8 @@
 	$feeddatabase['XMLFeeds'] = 'XMLFeeds';
 	
 	$databaseoptions = array();
-	$databaseoptions['FileName'] = 'rss.xml';
+	$databaseoptions['Screen'] = TRUE;
+	//$databaseoptions['FileName'] = 'rss.xml';
 	
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
@@ -25,6 +26,7 @@
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 	if ($feedoutput) {
+		header('Content-type: text/xml');
 		print "$feedoutput\n";
 	} else {
 		header("Location: rss.xml");

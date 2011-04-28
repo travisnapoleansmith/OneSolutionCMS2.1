@@ -221,7 +221,9 @@ class DataAccessLayer extends LayerModulesAbstract
 				
 				if ($EnableDisable == 'Enable') {
 					reset ($ModuleFileName);
-					$modulesfile = $ObjectTypeLocation;
+					$modulesfile = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+					$modulesfile .= '/';
+					$modulesfile .= $ObjectTypeLocation;
 					$modulesfile .= '/';
 					$modulesfile .= current($ModuleFileName);
 					$modulesfile .= '.php';

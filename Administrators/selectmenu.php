@@ -4,22 +4,31 @@
 	$hold = $_POST['MenuItem'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[0];
-	$MenuID = $hold[2];
+	//$MenuID = $hold[2];
 	unset($hold);
 	
 	$_POST['PageID'] = $PageID;
 	$_POST['UlMenuID'] = $MenuID;
-	
-	$passarray = array();
-	$passarray['PageID'] = 1;
-	$passarray['ObjectID'] = $MenuID;
-	$Menu = $Tier6Databases->getRecord($passarray, 'MainMenu');
 	
 	unset($passarray);
 	$passarray = array();
 	$passarray['CurrentVersion'] = 'true';
 	$PageAttributes = $Tier6Databases->getRecord($passarray, 'PageAttributes', TRUE, array('1' => 'PageID'), 'ASC');
 	$PageAttributes = array_combine(range(1, count($PageAttributes)), array_values($PageAttributes));
+	
+	$PageVersion = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion', TRUE, array('1' => 'PageID'), 'ASC');
+	$PageVersion = array_combine(range(1, count($PageVersion)), array_values($PageVersion));
+	$MenuID = $PageVersion[$PageID]['ContentPageMenuObjectID'];
+	
+	if ($MenuID != NULL) {
+		$passarray = array();
+		$passarray['PageID'] = 1;
+		$passarray['ObjectID'] = $MenuID;
+		
+		$Menu = $Tier6Databases->getRecord($passarray, 'MainMenu');
+	} else {
+		$Menu = NULL;
+	}
 	
 	$TopMenuName = $PageAttributes[$PageID]['PageTitle'];
 	$sessionname = $Tier6Databases->SessionStart('UpdateMenu');
@@ -62,6 +71,7 @@
 		}
 		
 	}
+	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
 	header("Location: index.php?PageID=$MainMenuUpdatePage&SessionID=$sessionname");

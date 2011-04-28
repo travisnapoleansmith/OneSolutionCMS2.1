@@ -215,7 +215,6 @@ abstract class LayerModulesAbstract
 				$ModuleFileName = array();
 				$ModuleFileName = $this->buildArray($ModuleFileName, 'ModuleFileName', $keymoduletable, $LayerModuleTable, 'Numerical');
 				$EnableDisable = $LayerModuleTable[$keymoduletable]['Enable/Disable'];
-				
 				reset ($this->LayerTable);
 				$layertable = current($this->LayerTable);
 				$keylayertable = key($this->LayerTable);
@@ -233,24 +232,19 @@ abstract class LayerModulesAbstract
 				
 				if ($EnableDisable == 'Enable') {
 					reset ($ModuleFileName);
-					$modulesfile = $ObjectTypeLocation;
-					$modulesfile .= '/';
-					$modulesfile .= current($ModuleFileName);
-					$modulesfile .= '.php';
-					
-					$filename = current($ModuleFileName);
-					while ($filename) {
-						if (is_file($modulesfile)) {
-							require_once($modulesfile);
+					foreach ($ModuleFileName as $FileName) {
+						$ModulesFile = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+						$ModulesFile .= '/';
+						$ModulesFile .= $ObjectTypeLocation;
+						$ModulesFile .= '/';
+						$ModulesFile .= $FileName;
+						$ModulesFile .= '.php';
+						
+						if (is_file($ModulesFile)) {
+							require_once($ModulesFile);
 						} else {
 							array_push($this->ErrorMessage,"buildModules: Module filename - $modulesfile does not exist!");
 						}
-						next($ModuleFileName);
-						$modulesfile = $ObjectTypeLocation;
-						$modulesfile .= '/';
-						$modulesfile .= $filename;
-						$modulesfile .= '.php';
-						$filename = current($ModuleFileName);
 					}
 					
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'] = $ObjectTypeLocation;
@@ -457,129 +451,112 @@ abstract class LayerModulesAbstract
 				$SortOrder['XMLItem'] = 'XMLItem';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
-			/*
-			if (in_array('ObjectID', $Keys) & in_array('PageID', $Keys)) {
-				print "dog\n";
-				$SortOrder = array();
-				$SortOrder['ObjectID'] = 'ObjectID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-				$SortOrder = array();
-				$SortOrder['PageID'] = 'PageID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-			}
-			
-			if ($Keys['RevisionID'] & $Keys['PageID']) {
-				$SortOrder = array();
-				$SortOrder['RevisionID'] = 'RevisionID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-				$SortOrder = array();
-				$SortOrder['PageID'] = 'PageID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-			}
-			
-			if ($Keys['RevisionID'] & $Keys['PageID'] & $Keys['ObjectID']) {
-				$SortOrder = array();
-				$SortOrder['RevisionID'] = 'RevisionID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-				$SortOrder = array();
-				$SortOrder['ObjectID'] = 'ObjectID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-				$SortOrder = array();
-				$SortOrder['PageID'] = 'PageID';
-				$this->sortTable($SortOrder, $DatabaseTableName);
-			}
-			*/
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
 	}
 	
 	protected function updateModuleContent(array $PageID, $DatabaseTableName) {
+		$arguments = func_get_args();
+		$Data = $arguments[2];
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
 			$passarray1 = array();
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
-			if ($PageID['PageID']) {
-				$passarray1[0] = 'CurrentVersion';
-				$passarray2[0] = 'false';
-			} 
-			
-			if ($PageID['XMLItem']) {
-				$passarray1[0][0] = 'XMLItem';
-				$passarray2[0][0] = $PageID['XMLItem'];
+			if ($Data != NULL) {
+				$passarray1 = array_keys($Data);
+				$passarray2 = array_values($Data);
 				
-				if ($PageID['FeedItemTitle']) {
-					$passarray1[0] = 'FeedItemTitle';
-					$passarray2[0] = $PageID['FeedItemTitle'];
+				$i = 0;
+				foreach ($Data as $Key => $Value) {
+					$passarray3[$i] = array_keys($PageID);
+					$passarray4[$i] = array_values($PageID);
+					
+					$i++;
+				}
+			} else {
+				if ($PageID['PageID']) {
+					$passarray1[0] = 'CurrentVersion';
+					$passarray2[0] = 'false';
+				} 
+				
+				if ($PageID['XMLItem']) {
+					$passarray1[0][0] = 'XMLItem';
+					$passarray2[0][0] = $PageID['XMLItem'];
+					
+					if ($PageID['FeedItemTitle']) {
+						$passarray1[0] = 'FeedItemTitle';
+						$passarray2[0] = $PageID['FeedItemTitle'];
+					}
+					
+					if ($PageID['FeedItemDescription']) {
+						$passarray1[1] = 'FeedItemDescription';
+						$passarray2[1] = $PageID['FeedItemDescription'];
+					}
+					
+					if ($PageID['FeedItemAuthor']) {
+						$passarray1[2] = 'FeedItemAuthor';
+						$passarray2[2] = $PageID['FeedItemAuthor'];
+					}
+					
+					if ($PageID['FeedItemCategory']) {
+						$passarray1[3] = 'FeedItemCategory';
+						$passarray2[3] = $PageID['FeedItemCategory'];
+					}
+					
+					if ($PageID['FeedItemGuid']) {
+						$passarray1[4] = 'FeedItemGuid';
+						$passarray2[4] = $PageID['FeedItemGuid'];
+					}
+					
+					if ($PageID['FeedItemPubDate']) {
+						$passarray1[5] = 'FeedItemPubDate';
+						$passarray2[5] = $PageID['FeedItemPubDate'];
+					}
 				}
 				
-				if ($PageID['FeedItemDescription']) {
-					$passarray1[1] = 'FeedItemDescription';
-					$passarray2[1] = $PageID['FeedItemDescription'];
+				if ($PageID['PageID']) {
+					$passarray3[0][0] = 'PageID';
+					$passarray4[0][0] = $PageID['PageID'];
+					
+					$passarray3[0][1] = 'CurrentVersion';
+					$passarray4[0][1] = 'true';
+					
+				} 
+				
+				if ($PageID['XMLItem']) {
+					$passarray3[0] = 'XMLItem';
+					$passarray4[0] = $PageID['XMLItem'];
+					
+					$passarray3[1] = 'XMLItem';
+					$passarray4[1] = $PageID['XMLItem'];
+					
+					$passarray3[2] = 'XMLItem';
+					$passarray4[2] = $PageID['XMLItem'];
+					
+					$passarray3[3] = 'XMLItem';
+					$passarray4[3] = $PageID['XMLItem'];
+					
+					$passarray3[4] = 'XMLItem';
+					$passarray4[4] = $PageID['XMLItem'];
+					
+					$passarray3[5] = 'XMLItem';
+					$passarray4[5] = $PageID['XMLItem'];
 				}
-				
-				if ($PageID['FeedItemAuthor']) {
-					$passarray1[2] = 'FeedItemAuthor';
-					$passarray2[2] = $PageID['FeedItemAuthor'];
-				}
-				
-				if ($PageID['FeedItemCategory']) {
-					$passarray1[3] = 'FeedItemCategory';
-					$passarray2[3] = $PageID['FeedItemCategory'];
-				}
-				
-				if ($PageID['FeedItemGuid']) {
-					$passarray1[4] = 'FeedItemGuid';
-					$passarray2[4] = $PageID['FeedItemGuid'];
-				}
-				
-				if ($PageID['FeedItemPubDate']) {
-					$passarray1[5] = 'FeedItemPubDate';
-					$passarray2[5] = $PageID['FeedItemPubDate'];
-				}
-			}
-			
-			if ($PageID['PageID']) {
-				$passarray3[0][0] = 'PageID';
-				$passarray4[0][0] = $PageID['PageID'];
-				
-				$passarray3[0][1] = 'CurrentVersion';
-				$passarray4[0][1] = 'true';
-				
-			} 
-			
-			if ($PageID['XMLItem']) {
-				$passarray3[0] = 'XMLItem';
-				$passarray4[0] = $PageID['XMLItem'];
-				
-				$passarray3[1] = 'XMLItem';
-				$passarray4[1] = $PageID['XMLItem'];
-				
-				$passarray3[2] = 'XMLItem';
-				$passarray4[2] = $PageID['XMLItem'];
-				
-				$passarray3[3] = 'XMLItem';
-				$passarray4[3] = $PageID['XMLItem'];
-				
-				$passarray3[4] = 'XMLItem';
-				$passarray4[4] = $PageID['XMLItem'];
-				
-				$passarray3[5] = 'XMLItem';
-				$passarray4[5] = $PageID['XMLItem'];
 			}
 			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+		
 			$this->LayerModule->Connect($DatabaseTableName);
 			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+			
 			$this->LayerModule->Disconnect($DatabaseTableName);
+			
 		} else {
 			array_push($this->ErrorMessage,'updateModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}

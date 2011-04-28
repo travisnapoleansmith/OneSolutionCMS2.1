@@ -20,6 +20,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	protected $EnableDisable;
 	protected $Status;
 	protected $HttpUserAgent;
+	protected $HttpAccept;
 	
 	protected $ContentTableName;
 	protected $ContentObjectName;

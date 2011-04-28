@@ -380,7 +380,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 						}
 					} else if ($containertype == 'XhtmlMenu') {
 						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
-							$filename = 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
+							$filename = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+							$filename .= '/';
+							$filename .= 'Configuration/Tier6-ContentLayer/' . $this->ContainerObjectTypeName .'.php';
 							require($filename);
 							$this->Writer->writeRaw("\n");
 							
@@ -485,39 +487,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function createContent(array $Content) {
 		if ($Content != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'ContainerObjectType';
-			$Keys[3] = 'ContainerObjectTypeName';
-			$Keys[4] = 'ContainerObjectID';
-			$Keys[5] = 'ContainerObjectPrintPreview';
-			$Keys[6] = 'RevisionID';
-			$Keys[7] = 'CurrentVersion';
-			$Keys[8] = 'Empty';
-			$Keys[9] = 'StartTag';
-			$Keys[10] = 'EndTag';
-			$Keys[11] = 'StartTagID';
-			$Keys[12] = 'StartTagStyle';
-			$Keys[13] = 'StartTagClass';
-			$Keys[14] = 'Heading';
-			$Keys[15] = 'HeadingStartTag';
-			$Keys[16] = 'HeadingEndTag';
-			$Keys[17] = 'HeadingStartTagID';
-			$Keys[18] = 'HeadingStartTagStyle';
-			$Keys[19] = 'HeadingStartTagClass';
-			$Keys[20] = 'Content';
-			$Keys[21] = 'ContentStartTag';
-			$Keys[22] = 'ContentEndTag';
-			$Keys[23] = 'ContentStartTagID';
-			$Keys[24] = 'ContentStartTagStyle';
-			$Keys[25] = 'ContentStartTagClass';
-			$Keys[26] = 'ContentPTagID';
-			$Keys[27] = 'ContentPTagStyle';
-			$Keys[28] = 'ContentPTagClass';
-			$Keys[29] = 'Enable/Disable';
-			$Keys[30] = 'Status';
-			
+			$this->LayerModule->pass ($this->ContentTableName, 'BuildFieldNames', array('TableName' => $this->ContentTableName));
+			$Keys = $this->LayerModule->pass ($this->ContentTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Content, $this->ContentTableName);
 		} else {
 			array_push($this->ErrorMessage,'createContent: Content cannot be NULL!');
@@ -567,31 +538,8 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function createContentPrintPreview(array $Content) {
 		if ($Content != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'PrintPageID1';
-			$Keys[2] = 'PrintPageID2';
-			$Keys[3] = 'PrintPageID3';
-			$Keys[4] = 'PrintPageID4';
-			$Keys[5] = 'PrintPageID5';
-			$Keys[6] = 'PrintPageID6';
-			$Keys[7] = 'PrintPageID7';
-			$Keys[8] = 'PrintPageID8';
-			$Keys[9] = 'PrintPageID9';
-			$Keys[10] = 'PrintPageID10';
-			$Keys[11] = 'PrintPageID11';
-			$Keys[12] = 'PrintPageID12';
-			$Keys[13] = 'PrintPageID13';
-			$Keys[14] = 'PrintPageID14';
-			$Keys[15] = 'PrintPageID15';
-			$Keys[16] = 'PrintPageID16';
-			$Keys[17] = 'PrintPageID17';
-			$Keys[18] = 'PrintPageID18';
-			$Keys[19] = 'PrintPageID19';
-			$Keys[20] = 'PrintPageID20';
-			$Keys[21] = 'Enable/Disable';
-			$Keys[22] = 'Status';
-			
+			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'BuildFieldNames', array('TableName' => $this->ContentPrintPreviewTableName));
+			$Keys = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Content, $this->ContentPrintPreviewTableName);
 		} else {
 			array_push($this->ErrorMessage,'createContentPrintPreview: Content cannot be NULL!');

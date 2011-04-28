@@ -45,9 +45,9 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 			if (current($this->TableNames) == 'HtmlTags') {
 				$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
 				$this->LookupTable[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
-			} else if (!(current($this->TableNames) == 'States' || current($this->TableNames) == 'Zipcodes')){
+			} else if (key($this->TableNames) == 'DatabaseTable1'){
 				$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('PageID' => $passarray));
-				$this->LookupTable[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
+				$this->LookupTable['FormValidation'] = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
 			}
 			$this->LayerModule->Disconnect(current($this->TableNames));
 			next ($this->TableNames);
@@ -244,10 +244,9 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 			return 'Input must contain at least one character.';
 		}
 		
-		if (file_exists('Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php')) {
-			require_once 'Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
-		} else if (file_exists('../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php')) {
-			require_once '../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php';
+		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+		if (file_exists("$HOME/Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php")) {
+			require_once "$HOME/Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php";
 		}
 		
 		$config = HTMLPurifier_Config::createDefault();

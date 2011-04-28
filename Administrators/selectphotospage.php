@@ -31,8 +31,12 @@
 	unset($passarray);
 	$passarray = array();
 	$passarray['PageID'] = $PageID['PageID'];
+	$passarray['CurrentVersion'] = $PageID['CurrentVersion'];
 	$PhotosPageHeader = $Tier6Databases->getRecord($passarray, 'PageAttributes');
 	
+	unset($passarray);
+	$passarray = array();
+	$passarray['PageID'] = $PageID['PageID'];
 	$HeaderPanel1 = $Tier6Databases->getRecord($passarray, 'HeaderPanel1');
 	
 	$Sitemap = $Tier6Databases->getRecord($passarray, 'XMLSitemap');
@@ -49,7 +53,7 @@
 	$_SESSION['POST']['FilteredInput']['PageID'] = $_POST['PageID'];
 	$_SESSION['POST']['FilteredInput']['FormOptionObjectID'] = $_POST['FormOptionObjectID'];
 	$_SESSION['POST']['FilteredInput']['RevisionID'] = $PhotosPageVersion[0]['RevisionID'];
-	$_SESSION['POST']['FilteredInput']['MenuParentObjectID'] = $PhotosPageVersion[0]['ContentPageMenuParentObjectID'];
+	$_SESSION['POST']['FilteredInput']['MenuObjectID'] = $PhotosPageVersion[0]['ContentPageMenuObjectID'];
 	$_SESSION['POST']['FilteredInput']['CreationDateTime'] = $PhotosPageVersion[0]['CreationDateTime'];
 	$_SESSION['POST']['FilteredInput']['Owner'] = $PhotosPageVersion[0]['Owner'];
 	$_SESSION['POST']['FilteredInput']['UserAccessGroup'] = $PhotosPageVersion[0]['UserAccessGroup'];
@@ -172,8 +176,12 @@
 	}
 	end($PhotosPage);
 	prev($PhotosPage);
-	$Record = current($PhotosPage);
-
+	$count = count($PhotosPage);
+	if ($count <= 2) {
+		$Record = array();
+	} else {
+		$Record = current($PhotosPage);
+	}
 	if ($Record['Heading'] != NULL) {
 		$_SESSION['POST']['FilteredInput']['BottomHeading'] = $Record['Heading'];
 	} else {

@@ -1,0 +1,123 @@
+/* Top Panel 1 Menu Buttons */
+
+#MainMenu1 {
+	top: 100px;
+	left: 45px;
+}
+
+
+/* Top Panel 1 Drop Down */
+
+.MainMenu1DropDown1 {
+	left: 221px;
+	top: 15px;
+}
+
+.MainMenu1DropDown3 {
+	left: 131px;
+}
+
+/* Top Panel 1 Menu Buttons */
+.MainMenu1Button {
+	border: 4px groove #000000;
+	left: -20px;
+}
+
+.MainMenu1Button2 {
+	top: 10px; 
+}
+
+.MainMenu1Button3 {
+	top: 20px;
+}
+
+.MainMenu1Button4 {
+	top: 25px;
+}
+
+.MainMenu1Button5 {
+	top: 35px;
+}
+
+.MainMenu1Button6 {
+	top: 40px;
+}
+
+.MainMenu1Button7 {
+	top: 45px;
+}
+
+.MainMenu1Button8 {
+	top: 50px;
+}
+
+.MainMenu1Button9 {
+	top: 55px;
+}
+
+.MainMenu1Button10 {
+	top: 60px;
+}
+
+.MainMenu1Button11 {
+	top: 70px;
+}
+
+.MainMenu1Button12 {
+	top: 80px;
+}
+
+.MainMenu1Button13 {
+	top: 90px;
+}
+
+.MainMenu1Button14 {
+	top: 100px;
+}
+
+.MainMenu1Button15 {
+	top: 110px;
+}
+
+.MainMenu1Button16 {
+	top: 120px;
+}
+
+.MainMenu1Button17 {
+	top: 130px;
+}
+
+.MainMenu1Button18 {
+	top: 140px;
+}
+
+.MainMenu1Button19 {
+	top: 150px;
+}
+
+.MainMenu1Button20 {
+	top: 160px;
+}
+
+/* Top Panel 1 Drop Down Text */
+
+.MainMenu1DropDownText1 {
+	left: 80px; 
+
+}
+
+.MainMenu1DropDownText2 {
+	left: 80px; 
+
+}
+
+.MainMenu1DropDownText3 {
+	left: -30px; 
+
+}
+
+.MainMenu1DropDownText4 {
+	float: left;
+	left: -30px;
+	width: 80px;
+}

@@ -312,5 +312,62 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	public function getOutput() {
 		return $this->List;
 	}
+	
+	public function createUnorderedList(array $UnorderedList) {
+		if ($UnorderedList != NULL) {
+			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
+			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $UnorderedList, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'createUnorderedList: UnorderedList cannot be NULL!');
+		}
+	}
+	
+	public function updateUnorderedList(array $PageID) {
+		if ($PageID != NULL) {
+			$Data = $PageID;
+			$PageID = array();
+			$PageID['PageID'] = $Data['PageID'];
+			unset($Data['PageID']);
+			$PageID['ObjectID'] = $Data['ObjectID'];
+			unset($Data['ObjectID']);
+			$this->updateModuleContent($PageID, $this->DatabaseTable, $Data);
+		} else {
+			array_push($this->ErrorMessage,'updateUnorderedList: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteUnorderedList(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'deleteUnorderedList: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateUnorderedListStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->DatabaseTable);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->DatabaseTable);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateUnorderedListStatus: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

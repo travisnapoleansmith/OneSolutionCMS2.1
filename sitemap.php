@@ -9,7 +9,8 @@
 	$sitemapdatabase['XMLSitemap'] = 'XMLSitemap';
 	
 	$databaseoptions = array();
-	$databaseoptions['FileName'] = 'sitemap.xml';
+	$databaseoptions['Screen'] = TRUE;
+	//$databaseoptions['FileName'] = 'sitemap.xml';
 	
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
@@ -26,6 +27,7 @@
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 	
 	if ($sitemapoutput) {
+		header('Content-type: text/xml');
 		print "$sitemapoutput\n";
 	} else {
 		header("Location: sitemap.xml");

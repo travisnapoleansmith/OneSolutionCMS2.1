@@ -42,7 +42,17 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 			
 		} else {
-			$this->Writer = &$GLOBALS['Writer'];
+			if ($databaseoptions['Screen']) {
+				$this->Writer = new XMLWriter();
+				$this->Writer->openMemory();
+				$this->Writer->startDocument('1.0' , 'UTF-8');
+				$this->Writer->setIndent(4);
+				
+				$this->Writer->startElement('urlset');
+				$this->Writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+			} else {
+				$this->Writer = &$GLOBALS['Writer'];
+			}
 		}
 	}
 	
@@ -141,23 +151,22 @@ class XmlSitemap extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
+		} else {
+			$this->XmlSitemap = $this->Writer->flush();
 		}
 		
 	}
 	
+	public function getOutput() {
+		return $this->XmlSitemap;
+	}
+	
 	public function createSitemapItem(array $Item) {
 		if ($Item != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'Loc';
-			$Keys[2] = 'Lastmod';
-			$Keys[3] = 'ChangeFreq';
-			$Keys[4] = 'Priority';
-			$Keys[5] = 'Enable/Disable';
-			$Keys[6] = 'Status';
-			
 			reset($this->TableNames);
 			while (current($this->TableNames)) {
+				$this->LayerModule->pass (current($this->TableNames), 'BuildFieldNames', array('TableName' => current($this->TableNames)));
+				$Keys = $this->LayerModule->pass (current($this->TableNames), 'getRowFieldNames', array());
 				$this->addModuleContent($Keys, $Item, current($this->TableNames));
 				next($this->TableNames);
 			}

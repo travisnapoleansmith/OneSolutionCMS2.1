@@ -4,6 +4,10 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	protected $TableNames = array();
 	protected $MainMenuTables = array();
 	
+	protected $MainMenuLookupTableName;
+	protected $MainMenuTableName;
+	protected $MainMenuItemLookupTableName;
+	
 	protected $JavaScriptFileName;
 	protected $JavaScriptLibraryName;
 	
@@ -193,6 +197,12 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
+		
+		$this->MainMenuLookupTableName = $tablenames['DatabaseTable1'];
+		$this->MainMenuTableName = $tablesnames['DatabaseTable2'];
+		$this->MainMenuItemLookupTableName = $tablenames['DatabaseTable3'];
+		unset($tablenames['DatabaseTable3']);
+		
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
@@ -239,6 +249,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 		}
 		next ($this->TableNames);
 		$i = 0;
+		
 		while ($this->LookupPageID[$i]) {
 			$listidnumber['PageID'] = $this->LookupPageID[$i];
 			$listidnumber['ObjectID'] = $this->LookupObjectID[$i];
@@ -262,6 +273,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 			//$objectoutput = $object->getOutput();
 			$this->MainMenuTables[current($this->TableNames)] = $list;
 			$i++;
+			
 		}
 			
 	}
@@ -359,5 +371,135 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	public function getOutput() {
 		return $this->MainMenu;
 	}*/
+	
+	public function createMainMenuItemLookup (array $MenuItemLookup) {
+		if ($MenuItemLookup != NULL) {
+			$this->LayerModule->pass ($this->MainMenuItemLookupTableName, 'BuildFieldNames', array('TableName' => $this->MainMenuItemLookupTableName));
+			$Keys = $this->LayerModule->pass ($this->MainMenuItemLookupTableName, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $MenuItemLookup, $this->MainMenuItemLookupTableName);
+		} else {
+			array_push($this->ErrorMessage,'createMainMenuItemLookup: MenuItemLookup cannot be NULL!');
+		}
+	}
+	
+	public function updateMainMenuItemLookup(array $PageID) {
+		if ($PageID != NULL) {
+			$Data = $PageID;
+			$PageID = array();
+			$PageID['PageID'] = $Data['PageID'];
+			unset($Data['PageID']);
+			$PageID['ObjectID'] = $Data['ObjectID'];
+			unset($Data['ObjectID']);
+			$this->FetchDatabase($PageID);
+			$this->updateModuleContent($PageID, $this->MainMenuItemLookupTableName, $Data);
+			$this->updateModuleContent($PageID, $this->MainMenuItemLookupTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateMainMenuItemLookup: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateMenuMenuItemLookupChildsParentObjectID(array $PageID) {
+		if ($PageID != NULL) {
+			$Data['ParentObjectID'] = $PageID['ParentID'];
+			
+			$ID = array();
+			$ID['PageID'] = $PageID['PageID'];
+			$ID['ObjectID'] = $PageID['ObjectID'];
+			
+			$this->updateModuleContent($ID, $this->MainMenuItemLookupTableName, $Data);
+		} else {
+			array_push($this->ErrorMessage,'updateMenuMenuItemLookupChildsParentObjectID: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateMenuMenuItemLookupChildsParentObjectIDName(array $PageID) {
+		if ($PageID != NULL) {
+			$Data['ParentIDName'] = $PageID['ParentIDName'];
+			
+			$ID = array();
+			$ID['PageID'] = $PageID['PageID'];
+			$ID['ObjectID'] = $PageID['ObjectID'];
+			
+			$this->updateModuleContent($ID, $this->MainMenuItemLookupTableName, $Data);
+		} else {
+			array_push($this->ErrorMessage,'updateMenuMenuItemLookupChildsParentObjectID: PageID cannot be NULL!');
+		}
+	}
+	
+	public function createMenuItem(array $MenuItem) {
+		if ($MenuItem != NULL) {
+			$PageID = array();
+			$PageID['PageID'] = $MenuItem['PageID'];
+			$PageID['ObjectID'] = $MenuItem['ObjectID'];
+			$this->FetchDatabase($PageID);
+			$this->MainMenuTables['MainMenu']->createUnorderedList($MenuItem);
+		} else {
+			array_push($this->ErrorMessage,'createMenuItem: MenuItem cannot be NULL!');
+		}
+	}
+	
+	public function updateMenuItem(array $PageID) {
+		if ($PageID != NULL) {
+			print "UPDATE MENU ITEM\n";
+			//var_dump($this->MainMenuTables);
+			//print get_class($this->MainMenuTables['MainMenu']);
+			//print "\n";
+			//print_r($PageID);
+			//print "$this->HostName\n";
+			
+			//if ($this->Hostname | $this->User | $this->Password | $this->DatabaseName) {
+				//var_dump($this->Hostname);
+				//$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+				//print_r($credentaillogonarray);
+			//}
+			if ($this->MainMenuTables['MainMenu'] == NULL) {
+				$pageid = array();
+				$pageid['PageID'] = $PageID['PageID'];
+				$pageid['ObjectID'] = $PageID['ObjectID'];
+				$this->FetchDatabase($pageid);
+			}
+			$this->MainMenuTables['MainMenu']->updateUnorderedList($PageID);
+			//$this->updateModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'updateMenuItem: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteMenuItem(array $PageID) {
+		if ($PageID != NULL) {
+			$this->MainMenuTables['MainMenu']->deleteUnorderedList($PageID);
+			//$this->deleteModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'deleteMenuItem: PageID cannot be NULL!');
+		}
+	}
+	
+	public function updateMenuItemStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$this->MainMenuTables['MainMenu']->updateUnorderedListStatus($PageID);
+			/*$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->MainMenuTables['MainMenu']->enableUnorderedList($PassID);
+				//$this->enableModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->MainMenuTables['MainMenu']->disableUnorderedList($PassID);
+				//$this->disableModuleContent($PassID, $this->DatabaseTable);
+			}
+			
+			if ($PageID['Status'] == 'Approved') {
+				//$this->approvedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				//$this->notApprovedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Pending') {
+				//$this->pendingModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Spam') {
+				//$this->spamModuleContent($PassID, $this->DatabaseTable);
+			}*/
+		} else {
+			array_push($this->ErrorMessage,'updateMenuItemStatus: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

@@ -1886,7 +1886,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->FormSelectStatus);
 		}
 		
-		//while (current($this->FormSelectObjectID) != current($this->FormSelectStopObjectID)) {
 		while (isset($this->FormSelectObjectID[key($this->FormSelectObjectID)])) {
 			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
 				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
@@ -1930,6 +1929,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$this->buildObjects(current($this->FormSelectContainerObjectID), 1, current($this->FormSelectContainerObjectTypeName), current($this->FormSelectContainerObjectType));
 					}
 				}
+				
 			}
 			
 			if (current($this->FormSelectStopObjectID)) {
@@ -2763,35 +2763,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function createFormSelect(array $Content) {
 		if ($Content != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'StopObjectID';
-			$Keys[3] = 'ContinueObjectID';
-			$Keys[3] = 'ContainerObjectType';
-			$Keys[4] = 'ContainerObjectTypeName';
-			$Keys[5] = 'ContainerObjectID';
-			$Keys[6] = 'FormSelectDisabled';
-			$Keys[7] = 'FormSelectMultiple';
-			$Keys[8] = 'FormSelectName';
-			$Keys[9] = 'FormSelectNameDynamic';
-			$Keys[10] = 'FormSelectNameTableName';
-			$Keys[11] = 'FormSelectNameField';
-			$Keys[12] = 'FormSelectNamePageID';
-			$Keys[13] = 'FormSelectNameObjectID';
-			$Keys[14] = 'FormSelectNameRevisionID';
-			$Keys[15] = 'FormSelectSize';
-			$Keys[16] = 'FormSelectClass';
-			$Keys[17] = 'FormSelectDir';
-			$Keys[18] = 'FormSelectID';
-			$Keys[19] = 'FormSelectLang';
-			$Keys[20] = 'FormSelectStyle';
-			$Keys[21] = 'FormSelectTabIndex';
-			$Keys[22] = 'FormSelectTitle';
-			$Keys[23] = 'FormSelectXMLLang';
-			$Keys[24] = 'Enable/Disable';
-			$Keys[25] = 'Status';
-			
+			$this->LayerModule->pass ($this->TableNames['FormSelect'], 'BuildFieldNames', array('TableName' => $this->TableNames['FormSelect']));
+			$Keys = $this->LayerModule->pass ($this->TableNames['FormSelect'], 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Content, $this->TableNames['FormSelect']);
 		} else {
 			array_push($this->ErrorMessage,'createFormSelect: Content cannot be NULL!');
@@ -2842,42 +2815,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	public function createFormOption(array $Content) {
 		if ($Content != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'FormOptionText';
-			$Keys[3] = 'FormOptionTextDynamic';
-			$Keys[4] = 'FormOptionTextTableName';
-			$Keys[5] = 'FormOptionTextField';
-			$Keys[6] = 'FormOptionTextPageID';
-			$Keys[7] = 'FormOptionTextObjectID';
-			$Keys[8] = 'FormOptionTextRevisionID';
-			$Keys[9] = 'FormOptionDisabled';
-			$Keys[10] = 'FormOptionLabel';
-			$Keys[11] = 'FormOptionLabelDynamic';
-			$Keys[12] = 'FormOptionLabelTableName';
-			$Keys[13] = 'FormOptionLabelField';
-			$Keys[14] = 'FormOptionLabelPageID';
-			$Keys[15] = 'FormOptionLabelObjectID';
-			$Keys[16] = 'FormOptionLabelRevisionID';
-			$Keys[17] = 'FormOptionSelected';
-			$Keys[18] = 'FormOptionValue';
-			$Keys[19] = 'FormOptionValueDynamic';
-			$Keys[20] = 'FormOptionValueTableName';
-			$Keys[21] = 'FormOptionValueField';
-			$Keys[22] = 'FormOptionValuePageID';
-			$Keys[23] = 'FormOptionValueObjectID';
-			$Keys[24] = 'FormOptionValueRevisionID';
-			$Keys[25] = 'FormOptionClass';
-			$Keys[26] = 'FormOptionDir';
-			$Keys[27] = 'FormOptionID';
-			$Keys[28] = 'FormOptionLang';
-			$Keys[29] = 'FormOptionStyle';
-			$Keys[30] = 'FormOptionTitle';
-			$Keys[31] = 'FormOptionXMLLang';
-			$Keys[32] = 'Enable/Disable';
-			$Keys[33] = 'Status';
-			
+			$this->LayerModule->pass ($this->TableNames['FormOption'], 'BuildFieldNames', array('TableName' => $this->TableNames['FormOption']));
+			$Keys = $this->LayerModule->pass ($this->TableNames['FormOption'], 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Content, $this->TableNames['FormOption']);
 		} else {
 			array_push($this->ErrorMessage,'createFormOption: Content cannot be NULL!');

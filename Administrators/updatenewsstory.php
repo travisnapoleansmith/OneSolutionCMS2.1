@@ -177,6 +177,8 @@
 			$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];
 			$NewsVersion['CreationDateTime'] = $CreationDateTime;
 			$NewsVersion['LastChangeDateTime'] = $DateTime;
+			$NewsVersion['PublishDate'] = NULL;
+			$NewsVersion['UnpublishDate'] = NULL;
 			
 			$NewsFeed = array();
 			$NewsFeed['XMLItem'] = $PageID;

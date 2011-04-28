@@ -7,7 +7,7 @@
 			if ($GLOBALS['ThemeName']) {
 				$ThemeName = $GLOBALS['ThemeName'];
 				$Writer->startElement('img');
-				$Writer->writeAttribute('src', "../Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Background.jpg");
+				$Writer->writeAttribute('src', "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Background.jpg");
 				$Writer->writeAttribute('alt', 'Background Image');
 				$Writer->writeAttribute('id', 'background');
 				$Writer->endElement();

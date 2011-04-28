@@ -48,7 +48,7 @@
 	$_SESSION['POST']['FilteredInput']['PageID'] = $_POST['PageID'];
 	$_SESSION['POST']['FilteredInput']['FormOptionObjectID'] = $_POST['FormOptionObjectID'];
 	$_SESSION['POST']['FilteredInput']['RevisionID'] = $ContentPageVersion[0]['RevisionID'];
-	$_SESSION['POST']['FilteredInput']['MenuParentObjectID'] = $ContentPageVersion[0]['ContentPageMenuParentObjectID'];
+	$_SESSION['POST']['FilteredInput']['MenuObjectID'] = $ContentPageVersion[0]['ContentPageMenuObjectID'];
 	$_SESSION['POST']['FilteredInput']['CreationDateTime'] = $ContentPageVersion[0]['CreationDateTime'];
 	$_SESSION['POST']['FilteredInput']['Owner'] = $ContentPageVersion[0]['Owner'];
 	$_SESSION['POST']['FilteredInput']['UserAccessGroup'] = $ContentPageVersion[0]['UserAccessGroup'];

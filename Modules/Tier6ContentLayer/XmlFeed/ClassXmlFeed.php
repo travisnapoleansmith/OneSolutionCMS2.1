@@ -95,7 +95,18 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$this->Writer->writeAttribute('version', '2.0');
 			$this->Writer->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 		} else {
-			$this->Writer = &$GLOBALS['Writer'];
+			if ($databaseoptions['Screen']) {
+				$this->Writer = new XMLWriter();
+				$this->Writer->openMemory();
+				$this->Writer->startDocument('1.0' , 'UTF-8');
+				$this->Writer->setIndent(4);
+				
+				$this->Writer->startElement('rss');
+				$this->Writer->writeAttribute('version', '2.0');
+				$this->Writer->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+			} else {
+				$this->Writer = &$GLOBALS['Writer'];
+			}
 		}
 	}
 	
@@ -535,11 +546,16 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 		$this->Writer->endElement();
 		$this->Writer->endDocument();
-		
 		if ($this->FileName) {
 			$this->Writer->flush();
+		} else {
+			$this->XmlFeed = $this->Writer->flush();
 		}
 		
+	}
+	
+	public function getOutput() {
+		return $this->XmlFeed;
 	}
 	
 	protected function processStoryItems ($XMLFeedName) {
@@ -656,24 +672,8 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 		
 		if ($Story != NULL) {
-			$Keys = array();
-			$Keys[0] = 'XMLItem';
-			$Keys[1] = 'FeedItemTitle';
-			$Keys[2] = 'FeedItemLink';
-			$Keys[3] = 'FeedItemDescription';
-			$Keys[4] = 'FeedItemAuthor';
-			$Keys[5] = 'FeedItemCategory';
-			$Keys[6] = 'FeedItemComments';
-			$Keys[7] = 'FeedItemEnclosure';
-			$Keys[8] = 'FeedItemEnclosureLength';
-			$Keys[9] = 'FeedItemEnclosureType';
-			$Keys[10] = 'FeedItemEnclosureUrl';
-			$Keys[11] = 'FeedItemGuid';
-			$Keys[12] = 'FeedItemPubDate';
-			$Keys[13] = 'FeedItemSource';
-			$Keys[14] = 'Enable/Disable';
-			$Keys[15] = 'Status';
-			
+			$this->LayerModule->pass ($this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName'], 'BuildFieldNames', array('TableName' => $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']));
+			$Keys = $this->LayerModule->pass ($this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName'], 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Story, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
 		} else {
 			array_push($this->ErrorMessage,'createStoryFeed: Header cannot be NULL!');

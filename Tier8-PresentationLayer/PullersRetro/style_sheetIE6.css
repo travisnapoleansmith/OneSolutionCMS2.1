@@ -1,0 +1,12 @@
+
+#BodyLayer2 p {
+	padding-top: 15px;
+}
+
+.Sponsors-Panel {
+	padding-bottom: 10px;
+}
+
+* html .Sponsors-Panel { 
+	position: absolute;
+}

@@ -197,6 +197,10 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		return $this->rowfieldnames[$rownumber];
 	}
 	
+	public function getRowFieldNames() {
+		return $this->rowfieldnames;
+	}
+	
 	public function getDatabase ($rownumber) {
 		return $this->database[$rownumber];
 	}

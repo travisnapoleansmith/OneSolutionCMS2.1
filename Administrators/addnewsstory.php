@@ -57,6 +57,9 @@
 		$NewsStory[0]['ContentStartTagID'] = NULL;
 		$NewsStory[0]['ContentStartTagStyle'] = NULL;
 		$NewsStory[0]['ContentStartTagClass'] = NULL;
+		$NewsStory[0]['ContentPTagID'] = NULL;
+		$NewsStory[0]['ContentPTagStyle'] = NULL;
+		$NewsStory[0]['ContentPTagClass'] = NULL;
 		$NewsStory[0]['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsStory[0]['Status'] = $_POST['Status'];
 		
@@ -86,6 +89,9 @@
 		$NewsStory[1]['ContentStartTagID'] = NULL;
 		$NewsStory[1]['ContentStartTagStyle'] = NULL;
 		$NewsStory[1]['ContentStartTagClass'] = NULL;
+		$NewsStory[1]['ContentPTagID'] = NULL;
+		$NewsStory[1]['ContentPTagStyle'] = NULL;
+		$NewsStory[1]['ContentPTagClass'] = NULL;
 		$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsStory[1]['Status'] = $_POST['Status'];
 		
@@ -115,6 +121,9 @@
 		$NewsStory[2]['ContentStartTagID'] = NULL;
 		$NewsStory[2]['ContentStartTagStyle'] = NULL;
 		$NewsStory[2]['ContentStartTagClass'] = 'BodyText';
+		$NewsStory[2]['ContentPTagID'] = NULL;
+		$NewsStory[2]['ContentPTagStyle'] = NULL;
+		$NewsStory[2]['ContentPTagClass'] = NULL;
 		$NewsStory[2]['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsStory[2]['Status'] = $_POST['Status'];
 		
@@ -164,6 +173,8 @@
 		$NewsVersion['LastChangeUser'] = $_COOKIE['UserName'];
 		$NewsVersion['CreationDateTime'] = $DateTime;
 		$NewsVersion['LastChangeDateTime'] = $DateTime;
+		$NewsVersion['PublishDate'] = NULL;
+		$NewsVersion['UnpublishDate'] = NULL;
 		
 		$NewsFeed = array();
 		$NewsFeed['XMLItem'] = $NewPageID;

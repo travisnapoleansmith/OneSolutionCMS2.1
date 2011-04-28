@@ -220,7 +220,9 @@ class ContentLayer extends LayerModulesAbstract
 				$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
 				$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
 				$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
-				$ObjectTypeConfiguration = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
+				$ObjectTypeConfiguration = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+				$ObjectTypeConfiguration .= '/';
+				$ObjectTypeConfiguration .= $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
 				$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
 				
 				$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
@@ -230,6 +232,9 @@ class ContentLayer extends LayerModulesAbstract
 				$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
 				$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
 				$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
+				
+				$ImportFileName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileName'];
+				$ImportFileType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileType'];
 				
 				$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
 				
@@ -246,6 +251,9 @@ class ContentLayer extends LayerModulesAbstract
 								setcookie('DestinationPageID', $PageID);
 							}
 							header("Location: $AuthenticationPage");
+						} else {
+							$this->KeepLoggedIn();
+							
 						}
 					}
 					
@@ -293,6 +301,15 @@ class ContentLayer extends LayerModulesAbstract
 								
 							}
 							
+							if ($ImportFileName != NULL) {
+								if ($ImportFileType == 'xml') {
+									$this->processXMLFile($ImportFileName);
+								}
+								
+								if ($ImportFileType == 'html') {
+									$this->processHTMLFile($ImportFileName);
+								}
+							}
 							
 							if ($EndTag) {
 								$this->Writer->endElement(); // ENDS END TAG
@@ -325,6 +342,42 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	private function transverseSimpleXMLAttribute (SimpleXMLElement $Attribute) {
+		foreach ($Attribute->attributes() as $key => $attributes) {
+			$this->Writer->writeAttribute($key, $attributes);
+		}
+	}
+
+	public function processXMLFile($XMLFile) {
+		if ($XMLFile != NULL) {
+			if (file_exists($XMLFile)) {
+				libxml_use_internal_errors(true);
+				$Xml = simplexml_load_file($XMLFile);
+				if ($Xml) {
+					$RootName = $Xml->getName();
+					foreach($Xml as $child) {
+						$hold = $child->asXML();
+						$hold = trim($hold);
+						$hold = str_replace("\t", '    ', $hold);
+						$RawText = '    ';
+						$RawText .= $hold;
+						$RawText .= "\n";
+						$this->Writer->writeRaw($RawText);
+					}
+					$this->Writer->writeRaw('  ');
+				}
+			} else {
+				array_push($this->ErrorMessage,'processXMLFile: XMLFile DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'processXMLFile: XMLFile cannot be NULL!');
+		}
+	}
+	
+	public function processHTMLFile($HTMLFile) {
+		//print "$HTMLFile\n";
+	}
+	
 	public function SessionStart($SessionName) {
 		if ($_COOKIE['SessionID']) {
 			$this->SessionDestroy($_COOKIE['SessionID']);
@@ -351,6 +404,691 @@ class ContentLayer extends LayerModulesAbstract
 				);
 			}
 			session_destroy();
+		}
+	}
+	
+	public function PostCheck ($PostName, $FilteredInputName, array $Input) {
+		if (!is_null($PostName)) {
+			if (!is_null($Input)) {
+				if ($_POST[$PostName] == 'Null' | $_POST[$PostName] == 'NULL') {
+					if (is_null($FilteredInputName)) {
+						$Input[$PostName] = NULL;
+					} else {
+						$_POST[$PostName] = NULL;
+						$Input[$FilteredInputName][$PostName] = NULL;
+					}
+					
+					return $Input;
+				}
+			} else {
+				array_push($this->ErrorMessage,'PostCheck: Input cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'PostCheck: PostName cannot be NULL!');
+		}
+	}
+	
+	public function MultiPostCheck ($PostName, $StartNumber, $Input) {
+		$functionarguments = func_get_args();
+		$Seperator = NULL;
+		$SecondStartNumber = NULL;
+		$PostName2 = NULL;
+		$StartNumber2 = NULL;
+		$Seperator2 = NULL;
+		$SecondStartNumber2 = NULL;
+		
+		if ($functionarguments[3]) {
+			$Seperator = $functionarguments[3];
+		}
+		if ($functionarguments[4]) {
+			$SecondStartNumber = $functionarguments[4];
+			if (!is_int($SecondStartNumber)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber must be an integer!');
+			}
+		}
+		
+		if ($functionarguments[5]) {
+			$PostName2 = $functionarguments[5];
+			if (is_null($PostName2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: PostName2 cannot be NULL!');
+			}
+		}
+		if ($functionarguments[6]) {
+			$StartNumber2 = $functionarguments[6];
+			if (!is_int($StartNumber2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 must be an integer!');
+			}
+			
+			if (is_null($StartNumber2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 cannot be NULL!');
+			}
+		}
+		if ($functionarguments[7]) {
+			$Seperator2 = $functionarguments[7];
+			if (is_null($Seperator2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: Seperator2 cannot be NULL!');
+			}
+		}
+		if ($functionarguments[8]) {
+			$SecondStartNumber2 = $functionarguments[8];
+			if (is_int($SecondStartNumber2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 must be an integer!');
+			}
+			
+			if (is_null($SecondStartNumber2)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 cannot be NULL!');
+			}
+		}
+		
+		if (is_int($StartNumber)) {
+			if (!is_null($StartNumber)) {
+				if (!is_null($PostName)) {
+					if (!is_null($Input)) {	
+						if ($PostName2 == NULL & $StartNumber2 == NULL) {
+							if (is_null($Seperator) & is_null($SecondStartNumber)) {
+								$i = $StartNumber;
+								$temp = $PostName;
+								$temp .= $i;
+								
+								while (($_POST[$temp])) {
+									$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+									if (!is_null($hold)) {
+										$Input = $hold;
+									}
+									$i++;
+									$temp = $PostName;
+									$temp .= $i;
+								}
+								
+								return $Input;
+							} else {
+								if (is_null($Seperator)) {
+									array_push($this->ErrorMessage,'MultiPostCheck: Seperator cannot be NULL!');
+								} else {
+									if (is_null($SecondStartNumber)) {
+										array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber cannot be NULL!');
+									} else {
+										$i = $StartNumber;
+										$j = $SecondStartNumber;
+										$temp = $PostName;
+										$temp .= $i;
+										$temp .= $Seperator;
+										$temp .= $j;
+										while (($_POST[$temp])) {
+											while (($_POST[$temp])) {
+												$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+												if (!is_null($hold)) {
+													$Input = $hold;
+												}
+												$j++;
+												$temp = $PostName;
+												$temp .= $i;
+												$temp .= $Seperator;
+												$temp .= $j;
+											}
+											$i++;
+											$j = $SecondStartNumber;
+											$temp = $PostName;
+											$temp .= $i;
+											$temp .= $Seperator;
+											$temp .= $j;
+										}
+										
+										return $Input;
+									}
+								}
+							}
+						} else {
+							if ($StartNumber2 == NULL & $Seperator2 == NULL & is_null($SecondStartNumber2)) {
+								if ($PostName2 != NULL) {
+									$i = $StartNumber;
+									$j = $SecondStartNumber;
+									$temp = $PostName;
+									$temp .= $i;
+									$temp .= $Seperator;
+									$temp .= $j;
+									$temp .= $PostName2;
+									while (array_key_exists($temp, $_POST)) {
+										while (array_key_exists($temp, $_POST)) {
+											$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+											if (!is_null($hold)) {
+												$Input = $hold;
+											}
+											$j++;
+											$temp = $PostName;
+											$temp .= $i;
+											$temp .= $Seperator;
+											$temp .= $j;
+											$temp .= $PostName2;
+										}
+										$i++;
+										$j = $SecondStartNumber;
+										$temp = $PostName;
+										$temp .= $i;
+										$temp .= $Seperator;
+										$temp .= $j;
+										$temp .= $PostName2;
+									}
+									return $Input;
+								} 
+							} else {
+								if ($PostName2 != NULL & $StartNumber2 != NULL) {
+									if ($Seperator != NULL & $SecondStartNumber != NULL & $Seperator2 != NULL & $SecondStartNumber2 != NULL) {
+										$i = $StartNumber;
+										$j = $SecondStartNumber;
+										$k = $StartNumber2;
+										$l = $SecondStartNumber2;
+										$temp = $PostName;
+										$temp .= $i;
+										$temp .= $Seperator;
+										$temp .= $j;
+										$temp .= $PostName2;
+										$temp .= $k;
+										$temp .= $Seperator2;
+										$temp .= $l;
+										
+										while (($_POST[$temp])) {
+											while (($_POST[$temp])) {
+												while (($_POST[$temp])) {
+													while (($_POST[$temp])) {
+														$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+														if (!is_null($hold)) {
+															$Input = $hold;
+														}
+														$l++;
+														$temp = $PostName;
+														$temp .= $i;
+														$temp .= $Seperator;
+														$temp .= $j;
+														$temp .= $PostName2;
+														$temp .= $k;
+														$temp .= $Seperator2;
+														$temp .= $l;
+													}
+													$k++;
+													$l = $SecondStartNumber2;
+													$temp = $PostName;
+													$temp .= $i;
+													$temp .= $Seperator;
+													$temp .= $j;
+													$temp .= $PostName2;
+													$temp .= $k;
+													$temp .= $Seperator2;
+													$temp .= $l;
+												}
+												$j++;
+												$k = $StartNumber2;
+												$l = $SecondStartNumber2;
+												$temp = $PostName;
+												$temp .= $i;
+												$temp .= $Seperator;
+												$temp .= $j;
+												$temp .= $PostName2;
+												$temp .= $k;
+												$temp .= $Seperator2;
+												$temp .= $l;
+											}
+											
+											$i++;
+											$j = $SecondStartNumber;
+											$k = $StartNumber2;
+											$l = $SecondStartNumber2;
+											$temp = $PostName;
+											$temp .= $i;
+											$temp .= $Seperator;
+											$temp .= $j;
+											$temp .= $PostName2;
+											$temp .= $k;
+											$temp .= $Seperator2;
+											$temp .= $l;
+										}
+										return $Input;
+									} else {
+										if (is_null($Seperator2) & !is_null($SecondStartNumber2)) {
+											array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 is set but Seperator2 cannot be NULL!');
+										} else if (!is_null($Seperator2) & is_null($SecondStartNumber2)){
+											array_push($this->ErrorMessage,'MultiPostCheck: Seperator2 is set but SecondStartNumber2 cannot be NULL!');
+										} else {
+											if (is_null($Seperator) & !is_null($SecondStartNumber)) {
+												array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber is set but Seperator cannot be NULL!');
+											} else if (!is_null($Seperator) & is_null($SecondStartNumber)) {
+												array_push($this->ErrorMessage,'MultiPostCheck: Seperator is set but SecondStartNumber cannot be NULL!');
+											} else if (!is_null($Seperator) & !is_null($SecondStartNumber)){
+												$i = $StartNumber;
+												$j = $SecondStartNumber;
+												$k = $StartNumber2;
+												$temp = $PostName;
+												$temp .= $i;
+												$temp .= $Seperator;
+												$temp .= $j;
+												$temp .= $PostName2;
+												$temp .= $k;
+												
+												while (($_POST[$temp])) {
+													while (($_POST[$temp])) {
+														while (($_POST[$temp])) {
+															$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+															if (!is_null($hold)) {
+																$Input = $hold;
+															}
+															$k++;
+															$temp = $PostName;
+															$temp .= $i;
+															$temp .= $Seperator;
+															$temp .= $j;
+															$temp .= $PostName2;
+															$temp .= $k;
+														}
+														$j++;
+														$k = $StartNumber2;
+														$temp = $PostName;
+														$temp .= $i;
+														$temp .= $Seperator;
+														$temp .= $j;
+														$temp .= $PostName2;
+														$temp .= $k;
+													}
+													$i++;
+													$j = $SecondStartNumber;
+													$k = $StartNumber2;
+													$temp = $PostName;
+													$temp .= $i;
+													$temp .= $Seperator;
+													$temp .= $j;
+													$temp .= $PostName2;
+													$temp .= $k;
+												}
+												return $Input;
+												
+											} else if (!is_null($Seperator2) & !is_null($SecondStartNumber2)){
+												$i = $StartNumber;
+												$j = $StartNumber2;
+												$k = $SecondStartNumber2;
+												$temp = $PostName;
+												$temp .= $i;
+												$temp .= $PostName2;
+												$temp .= $j;
+												$temp .= $Seperator2;
+												$temp .= $k;
+												while (($_POST[$temp])) {
+													while (($_POST[$temp])) {
+														while (($_POST[$temp])) {
+															$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+															if (!is_null($hold)) {
+																$Input = $hold;
+															}
+															$k++;
+															$temp = $PostName;
+															$temp .= $i;
+															$temp .= $PostName2;
+															$temp .= $j;
+															$temp .= $Seperator2;
+															$temp .= $k;
+														}
+														$j++;
+														$k = $SecondStartNumber2;
+														$temp = $PostName;
+														$temp .= $i;
+														$temp .= $PostName2;
+														$temp .= $j;
+														$temp .= $Seperator2;
+														$temp .= $k;
+													}
+													$i++;
+													$j = $StartNumber2;
+													$k = $SecondStartNumber2;
+													$temp = $PostName;
+													$temp .= $i;
+													$temp .= $PostName2;
+													$temp .= $j;
+													$temp .= $Seperator2;
+													$temp .= $k;
+												}
+												return $Input;
+											} else {
+												$i = $StartNumber;
+												$j = $StartNumber2;
+												$temp = $PostName;
+												$temp .= $i;
+												$temp .= $PostName2;
+												$temp .= $j;
+												while (($_POST[$temp])) {
+													while (($_POST[$temp])) {
+														$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+														if (!is_null($hold)) {
+															$Input = $hold;
+														}
+														$j++;
+														$temp = $PostName;
+														$temp .= $i;
+														$temp .= $PostName2;
+														$temp .= $j;
+													}
+													$i++;
+													$j = $StartNumber2;
+													$temp = $PostName;
+													$temp .= $i;
+													$temp .= $PostName2;
+													$temp .= $j;
+												}
+												
+												return $Input;		
+											}
+										}
+									}
+								} else {
+									array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 is set but PostName2 cannot be NULL!');
+								}
+							}
+						}
+					} else {
+						array_push($this->ErrorMessage,'MultiPostCheck: Input cannot be NULL!');
+					}
+				} else {
+					array_push($this->ErrorMessage,'MultiPostCheck: PostName cannot be NULL!');
+				}
+			} else {
+				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'MultiPostCheck: StartNumber must be an integer!');
+		}
+	}
+	
+	public function EmptyStringToNullArray (array $Array) {
+		foreach ($Array as $key => $value) {
+			if ($value == "") {
+				$Array[$key] = NULL;
+			} else if (is_array($value)) {
+				foreach ($value as $key2 => $value2) {
+					if ($value2 == "") {
+						$Array[$key][$key2] = NULL;
+					}
+				}
+			}
+		}
+		return $Array;
+	}
+	
+	public function MultiArrayBuild(array $Start, $StartKey, $ConditionalKey, $StartNumber, array $Source) {
+		$functionarguments = func_get_args();
+		
+		$Sort = NULL;
+		if ($functionarguments[5]) {
+			$Sort = $functionarguments[5];
+		}
+		
+		$EndKey = NULL;
+		if ($functionarguments[6]) {
+			$EndKey = $functionarguments[6];
+		}
+		
+		if (is_null($StartKey)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: RemoveKey cannot be NULL!');
+		} else if (is_null($ConditionalKey)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: Key cannot be NULL!');
+		} else if (is_null($StartNumber)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: StartNumber cannot be NULL!');
+		} else {  
+			$temp = array();
+			$i = $StartNumber;
+			if ($EndKey) {
+				$SourceKey = $StartKey;
+				$SourceKey .= $ConditionalKey;
+				$SourceKey .= $i;
+			} else {
+				$SourceKey = $StartKey;
+				$SourceKey .= $i;
+				$SourceKey .= $ConditionalKey;
+			}
+			while (array_key_exists($SourceKey, $Source)) {
+				if (isset($Source[$SourceKey])) {
+					$SourceKeyHold = $SourceKey;
+					foreach ($Start as $StartValue) {
+						if ($EndKey) {
+							$SourceKey = $StartKey;
+							$SourceKey .= $StartValue;
+							$SourceKey .= $i;
+						} else {
+							$SourceKey = $StartKey;
+							$SourceKey .= $i;
+							$SourceKey .= $StartValue;
+						}
+						
+						if (is_null($Source[$SourceKey])) {
+							unset($Source[$SourceKey]);
+						} else {
+							$temp[$i][$SourceKey] = $Source[$SourceKey];
+							unset($Source[$SourceKey]);
+						}
+					}
+					if (isset($Source[$SourceKeyHold])) {
+						unset($Source[$SourceKeyHold]);
+					}
+				} else {
+					$SourceKeyHold = $SourceKey;
+					foreach ($Start as $StartValue) {
+						if ($EndKey) {
+							$SourceKey = $StartKey;
+							$SourceKey .= $StartValue;
+							$SourceKey .= $i;
+						} else {
+							$SourceKey = $StartKey;
+							$SourceKey .= $i;
+							$SourceKey .= $StartValue;
+						}
+						
+						unset($Source[$SourceKey]);
+					}
+				}
+				$i++;
+				if ($EndKey) {
+					$SourceKey = $StartKey;
+					$SourceKey .= $ConditionalKey;
+					$SourceKey .= $i;
+				} else {
+					$SourceKey = $StartKey;
+					$SourceKey .= $i;
+					$SourceKey .= $ConditionalKey;
+				}
+			}
+			$Source = $Source + $temp;
+			unset ($temp);
+			if (!is_null($Sort)) {
+				if (!is_array($Sort)) {
+					$temp = $Source;
+					$newtemp = array();
+					$holdarray = array();
+					
+					for ($i = $StartNumber; $temp[$i]; $i++) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $i;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $i;
+							$SetOrder .= $Sort;
+						}
+
+						if ($temp[$i][$SetOrder]) {
+							try {
+								if (is_numeric($temp[$i][$SetOrder])) {
+									$index = $temp[$i][$SetOrder];
+									
+									if ($newtemp[$index]) {
+										if ($newtemp[$i] == NULL) {
+											$newtemp[$i] = $newtemp[$index];
+											unset($newtemp[$index]);
+										} else {
+											$j = $i;
+											while ($newtemp[$j]) {
+												$j++;
+											}
+											$newtemp[$j] = $newtemp[$index];
+											unset($newtemp[$index]);
+										}
+									}
+									
+									foreach ($temp[$i] as $key => $value) {
+										$key = explode($StartKey, $key, 2);
+										$hold = $key[0];
+										$key[0] = $StartKey;
+										if (is_null($EndKey)) {
+											$key[0] .= $hold;
+											$key[0] .= $index;
+											$key[1] = preg_replace('([0-9]+)', '', $key[1], 1);
+										} else {
+											preg_match('([0-9]+)', $key[1], $oldindex);
+											$oldindex = $oldindex[0];
+											$key[1] = str_replace($oldindex, $index, $key[1]);
+										}
+										$key = implode($key);
+										$newtemp[$index][$key] = $value;
+									}
+									unset($temp[$i]);
+									unset($Source[$i]);
+								} else {
+									array_push($this->ErrorMessage,"MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
+									throw new Exception("FATAL ERROR: MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
+								}
+							} catch (Exception $e) {
+								print $e->getMessage();
+								print "\n";
+								return NULL;
+							}
+							
+						} else if ($temp[$i]) {
+							$temp[$i][$SetOrder] = NULL;
+							array_push($holdarray, $temp[$i]);
+							unset($temp[$i]);
+							unset($Source[$i]);
+						}
+					}
+					
+					if ($holdarray) {
+						foreach ($holdarray as $key => $values) {
+							array_push($newtemp, $values);
+						}
+						unset($holdarray);
+					}
+					
+					$holdarray = array();
+					
+					ksort($newtemp);
+					$newtemp = array_merge($newtemp);
+					
+					//$newtemp = array_combine(range($StartNumber, count($newtemp)), array_values($newtemp));
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						if (isset($key)) {
+							$newkey = $key;
+							$newkey++;
+							$holdarray[$newkey] = $value;
+							
+							unset($newtemp[$key]);
+							
+						}
+					}
+					$newtemp = $newtemp + $holdarray;
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						
+						if ($key != $value[$SetOrder]) {
+							foreach($value as $key2 => $value2) {
+								preg_match('([0-9]+)', $key2, $oldcount);
+								$oldcount = $oldcount[0];
+
+								$replace = $StartKey;
+								$replace .= $oldcount;
+								$replacement = $StartKey;
+								$replacement .= $key;
+								
+								$key3 = str_replace($replace, $replacement, $key2);
+								if ($key2 != $key3) {
+									$newtemp[$key][$key3] = $newtemp[$key][$key2];
+									unset($newtemp[$key][$key2]);
+								}
+							}
+						}
+					}
+					
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						if (isset($value[$SetOrder])) {
+							$newtemp[$key][$SetOrder] = NULL;
+						}
+					}
+					
+					$Source = $Source + $newtemp;
+					unset($newtemp);
+					unset($temp);
+					
+				} else {
+					array_push($this->ErrorMessage,'MultiArrayBuild: Sort cannot be an ARRAY!');
+				}
+			}
+			
+			return $Source;
+		}
+		
+	}
+	
+	public function MultiArrayCombine($StartNumber, array $Source) {
+		if ($StartNumber != NULL) {
+			try {
+				if (is_numeric($StartNumber)) {
+					for ($i = $StartNumber; $Source[$i]; $i++) {
+						foreach ($Source[$i] as $key => $value) {
+							if (is_numeric($key)) {
+								$hold = $this->MultiArrayCombine($StartNumber, $value);
+								if ($hold) {
+									$Source = $Source + $hold;
+								}
+							} else {
+								$Source[$key] = $value;
+							}
+							unset($Source[$i][$key]);
+						}
+						unset($Source[$i]);
+					}
+					return $Source;
+					
+				} else {
+					array_push($this->ErrorMessage,"MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
+					throw new Exception("FATAL ERROR: MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
+				}
+			} catch (Exception $e){
+				print $e->getMessage();
+				print "\n";
+				return NULL;
+			} 
+		} else {
+			array_push($this->ErrorMessage,'MultiArrayCombine: StartNumber MUST be set!');
 		}
 	}
 	
@@ -406,6 +1144,12 @@ class ContentLayer extends LayerModulesAbstract
 				}
 			}
 		}
+	}
+	
+	public function KeepLoggedIn() {
+		if ($_COOKIE['LoggedIn']) {
+			setcookie("LoggedIn", TRUE, time()+3600);
+		}	
 	}
 	
 	public function Logoff() {
@@ -686,13 +1430,15 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[3] = 'ContentPageType';
 			$Keys[4] = 'ContentPageMenuName';
 			$Keys[5] = 'ContentPageMenuTitle';
-			$Keys[6] = 'ContentPageMenuParentObjectID';
+			$Keys[6] = 'ContentPageMenuObjectID';
 			$Keys[7] = 'UserAccessGroup';
 			$Keys[8] = 'Owner';
 			$Keys[9] = 'Creator';
 			$Keys[10] = 'LastChangeUser';
 			$Keys[11] = 'CreationDateTime';
 			$Keys[12] = 'LastChangeDateTime';
+			$Keys[13] = 'PublishDate';
+			$Keys[14] = 'UnpublishDate';
 			
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {
@@ -701,9 +1447,15 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function updateContentVersion(array $PageID, $DatabaseTableName) {
+		$arguments = func_get_args();
+		$Data = $arguments[2];
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
-			$this->updateModuleContent($PageID, $DatabaseTableName);
+			if ($Data != NULL) {
+				$this->updateModuleContent($PageID, $DatabaseTableName, $Data);
+			} else {
+				$this->updateModuleContent($PageID, $DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'updateContentVersion: PageID and Database Table Name cannot be NULL!');
 		}

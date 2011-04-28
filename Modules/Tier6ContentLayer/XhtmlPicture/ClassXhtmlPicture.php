@@ -120,26 +120,8 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	public function createPicture(array $Picture) {
 		if ($Picture != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'RevisionID';
-			$Keys[3] = 'CurrentVersion';
-			$Keys[4] = 'StartTag';
-			$Keys[5] = 'EndTag';
-			$Keys[6] = 'StartTagID';
-			$Keys[7] = 'StartTagStyle';
-			$Keys[8] = 'StartTagClass';
-			$Keys[9] = 'PictureID';
-			$Keys[10] = 'PictureClass';
-			$Keys[11] = 'PictureStyle';
-			$Keys[12] = 'PictureLink';
-			$Keys[13] = 'PictureAltText';
-			$Keys[14] = 'Width';
-			$Keys[15] = 'Height';
-			$Keys[16] = 'Enable/Disable';
-			$Keys[17] = 'Status';
-			
+			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
+			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Picture, $this->DatabaseTable);
 		} else {
 			array_push($this->ErrorMessage,'createPicture: Picture cannot be NULL!');
