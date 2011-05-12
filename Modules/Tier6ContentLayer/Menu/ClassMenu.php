@@ -16,9 +16,9 @@ class Menu
 	
 	public function __construct($tablenames, $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
-		$this->idnumber = current($tablenames);
-		$this->MenuDatabase = next($tablenames);
-		$this->MenuLookup = next($tablenames);
+		$this->idnumber = $tablenames['idnumber'];
+		$this->MenuDatabase = $tablenames['DatabaseTable1'];
+		$this->MenuLookup = $tablenames['DatabaseTable2'];
 		$this->MenuItemList = Array();
 	}
 	
@@ -376,7 +376,7 @@ class Menu
 		} else {
 			$this->Menus .= "  <ul>\n";
 		}
-		
+
 		while ($i <= $max) {
 			$idnumber = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'idnumber'));
 			$status = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'Status'));
@@ -423,7 +423,7 @@ class Menu
 		
 		$rowcount = $this->LayerModule->pass ($this->MenuDatabase, 'getRowCount', array());
 		$max = $this->LayerModule->pass ($this->MenuLookup, 'getRowCount', array());
-		
+
 		$this->menuLoop($rowcount, $j, $MenuName);
 		
 		$this->buildInsertInformation (1, $rowcount);

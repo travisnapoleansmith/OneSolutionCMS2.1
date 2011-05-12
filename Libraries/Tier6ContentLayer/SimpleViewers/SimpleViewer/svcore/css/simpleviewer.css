@@ -1,22 +1,3 @@
-/*html, body {
-  overflow: hidden;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: #444;
-  color: #fff;
-  font: 75%/1.5em sans-serif;
-}
-.simpleviewer h1 {
-  font-size: 165%;
-  font-weight: normal;
-  line-height: 1.5em;
-  margin: 0 0 0.6em;
-}
-.simpleviewer p {
-  margin: 0 0 1em;
-}*/
 .simpleviewer a {
   color: #fff;
 }
@@ -36,21 +17,21 @@ body {
 .loading {
   background: url(../img/spinner.gif) no-repeat center;
 }
-#sv-mobile-flash {
+.cls-mobile-flash {
   overflow: hidden;
 }
 /*--- /layout ---*/
 
 /*--- detail ---*/
-#sv-photos {
+.cls-photos {
   position: absolute;
   top: 0;
   left: 0;
 }
 .sv-photo {
-  float: left;
+  float: none;
   text-align: center;
-  position: relative;
+  position: absolute;
 }
 .sv-caption {
   background: url(../img/caption-bg.png);
@@ -77,7 +58,7 @@ body {
   margin: 0;
 }
 
-#sv-prev-photo {
+.cls-prev-photo {
   display: block;
   width: 50%;
   height: 680px;
@@ -89,7 +70,7 @@ body {
   background: url(../img/empty-pixel.png);
   z-index: 8;
 }
-#sv-prev-photo span {
+.cls-prev-photo span, .sv-nav-page-prev {
   display: block;
   width: 27px;
   height: 27px;
@@ -100,7 +81,16 @@ body {
   background: url(../img/assets.png) no-repeat -9px -12px;
   display: none;
 }
-#sv-next-photo {
+.sv-cls-4-ipad .cls-prev-photo span,
+.sv-cls-4-iphone .cls-prev-photo span,
+.sv-cls-4-android .cls-prev-photo span
+{
+  width: 55px;
+  height: 55px;
+  background: url(../img/assets.png) no-repeat 6px 0px;
+}
+
+.cls-next-photo {
   display: block;
   width: 50%;
   height: 680px;
@@ -112,7 +102,34 @@ body {
   background: url(../img/empty-pixel.png);
   z-index: 8;
 }
-#sv-next-photo span {
+.sv-nav-logo, .sv-photo-logo {
+  display: block;
+  width: 105px;
+  height: 15px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 10;
+  text-decoration: none;
+  font-size: 90%;
+  background: url(http://simpleviewer.net/m/sv.png) no-repeat 0 0;
+}
+
+.sv-cls-4-iphone.sv-vertical .sv-nav-logo,
+.sv-cls-4-iphone.sv-vertical .sv-photo-logo
+{
+	bottom:10px;
+}
+
+/*
+.sv-cls-4-iphone.sv-horizental .sv-nav-logo
+{
+	bottom:0px;
+}
+*/
+
+.cls-next-photo span, .sv-nav-page-next {
   display: block;
   width: 27px;
   height: 27px;
@@ -124,7 +141,48 @@ body {
   display: none;
 }
 
-#sv-topmenu {
+.sv-cls-4-ipad .cls-next-photo span,
+.sv-cls-4-iphone .cls-next-photo span,
+.sv-cls-4-android .cls-next-photo span
+{
+  width: 55px;
+  height: 55px;
+  background: url(../img/assets.png) no-repeat -44px 0px;
+}
+
+.sv-photo-nav .sv-nav-page-prev
+{
+	position:absolute;
+	display:block;
+	cursor:pointer;
+	height:60px;
+	width:55px;
+	background: url(../img/assets.png) no-repeat 7px 8px;
+	margin-top: -40px;
+}
+.sv-photo-nav .sv-nav-page-next
+{
+	position:absolute;
+	display:block;
+	cursor:pointer;
+	height:60px;
+	width:55px;
+	background: url(../img/assets.png) no-repeat -44px 8px;
+	margin-top: -40px;
+}
+.sv-nav-page-label
+{
+	position:absolute;
+	display:block;
+	font-size:15px;
+}
+.sv-nav-page-caption
+{
+	position:absolute;
+	display:block;
+	font-size:19px;
+}
+.cls-topmenu {
   height: 38px;
   position: absolute;
   top: 10px;
@@ -132,7 +190,7 @@ body {
   display: none;
   z-index: 9;
 }
-#sv-topmenu a {
+.cls-topmenu a {
   display: block;
   float: right;
   height: 38px;
@@ -141,39 +199,51 @@ body {
   position: relative;
   cursor: pointer;
 }
-#sv-topmenu #sv-open-window {
+.cls-topmenu .cls-open-window {
   display: none;
   background-position: -147px -5px;
 }
-#sv-topmenu #sv-go-fullscreen {
+.cls-topmenu .cls-go-fullscreen {
   display: none;
   background-position: -97px -5px;
 }
-#sv-topmenu a span {
+.cls-topmenu .cls-go-nav-panel{
+  background-position: -197px -5px;
+}
+
+.cls-topmenu a span {
   display: none;
 }
-#sv-topmenu-right, #sv-topmenu-left, #sv-topmenu-links {
+.cls-topmenu-right, .cls-topmenu-left, .cls-topmenu-links {
+  display: none;
   float: right;
   height: 38px;
   overflow: hidden;
   margin: 0;
   position: relative;
+  background-color: #111;
+  background: transparent url(../img/assets.png) no-repeat -10px -56px;
 }
-#sv-topmenu-right {
+.cls-topmenu-right {
   width: 5px;
-  background: url(../img/assets.png) no-repeat -148px -56px;
+  background: transparent url(../img/assets.png) no-repeat -148px -56px;
 }
-#sv-topmenu-left {
+.sv-cls-4-msie9 .cls-topmenu-right
+{
+	display:none;
+}
+.cls-topmenu-left {
   width: 5px;
-  background: url(../img/assets.png) no-repeat 0 -56px;
+  background: transparent url(../img/assets.png) no-repeat 0 -56px;
 }
-#sv-topmenu-links {
-  background: url(../img/assets.png) no-repeat -10px -56px;
+.sv-cls-4-msie9 .cls-topmenu-left
+{
+	display:none;
 }
 /*--- /detail ---*/
 
 /*--- error ---*/
-#sv-error {
+.sv-cls-error {
   color: #fff;
   font-size: 12px;
   font-weight: bold;
@@ -182,13 +252,13 @@ body {
   font-family: sans-serif;
   position: absolute;
 }
-#sv-error #sv-error-text {
+.sv-cls-error .sv-cls-error-text {
   float: left;
   padding: 0.7em 20px;
   position: relative;
   z-index: 10;
 }
-#sv-error #sv-error-bg {
+.sv-cls-error .sv-cls-error-bg {
   position: absolute;
   left: 0;
   top: 0;
@@ -221,3 +291,98 @@ body {
 .clearfix {
 	display: block;
 }
+.sv-photo-detail
+{
+	position:relative;
+	display:inline-block;
+	overflow:hidden;
+}
+/****** photo navigation panel ******/
+.sv-photo-nav
+{
+	z-index:50;
+	position:relative;
+	float:left;
+	overflow:hidden;
+}
+.sv-photo-nav table
+{
+	position:absolute;
+	top:0;
+}
+.sv-nav-photo-list
+{
+	position:relative;
+	overflow:hidden;
+}
+
+.sv-nav-photo-list table tr td
+{
+	width:80px !important;
+	height:80px !important;
+	border:none !important;
+	padding:0 !important;
+	margin:0 !important;
+}
+
+.sv-nav-photo-list a img
+{
+	display:block;
+	border:none;
+	width:75px;
+	height:75px;
+	padding:0;
+	margin:0;
+	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, .4);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .4);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .4);
+}
+
+.sv-nav-photo-list a img:hover
+{
+	width: 75px;
+	height: 75px;
+	border: none;
+}
+
+.sv-nav-photo-list a.current img
+{
+	width: 75px;
+	height: 75px;
+	border: none;
+}
+
+.sv-nav-photo-list .visited img
+{
+	width:75px;
+	height:75px;
+	border: none;
+}
+/****** for hand hold devices ******/
+/* iphone */
+/*
+.sv-cls-4-iphone .sv-photo-nav
+{
+	margin-left: 3px;
+	margin-top:5px;
+}
+*/
+
+/* android */
+/*
+.sv-cls-4-android .sv-photo-nav
+{
+	margin-left: 3px;
+	margin-top:5px;
+}
+*/
+
+/* iPad */
+/*
+.sv-cls-4-ipad .sv-photo-nav
+{
+	margin-left: 3px;
+	margin-top:5px;
+}
+*/
+

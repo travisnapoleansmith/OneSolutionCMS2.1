@@ -28,8 +28,8 @@
 	</script>
 	<script type="text/javascript" src="js/simpleviewer.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function () {
-	  SV.simpleviewer.load('sv-container', '100%', '100%', parameters.bg, false, {galleryURL: parameters.galleryURL || 'gallery.xml'});
+	simpleviewer.ready(function () {
+		simpleviewer.load('sv-container', '100%', '100%', parameters.bg, false, {galleryURL: parameters.galleryURL || 'gallery.xml'});
 	});
 	</script>
 </head>

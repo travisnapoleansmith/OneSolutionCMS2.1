@@ -13,6 +13,7 @@
 	$rsslink = $SETTINGS['SITE SETTINGS']['RSSLINK'];
 	$sitelink = $SETTINGS['SITE SETTINGS']['SITELINK'];
 	$author = $SETTINGS['SITE SETTINGS']['AUTHOR'];
+	$copyright = $SETTINGS['SITE SETTINGS']['COPYRIGHT'];
 	
 	$Writer = new XMLWriter();
 	$Writer->openMemory();

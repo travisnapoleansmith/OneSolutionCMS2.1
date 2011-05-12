@@ -217,116 +217,122 @@ class ContentLayer extends LayerModulesAbstract
 		if ($this->ContentLayerVersionTableName) {
 			reset($this->ContentLayerDatabase);
 			while (current($this->ContentLayerDatabase)) {
-				$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
-				$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
-				$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
-				$ObjectTypeConfiguration = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
-				$ObjectTypeConfiguration .= '/';
-				$ObjectTypeConfiguration .= $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
-				$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
+				$PrintPreviewFlag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['PrintPreview'];
 				
-				$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
-				
-				$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
-				$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
-				$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
-				$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
-				$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
-				
-				$ImportFileName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileName'];
-				$ImportFileType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileType'];
-				
-				$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
-				
-				if ($EnableDisable == 'Enable') {
-					if ($Authenticate == 'true') {
-						if (!$_COOKIE['LoggedIn']) {
-							$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-							
-							if ($_GET['DestinationPageID']) {
-								$DestinationPageID = $_GET['DestinationPageID'];
-								setcookie('DestinationPageID', $DestinationPageID);
-							} else {
-								$PageID = $this->PageID['PageID'];
-								setcookie('DestinationPageID', $PageID);
-							}
-							header("Location: $AuthenticationPage");
-						} else {
-							$this->KeepLoggedIn();
-							
-						}
+				if ($this->PrintPreview == FALSE | $PrintPreviewFlag == 'true') {
+					$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
+					$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
+					$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
+					if ($this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'] != NULL) {
+						$ObjectTypeConfiguration = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+						$ObjectTypeConfiguration .= '/';
+						$ObjectTypeConfiguration .= $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
 					}
+					$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
 					
-					$UserAccessGroup = $this->ContentLayerVersionDatabase[0]['UserAccessGroup'];
-					$CurrentAccessGroup = $_COOKIE[$UserAccessGroup];
-					if ($UserAccessGroup == 'Guest' || $UserAccessGroup == ($CurrentAccessGroup == 'Yes')) {
-						if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
-							if ($StartTag) {
-								$StartTag = str_replace('<','', $StartTag);
-								$StartTag = str_replace('>','', $StartTag);
+					$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
+					
+					$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
+					$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
+					$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
+					$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
+					$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
+					
+					$ImportFileName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileName'];
+					$ImportFileType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileType'];
+					
+					$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
+					
+					if ($EnableDisable == 'Enable') {
+						if ($Authenticate == 'true') {
+							if (!$_COOKIE['LoggedIn']) {
+								$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
 								
-								$this->Writer->startElement($StartTag);
-								
-								if ($StartTagID) {
-									$this->Writer->writeAttribute('id', $StartTagID);
-								}
-								
-								if ($StartTagStyle) {
-									$this->Writer->writeAttribute('style', $StartTagStyle);
-								}
-								
-								if ($StartTagClass) {
-									$this->Writer->writeAttribute('class', $StartTagClass);
-								}
-								$this->Writer->writeRaw("\n");
-								
-							}
-							
-							if ($ObjectTypeConfiguration) {
-								if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
-									$file = file_get_contents($ObjectTypeConfiguration);
-									$this->Writer->writeRaw($file);
+								if ($_GET['DestinationPageID']) {
+									$DestinationPageID = $_GET['DestinationPageID'];
+									setcookie('DestinationPageID', $DestinationPageID);
 								} else {
-									require ("$ObjectTypeConfiguration");
+									$PageID = $this->PageID['PageID'];
+									setcookie('DestinationPageID', $PageID);
 								}
+								header("Location: $AuthenticationPage");
 							} else {
-								$idnumber = array();
-								$idnumber['PageID'] = $this->PageID['PageID'];
-								$idnumber['ObjectID'] = 1;
-								$idnumber['RevisionID'] = $this->PageID['RevisionID'];
-								$idnumber['CurrentVersion'] = $this->PageID['CurrentVersion'];
-								$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
-								$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
-								$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
+								$this->KeepLoggedIn();
 								
 							}
-							
-							if ($ImportFileName != NULL) {
-								if ($ImportFileType == 'xml') {
-									$this->processXMLFile($ImportFileName);
-								}
-								
-								if ($ImportFileType == 'html') {
-									$this->processHTMLFile($ImportFileName);
-								}
-							}
-							
-							if ($EndTag) {
-								$this->Writer->endElement(); // ENDS END TAG
-							}
-							
 						}
 						
-						if ($ObjectType == 'XhtmlHeader') {
-							$this->Writer->startElement('body');
-						}
-					} else {
-						if (!$_COOKIE['LoggedIn']) {
-							exit;
+						$UserAccessGroup = $this->ContentLayerVersionDatabase[0]['UserAccessGroup'];
+						$CurrentAccessGroup = $_COOKIE[$UserAccessGroup];
+						if ($UserAccessGroup == 'Guest' || $UserAccessGroup == ($CurrentAccessGroup == 'Yes')) {
+							if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
+								if ($StartTag) {
+									$StartTag = str_replace('<','', $StartTag);
+									$StartTag = str_replace('>','', $StartTag);
+									
+									$this->Writer->startElement($StartTag);
+									
+									if ($StartTagID) {
+										$this->Writer->writeAttribute('id', $StartTagID);
+									}
+									
+									if ($StartTagStyle) {
+										$this->Writer->writeAttribute('style', $StartTagStyle);
+									}
+									
+									if ($StartTagClass) {
+										$this->Writer->writeAttribute('class', $StartTagClass);
+									}
+									$this->Writer->writeRaw("\n");
+									
+								}
+								
+								if ($ObjectTypeConfiguration != NULL) {
+									if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
+										$file = file_get_contents($ObjectTypeConfiguration);
+										$this->Writer->writeRaw($file);
+									} else {
+										require ("$ObjectTypeConfiguration");
+									}
+								} else {
+									$idnumber = array();
+									$idnumber['PageID'] = $this->PageID['PageID'];
+									$idnumber['ObjectID'] = 1;
+									$idnumber['RevisionID'] = $this->PageID['RevisionID'];
+									$idnumber['CurrentVersion'] = $this->PageID['CurrentVersion'];
+									$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
+									$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
+									$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
+									
+								}
+								
+								if ($ImportFileName != NULL) {
+									if ($ImportFileType == 'xml') {
+										$this->processXMLFile($ImportFileName);
+									}
+									
+									if ($ImportFileType == 'html') {
+										$this->processHTMLFile($ImportFileName);
+									}
+								}
+								
+								if ($EndTag) {
+									$this->Writer->endElement(); // ENDS END TAG
+								}
+								
+							}
+							
+							if ($ObjectType == 'XhtmlHeader') {
+								$this->Writer->startElement('body');
+							}
 						} else {
-							$DenyRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['DenyRedirect']['SettingAttribute'];
-							header("Location: $DenyRedirectPage");
-							exit;
+							if (!$_COOKIE['LoggedIn']) {
+								exit;
+							} else {
+								$DenyRedirectPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['DenyRedirect']['SettingAttribute'];
+								header("Location: $DenyRedirectPage");
+								exit;
+							}
 						}
 					}
 				}
@@ -334,6 +340,11 @@ class ContentLayer extends LayerModulesAbstract
 				
 				if (!current($this->ContentLayerDatabase)) {
 					$this->Writer->endElement(); // ENDS BODY
+					$this->Writer->endElement(); // ENDS HTML
+				}
+			}
+			if ($this->PrintPreview == TRUE) {
+				if ($_GET['PageID']){
 					$this->Writer->endElement(); // ENDS HTML
 				}
 			}
@@ -348,21 +359,24 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 
+	private function transverseChildSimpleXMLToOutput(SimpleXMLElement $Child) {
+		$hold = $Child->asXML();
+		$hold = trim($hold);
+		$hold = str_replace("\t", '    ', $hold);
+		$RawText = '    ';
+		$RawText .= $hold;
+		$RawText .= "\n";
+		$this->Writer->writeRaw($RawText);
+	}
+	
 	public function processXMLFile($XMLFile) {
 		if ($XMLFile != NULL) {
 			if (file_exists($XMLFile)) {
 				libxml_use_internal_errors(true);
 				$Xml = simplexml_load_file($XMLFile);
 				if ($Xml) {
-					$RootName = $Xml->getName();
 					foreach($Xml as $child) {
-						$hold = $child->asXML();
-						$hold = trim($hold);
-						$hold = str_replace("\t", '    ', $hold);
-						$RawText = '    ';
-						$RawText .= $hold;
-						$RawText .= "\n";
-						$this->Writer->writeRaw($RawText);
+						$this->transverseChildSimpleXMLToOutput($child);
 					}
 					$this->Writer->writeRaw('  ');
 				}
@@ -375,7 +389,26 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function processHTMLFile($HTMLFile) {
-		//print "$HTMLFile\n";
+		if ($HTMLFile != NULL) {
+			if (file_exists($HTMLFile)) {
+				libxml_use_internal_errors(true);
+				$Html = simplexml_load_file($HTMLFile);
+				if ($Html->body) {
+					foreach($Html->body->children() as $child) {
+						$this->transverseChildSimpleXMLToOutput($child);
+					}
+				} else if (!$Html->head) {
+					$RootElement = $Html->getName();
+					foreach($Html as $child) {
+						$this->transverseChildSimpleXMLToOutput($child);
+					}
+				}
+			} else {
+				array_push($this->ErrorMessage,'processHTMLFile: HTMLFile DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'processHTMLFile: HTMLFile cannot be NULL!');
+		}
 	}
 	
 	public function SessionStart($SessionName) {
