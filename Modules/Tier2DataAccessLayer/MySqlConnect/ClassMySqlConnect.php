@@ -13,7 +13,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	}
 	
 	public function Connect () {
-		if ($this->hostname == NULL | $this->user == NULL | $this->password == NULL | $this->databasename) {
+		if ($this->hostname == NULL | $this->user == NULL | $this->password == NULL | $this->databasename == NULL) {
 			$this->hostname = $GLOBALS['credentaillogonarray'][0];
 			$this->user = $GLOBALS['credentaillogonarray'][1];
 			$this->password = $GLOBALS['credentaillogonarray'][2];

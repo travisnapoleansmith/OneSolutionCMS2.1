@@ -15,9 +15,11 @@
 	width:100px;
 	height:25px;
 	z-index:1;
-	background-image: url(TemplateImages/Background.png);
-	background-repeat: no-repeat;
-	border: 5px groove #000000;
+	/*background-image: url(TemplateImages/Background.png);
+	background-repeat: no-repeat;*/
+	background-color: #c22826;
+	/*border: 5px groove #FFFFFF;*/
+	border: 4px double #FFFFFF;
 	
 }
 
@@ -248,9 +250,11 @@
 	top: -10px;
 	float: left;
 	background-color: #FFFFFF;
+	/*background-color: #1E3221;*/
 	padding-left: 10px;
 	padding-top: 3px;
 	border: 1px groove #000000;
+	/*border: 4px double #FFFFFF;*/
 }
 
 .MainMenu1DropDownText1 {

@@ -14,7 +14,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	protected $EnableDisable = array();
 	protected $Status = array();
 		
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

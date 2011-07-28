@@ -1,19 +1,73 @@
 <?php
-
+/* Class Content Layer
+ * 
+ * Class ContentLayer is designed as the main content container for all One Solution CMS websites. This is where
+ * all modules, services and add ons are used to be displayed to the end user.
+ *
+ * @author Travis Napolean Smith
+ * @copyright Copyright (c) 1999 - 2011 One Solution CMS
+ * @copyright PHP - Copyright (c) 2005 - 2011 One Solution CMS
+ * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
+ * @version PHP - 2.0
+ * @version C++ - Unknown
+ */ 
 class ContentLayer extends LayerModulesAbstract
 {
+	/*
+	 * Content Layer Modules
+	 * 
+	 * @var array
+	 */
 	protected $Modules;
 	
+	/*
+	 * User settings for what is allowed to be done with the database -  set with Tier6ContentLayerSetting.php
+	 * in /Configuration folder
+	 * 
+	 * @var array
+	 */
 	protected $DatabaseAllow;
+	/*
+	 * User setting for what is cannot be done with the database - set with Tier6ContentLayerSetting.php
+	 * in /Configuration folder
+	 * 
+	 * @var array
+	 */
 	protected $DatabaseDeny;
 	
+	/*
+	 * Print Preview array for the current page being displayed
+	 * 
+	 * @var array
+	 */
 	protected $PrintPreview;
 	
+	/*
+	 * Current Database Table Name for Content Layer
+	 * 
+	 * @var string
+	 */
 	protected $DatabaseTableName;
+	/*
+	 * Current Database Table - Contains all the information retrieved from FetchDatabase
+	 * 
+	 * @var array
+	 */
 	protected $ContentLayerDatabase;
 	
+	/*
+	 * Content Layer Version Table Name
+	 * 
+	 * @var string
+	 */
 	protected $ContentLayerVersionTableName;
+	/*
+	 * Content Layer Version Table - Contains all the information retrieved from FetchDatabase
+	 * 
+	 * @var array
+	 */
 	protected $ContentLayerVersionDatabase;
+	
 	
 	public function __construct () {
 		$this->Modules = Array();
@@ -215,13 +269,11 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function CreateOutput($Space) {
 		if ($this->ContentLayerVersionTableName) {
-			reset($this->ContentLayerDatabase);
-			while (current($this->ContentLayerDatabase)) {
-				$PrintPreviewFlag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['PrintPreview'];
-				
-				if ($this->PrintPreview == FALSE | $PrintPreviewFlag == 'true') {
-					$ObjectType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectType'];
-					$ObjectTypeName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ObjectTypeName'];
+			foreach ($this->ContentLayerDatabase as $Key => $ContentLayerDatabase) {
+				$PrintPreviewFlag = $ContentLayerDatabase['PrintPreview'];
+				if ($this->PrintPreview == FALSE || $PrintPreviewFlag == 'true') {
+					$ObjectType = $ContentLayerDatabase['ObjectType'];
+					$ObjectTypeName = $ContentLayerDatabase['ObjectTypeName'];
 					$ObjectTypeLocation = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'];
 					if ($this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'] != NULL) {
 						$ObjectTypeConfiguration = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
@@ -229,19 +281,19 @@ class ContentLayer extends LayerModulesAbstract
 						$ObjectTypeConfiguration .= $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'];
 					}
 					$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
+					$Authenticate = $ContentLayerDatabase['Authenticate'];
 					
-					$Authenticate = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['Authenticate'];
+					$StartTag = $ContentLayerDatabase['StartTag'];
+					$EndTag = $ContentLayerDatabase['EndTag'];
+					$StartTagID = $ContentLayerDatabase['StartTagID'];
+					$StartTagStyle = $ContentLayerDatabase['StartTagStyle'];
+					$StartTagClass = $ContentLayerDatabase['StartTagClass'];
 					
-					$StartTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTag'];
-					$EndTag = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['EndTag'];
-					$StartTagID = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagID'];
-					$StartTagStyle = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagStyle'];
-					$StartTagClass = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['StartTagClass'];
+					$ImportFileName = $ContentLayerDatabase['ImportFileName'];
+					$ImportFileType = $ContentLayerDatabase['ImportFileType'];
 					
-					$ImportFileName = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileName'];
-					$ImportFileType = $this->ContentLayerDatabase[key($this->ContentLayerDatabase)]['ImportFileType'];
-					
-					$EnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
+					$ObjectEnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
+					$EnableDisable = $ContentLayerDatabase['Enable/Disable'];
 					
 					if ($EnableDisable == 'Enable') {
 						if ($Authenticate == 'true') {
@@ -265,28 +317,28 @@ class ContentLayer extends LayerModulesAbstract
 						$UserAccessGroup = $this->ContentLayerVersionDatabase[0]['UserAccessGroup'];
 						$CurrentAccessGroup = $_COOKIE[$UserAccessGroup];
 						if ($UserAccessGroup == 'Guest' || $UserAccessGroup == ($CurrentAccessGroup == 'Yes')) {
-							if ($this->PrintPreview == FALSE || $ObjectTypePrintPreview == 'true') {
-								if ($StartTag) {
-									$StartTag = str_replace('<','', $StartTag);
-									$StartTag = str_replace('>','', $StartTag);
-									
-									$this->Writer->startElement($StartTag);
-									
-									if ($StartTagID) {
-										$this->Writer->writeAttribute('id', $StartTagID);
-									}
-									
-									if ($StartTagStyle) {
-										$this->Writer->writeAttribute('style', $StartTagStyle);
-									}
-									
-									if ($StartTagClass) {
-										$this->Writer->writeAttribute('class', $StartTagClass);
-									}
-									$this->Writer->writeRaw("\n");
-									
+							if ($StartTag) {
+								$StartTag = str_replace('<','', $StartTag);
+								$StartTag = str_replace('>','', $StartTag);
+								
+								$this->Writer->startElement($StartTag);
+								
+								if ($StartTagID) {
+									$this->Writer->writeAttribute('id', $StartTagID);
 								}
 								
+								if ($StartTagStyle) {
+									$this->Writer->writeAttribute('style', $StartTagStyle);
+								}
+								
+								if ($StartTagClass) {
+									$this->Writer->writeAttribute('class', $StartTagClass);
+								}
+								$this->Writer->writeRaw("\n");
+								
+							}
+							
+							if ($ObjectEnableDisable == 'Enable') {
 								if ($ObjectTypeConfiguration != NULL) {
 									if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
 										$file = file_get_contents($ObjectTypeConfiguration);
@@ -305,23 +357,21 @@ class ContentLayer extends LayerModulesAbstract
 									$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
 									
 								}
-								
-								if ($ImportFileName != NULL) {
-									if ($ImportFileType == 'xml') {
-										$this->processXMLFile($ImportFileName);
-									}
-									
-									if ($ImportFileType == 'html') {
-										$this->processHTMLFile($ImportFileName);
-									}
+							}
+							if ($ImportFileName != NULL) {
+								if ($ImportFileType == 'xml') {
+									$this->processXMLFile($ImportFileName);
 								}
 								
-								if ($EndTag) {
-									$this->Writer->endElement(); // ENDS END TAG
+								if ($ImportFileType == 'html') {
+									$this->processHTMLFile($ImportFileName);
 								}
-								
 							}
 							
+							if ($EndTag) {
+								$this->Writer->endElement(); // ENDS END TAG
+							}
+														
 							if ($ObjectType == 'XhtmlHeader') {
 								$this->Writer->startElement('body');
 							}
@@ -336,18 +386,11 @@ class ContentLayer extends LayerModulesAbstract
 						}
 					}
 				}
-				next($this->ContentLayerDatabase);
-				
-				if (!current($this->ContentLayerDatabase)) {
-					$this->Writer->endElement(); // ENDS BODY
-					$this->Writer->endElement(); // ENDS HTML
-				}
 			}
-			if ($this->PrintPreview == TRUE) {
-				if ($_GET['PageID']){
-					$this->Writer->endElement(); // ENDS HTML
-				}
-			}
+			
+			$this->Writer->endElement(); // ENDS BODY
+			$this->Writer->endElement(); // ENDS HTML
+			
 		} else {
 			array_push($this->ErrorMessage,'CreateOutput: Content Layer Version Table Name Cannot Be Null!');
 		}

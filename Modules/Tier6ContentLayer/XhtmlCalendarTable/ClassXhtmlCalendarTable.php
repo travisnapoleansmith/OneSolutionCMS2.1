@@ -117,7 +117,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	protected $CalendarTable;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$this->CurrentDate = date('D M d, Y');
@@ -288,7 +288,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbyname', array('orderbyname' => 'StartTimeAmPm`, `StartTime'));
 				$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setOrderbytype', array('orderbytype' => 'ASC'));
 			}
-			$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseField', array('idnumber' => $passarray));
+			//$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseField', array('idnumber' => $passarray));
 			$this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($this->CalendarAppointmentNames[$i]);
 			$this->CalendarAppointments[$this->CalendarAppointmentNames[$i]] = $this->LayerModule->pass ($this->CalendarAppointmentNames[$i], 'getMultiRowField', array());

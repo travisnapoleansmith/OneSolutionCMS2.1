@@ -1,4 +1,4 @@
-<?
+<?php
 	// Includes all files
 	require_once ("../../../Configuration/includes.php");
 	
@@ -8,7 +8,13 @@
 	} else {
 		$SimpleViewerIdNumber['PageID'] = 1;
 	}
-	$SimpleViewerIdNumber['ObjectID'] = 1;
+	if (is_numeric($_GET['ObjectID'])) {
+		$SimpleViewerIdNumber['ObjectID'] = $_GET['ObjectID'];
+	} else if (is_numeric($_GET['amp;ObjectID'])){
+		$SimpleViewerIdNumber['ObjectID'] = $_GET['amp;ObjectID'];
+	} else {
+		$SimpleViewerIdNumber['ObjectID'] = 1;
+	}
 	$SimpleViewerIdNumber['RevisionID'] = 1;
 	$SimpleViewerIdNumber['CurrentVersion'] = 'true';
 	

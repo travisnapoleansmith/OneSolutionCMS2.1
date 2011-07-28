@@ -39,7 +39,7 @@ class XhtmlMainMenu extends Tier6ContentLayerModulesAbstract implements Tier6Con
 	
 	//protected $MainMenu;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

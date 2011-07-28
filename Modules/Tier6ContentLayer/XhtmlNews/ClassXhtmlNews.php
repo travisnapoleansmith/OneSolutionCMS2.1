@@ -29,7 +29,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $NewsButtonsRowCount;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

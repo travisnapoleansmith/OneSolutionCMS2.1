@@ -38,7 +38,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $OutputReturn = FALSE;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		$hold = $tablenames['Content'];
 		$GLOBALS['ErrorMessage']['XhtmlContent'][$hold] = NULL;
@@ -199,7 +199,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$passarray = array();
 		$passarray = $PageID;
 		
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 
 		$this->ContainerObjectType = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContainerObjectType'));
@@ -244,7 +244,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$passarray['PageID'] = $PageID['PageID'];
 			$this->LayerModule->Connect($this->ContentPrintPreviewTableName);
 			
-			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
+			//$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseField', array('idnumber' => $passarray));
 			$this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$i = 1;
 			$hold = $this->LayerModule->pass ($this->ContentPrintPreviewTableName, 'getRowField', array('rowfield' => "PrintPageID$i"));
@@ -303,7 +303,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		}
 		$temp = &$GLOBALS['Tier6Databases'];
 		$module = &$temp->getModules($ContainerObjectType, $ContainerObjectTypeName);
-		
+				
 		reset($databasetablename);
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 		$module->setHttpUserAgent($this->HttpUserAgent);
@@ -316,7 +316,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		}
 	}
 	
-	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $LayerModule, $LayerModule, $print) {
+	protected function buildXhtmlContentObject ($PageID, $ContainerObjectID, $PrintPreview, $LayerModule, $print) {
 		$contentidnumber = Array();
 		$contentidnumber['PageID'] = $PageID;
 		$contentidnumber['ObjectID'] = $ContainerObjectID;
@@ -367,7 +367,9 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		if ($this->ContainerObjectType) {
 			$temp = $this->ObjectID;
 			$temp++;
-			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
+			
+			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, FALSE);
+			
 			while ($this->EnableDisable) {
 				if ($this->ContainerObjectType) {
 					$containertype = $this->ContainerObjectType;
@@ -375,7 +377,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					if ($containertype ==  'XhtmlContent') {
 						if ($this->ContainerObjectID) {
 							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
-								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, TRUE);
+								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, TRUE);
 							}
 						}
 					} else if ($containertype == 'XhtmlMenu') {
@@ -396,7 +398,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 					}
 				}
 				$temp++;
-				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, $this->LayerModule, FALSE);
+				$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, FALSE);
 			}
 			if ($this->Insert) {
 				reset($this->Insert);

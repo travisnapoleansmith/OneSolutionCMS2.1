@@ -4,6 +4,10 @@ class Menu
 {
 	private $MenuDatabase;
 	private $MenuLookup;
+	
+	private $MenuDatabaseTable;
+	private $MenuLookupDatabaseTable;
+	
 	private $idnumber;
 	private $Menus;
 	private $MenuItemList;
@@ -42,7 +46,7 @@ class Menu
 	
 	public function setDatabaseLookup($hostname, $user, $password, $databasename, $databasetable) {
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable);
-		$this->LayerModule->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'idnumber', 'ASC' => 'ASC'));
+		$this->LayerModule->pass ($databasetable, 'setOrderByAll', array('idnumber' => 'OrderID', 'ASC' => 'ASC'));
 	}
 
 	public function setDynamicDatabaseButtons($hostname, $user, $password, $databasename, $databasetable, $name) {
@@ -113,11 +117,13 @@ class Menu
 		$this->LayerModule->Connect($this->MenuDatabase);
 		$this->LayerModule->pass ($this->MenuDatabase, 'setEntireTable', array());
 		$this->LayerModule->pass ($this->MenuDatabase, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->MenuDatabaseTable = $this->LayerModule->pass ($this->MenuDatabase, 'getEntireTable', array());
 		$this->LayerModule->Disconnect($this->MenuDatabase);
 		
 		$this->LayerModule->Connect($this->MenuLookup);
 		$this->LayerModule->pass ($this->MenuLookup, 'setEntireTable', array());
 		$this->LayerModule->pass ($this->MenuLookup, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->MenuLookupDatabaseTable = $this->LayerModule->pass ($this->MenuLookup, 'getEntireTable', array());
 		$this->LayerModule->Disconnect($this->MenuLookup);
 	}
 	
@@ -331,7 +337,6 @@ class Menu
 			$tempholder = 'idMenuItem';
 			$tempholder .= "$j";
 			while ($this->getTable($i, $tempholder)) {
-				
 				$this->buildInsertInformation($j, $i+$j);
 				$this->MenuItemList[$j]->createMenuItemListOutput(NULL);
 				$j++;
@@ -376,7 +381,7 @@ class Menu
 		} else {
 			$this->Menus .= "  <ul>\n";
 		}
-
+		
 		while ($i <= $max) {
 			$idnumber = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'idnumber'));
 			$status = $this->LayerModule->pass ($this->MenuLookup, 'getTable', array('i' => "$i", 'idnumber' => 'Status'));
@@ -400,6 +405,17 @@ class Menu
 	}
 	
 	private function menuLoop ($rowcount, $j, $MenuName) {
+		foreach ($this->MenuDatabaseTable as $index => $value) {
+			$PageID = $value['idnumber'];
+			$this->createMenuItemListArray($PageID, $j, $MenuName);
+			$this->MenuItemList[$PageID]->removeUnusedMenuItems();
+		}
+		
+		foreach ($this->MenuDatabaseTable as $index => $value) {
+			$PageID = $value['idnumber'];
+			$this->createMenuItemListOutput($PageID);
+		}
+		/*
 		$i = 1;
 		while ($i <= $rowcount) {
 			$this->createMenuItemListArray($i, $j, $MenuName);
@@ -411,7 +427,7 @@ class Menu
 		while ($i <= $rowcount) {
 			$this->createMenuItemListOutput($i);
 			$i++;
-		}
+		}*/
 	}
 	
 	public function makeMenuItem($j, $MenuName) {
@@ -423,7 +439,7 @@ class Menu
 		
 		$rowcount = $this->LayerModule->pass ($this->MenuDatabase, 'getRowCount', array());
 		$max = $this->LayerModule->pass ($this->MenuLookup, 'getRowCount', array());
-
+		
 		$this->menuLoop($rowcount, $j, $MenuName);
 		
 		$this->buildInsertInformation (1, $rowcount);
@@ -435,7 +451,7 @@ class Menu
 		}
 		
 		// Output of Menu
-		$this->makeMenuOutput($max);
+		$this->makeMenuOutput($max);		
 	}
 	
 	public function getMenu() {

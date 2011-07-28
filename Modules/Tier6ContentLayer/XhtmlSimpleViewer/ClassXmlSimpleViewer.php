@@ -8,6 +8,8 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	protected $XMLSimpleViewerLookupXMLSimpleViewerObjectID;
 	
 	protected $XMLSimpleViewerLookupGalleryStyle;
+	protected $XMLSimpleViewerLookupGalleryWidth;
+	protected $XMLSimpleViewerLookupGalleryHeight;
 	
 	protected $XMLSimpleViewerLookupTitle;
 	protected $XMLSimpleViewerLookupTextColor;
@@ -18,10 +20,14 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	protected $XMLSimpleViewerLookupThumbPosition;
 	protected $XMLSimpleViewerLookupThumbColumns;
 	protected $XMLSimpleViewerLookupThumbRows;
+	protected $XMLSimpleViewerLookupThumbWidth;
+	protected $XMLSimpleViewerLookupThumbHeight;
+	protected $XMLSimpleViewerLookupThumbQuality;
 	
 	protected $XMLSimpleViewerLookupShowOpenButton;
 	protected $XMLSimpleViewerLookupShowFullscreenButton;
 	
+	protected $XMLSimpleViewerLookupImageQuality;
 	protected $XMLSimpleViewerLookupMaxImageWidth;
 	protected $XMLSimpleViewerLookupMaxImageHeight;
 	
@@ -41,7 +47,7 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	protected $XMLSimpleViewerXMLTable;
 	
 	protected $XMLSimpleViewer;
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -90,7 +96,7 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		$passarray = array();
 		$passarray = $PageID;
 		
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
 		$this->XMLSimpleViewerLookupStopObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StopObjectID'));
@@ -99,20 +105,26 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		$this->XMLSimpleViewerLookupXMLSimpleViewerObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerObjectID'));
 		
 		$this->XMLSimpleViewerLookupGalleryStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGalleryStyle'));
+		$this->XMLSimpleViewerLookupGalleryWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGalleryWidth'));
+		$this->XMLSimpleViewerLookupGalleryHeight = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGalleryHeight'));
 		
 		$this->XMLSimpleViewerLookupTitle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerTitle'));
 		$this->XMLSimpleViewerLookupTextColor = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerTextColor'));
 		
 		$this->XMLSimpleViewerLookupFrameColor = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerFrameColor'));
-		$this->XMLSimpleViewerLookupFrameWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGFrameWidth'));
+		$this->XMLSimpleViewerLookupFrameWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerFrameWidth'));
 		
 		$this->XMLSimpleViewerLookupThumbPosition = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbPosition'));
 		$this->XMLSimpleViewerLookupThumbColumns = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbColumns'));
 		$this->XMLSimpleViewerLookupThumbRows = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbRows'));
+		$this->XMLSimpleViewerLookupThumbWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbWidth'));
+		$this->XMLSimpleViewerLookupThumbHeight = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbHeight'));
+		$this->XMLSimpleViewerLookupThumbQuality = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerThumbQuality'));
 		
 		$this->XMLSimpleViewerLookupShowOpenButton = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerShowOpenButton'));
 		$this->XMLSimpleViewerLookupShowFullscreenButton = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerShowFullscreenButton'));
 		
+		$this->XMLSimpleViewerLookupImageQuality = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerImageQuality'));
 		$this->XMLSimpleViewerLookupMaxImageWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerMaxImageWidth'));
 		$this->XMLSimpleViewerLookupMaxImageHeight = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerMaxImageHeight'));
 		
@@ -157,30 +169,125 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			
 			$this->Writer->startElement('simpleviewergallery');
+		
+			if ($this->XMLSimpleViewerLookupGalleryStyle) {
+				$this->Writer->writeAttribute('galleryStyle', $this->XMLSimpleViewerLookupGalleryStyle);
+			}
 			
-			$this->Writer->writeAttribute('galleryStyle', 'MODERN');
-			$this->Writer->writeAttribute('title', '2010 Baseball');
-			$this->Writer->writeAttribute('textColor', 'FFFFFF');
-			$this->Writer->writeAttribute('frameColor', 'FFFFFF');
-			$this->Writer->writeAttribute('frameWidth', '2');
-			$this->Writer->writeAttribute('thumbPosition', 'RIGHT');
-			$this->Writer->writeAttribute('thumbColumns', '3');
-			$this->Writer->writeAttribute('thumbRows', '5');
-			$this->Writer->writeAttribute('showOpenButton', 'FALSE');
-			$this->Writer->writeAttribute('showFullscreenButton', 'FALSE');
-			$this->Writer->writeAttribute('maxImageWidth', '300');
-			$this->Writer->writeAttribute('maxImageHeight', '300');
-			$this->Writer->writeAttribute('useFlickr', 'false');
-			$this->Writer->writeAttribute('flickrUserName', '');
-			$this->Writer->writeAttribute('flickrTags', '');
-			$this->Writer->writeAttribute('languageCode', 'EN');
-			$this->Writer->writeAttribute('languageList', '');
-			$this->Writer->writeAttribute('imagePath', 'images/');
-			$this->Writer->writeAttribute('thumbPath', 'thumbs/');
+			if ($this->XMLSimpleViewerLookupGalleryWidth) {
+				$this->Writer->writeAttribute('galleryWidth', $this->XMLSimpleViewerLookupGalleryWidth);
+			}
+			
+			if ($this->XMLSimpleViewerLookupGalleryHeight) {
+				$this->Writer->writeAttribute('galleryHeight', $this->XMLSimpleViewerLookupGalleryHeight);
+			}
+			
+			if ($this->XMLSimpleViewerLookupTitle) {
+				$this->Writer->writeAttribute('title', $this->XMLSimpleViewerLookupTitle);
+			}
+			
+			if ($this->XMLSimpleViewerLookupTextColor) {
+				$this->Writer->writeAttribute('textColor', $this->XMLSimpleViewerLookupTextColor);
+			}
+			
+			if ($this->XMLSimpleViewerLookupFrameColor) {
+				$this->Writer->writeAttribute('frameColor', $this->XMLSimpleViewerLookupFrameColor);
+			}
+			
+			if ($this->XMLSimpleViewerLookupFrameWidth) {
+				$this->Writer->writeAttribute('frameWidth', $this->XMLSimpleViewerLookupFrameWidth);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbPosition) {
+				$this->Writer->writeAttribute('thumbPosition', $this->XMLSimpleViewerLookupThumbPosition);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbColumns) {
+				$this->Writer->writeAttribute('thumbColumns', $this->XMLSimpleViewerLookupThumbColumns);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbRows) {
+				$this->Writer->writeAttribute('thumbRows', $this->XMLSimpleViewerLookupThumbRows);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbWidth) {
+				$this->Writer->writeAttribute('thumbWidth', $this->XMLSimpleViewerLookupThumbWidth);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbHeight) {
+				$this->Writer->writeAttribute('thumbHeight', $this->XMLSimpleViewerLookupThumbHeight);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbQuality) {
+				$this->Writer->writeAttribute('thumbQuality', $this->XMLSimpleViewerLookupThumbQuality);
+			}
+			
+			if ($this->XMLSimpleViewerLookupShowOpenButton) {
+				$this->Writer->writeAttribute('showOpenButton', $this->XMLSimpleViewerLookupShowOpenButton);
+			}
+			
+			if ($this->XMLSimpleViewerLookupShowFullscreenButton) {
+				$this->Writer->writeAttribute('showFullscreenButton', $this->XMLSimpleViewerLookupShowFullscreenButton);
+			}
+			
+			if ($this->XMLSimpleViewerLookupImageQuality) {
+				$this->Writer->writeAttribute('imageQuality', $this->XMLSimpleViewerLookupImageQuality);
+			}
+			
+			if ($this->XMLSimpleViewerLookupMaxImageWidth) {
+				$this->Writer->writeAttribute('maxImageWidth', $this->XMLSimpleViewerLookupMaxImageWidth);
+			}
+			
+			if ($this->XMLSimpleViewerLookupMaxImageHeight) {
+				$this->Writer->writeAttribute('maxImageHeight', $this->XMLSimpleViewerLookupMaxImageHeight);
+			}
+			
+			if ($this->XMLSimpleViewerLookupUseFlickr) {
+				$this->Writer->writeAttribute('useFlickr', $this->XMLSimpleViewerLookupUseFlickr);
+			}
+			
+			if ($this->XMLSimpleViewerLookupFlickrUserName) {
+				$this->Writer->writeAttribute('flickrUserName', $this->XMLSimpleViewerLookupFlickrUserName);
+			}
+			
+			if ($this->XMLSimpleViewerLookupFlickrTags) {
+				$this->Writer->writeAttribute('flickrTags', $this->XMLSimpleViewerLookupFlickrTags);
+			}
+			
+			if ($this->XMLSimpleViewerLookupLanguageCode) {
+				$this->Writer->writeAttribute('languageCode', $this->XMLSimpleViewerLookupLanguageCode);
+			}
+			
+			if ($this->XMLSimpleViewerLookupLanguageList) {
+				$this->Writer->writeAttribute('languageList', $this->XMLSimpleViewerLookupLanguageList);
+			}
+			
+			if ($this->XMLSimpleViewerLookupImagePath) {
+				$this->Writer->writeAttribute('imagePath', $this->XMLSimpleViewerLookupImagePath);
+			}
+			
+			if ($this->XMLSimpleViewerLookupThumbPath) {
+				$this->Writer->writeAttribute('thumbPath', $this->XMLSimpleViewerLookupThumbPath);
+			}
 			
 			$this->Writer->startElement('PageID');
 			$this->Writer->writeRaw($this->PageID);
 			$this->Writer->endElement();
+			if ($this->XMLSimpleViewerLookupStopObjectID != NULL) {
+				foreach ($this->XMLSimpleViewerXMLTable as $Key => $Value) {
+					if ($Value['ObjectID'] > $this->XMLSimpleViewerLookupStopObjectID) {
+						unset($this->XMLSimpleViewerXMLTable[$Key]);
+					}
+				}
+			}
+			
+			if ($this->XMLSimpleViewerLookupContinueObjectID != NULL) {
+				foreach ($this->XMLSimpleViewerXMLTable as $Key => $Value) {
+					if ($Value['ObjectID'] < $this->XMLSimpleViewerLookupContinueObjectID) {
+						unset($this->XMLSimpleViewerXMLTable[$Key]);
+					}
+				}
+			}
 			
 			foreach ($this->XMLSimpleViewerXMLTable as $Key => $Value) {
 				if ($Value['Enable/Disable'] == 'Enable' & $Value['Status'] == 'Approved') {
@@ -211,51 +318,124 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		return $this->XmlSimpleViewer;
 	}
 	
-	/*public function createPicture(array $Picture) {
-		if ($Picture != NULL) {
+	public function importGalleryFile($XMLFile, array $Path = NULL) {
+		if ($XMLFile != NULL) {
+			if (file_exists($XMLFile)) {
+				libxml_use_internal_errors(true);
+				$Xml = simplexml_load_file($XMLFile);
+				
+				if ($Xml) {
+					$i = $this->ObjectID;
+					foreach($Xml as $Child) {
+						$SimpleViewerGallery = array();
+						$SimpleViewerGallery['PageID'] = $this->PageID;
+						$SimpleViewerGallery['ObjectID'] = $i;
+						$SimpleViewerGallery['RevisionID'] = $this->RevisionID;
+						$SimpleViewerGallery['CurrentVersion'] = $this->CurrentVersion;
+						$SimpleViewerGallery['ImageUrl'] = NULL;
+						$SimpleViewerGallery['ThumbUrl'] = NULL;
+						$SimpleViewerGallery['LinkUrl'] = NULL;
+						$SimpleViewerGallery['LinkTarget'] = NULL;
+						$SimpleViewerGallery['Caption'] = NULL;
+						$SimpleViewerGallery['Enable/Disable'] = 'Enable';
+						$SimpleViewerGallery['Status'] = 'Approved';
+						
+						foreach ($Child->attributes() as $AttributesName => $Attributes){
+							if ($AttributesName == 'imageURL') {
+								$Attribute = $Attributes->asXML();
+								$Attribute = str_replace('imageURL=', '', $Attribute);
+								$Attribute = str_replace('"', '', $Attribute);
+								if ($Path['imageURL'] != NULL) {
+									$Attribute = str_replace('images/', $Path['imageURL'], $Attribute);
+								}
+								$SimpleViewerGallery['ImageUrl'] = $Attribute;
+							}
+							
+							if ($AttributesName == 'thumbURL') {
+								$Attribute = $Attributes->asXML();
+								$Attribute = str_replace('thumbURL=', '', $Attribute);
+								$Attribute = str_replace('"', '', $Attribute);
+								if ($Path['thumbURL'] != NULL) {
+									$Attribute = str_replace('thumbs/', $Path['thumbURL'], $Attribute);
+								}
+								$SimpleViewerGallery['ThumbUrl'] = $Attribute;
+							}
+							
+							if ($AttributesName == 'linkURL') {
+								$Attribute = $Attributes->asXML();
+								$Attribute = str_replace('linkURL=', '', $Attribute);
+								$Attribute = str_replace('"', '', $Attribute);
+								if ($Path['linkURL'] != NULL) {
+									$Attribute = str_replace('images/', $Path['linkURL'], $Attribute);
+								}
+								$SimpleViewerGallery['LinkUrl'] = $Attribute;
+							}
+							
+							if ($AttributesName == 'linkTarget') {
+								$Attribute = $Attributes->asXML();
+								$Attribute = str_replace('linkTarget=', '', $Attribute);
+								$Attribute = str_replace('"', '', $Attribute);
+								
+								$SimpleViewerGallery['LinkTarget'] = $Attribute;
+							}
+						}
+						$Caption = $Child->caption->asXML();
+						$Caption = str_replace('<caption>', '', $Caption);
+						$Caption = str_replace('</caption>', '', $Caption);
+						if (empty($Caption)) {
+							$SimpleViewerGallery['Caption'] = '<![CDATA[]]>';
+						} else {
+							$SimpleViewerGallery['Caption'] = $Caption;
+						}
+						$this->createGallery($SimpleViewerGallery);
+						$i++;
+					}
+				}
+			} else {
+				array_push($this->ErrorMessage,'importGalleryFile: XMLFile DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'importGalleryFile: XMLFile cannot be NULL!');
+		}
+	}
+	public function createGallery(array $Gallery) {
+		if ($Gallery != NULL) {
 			$Keys = array();
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'ObjectID';
 			$Keys[2] = 'RevisionID';
 			$Keys[3] = 'CurrentVersion';
-			$Keys[4] = 'StartTag';
-			$Keys[5] = 'EndTag';
-			$Keys[6] = 'StartTagID';
-			$Keys[7] = 'StartTagStyle';
-			$Keys[8] = 'StartTagClass';
-			$Keys[9] = 'PictureID';
-			$Keys[10] = 'PictureClass';
-			$Keys[11] = 'PictureStyle';
-			$Keys[12] = 'PictureLink';
-			$Keys[13] = 'PictureAltText';
-			$Keys[14] = 'Width';
-			$Keys[15] = 'Height';
-			$Keys[16] = 'Enable/Disable';
-			$Keys[17] = 'Status';
+			$Keys[4] = 'ImageUrl';
+			$Keys[5] = 'ThumbUrl';
+			$Keys[6] = 'LinkUrl';
+			$Keys[7] = 'LinkTarget';
+			$Keys[8] = 'Caption';
+			$Keys[9] = 'Enable/Disable';
+			$Keys[10] = 'Status';
 			
-			$this->addModuleContent($Keys, $Picture, $this->DatabaseTable);
+			$this->addModuleContent($Keys, $Gallery, $this->XMLSimpleViewerTableName);
 		} else {
-			array_push($this->ErrorMessage,'createPicture: Picture cannot be NULL!');
+			array_push($this->ErrorMessage,'createGallery: Gallery cannot be NULL!');
 		}
 	}
-	
-	public function updatePicture(array $PageID) {
+	/*
+	public function updateGallery(array $PageID) {
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'updatePicture: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateGallery: PageID cannot be NULL!');
 		}
 	}
 	
-	public function deletePicture(array $PageID) {
+	public function deleteGallery(array $PageID) {
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'deletePicture: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'deleteGallery: PageID cannot be NULL!');
 		}
 	}
 	
-	public function updatePictureStatus(array $PageID) {
+	public function updateGalleryStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
@@ -276,7 +456,7 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 				$this->spamModuleContent($PassID, $this->DatabaseTable);
 			}
 		} else {
-			array_push($this->ErrorMessage,'updatePictureStatus: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateGalleryStatus: PageID cannot be NULL!');
 		}
 	}*/
 }

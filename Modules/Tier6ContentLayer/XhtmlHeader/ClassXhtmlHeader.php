@@ -57,7 +57,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $Theme;
 	protected $SiteName;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -117,7 +117,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->LayerModule->Connect(current($this->TableNames));
 		$passarray = array();
 		$passarray = $PageID;
-		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
+		//$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect(current($this->TableNames));
 		
@@ -426,11 +426,11 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			
 			// Determines if the browser will support XHTML or not and outputs the proper header for XHTML or HTML
 			if (isset($this->HttpAccept)) {
-				if (stristr($this->HttpAccept, 'application/xhtml+xml')) {
-					header ('Content-type: application/xhtml+xml');
-				} else {
+				//if (stristr($this->HttpAccept, 'application/xhtml+xml')) {
+					//header ('Content-type: application/xhtml+xml');
+				//} else {
 					header ('Content-type: text/html');
-				}
+				//}
 			}
 			// USING NEW XMLWRITER
 			// STARTS HEADER

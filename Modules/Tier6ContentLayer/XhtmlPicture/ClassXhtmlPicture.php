@@ -10,7 +10,7 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	protected $Width;
 	protected $Height;
 		
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -53,7 +53,7 @@ class XhtmlPicture extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		$passarray = array();
 		$passarray = $PageID;
 		
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
+		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
 		
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));

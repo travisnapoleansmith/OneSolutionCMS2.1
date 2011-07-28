@@ -551,7 +551,7 @@ abstract class LayerModulesAbstract
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-		
+			
 			$this->LayerModule->Connect($DatabaseTableName);
 			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
 			

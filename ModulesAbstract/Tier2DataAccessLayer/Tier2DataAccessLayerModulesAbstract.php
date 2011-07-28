@@ -209,6 +209,10 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		return $this->rowfield[$rownumber];
 	}
 	
+	public function getEntireRow(){
+		return $this->rowfield;
+	}
+	
 	public function getMultiRowField() {
 		return $this->multirowfield;
 	}

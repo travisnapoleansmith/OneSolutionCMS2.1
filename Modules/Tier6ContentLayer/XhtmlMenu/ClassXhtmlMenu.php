@@ -21,7 +21,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $List;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -68,7 +68,7 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 		$this->LayerModule->Connect($this->DatabaseTable);
 		
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $ConnectionID));
+		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $ConnectionID));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $ConnectionID));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
 		

@@ -104,7 +104,7 @@ body {
 	z-index: 0; 
 	left: 121px; 
 	top: 16px; 
-	background-color: #df5c04; 
+	background-color: #c22826; 
 	border: 1px none #000000;
 
 }
@@ -146,6 +146,10 @@ body {
 	width: 150px;
 
 }
+.tablebios td:first-child {
+	font-weight: bold;
+}
+
 .h1class {
 	text-align: center;
 
@@ -165,7 +169,7 @@ body {
 	left: 840px;
 	width: 150px;
 	height: auto;
-	background-color: #df5c04;
+	background-color: #c22826;
 
 }
 h2.Sponsors-Heading {

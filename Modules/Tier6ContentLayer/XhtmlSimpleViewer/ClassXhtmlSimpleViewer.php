@@ -8,9 +8,8 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 	protected $SimpleViewerFlashTableName;
 	protected $SimpleViewerFlashObjectName;
 	
-	public function __construct($tablenames, $databaseoptions, $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
 		$this->LayerModule = &$layermodule;
-		
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlSimpleViewer'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlSimpleViewer'][$hold];
@@ -41,7 +40,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 	}
 
 	public function FetchDatabase ($PageID) {
-		/*$this->PageID = $PageID['PageID'];
+		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
@@ -71,12 +70,11 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 		
 		$this->LayerModule->Disconnect($this->DatabaseTable);
-		*/		
 	}
 	
 	public function CreateOutput($space) {
-	  	require_once '../Configuration/Tier6-ContentLayer/simpleviewer.php';
-		/*$this->Space = $space;
+		require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
+		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
 				$this->StartTag = str_replace('<','', $this->StartTag);
@@ -85,15 +83,32 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 					$this->ProcessStandardAttribute('StartTag');
 			}
 			
-			$this->Writer->startElement('div');
-				$this->ProcessStandardAttribute('SimpleViewer');
+			$GalleryUrl = 'Modules/Tier6ContentLayer/XhtmlSimpleViewer/XmlSimpleViewer.php?PageID=';
+			$GalleryUrl .= $this->PageID;
+			$GalleryUrl .= '%26ObjectID=';
+			$GalleryUrl .= $this->ObjectID;
 				
-				$FlashDatabase = Array();
-				$FlashDatabase['Flash'] = $this->SimpleViewerFlashTableName;
+			$PageID = array();
+			$PageID['PageID'] = $this->PageID;
+			$PageID['ObjectID'] = $this->ObjectID;
+			$PageID['RevisionID'] = $this->RevisionID;
+			$PageID['CurrentVersion'] = $this->CurrentVersion;
+			
+			$FlashDatabase = Array();
+			$FlashDatabase['Flash'] = $this->SimpleViewerFlashTableName;
 				
-				$Flash = new XhtmlFlash($FlashDatabase, $this->DatabaseTable);
-				
-			$this->Writer->endElement(); // ENDS IMG TAG
+			$DatabaseOptions = Array();
+			$DatabaseOptions['FlashVars'] = array();
+			$DatabaseOptions['FlashVars']['GalleryUrl']['value']['galleryURL'] = $GalleryUrl;
+			
+			// EXAMPLE OF PASSING DATABASE COLUMNS TO FLASHVARS
+			//$DatabaseOptions['FlashVars']['FlashVarsVersion']= 'version';
+			
+			$Flash = new XhtmlFlash($FlashDatabase, $DatabaseOptions, $this->LayerModule);
+			$Flash->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->Databasename, $this->SimpleViewerFlashTableName);
+			$Flash->setHttpUserAgent($this->HttpUserAgent);
+			$Flash->FetchDatabase($PageID);
+			$Flash->CreateOutput('  ');
 			
 			if ($this->EndTag) {
 				$this->Writer->endElement(); // ENDS END TAG
@@ -103,11 +118,11 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		
 		if ($this->FileName) {
 			$this->Writer->flush();
-		}*/
+		}
 	}
 	
-	/*public function createPicture(array $Picture) {
-		if ($Picture != NULL) {
+	/*public function createFlash(array $Flash) {
+		if ($Flash != NULL) {
 			$Keys = array();
 			$Keys[0] = 'PageID';
 			$Keys[1] = 'ObjectID';
@@ -128,29 +143,29 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 			$Keys[16] = 'Enable/Disable';
 			$Keys[17] = 'Status';
 			
-			$this->addModuleContent($Keys, $Picture, $this->DatabaseTable);
+			$this->addModuleContent($Keys, $Flash, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'createPicture: Picture cannot be NULL!');
+			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
 		}
 	}
 	
-	public function updatePicture(array $PageID) {
+	public function updateFlash(array $PageID) {
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'updatePicture: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateFlash: PageID cannot be NULL!');
 		}
 	}
 	
-	public function deletePicture(array $PageID) {
+	public function deleteFlash(array $PageID) {
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'deletePicture: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'deleteFlash: PageID cannot be NULL!');
 		}
 	}
 	
-	public function updatePictureStatus(array $PageID) {
+	public function updateFlashStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
@@ -171,7 +186,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 				$this->spamModuleContent($PassID, $this->DatabaseTable);
 			}
 		} else {
-			array_push($this->ErrorMessage,'updatePictureStatus: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateFlashStatus: PageID cannot be NULL!');
 		}
 	}*/
 }
