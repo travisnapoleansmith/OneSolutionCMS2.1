@@ -29,7 +29,7 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $NewsButtonsRowCount;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -448,7 +448,9 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$newsdatabase[$this->NewsStoriesTableName] = $this->NewsStoriesTableName;
 					$newsdatabase[$this->ContentLayerTablesName] = $this->ContentLayerTablesName;
 					
-					$news = new XhtmlNews($newsdatabase, $this->LayerModule, $this->LayerModule);
+					$databaseoptions = Array();
+					
+					$news = new XhtmlNews($newsdatabase, $databaseoptions, $this->LayerModule);
 					$news->setHttpUserAgent($this->HttpUserAgent);
 					$news->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTable);
 					$news->FetchDatabase ($newsidnumber);
@@ -495,7 +497,8 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 							$modulesdatabase[current($databasetablename)] = &new ProtectionLayer();
 							next($databasetablename);
 						}
-						$module = new $this->ContainerObjectType($modulesdatabase);
+						$databaseoptions = Array();
+						$module = new $this->ContainerObjectType($modulesdatabase, $databaseoptions, $this->LayerModule);
 						reset($databasetablename);
 						$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 						$module->setHttpUserAgent($this->HttpUserAgent);

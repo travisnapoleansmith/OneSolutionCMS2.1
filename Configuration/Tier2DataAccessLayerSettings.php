@@ -55,6 +55,7 @@
 	$Tier2DatabaseDeny['deleteRow'] = 'deleteRow';
 	
 	// Field Methods
+	$Tier2DatabaseDeny['createField'] = 'createField';
 	$Tier2DatabaseDeny['updateField'] = 'updateField';
 	$Tier2DatabaseDeny['deleteField'] = 'deleteField';
 	
@@ -73,6 +74,7 @@
 	
 	// Field Methods
 	$Tier2DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
+	$Tier2DatabaseAllow['BuildFieldNames'] = 'BuildFieldNames';
 	
 	// Entire Table Methods
 	$Tier2DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
@@ -87,6 +89,7 @@
 	// Getters 
 	$Tier2DatabaseAllow['getRowCount'] = 'getRowCount';
 	$Tier2DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
+	$Tier2DatabaseAllow['getRowFieldNames'] = 'getRowFieldNames';
 	$Tier2DatabaseAllow['getDatabase'] = 'getDatabase';
 	$Tier2DatabaseAllow['getRowField'] = 'getRowField';
 	$Tier2DatabaseAllow['getMultiRowField'] = 'getMultiRowField';

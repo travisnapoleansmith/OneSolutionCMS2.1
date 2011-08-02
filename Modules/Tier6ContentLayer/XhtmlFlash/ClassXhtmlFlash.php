@@ -15,11 +15,15 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $AltText;
 	
+	protected $FlashID;
+	protected $FlashStyle;
+	protected $FlashClass;
+	
 	//protected $FlashRecord;
 	
 	protected $IsIE;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);
@@ -82,6 +86,11 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		//$this->FlashRecord = $this->LayerModule->pass($this->DatabaseTable, 'getEntireRow', array());
 		
 		$this->AltText = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AltText'));
+		
+		$this->FlashID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashID'));
+		$this->FlashStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashStyle'));
+		$this->FlashClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashClass'));
+		
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
 		$this->StartTagId = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagId'));
@@ -153,7 +162,23 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($this->IsIE) {
 			$this->Writer->writeAttribute('id', 'player');
 			$this->Writer->writeAttribute('name', 'player');
+			
+			if ($this->FlashStyle) {
+				$this->Writer->writeAttribute('style', $this->FlashStyle);
+			}
+			if ($this->FlashClass) {
+				$this->Writer->writeAttribute('class', $this->FlashClass);
+			}
 		} else {
+			if ($this->FlashID) {
+				$this->Writer->writeAttribute('id', $this->FlashID);
+			}
+			if ($this->FlashStyle) {
+				$this->Writer->writeAttribute('style', $this->FlashStyle);
+			}
+			if ($this->FlashClass) {
+				$this->Writer->writeAttribute('class', $this->FlashClass);
+			}
 			$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
 		}
 		

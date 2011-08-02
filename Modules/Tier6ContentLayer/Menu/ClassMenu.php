@@ -125,6 +125,7 @@ class Menu
 		$this->LayerModule->pass ($this->MenuLookup, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->MenuLookupDatabaseTable = $this->LayerModule->pass ($this->MenuLookup, 'getEntireTable', array());
 		$this->LayerModule->Disconnect($this->MenuLookup);
+		
 	}
 	
 	public function DynamicFetchAll($name) {

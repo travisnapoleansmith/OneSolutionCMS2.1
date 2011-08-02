@@ -84,7 +84,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @param ValidationLayer $layermodule = Tier 5 Validation Layer to use
 	 * 
 	 */
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

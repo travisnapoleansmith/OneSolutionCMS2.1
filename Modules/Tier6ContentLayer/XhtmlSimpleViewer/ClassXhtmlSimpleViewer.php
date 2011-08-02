@@ -1,14 +1,10 @@
 <?php
 
 class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $SimpleViewerID;
-	protected $SimpleViewerClass;
-	protected $SimpleViewerStyle;
-	
 	protected $SimpleViewerFlashTableName;
 	protected $SimpleViewerFlashObjectName;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlSimpleViewer'][$hold] = NULL;
@@ -45,7 +41,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset ($PageID['PrintPreview']);
-		
+		$this->LayerModule->createDatabaseTable($this->DatabaseTable);
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
@@ -59,10 +55,6 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
 		
-		$this->SimpleViewerID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'SimpleViewerID'));
-		$this->SimpleViewerClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'SimpleViewerClass'));
-		$this->SimpleViewerStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'SimpleViewerStyle'));
-		
 		$this->SimpleViewerFlashTableName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'SimpleViewerFlashTableName'));
 		$this->SimpleViewerFlashObjectName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'SimpleViewerFlashObjectName'));
 		
@@ -73,7 +65,8 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 	}
 	
 	public function CreateOutput($space) {
-		require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
+		$HOME = $GLOBALS['HOME'];
+		require_once "$HOME/Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php";
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			if ($this->StartTag){
@@ -82,8 +75,8 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 				$this->Writer->startElement($this->StartTag);
 					$this->ProcessStandardAttribute('StartTag');
 			}
-			
-			$GalleryUrl = 'Modules/Tier6ContentLayer/XhtmlSimpleViewer/XmlSimpleViewer.php?PageID=';
+
+			$GalleryUrl = "/Modules/Tier6ContentLayer/XhtmlSimpleViewer/XmlSimpleViewer.php?PageID=";
 			$GalleryUrl .= $this->PageID;
 			$GalleryUrl .= '%26ObjectID=';
 			$GalleryUrl .= $this->ObjectID;

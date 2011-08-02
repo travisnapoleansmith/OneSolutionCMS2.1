@@ -55,6 +55,7 @@
 	$Tier3DatabaseDeny['deleteRow'] = 'deleteRow';
 	
 	// Field Methods
+	$Tier3DatabaseDeny['createField'] = 'createField';
 	$Tier3DatabaseDeny['updateField'] = 'updateField';
 	$Tier3DatabaseDeny['deleteField'] = 'deleteField';
 	
@@ -73,6 +74,7 @@
 	
 	// Field Methods
 	$Tier3DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
+	$Tier3DatabaseAllow['BuildFieldNames'] = 'BuildFieldNames';
 	
 	// Entire Table Methods
 	$Tier3DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
@@ -87,6 +89,7 @@
 	// Getters 
 	$Tier3DatabaseAllow['getRowCount'] = 'getRowCount';
 	$Tier3DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
+	$Tier3DatabaseAllow['getRowFieldNames'] = 'getRowFieldNames';
 	$Tier3DatabaseAllow['getDatabase'] = 'getDatabase';
 	$Tier3DatabaseAllow['getRowField'] = 'getRowField';
 	$Tier3DatabaseAllow['getMultiRowField'] = 'getMultiRowField';

@@ -42,7 +42,7 @@
 	$contentdatabase['ContentLayerModules'] = 'ContentLayerModules';
 		
 	//$databases = &$GLOBALS['Tier6Databases'];
-	$databaseoptions = NULL;
+	$databaseoptions = Array();
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];

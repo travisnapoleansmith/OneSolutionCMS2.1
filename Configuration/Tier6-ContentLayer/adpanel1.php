@@ -42,7 +42,7 @@
 	$contentdatabase['ContentPrintPreview'] = NULL;
 	$contentdatabase['ContentLayerModules'] = NULL;
 	
-	$databaseoptions = NULL;
+	$databaseoptions = Array();
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
 	$ad = new XhtmlContent($contentdatabase, $databaseoptions, $Tier6Databases);

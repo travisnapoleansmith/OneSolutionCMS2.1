@@ -24,7 +24,7 @@
 	$listdatabase = Array();
 	$listdatabase['HeaderPanel1'] = 'HeaderPanel1';
 	
-	$databaseoptions = NULL;
+	$databaseoptions = Array();
 	$Writer = $GLOBALS['Writer'];
 	
 	$GLOBALS['Writer']->startElement('div');

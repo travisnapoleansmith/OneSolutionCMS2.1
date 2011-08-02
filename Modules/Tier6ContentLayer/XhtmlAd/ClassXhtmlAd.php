@@ -39,7 +39,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected $AdMax;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

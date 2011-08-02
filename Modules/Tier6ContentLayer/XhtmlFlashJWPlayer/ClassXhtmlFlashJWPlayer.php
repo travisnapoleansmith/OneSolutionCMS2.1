@@ -2,7 +2,7 @@
 
 class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['XhtmlFlashJWPlayer'][$hold] = NULL;

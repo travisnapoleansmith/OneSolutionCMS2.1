@@ -55,6 +55,7 @@
 	$Tier5DatabaseDeny['deleteRow'] = 'deleteRow';
 	
 	// Field Methods
+	$Tier5DatabaseDeny['createField'] = 'createField';
 	$Tier5DatabaseDeny['updateField'] = 'updateField';
 	$Tier5DatabaseDeny['deleteField'] = 'deleteField';
 	
@@ -73,6 +74,7 @@
 	
 	// Field Methods
 	$Tier5DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
+	$Tier5DatabaseAllow['BuildFieldNames'] = 'BuildFieldNames';
 	
 	// Entire Table Methods
 	$Tier5DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
@@ -87,6 +89,7 @@
 	// Getters 
 	$Tier5DatabaseAllow['getRowCount'] = 'getRowCount';
 	$Tier5DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
+	$Tier5DatabaseAllow['getRowFieldNames'] = 'getRowFieldNames';
 	$Tier5DatabaseAllow['getDatabase'] = 'getDatabase';
 	$Tier5DatabaseAllow['getRowField'] = 'getRowField';
 	$Tier5DatabaseAllow['getMultiRowField'] = 'getMultiRowField';

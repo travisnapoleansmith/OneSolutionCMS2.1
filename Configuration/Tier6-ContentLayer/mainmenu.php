@@ -18,7 +18,7 @@
 		$mainmenuidnumber['PageID'] = $_GET['PageID'];
 	}
 	
-	$mainmenudatabase = Array();
+	$mainmenudatabase = array();
 	$mainmenudatabase['MainMenuLookup'] = 'MainMenuLookup';
 	$mainmenudatabase['MainMenu'] = 'MainMenu';
 	

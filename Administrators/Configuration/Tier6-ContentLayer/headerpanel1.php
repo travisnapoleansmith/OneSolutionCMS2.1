@@ -24,7 +24,7 @@
 	$listdatabase = Array();
 	$listdatabase['AdministratorHeaderPanel1'] = 'AdministratorHeaderPanel1';
 	
-	$databaseoptions = NULL;
+	$databaseoptions = Array();
 	$Writer = $GLOBALS['Writer'];
 	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];

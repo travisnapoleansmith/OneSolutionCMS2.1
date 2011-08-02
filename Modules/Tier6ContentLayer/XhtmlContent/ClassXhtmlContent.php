@@ -303,7 +303,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 		}
 		$temp = &$GLOBALS['Tier6Databases'];
 		$module = &$temp->getModules($ContainerObjectType, $ContainerObjectTypeName);
-				
+		
 		reset($databasetablename);
 		$module->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($databasetablename));
 		$module->setHttpUserAgent($this->HttpUserAgent);
@@ -373,13 +373,13 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			while ($this->EnableDisable) {
 				if ($this->ContainerObjectType) {
 					$containertype = $this->ContainerObjectType;
-					
 					if ($containertype ==  'XhtmlContent') {
 						if ($this->ContainerObjectID) {
 							if ($this->ContainerObjectPrintPreview == 'true' | ($this->ContainerObjectPrintPreview == 'false' && !$this->PrintPreview)) {
 								$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, TRUE);
 							}
 						}
+						
 					} else if ($containertype == 'XhtmlMenu') {
 						if (($this->PrintPreview & $this->ContainerObjectPrintPreview) | !$this->PrintPreview) {
 							$filename = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];

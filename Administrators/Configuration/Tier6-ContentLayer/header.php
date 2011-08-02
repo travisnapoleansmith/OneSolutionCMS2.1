@@ -45,7 +45,7 @@
 	$headerdatabase['AdministratorPageAttributes'] = 'AdministratorPageAttributes';
 	$headerdatabase['ContentLayerTheme'] = 'AdministratorContentLayerTheme';
 	
-	$databaseoptions = NULL;
+	$databaseoptions = Array();
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	

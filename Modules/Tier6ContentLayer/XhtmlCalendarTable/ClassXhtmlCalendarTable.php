@@ -117,7 +117,7 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	protected $CalendarTable;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$this->CurrentDate = date('D M d, Y');

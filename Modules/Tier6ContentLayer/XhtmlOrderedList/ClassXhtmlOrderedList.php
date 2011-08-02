@@ -32,7 +32,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	//protected $List;
 	
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$hold = current($tablenames);

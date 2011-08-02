@@ -48,20 +48,19 @@
 
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
-	
+
 	$content = new XhtmlContent($contentdatabase, $databaseoptions, $Tier6Databases);
 	$content->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], 'AdministratorContent');
 	$content->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 	$content->FetchDatabase ($contentidnumber);
 	$content->FetchDatabase ($contentidnumber);
 	//$content->CreateOutput('    ');
-	
+
 	//$contentoutput = $content->getOutput();
 	//if ($contentoutput) {
 		$Writer->startElement('div');
 		$Writer->writeAttribute('id', 'main-content-top');
 		$Writer->fullEndElement();
-		
 		//$Writer->writeRaw($contentoutput);
 		$content->CreateOutput('    ');
 		$Writer->startElement('div');
@@ -81,6 +80,5 @@
 		$Writer->fullEndElement();
 	}*/
 	//print "$contentoutput";
-	
 	
 ?>

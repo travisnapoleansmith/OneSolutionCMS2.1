@@ -21,7 +21,7 @@ class XhtmlCalendarDiv extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $CurrentMonth;
 	protected $CurrentYear;
 		
-	public function __construct(array $tablenames, array $databaseoptions, ValidationLayer $layermodule) {
+	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 		
 		$this->CurrentDate = date('D M d, Y');

@@ -1,5 +1,6 @@
 <?php
 	$SETTINGS = parse_ini_file('settings.ini', true);
+	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	
 	$servername = $SETTINGS['DATABASE CONNECTION']['SERVERNAME'];
 	$username = $SETTINGS['DATABASE CONNECTION']['USERNAME'];
