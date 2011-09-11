@@ -20,7 +20,11 @@
 		$SiteName = $GLOBALS['sitename'];
 		
 		$LastPageID = $Tier6Databases->ModulePass('XhtmlContent', 'content', 'getLastContentPageID', array());
-		$NewPageID = ++$LastPageID;
+		if (isset($LastPageID)) {
+			$NewPageID = ++$LastPageID;
+		} else {
+			$NewPageID = 1;
+		}
 		
 		$LastMultiHeaderPage = $Options['XhtmlContent']['content']['LastMultiHeaderPage']['SettingAttribute'];
 		$NewMultiHeaderPage = ++$LastMultiHeaderPage;

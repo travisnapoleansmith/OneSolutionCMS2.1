@@ -266,6 +266,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			
 			$this->AdSponsorsOutputAdsOrder[$TableNamePageID] = array();
 			$j = 1;
+			
 			foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
 				if ($DatabaseTable['Enable/Disable'] == 'Disable') {
 					unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
@@ -391,7 +392,8 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
 		}
 		
-		
+		//print_r($this->AdSponsorsDatabaseTable);
+		//print_r($this->AdSponsorsOutputAdLookup);
 		
 		
 		$this->LayerModule->Connect($this->DatabaseTable);
@@ -574,7 +576,9 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					$this->Writer->text($AdSponsorsData['Name']);
 				}
 				
-				$this->Writer->endElement(); // ENDS START TAG OR P TAG
+				if ($this->AdvertisingStartTag) {
+					$this->Writer->endElement(); // ENDS START TAG OR P TAG
+				}
 				
 				if ($AdSponsorsData['Location']) {
 					if ($this->AdvertisingContentStartTag) {
@@ -617,7 +621,6 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStyle]) {
 							$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStyle]); 
 						}
-						
 						$this->Writer->endElement();
 						
 					}
@@ -657,25 +660,19 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected function selectRandomSponsor ($AdSponsorsTableName, Array $DatabaseTable) {
 		if ($AdSponsorsTableName != NULL) {
-			$i = 0;
-			foreach($DatabaseTable as $key => $value) {
-				$i++;
-			}
-			
-			$Index = rand(1,$i);
-			
+			$Index = array_rand($DatabaseTable);
 			$TRIP = NULL;
 			
 			if (!isset($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName])) {
 				$this->AdSponsorsOutputAdLookup[$AdSponsorsTableName] = array();
-				$Index = rand(1,$i);
+				$Index = array_rand($DatabaseTable);
 				array_push($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName], $Index);
 			} else {
 				foreach($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName] as $value) {
 					if ($Index == $value) {
-						$Index = $this->recurssiveRand ($i, $Index, $value);
+						$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
 						if (array_search($Index, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName])) {
-							$Index = $this->recurssiveRand ($i, $Index, $value);
+							$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
 						}
 					}
 				}
@@ -687,10 +684,10 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				foreach($this->AdSponsorsRemoveArray[$AdSponsorsTableName] as $value) {
 					$ReplaceKey = array_search($value, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName]);
 					if ($ReplaceKey !== FALSE){
-						$Index = $this->recurssiveRand ($i, $Index, $value);
+						$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
 						$Key = array_search($Index, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName]);
 						while ($Key !== FALSE) {
-							$Index = $this->recurssiveRand ($i, $Index, $value);
+							$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
 							$Key = array_search($Index, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName]);
 						}
 						$this->AdSponsorsOutputAdLookup[$AdSponsorsTableName][$ReplaceKey] = $Index;
@@ -701,10 +698,10 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 	}
 	
-	protected function recurssiveRand ($i, $Index, $Value) {
-		$Index = rand(1,$i);
+	protected function recurssiveRand (Array $DatabaseTable, $Index, $Value) {
+		$Index = array_rand($DatabaseTable);
 		if ($Index == $Value) {
-			$Index = $this->recurssiveRand($i, $Index, $Value);
+			$Index = $this->recurssiveRand($DatabaseTable, $Index, $Value);
 		}
 		
 		return $Index;

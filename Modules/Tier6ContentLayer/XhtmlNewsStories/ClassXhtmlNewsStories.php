@@ -393,6 +393,9 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->buildLastDays(5, 120);
 			} 
 			
+			$this->sortNewsStories('DSC');
+			
+			reset($this->NewsStoriesDatesTable);
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();
 				$passarray['PageID'] = $this->NewsStoriesDatesTable[key($this->NewsStoriesDatesTable)]['PageID'];
@@ -413,6 +416,23 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			}
 			reset($this->NewsStoriesTable);
 		}
+	}
+	
+	protected function sortNewsStories($ASCDSC) {
+		foreach ($this->NewsStoriesDatesTable as $Key => $Value) {
+			$DateString = $Value['NewsStoryMonth'] . ' ';
+			$DateString .= $Value['NewsStoryDay'] . ', ';
+			$DateString .= $Value['NewsStoryYear'];
+			$Date = strtotime($DateString);
+			$SortArray[$Key] = $Date;
+		}
+		
+		if ($ASCDSC == 'DSC') {
+			array_multisort($SortArray, SORT_DESC, $this->NewsStoriesDatesTable);
+		} else if ($ASCDSC == 'ASC') {
+			array_multisort($SortArray, SORT_ASC, $this->NewsStoriesDatesTable);
+		}
+		unset($SortArray);
 	}
 	
 	protected function buildLastDays($MonthNumber, $Days) {

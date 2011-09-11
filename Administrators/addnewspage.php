@@ -26,8 +26,11 @@
 		$SiteName = $GLOBALS['sitename'];
 		
 		$LastPageID = $Tier6Databases->ModulePass('XhtmlContent', 'content', 'getLastContentPageID', array());
-		$NewPageID = ++$LastPageID;
-		
+		if (isset($LastPageID)) {
+			$NewPageID = ++$LastPageID;
+		} else {
+			$NewPageID = 1;
+		}
 		$LastNewsPage = $Options['XhtmlNewsStories']['news']['LastNewsPage']['SettingAttribute'];
 		$NewNewsPage = ++$LastNewsPage;
 		$Tier6Databases->updateModuleSetting('XhtmlNewsStories', 'news', 'LastNewsPage', $NewNewsPage);
@@ -306,7 +309,7 @@
 		$FormSelect['ContainerObjectID'] = $NewNewsPage;
 		$FormSelect['FormSelectDisabled'] = NULL;
 		$FormSelect['FormSelectMultiple'] = NULL;
-		$FormSelect['FormSelectName'] = 'NewsStory';
+		$FormSelect['FormSelectName'] = 'NewsPage';
 		$FormSelect['FormSelectNameDynamic'] = NULL;
 		$FormSelect['FormSelectNameTableName'] = NULL;
 		$FormSelect['FormSelectNameField'] = NULL;
@@ -318,7 +321,7 @@
 		$FormSelect['FormSelectDir'] = 'ltr';
 		$FormSelect['FormSelectID'] = NULL;
 		$FormSelect['FormSelectLang'] = 'en-us';
-		$FormSelect['FormSelectStyle'] = 'width: 245px;';
+		$FormSelect['FormSelectStyle'] = 'width: 250px;';
 		$FormSelect['FormSelectTabIndex'] = NULL;
 		$FormSelect['FormSelectTitle'] = NULL;
 		$FormSelect['FormSelectXMLLang'] = 'en-us';

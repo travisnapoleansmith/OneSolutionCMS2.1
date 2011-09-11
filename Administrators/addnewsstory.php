@@ -21,6 +21,13 @@
 			$hold['FilteredInput']['MenuName'] = NULL;
 		}
 		
+		if ($_POST['ImageSrc'] == 'Null' | $_POST['ImageSrc'] == 'NULL') {
+			$_POST['ImageSrc'] = NULL;
+			$hold['FilteredInput']['ImageSrc'] = NULL;
+			$_POST['ImageAlt'] = NULL;
+			$hold['FilteredInput']['ImageAlt'] = NULL;
+		}
+		
 		//$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
 		//$NewNewsFeedItem = ++$LastNewsFeedItem;
 		
@@ -63,71 +70,103 @@
 		$NewsStory[0]['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsStory[0]['Status'] = $_POST['Status'];
 		
-		$NewsStory[1]['PageID'] = $NewPageID;
-		$NewsStory[1]['ObjectID'] = 2;
-		$NewsStory[1]['ContainerObjectType'] = 'XhtmlPicture';
-		$NewsStory[1]['ContainerObjectName'] = 'newspicture';
-		$NewsStory[1]['ContainerObjectID'] = 1;
-		$NewsStory[1]['ContainerObjectPrintPreview'] = 'true';
-		$NewsStory[1]['RevisionID'] = 0;
-		$NewsStory[1]['CurrentVersion'] = 'true';
-		$NewsStory[1]['Empty'] = 'false';
-		$NewsStory[1]['StartTag'] = NULL;
-		$NewsStory[1]['EndTag'] = NULL;
-		$NewsStory[1]['StartTagID'] = NULL;
-		$NewsStory[1]['StartTagStyle'] = NULL;
-		$NewsStory[1]['StartTagClass'] = NULL;
-		$NewsStory[1]['Heading'] = NULL;
-		$NewsStory[1]['HeadingStartTag'] = NULL;
-		$NewsStory[1]['HeadingEndTag'] = NULL;
-		$NewsStory[1]['HeadingStartTagID'] = NULL;
-		$NewsStory[1]['HeadingStartTagStyle'] = NULL;
-		$NewsStory[1]['HeadingStartTagClass'] = NULL;
-		$NewsStory[1]['Content'] = NULL;
-		$NewsStory[1]['ContentStartTag'] = NULL;
-		$NewsStory[1]['ContentEndTag'] = NULL;
-		$NewsStory[1]['ContentStartTagID'] = NULL;
-		$NewsStory[1]['ContentStartTagStyle'] = NULL;
-		$NewsStory[1]['ContentStartTagClass'] = NULL;
-		$NewsStory[1]['ContentPTagID'] = NULL;
-		$NewsStory[1]['ContentPTagStyle'] = NULL;
-		$NewsStory[1]['ContentPTagClass'] = NULL;
-		$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
-		$NewsStory[1]['Status'] = $_POST['Status'];
-		
-		$NewsStory[2]['PageID'] = $NewPageID;
-		$NewsStory[2]['ObjectID'] = 3;
-		$NewsStory[2]['ContainerObjectType'] = 'XhtmlNewsStories';
-		$NewsStory[2]['ContainerObjectName'] = 'news';
-		$NewsStory[2]['ContainerObjectID'] = 4;
-		$NewsStory[2]['ContainerObjectPrintPreview'] = 'true';
-		$NewsStory[2]['RevisionID'] = 0;
-		$NewsStory[2]['CurrentVersion'] = 'true';
-		$NewsStory[2]['Empty'] = 'false';
-		$NewsStory[2]['StartTag'] = NULL;
-		$NewsStory[2]['EndTag'] = NULL;
-		$NewsStory[2]['StartTagID'] = NULL;
-		$NewsStory[2]['StartTagStyle'] = NULL;
-		$NewsStory[2]['StartTagClass'] = NULL;
-		$NewsStory[2]['Heading'] = NULL;
-		$NewsStory[2]['HeadingStartTag'] = NULL;
-		$NewsStory[2]['HeadingEndTag'] = NULL;
-		$NewsStory[2]['HeadingStartTagID'] = NULL;
-		$NewsStory[2]['HeadingStartTagStyle'] = NULL;
-		$NewsStory[2]['HeadingStartTagClass'] = NULL;
-		$NewsStory[2]['Content'] = $hold['FilteredInput']['Content'];
-		$NewsStory[2]['ContentStartTag'] = '<p>';
-		$NewsStory[2]['ContentEndTag'] = '</p>';
-		$NewsStory[2]['ContentStartTagID'] = NULL;
-		$NewsStory[2]['ContentStartTagStyle'] = NULL;
-		$NewsStory[2]['ContentStartTagClass'] = 'BodyText';
-		$NewsStory[2]['ContentPTagID'] = NULL;
-		$NewsStory[2]['ContentPTagStyle'] = NULL;
-		$NewsStory[2]['ContentPTagClass'] = NULL;
-		$NewsStory[2]['Enable/Disable'] = $_POST['EnableDisable'];
-		$NewsStory[2]['Status'] = $_POST['Status'];
-		
-		//$NewsStory = array_reverse($NewsStory);
+		if ($hold['FilteredInput']['ImageSrc'] != NULL) {
+			$NewsStory[1]['PageID'] = $NewPageID;
+			$NewsStory[1]['ObjectID'] = 2;
+			$NewsStory[1]['ContainerObjectType'] = 'XhtmlPicture';
+			$NewsStory[1]['ContainerObjectName'] = 'newspicture';
+			$NewsStory[1]['ContainerObjectID'] = 1;
+			$NewsStory[1]['ContainerObjectPrintPreview'] = 'true';
+			$NewsStory[1]['RevisionID'] = 0;
+			$NewsStory[1]['CurrentVersion'] = 'true';
+			$NewsStory[1]['Empty'] = 'false';
+			$NewsStory[1]['StartTag'] = NULL;
+			$NewsStory[1]['EndTag'] = NULL;
+			$NewsStory[1]['StartTagID'] = NULL;
+			$NewsStory[1]['StartTagStyle'] = NULL;
+			$NewsStory[1]['StartTagClass'] = NULL;
+			$NewsStory[1]['Heading'] = NULL;
+			$NewsStory[1]['HeadingStartTag'] = NULL;
+			$NewsStory[1]['HeadingEndTag'] = NULL;
+			$NewsStory[1]['HeadingStartTagID'] = NULL;
+			$NewsStory[1]['HeadingStartTagStyle'] = NULL;
+			$NewsStory[1]['HeadingStartTagClass'] = NULL;
+			$NewsStory[1]['Content'] = NULL;
+			$NewsStory[1]['ContentStartTag'] = NULL;
+			$NewsStory[1]['ContentEndTag'] = NULL;
+			$NewsStory[1]['ContentStartTagID'] = NULL;
+			$NewsStory[1]['ContentStartTagStyle'] = NULL;
+			$NewsStory[1]['ContentStartTagClass'] = NULL;
+			$NewsStory[1]['ContentPTagID'] = NULL;
+			$NewsStory[1]['ContentPTagStyle'] = NULL;
+			$NewsStory[1]['ContentPTagClass'] = NULL;
+			$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
+			$NewsStory[1]['Status'] = $_POST['Status'];
+			
+			$NewsStory[2]['PageID'] = $NewPageID;
+			$NewsStory[2]['ObjectID'] = 3;
+			$NewsStory[2]['ContainerObjectType'] = 'XhtmlNewsStories';
+			$NewsStory[2]['ContainerObjectName'] = 'news';
+			$NewsStory[2]['ContainerObjectID'] = 4;
+			$NewsStory[2]['ContainerObjectPrintPreview'] = 'true';
+			$NewsStory[2]['RevisionID'] = 0;
+			$NewsStory[2]['CurrentVersion'] = 'true';
+			$NewsStory[2]['Empty'] = 'false';
+			$NewsStory[2]['StartTag'] = NULL;
+			$NewsStory[2]['EndTag'] = NULL;
+			$NewsStory[2]['StartTagID'] = NULL;
+			$NewsStory[2]['StartTagStyle'] = NULL;
+			$NewsStory[2]['StartTagClass'] = NULL;
+			$NewsStory[2]['Heading'] = NULL;
+			$NewsStory[2]['HeadingStartTag'] = NULL;
+			$NewsStory[2]['HeadingEndTag'] = NULL;
+			$NewsStory[2]['HeadingStartTagID'] = NULL;
+			$NewsStory[2]['HeadingStartTagStyle'] = NULL;
+			$NewsStory[2]['HeadingStartTagClass'] = NULL;
+			$NewsStory[2]['Content'] = $hold['FilteredInput']['Content'];
+			$NewsStory[2]['ContentStartTag'] = '<p>';
+			$NewsStory[2]['ContentEndTag'] = '</p>';
+			$NewsStory[2]['ContentStartTagID'] = NULL;
+			$NewsStory[2]['ContentStartTagStyle'] = NULL;
+			$NewsStory[2]['ContentStartTagClass'] = 'BodyText';
+			$NewsStory[2]['ContentPTagID'] = NULL;
+			$NewsStory[2]['ContentPTagStyle'] = NULL;
+			$NewsStory[2]['ContentPTagClass'] = NULL;
+			$NewsStory[2]['Enable/Disable'] = $_POST['EnableDisable'];
+			$NewsStory[2]['Status'] = $_POST['Status'];
+		} else {
+			$NewsStory[1]['PageID'] = $NewPageID;
+			$NewsStory[1]['ObjectID'] = 2;
+			$NewsStory[1]['ContainerObjectType'] = 'XhtmlNewsStories';
+			$NewsStory[1]['ContainerObjectName'] = 'news';
+			$NewsStory[1]['ContainerObjectID'] = 3;
+			$NewsStory[1]['ContainerObjectPrintPreview'] = 'true';
+			$NewsStory[1]['RevisionID'] = 0;
+			$NewsStory[1]['CurrentVersion'] = 'true';
+			$NewsStory[1]['Empty'] = 'false';
+			$NewsStory[1]['StartTag'] = NULL;
+			$NewsStory[1]['EndTag'] = NULL;
+			$NewsStory[1]['StartTagID'] = NULL;
+			$NewsStory[1]['StartTagStyle'] = NULL;
+			$NewsStory[1]['StartTagClass'] = NULL;
+			$NewsStory[1]['Heading'] = NULL;
+			$NewsStory[1]['HeadingStartTag'] = NULL;
+			$NewsStory[1]['HeadingEndTag'] = NULL;
+			$NewsStory[1]['HeadingStartTagID'] = NULL;
+			$NewsStory[1]['HeadingStartTagStyle'] = NULL;
+			$NewsStory[1]['HeadingStartTagClass'] = NULL;
+			$NewsStory[1]['Content'] = $hold['FilteredInput']['Content'];
+			$NewsStory[1]['ContentStartTag'] = '<p>';
+			$NewsStory[1]['ContentEndTag'] = '</p>';
+			$NewsStory[1]['ContentStartTagID'] = NULL;
+			$NewsStory[1]['ContentStartTagStyle'] = NULL;
+			$NewsStory[1]['ContentStartTagClass'] = 'BodyText';
+			$NewsStory[1]['ContentPTagID'] = NULL;
+			$NewsStory[1]['ContentPTagStyle'] = NULL;
+			$NewsStory[1]['ContentPTagClass'] = NULL;
+			$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
+			$NewsStory[1]['Status'] = $_POST['Status'];
+		}
 		
 		$NewsDate = array();
 		$NewsDate['PageID'] = $NewPageID;
@@ -140,26 +179,28 @@
 		$NewsDate['Enable/Disable'] = $_POST['EnableDisable'];
 		$NewsDate['Status'] = $_POST['Status'];
 		
-		$NewsImage = array();
-		$NewsImage['PageID'] = $NewPageID;
-		$NewsImage['ObjectID'] = 1;
-		$NewsImage['RevisionID'] = 0;
-		$NewsImage['CurrentVersion'] = 'true';
-		$NewsImage['StartTag'] = NULL;
-		$NewsImage['EndTag'] = NULL;
-		$NewsImage['StartTagID'] = NULL;
-		$NewsImage['StartTagStyle'] = NULL;
-		$NewsImage['StartTagClass'] = NULL;
-		$NewsImage['PictureID'] = NULL;
-		$NewsImage['PictureClass'] = 'image';
-		$NewsImage['PictureStyle'] = NULL;
-		$NewsImage['PictureLink'] = $hold['FilteredInput']['ImageSrc'];
-		$NewsImage['PictureAltText'] = $hold['FilteredInput']['ImageAlt'];
-		$NewsImage['Width'] = NULL;
-		$NewsImage['Height'] = NULL;
-		$NewsImage['Enable/Disable'] = $_POST['EnableDisable'];
-		$NewsImage['Status'] = $_POST['Status'];
-				
+		if ($hold['FilteredInput']['ImageSrc'] != NULL) { 
+			$NewsImage = array();
+			$NewsImage['PageID'] = $NewPageID;
+			$NewsImage['ObjectID'] = 1;
+			$NewsImage['RevisionID'] = 0;
+			$NewsImage['CurrentVersion'] = 'true';
+			$NewsImage['StartTag'] = NULL;
+			$NewsImage['EndTag'] = NULL;
+			$NewsImage['StartTagID'] = NULL;
+			$NewsImage['StartTagStyle'] = NULL;
+			$NewsImage['StartTagClass'] = NULL;
+			$NewsImage['PictureID'] = NULL;
+			$NewsImage['PictureClass'] = 'image';
+			$NewsImage['PictureStyle'] = NULL;
+			$NewsImage['PictureLink'] = $hold['FilteredInput']['ImageSrc'];
+			$NewsImage['PictureAltText'] = $hold['FilteredInput']['ImageAlt'];
+			$NewsImage['Width'] = NULL;
+			$NewsImage['Height'] = NULL;
+			$NewsImage['Enable/Disable'] = $_POST['EnableDisable'];
+			$NewsImage['Status'] = $_POST['Status'];
+		}
+		
 		$NewsVersion = array();
 		$NewsVersion['PageID'] = $NewPageID;
 		$NewsVersion['RevisionID'] = 0;
@@ -286,7 +327,11 @@
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStory', $NewsStory);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
-		$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
+		
+		if ($hold['FilteredInput']['ImageSrc'] != NULL) {
+			$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
+		}
+		
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 		

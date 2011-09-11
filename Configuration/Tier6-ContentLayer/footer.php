@@ -1,7 +1,7 @@
 <?php
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
-	
+
 	$Writer->startElement('div');
 		$Writer->writeAttribute('id', 'footer');
 			$Writer->startElement('div');
@@ -19,5 +19,7 @@
 				$Writer->writeRaw($text);
 				$Writer->endElement();
 			$Writer->endElement();
-		$Writer->endElement();		
+		$Writer->endElement();
+
+		require('sitestats.php');
 ?>

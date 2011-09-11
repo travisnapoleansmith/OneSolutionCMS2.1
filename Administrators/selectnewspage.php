@@ -113,6 +113,7 @@
 	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdateNewsPage = $Options['XhtmlNewsStories']['news']['UpdateNewsPage']['SettingAttribute'];
+	
 	header("Location: $UpdateNewsPage&SessionID=$sessionname");
 	
 ?>

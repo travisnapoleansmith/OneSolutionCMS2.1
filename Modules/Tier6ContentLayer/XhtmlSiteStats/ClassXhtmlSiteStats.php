@@ -129,7 +129,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 		
 		if ($databaseoptions['NoOutput']) {
-			$this->StartTag = $databaseoptions['NoOutput'];
+			$this->NoOutput = $databaseoptions['NoOutput'];
 		}
 	}
 	
@@ -196,15 +196,15 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 		
 		if ($Message != '' & isset($this->Count)) {
-			if ($this->StartTag != NULL) {
+			if ($this->NoOutput == TRUE) {
+				return FALSE;
+			} else if ($this->StartTag != NULL) {
 				$this->Space = $space;
 				$this->Writer->startElement($this->StartTag);
 				$this->ProcessStandardAttribute('');
 				
 				$this->Writer->text($Message);
 				$this->Writer->endElement();
-			} else if ($this->NoOutput == TRUE) {
-				return FALSE;
 			} else {
 				$this->Writer->writeRaw($Message);
 			}

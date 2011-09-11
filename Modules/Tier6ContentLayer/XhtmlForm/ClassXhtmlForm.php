@@ -476,7 +476,17 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect(current($this->TableNames));
 			$this->FormLookupTableName[key($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
+			
+			next($this->TableNames);
+		}
+		
+		//$this->sortFormOption('ASC');
+		//print($this->FormLookupTableName);
+		reset($this->TableNames);
+		//print_r($this->TableNames);
+		while (current($this->TableNames)) {
 			$i = 0;
+			//print "HERE\n";
 			reset($this->FormLookupTableName);
 			while ($this->FormLookupTableName[key($this->TableNames)][$i]) {
 				if (key($this->TableNames) == 'Form') {
@@ -498,7 +508,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$this->processFormLegend($i);
 					
 				} else if (key($this->TableNames) == 'FormOption') {
-					$this->processFormOption($i); 
+					$this->processFormOption($i);
 					
 				} else if (key($this->TableNames) == 'FormOptGroup') {
 					$this->processFormOptGroup($i);
@@ -518,13 +528,31 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 				$i++;
 			}
-			
 			next($this->TableNames);
 		}
+		//$this->sortFormOption('ASC');
+		//print_r($this->FormOptionText);
 		$i = 0;
 		$pageid = NULL;
 		
 		$passarray = $pageid;
+	}
+	
+	protected function sortFormOption($ASCDSC) {
+		/*foreach ($this->FormLookupTableName['FormOption'] as $Key => $Value) {
+			$SortArray[$Key] = $Value['FormOptionText'];
+		}*/
+		
+		if ($ASCDSC == 'DSC') {
+			//$this->FormOptionText
+			//array_multisort($this->FormOptionText, SORT_DESC, $this->FormLookupTableName['FormOption']);
+			//array_multisort($SortArray, SORT_DESC, $this->FormLookupTableName['FormOption']);
+		} else if ($ASCDSC == 'ASC') {
+			//array_multisort($this->FormOptionText, SORT_ASC, $this->FormLookupTableName['FormOption']);
+			//array_multisort($SortArray, SORT_ASC, $this->FormLookupTableName['FormOption']);
+		}
+		//unset($SortArray);
+		
 	}
 	
 	protected function processForm($i) {
@@ -2254,6 +2282,82 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		reset($this->FormOptionStatus);
 		
 		$DestroyArray = array();
+		
+		// USED TO SORT OUT OPTIONS FOR MENU, NEEDS TO WORK WITH UPDATE PAGES
+		/*foreach($this->FormLookupTableName['FormOption'] as $Key => $Value) {
+			if ($Value['ObjectID'] == $objectid && $Value['PageID'] == $this->PageID) {
+			if ($Value['Enable/Disable'] == 'Enable' && $Value['Status'] == 'Approved') {
+				$this->Writer->startElement('option');
+				
+				$this->ProcessArrayStandardAttribute('FormOption');
+				
+				if ($Value['FormOptionDisabled']) {
+					$this->Writer->writeAttribute('disabled', $Value['FormOptionDisabled']);
+				}
+				
+				if ($Value['FormOptionLabel']) {
+					$this->Writer->writeAttribute('label', $Value['FormOptionLabel']);
+				} else if ($Value['FormOptionLabelDynamic']) {
+					$tablename = $Value['FormOptionLabelTableName'];
+					$field = $Value['FormOptionLabelField'];
+					$pageid = $Value['FormOptionLabelPageID'];
+					$objectid = $Value['FormOptionLabelObjectID'];
+					$revisionid = $Value['FormOptionLabelRevisionID'];
+					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+					if ($hold) {
+						$this->Writer->writeAttribute('label', $hold);
+					}
+				}
+				if (isset($this->FormSession[$formselectname])) {
+					$SessionInfo = $this->FormSession[$formselectname];
+					$CurrentInfo = current($this->FormOptionText);
+					
+					if ($SessionInfo == $CurrentInfo) {
+						$Value['FormOptionSelected'] = 'selected';
+						$DestroyArray[$Key] = $Value['FormOptionSelected'];
+					}
+				}
+				
+				if ($Value['FormOptionSelected']) {
+					$this->Writer->writeAttribute('selected', $Value['FormOptionSelected']);
+				}
+				
+				if ($Value['FormOptionValue']) {
+					$this->Writer->writeAttribute('value', $Value['FormOptionValue']);
+				} else if ($Value['FormOptionValueDynamic']) {
+					$tablename = $Value['FormOptionValueTableName'];
+					$field = $Value['FormOptionValueField'];
+					$pageid = $Value['FormOptionValuePageID'];
+					$objectid = $Value['FormOptionValueObjectID'];
+					$revisionid = $Value['FormOptionValueRevisionID'];
+					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+					if ($hold) {
+						$this->Writer->writeAttribute('value', $hold);
+					}
+				}
+				
+				if ($Value['FormOptionText']) {
+					$this->Writer->text($Value['FormOptionText']);
+				} else if ($Value['FormOptionTextDynamic']) {
+					$tablename = $Value['FormOptionTextTableName'];
+					$field = $Value['FormOptionTextField'];
+					$pageid = $Value['FormOptionTextPageID'];
+					$objectid = $Value['FormOptionTextObjectID'];
+					$revisionid = $Value['FormOptionTextRevisionID'];
+					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+					$hold = $this->CreateWordWrap($hold, '    ');
+					if ($hold) {
+						$this->Writer->writeRaw("\n    ");
+						$this->Writer->text($hold);
+						$this->Writer->writeRaw("\n  ");
+					}
+				}
+				
+				$this->Writer->endElement(); // ENDS OPTION
+			}
+			}
+		}*/
+		
 		while (current($this->FormLookupTableName['FormOption'])) {
 			if (current($this->FormOptionObjectID) == $objectid && current($this->FormOptionPageID) == $this->PageID) {
 				if (current($this->FormOptionEnableDisable) == 'Enable' && current($this->FormOptionStatus) == 'Approved') {

@@ -28,12 +28,11 @@
 	$_POST['Owner'] = $Owner;
 	$_POST['UserAccessGroup'] = $UserAccessGroup;
 	$_POST['UpdatePhotosPage'] = $NewUpdatePhotosPage;
-		
+	
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
 		$PageName = $UpdatePhotosPage;
 		
 		$hold = $Tier6Databases->FormSubmitValidate('UpdatePhotosPage', $PageName);
-
 		if ($hold) {
 			$sessionname = $Tier6Databases->SessionStart('UpdatePhotosPage');
 			$_SESSION['POST'] = $_POST;

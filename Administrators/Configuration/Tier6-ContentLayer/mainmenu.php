@@ -24,8 +24,8 @@
 	
 	$databaseoptions = NULL;
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
-		$databaseoptions['JavaScriptFileName'] = '../Tier7-BehavioralLayer/CaseyRed/menu-jquery.js';
-		$databaseoptions['JavaScriptLibraryName'] = '../Tier7-BehavioralLayer/CaseyRed/jquery-1.3.2.min.js';
+		$databaseoptions['JavaScriptFileName'] = '../Tier7-BehavioralLayer/ComputerAidBlue/menu-jquery.js';
+		$databaseoptions['JavaScriptLibraryName'] = '../Tier7-BehavioralLayer/ComputerAidBlue/jquery-1.3.2.min.js';
 	}
 	
 	$databaseoptions['MainMenuID'] = 'main-menu';
@@ -43,7 +43,7 @@
 	$databaseoptions['MainMenuBottomStyle'] = NULL;
 	$databaseoptions['MainMenuBottomInsert'] = NULL;
 	
-	$databaseoptions['Insert'] = '<img src="../Images/Main-Logo.png" alt="KC Photo and Video Logo" class="main-menu-image"/>';
+	$databaseoptions['Insert'] = '<img src="../Images/Main-Logo.png" alt="Computer Aid Logo" class="main-menu-image"/>';
 		
 	$Writer = $GLOBALS['Writer'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];

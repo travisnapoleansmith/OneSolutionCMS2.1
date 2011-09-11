@@ -674,6 +674,7 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		if ($Story != NULL) {
 			$this->LayerModule->pass ($this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName'], 'BuildFieldNames', array('TableName' => $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']));
 			$Keys = $this->LayerModule->pass ($this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName'], 'getRowFieldNames', array());
+			
 			$this->addModuleContent($Keys, $Story, $this->XMLFeedTables[key($this->XMLFeedTables)][1]['XMLFeedName']);
 		} else {
 			array_push($this->ErrorMessage,'createStoryFeed: Header cannot be NULL!');

@@ -1584,15 +1584,16 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[5] = 'RevisionID';
 			$Keys[6] = 'CurrentVersion';
 			$Keys[7] = 'Authenticate';
-			$Keys[8] = 'StartTag';
-			$Keys[9] = 'EndTag';
-			$Keys[10] = 'StartTagID';
-			$Keys[11] = 'StartTagStyle';
-			$Keys[12] = 'StartTagClass';
-			$Keys[13] = 'ImportFileName';
-			$Keys[14] = 'ImportFileType';
-			$Keys[15] = 'Enable/Disable';
-			$Keys[16] = 'Status';
+			$Keys[8] = 'PrintPreview';
+			$Keys[9] = 'StartTag';
+			$Keys[10] = 'EndTag';
+			$Keys[11] = 'StartTagID';
+			$Keys[12] = 'StartTagStyle';
+			$Keys[13] = 'StartTagClass';
+			$Keys[14] = 'ImportFileName';
+			$Keys[15] = 'ImportFileType';
+			$Keys[16] = 'Enable/Disable';
+			$Keys[17] = 'Status';
 			
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {
