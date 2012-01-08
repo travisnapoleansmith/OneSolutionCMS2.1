@@ -30,6 +30,8 @@ abstract class LayerModulesAbstract
 	protected $DatabaseName;
 	protected $DatabaseTable;
 	
+	protected static $OneSolutionCMSVersion;
+	
 	protected $ModulesLocation;
 	
 	protected $Modules = array();
@@ -88,6 +90,10 @@ abstract class LayerModulesAbstract
 	
 	public function getDatabaseName () {
 		return $this->DatabaseName;
+	}
+	
+	final public function getOneSolutionCMSVersion() {
+		return $this->OneSolutionCMSVersion;
 	}
 	
 	public function setDatabasetable ($databasetable){

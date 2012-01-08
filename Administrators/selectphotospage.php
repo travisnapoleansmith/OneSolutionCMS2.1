@@ -161,7 +161,12 @@
 			next($PhotosPage);
 			$Record = current($PhotosPage);
 		}
-
+		
+		if ($Record['ContainerObjectType'] == 'XhtmlContent') {
+			if ($Record['Content'] != NULL) {
+				$_SESSION['POST']['FilteredInput'][$PhotoSetBottomText] = $Record['Content'];
+			}
+		}
 		next($PhotosPage);
 		$PhotoSetHeading = "PhotoSet$i" . 'Heading';
 		$PhotoSetTopText = "PhotoSet$i" . 'TopText';
@@ -175,7 +180,7 @@
 		
 	}
 	end($PhotosPage);
-	prev($PhotosPage);
+	//prev($PhotosPage);
 	$count = count($PhotosPage);
 	if ($count <= 2) {
 		$Record = array();

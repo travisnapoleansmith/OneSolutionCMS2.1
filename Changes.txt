@@ -1,0 +1,528 @@
+Changes For One Solution CMS 2.1.123 - Sunday, January 8, 2012
+
+Added:
+1). To HeaderPanel1 in Administrators Module Settings for Tier6-ContentLayer and XhtmlMenu folder and .ini settings file for headerpanel1, to add and update. All CRUD Page Types have been updated to reflect this.
+
+Updated (Fixed):
+1). Updated SimpleViewer from 2.1.3 to 2.2.0
+2). Updated the following tables: AdministratorsContentLayerVersion, ContentLayerVersion, MainMenuItemLookup, ALL AdministratorsFormTables - Photo Pages can now have up to 30 photo sets.
+3). Updated XhtmlNewsStories so if a page has no news stories, PHP will not throw an error saying sort array can't be 0.
+4). Updated Zend Framework from 1.11.9 to 1.11.11.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Changes For One Solution CMS 2.1.122 - Sunday, September 11, 2011 12:09:15 AM
+
+Added:
+1). Computer Aid Blue Theme based on Casey Red Theme.
+
+Updated (Fixed):
+1). Fixed UpdateNewsStory.php so it will update the form option text when user changes date or heading.
+2). Fixed AddNewsStory.php so it will allow user to not have to create an image for a NewsStory.
+3). Fixed UpdateNewsStory.php so it will allow user to not have to create an image for NewsStory.
+4). Fixed createContent in ClassContentLayer by adding Print Preview. Content Layer data was not being put in the database properly because of it.
+5). Updated all add__.php file if last page id doesn't exist it will be added.
+6). Fixed XhtmlAd so that AdStartTag is closed properly.
+7). Fixed No Output that was not functioning problem in XhtmlSiteStats.
+8). Updated AddContentLayer.ini and UpdateContentLayer.ini to reflect XhtmlAd addition and new XhtmlSiteStats.
+9). Updated XhtmlNewsStories module so that News Stories are sorted by date when they get displayed.
+10.) Fixed XhtmlAd so that disabled Ads don't leave empty spaces in Ad Panel.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.121 - Monday, August 01, 2011 10:09:05 PM
+
+Added:
+1). To Flash Tables for XhtmlFlashModule - FlashID, FlashStyle and FlashClass
+
+Updated:
+1). Fixed header.php bug with database options being set to NULL.
+2). Fixed headerpanel1.php bug with database options being set to NULL. 
+3). Fixed content.php bug with database options being set to NULL. 
+4). Fixed adpanel1.php bug with database options being set to NULL. 
+5). Updated all modules to remove ValidationLayer as part of the constructor.
+6). Fixed HtmlUnorderedList so it will work. Un-Removed setDatabaseField.
+7). Updated Content Layer's createContent method to include ImportFileName and ImportFileType.
+8). Removed from XhtmlSimpleViewer and SimpleViewerTable - SimpleViewerID, SimpleViewerClass and SimpleViewerStyle.
+9). Fixed XhtmlNEws so that when it creates a new version of itself, it will created it with Database Options as an array not NULL!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.120 - Thursday, July 28, 2011 6:49:29 PM
+
+Added:
+1.) Facebook PHP-SDK 2.1.2 to Libraries/GlobalLayer
+2.) Facebook Authentication Module to Tier4AuthenticationTier (Work In Progress)
+3). XhtmlAdModule will display random ads on each page and can display ads on a single page in the order define!
+4). GetEntireRow to Tier 2 Database Abstraction LayerModule
+5). XhtmlFlashJwPlayer to Tier 6 Content Layer and is fully working.
+6). XhtmlSimpleViewer to Tier 6 Content Layer and is fully working.
+7). Countdown Libary to Libraries/Tier7BehavioralLayer.
+8). ContentFiles folder for Content Files.
+9). Images folder for Site Images.
+
+Updated:
+1). SetDatabaseField has been commented out from all modules for speed improvements.  Need to make sure all modules function.
+2). XhtmlSiteStats - Added documentation to the file.
+3). Class Content Layer - Standard documentation to the file. (Needs to be finished).
+4). Zend Framework from 1.11.6 to 1.11.7 to 1.11.8 to 1.11.9.
+5). jQuery from 1.6 to 1.6.1 to 1.6.2. Kept 1.3.2 because of menu issues.
+6). Smarty from 3.0.7 to 3.0.8.
+7). Printer View bug now works fully used to sometimes not show items marked for Print Preview.
+8). XhtmlFlash to allow user to define FlashVars.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.119 - Wednesday, May 11, 2011 11:23:41 PM
+Added:
+1). To Settings.ini file a copyright attribute to show copy right notice on pages.
+2). Process HTML File to Add HTML Files to content layer.
+3). XHtmlSiteStats - will do a basic page counter and monthly totals.
+4). Content Layer a PrintPreview flag.
+
+Updated:
+1). Zend Framework was updated from 1.11.4 to 1.11.5
+2). Zend Framework was updated from 1.11.5 to 1.11.6
+3). jQuery was updated from 1.5.1 to 1.5.2 kept 1.3.2 because of menu problems with IE 6.
+4). jQuery was updated from 1.5.2 to 1.6 kept 1.3.2 because of menu problems with IE 6.
+5). Menu's constructor to not use Current and Next for Table Name instead it uses idnumber, DatabaseTable1 and DatabaseTable2
+6). HTMLPurifer was updated from 4.2.0 to 4.3.0
+7). SimpleViewer was updated from 2.1.2 to 2.1.3
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.118 - Wednesday, April 27, 2011 9:31:07 PM
+
+Added:
+1) XhtmlMenu - Add, Update, Delete, Enable/Disable - Completed!
+2) Smarty 3.0.7 To Libraries/Tier8PresentationLayer/
+3) Postcheck - Photos Page, Blockquote Page
+4) Auto-Detect For Xhtml + XML and HTML to XhtmlHeader Module
+5) ProcessXmlFile to ClassContentLayer to be able to add XML File to the Content Layer
+6) MultiArrayCombine to ClassContentLayer
+7) MultiArrayBuild to Photo Page
+8) MultiArrayBuild to ClassContentLayer
+9) Update Menu to Admin Section
+10) AddMultiHeader Page
+11) Publish / Unpublish Field to Content and News Stories Database Table (Not Functional)!
+12) To XhtmlHeader (Blackberry OS 5 and 6, Blackberry Playbook, Apple iPhone, Apple iPod, AppleiPad and Android) StylesSheets!
+
+Updated (Fixed)
+1) PhotoPages Bug with Zero Photos
+2) jQuery was updated from 1.4.2 to 1.5.1, kept 1.3.2 because of menu problems with IE 6
+3) Zend Framework was updated from 1.11.0 to 1.11.3
+4) Zend Framework was updated from 1.11.3 to 1.11.4
+5) XhtmlHeader changed IEStyleSheetBuild to StyleSheetBuild.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.117 - Wednesday, November 03, 2010 10:32:58 PM
+
+Removed SOAP from the root folder.  It was a mistake to leave it in their.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.116 - Wednesday, November 03, 2010 10:27:31 PM
+
+Fixed the Setting.ini problem!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.115 - Wednesday, November 03, 2010 6:56:28 PM
+
+Many many changes have occured with this commit.  First off with XhtmlForm, have added Fieldset to database table for Fieldset, you can now nest fieldsets and you can have more than one form table for a site.  Also created an Administrators Form along with a regular form for non administrators part of the site.  Second off with XhtmlFlash, it now supports revisions.  Have added to FlashTable a RevisionID and CurrentVersion.  Third HTMLPurifier has been upgraded from 4.1.1 to 4.2.0. Forth Jquery has been updated from 1.3.2 to 1.4.2. I have kept the 1.3.2 file for now because of issues with the menu.  Fifth, XhtmlHeader now supports IE9 and have added IE9StyleSheet to the ContentLayerTheme and AdministratorContentLayerTheme table.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.114 - Wednesday, November 03, 2010 6:54:36 PM
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.113 - Wednesday, October 06, 2010 5:40:26 PM
+
+Added Blockquote Page Type is now finished.  Fully CRUD.  Have fixed a bug with output for content with P's and Blockquote.  Those are now working properly.  Fixed Content Page bug with page type listing in the Version table.  Corrected it from listing News Page to Content Page.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.112 - Tuesday, October 05, 2010 8:06:38 PM
+
+Added Content Page Type.  It is fully CRUD.  Fixed a bug with any content types that are not News Pages where when you add or update content it would put the link to go to page as a News Page not as the correct type.
+
+Have started Blockquote Page and added Multi-Header Content Page type to replace Paragraph List Page.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.111 - Thursday, September 09, 2010 7:19:25 PM
+
+Fixed Directory Stucture
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.110 - Thursday, September 09, 2010 7:15:02 PM
+
+Updated file structure for One Solution CMS Version 2
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.109 - Thursday, September 09, 2010 7:06:25 PM
+
+Added Administrators Panel!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.108 - Thursday, September 09, 2010 6:59:44 PM
+
+Updated Settings
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.107 - Tuesday, August 10, 2010 10:26:04 PM
+
+Added ServicesAbstract and ServicesInterfaces to go with Services.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.106 - Tuesday, August 10, 2010 10:05:36 PM
+
+Added Services folder with OAuth, SCA, SOAP, and XML-RPC.  No files in them, just the folders for future use.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.105 - Tuesday, August 10, 2010 9:04:03 PM
+
+Added settings.ini file for configuration.  Updated MySqlConnect to allow sorting of a table (sortTable).  Updated Menu selection and various other small jobs.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.104 - Tuesday, August 10, 2010 3:15:01 PM
+
+Updated XhtmlHeader to allow for Revisions to work.  Added Revisions and CurrentVersion to database.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.103 - Wednesday, August 04, 2010 12:14:35 AM
+
+Updated Tier6ContentLayerModulesAbstract to include output methods for XhtmlNewsStories.  This is so XhtmlContent can be updated to be similar to XhtmlNewsStories and allows for new modules to be based on this kind of output.
+
+Added SelectMenu and UpdateMenu for the Administrators panel.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.102 - Saturday, July 31, 2010 8:13:35 PM
+
+Updated News Stories, News Pages, Photos Pages to handle XhtmlMainMenu to include a Menu Name and Menu Title attribute. Also created a sort order field in Photo Pages forms to allow user to sort the order of the photo sets.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.101 - Saturday, July 24, 2010 8:38:51 PM
+
+Updated Photo Page so you can Create, Update and Delete Photo Pages.  Have been working on getting Menu to Create, Update and Delete.  Have added Menu Name to ContentVersion table.  Needs to be implemented in the forms for News Page and Photos Page.  That is a works in progress.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.100 - Thursday, July 15, 2010 8:51:51 PM
+
+Updated UserAccount to handle password changed.  Updated SelectPhotosPage to pass information to the Change Photos Page form.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.99 - Tuesday, July 13, 2010 8:04:34 PM
+
+Finished with Creating Photo Pages.  Still have to Update, Delete and Enable/Disable Status Change them!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.98 - Saturday, July 10, 2010 8:01:32 PM
+
+Modified the CaseyRed theme to expand the ShortForm class.  Updated XhtmlContent and XhtmlNewsStories to handle new paragraphs so now \n\n and \n\r will both be new paragraphs.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.97 - Saturday, July 10, 2010 2:34:42 PM
+
+Fix all issues with News Pages.  Now News Pages can be Created, Updated and Deleted.  This is RTM for News Pages! Updated XhtmlHeader to allow for Enable/Disable and Status to be set for XhtmlHeader.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.96 - Thursday, July 08, 2010 9:12:16 PM
+
+Fixed all major bugs with updating News Story Pages. So now Create and Update are done for News Story Pages.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.95 - Thursday, July 01, 2010 9:30:37 PM
+
+Added to MySqlConnect, sortTable.  Updated addnewspage to support XMLSitemap.  Updated XMLSitemap to allow for pages to be added.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.94 - Wednesday, June 23, 2010 10:22:59 PM
+
+Updated XMLFeed to Update and Delete content from the database.  Now CRUD - Create, Read, Update and Delete are all working for XMLFeed.  Updated CaseyRed theme to handle images.  Still needs work on it!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.93 - Tuesday, June 22, 2010 10:07:56 PM
+
+Updated MySqlConnect to fix problems with updateRow where some queries would pass NULL instead of data to be updated.  Updated XMLFeed to support Create and Update.  Still have Delete to do for it. Read works fine!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.92 - Saturday, June 19, 2010 9:50:11 PM
+
+Created NewsStories Page in Administrators panel.  Updated ContentLayer, XhtmlContent, XhtmlHeader, XhtmlMenu to include adding content to the database, updating content, deleting content and updating status for the content!
+
+Added Limit to MySqlConnect to allow for limiting results coming from the database!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.91 - Wednesday, June 16, 2010 9:51:51 PM
+
+Removed strstr from XhtmlNews because it was causing a server 500 error!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.90 - Wednesday, June 16, 2010 8:40:12 PM
+
+Updated News Story Management.  News Story Management is now working.  Started to work on News Page Management.  MUST FIX MYSQLCONNECT - ALL QUERIES MUST HAVE MYSQL_REAL_ESCAPE_STRING IN THEM!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.89 - Tuesday, June 15, 2010 8:51:10 PM
+
+Have updated Update Content!  It is working!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.88 - Friday, June 11, 2010 1:57:04 AM
+
+Updated rss and sitemap to handle the new Tiers!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.87 - Friday, June 11, 2010 1:24:23 AM
+
+Updated XhtmlContent, XhtmlNewsStories, XhtmlUnorderedList and XhtmlOrderedList to fix a problem with the new Tier setup!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.86 - Friday, June 11, 2010 12:35:37 AM
+
+Tiered all tiers.  Removed all global tiers except for Tier6Databases
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.85 - Wednesday, June 09, 2010 10:44:16 PM
+
+Updated XhtmlPicture module to support Version History.  Updated XhtmlNewsStories to allow for updating news stories.  Updated XhtmlContent to support Version History.  Updated XhtmlContentLayer to support Version History.  Fixed XhtmlForm bug with not using session data!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.84 - Saturday, June 05, 2010 10:19:43 PM
+
+Updated HTMLPurifier to Version 4.1.1
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.83 - Saturday, June 05, 2010 8:21:17 PM
+
+Updated the XhtmlPicture to include support for Adding new content.  Updated XhtmlNewsStories for Adding new content.  Updated LayerModulesAbstract to include addModuleContent.  Fixed all major problems so that adding News Stories works.  Need to fix HTMLPurifier in Form so that it remembers what was entered into the form!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.82 - Wednesday, June 02, 2010 9:21:29 PM
+
+Fixed FormSelect to all for more than 1 select drop down boxes on a form.  Created AddNewsStory and created the basics for adding news stories to the database.  Have to implement Create, Update and Delete for XhtmlPicture.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.81 - Saturday, May 29, 2010 8:42:41 PM
+
+Finished Password Reset.  Started Password change and Password Reset Change.  Fixed bugs with XhtmlForm.  Need to fix FormSelect to allow for more than one select drop down box on a page!  Updated CaseyRed theme for forms!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.80 - Wednesday, May 26, 2010 8:08:29 PM
+
+Updated XhtmlForm to include a Captcha.  Still needs work on it!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.79 - Wednesday, May 26, 2010 6:34:08 PM
+
+Added User Registration, User Validation, First time user password creator!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.78 - Tuesday, May 18, 2010 9:51:52 PM
+
+Added user registration to UserAccounts!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.77 - Saturday, May 15, 2010 6:26:13 PM
+
+Updated ContentLayer to handle Authentication.  Fixed session and cookie issues, created a new login and logout script!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.76 - Saturday, May 15, 2010 3:25:34 PM
+
+Added Module Options and Authentication to the Content Layer
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.75 - Tuesday, May 11, 2010 10:23:55 PM
+
+Added Global ErrorMessage array.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.74 - Tuesday, May 11, 2010 7:08:12 PM
+
+Updated ContentLayer to fix a bug with it closing out </body> and </html> tags!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.73 - Saturday, May 08, 2010 9:04:19 PM
+
+Updated XhtmlHeader to create a global variable for CurrentTheme!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.72 - Saturday, May 08, 2010 7:37:47 PM
+
+Updated ContentLayer to use ContentLayer table to create a content page!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.71 - Saturday, May 08, 2010 1:10:15 PM
+
+Updated XhtmlMenu to use XMLWriter!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.70 - Wednesday, April 28, 2010 10:43:18 PM
+
+Updated user accounts module and all the tiers to handle dynamically generated session id's
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.69 - Wednesday, April 28, 2010 4:35:56 PM
+
+Updated User Accounts for basic authentication.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.68 - Wednesday, April 28, 2010 1:49:13 PM
+
+Added User Accounts module and updated XMLSitemap and XMLFeed to handle automatic databases.  Updated XhtmlNewsStories to handle enable/disable and status for all news stories and modules.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.67 - Saturday, April 24, 2010 7:52:14 PM
+
+Updated XhtmlContent to handle an insert.  Needs to be able to insert class, id and style into it!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.66 - Saturday, April 24, 2010 6:03:53 PM
+
+Updated all Tiers to dynamically include all databases tables needs for modules!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.65 - Saturday, April 24, 2010 2:22:53 PM
+
+Updated all modules to handle forms and login!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.64 - Wednesday, April 21, 2010 11:06:14 PM
+
+Updated XhtmlForm to fix problem with auto loading in the Content Layer.  Added Form tags inside of CaseyRed css.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.63 - Wednesday, April 21, 2010 7:18:31 PM
+
+Form Validation is completed!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.62 - Wednesday, April 21, 2010 3:42:02 PM
+
+Added Libraries folder for all external libraries!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.61 - Wednesday, April 21, 2010 3:38:56 PM
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.60 - Wednesday, April 21, 2010 3:17:29 PM
+
+Included a Libraries Folder for all external libraries used!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.59 - Tuesday, April 20, 2010 11:28:56 PM
+
+Updated CaseyRed Theme to handle IE 7 and IE 6 better with Calendar Table
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.58 - Tuesday, April 20, 2010 11:15:01 PM
+
+Updated CaseyRed theme for handling schedule tables in IE 7 and IE 6
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.57 - Saturday, April 17, 2010 8:18:09 PM
+
+Updated Form Validation.  Still needs work on it.  Must work on the HTML Tags
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.56 - Wednesday, April 14, 2010 7:16:15 PM
+
+Updated all modules to take the global writer.  Updated XhtmlNewsStories to support displaying last 30, 60, 90 and 120 days of news stories.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.55 - Saturday, April 10, 2010 6:34:19 PM
+
+Updated all modules to take Global tier and removed it from the constructor argument.  Replaced the $databases with $databaseoptions for all modules as part of the constructor.
+
+Updated all modules to take a GlobalWriter and us it.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.54 - Thursday, April 08, 2010 1:08:23 AM
+
+Updated XhtmlNewsStories to fix a render bug it had with mulitple XhtmlNewsStories on one page.  It would repeat all the prior XhtmlNewsStories for each new one!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.53 - Wednesday, April 07, 2010 7:29:19 PM
+
+Updated XhtmlNewsStories.  It is final.  It fully works!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.52 - Wednesday, April 07, 2010 12:30:55 PM
+
+Started NewsStories Module
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.51 - Wednesday, April 07, 2010 1:42:36 AM
+
+Updated XhtmlCalendarTable.  Fixed a nasty bug with current month where if the current month's current day was less than 10 it would add an extra 0 to it.  Also fixed a bug where if the current day was less than 10 and was early in the week where the week before was the first week of that month it would not show the week before it.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.50 - Tuesday, April 06, 2010 11:49:22 PM
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MORE TO COME!

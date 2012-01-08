@@ -4,10 +4,33 @@
 	
 	$passarray = array();
 	$passarray['CurrentVersion'] = 'true';
-	$PageVersionTemp = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion', TRUE, array('1' => 'PageID'), 'ASC');
-	$PageVersionTemp = array_combine(range(1, count($PageVersionTemp)), array_values($PageVersionTemp));
 	
-	$PageVersion = array();
+	$PageVersion = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion', TRUE, array('1' => 'PageID'), 'ASC');
+	//$PageVersionTemp = array_combine(range(1, count($PageVersionTemp)), array_values($PageVersionTemp));
+	
+	$PageNumber = array();
+	foreach ($PageVersion as $Value) {
+		if ($Value['PageID'] != NULL) {
+			array_push($PageNumber, $Value['PageID']);
+		}
+	}
+	$PageVersion = array_combine($PageNumber, array_values($PageVersion));
+	
+	$passarray = array();
+	$passarray['PageID'] = 1;
+	//$passarray['ObjectID'] = $PageID;
+	$Menu = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup');
+	$PageNumber = array();
+	foreach ($Menu as $Value) {
+		if ($Value['PageID'] != NULL) {
+			array_push($PageNumber, $Value['ObjectID']);
+		}
+	}
+	$Menu = array_combine($PageNumber, array_values($Menu));
+	//print_r($Menu);
+	//print_r($PageVersion);
+	
+	/*$PageVersion = array();
 	foreach ($PageVersionTemp as $key => $value) {
 		if ($value['PageID'] != $key){
 			$key = $value['PageID'];
@@ -17,7 +40,9 @@
 		}
 	}
 	unset($PageVersionTemp);
-	
+	*/
+	//print_r($PageVersion);
+	/*
 	$passarray = array();
 	$passarray['PageID'] = 1;
 	$passarray['ObjectID'] = 1;
@@ -29,31 +54,9 @@
 			$FirstMenuLiChildID[$LiChildID] = $FirstMenuRecord[0][$LiChildID];
 		}
 	}
+	*/
 	
-	$i = 1;
-	$Name = 'MenuItem';
-	$Name .= $i;
-	
-	$MenuItem = array();
-	while ($_POST[$Name]) {
-		if ($_POST[$Name] != 'NULL') {
-			$hold = $_POST[$Name];
-			$hold = explode(' ', $hold);
-			$MenuItem[$Name]['PageID'] = $hold[0];
-			if ($hold[4]) {
-				$MenuItem[$Name]['PageLocation'] = $hold[4];
-			} 
-			
-			$MenuItem[$Name]['SubMenuID'] = $PageVersion[$hold[0]]['ContentPageMenuObjectID'];
-			
-			$MenuItem[$Name]['MenuName'] = $PageVersion[$hold[0]]['ContentPageMenuName'];
-			$MenuItem[$Name]['MenuTitle'] = $PageVersion[$hold[0]]['ContentPageMenuTitle'];
-		}
-		$i++;
-		$Name = 'MenuItem';
-		$Name .= $i;
-	}
-	
+	//print_r($FirstMenuRecord);
 	$hold = $_POST['TopMenuHidden'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[0];
@@ -61,12 +64,83 @@
 	$PageLocation = $hold[4];
 	$LiPageID = $PageVersion[$PageID]['ContentPageMenuObjectID'];
 	
+	$ParentMenu = $Menu[$PageID];
+	print "PARRENT MENU\n";
+	print_r($ParentMenu);
+	
+	$i = 1;
+	$Name = 'MenuItem';
+	$Name .= $i;
+	
+	$ParentIDName = $ParentMenu['ParentIDName'];
+	if ($ParentIDName == NULL) {
+		$ParentIDName = 'MenuItem';
+	} else {
+		$ParentIDName .= '-';
+	}
+	$ParentIDName .= $i;
+	
+	$MenuItem = array();
+	while ($_POST[$Name]) {
+		//print "HERE\n";
+		if ($_POST[$Name] != 'NULL') {
+			$hold = $_POST[$Name];
+			$hold = explode(' ', $hold);
+			$CurrentPageID = $hold[0];
+			$MenuItem[$Name]['PageID'] = $CurrentPageID;
+			if ($hold[4]) {
+				$MenuItem[$Name]['PageLocation'] = $hold[4];
+			} 
+			//print "$hold[0]\n";
+			//print_r($PageVersion[$CurrentPageID]);
+			//$MenuItem[$Name]['SubMenuID'] = $PageVersion[$hold[0]]['ContentPageMenuObjectID'];
+			//print_r($Menu[$CurrentPageID]);
+			
+			$UpdateMenuRecord = array();
+			$UpdateMenuRecord['ParentObjectID'] = $PageID;
+			$UpdateMenuRecord['ParentIDName'] = $ParentIDName;
+			
+			$UpdateMenuRecordPassArray = array();
+			$UpdateMenuRecordPassArray['PageID'] = 1;
+			$UpdateMenuRecordPassArray['ObjectID'] = $CurrentPageID;
+			$UpdateMenuRecordPassArray['VersionID'] = 1;
+			$UpdateMenuRecordPassArray['RevisionID'] = 1;
+			
+			print_r($UpdateMenuRecord);
+			print_r($UpdateMenuRecordPassArray);
+			
+			$MenuItem[$Name]['MenuName'] = $PageVersion[$CurrentPageID]['ContentPageMenuName'];
+			$MenuItem[$Name]['MenuTitle'] = $PageVersion[$CurrentPageID]['ContentPageMenuTitle'];
+		}
+		$i++;
+		$Name = 'MenuItem';
+		$Name .= $i;
+		
+		$ParentIDName = $ParentMenu['ParentIDName'];
+		if ($ParentIDName == NULL) {
+			$ParentIDName = 'MenuItem';
+		} else {
+			$ParentIDName .= '-';
+		}
+		$ParentIDName .= $i;
+	}
+	/*
+	$hold = $_POST['TopMenuHidden'];
+	$hold = explode(' ', $hold);
+	$PageID = $hold[0];
+	$LiParentID = $hold[2];
+	$PageLocation = $hold[4];
+	$LiPageID = $PageVersion[$PageID]['ContentPageMenuObjectID'];
+	*/
 	$MainMenu = array();
 	$MainMenu['PageID'] = 1;
 	
 	$MainMenuItemLookup = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
 	$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
 	
+	//print "$PageID\n";
+	//print "$LiPageID\n";
+	/*
 	if ($LiPageID != NULL) {
 		//$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
 		// UPDATE MAIN MENU RECORD
@@ -168,7 +242,8 @@
 		
 		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMenuItem', $MainMenu);
 		print_r($MainMenu);
-		
+	}*/
+	/*
 	} else {
 		// ADD NEW RECORD TO MAIN MENU
 		print "NEW RECORD\n";
@@ -229,6 +304,7 @@
 			}
 		} while ($UlIDKey);
 		*/
+		/*
 		$LiPageID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuLastMenuItem']['SettingAttribute'];
 		$LiPageID++;
 		
@@ -339,6 +415,7 @@
 				} else {
 					$MainMenu[$LiID] = NULL;
 				}*/
+				/*
 				$MainMenu[$LiID] = NULL;
 			}
 			$MainMenu[$LiLang] = NULL;
@@ -360,7 +437,8 @@
 		
 		$Tier6Databases->updateContentVersion(array('PageID' => $PageID), 'ContentLayerVersion', array('ContentPageMenuObjectID' => $LiPageID));
 	}
-	
+	*/
+	/*
 	// LEFT OFF HERE!!!!!!!!!!!!!!!!
 	// NEED TO UPDATE PAGE VERSION TABLE FOR THE CURRENT PAGE $PageID so that the ID from LiPageID goes into ContentPageMenuParentObjectID
 	// THIS MUST HAPPEN NO MATTER NEW MENU IS CREATED OR UPDATING AN EXISTING MENU

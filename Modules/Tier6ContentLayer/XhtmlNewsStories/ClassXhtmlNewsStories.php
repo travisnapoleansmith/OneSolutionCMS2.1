@@ -426,11 +426,12 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$Date = strtotime($DateString);
 			$SortArray[$Key] = $Date;
 		}
-		
-		if ($ASCDSC == 'DSC') {
-			array_multisort($SortArray, SORT_DESC, $this->NewsStoriesDatesTable);
-		} else if ($ASCDSC == 'ASC') {
-			array_multisort($SortArray, SORT_ASC, $this->NewsStoriesDatesTable);
+		if (!is_null($SortArray)) {
+			if ($ASCDSC == 'DSC') {
+				array_multisort($SortArray, SORT_DESC, $this->NewsStoriesDatesTable);
+			} else if ($ASCDSC == 'ASC') {
+				array_multisort($SortArray, SORT_ASC, $this->NewsStoriesDatesTable);
+			}
 		}
 		unset($SortArray);
 	}

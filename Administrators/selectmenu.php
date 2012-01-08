@@ -4,7 +4,6 @@
 	$hold = $_POST['MenuItem'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[0];
-	//$MenuID = $hold[2];
 	unset($hold);
 	
 	$_POST['PageID'] = $PageID;
@@ -13,22 +12,33 @@
 	unset($passarray);
 	$passarray = array();
 	$passarray['CurrentVersion'] = 'true';
-	$PageAttributes = $Tier6Databases->getRecord($passarray, 'PageAttributes', TRUE, array('1' => 'PageID'), 'ASC');
-	$PageAttributes = array_combine(range(1, count($PageAttributes)), array_values($PageAttributes));
 	
 	$PageVersion = $Tier6Databases->getRecord($passarray, 'ContentLayerVersion', TRUE, array('1' => 'PageID'), 'ASC');
-	$PageVersion = array_combine(range(1, count($PageVersion)), array_values($PageVersion));
-	$MenuID = $PageVersion[$PageID]['ContentPageMenuObjectID'];
 	
-	if ($MenuID != NULL) {
-		$passarray = array();
-		$passarray['PageID'] = 1;
-		$passarray['ObjectID'] = $MenuID;
-		
-		$Menu = $Tier6Databases->getRecord($passarray, 'MainMenu');
-	} else {
-		$Menu = NULL;
+	$PageNumber = array();
+	foreach ($PageVersion as $Value) {
+		if ($Value['PageID'] != NULL) {
+			array_push($PageNumber, $Value['PageID']);
+		}
 	}
+	
+	$PageVersion = array_combine($PageNumber, array_values($PageVersion));
+	
+	$PageAttributes = $Tier6Databases->getRecord($passarray, 'PageAttributes', TRUE, array('1' => 'PageID'), 'ASC');
+	
+	$PageNumber = array();
+	foreach ($PageAttributes as $Value) {
+		if ($Value['PageID'] != NULL) {
+			array_push($PageNumber, $Value['PageID']);
+		}
+	}
+	$PageAttributes = array_combine($PageNumber, array_values($PageAttributes));
+	
+	$passarray = array();
+	$passarray['PageID'] = 1;
+	$passarray['ObjectID'] = $PageID;
+		
+	$Menu = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup');
 	
 	$TopMenuName = $PageAttributes[$PageID]['PageTitle'];
 	$sessionname = $Tier6Databases->SessionStart('UpdateMenu');
@@ -41,37 +51,36 @@
 	}
 	
 	for ($i = 1; $i < 16; $i++) {
+		$MenuItemName = NULL;
 		$MenuItemNameSelect = 'MenuItem';
 		$MenuItemNameSelect .= $i;
 		
-		$LiNameSelect = 'Li';
-		$LiNameSelect .= $i;
+		$MenuItemNameLookup = 'MenuItemLookup';
+		$MenuItemNameLookup .= $i;
 		
-		$MenuItemName = $Menu[0][$LiNameSelect];
-		if (strstr($MenuItemName, 'index.php">')) {
-			$MenuItemName = 1;
-		} else if (strstr($MenuItemName, 'index.php')) {
-			$ReplaceMenuItemName = str_replace('<a href="index.php?PageID=', '', $MenuItemName);
-			$MenuItemName = strip_tags($MenuItemName);
-			$ReplaceMenuItemName = str_replace('">' . "$MenuItemName", '', $ReplaceMenuItemName);
-			$ReplaceMenuItemName = strip_tags($ReplaceMenuItemName);
-			$MenuItemName = $ReplaceMenuItemName;
-			unset($ReplaceMenuItemName);
-		} else {
-			$MenuName = strip_tags($MenuItemName, 'br');
+		$ChildNameSelect = 'Child';
+		$ChildNameSelect .= $i;
+		
+		$MenuItemLookup = $Menu[0][$ChildNameSelect];
+		
+		if ($MenuItemLookup != NULL){
+			$MenuItemName = strip_tags($PageVersion[$MenuItemLookup]['ContentPageMenuTitle']);
 		}
 		
-		if ($MenuName) {
-			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = $MenuName;
-		} else if ($MenuItemName) {
-			$MenuItemName = $PageAttributes[$MenuItemName]['PageTitle'];
+		if ($MenuItemName != NULL) {
 			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = $MenuItemName;
 		} else {
 			$_SESSION['POST']['FilteredInput'][$MenuItemNameSelect] = 'NULL';
 		}
 		
+		if ($MenuItemLookup != NULL) {
+			$_SESSION['POST']['FilteredInput'][$MenuItemNameLookup] = $MenuItemLookup;
+		} else {
+			$_SESSION['POST']['FilteredInput'][$MenuItemNameLookup] = 'NULL';
+		}
+		
 	}
-	
+
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
 	header("Location: index.php?PageID=$MainMenuUpdatePage&SessionID=$sessionname");

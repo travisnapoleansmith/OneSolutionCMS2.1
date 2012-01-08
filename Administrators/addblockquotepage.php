@@ -105,6 +105,10 @@
 		define(Keywords, $hold['FilteredInput']['Keywords']);
 		define(Description, $hold['FilteredInput']['Description']);
 		
+		// HeaderPanel1 Defines
+		define (SiteName, $GLOBALS['sitename']);
+		define (Header, $hold['FilteredInput']['Header']);
+		
 		$Content = array();
 		
 		$PageID = array();
@@ -183,46 +187,8 @@
 		$Header = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
 		$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 		
-		$HeaderPanel1 = array();
-		$HeaderPanel1[0]['PageID'] = $NewPageID;
-		$HeaderPanel1[0]['ObjectID'] = 1;
-		$HeaderPanel1[0]['StartTag'] = NULL;
-		$HeaderPanel1[0]['EndTag'] = NULL;
-		$HeaderPanel1[0]['StartTagID'] = NULL;
-		$HeaderPanel1[0]['StartTagStyle'] = NULL;
-		$HeaderPanel1[0]['StartTagClass'] = NULL;
-		$HeaderPanel1[0]['Div'] = NULL;
-		$HeaderPanel1[0]['DivID'] = 'header-sitename';
-		$HeaderPanel1[0]['DivClass'] = NULL;
-		$HeaderPanel1[0]['DivStyle'] = NULL;
-		$HeaderPanel1[0]['Div1'] = "<h1 class=\"MainHeading\">$SiteName</h1>";
-		$HeaderPanel1[0]['Div1Title'] = NULL;
-		$HeaderPanel1[0]['Div1ID'] = NULL;
-		$HeaderPanel1[0]['Div1Class'] = NULL;
-		$HeaderPanel1[0]['Div1Style'] = NULL;
-		$HeaderPanel1[0]['Enable/Disable'] = $_POST['EnableDisable'];;
-		$HeaderPanel1[0]['Status'] = $_POST['Status'];
-		
-		$header = $hold['FilteredInput']['Header'];
-		
-		$HeaderPanel1[1]['PageID'] = $NewPageID;
-		$HeaderPanel1[1]['ObjectID'] = 2;
-		$HeaderPanel1[1]['StartTag'] = NULL;
-		$HeaderPanel1[1]['EndTag'] = NULL;
-		$HeaderPanel1[1]['StartTagID'] = NULL;
-		$HeaderPanel1[1]['StartTagStyle'] = NULL;
-		$HeaderPanel1[1]['StartTagClass'] = NULL;
-		$HeaderPanel1[1]['Div'] = NULL;
-		$HeaderPanel1[1]['DivID'] = 'header-pagename';
-		$HeaderPanel1[1]['DivClass'] = NULL;
-		$HeaderPanel1[1]['DivStyle'] = NULL;
-		$HeaderPanel1[1]['Div1'] = "<h1 class=\"SecondaryHeading\">$header</h1>";
-		$HeaderPanel1[1]['Div1Title'] = NULL;
-		$HeaderPanel1[1]['Div1ID'] = NULL;
-		$HeaderPanel1[1]['Div1Class'] = NULL;
-		$HeaderPanel1[1]['Div1Style'] = NULL;
-		$HeaderPanel1[1]['Enable/Disable'] = $_POST['EnableDisable'];
-		$HeaderPanel1[1]['Status'] = $_POST['Status'];
+		$HeaderPanel1 = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMenu/AddHeaderPanel1.ini',TRUE);
+		$HeaderPanel1 = $Tier6Databases->EmptyStringToNullArray($HeaderPanel1);
 		
 		$ContentLayerVersion = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayerVersion.ini',FALSE);
 		$ContentLayerVersion = $Tier6Databases->EmptyStringToNullArray($ContentLayerVersion);
@@ -382,6 +348,7 @@
 		
 		header("Location: $BlockquotePageCreatedPage&SessionID=$sessionname");
 		exit;
+		
 	}
 	
 ?>

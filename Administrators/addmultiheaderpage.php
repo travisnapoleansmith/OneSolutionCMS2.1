@@ -140,6 +140,10 @@
 		define(Keywords, $hold['FilteredInput']['Keywords']);
 		define(Description, $hold['FilteredInput']['Description']);
 		
+		// HeaderPanel1 Defines
+		define (SiteName, $GLOBALS['sitename']);
+		define (Header, $hold['FilteredInput']['Header']);
+		
 		$Start = array();
 		$Start ['Blockquote1'] = 'Blockquote1';
 		$Start ['Blockquote2'] = 'Blockquote2';
@@ -659,6 +663,7 @@
 		$Header = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
 		$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 		
+		/*
 		$HeaderPanel1 = array();
 		$HeaderPanel1[0]['PageID'] = $NewPageID;
 		$HeaderPanel1[0]['ObjectID'] = 1;
@@ -699,6 +704,10 @@
 		$HeaderPanel1[1]['Div1Style'] = NULL;
 		$HeaderPanel1[1]['Enable/Disable'] = $_POST['EnableDisable'];
 		$HeaderPanel1[1]['Status'] = $_POST['Status'];
+		*/
+		
+		$HeaderPanel1 = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMenu/AddHeaderPanel1.ini',TRUE);
+		$HeaderPanel1 = $Tier6Databases->EmptyStringToNullArray($HeaderPanel1);
 		
 		$ContentLayerVersion = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayerVersion.ini',FALSE);
 		$ContentLayerVersion = $Tier6Databases->EmptyStringToNullArray($ContentLayerVersion);
