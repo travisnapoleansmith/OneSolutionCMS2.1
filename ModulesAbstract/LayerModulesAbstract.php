@@ -865,6 +865,133 @@ abstract class LayerModulesAbstract
 		
 	}
 	
+	public function installSystem() {
+	
+	}
+	
+	public function upgradeSystem($DatabaseFilename, $SystemFilename) {
+		if (!empty($DatabaseFilename)) {
+			if (!empty($SystemFilename)) {
+				if (file_exists($DatabaseFilename)) {
+					if (file_exists($SystemFilename)) {
+						$this->upgradeDatabase($DatabaseFilename);
+						$this->upgradeSystemFiles($SystemFilename);
+					} else {
+						array_push($this->ErrorMessage,'upgradeSystem: SystemFilename DOES NOT EXIST!');
+					}
+				} else {
+					array_push($this->ErrorMessage,'upgradeSystem: DatabaseFilename DOES NOT EXIST!');
+				}
+			} else {
+				array_push($this->ErrorMessage,'upgradeSystem: SystemFilename CANNOT BE EMPTY!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'upgradeSystem: DatabaseFilename CANNOT BE EMPTY!');
+		}
+	}
+	
+	public function upgradeDatabase($Filename) {
+		if (!empty($Filename)) {
+			if (file_exists($Filename)) {
+				$File = file($Filename);
+				foreach ($File as $FileContent) {
+					$FileContent = str_replace("\n", '', $FileContent);
+					$SQLQuery = $this->processSqlFile($FileContent);
+					// LEFT OFF HERE
+					// NOW WE HAVE TO MAKE IT TALK TO THE DATABASE
+					// WE HAVE TO BACKUP THE DATABASE
+				}
+			} else {
+				array_push($this->ErrorMessage,'upgradeDatabase: Filename DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'upgradeDatabase: Filename CANNOT BE EMPTY!');
+		}
+	}
+	
+	public function upgradeSystemFiles($Filename) {
+		if (!empty($Filename)) {
+			if (file_exists($Filename)) {
+				$File = file($Filename);
+				foreach ($File as $FileContent) {
+					$FileContent = str_replace("\n", '', $FileContent);
+					$ZipArchiveFile = new ZipArchive();
+					$Resource = $ZipArchiveFile->open($FileContent);
+					if ($Resource === TRUE) {
+						print "HERE\n";
+						//$ZipArchiveFile->extractTo('UPGRADE');
+						//$ZipArchiveFile->close();
+					} else {
+					
+					}
+					//print_r($Resource);
+					//print_r($ZipArchiveFile);
+					//print "\n $FileContent\n";
+					//print "------\n";
+				}
+				
+				// LEFT OFF HERE
+				
+			} else {
+				array_push($this->ErrorMessage,'upgradeSystemFile: Filename DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'upgradeSystemFile: Filename CANNOT BE EMPTY!');
+		}
+	}
+	
+	public function backupDatabase($Filename) {
+		if (!empty($Filename)) {
+			if (file_exists($Filename)) {
+				// LEFT OFF HERE
+			} else {
+				array_push($this->ErrorMessage,'backupDatabase: Filename DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'backupDatabase: Filename CANNOT BE EMPTY!');
+		}
+	}
+	
+	public function restoreDatabase($Filename) {
+		if (!empty($Filename)) {
+			if (file_exists($Filename)) {
+				// LEFT OFF HERE
+			} else {
+				array_push($this->ErrorMessage,'restoreDatabase: Filename DOES NOT EXIST!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'restoreDatabase: Filename CANNOT BE EMPTY!');
+		}
+	}
+	
+	public function processSqlFile($Filename) {
+		if (!empty($Filename)) {
+			if (file_exists($Filename)) {
+				$File = file($Filename);
+				$ReturnFile = array();
+				foreach ($File as $Line) {
+					// Skip it if it is a comment or it is empty space
+					if (substr($Line, 0, 2) == '--' || $Line == '' || strstr($Line, '/*') || strstr($Line, '/*') || empty($Line)) {
+						continue;
+					}
+					
+					// Add this line to the current segment
+					$Content .= $Line;
+					
+					// If it has a semicolon at the end, it's the end of the query
+					if (substr(trim($Line), -1, 1) == ';') {
+						$Content = trim($Content);
+						$Content = str_replace("\n", '', $Content);
+						$Content = str_replace("\r", '', $Content);
+						array_push($ReturnFile,$Content);
+						$Content = '';
+					}
+				}
+				return $ReturnFile;
+			}
+		} 
+	}
+	
 	public function getTable($TableName) {
 		if (is_string($TableName)) {
 			$this->LayerModule->createDatabaseTable($TableName);

@@ -480,6 +480,7 @@ class ContentLayer extends LayerModulesAbstract
 				);
 			}
 			session_destroy();
+			
 		}
 	}
 	

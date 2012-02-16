@@ -34,72 +34,72 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	abstract protected function checkField ($field);
 	abstract protected function BuildingEntireTable();
 	
-	public function setIdnumber ($idnumber) {
-		$this->idnumber = $idnumber;
+	public function setIdnumber ($IdNumber) {
+		$this->idnumber = $IdNumber;
 	}
 	
 	public function getIdnumber () {
 		return $this->idnumber;
 	}
 	
-	public function setOrderbyname ($orderbyname) {
-		$this->orderbyname = $orderbyname;
+	public function setOrderbyname ($OrderByName) {
+		$this->orderbyname = $OrderByName;
 	}
 	
 	public function getOrderbyname () {
 		return $this->orderbyname;
 	}
 	
-	public function setOrderbytype ($orderbytype) {
-		$this->orderbytype = $orderbytype;
+	public function setOrderbytype ($OrderByType) {
+		$this->orderbytype = $OrderByType;
 	}
 	
 	public function getOrderbytype () {
 		return $this->orderbytype;
 	}
 	
-	public function setLimit ($limit) {
-		$this->limit = $limit;
+	public function setLimit ($Limit) {
+		$this->limit = $Limit;
 	}
 	
 	public function getLimit () {
 		return $this->limit;
 	}
 	
-	public function setDatabasename ($databasename){
-		$this->databasename = $databasename;
+	public function setDatabasename ($DatabaseName){
+		$this->databasename = $DatabaseName;
 	}
 	
 	public function getDatabasename () {
 		return $this->databasename;
 	}
 	
-	public function setUser ($user){
-		$this->user = $user;
+	public function setUser ($User){
+		$this->user = $User;
 	}
 	
 	public function getUser () {
 		return $this->user;
 	}
 	
-	public function setPassword ($password){
-		$this->password = $password;
+	public function setPassword ($Password){
+		$this->password = $Password;
 	}
 	
 	public function getPassword () {
 		return $this->password;
 	}
 	
-	public function setDatabasetable ($databasetable){
-		$this->databasetable = $databasetable;
+	public function setDatabasetable ($DatabaseTable){
+		$this->databasetable = $DatabaseTable;
 	}
 	
 	public function getDatabasetable () {
 		return $this->databasetable;
 	}
 	
-	public function setHostname ($hostname){
-		$this->hostname = $hostname;
+	public function setHostname ($HostName){
+		$this->hostname = $HostName;
 	}
 	
 	public function getHostname () {
@@ -119,8 +119,8 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		$this->orderbytype = $orderbytype;
 	}
 	
-	public function setDatabaseField ($idnumber) {
-		$this->idnumber = $idnumber;
+	public function setDatabaseField ($IdNumber) {
+		$this->idnumber = $IdNumber;
 		$this->BuildDatabaseRows();
 		$this->rowfieldnames = Array ();
 		if (is_array($this->database)) {
@@ -128,9 +128,9 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		}
 	}
 	
-	public function searchFieldNames($search) {
+	public function searchFieldNames($Search) {
 		if (is_array($this->rowfieldnames)) {
-			if (array_search($search, $this->rowfieldnames)) {
+			if (array_search($Search, $this->rowfieldnames)) {
 				return TRUE;
 			} else {
 				return FALSE;
@@ -138,7 +138,7 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		}
 	}
 	
-	public function searchEntireTable($search){
+	public function searchEntireTable($Search){
 		$arguments = func_get_args();
 		$search2 = $arguments[1];
 		
@@ -150,9 +150,9 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 			$this->i = 0;
 			$j = 0;
 			while ($this->i <= $this->rownumber) {
-				if (in_array($search, $this->entiretable[$this->i]) && in_array($search2, $this->entiretable[$this->i])){
+				if (in_array($Search, $this->entiretable[$this->i]) && in_array($search2, $this->entiretable[$this->i])){
 					$this->idsearch[$j]["idnumber"] = $this->entiretable[$this->i]["idnumber"];
-					$this->idsearch[$j]["keyname"] = array_search($search, $this->entiretable[$this->i]);
+					$this->idsearch[$j]["keyname"] = array_search($Search, $this->entiretable[$this->i]);
 					$j++;
 				}
 				$this->i++;
@@ -162,9 +162,9 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 			$j = 0;
 			while ($this->i <= $this->rownumber) {
 				if (is_array($this->entiretable[$this->i])) {
-					if (in_array($search, $this->entiretable[$this->i])){
+					if (in_array($Search, $this->entiretable[$this->i])){
 						$this->idsearch[$j]["idnumber"] = $this->entiretable[$this->i]["idnumber"];
-						$this->idsearch[$j]["keyname"] = array_search($search, $this->entiretable[$this->i]);
+						$this->idsearch[$j]["keyname"] = array_search($Search, $this->entiretable[$this->i]);
 						$j++;
 					}
 				}

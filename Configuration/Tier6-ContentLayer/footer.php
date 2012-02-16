@@ -2,6 +2,10 @@
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
 
+	$Copyright = $GLOBALS['copyright'];
+	$Copyright .= date('Y');
+	$CMSVersion = $GLOBALS['cmsversion'];
+	
 	$Writer->startElement('div');
 		$Writer->writeAttribute('id', 'footer');
 			$Writer->startElement('div');
@@ -12,10 +16,9 @@
 					$Writer->startElement('h4');
 				}
 				$Writer->writeAttribute('class', 'CopyrightHeading');
-				$text = "Copyright &copy; 2009 - ";
-				$text .= date("Y");
-				$text .= " <a href='index.php'>KC Photo and Video</a>";
-				$text .= " &#8211; Created with <a href='http://www.onesolutioncms.com'>One Solution CMS</a>";
+				$text = $Copyright;
+				$text .= " &#8211; Created with <a href='http://www.onesolutioncms.com'>One Solution CMS</a> ";
+				$text .= $CMSVersion;
 				$Writer->writeRaw($text);
 				$Writer->endElement();
 			$Writer->endElement();

@@ -31,7 +31,7 @@
 		
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
 		$PageName = $UpdateNewsPage;
-
+		//print "$PageName\n";
 		$hold = $Tier6Databases->FormSubmitValidate('UpdateNewsPage', $PageName);
 		if ($hold) {
 			$DateTime = date('Y-m-d H:i:s');

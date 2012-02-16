@@ -59,6 +59,9 @@
 	$Tier6DatabaseDeny['updateField'] = 'updateField';
 	$Tier6DatabaseDeny['deleteField'] = 'deleteField';
 	
+	// Empty Table Methods
+	$Tier6DatabaseAllow['emptyTable'] = 'emptyTable';
+	
 	// Setting Database Row
 	$Tier6DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
 	

@@ -28,7 +28,7 @@
 	require_once "$HOME/Tier6-ContentLayer/ClassContentLayer.php";
 	
 	// Tier 2 Modules
-	require_once "$HOME/Modules/Tier2DataAccessLayer/MySqlConnect/ClassMySqlConnect.php";
+	require_once "$HOME/Modules/Tier2DataAccessLayer/Core/MySqlConnect/ClassMySqlConnect.php";
 	
 	// Tier 3 Modules
 	

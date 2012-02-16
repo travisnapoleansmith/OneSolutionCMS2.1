@@ -1,5 +1,9 @@
 <?php
-	require_once ('Configuration/includes.php');
+	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	$ADMIN = $HOME . '/Administrators';
+	
+	require_once ("$ADMIN/Configuration/includes.php");
+	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$PageName = 'index.php?PageID=';
 	if ($_POST['AddBlockquotePage']) {

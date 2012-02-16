@@ -1,5 +1,8 @@
 <?php
-	require_once ('Configuration/includes.php');
+	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	$ADMIN = $HOME . '/Administrators';
+	
+	require_once ("$ADMIN/Configuration/includes.php");
 	
 	$sessionname = NULL;
 	$sessionname = $_COOKIE['SessionID'];
@@ -28,11 +31,12 @@
 	$_POST['Owner'] = $Owner;
 	$_POST['UserAccessGroup'] = $UserAccessGroup;
 	$_POST['UpdateNewsPage'] = $NewUpdateNewsPage;
-		
+	
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
-		$PageName = $UpdateContentPage;
-
+		$PageName = $UpdateBlockquotePage;
+		
 		$hold = $Tier6Databases->FormSubmitValidate('UpdateBlockquotePage', $PageName);
+		
 		if ($hold) {
 			$DateTime = date('Y-m-d H:i:s');
 			$Date = date('Y-m-d');

@@ -1,6 +1,6 @@
 <?php
 	require_once ('Configuration/includes.php');
-	
+
 	$hold = $_POST['MenuItem'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[0];
@@ -80,7 +80,7 @@
 		}
 		
 	}
-
+	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
 	header("Location: index.php?PageID=$MainMenuUpdatePage&SessionID=$sessionname");

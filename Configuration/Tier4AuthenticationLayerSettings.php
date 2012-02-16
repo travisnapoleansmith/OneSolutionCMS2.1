@@ -59,6 +59,9 @@
 	$Tier4DatabaseDeny['updateField'] = 'updateField';
 	$Tier4DatabaseDeny['deleteField'] = 'deleteField';
 	
+	// Empty Table Methods
+	$Tier4DatabaseAllow['emptyTable'] = 'emptyTable';
+	
 	// Maintenance Methods
 	$Tier4DatabaseDeny['sortTable'] = 'sortTable';
 	

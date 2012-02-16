@@ -1,5 +1,8 @@
 <?php
-	require_once ('Configuration/includes.php');
+	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	$ADMIN = $HOME . '/Administrators';
+	
+	require_once ("$ADMIN/Configuration/includes.php");
 	
 	$hold = $_POST['BlockquotePage'];
 	$hold = explode(' ', $hold);
