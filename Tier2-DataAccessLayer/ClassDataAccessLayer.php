@@ -86,7 +86,7 @@ class DataAccessLayer extends LayerModulesAbstract
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
-		while (current($this->Modules)) {
+		/*while (current($this->Modules)) {
 			//$tempobject = current($this->Modules[key($this->Modules)]);
 			//$databasetables = $tempobject->getTableNames();
 			//$tempobject->FetchDatabase ($this->PageID);
@@ -94,7 +94,7 @@ class DataAccessLayer extends LayerModulesAbstract
 			//$tempobject->getOutput();
 			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
-		}
+		}*/
 		if ($functionarguments[0]) {
 			$PassArguments = array();
 			$PassArguments[0] = $functionarguments;

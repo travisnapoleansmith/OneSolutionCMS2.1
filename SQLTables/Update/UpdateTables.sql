@@ -112,7 +112,7 @@ UPDATE `ContentLayerModules` SET `ObjectTypeLocation` = 'NULL' WHERE  CONVERT(`C
 UPDATE `ContentLayerModules` SET `ObjectTypeLocation` = 'Modules/Tier6ContentLayer/User/XhtmlSimpleViewer' WHERE  CONVERT(`ContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlSimpleViewer' AND CONVERT(`ContentLayerModules`.`ObjectTypeName` USING utf8) = 'simpleviewer';
 UPDATE `ContentLayerModules` SET `ObjectTypeLocation` = 'Modules/Tier6ContentLayer/Extended/XhtmlAd' WHERE  CONVERT(`ContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlAd' AND CONVERT(`ContentLayerModules`.`ObjectTypeName` USING utf8) = 'ad';
 UPDATE `ContentLayerModules` SET `ObjectTypeLocation` = 'Modules/Tier6ContentLayer/Core/XhtmlSiteStats' WHERE  CONVERT(`ContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlSiteStats' AND CONVERT(`ContentLayerModules`.`ObjectTypeName` USING utf8) = 'sitestats';
-
+UPDATE `ContentLayerModules` SET `ObjectTypeLocation` = 'Modules/Tier6ContentLayer/User/XhtmlFlashJWPlayer' WHERE CONVERT(`ContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlFlashJWPlayer' AND CONVERT(`ContentLayerModules`.`ObjectTypeName` USING utf8) = 'flashjwplayer';
 
 --
 -- Update content for table `DataAccessLayerModules`
