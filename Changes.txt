@@ -1,4 +1,37 @@
-Changes For One Solution CMS 2.1.124 - Wednesday, February 15, 2012
+Changes For One Solution CMS 2.1.126 - 
+Added:
+	1). Added UserData folder for all user data. Will be used in the future.
+	2). Added the following folders to UserData: Administrators, Configuration, ContentFiles, Images, Libraries, Modules, Tier2-DataAccessLayer, Tier3-ProtectionLayer, Tier4-AuthenticationLayer, Tier5-ValidationLayer, Tier6-ContentLayer, Tier7-BehavioralLayer, Tier8-PresentationLayer.
+	3). Added the following folders to UserData/Administrators: Configuration, ModuleSettings, PageTypes.
+	4). Added the following folders to UserData/Administrators/Configuration: Tier2-DataAccessLayer, Tier3-ProtectionLayer, Tier4-AuthenticationLayer, Tier5-ValidationLayer, Tier6-ContentLayer.
+	5). Added the following folders to UserData/Configuration: Tier2-DataAccessLayer, Tier3-ProtectionLayer, Tier4-AuthenticationLayer, Tier5-ValidationLayer, Tier6-ContentLayer.
+	6). Added the following folders to UserData/Libraries: GlobalLayer, Tier2DataAccessLayer, Tier3ProtectionLayer, Tier4AuthenciationLayer, Tier5ValidationLayer, Tier6ContentLayer, Tier7BehavioralLayer, Tier8PresentationLayer.
+	7). Added the following folders to UserData/Modules: Tier2DataAccessLayer, Tier3ProtectionLayer, Tier4AuthenciationLayer, Tier5ValidationLayer, Tier6ContentLayer.
+
+Updated (Fixed):
+	1). Updated in Administrators Panel updatemenu.php to correct an issue with updating the root menu.
+	2). Fixed AdPanel Module so if their are not enough ads to show all ads instead.
+	3). Fixed AdPanel Module to make it take HTML code inside of the location field.
+	4). Renamed settings.ini to defaultsettings.ini. Make sure that when you use this file to always rename the file to settings.ini.
+	
+Removed:
+	1). Removed Configuration/News, Configuration/NotInUse folders.
+	2). Removed Configuration/settings.ini see Update(Fixed) for more.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Changes For One Solution CMS 2.1.125 - Friday, February 17, 2012 6:16:51 PM
+Added:
+	1). Added to SQLTables/Install InstallTables.sql
+	
+Updated (Fixed):
+	1). Updated SQLTables/Update/UpdateTables.sql file.
+	2). Updated Tier 2 - Data Access Layer. Fixed a few minor bugs.
+	
+Removed:
+	1). Removed the following from Tier6ContentLayer: AdPanel1.php, bottompanel1.php, bottompanel1news.php, bottompanel2.php, menu.php, news.php,  NotInUse Folder, All files from Custom, simpleviewer.php, toppanel2.php.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Changes For One Solution CMS 2.1.124 - Wednesday, February 15, 2012 7:52:10 PM
 Added:
 	1). Added to Libraries/Tier7-BeharvioralTier/TinyMCE TinyMCE 3.4.7.
 	2). Added custom folder to all configuration Tier folders.
@@ -19,7 +52,7 @@ Removed:
 	3). Removed BottomPanel1.php, BottomPanel1News.php, BottomPanel2.php, menu.php, news.php, TopPanel2.php from Configuration/Tier6ContentLayer folder.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
-Changes For One Solution CMS 2.1.123 - Sunday, January 8, 2012
+Changes For One Solution CMS 2.1.123 - Sunday, January 8, 2012 4:01:50 AM
 
 Added:
 	1). To HeaderPanel1 in Administrators Module Settings for Tier6-ContentLayer and XhtmlMenu folder and .ini settings file for headerpanel1, to add and update. All CRUD Page Types have been updated to reflect this.
@@ -546,4 +579,52 @@ Changes For One Solution CMS 2.1.50 - Tuesday, April 06, 2010 11:49:22 PM
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Changes For One Solution CMS 2.1.49 - Saturday, April 03, 2010 8:30:39 PM
+
+	Added Form Validation.  Still needs a lot of work.  Fixed a lot of problems with the underlining parts of each Tier. Still need to do more with the Tiers.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.48 - Wednesday, March 31, 2010 10:54:17 PM
+	Updated XhtmlForm.  It supports FormOptGroup and FormButton.  Still have to get it to support XhtmlList and other modules.  Began working on authentication for AuthenticationLayer.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.47 - Saturday, March 27, 2010 5:23:32 PM
+	Updated XhtmlForm to include FormSelect.  Updated all tiers to include the rest of the form database tables.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.46 - Wednesday, March 24, 2010 8:02:06 PM
+	Updated XhtmlForm to include support for Fieldset and Legend.  Updated the Form Module to support W3C Standards!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.45 - Saturday, March 20, 2010 11:05:19 PM
+	Updated XhtmlForm.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.44 - Wednesday, March 17, 2010 8:07:24 PM
+	Updated XhtmlForm module and updated Tier 6 Abstract Module to include Standard Attributes for arrays!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.43 - Monday, March 15, 2010 11:16:59 PM
+	Speed improvements for Layer Modules Abstract.  Updated Tier 6 Content Layer Modules Abstract to have a Standard Attribute method for non-array's.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.42 - Saturday, March 13, 2010 10:37:55 PM
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.41 - Saturday, March 13, 2010 10:33:44 PM
+	Updated XhtmlMainMenu to use XhtmlUnorderedlist and updated XhtmllOrderedList to use XhtmlOrderedList`
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.40 - Saturday, March 13, 2010 10:11:02 PM
+	Updated XhtmlList to be XhtmlUnorderedList and added XhtmlOrderedList
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 MORE TO COME!

@@ -8,12 +8,12 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 		$GLOBALS['ErrorMessage']['XhtmlFlashJWPlayer'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlFlashJWPlayer'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($databaseoptions['FileName']) {
 			$this->FileName = $databaseoptions['FileName'];
 			unset($databaseoptions['FileName']);
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
@@ -21,17 +21,17 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
-		
+
 	}
 
 	public function FetchDatabase ($PageID) {
@@ -40,41 +40,41 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset ($PageID['PrintPreview']);
-		
+
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		
+
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
+
 		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
-		
+
 		$this->LayerModule->Disconnect($this->DatabaseTable);
-		
+
 	}
-	
+
 	public function CreateOutput($space) {
-		require_once 'Modules/Tier6ContentLayer/XhtmlFlash/ClassXhtmlFlash.php';
+		require_once 'Modules/Tier6ContentLayer/Core/XhtmlFlash/ClassXhtmlFlash.php';
 		$this->Space = $space;
-		
+
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
 			$PageID = array();
 			$PageID['PageID'] = $this->PageID;
 			$PageID['ObjectID'] = $this->ObjectID;
 			$PageID['RevisionID'] = $this->RevisionID;
 			$PageID['CurrentVersion'] = $this->CurrentVersion;
-			
+
 			$FlashDatabase = Array();
 			$FlashDatabase['Flash'] = $this->DatabaseTable;
-					
+
 			$DatabaseOptions = Array();
 			$DatabaseOptions['FlashVars'] = array();
-			
+
 			// EXAMPLE OF PASSING DATA TO FLASHVARS
 			//$DatabaseOptions['FlashVars']['GalleryUrl']['value']['galleryURL'] = $GalleryUrl;
-			
+
 			// FlashVars File Properties
 			$DatabaseOptions['FlashVars']['FlashVarsAuthor']= 'author';
 			$DatabaseOptions['FlashVars']['FlashVarsDate']= 'date';
@@ -88,7 +88,7 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			$DatabaseOptions['FlashVars']['FlashVarsTags']= 'tags';
 			$DatabaseOptions['FlashVars']['FlashVarsTitle']= 'title';
 			$DatabaseOptions['FlashVars']['FlashVarsType']= 'type';
-			
+
 			//FlashVars Layout Properties
 			$DatabaseOptions['FlashVars']['FlashVarsBackColor']= 'backcolor';
 			$DatabaseOptions['FlashVars']['FlashVarsControlBar']= 'controlbar';
@@ -103,7 +103,7 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			$DatabaseOptions['FlashVars']['FlashVarsSkin']= 'skin';
 			$DatabaseOptions['FlashVars']['FlashVarsScreenColor']= 'screencolor';
 			$DatabaseOptions['FlashVars']['FlashVarsWidth']= 'width';
-			
+
 			//FlashVars Behavior Properties
 			$DatabaseOptions['FlashVars']['FlashVarsAutoStart']= 'autostart';
 			$DatabaseOptions['FlashVars']['FlashVarsBufferLength']= 'bufferlength';
@@ -119,29 +119,29 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			$DatabaseOptions['FlashVars']['FlashVarsState']= 'state';
 			$DatabaseOptions['FlashVars']['FlashVarsStretching']= 'stretching';
 			$DatabaseOptions['FlashVars']['FlashVarsVolume']= 'volume';
-			
+
 			//FlashVars API Properties
 			$DatabaseOptions['FlashVars']['FlashVarsClient']= 'client';
 			$DatabaseOptions['FlashVars']['FlashVarsDebug']= 'debug';
 			$DatabaseOptions['FlashVars']['FlashVarsId']= 'id';
 			$DatabaseOptions['FlashVars']['FlashVarsPlugins']= 'plugins';
 			$DatabaseOptions['FlashVars']['FlashVarsVersion']= 'version';
-			
+
 			//FlashVars ConfigXML Properties
 			$DatabaseOptions['FlashVars']['FlashVarsConfig']= 'config';
-			
+
 			$Flash = new XhtmlFlash($FlashDatabase, $DatabaseOptions, $this->LayerModule);
 			$Flash->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->Databasename, $this->DatabaseTable);
 			$Flash->setHttpUserAgent($this->HttpUserAgent);
 			$Flash->FetchDatabase($PageID);
 			$Flash->CreateOutput('  ');
-				
+
 			if ($this->FileName) {
 				$this->Writer->flush();
 			}
 		}
 	}
-	
+
 	/*public function createFlash(array $Flash) {
 		if ($Flash != NULL) {
 			$Keys = array();
@@ -163,13 +163,13 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			$Keys[15] = 'Height';
 			$Keys[16] = 'Enable/Disable';
 			$Keys[17] = 'Status';
-			
+
 			$this->addModuleContent($Keys, $Flash, $this->DatabaseTable);
 		} else {
 			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
 		}
 	}
-	
+
 	public function updateFlash(array $PageID) {
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->DatabaseTable);
@@ -177,7 +177,7 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			array_push($this->ErrorMessage,'updateFlash: PageID cannot be NULL!');
 		}
 	}
-	
+
 	public function deleteFlash(array $PageID) {
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->DatabaseTable);
@@ -185,18 +185,18 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			array_push($this->ErrorMessage,'deleteFlash: PageID cannot be NULL!');
 		}
 	}
-	
+
 	public function updateFlashStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
-			
+
 			if ($PageID['EnableDisable'] == 'Enable') {
 				$this->enableModuleContent($PassID, $this->DatabaseTable);
 			} else if ($PageID['EnableDisable'] == 'Disable') {
 				$this->disableModuleContent($PassID, $this->DatabaseTable);
 			}
-			
+
 			if ($PageID['Status'] == 'Approved') {
 				$this->approvedModuleContent($PassID, $this->DatabaseTable);
 			} else if ($PageID['Status'] == 'Not-Approved') {

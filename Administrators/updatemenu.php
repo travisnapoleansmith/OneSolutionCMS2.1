@@ -71,12 +71,7 @@
 		}
 	}
 	
-	$CurrentIDName = NULL;
-	
-	$CurrentIDName = $CurrentMenu['ParentIDName'];
-	if ($CurrentIDName == NULL) {
-		$CurrentIDName = 'MenuItem';
-	} 
+	$CurrentIDName = 'MenuItem';
 	
 	$ParentObjectID = $CurrentMenu['ParentObjectID'];
 	$ChildChanges = array();
@@ -97,7 +92,6 @@
 	$returnvalue = $Tier6Databases->FormSubmitValidate('UpdateMenu', $PageName);
 	
 	$GlobalUpdateRecord = array();
-	
 	recursiveWalk($CurrentMenu, $ChildChanges, $CurrentIDName, $ParentObjectID, $Menu);
 	
 	foreach ($GlobalUpdateRecord as $UpdateRecord) {
@@ -124,7 +118,6 @@
 							$ModifyRecord['RevisionID'] = 1;
 							$ModifyRecord['ParentObjectID'] = $UpdateRecord['ObjectID'];
 							$ModifyRecord['ParentIDName'] = $UpdateRecord['ParentIDName'] . '-' . str_replace('Child', '', $Key);
-							
 							$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
 						}
 					}
@@ -267,7 +260,11 @@
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Class'] = $LiClassChild;
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Dir'] = NULL;
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = NULL;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] = $Menu[$Value]['ParentIDName'];
+				if (!is_null($Value)) {
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] =  $Menu[$Value]['ParentIDName'];
+				} else {
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] = NULL;
+				}
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Lang'] = NULL;
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Style'] = NULL;
 				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Title'] = $PageVersion[$Value]['ContentPageMenuTitle'];
@@ -319,8 +316,6 @@
 			return $NextIDNumberChild;
 		}
 	}
-	
-	
 	
 	function recursiveWalk($CurrentMenu, $Changes, $ParentIDName, $ParentObjectID, $Menu) {
 		$Tier6Databases = &$GLOBALS['Tier6Databases'];

@@ -259,8 +259,14 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$this->AdSponsorsDatabaseTable[$TableNamePageID] = $this->LayerModule->pass ($TableNamePageID, 'getEntireTable', array());
 			$this->LayerModule->Disconnect($TableNamePageID);
 			
+			$AdCount = count($this->AdSponsorsDatabaseTable[$TableName]);
+			
 			$ShowNumber = $TableName . 'ShowNumber';
 			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
+			
+			if ($ShowNumber > $AdCount) {
+				$ShowNumber = $AdCount;
+			}
 			
 			$PrintOrder = $this->AdSponsorsDatabaseTable[$TableNamePageID];
 			
@@ -377,6 +383,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					}
 				}
 			}
+			
 			for ($i = 0; $i < $ShowNumber; $i++) {
 				$this->selectRandomSponsor ($TableNamePageID, $this->AdSponsorsDatabaseTable[$TableNamePageID]);
 			}
@@ -389,12 +396,13 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			
 			$ShowNumber = $TableName . 'ShowNumber';
 			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
+			
+			if ($ShowNumber > $AdCount) {
+				$ShowNumber = $AdCount;
+			}
+			
 			$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
 		}
-		
-		//print_r($this->AdSponsorsDatabaseTable);
-		//print_r($this->AdSponsorsOutputAdLookup);
-		
 		
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
@@ -599,7 +607,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						$this->Writer->writeAttribute('style', $this->AdvertisingContentStyle); 
 					}
 					
-					$this->Writer->text($AdSponsorsData['Location']);
+					$this->Writer->writeRaw($AdSponsorsData['Location']);
 					
 					$this->Writer->endElement(); // ENDS START TAG OR P TAG
 				}
