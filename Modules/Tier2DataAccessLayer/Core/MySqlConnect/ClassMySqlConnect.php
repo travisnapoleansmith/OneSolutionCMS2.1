@@ -856,7 +856,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	
 	public function emptyTable() {
 		$query = 'TRUNCATE TABLE `' . $this->databasetable . '` ; ';
-		$result = mysql_query($query);		
+		$result = mysql_query($query);
+	}
+	
+	public function executeSQlCommand ($SQLCommand) {
+		if (!is_null($SQLCommand)) {
+			$this->Connect();
+			$result = mysql_query($SQLCommand);
+			$this->Disconnect();
+		}
 	}
 	
 	public function sortTable($sortorder) {

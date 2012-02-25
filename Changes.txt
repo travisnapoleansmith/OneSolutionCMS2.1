@@ -1,4 +1,18 @@
-Changes For One Solution CMS 2.1.126 - 
+Changes For One Solution CMS 2.1.127 -
+Added:
+	1). Added Updater Utility to Administrators folder.
+	2). Added Calendar Event form to database.
+	3). Added SystemFiles.txt to SQLTables/Update.
+
+Updated (Fixed):
+	None.
+
+Removed:
+	None.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.126 - Sunday, February 19, 2012 5:10:00 PM
 Added:
 	1). Added UserData folder for all user data. Will be used in the future.
 	2). Added the following folders to UserData: Administrators, Configuration, ContentFiles, Images, Libraries, Modules, Tier2-DataAccessLayer, Tier3-ProtectionLayer, Tier4-AuthenticationLayer, Tier5-ValidationLayer, Tier6-ContentLayer, Tier7-BehavioralLayer, Tier8-PresentationLayer.

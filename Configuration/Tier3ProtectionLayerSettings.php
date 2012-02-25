@@ -59,6 +59,9 @@
 	$Tier3DatabaseDeny['updateField'] = 'updateField';
 	$Tier3DatabaseDeny['deleteField'] = 'deleteField';
 	
+	// General SQL Command
+	$Tier3DatabaseAllow['executeSQlCommand'] = 'executeSQlCommand';
+	
 	// Empty Table Methods
 	$Tier3DatabaseAllow['emptyTable'] = 'emptyTable';
 	

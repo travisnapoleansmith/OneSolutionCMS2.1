@@ -1,1 +1,1 @@
-../SQLTables/Update/UpdateTables.sql
+../../SQLTables/Update/UpdateTables.sql

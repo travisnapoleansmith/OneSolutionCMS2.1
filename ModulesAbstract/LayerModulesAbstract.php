@@ -869,37 +869,19 @@ abstract class LayerModulesAbstract
 	
 	}
 	
-	public function upgradeSystem($DatabaseFilename, $SystemFilename) {
-		if (!empty($DatabaseFilename)) {
-			if (!empty($SystemFilename)) {
-				if (file_exists($DatabaseFilename)) {
-					if (file_exists($SystemFilename)) {
-						$this->upgradeDatabase($DatabaseFilename);
-						$this->upgradeSystemFiles($SystemFilename);
-					} else {
-						array_push($this->ErrorMessage,'upgradeSystem: SystemFilename DOES NOT EXIST!');
-					}
-				} else {
-					array_push($this->ErrorMessage,'upgradeSystem: DatabaseFilename DOES NOT EXIST!');
-				}
-			} else {
-				array_push($this->ErrorMessage,'upgradeSystem: SystemFilename CANNOT BE EMPTY!');
-			}
-		} else {
-			array_push($this->ErrorMessage,'upgradeSystem: DatabaseFilename CANNOT BE EMPTY!');
-		}
-	}
-	
 	public function upgradeDatabase($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
 				$File = file($Filename);
+				
 				foreach ($File as $FileContent) {
 					$FileContent = str_replace("\n", '', $FileContent);
-					$SQLQuery = $this->processSqlFile($FileContent);
-					// LEFT OFF HERE
-					// NOW WE HAVE TO MAKE IT TALK TO THE DATABASE
-					// WE HAVE TO BACKUP THE DATABASE
+					$ReturnFileContents = $this->processSqlFile($FileContent);
+					if (is_array($ReturnFileContents)) {
+						foreach ($ReturnFileContents as $Value) {
+							$this->LayerModule->pass ($this->LayerModuleTableName, 'executeSQlCommand', array('SQLCommand' => $Value));
+						}
+					}
 				}
 			} else {
 				array_push($this->ErrorMessage,'upgradeDatabase: Filename DOES NOT EXIST!');
@@ -909,41 +891,11 @@ abstract class LayerModulesAbstract
 		}
 	}
 	
-	public function upgradeSystemFiles($Filename) {
-		if (!empty($Filename)) {
-			if (file_exists($Filename)) {
-				$File = file($Filename);
-				foreach ($File as $FileContent) {
-					$FileContent = str_replace("\n", '', $FileContent);
-					$ZipArchiveFile = new ZipArchive();
-					$Resource = $ZipArchiveFile->open($FileContent);
-					if ($Resource === TRUE) {
-						print "HERE\n";
-						//$ZipArchiveFile->extractTo('UPGRADE');
-						//$ZipArchiveFile->close();
-					} else {
-					
-					}
-					//print_r($Resource);
-					//print_r($ZipArchiveFile);
-					//print "\n $FileContent\n";
-					//print "------\n";
-				}
-				
-				// LEFT OFF HERE
-				
-			} else {
-				array_push($this->ErrorMessage,'upgradeSystemFile: Filename DOES NOT EXIST!');
-			}
-		} else {
-			array_push($this->ErrorMessage,'upgradeSystemFile: Filename CANNOT BE EMPTY!');
-		}
-	}
-	
 	public function backupDatabase($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
-				// LEFT OFF HERE
+				//$SqlFileCommand = 'mysql -h ' . $this->Hostname . ' -u ' . $this->UserName . ' -p  > ' . $FileName;
+				//exec ($SqlFileCommand);
 			} else {
 				array_push($this->ErrorMessage,'backupDatabase: Filename DOES NOT EXIST!');
 			}
@@ -955,7 +907,8 @@ abstract class LayerModulesAbstract
 	public function restoreDatabase($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
-				// LEFT OFF HERE
+				//$SqlFileCommand = 'mysql -h ' . $this->Hostname . ' -u ' . $this->UserName . ' -p  < ' . $FileName;
+				//exec ($SqlFileCommand);
 			} else {
 				array_push($this->ErrorMessage,'restoreDatabase: Filename DOES NOT EXIST!');
 			}
@@ -988,6 +941,10 @@ abstract class LayerModulesAbstract
 					}
 				}
 				return $ReturnFile;
+				//$SqlFileCommand = 'mysql -u "' . $this->User . '" -p "' . $this->Password . '" "' . $this->DatabaseName . '" < ' . $Filename;
+				//print "$SqlFileCommand\n";
+				//print "$this->Hostname\n";
+				//exec ($SqlFileCommand);
 			}
 		} 
 	}
