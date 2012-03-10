@@ -62,7 +62,7 @@
 	$Page->startElement('p');
 		$Page->text('To continue this process please select ');
 		$Page->startElement('a');
-		$Page->writeAttribute('href', 'updatedatabase.php');
+		$Page->writeAttribute('href', 'UpdateDatabase.php');
 		$Page->text('Step 4: Update Database');
 		$Page->endElement(); //Ends A
 	$Page->endElement(); //Ends P

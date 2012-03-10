@@ -1,4 +1,27 @@
-Changes For One Solution CMS 2.1.127 -
+Changes For One Solution CMS 2.1.128 - Saturday, March 10, 2012
+Added:
+	1). Added DHTMLX Suite Standard to Libraries/Tier7BehavioralLayer. This is version 3.0
+	2). Added AdminTheme to Tier7BehavioralLayer and Tier8BehavioralLayer. This is the official Administrator's Theme for the system.
+	3). Added Upload System Update to the Administrators Panel.
+	4). Added XhtmlTable's Tables to the database. Have included an Admin version of the table - Module will be worked as new versions come along. This is a works in progress.
+	5). Added Calendar Event forms and they can Create, Update, Delete, Enable/Disable Calendar Events.
+	6). Added to Administrator's Panel DHTMLX Datagrid for future use.
+
+Updated (Fixed):
+	1). Updated notice.php to allow for system wide message to be used. Added maintenance mode to the system to allow Administrators a choice to post a message to all users on all pages.
+	2). Updated many parts of the database see update.sql file.
+	3). Fixed Main Menu issue with pages that don't have an ID numbers. Also correct a bug with updating the Main Menu from the home page.
+	4). Moved and renamed blockquote page files from Administrators folder. They reside inside PageTypes/BlockquotePage folder.
+	5). Updated all Page Types to correct an issue when a user deletes a page from the system that if it was re-enabled it would not show up in the delete page type form. This bug has been fixed.
+
+Removed:
+	1). Removed all Admin Modules from Content Layer Module Table.
+	2). Removed XhtmlCalendarDiv, use XhtmlCalendarTable instead.
+	3). Removed from Administrators folder the following files: addblockquotepage.php, deleteblockquotepage.php, enabledisablestatuschangeblockquotepage.php, selectblockquotepage.php and updateblockquotepage.php.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.127 - Friday, February 24, 2012 11:12:37 PM
 Added:
 	1). Added Updater Utility to Administrators folder.
 	2). Added Calendar Event form to database.

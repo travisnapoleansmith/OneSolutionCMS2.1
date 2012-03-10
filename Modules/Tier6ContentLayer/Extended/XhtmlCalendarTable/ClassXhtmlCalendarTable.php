@@ -943,5 +943,71 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->Writer->flush();
 		}
 	}
+	
+	public function createCalendarAppointment(array $CalendarAppointment) {
+		$DatabaseTableName = $CalendarAppointment['TableName'];
+		unset($CalendarAppointment['TableName']);
+		if ($CalendarAppointment != NULL) {
+			if ($DatabaseTableName != NULL) {
+				$this->LayerModule->pass ($DatabaseTableName, 'BuildFieldNames', array('TableName' => $DatabaseTableName));
+				$Keys = $this->LayerModule->pass ($DatabaseTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $CalendarAppointment, $DatabaseTableName);
+			} else {
+				array_push($this->ErrorMessage,'createCalendarAppointment: Database Table Name cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createCalendarAppointment: Calendar Appointment cannot be NULL!');
+		}
+	}
+	
+	public function updateCalendarAppointment(array $CalendarAppointment) {
+		$DatabaseTableName = $CalendarAppointment['TableName'];
+		$PageID = $CalendarAppointment['OldCalendarAppointment'];
+		unset($CalendarAppointment['OldCalendarAppointment']);
+		if ($CalendarAppointment != NULL) {
+			if ($DatabaseTableName != NULL) {
+				$this->updateModuleContent($PageID, $DatabaseTableName, $CalendarAppointment);
+			} else {
+				array_push($this->ErrorMessage,'updateCalendarAppointment: Database Table Name cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateCalendarAppointment: Calendar Appointment cannot be NULL!');
+		}
+	}
+	
+	public function updateCalendarAppointmentStatus(array $PageID) {
+		$DatabaseTableName = $PageID['TableName'];
+		unset($PageID['TableName']);
+		if ($PageID != NULL) {
+			if ($DatabaseTableName != NULL) {
+				$PassID = array();
+				$PassID = $PageID['PageID'];
+				unset($PageID['PageID']);
+				$this->updateModuleContent($PassID, $DatabaseTableName, $PageID);
+			} else {
+				array_push($this->ErrorMessage,'updateCalendarAppointmentStatus: Database Table Name cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateCalendarAppointmentStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function deleteCalendarAppointment(array $PageID) {
+		$DatabaseTableName = $PageID['TableName'];
+		$PageID['EnableDisable'] = 'Disable';
+		unset($PageID['TableName']);
+		if ($PageID != NULL) {
+			if ($DatabaseTableName != NULL) {
+				$PassID = array();
+				$PassID = $PageID['PageID'];
+				unset($PageID['PageID']);
+				$this->updateModuleContent($PassID, $DatabaseTableName, $PageID);
+			} else {
+				array_push($this->ErrorMessage,'deleteCalendarAppointment: Database Table Name cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'deleteCalendarAppointment: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

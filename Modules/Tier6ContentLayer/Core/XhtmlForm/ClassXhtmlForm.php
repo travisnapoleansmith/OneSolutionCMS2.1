@@ -2624,10 +2624,13 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$imagename = 'captchaimage-';
 		$imagename .= $imagekey;
 		$imagename .= '.png';
-		setcookie ('CaptchaImage', $imagename);
+		
+		setcookie ('CaptchaImage', $imagename, NULL, '/');
+		//setcookie ('CaptchaImage', $imagename);
 		imagepng($image, "CAPTCHAIMAGE/$imagename");
 		
 		$captchakey = $indexkey;
+		//setcookie('CaptchaKey', $captchakey, NULL, '/');
 		setcookie('CaptchaKey', $captchakey);
 		
 		$this->Writer->startElement('div');

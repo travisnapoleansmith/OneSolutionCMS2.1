@@ -291,7 +291,10 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 	
 	protected function ProcessCaptcha(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
 		$captchaimage = $_COOKIE['CaptchaImage'];
-		setcookie('CaptchaImage', ' ');
+		setcookie('CaptchaImage', ' ', NULL, '/');
+		//setcookie('CaptchaImage', ' ');
+		
+		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 		
 		if (is_file("CAPTCHAIMAGE/$captchaimage")) {
 			unlink("CAPTCHAIMAGE/$captchaimage");
@@ -305,7 +308,8 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		$captchavalue = md5($value);
 		$captchavalue = sha1($captchavalue);
 		
-		setcookie('CaptchaKey', ' ');
+		setcookie('CaptchaKey', ' ', NULL, '/');
+		//setcookie('CaptchaKey', ' ');
 		
 		if ($captchakey != $captchavalue) {
 			return 'Input does not match with the two words in the image, please try again!';
@@ -314,7 +318,6 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 	}
 	
 	protected function ProcessMenuRepeat(&$value, $minlength, $maxlength, $minvalue, $maxvalue) {
-		//print_r($_POST);
 		$ObjectID = $_POST['TopMenuHidden'];
 		$ObjectID = explode(' ', $ObjectID);
 		$ObjectID = $ObjectID[0];

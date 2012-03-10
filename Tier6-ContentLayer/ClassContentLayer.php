@@ -302,10 +302,10 @@ class ContentLayer extends LayerModulesAbstract
 								
 								if ($_GET['DestinationPageID']) {
 									$DestinationPageID = $_GET['DestinationPageID'];
-									setcookie('DestinationPageID', $DestinationPageID);
+									setcookie('DestinationPageID', $DestinationPageID, NULL, '/');
 								} else {
 									$PageID = $this->PageID['PageID'];
-									setcookie('DestinationPageID', $PageID);
+									setcookie('DestinationPageID', $PageID, NULL, '/');
 								}
 								header("Location: $AuthenticationPage");
 							} else {
@@ -390,7 +390,6 @@ class ContentLayer extends LayerModulesAbstract
 			
 			$this->Writer->endElement(); // ENDS BODY
 			$this->Writer->endElement(); // ENDS HTML
-			
 		} else {
 			array_push($this->ErrorMessage,'CreateOutput: Content Layer Version Table Name Cannot Be Null!');
 		}
@@ -460,7 +459,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		$sessionname = $SessionName;
 		$sessionname .= time();
-		setcookie('SessionID', $sessionname);
+		setcookie('SessionID', $sessionname, NULL, '/');
 		session_name($sessionname);
 		session_start();
 		
@@ -1205,13 +1204,13 @@ class ContentLayer extends LayerModulesAbstract
 				unset($UserInfo['Salt']);
 
 				$username = $_POST['UserName'];
-				setcookie("UserName", $username);
-				setcookie("LoggedIn", TRUE, time()+3600);
-				setcookie('Administrator', $UserInfo['Administrator'], time()+3600);
-				setcookie('ContentCreator', $UserInfo['ContentCreator'], time()+3600);
-				setcookie('Editor', $UserInfo['Editor'], time()+3600);
-				setcookie('User', $UserInfo['User'], time()+3600);
-				setcookie('Guest', $UserInfo['Guest'], time()+3600);
+				setcookie("UserName", $username, NULL, '/');
+				setcookie("LoggedIn", TRUE, time()+3600, '/');
+				setcookie('Administrator', $UserInfo['Administrator'], time()+3600, '/');
+				setcookie('ContentCreator', $UserInfo['ContentCreator'], time()+3600, '/');
+				setcookie('Editor', $UserInfo['Editor'], time()+3600, '/');
+				setcookie('User', $UserInfo['User'], time()+3600, '/');
+				setcookie('Guest', $UserInfo['Guest'], time()+3600, '/');
 				if ($DestinationPageID) {
 					header("Location: index.php?PageID=$DestinationPageID");
 					exit;
@@ -1225,18 +1224,18 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function KeepLoggedIn() {
 		if ($_COOKIE['LoggedIn']) {
-			setcookie("LoggedIn", TRUE, time()+3600);
+			setcookie("LoggedIn", TRUE, time()+3600, '/');
 		}	
 	}
 	
 	public function Logoff() {
-		setcookie("UserName", '', time()-1000);
-		setcookie("LoggedIn", '', time()-1000);
-		setcookie('Administrator', '', time()-1000);
-		setcookie('ContentCreator', '', time()-1000);
-		setcookie('Editor', '', time()-1000);
-		setcookie('User', '', time()-1000);
-		setcookie('Guest', '', time()-1000);
+		setcookie("UserName", '', time()-1000, '/');
+		setcookie("LoggedIn", '', time()-1000, '/');
+		setcookie('Administrator', '', time()-1000, '/');
+		setcookie('ContentCreator', '', time()-1000, '/');
+		setcookie('Editor', '', time()-1000, '/');
+		setcookie('User', '', time()-1000, '/');
+		setcookie('Guest', '', time()-1000, '/');
 		
 		$DestinationPageID = NULL;
 		if ($_GET['DestinationPageID']) {
@@ -1432,10 +1431,11 @@ class ContentLayer extends LayerModulesAbstract
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		
 		if ($hold['FilteredInput']['Priority']) {
 			$hold['FilteredInput']['Priority'] *= 10;
 		}

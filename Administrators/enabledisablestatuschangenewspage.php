@@ -36,10 +36,6 @@
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $NewsPageID);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $NewsPageID);
 		
-		$FormOptionID = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $NewsPageID);
-		
 		$EnableDisableNewsPage = $Options['XhtmlNewsStories']['news']['EnableDisableNewsPage']['SettingAttribute'];
 		header("Location: $EnableDisableNewsPage");
 	} else {

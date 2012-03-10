@@ -62,7 +62,7 @@
 	$Page->startElement('p');
 		$Page->text('To continue this process please select ');
 		$Page->startElement('a');
-		$Page->writeAttribute('href', 'installnewsystemfiles.php');
+		$Page->writeAttribute('href', 'InstallNewSystemFiles.php');
 		$Page->text('Step 3: Install New System Files');
 		$Page->endElement(); //Ends A
 	$Page->endElement(); //Ends P

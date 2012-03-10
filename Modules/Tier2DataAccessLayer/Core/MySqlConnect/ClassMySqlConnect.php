@@ -386,7 +386,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 						if (is_array($rowvalue)){
 							if (is_array($rownumbername)) {
 								if (is_array($rownumber)) {
-									
 									while (isset($rowname[key($rowname)])) {
 										if (is_array($rownumbername[key($rownumbername)]) || is_array($rownumber[key($rownumber)])) {
 											$namearray = $rownumbername[key($rownumbername)];

@@ -34,10 +34,6 @@
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $ContentPageID);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $ContentPageID);
 		
-		$FormOptionID = $Options['XhtmlContent']['content']['DeleteContentPage']['SettingAttribute'];
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $ContentPageID);
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $ContentPageID);
-		
 		$EnableDisableContentPage = $Options['XhtmlContent']['content']['EnableDisableContentPage']['SettingAttribute'];
 		header("Location: $EnableDisableContentPage");
 	} else {

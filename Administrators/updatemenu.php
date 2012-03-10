@@ -1,4 +1,5 @@
 <?php
+	set_time_limit(60);
 	require_once ('Configuration/includes.php');
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	
@@ -123,9 +124,11 @@
 					}
 				}
 				$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $UpdateRecord);
+				
 			}
 		}
 	}
+	
 	
 	$UlLiMenu = $Tier6Databases->getRecord($passarray, 'MainMenu');
 	$StartTagIDParent = 'main-menu-middle';
@@ -169,6 +172,8 @@
 	$StartMenu = $Menu[1];
 	
 	$i = 2;
+	
+	
 	foreach ($StartMenu as $Key => $Value) {
 		if (strstr($Key, 'Child')) {
 			$LiNumber = str_replace('Child', '', $Key);
@@ -190,6 +195,9 @@
 			if (!is_null($Value)) {
 				if ($Key !== 'Child1') {
 					$CurrentMenu = $Menu[$Value]; 
+					if ($CurrentMenu['PageLocation'] != NULL) {
+						$MenuChange[1]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+					}
 					$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $i, $Value);
 					if (!is_null($ReturnValue)) {
 						if ($i != $ReturnValue) {
@@ -207,7 +215,6 @@
 	$MenuChange[1]['Status'] = 'Approved';
 	
 	$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenu', $MenuChange);	
-	
 	$UpdateMainMenu = $Options['XhtmlMainMenu']['mainmenu']['CreatedMainMenuUpdatedPage']['SettingAttribute'];
 	header("Location: index.php?PageID=$UpdateMainMenu");
 	
@@ -246,6 +253,7 @@
 		$NextIDNumberChild++;
 		
 		$LiLastChildName = NULL;
+		
 		foreach ($CurrentMenu as $Key => $Value) {
 			if (strstr($Key, 'Child')) {
 				$LiNumber = str_replace('Child', '', $Key);
@@ -274,6 +282,10 @@
 				if (!is_null($Value)) {
 					$LiLastChildName = 'Li' . $LiNumber . 'Class';
 					$CurrentMenu = $Menu[$Value]; 
+					if ($CurrentMenu['PageLocation'] != NULL) {
+						$MenuChange[$NextIDNumber]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+					}
+					
 					$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $NextIDNumberChild, $Value);
 					$TRIP = 'CHANGE';
 					if (!is_null($ReturnValue)) {
@@ -327,6 +339,8 @@
 		$UpdateRecord['VersionID'] = 1;
 		$UpdateRecord['RevisionID'] = 1;
 		
+		$UpdateRecord['PageLocation'] = $CurrentMenu['PageLocation'];
+		
 		$UpdateRecord['ParentObjectID'] = $ParentObjectID;
 		if ($ParentIDName == 'MenuItem') {
 			$UpdateRecord['ParentIDName'] = NULL;
@@ -363,6 +377,7 @@
 					}
 				}
 			}
+			
 		}
 	}
 	

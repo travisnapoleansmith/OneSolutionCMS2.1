@@ -36,10 +36,6 @@
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $PhotosPageID);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $PhotosPageID);
 		
-		$FormOptionID = $Options['XhtmlPicture']['picture']['DeletePhotosPage']['SettingAttribute'];
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $PhotosPageID);
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $PhotosPageID);
-		
 		$EnableDisablePhotosPage = $Options['XhtmlPicture']['picture']['EnableDisablePhotosPage']['SettingAttribute'];
 		header("Location: $EnableDisablePhotosPage");
 	} else {

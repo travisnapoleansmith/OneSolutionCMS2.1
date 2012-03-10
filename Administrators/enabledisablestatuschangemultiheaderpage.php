@@ -34,10 +34,6 @@
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $ContentPageID);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $ContentPageID);
 		
-		$FormOptionID = $Options['XhtmlContent']['content']['DeleteMultiHeaderPage']['SettingAttribute'];
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $ContentPageID);
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $ContentPageID);
-		
 		$EnableDisableMultiHeaderPage = $Options['XhtmlContent']['content']['EnableDisableMultiHeaderPage']['SettingAttribute'];
 		header("Location: $EnableDisableMultiHeaderPage");
 	} else {

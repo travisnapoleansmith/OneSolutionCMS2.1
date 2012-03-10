@@ -58,7 +58,7 @@
 	$Page->startElement('p');
 		$Page->text('To start this process please select ');
 		$Page->startElement('a');
-		$Page->writeAttribute('href', 'unzipfiles.php');
+		$Page->writeAttribute('href', 'UnzipFiles.php');
 		$Page->text('Step 1: Extract Zip File');
 		$Page->endElement(); //Ends A
 	$Page->endElement(); //Ends P

@@ -560,7 +560,6 @@ abstract class LayerModulesAbstract
 			
 			$this->LayerModule->Connect($DatabaseTableName);
 			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			
 			$this->LayerModule->Disconnect($DatabaseTableName);
 			
 		} else {
@@ -968,7 +967,6 @@ abstract class LayerModulesAbstract
 		
 		$args = func_get_args();
 		if ($args[1]) {
-			
 			$DatabaseName = $args[1];
 			$this->LayerModule->createDatabaseTable($DatabaseName);
 			if (is_array($PageID)) {
@@ -1005,13 +1003,23 @@ abstract class LayerModulesAbstract
 			
 			$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
 		} else {
-			$DatabaseVariableName = $PageID['DatabaseVariableName'];
-			
-			$this->LayerModule->Connect($this->$DatabaseVariableName);
-			$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->LayerModule->Disconnect($this->$DatabaseVariableName);
-
-			$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+			if (isset($PageID['DatabaseVariableName'])) {
+				$DatabaseVariableName = $PageID['DatabaseVariableName'];
+				
+				$this->LayerModule->Connect($this->$DatabaseVariableName);
+				$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($this->$DatabaseVariableName);
+	
+				$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+			} else if (isset($PageID['DatabaseTableName'])) {
+				$DatabaseTableName = $PageID['DatabaseTableName'];
+				
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($DatabaseTableName);
+	
+				$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
+			}
 		}
 		
 

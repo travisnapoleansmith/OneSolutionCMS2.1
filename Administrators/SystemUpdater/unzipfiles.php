@@ -63,7 +63,7 @@
 	$Page->startElement('p');
 		$Page->text('To continue this process please select ');
 		$Page->startElement('a');
-		$Page->writeAttribute('href', 'removeoldsystemfiles.php');
+		$Page->writeAttribute('href', 'RemoveOldSystemFiles.php');
 		$Page->text('Step 2: Remove Old System Files');
 		$Page->endElement(); //Ends A
 	$Page->endElement(); //Ends P
