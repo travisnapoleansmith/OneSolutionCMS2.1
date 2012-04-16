@@ -2,16 +2,24 @@
 
 class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
-		$hold = current($tablenames);
+	/**
+	 * Create an instance of XtmlFlashJWPlayer
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlFlashJWPlayer'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlFlashJWPlayer'][$hold];
 		$this->ErrorMessage = array();
 
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 
 		if ($this->FileName) {

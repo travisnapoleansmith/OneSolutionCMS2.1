@@ -23,21 +23,29 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	
 	protected $IsIE;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlFlash
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlFlash'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlFlash'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
-		if ($databaseoptions['FlashVars']) {
-			$this->FlashVars = $databaseoptions['FlashVars'];
+		if ($DatabaseOptions['FlashVars']) {
+			$this->FlashVars = $DatabaseOptions['FlashVars'];
 		}
 		
 		if ($this->FileName) {

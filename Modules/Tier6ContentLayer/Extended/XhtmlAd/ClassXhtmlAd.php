@@ -39,17 +39,25 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected $AdMax;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlAd
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlAd'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlAd'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -59,84 +67,84 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['Class']) {
-			$this->Class = $databaseoptions['Class'];
+		if ($DatabaseOptions['Class']) {
+			$this->Class = $DatabaseOptions['Class'];
 		}
 		
-		if ($databaseoptions['ID']) {
-			$this->ID = $databaseoptions['ID'];
+		if ($DatabaseOptions['ID']) {
+			$this->ID = $DatabaseOptions['ID'];
 		}
 		
-		if ($databaseoptions['Style']) {
-			$this->Style = $databaseoptions['Style'];
+		if ($DatabaseOptions['Style']) {
+			$this->Style = $DatabaseOptions['Style'];
 		}
 		
-		if ($databaseoptions['AdvertisingClass']) {
-			$this->AdvertisingClass = $databaseoptions['AdvertisingClass'];
+		if ($DatabaseOptions['AdvertisingClass']) {
+			$this->AdvertisingClass = $DatabaseOptions['AdvertisingClass'];
 		}
 		
-		if ($databaseoptions['AdvertisingID']) {
-			$this->AdvertisingID = $databaseoptions['AdvertisingID'];
+		if ($DatabaseOptions['AdvertisingID']) {
+			$this->AdvertisingID = $DatabaseOptions['AdvertisingID'];
 		}
 		
-		if ($databaseoptions['AdvertisingStyle']) {
-			$this->AdvertisingStyle = $databaseoptions['AdvertisingStyle'];
+		if ($DatabaseOptions['AdvertisingStyle']) {
+			$this->AdvertisingStyle = $DatabaseOptions['AdvertisingStyle'];
 		}
 		
-		if ($databaseoptions['AdvertisingImageClass']) {
-			$this->AdvertisingImageClass = $databaseoptions['AdvertisingImageClass'];
+		if ($DatabaseOptions['AdvertisingImageClass']) {
+			$this->AdvertisingImageClass = $DatabaseOptions['AdvertisingImageClass'];
 		}
 		
-		if ($databaseoptions['AdvertisingImageID']) {
-			$this->AdvertisingImageID = $databaseoptions['AdvertisingImageID'];
+		if ($DatabaseOptions['AdvertisingImageID']) {
+			$this->AdvertisingImageID = $DatabaseOptions['AdvertisingImageID'];
 		}
 		
-		if ($databaseoptions['AdvertisingImageStyle']) {
-			$this->AdvertisingImageStyle = $databaseoptions['AdvertisingImageStyle'];
+		if ($DatabaseOptions['AdvertisingImageStyle']) {
+			$this->AdvertisingImageStyle = $DatabaseOptions['AdvertisingImageStyle'];
 		}
 		
-		if ($databaseoptions['AdvertisingContentClass']) {
-			$this->AdvertisingContentClass = $databaseoptions['AdvertisingContentClass'];
+		if ($DatabaseOptions['AdvertisingContentClass']) {
+			$this->AdvertisingContentClass = $DatabaseOptions['AdvertisingContentClass'];
 		}
 		
-		if ($databaseoptions['AdvertisingContentID']) {
-			$this->AdvertisingContentID = $databaseoptions['AdvertisingContentID'];
+		if ($DatabaseOptions['AdvertisingContentID']) {
+			$this->AdvertisingContentID = $DatabaseOptions['AdvertisingContentID'];
 		}
 		
-		if ($databaseoptions['AdvertisingContentStyle']) {
-			$this->AdvertisingContentStyle = $databaseoptions['AdvertisingContentStyle'];
+		if ($DatabaseOptions['AdvertisingContentStyle']) {
+			$this->AdvertisingContentStyle = $DatabaseOptions['AdvertisingContentStyle'];
 		}
 		
-		if ($databaseoptions['SeparatorClass']) {
-			$this->SeparatorClass = $databaseoptions['SeparatorClass'];
+		if ($DatabaseOptions['SeparatorClass']) {
+			$this->SeparatorClass = $DatabaseOptions['SeparatorClass'];
 		}
 		
-		if ($databaseoptions['SeparatorID']) {
-			$this->SeparatorID = $databaseoptions['SeparatorID'];
+		if ($DatabaseOptions['SeparatorID']) {
+			$this->SeparatorID = $DatabaseOptions['SeparatorID'];
 		}
 		
-		if ($databaseoptions['SeparatorStyle']) {
-			$this->SeparatorStyle = $databaseoptions['SeparatorStyle'];
+		if ($DatabaseOptions['SeparatorStyle']) {
+			$this->SeparatorStyle = $DatabaseOptions['SeparatorStyle'];
 		}
 		
-		if ($databaseoptions['StartTag']) {
-			$this->StartTag = $databaseoptions['StartTag'];
+		if ($DatabaseOptions['StartTag']) {
+			$this->StartTag = $DatabaseOptions['StartTag'];
 		}
 		
-		if ($databaseoptions['AdvertisingStartTag']) {
-			$this->AdvertisingStartTag = $databaseoptions['AdvertisingStartTag'];
+		if ($DatabaseOptions['AdvertisingStartTag']) {
+			$this->AdvertisingStartTag = $DatabaseOptions['AdvertisingStartTag'];
 		}
 		
-		if ($databaseoptions['AdvertisingContentStartTag']) {
-			$this->AdvertisingContentStartTag = $databaseoptions['AdvertisingContentStartTag'];
+		if ($DatabaseOptions['AdvertisingContentStartTag']) {
+			$this->AdvertisingContentStartTag = $DatabaseOptions['AdvertisingContentStartTag'];
 		}
 		
-		if ($databaseoptions['SeparatorStartTag']) {
-			$this->SeparatorStartTag = $databaseoptions['SeparatorStartTag'];
+		if ($DatabaseOptions['SeparatorStartTag']) {
+			$this->SeparatorStartTag = $DatabaseOptions['SeparatorStartTag'];
 		}
 		
-		if ($databaseoptions['AdMax']) {
-			$this->AdMax = $databaseoptions['AdMax'];
+		if ($DatabaseOptions['AdMax']) {
+			$this->AdMax = $DatabaseOptions['AdMax'];
 		} else {
 			$this->AdMax = 0;
 		}
@@ -144,7 +152,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$this->LastAccess = date('Y-m-d H:i:s');
 		
 		$this->AdStatsTableName = $tablenames['DatabaseTable1'];
-		foreach($tablenames as $key => $databasename) {
+		foreach($TableNames as $key => $databasename) {
 			if ($key != 'DatabaseTable1') {
 				$this->AdSponsorsTableName[$key] = $databasename;
 			}
@@ -169,60 +177,60 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$AdvertisingImageStyle = $TableName . 'ImageStyle';
 			$AdvertisingImageStartTag = $TableName . 'ImageStartTag';
 			
-			if ($databaseoptions[$ShowNumber]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber] = $databaseoptions[$ShowNumber];
+			if ($DatabaseOptions[$ShowNumber]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber] = $DatabaseOptions[$ShowNumber];
 			}
 			
-			if ($databaseoptions[$Class]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$Class] = $databaseoptions[$Class];
+			if ($DatabaseOptions[$Class]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$Class] = $DatabaseOptions[$Class];
 			}
 			
-			if ($databaseoptions[$ID]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$ID] = $databaseoptions[$ID];
+			if ($DatabaseOptions[$ID]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$ID] = $DatabaseOptions[$ID];
 			}
 			
-			if ($databaseoptions[$Style]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$Style] = $databaseoptions[$Style];
+			if ($DatabaseOptions[$Style]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$Style] = $DatabaseOptions[$Style];
 			}
 			
-			if ($databaseoptions[$StartTag]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$StartTag] = $databaseoptions[$StartTag];
+			if ($DatabaseOptions[$StartTag]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$StartTag] = $DatabaseOptions[$StartTag];
 			}
 			
-			if ($databaseoptions[$Text]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$Text] = $databaseoptions[$Text];
+			if ($DatabaseOptions[$Text]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$Text] = $DatabaseOptions[$Text];
 			}
 			
-			if ($databaseoptions[$SeparatorClass]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorClass] = $databaseoptions[$SeparatorClass];
+			if ($DatabaseOptions[$SeparatorClass]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorClass] = $DatabaseOptions[$SeparatorClass];
 			}
 			
-			if ($databaseoptions[$SeparatorID]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorID] = $databaseoptions[$SeparatorID];
+			if ($DatabaseOptions[$SeparatorID]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorID] = $DatabaseOptions[$SeparatorID];
 			}
 			
-			if ($databaseoptions[$SeparatorStyle]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStyle] = $databaseoptions[$SeparatorStyle];
+			if ($DatabaseOptions[$SeparatorStyle]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStyle] = $DatabaseOptions[$SeparatorStyle];
 			}
 			
-			if ($databaseoptions[$SeparatorStartTag]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStartTag] = $databaseoptions[$SeparatorStartTag];
+			if ($DatabaseOptions[$SeparatorStartTag]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStartTag] = $DatabaseOptions[$SeparatorStartTag];
 			}
 			
-			if ($databaseoptions[$AdvertisingImageClass]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageClass] = $databaseoptions[$AdvertisingImageClass];
+			if ($DatabaseOptions[$AdvertisingImageClass]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageClass] = $DatabaseOptions[$AdvertisingImageClass];
 			}
 			
-			if ($databaseoptions[$AdvertisingImageID]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageID] = $databaseoptions[$AdvertisingImageID];
+			if ($DatabaseOptions[$AdvertisingImageID]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageID] = $DatabaseOptions[$AdvertisingImageID];
 			}
 			
-			if ($databaseoptions[$AdvertisingImageStyle]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStyle] = $databaseoptions[$AdvertisingImageStyle];
+			if ($DatabaseOptions[$AdvertisingImageStyle]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStyle] = $DatabaseOptions[$AdvertisingImageStyle];
 			}
 			
-			if ($databaseoptions[$AdvertisingImageStartTag]) {
-				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStartTag] = $databaseoptions[$AdvertisingImageStartTag];
+			if ($DatabaseOptions[$AdvertisingImageStartTag]) {
+				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStartTag] = $DatabaseOptions[$AdvertisingImageStartTag];
 			}
 		}
 		

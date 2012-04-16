@@ -33,6 +33,7 @@
 		
 		$CalendarAppointment = array();
 		$CalendarAppointment['TableName'] = 'CalendarAppointments';
+		$CalendarAppointment['CalendarID'] = $NewPageID;
 		$CalendarAppointment['Day'] = $hold['FilteredInput']['EventDay'];
 		$CalendarAppointment['Month'] = $hold['FilteredInput']['EventMonth'];
 		$CalendarAppointment['Year'] = $hold['FilteredInput']['EventYear'];
@@ -147,7 +148,7 @@
 		$FormOption['FormOptionLabelObjectID'] = NULL;
 		$FormOption['FormOptionLabelRevisionID'] = NULL;
 		$FormOption['FormOptionSelected'] = NULL;
-		$FormOption['FormOptionValue'] = NULL;
+		$FormOption['FormOptionValue'] = $NewPageID;
 		$FormOption['FormOptionValueDynamic'] = NULL;
 		$FormOption['FormOptionValueTableName'] = NULL;
 		$FormOption['FormOptionValueField'] = NULL;

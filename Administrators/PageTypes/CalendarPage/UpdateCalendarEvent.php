@@ -12,7 +12,6 @@
 	
 	if ($hold) {
 		$Options = $Tier6Databases->getLayerModuleSetting();
-		
 		$PageID = $_POST['FormOptionSelectedID'];
 		
 		$CalendarEventUpdateSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdateSelectPage']['SettingAttribute'];
@@ -21,61 +20,6 @@
 		$passarray['ObjectID'] = $PageID;
 		
 		$FormOptionSelected = $Tier6Databases->getRecord($passarray, 'AdministratorFormOption', TRUE, array('1' => 'PageID'), 'ASC');
-		
-		$OldCalendarEvent = stripslashes($FormOptionSelected[0]['FormOptionText']);
-		$OldCalendarEvent = explode(' - ', $OldCalendarEvent);
-		
-		$OldEvent = array();
-		$OldEvent['StartDate'] = $OldCalendarEvent[0];
-		$OldEvent['StartTime'] = $OldCalendarEvent[1];
-		$OldEvent['EndTime'] = $OldCalendarEvent[2];
-		$OldEvent['Event'] = $OldCalendarEvent[3];
-		unset($OldCalendarEvent);
-		
-		$Date = NULL;
-		$Date = date_parse($OldEvent['StartDate']);
-		
-		$OldStartDay = NULL;
-		if ($Date['day'] < 10) {
-			$OldStartDay = 0 . $Date['day'];
-		} else {
-			$OldStartDay = $Date['day'];
-		}
-		
-		$OldStartMonth = NULL;
-		$OldStartMonth = date("F", mktime(0, 0, 0, $Date['month'], 10));
-		
-		$OldStartYear = NULL;
-		if ($Date['year'] < 10) {
-			$OldStartYear = 0 . $Date['year'];
-		} else {
-			$OldStartYear = $Date['year'];
-		}
-		
-		$OldStartTime = NULL;
-		$OldStartTimeAmPm = NULL;
-		
-		$OldStartTimeTemp = explode(' ', $OldEvent['StartTime']);
-		$OldStartTime = $OldStartTimeTemp[0];
-		$OldStartTimeAmPm = $OldStartTimeTemp[1];
-		unset($OldStartTimeTemp);
-		
-		$OldEndTime = NULL;
-		$OldEndTimeAmPm = NULL;
-		
-		$OldEndTimeTemp = explode(' ', $OldEvent['EndTime']);
-		$OldEndTime = $OldEndTimeTemp[0];
-		$OldEndTimeAmPm = $OldEndTimeTemp[1];
-		unset($OldEndTimeTemp);
-		
-		$OldPageID = array();
-		$OldPageID['Day'] = $OldStartDay;
-		$OldPageID['Month'] = $OldStartMonth;
-		$OldPageID['Year'] = $OldStartYear;
-		$OldPageID['StartTime'] = $OldStartTime;
-		$OldPageID['StartTimeAmPm'] = $OldStartTimeAmPm;
-		$OldPageID['EndTime'] = $OldEndTime;
-		$OldPageID['EndTimeAmPm'] = $OldEndTimeAmPm;
 		
 		$StartTime = NULL;
 		$EndTime = NULL;
@@ -94,7 +38,7 @@
 		$EndTime = $hold['FilteredInput']['EndHour'] . ':' . $hold['FilteredInput']['EndMinute'] . ':' . $hold['FilteredInput']['EndSecond'];
 		
 		$CalendarAppointment = array();
-		$CalendarAppointment['OldCalendarAppointment'] = $OldPageID;
+		$CalendarAppointment['CalendarID'] = $PageID;
 		$CalendarAppointment['TableName'] = 'CalendarAppointments';
 		$CalendarAppointment['Day'] = $hold['FilteredInput']['EventDay'];
 		$CalendarAppointment['Month'] = $hold['FilteredInput']['EventMonth'];
@@ -195,8 +139,7 @@
 		//$FormOption['FormOptionXMLLang'] = 'en-us';
 		//$FormOption['Enable/Disable'] = 'Enable';
 		//$FormOption['Status'] = 'Approved';
-		
-		
+				
 		$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'updateCalendarAppointment', $CalendarAppointment);
 		
 		$CalendarEventUpdateSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdateSelectPage']['SettingAttribute'];

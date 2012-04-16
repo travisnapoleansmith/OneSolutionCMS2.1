@@ -56,17 +56,25 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $NewsStoriesLookupEnableDisable;
 	protected $NewsStoriesLookupStatus;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlNewsStories
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlNewsStories'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlNewsStories'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -76,19 +84,19 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['NoAttributes']) {
-			$this->NoAttributes = $databaseoptions['NoAttributes'];
-			unset($databaseoptions['NoAttributes']);
+		if ($DatabaseOptions['NoAttributes']) {
+			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
+			unset($DatabaseOptions['NoAttributes']);
 		}
 		
-		$this->NewsStoriesTableName = current($tablenames);
-		$this->NewsStoriesLookupTableName = next($tablenames);
-		$this->NewsStoriesDatesTableName = next($tablenames);
-		$this->NewsStoriesVersionTableName = next($tablenames);
+		$this->NewsStoriesTableName = current($TableNames);
+		$this->NewsStoriesLookupTableName = next($TableNames);
+		$this->NewsStoriesDatesTableName = next($TableNames);
+		$this->NewsStoriesVersionTableName = next($TableNames);
 		
-		$this->ContentLayerTablesName = next($tablenames);
-		$this->ContentPrintPreviewTableName = next($tablenames);
-		$this->ContentLayerModulesTableName = next($tablenames);
+		$this->ContentLayerTablesName = next($TableNames);
+		$this->ContentPrintPreviewTableName = next($TableNames);
+		$this->ContentLayerModulesTableName = next($TableNames);
 		
 		$this->ContentTableName = 'NewsStoriesTable';
 		$this->ContentObjectName = 'XhtmlNewsStories';

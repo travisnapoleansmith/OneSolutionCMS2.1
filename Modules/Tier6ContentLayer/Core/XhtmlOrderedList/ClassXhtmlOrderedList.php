@@ -32,17 +32,25 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	
 	//protected $List;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlOrderedList
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -52,32 +60,32 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['Insert']) {
-			$this->Insert = $databaseoptions['Insert'];
-			unset($databaseoptions['Insert']);
+		if ($DatabaseOptions['Insert']) {
+			$this->Insert = $DatabaseOptions['Insert'];
+			unset($DatabaseOptions['Insert']);
 		}
 		
-		if ($databaseoptions['NoAttributes']) {
-			$this->NoAttributes = $databaseoptions['NoAttributes'];
-			unset($databaseoptions['NoAttributes']);
+		if ($DatabaseOptions['NoAttributes']) {
+			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
+			unset($DatabaseOptions['NoAttributes']);
 		}
 		
-		if ($databaseoptions['NoGlobal']) {
-			$this->NoGlobal = $databaseoptions['NoGlobal'];
-			unset($databaseoptions['NoGlobal']);
+		if ($DatabaseOptions['NoGlobal']) {
+			$this->NoGlobal = $DatabaseOptions['NoGlobal'];
+			unset($DatabaseOptions['NoGlobal']);
 		}
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
-		if ($databaseoptions['Indent']) {
-			$this->Indent = $databaseoptions['Indent'];
-			unset($databaseoptions['Indent']);
+		if ($DatabaseOptions['Indent']) {
+			$this->Indent = $DatabaseOptions['Indent'];
+			unset($DatabaseOptions['Indent']);
 		}
 		
-		$this->DatabaseTableName = current($tablenames);
+		$this->DatabaseTableName = current($TableNames);
 		
 	}
 	

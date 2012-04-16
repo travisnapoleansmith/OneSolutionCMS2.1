@@ -379,17 +379,25 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $Form;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlForm
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlForm'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlForm'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -399,51 +407,51 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['PrintPreview']) {
-			$this->PrintPreview = $databaseoptions['PrintPreview'];
-			unset($databaseoptions['PrintPreview']);
+		if ($DatabaseOptions['PrintPreview']) {
+			$this->PrintPreview = $DatabaseOptions['PrintPreview'];
+			unset($DatabaseOptions['PrintPreview']);
 		}
 		
-		if ($databaseoptions['XhtmlFormSession']) {
-			$this->FormSession = $databaseoptions['XhtmlFormSession'];
+		if ($DatabaseOptions['XhtmlFormSession']) {
+			$this->FormSession = $DatabaseOptions['XhtmlFormSession'];
 		}
 		
-		/*while (current($tablenames)) {
-			$this->TableNames[current($tablenames)] = current($tablenames);
-			next($tablenames);
+		/*while (current($TableNames)) {
+			$this->TableNames[current($TableNames)] = current($TableNames);
+			next($TableNames);
 		}*/
-		$this->TableNames['Form'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['Form'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormButton'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormButton'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormFieldSet'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormFieldSet'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormInput'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormInput'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormLabel'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormLabel'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormLegend'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormLegend'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormOptGroup'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormOptGroup'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormOption'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormOption'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormSelect'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormSelect'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormTableListing'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormTableListing'] = current($TableNames);
+		next($TableNames);
 		
-		$this->TableNames['FormTextArea'] = current($tablenames);
-		next($tablenames);
+		$this->TableNames['FormTextArea'] = current($TableNames);
+		next($TableNames);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -1958,6 +1966,8 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					}
 				}
 				
+			} else if ($objectid == 1) {
+				$objectid++;
 			}
 			
 			if (current($this->FormSelectStopObjectID)) {

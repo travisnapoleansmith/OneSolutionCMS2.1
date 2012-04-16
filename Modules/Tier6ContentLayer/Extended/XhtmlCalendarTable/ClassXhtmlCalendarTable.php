@@ -117,8 +117,16 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	protected $CalendarTable;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlCalendarTable
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
 		$this->CurrentDate = date('D M d, Y');
 		$this->CurrentTime = date('h:i A T');
@@ -146,14 +154,14 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->AppointmentDayColumns['End Time'] = 'End Time';
 		$this->AppointmentDayColumns['Appointment'] = 'Appointment';
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlCalendarTable'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -163,29 +171,29 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['PrintPreview']) {
-			$this->PrintPreview = $databaseoptions['PrintPreview'];
-			unset($databaseoptions['PrintPreview']);
+		if ($DatabaseOptions['PrintPreview']) {
+			$this->PrintPreview = $DatabaseOptions['PrintPreview'];
+			unset($DatabaseOptions['PrintPreview']);
 		}
 		
-		if ($databaseoptions['Day']) {
-			$this->Day = $databaseoptions['Day'];
-			unset($databaseoptions['Day']);
+		if ($DatabaseOptions['Day']) {
+			$this->Day = $DatabaseOptions['Day'];
+			unset($DatabaseOptions['Day']);
 		}
 		
-		if ($databaseoptions['Month']) {
-			$this->Month = $databaseoptions['Month'];
-			unset($databaseoptions['Month']);
+		if ($DatabaseOptions['Month']) {
+			$this->Month = $DatabaseOptions['Month'];
+			unset($DatabaseOptions['Month']);
 		}
 		
-		if ($databaseoptions['Year']) {
-			$this->Year = $databaseoptions['Year'];
-			unset($databaseoptions['Year']);
+		if ($DatabaseOptions['Year']) {
+			$this->Year = $DatabaseOptions['Year'];
+			unset($DatabaseOptions['Year']);
 		}
 		
-		while (current($tablenames)) {
-			$this->TableNames[key($tablenames)] = current($tablenames);
-			next($tablenames);
+		while (current($TableNames)) {
+			$this->TableNames[key($TableNames)] = current($TableNames);
+			next($TableNames);
 		}
 	}
 	
@@ -962,8 +970,9 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 	
 	public function updateCalendarAppointment(array $CalendarAppointment) {
 		$DatabaseTableName = $CalendarAppointment['TableName'];
-		$PageID = $CalendarAppointment['OldCalendarAppointment'];
-		unset($CalendarAppointment['OldCalendarAppointment']);
+		$PageID = array();
+		$PageID['CalendarID'] = $CalendarAppointment['CalendarID'];
+		unset($CalendarAppointment['CalendarID']);
 		if ($CalendarAppointment != NULL) {
 			if ($DatabaseTableName != NULL) {
 				$this->updateModuleContent($PageID, $DatabaseTableName, $CalendarAppointment);
@@ -981,8 +990,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($PageID != NULL) {
 			if ($DatabaseTableName != NULL) {
 				$PassID = array();
-				$PassID = $PageID['PageID'];
-				unset($PageID['PageID']);
+				$PassID['CalendarID'] = $PageID['CalendarID'];
+				unset($PageID['CalendarID']);
 				$this->updateModuleContent($PassID, $DatabaseTableName, $PageID);
 			} else {
 				array_push($this->ErrorMessage,'updateCalendarAppointmentStatus: Database Table Name cannot be NULL!');
@@ -999,8 +1008,8 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		if ($PageID != NULL) {
 			if ($DatabaseTableName != NULL) {
 				$PassID = array();
-				$PassID = $PageID['PageID'];
-				unset($PageID['PageID']);
+				$PassID ['CalendarID'] = $PageID['CalendarID'];
+				unset($PageID['CalendarID']);
 				$this->updateModuleContent($PassID, $DatabaseTableName, $PageID);
 			} else {
 				array_push($this->ErrorMessage,'deleteCalendarAppointment: Database Table Name cannot be NULL!');

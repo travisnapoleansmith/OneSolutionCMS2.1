@@ -1136,5 +1136,287 @@ abstract class LayerModulesAbstract
 		}
 	}
 	
+	public function MultiArrayBuild(array $Start, $StartKey, $ConditionalKey, $StartNumber, array $Source) {
+		$functionarguments = func_get_args();
+		
+		$Sort = NULL;
+		if ($functionarguments[5]) {
+			$Sort = $functionarguments[5];
+		}
+		
+		$EndKey = NULL;
+		if ($functionarguments[6]) {
+			$EndKey = $functionarguments[6];
+		}
+		
+		if (is_null($StartKey)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: RemoveKey cannot be NULL!');
+		} else if (is_null($ConditionalKey)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: Key cannot be NULL!');
+		} else if (is_null($StartNumber)) {
+			array_push($this->ErrorMessage,'MultiArrayBuild: StartNumber cannot be NULL!');
+		} else {  
+			$temp = array();
+			$i = $StartNumber;
+			if ($EndKey) {
+				$SourceKey = $StartKey;
+				$SourceKey .= $ConditionalKey;
+				$SourceKey .= $i;
+			} else {
+				$SourceKey = $StartKey;
+				$SourceKey .= $i;
+				$SourceKey .= $ConditionalKey;
+			}
+			while (array_key_exists($SourceKey, $Source)) {
+				if (isset($Source[$SourceKey])) {
+					$SourceKeyHold = $SourceKey;
+					foreach ($Start as $StartValue) {
+						if ($EndKey) {
+							$SourceKey = $StartKey;
+							$SourceKey .= $StartValue;
+							$SourceKey .= $i;
+						} else {
+							$SourceKey = $StartKey;
+							$SourceKey .= $i;
+							$SourceKey .= $StartValue;
+						}
+						
+						if (is_null($Source[$SourceKey])) {
+							unset($Source[$SourceKey]);
+						} else {
+							$temp[$i][$SourceKey] = $Source[$SourceKey];
+							unset($Source[$SourceKey]);
+						}
+					}
+					if (isset($Source[$SourceKeyHold])) {
+						unset($Source[$SourceKeyHold]);
+					}
+				} else {
+					$SourceKeyHold = $SourceKey;
+					foreach ($Start as $StartValue) {
+						if ($EndKey) {
+							$SourceKey = $StartKey;
+							$SourceKey .= $StartValue;
+							$SourceKey .= $i;
+						} else {
+							$SourceKey = $StartKey;
+							$SourceKey .= $i;
+							$SourceKey .= $StartValue;
+						}
+						
+						unset($Source[$SourceKey]);
+					}
+				}
+				$i++;
+				if ($EndKey) {
+					$SourceKey = $StartKey;
+					$SourceKey .= $ConditionalKey;
+					$SourceKey .= $i;
+				} else {
+					$SourceKey = $StartKey;
+					$SourceKey .= $i;
+					$SourceKey .= $ConditionalKey;
+				}
+			}
+			$Source = $Source + $temp;
+			unset ($temp);
+			if (!is_null($Sort)) {
+				if (!is_array($Sort)) {
+					$temp = $Source;
+					$newtemp = array();
+					$holdarray = array();
+					
+					for ($i = $StartNumber; $temp[$i]; $i++) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $i;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $i;
+							$SetOrder .= $Sort;
+						}
+
+						if ($temp[$i][$SetOrder]) {
+							try {
+								if (is_numeric($temp[$i][$SetOrder])) {
+									$index = $temp[$i][$SetOrder];
+									
+									if ($newtemp[$index]) {
+										if ($newtemp[$i] == NULL) {
+											$newtemp[$i] = $newtemp[$index];
+											unset($newtemp[$index]);
+										} else {
+											$j = $i;
+											while ($newtemp[$j]) {
+												$j++;
+											}
+											$newtemp[$j] = $newtemp[$index];
+											unset($newtemp[$index]);
+										}
+									}
+									
+									foreach ($temp[$i] as $key => $value) {
+										$key = explode($StartKey, $key, 2);
+										$hold = $key[0];
+										$key[0] = $StartKey;
+										if (is_null($EndKey)) {
+											$key[0] .= $hold;
+											$key[0] .= $index;
+											$key[1] = preg_replace('([0-9]+)', '', $key[1], 1);
+										} else {
+											preg_match('([0-9]+)', $key[1], $oldindex);
+											$oldindex = $oldindex[0];
+											$key[1] = str_replace($oldindex, $index, $key[1]);
+										}
+										$key = implode($key);
+										$newtemp[$index][$key] = $value;
+									}
+									unset($temp[$i]);
+									unset($Source[$i]);
+								} else {
+									array_push($this->ErrorMessage,"MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
+									throw new Exception("FATAL ERROR: MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
+								}
+							} catch (Exception $e) {
+								print $e->getMessage();
+								print "\n";
+								return NULL;
+							}
+							
+						} else if ($temp[$i]) {
+							$temp[$i][$SetOrder] = NULL;
+							array_push($holdarray, $temp[$i]);
+							unset($temp[$i]);
+							unset($Source[$i]);
+						}
+					}
+					
+					if ($holdarray) {
+						foreach ($holdarray as $key => $values) {
+							array_push($newtemp, $values);
+						}
+						unset($holdarray);
+					}
+					
+					$holdarray = array();
+					
+					ksort($newtemp);
+					$newtemp = array_merge($newtemp);
+					
+					//$newtemp = array_combine(range($StartNumber, count($newtemp)), array_values($newtemp));
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						if (isset($key)) {
+							$newkey = $key;
+							$newkey++;
+							$holdarray[$newkey] = $value;
+							
+							unset($newtemp[$key]);
+							
+						}
+					}
+					$newtemp = $newtemp + $holdarray;
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						
+						if ($key != $value[$SetOrder]) {
+							foreach($value as $key2 => $value2) {
+								preg_match('([0-9]+)', $key2, $oldcount);
+								$oldcount = $oldcount[0];
+
+								$replace = $StartKey;
+								$replace .= $oldcount;
+								$replacement = $StartKey;
+								$replacement .= $key;
+								
+								$key3 = str_replace($replace, $replacement, $key2);
+								if ($key2 != $key3) {
+									$newtemp[$key][$key3] = $newtemp[$key][$key2];
+									unset($newtemp[$key][$key2]);
+								}
+							}
+						}
+					}
+					
+					foreach ($newtemp as $key => $value) {
+						if ($EndKey) {
+							$SetOrder = $StartKey;
+							$SetOrder .= $Sort;
+							$SetOrder .= $key;
+						} else {
+							$SetOrder = $StartKey;
+							$SetOrder .= $key;
+							$SetOrder .= $Sort;
+						}
+						if (isset($value[$SetOrder])) {
+							$newtemp[$key][$SetOrder] = NULL;
+						}
+					}
+					
+					$Source = $Source + $newtemp;
+					unset($newtemp);
+					unset($temp);
+					
+				} else {
+					array_push($this->ErrorMessage,'MultiArrayBuild: Sort cannot be an ARRAY!');
+				}
+			}
+			
+			return $Source;
+		}
+		
+	}
+	
+	public function MultiArrayCombine($StartNumber, array $Source) {
+		if ($StartNumber != NULL) {
+			try {
+				if (is_numeric($StartNumber)) {
+					for ($i = $StartNumber; $Source[$i]; $i++) {
+						foreach ($Source[$i] as $key => $value) {
+							if (is_numeric($key)) {
+								$hold = $this->MultiArrayCombine($StartNumber, $value);
+								if ($hold) {
+									$Source = $Source + $hold;
+								}
+							} else {
+								$Source[$key] = $value;
+							}
+							unset($Source[$i][$key]);
+						}
+						unset($Source[$i]);
+					}
+					return $Source;
+					
+				} else {
+					array_push($this->ErrorMessage,"MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
+					throw new Exception("FATAL ERROR: MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
+				}
+			} catch (Exception $e){
+				print $e->getMessage();
+				print "\n";
+				return NULL;
+			} 
+		} else {
+			array_push($this->ErrorMessage,'MultiArrayCombine: StartNumber MUST be set!');
+		}
+	}
+	
 }
 ?>

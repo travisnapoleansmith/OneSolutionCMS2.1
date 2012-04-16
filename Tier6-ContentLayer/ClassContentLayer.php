@@ -1,33 +1,35 @@
 <?php
-/* Class Content Layer
+/** 
+ * Class Content Layer
  * 
  * Class ContentLayer is designed as the main content container for all One Solution CMS websites. This is where
  * all modules, services and add ons are used to be displayed to the end user.
  *
  * @author Travis Napolean Smith
- * @copyright Copyright (c) 1999 - 2011 One Solution CMS
- * @copyright PHP - Copyright (c) 2005 - 2011 One Solution CMS
+ * @copyright Copyright (c) 1999 - 2012 One Solution CMS
+ * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.0
+ * @version PHP - 2.1.129
  * @version C++ - Unknown
  */ 
 class ContentLayer extends LayerModulesAbstract
 {
-	/*
+	/**
 	 * Content Layer Modules
 	 * 
 	 * @var array
 	 */
 	protected $Modules;
 	
-	/*
+	/**
 	 * User settings for what is allowed to be done with the database -  set with Tier6ContentLayerSetting.php
 	 * in /Configuration folder
 	 * 
 	 * @var array
 	 */
 	protected $DatabaseAllow;
-	/*
+	
+	/**
 	 * User setting for what is cannot be done with the database - set with Tier6ContentLayerSetting.php
 	 * in /Configuration folder
 	 * 
@@ -35,40 +37,46 @@ class ContentLayer extends LayerModulesAbstract
 	 */
 	protected $DatabaseDeny;
 	
-	/*
+	/**
 	 * Print Preview array for the current page being displayed
 	 * 
 	 * @var array
 	 */
 	protected $PrintPreview;
 	
-	/*
+	/**
 	 * Current Database Table Name for Content Layer
 	 * 
 	 * @var string
 	 */
 	protected $DatabaseTableName;
-	/*
+	
+	/**
 	 * Current Database Table - Contains all the information retrieved from FetchDatabase
 	 * 
 	 * @var array
 	 */
 	protected $ContentLayerDatabase;
 	
-	/*
+	/**
 	 * Content Layer Version Table Name
 	 * 
 	 * @var string
 	 */
 	protected $ContentLayerVersionTableName;
-	/*
+	
+	/**
 	 * Content Layer Version Table - Contains all the information retrieved from FetchDatabase
 	 * 
 	 * @var array
 	 */
 	protected $ContentLayerVersionDatabase;
 	
-	
+	/**
+	 * Create an instance of ContentLayer
+	 *
+	 * @access public
+	*/
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
@@ -92,13 +100,39 @@ class ContentLayer extends LayerModulesAbstract
 		$this->Writer = &$GLOBALS['Writer'];
 	}
 	
+	/**
+	 * setVersionTable
+	 *
+	 * Setter for ContentLayerVersionTableName
+	 *
+	 * @param string $VersionTableName the name of the content layer's version table.
+	 * @access public
+	*/
+	
 	public function setVersionTable($VersionTableName) {
 		$this->ContentLayerVersionTableName = $VersionTableName;
 	}
 	
+	/**
+	 * setPrintPreview
+	 *
+	 * Setter for PrintPreview
+	 *
+	 * @param bool $PrintPreview set to TRUE or 1 for a page displayed as a printer preview; set to FALSE or 0 for a non printer view page.
+	 * @access public
+	*/
+	
 	public function setPrintPreview($PrintPreview) {
 		$this->PrintPreview = $PrintPreview;
 	}
+	
+	/**
+	 * setModules
+	 *
+	 * Setter for Modules
+	 *
+	 * @access public
+	*/
 	
 	public function setModules() {
 		
@@ -108,42 +142,114 @@ class ContentLayer extends LayerModulesAbstract
 		return $this->Modules[$key][$key1];
 	}
 	
-	public function setDatabaseAll ($hostname, $user, $password, $databasename) {
-		$this->Hostname = $hostname;
-		$this->User = $user;
-		$this->Password = $password;
-		$this->DatabaseName = $databasename;
+	/**
+	 * setDatabaseAll
+	 *
+	 * Setter for Hostname, User, Password, Database name and Database table
+	 *
+	 * @param string $Hostname the name of the host needed to connect to database.
+	 * @param string $User the user account needed to connect to database.
+	 * @param string $Password the user's password needed to connect to database.
+	 * @param string $DatabaseName the name of the database needed to connect to database.
+	 * @access public
+	*/
+	
+	public function setDatabaseAll ($Hostname, $User, $Password, $DatabaseName) {
+		$this->Hostname = $Hostname;
+		$this->User = $User;
+		$this->Password = $Password;
+		$this->DatabaseName = $DatabaseName;
 		
-		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabaseAll ($Hostname, $User, $Password, $DatabaseName);
 		
 	}
 	
-	public function setDatabaseTableName ($databasetablename) {
-		$this->DatabaseTableName = $databasetablename;
+	/**
+	 * setDatabaseTableName
+	 *
+	 * Setter for DatabaseTableName
+	 *
+	 * @param string $DatabaeTableName the name of the database table to use.
+	 * @access public
+	*/
+	
+	public function setDatabaseTableName ($DatabaseTableName) {
+		$this->DatabaseTableName = $DatabaseTableName;
 	}
+	
+	/**
+	 * ConnectAll
+	 *
+	 * Connects to all databases
+	 *
+	 * @access public
+	*/
 	
 	public function ConnectAll () {
 		$this->LayerModule->ConnectAll();
 	}
 	
-	public function Connect ($key) {
-		$this->LayerModule->Connect($key);
+	/**
+	 * Connect
+	 *
+	 * Connect to a database table
+	 *
+	 * @param string $DatabaseTable the name of the database table to connect to
+	 * @access public
+	*/
+	
+	public function Connect ($DatabaseTable) {
+		$this->LayerModule->Connect($DatabaseTable);
 	}
+	
+	/**
+	 * DiscconnectAll
+	 *
+	 * Disconnects from all databases
+	 *
+	 * @access public
+	*/
 	
 	public function DisconnectAll () {
 		$this->LayerModule->DisconnectAll();
 	}
 	
-	public function Disconnect ($key) {
-		$this->LayerModule->Disconnect($key);
+	/**
+	 * Disconnect
+	 *
+	 * Disconnection from a database table
+	 *
+	 * @param string $DatabaseTable the name of the database table to disconnect from
+	 * @access public
+	*/
+	
+	public function Disconnect ($DatabaseTable) {
+		$this->LayerModule->Disconnect($DatabaseTable);
 	}
+	
+	/**
+	 * buildDatabase
+	 *
+	 * Build Database!
+	 *
+	 * @access public
+	*/
 	
 	public function buildDatabase() {
 
 	}
 	
-	public function createDatabaseTable($key) {
-		$this->LayerModule->createDatabaseTable($key);
+	/**
+	 * createDatabaseTable
+	 *
+	 * Creates a connection for a database table
+	 *
+	 * @param string $DatabaseTable the name of the database table to create a connection to
+	 * @access public
+	*/
+	
+	public function createDatabaseTable($DatabaseTable) {
+		$this->LayerModule->createDatabaseTable($DatabaseTable);
 	}
 	
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
@@ -225,6 +331,16 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * FetchDatabase
+	 *
+	 * Fetches a database table based on Page ID as a String or Array
+	 *
+	 * @param string $PageID the lookupkey for the database table
+	 * @param array $PageID the lookupkey for the database table
+	 * @access public
+	*/
+	
 	public function FetchDatabase($PageID) {
 		if (!$PageID['PageID']) {
 			if ($_GET['PageID']) {
@@ -267,6 +383,14 @@ class ContentLayer extends LayerModulesAbstract
 		
 	}
 	
+	/**
+	 * CreateOutput
+	 *
+	 * Creates the output of the Content Layer
+	 *
+	 * @param string $Space how much space to use for a line indent, can be NULL
+	 * @access public
+	*/
 	public function CreateOutput($Space) {
 		if ($this->ContentLayerVersionTableName) {
 			foreach ($this->ContentLayerDatabase as $Key => $ContentLayerDatabase) {
@@ -395,12 +519,28 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * transverseSimpleXMLAttribute
+	 *
+	 * Transverses a SimpleXMLElement object
+	 *
+	 * @param SimpleXMLElement $Attribute the attributes for a SimpleXMLElement object
+	 * @access private
+	*/
 	private function transverseSimpleXMLAttribute (SimpleXMLElement $Attribute) {
 		foreach ($Attribute->attributes() as $key => $attributes) {
 			$this->Writer->writeAttribute($key, $attributes);
 		}
 	}
-
+	
+	/**
+	 * transverseChildSimpleXMLToOutput
+	 *
+	 * Transverses a SimpleXMLElement object's child and writes the output to XMLWriter
+	 *
+	 * @param SimpleXMLElement $Child the child node for a SimpleXMLElement object
+	 * @access private
+	*/
 	private function transverseChildSimpleXMLToOutput(SimpleXMLElement $Child) {
 		$hold = $Child->asXML();
 		$hold = trim($hold);
@@ -411,6 +551,14 @@ class ContentLayer extends LayerModulesAbstract
 		$this->Writer->writeRaw($RawText);
 	}
 	
+	/**
+	 * processXMLFile
+	 *
+	 * Transverses a XML File and writes the output to XMLWriter
+	 *
+	 * @param string $XMLFile the file name for an XML File.
+	 * @access public
+	*/
 	public function processXMLFile($XMLFile) {
 		if ($XMLFile != NULL) {
 			if (file_exists($XMLFile)) {
@@ -430,6 +578,14 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * processHTMLFile
+	 *
+	 * Transverses a HTML File and writes the output to XMLWriter
+	 *
+	 * @param string $HTMLFile the file name for an HTML File.
+	 * @access public
+	*/
 	public function processHTMLFile($HTMLFile) {
 		if ($HTMLFile != NULL) {
 			if (file_exists($HTMLFile)) {
@@ -453,6 +609,15 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * SessionStart
+	 *
+	 * Starts a session cookie
+	 *
+	 * @param string $SessionName the name of the session to start.
+	 * @return string the name of the session that was started.
+	 * @access public
+	*/
 	public function SessionStart($SessionName) {
 		if ($_COOKIE['SessionID']) {
 			$this->SessionDestroy($_COOKIE['SessionID']);
@@ -466,6 +631,14 @@ class ContentLayer extends LayerModulesAbstract
 		return $sessionname;
 	}
 	
+	/**
+	 * SessionDestroy
+	 *
+	 * Ends a session cookie
+	 *
+	 * @param string $SessionName the name of the session to end.
+	 * @access public
+	*/
 	public function SessionDestroy($SessionName) {
 		if ($SessionName) {
 			session_name($SessionName);
@@ -871,6 +1044,15 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * EmptyStringToNullArray
+	 *
+	 * Sets all "" strings to NULL inside of an array
+	 *
+	 * @param array $Array the array to transverse to set all "" strings to NULL.
+	 * @return array the array that was changed.
+	 * @access public
+	*/
 	public function EmptyStringToNullArray (array $Array) {
 		foreach ($Array as $key => $value) {
 			if ($value == "") {
@@ -886,288 +1068,13 @@ class ContentLayer extends LayerModulesAbstract
 		return $Array;
 	}
 	
-	public function MultiArrayBuild(array $Start, $StartKey, $ConditionalKey, $StartNumber, array $Source) {
-		$functionarguments = func_get_args();
-		
-		$Sort = NULL;
-		if ($functionarguments[5]) {
-			$Sort = $functionarguments[5];
-		}
-		
-		$EndKey = NULL;
-		if ($functionarguments[6]) {
-			$EndKey = $functionarguments[6];
-		}
-		
-		if (is_null($StartKey)) {
-			array_push($this->ErrorMessage,'MultiArrayBuild: RemoveKey cannot be NULL!');
-		} else if (is_null($ConditionalKey)) {
-			array_push($this->ErrorMessage,'MultiArrayBuild: Key cannot be NULL!');
-		} else if (is_null($StartNumber)) {
-			array_push($this->ErrorMessage,'MultiArrayBuild: StartNumber cannot be NULL!');
-		} else {  
-			$temp = array();
-			$i = $StartNumber;
-			if ($EndKey) {
-				$SourceKey = $StartKey;
-				$SourceKey .= $ConditionalKey;
-				$SourceKey .= $i;
-			} else {
-				$SourceKey = $StartKey;
-				$SourceKey .= $i;
-				$SourceKey .= $ConditionalKey;
-			}
-			while (array_key_exists($SourceKey, $Source)) {
-				if (isset($Source[$SourceKey])) {
-					$SourceKeyHold = $SourceKey;
-					foreach ($Start as $StartValue) {
-						if ($EndKey) {
-							$SourceKey = $StartKey;
-							$SourceKey .= $StartValue;
-							$SourceKey .= $i;
-						} else {
-							$SourceKey = $StartKey;
-							$SourceKey .= $i;
-							$SourceKey .= $StartValue;
-						}
-						
-						if (is_null($Source[$SourceKey])) {
-							unset($Source[$SourceKey]);
-						} else {
-							$temp[$i][$SourceKey] = $Source[$SourceKey];
-							unset($Source[$SourceKey]);
-						}
-					}
-					if (isset($Source[$SourceKeyHold])) {
-						unset($Source[$SourceKeyHold]);
-					}
-				} else {
-					$SourceKeyHold = $SourceKey;
-					foreach ($Start as $StartValue) {
-						if ($EndKey) {
-							$SourceKey = $StartKey;
-							$SourceKey .= $StartValue;
-							$SourceKey .= $i;
-						} else {
-							$SourceKey = $StartKey;
-							$SourceKey .= $i;
-							$SourceKey .= $StartValue;
-						}
-						
-						unset($Source[$SourceKey]);
-					}
-				}
-				$i++;
-				if ($EndKey) {
-					$SourceKey = $StartKey;
-					$SourceKey .= $ConditionalKey;
-					$SourceKey .= $i;
-				} else {
-					$SourceKey = $StartKey;
-					$SourceKey .= $i;
-					$SourceKey .= $ConditionalKey;
-				}
-			}
-			$Source = $Source + $temp;
-			unset ($temp);
-			if (!is_null($Sort)) {
-				if (!is_array($Sort)) {
-					$temp = $Source;
-					$newtemp = array();
-					$holdarray = array();
-					
-					for ($i = $StartNumber; $temp[$i]; $i++) {
-						if ($EndKey) {
-							$SetOrder = $StartKey;
-							$SetOrder .= $Sort;
-							$SetOrder .= $i;
-						} else {
-							$SetOrder = $StartKey;
-							$SetOrder .= $i;
-							$SetOrder .= $Sort;
-						}
-
-						if ($temp[$i][$SetOrder]) {
-							try {
-								if (is_numeric($temp[$i][$SetOrder])) {
-									$index = $temp[$i][$SetOrder];
-									
-									if ($newtemp[$index]) {
-										if ($newtemp[$i] == NULL) {
-											$newtemp[$i] = $newtemp[$index];
-											unset($newtemp[$index]);
-										} else {
-											$j = $i;
-											while ($newtemp[$j]) {
-												$j++;
-											}
-											$newtemp[$j] = $newtemp[$index];
-											unset($newtemp[$index]);
-										}
-									}
-									
-									foreach ($temp[$i] as $key => $value) {
-										$key = explode($StartKey, $key, 2);
-										$hold = $key[0];
-										$key[0] = $StartKey;
-										if (is_null($EndKey)) {
-											$key[0] .= $hold;
-											$key[0] .= $index;
-											$key[1] = preg_replace('([0-9]+)', '', $key[1], 1);
-										} else {
-											preg_match('([0-9]+)', $key[1], $oldindex);
-											$oldindex = $oldindex[0];
-											$key[1] = str_replace($oldindex, $index, $key[1]);
-										}
-										$key = implode($key);
-										$newtemp[$index][$key] = $value;
-									}
-									unset($temp[$i]);
-									unset($Source[$i]);
-								} else {
-									array_push($this->ErrorMessage,"MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
-									throw new Exception("FATAL ERROR: MultiArrayBuild: Array Sort Order from index - $i key - $SetOrder MUST BE AN INTEGER!");
-								}
-							} catch (Exception $e) {
-								print $e->getMessage();
-								print "\n";
-								return NULL;
-							}
-							
-						} else if ($temp[$i]) {
-							$temp[$i][$SetOrder] = NULL;
-							array_push($holdarray, $temp[$i]);
-							unset($temp[$i]);
-							unset($Source[$i]);
-						}
-					}
-					
-					if ($holdarray) {
-						foreach ($holdarray as $key => $values) {
-							array_push($newtemp, $values);
-						}
-						unset($holdarray);
-					}
-					
-					$holdarray = array();
-					
-					ksort($newtemp);
-					$newtemp = array_merge($newtemp);
-					
-					//$newtemp = array_combine(range($StartNumber, count($newtemp)), array_values($newtemp));
-					foreach ($newtemp as $key => $value) {
-						if ($EndKey) {
-							$SetOrder = $StartKey;
-							$SetOrder .= $Sort;
-							$SetOrder .= $key;
-						} else {
-							$SetOrder = $StartKey;
-							$SetOrder .= $key;
-							$SetOrder .= $Sort;
-						}
-						if (isset($key)) {
-							$newkey = $key;
-							$newkey++;
-							$holdarray[$newkey] = $value;
-							
-							unset($newtemp[$key]);
-							
-						}
-					}
-					$newtemp = $newtemp + $holdarray;
-					foreach ($newtemp as $key => $value) {
-						if ($EndKey) {
-							$SetOrder = $StartKey;
-							$SetOrder .= $Sort;
-							$SetOrder .= $key;
-						} else {
-							$SetOrder = $StartKey;
-							$SetOrder .= $key;
-							$SetOrder .= $Sort;
-						}
-						
-						if ($key != $value[$SetOrder]) {
-							foreach($value as $key2 => $value2) {
-								preg_match('([0-9]+)', $key2, $oldcount);
-								$oldcount = $oldcount[0];
-
-								$replace = $StartKey;
-								$replace .= $oldcount;
-								$replacement = $StartKey;
-								$replacement .= $key;
-								
-								$key3 = str_replace($replace, $replacement, $key2);
-								if ($key2 != $key3) {
-									$newtemp[$key][$key3] = $newtemp[$key][$key2];
-									unset($newtemp[$key][$key2]);
-								}
-							}
-						}
-					}
-					
-					foreach ($newtemp as $key => $value) {
-						if ($EndKey) {
-							$SetOrder = $StartKey;
-							$SetOrder .= $Sort;
-							$SetOrder .= $key;
-						} else {
-							$SetOrder = $StartKey;
-							$SetOrder .= $key;
-							$SetOrder .= $Sort;
-						}
-						if (isset($value[$SetOrder])) {
-							$newtemp[$key][$SetOrder] = NULL;
-						}
-					}
-					
-					$Source = $Source + $newtemp;
-					unset($newtemp);
-					unset($temp);
-					
-				} else {
-					array_push($this->ErrorMessage,'MultiArrayBuild: Sort cannot be an ARRAY!');
-				}
-			}
-			
-			return $Source;
-		}
-		
-	}
-	
-	public function MultiArrayCombine($StartNumber, array $Source) {
-		if ($StartNumber != NULL) {
-			try {
-				if (is_numeric($StartNumber)) {
-					for ($i = $StartNumber; $Source[$i]; $i++) {
-						foreach ($Source[$i] as $key => $value) {
-							if (is_numeric($key)) {
-								$hold = $this->MultiArrayCombine($StartNumber, $value);
-								if ($hold) {
-									$Source = $Source + $hold;
-								}
-							} else {
-								$Source[$key] = $value;
-							}
-							unset($Source[$i][$key]);
-						}
-						unset($Source[$i]);
-					}
-					return $Source;
-					
-				} else {
-					array_push($this->ErrorMessage,"MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
-					throw new Exception("FATAL ERROR: MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
-				}
-			} catch (Exception $e){
-				print $e->getMessage();
-				print "\n";
-				return NULL;
-			} 
-		} else {
-			array_push($this->ErrorMessage,'MultiArrayCombine: StartNumber MUST be set!');
-		}
-	}
-	
+	/**
+	 * Login
+	 *
+	 * Logs a user into the system.
+	 *
+	 * @access public
+	*/
 	public function Login() {
 		$sessionname = $this->SessionStart('UserAuthentication');
 		
@@ -1222,12 +1129,27 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * KeepLoggedIn
+	 *
+	 * Keeps a user logged in
+	 *
+	 * @access public
+	*/
+	
 	public function KeepLoggedIn() {
 		if ($_COOKIE['LoggedIn']) {
 			setcookie("LoggedIn", TRUE, time()+3600, '/');
 		}	
 	}
 	
+	/**
+	 * LogOff
+	 *
+	 * Logs a user off the system
+	 *
+	 * @access public
+	*/
 	public function Logoff() {
 		setcookie("UserName", '', time()-1000, '/');
 		setcookie("LoggedIn", '', time()-1000, '/');
@@ -1252,6 +1174,13 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * Register
+	 *
+	 * Registers a user account
+	 *
+	 * @access public
+	*/
 	public function Register() {
 		$sessionname = $this->SessionStart('UserRegistration');
 		
@@ -1306,6 +1235,13 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * NewUserChangePassword
+	 *
+	 * Changes a password when a user creates an account
+	 *
+	 * @access public
+	*/
 	public function NewUserChangePassword() {
 		$sessionname = $this->SessionStart('PasswordCreation');
 		
@@ -1341,10 +1277,24 @@ class ContentLayer extends LayerModulesAbstract
 		}		
 	}
 	
+	/**
+	 * ChangePassword
+	 * 
+	 * Changes a users password
+	 *
+	 * @access public
+	*/
 	public function ChangePassword() {
 		
 	}
 	
+	/**
+	 * ResetPassword
+	 * 
+	 * Resets a users password
+	 *
+	 * @access public
+	*/
 	public function ResetPassword() {
 		$sessionname = $this->SessionStart('PasswordReset');
 		
@@ -1388,6 +1338,13 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 	
+	/**
+	 * ChangeResetPassword
+	 *
+	 * Changes a users password
+	 *
+	 * @access public
+	*/
 	public function ChangeResetPassword() {
 		$sessionname = $this->SessionStart('PasswordResetChange');
 		

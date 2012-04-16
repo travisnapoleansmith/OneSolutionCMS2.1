@@ -21,24 +21,32 @@ class XhtmlMenu extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $List;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlMenu
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlMenu'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlMenu'][$hold];
 		$this->ErrorMessage = array();
 		
-		$this->DatabaseTableName = current($tablenames);
+		$this->DatabaseTableName = current($TableNames);
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
-		if ($databaseoptions['NoAttributes']) {
-			$this->NoAttributes = $databaseoptions['NoAttributes'];
-			unset($databaseoptions['NoAttributes']);
+		if ($DatabaseOptions['NoAttributes']) {
+			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
+			unset($DatabaseOptions['NoAttributes']);
 		}
 		
 		if ($this->FileName) {

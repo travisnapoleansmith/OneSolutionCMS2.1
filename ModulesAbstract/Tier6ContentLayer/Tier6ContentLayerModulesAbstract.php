@@ -681,6 +681,32 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 							$this->Writer->endElement();
 						}
 				}
+			} else {
+				if ($this->Content != NULL) {
+					$Content = '<CONTENT>' . $this->Content . '</CONTENT>';
+					
+					libxml_use_internal_errors(true);
+					$Html = simplexml_load_string($Content);
+					
+					foreach ($Html as $Child) {
+						$hold = $Child->asXML();
+						$hold = trim($hold);
+						$Element = $Child->getName();
+						$this->Writer->startElement($Element);
+						foreach ($Child->attributes() as $Name => $Attribute) {
+							$this->Writer->writeAttribute($Name, $Attribute);
+						}
+						(string)$Text = (string)$Child[0];
+						if ($Text != NULL) {
+							$this->Writer->text($Text);
+						}
+						if ($Child->children()) {
+							$ChildrenOutput = $Child->children()->asXML();
+							$this->Writer->writeRaw($ChildrenOutput);
+						}
+						$this->Writer->endElement();
+					}
+				}
 			}
 		}
 	}

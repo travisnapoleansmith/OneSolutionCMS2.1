@@ -1,6 +1,7 @@
 <?php
 
-/* Class Xhtml Site Stats
+/**
+ * Class XhtmlSiteStats
  * 
  * Class XhtmlSiteStats is designed to keep track of the sites stats including page hits and other stat information
  * about each page
@@ -9,12 +10,12 @@
  * @copyright Copyright (c) 1999 - 2011 One Solution CMS
  * @copyright PHP - Copyright (c) 2005 - 2011 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.0
+ * @version PHP - 2.1.129
  * @version C++ - Unknown
  */ 
  
 class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	/*
+	/**
 	 * Current Page Count - retrieved from the database table. The name of the database table is set 
 	 * in ContentLayerModule Table under XhtmlSiteStats - DatabaseTable1.
 	 * 
@@ -22,21 +23,23 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 */
 	protected $Count;
 	
-	/*
+	/**
 	 * Class Name - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * Class Settings.
 	 * 
 	 * @var string
 	 */
 	protected $Class;
-	/*
+	
+	/**
 	 * ID Name - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * ID Settings.
 	 * 
 	 * @var string
 	 */
 	protected $ID;
-	/*
+	
+	/**
 	 * Style Name - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * Style Settings.
 	 * 
@@ -51,7 +54,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var string
 	 */
 	protected $BeginMessage;
-	/*
+	
+	/**
 	 * End Message - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * EndMessage Settings. Used for setting a message after the counter is displayed.
 	 * 
@@ -59,14 +63,15 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 */
 	protected $EndMessage;
 	
-	/*
+	/**
 	 * Start Tag - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * StartTag Settings. Used for setting what tag you want to for the counter to be displayed.
 	 * 
 	 * @var string
 	 */
 	protected $StartTag;
-	/*
+	
+	/**
 	 * No Output - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats 
 	 * NoOutput Settings. Used to turn on or off the output.  FALSE is for output to be displayed. TRUE is
 	 * for output not to be displayed.
@@ -75,26 +80,25 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 */
 	protected $NoOutput;
 	
-	/* Constructor for XhtmlSiteStats
-	 * 
-	 * Sets the tablesnames, databaseoptions and layermodule for XhtmlSiteStats.
-	 * 
-	 * @param array $tablenames = Array of all the tables needed
-	 * @param array $databaseoptions = Array of all the database options
-	 * @param ValidationLayer $layermodule = Tier 5 Validation Layer to use
-	 * 
-	 */
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlSiteStats
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlSiteStats'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlSiteStats'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -104,38 +108,39 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['Class']) {
-			$this->Class = $databaseoptions['Class'];
+		if ($DatabaseOptions['Class']) {
+			$this->Class = $DatabaseOptions['Class'];
 		}
 		
-		if ($databaseoptions['ID']) {
-			$this->ID = $databaseoptions['ID'];
+		if ($DatabaseOptions['ID']) {
+			$this->ID = $DatabaseOptions['ID'];
 		}
 		
-		if ($databaseoptions['Style']) {
-			$this->Style = $databaseoptions['Style'];
+		if ($DatabaseOptions['Style']) {
+			$this->Style = $DatabaseOptions['Style'];
 		}
 		
-		if ($databaseoptions['BeginMessage']) {
-			$this->BeginMessage = $databaseoptions['BeginMessage'];
+		if ($DatabaseOptions['BeginMessage']) {
+			$this->BeginMessage = $DatabaseOptions['BeginMessage'];
 		}
 		
-		if ($databaseoptions['EndMessage']) {
-			$this->EndMessage = $databaseoptions['EndMessage'];
+		if ($DatabaseOptions['EndMessage']) {
+			$this->EndMessage = $DatabaseOptions['EndMessage'];
 		}
 		
-		if ($databaseoptions['StartTag']) {
-			$this->StartTag = $databaseoptions['StartTag'];
+		if ($DatabaseOptions['StartTag']) {
+			$this->StartTag = $DatabaseOptions['StartTag'];
 		}
 		
-		if ($databaseoptions['NoOutput']) {
-			$this->NoOutput = $databaseoptions['NoOutput'];
+		if ($DatabaseOptions['NoOutput']) {
+			$this->NoOutput = $DatabaseOptions['NoOutput'];
 		}
 	}
 	
-	/* setDatabaseAll
+	/**
+	 * setDatabaseAll
 	 * 
-	 * Sets the hostname, user, password, databasename and databasetable for XhtmlSiteStats.
+	 * Sets the hostname, user, password, databasename and databasetable.
 	 * 
 	 * @param string $hostname = Database Host Name
 	 * @param string $user = Database User
@@ -156,7 +161,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		
 	}
 	
-	/* FetchDatabase
+	/** 
+	 * FetchDatabase
 	 * 
 	 * Retrieved the database based on the PageID.
 	 * 
@@ -178,7 +184,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
 	
-	/* CreateOutput
+	/** 
+	 * CreateOutput
 	 * 
 	 * Creates Output based on what the database entried have in them with space being the indentation of each line.
 	 * 
@@ -215,7 +222,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
-	/* checkSiteStatPage
+	/**
+	 * checkSiteStatPage
 	 * 
 	 * Checks to see if the page exists in the Site Stat database table.
 	 * 
@@ -231,7 +239,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
-	/* createSiteStatPage
+	/**
+	 * createSiteStatPage
 	 * 
 	 * Creates a site stat page in the database.
 	 * 
@@ -248,7 +257,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
-	/* updateSiteStatPage
+	/*
+	 * updateSiteStatPage
 	 * 
 	 * Updates a site stat page counter and month counter.
 	 * 
@@ -284,7 +294,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
-	/* deleteSiteStatPage
+	/**
+	 * deleteSiteStatPage
 	 * 
 	 * Deletes a site stat page from the database.  This is not undoable!
 	 * 

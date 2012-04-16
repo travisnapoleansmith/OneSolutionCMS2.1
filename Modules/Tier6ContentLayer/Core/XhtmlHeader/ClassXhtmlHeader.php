@@ -57,17 +57,25 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 	protected $Theme;
 	protected $SiteName;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XtmlHeader
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlHeader'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlHeader'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -77,9 +85,9 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		while (current($tablenames)) {
-			$this->TableNames[key($tablenames)] = current($tablenames);
-			next($tablenames);
+		while (current($TableNames)) {
+			$this->TableNames[key($TableNames)] = current($TableNames);
+			next($TableNames);
 		}
 		
 		$this->HttpAccept = $_SERVER['HTTP_ACCEPT'];

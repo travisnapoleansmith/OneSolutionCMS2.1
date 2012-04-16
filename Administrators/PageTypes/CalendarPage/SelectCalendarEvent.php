@@ -52,15 +52,22 @@
 	$EndTimeAmPm = $EndTimeTemp[1];
 	unset($EndTimeTemp);
 	
+	$passarray = array();
+	$passarray['PageID'] = $_POST['UpdateCalendarEvent'];
+	$passarray['ObjectID'] = $_POST['CalendarEvent'];
+	//$passarray['FormOptionText'] = $_POST['CalendarEvent'];
+	
+	$FormOptionSelected = $Tier6Databases->getRecord($passarray, 'AdministratorFormOption', TRUE, array('1' => 'PageID'), 'ASC');
 	$PageID = array();
-	$PageID['Day'] = $StartDay;
+	$PageID['CalendarID'] = $FormOptionSelected[0]['ObjectID'];
+	/*$PageID['Day'] = $StartDay;
 	$PageID['Month'] = $StartMonth;
 	$PageID['Year'] = $StartYear;
 	$PageID['StartTime'] = $StartTime;
 	$PageID['StartTimeAmPm'] = $StartTimeAmPm;
 	$PageID['EndTime'] = $EndTime;
 	$PageID['EndTimeAmPm'] = $EndTimeAmPm;
-	
+	*/
 	$passarray = array();
 	$passarray['PageID'] = $PageID;
 	$passarray['DatabaseTableName'] = 'CalendarAppointments';
@@ -68,12 +75,6 @@
 	$CalendarEvent = $Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'getRecord', $passarray);
 	
 	$sessionname = $Tier6Databases->SessionStart('UpdateCalendarEvent');
-	
-	$passarray = array();
-	$passarray['PageID'] = $_POST['UpdateCalendarEvent'];
-	$passarray['FormOptionText'] = $_POST['CalendarEvent'];
-	
-	$FormOptionSelected = $Tier6Databases->getRecord($passarray, 'AdministratorFormOption', TRUE, array('1' => 'PageID'), 'ASC');
 	
 	$Date = date_parse($CalendarEvent[0]['StartTime']);
 	$StartHour = NULL;
@@ -157,6 +158,5 @@
 	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$CalendarEventUpdatePage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdatePage']['SettingAttribute'];
-	
 	header("Location: $CalendarEventUpdatePage&SessionID=$sessionname");
 ?>

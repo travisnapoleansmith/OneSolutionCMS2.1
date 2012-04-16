@@ -38,16 +38,24 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 	
 	protected $OutputReturn = FALSE;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
-		$hold = $tablenames['Content'];
+	/**
+	 * Create an instance of XtmlContent
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
+		$hold = $TableNames['Content'];
 		$GLOBALS['ErrorMessage']['XhtmlContent'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlContent'][$hold];
 		$this->ErrorMessage = array();
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {
@@ -57,21 +65,21 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 		
-		if ($databaseoptions['NoAttributes']) {
-			$this->NoAttributes = $databaseoptions['NoAttributes'];
-			unset($databaseoptions['NoAttributes']);
+		if ($DatabaseOptions['NoAttributes']) {
+			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
+			unset($DatabaseOptions['NoAttributes']);
 		}
 		
-		if ($databaseoptions['Insert']) {
-			$this->Insert = $databaseoptions['Insert'];
-			unset($databaseoptions['Insert']);
+		if ($DatabaseOptions['Insert']) {
+			$this->Insert = $DatabaseOptions['Insert'];
+			unset($DatabaseOptions['Insert']);
 		}
 		
-		reset($tablenames);
-		$this->ContentTableName = current($tablenames);
-		$this->ContentLayerTablesName = next($tablenames);
-		$this->ContentPrintPreviewTableName = next($tablenames);
-		$this->ContentLayerModulesTableName = next($tablenames);
+		reset($TableNames);
+		$this->ContentTableName = current($TableNames);
+		$this->ContentLayerTablesName = next($TableNames);
+		$this->ContentPrintPreviewTableName = next($TableNames);
+		$this->ContentLayerModulesTableName = next($TableNames);
 	}
 	
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {

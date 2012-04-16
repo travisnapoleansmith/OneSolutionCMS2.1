@@ -65,24 +65,32 @@ class XmlFeed extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	
 	protected $XmlFeed;
 	
-	public function __construct(array $tablenames, array $databaseoptions, $layermodule) {
-		$this->LayerModule = &$layermodule;
+	/**
+	 * Create an instance of XmlFeed
+	 *
+	 * @param array $TableNames an array of table names to connect to.
+	 * @param array $DatabaseOptions an array of option from the database.
+	 * @param object $LayerModule a copy of the current layer the module is in - Content Layer
+	 * @access public
+	*/
+	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->LayerModule = &$LayerModule;
 		
-		$hold = current($tablenames);
+		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XmlFeed'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XmlFeed'][$hold];
 		$this->ErrorMessage = array();
 		
-		while (current($tablenames)) {
-			$this->TableNames[key($tablenames)] = current($tablenames);
-			next($tablenames);
+		while (current($TableNames)) {
+			$this->TableNames[key($TableNames)] = current($TableNames);
+			next($TableNames);
 		}
 		
 		$this->XMLLink = $GLOBALS['rsslink'];
 		
-		if ($databaseoptions['FileName']) {
-			$this->FileName = $databaseoptions['FileName'];
-			unset($databaseoptions['FileName']);
+		if ($DatabaseOptions['FileName']) {
+			$this->FileName = $DatabaseOptions['FileName'];
+			unset($DatabaseOptions['FileName']);
 		}
 		
 		if ($this->FileName) {

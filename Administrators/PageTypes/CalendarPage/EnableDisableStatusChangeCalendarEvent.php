@@ -6,64 +6,11 @@
 	
 	require_once ("$ADMINHOME/Configuration/includes.php");
 	
-	$CalendarEvent = stripslashes($_POST['CalendarEvent']);
-	$CalendarEvent = explode(' - ', $CalendarEvent);
-	
-	$Event = array();
-	$Event['StartDate'] = $CalendarEvent[0];
-	$Event['StartTime'] = $CalendarEvent[1];
-	$Event['EndTime'] = $CalendarEvent[2];
-	$Event['Event'] = $CalendarEvent[3];
-	unset($CalendarEvent);
-	
-	$Date = NULL;
-	$Date = date_parse($Event['StartDate']);
-	
-	$StartDay = NULL;
-	if ($Date['day'] < 10) {
-		$StartDay = 0 . $Date['day'];
-	} else {
-		$StartDay = $Date['day'];
-	}
-	
-	$StartMonth = NULL;
-	$StartMonth = date("F", mktime(0, 0, 0, $Date['month'], 10));
-	
-	$StartYear = NULL;
-	if ($Date['year'] < 10) {
-		$StartYear = 0 . $Date['year'];
-	} else {
-		$StartYear = $Date['year'];
-	}
-	
-	$StartTime = NULL;
-	$StartTimeAmPm = NULL;
-	
-	$StartTimeTemp = explode(' ', $Event['StartTime']);
-	$StartTime = $StartTimeTemp[0];
-	$StartTimeAmPm = $StartTimeTemp[1];
-	unset($StartTimeTemp);
-	
-	$EndTime = NULL;
-	$EndTimeAmPm = NULL;
-	
-	$EndTimeTemp = explode(' ', $Event['EndTime']);
-	$EndTime = $EndTimeTemp[0];
-	$EndTimeAmPm = $EndTimeTemp[1];
-	unset($EndTimeTemp);
-	
-	$PageID = array();
-	$PageID['Day'] = $StartDay;
-	$PageID['Month'] = $StartMonth;
-	$PageID['Year'] = $StartYear;
-	$PageID['StartTime'] = $StartTime;
-	$PageID['StartTimeAmPm'] = $StartTimeAmPm;
-	$PageID['EndTime'] = $EndTime;
-	$PageID['EndTimeAmPm'] = $EndTimeAmPm;
+	$PageID = $_POST['CalendarEvent'];
 	
 	$passarray = array();
 	$passarray['PageID'] = $_POST['EnableDisableCalendarEvent'];
-	$passarray['FormOptionText'] = $_POST['CalendarEvent'];
+	$passarray['ObjectID'] = $_POST['CalendarEvent'];
 	
 	$FormOptionSelected = $Tier6Databases->getRecord($passarray, 'AdministratorFormOption', TRUE, array('1' => 'PageID'), 'ASC');
 	
@@ -71,7 +18,7 @@
 
 	if (!is_null($PageID)) {
 		$CalendarPageID = array();
-		$CalendarPageID['PageID'] = $PageID;
+		$CalendarPageID['CalendarID'] = $PageID;
 		$CalendarPageID['TableName'] = 'CalendarAppointments';
 		$CalendarPageID['Enable/Disable'] = $_POST['EnableDisable'];
 		$CalendarPageID['Status'] = $_POST['Status'];
