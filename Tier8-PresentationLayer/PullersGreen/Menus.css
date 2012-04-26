@@ -4,6 +4,7 @@
   file using MenuSettings.css as a template.
 */
 
+
 .block-main-menu {
   line-height: normal;
   z-index: 10;
@@ -11,7 +12,7 @@
 
 ul.main-menu,
 ul.main-menu ul {
-  z-index: 5;
+  z-index: 0;
   position: relative;
   margin-left: 0px;
 }
@@ -56,6 +57,7 @@ ul.main-menu li.menuparent li.menuparent li.over ul,
 ul.main-menu li.menuparent li.menuparent li.menuparent li.over ul,
 ul.main-menu li.menuparent li.menuparent li.menuparent li.menuparent li.over ul{
   visibility: visible;
+  z-index: 100;
 }
 
 /* Hide sub-menus initially. */

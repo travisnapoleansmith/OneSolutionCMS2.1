@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 1999 - 2012 One Solution CMS
  * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.1.129
+ * @version PHP - 2.1.130
  * @version C++ - Unknown
  */ 
 class ContentLayer extends LayerModulesAbstract
@@ -73,6 +73,34 @@ class ContentLayer extends LayerModulesAbstract
 	protected $ContentLayerVersionDatabase;
 	
 	/**
+	 * Content Layer Theme Table Name
+	 * 
+	 * @var string
+	 */
+	protected $ContentLayerThemeTableName;
+	
+	/**
+	 * Content Layer Theme Global Layer Table Name
+	 * 
+	 * @var string
+	 */
+	protected $ContentLayerThemeGlobalLayerTableName;
+	
+	/**
+	 * Content Layer Theme Name
+	 * 
+	 * @var string
+	 */
+	protected $ContentLayerThemeName;
+	
+	/**
+	 * Content Layer Theme Global Layer Table Content
+	 * 
+	 * @var string
+	 */
+	protected $ContentLayerThemeGlobalLayerContent = array();
+	
+	/**
 	 * Create an instance of ContentLayer
 	 *
 	 * @access public
@@ -111,6 +139,32 @@ class ContentLayer extends LayerModulesAbstract
 	
 	public function setVersionTable($VersionTableName) {
 		$this->ContentLayerVersionTableName = $VersionTableName;
+	}
+	
+	/**
+	 * setThemeTableName
+	 *
+	 * Setter for ContentLayerThemeTableName
+	 *
+	 * @param string $TableName the name of the content layer's theme table.
+	 * @access public
+	*/
+	
+	public function setThemeTableName($TableName) {
+		$this->ContentLayerThemeTableName = $TableName;
+	}
+	
+	/**
+	 * setVersionTable
+	 *
+	 * Setter for ContentLayerThemeGlobalLayerTableName
+	 *
+	 * @param string $TableName the name of the content layer's theme global layer table.
+	 * @access public
+	*/
+	
+	public function setThemeGlobalLayerTable($TableName) {
+		$this->ContentLayerThemeGlobalLayerTableName = $TableName;
 	}
 	
 	/**
@@ -176,7 +230,41 @@ class ContentLayer extends LayerModulesAbstract
 	public function setDatabaseTableName ($DatabaseTableName) {
 		$this->DatabaseTableName = $DatabaseTableName;
 	}
+
+	/**
+	 * buildThemeGlobalLayerTable
+	 *
+	 * Builds ContentLayerThemeGlobalLayerTableName
+	 *
+	 * @access public
+	*/
 	
+	public function buildThemeGlobalLayerTable() {
+		if ($this->ContentLayerThemeTableName != NULL) {
+			$passarray = array();
+			$passarray['Enable/Disable'] = 'Enable';
+			
+			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeTableName);
+			$this->LayerModule->Connect($this->ContentLayerThemeTableName);
+			$this->LayerModule->pass ($this->ContentLayerThemeTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->ContentLayerThemeTableName);
+			
+			$Theme = $this->LayerModule->pass ($this->ContentLayerThemeTableName, 'getMultiRowField', array());
+			$this->ContentLayerThemeName = $Theme[0]['ThemeName'];
+			
+			$passarray = array();
+			$passarray['ThemeName'] = $this->ContentLayerThemeName;
+			
+			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeGlobalLayerTableName);
+			$this->LayerModule->Connect($this->ContentLayerThemeGlobalLayerTableName);
+			$this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->ContentLayerThemeGlobalLayerTableName);
+			$this->ContentLayerThemeGlobalLayerContent = $this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'getMultiRowField', array());
+			
+			//print_r($this->ContentLayerThemeGlobalLayerContent);
+		}
+	}
+
 	/**
 	 * ConnectAll
 	 *
@@ -393,7 +481,13 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function CreateOutput($Space) {
 		if ($this->ContentLayerVersionTableName) {
-			foreach ($this->ContentLayerDatabase as $Key => $ContentLayerDatabase) {
+			if (!empty($this->ContentLayerDatabase[0])) {
+				$ContentLayer = &$this->ContentLayerDatabase;
+			} else {
+				$ContentLayer = &$this->ContentLayerThemeGlobalLayerContent;
+			}
+			
+			foreach ($ContentLayer as $Key => $ContentLayerDatabase) {
 				$PrintPreviewFlag = $ContentLayerDatabase['PrintPreview'];
 				if ($this->PrintPreview == FALSE || $PrintPreviewFlag == 'true') {
 					$ObjectType = $ContentLayerDatabase['ObjectType'];

@@ -265,8 +265,8 @@
 			$ContentLayerVersion = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/UpdateContentLayerVersion.ini',FALSE);
 			$ContentLayerVersion = $Tier6Databases->EmptyStringToNullArray($ContentLayerVersion);
 			
-			$ContentLayer = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/UpdateContentLayer.ini',TRUE);
-			$ContentLayer = $Tier6Databases->EmptyStringToNullArray($ContentLayer);
+			//$ContentLayer = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/UpdateContentLayer.ini',TRUE);
+			//$ContentLayer = $Tier6Databases->EmptyStringToNullArray($ContentLayer);
 			
 			$Sitemap = parse_ini_file('ModuleSettings/Tier6-ContentLayer/Modules/XmlSitemap/UpdateXmlSitemap.ini',FALSE);
 			$Sitemap = $Tier6Databases->EmptyStringToNullArray($Sitemap);
@@ -337,11 +337,11 @@
 			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContent', array('PageID' => $PageID));
 			$Tier6Databases->updateContentVersion(array('PageID' => $PageID), 'ContentLayerVersion');
-			$Tier6Databases->updateContent(array('PageID' => $PageID), 'ContentLayer');
+			//$Tier6Databases->updateContent(array('PageID' => $PageID), 'ContentLayer');
 			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
 			$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
-			$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
+			//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 			
 			$Tier6Databases->SessionDestroy($sessionname);
 			$sessionname = $Tier6Databases->SessionStart('UpdatedNewsPage');

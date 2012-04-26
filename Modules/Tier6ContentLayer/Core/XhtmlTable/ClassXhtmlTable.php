@@ -9,17 +9,38 @@
  * @copyright Copyright (c) 1999 - 2012 One Solution CMS
  * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.1.129
+ * @version PHP - 2.1.130
  * @version C++ - Unknown
  */ 
 
 class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
+	/**
+	 * DHtmlXGridTable Output, if true display for DHtmlX Grid Table
+	 * 
+	 * @var array
+	 */
+	protected $DHtmlXGridTable = FALSE;
+	
 	/**
 	 * Table Names passed to contructor
 	 * 
 	 * @var array
 	 */
 	protected $TablesNames = array();
+	
+	/**
+	 * Table Listing Table Name.
+	 * 
+	 * @var array
+	 */
+	protected $TablesListingTableName;
+	
+	/**
+	 * Content from database table listing table.
+	 * 
+	 * @var string
+	 */
+	protected $TablesListingContent = array();
 	
 	/**
 	 * Content from database tables retrieved from TablesNames.
@@ -182,12 +203,22 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			unset($DatabaseOptions['FileName']);
 		}
 		
+		if ($DatabaseOptions['DHtmlXGrid']) {
+			$this->DHtmlXGridTable = $DatabaseOptions['DHtmlXGrid'];
+			unset($DatabaseOptions['DHtmlXGrid']);
+		}
+		
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
+		
+		if (isset($TableNames['DatabaseTable2'])) {
+			$this->TablesListingTableName = $TableNames['DatabaseTable2'];
+			$TableNames['DatabaseTable2'] = NULL;
+		} 
 		
 		while (current($TableNames)) {
 			$this->TableNames[key($TableNames)] = current($TableNames);
@@ -247,30 +278,39 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->TablesLookup[$TableContent] = $this->LayerModule->pass ($TableContent, 'getMultiRowField', array());
 			
 			$ContentXhtmlTableName = $this->TablesLookup[$TableContent][0]['XhtmlTableName'];
-			$ContentTableName = $this->TablesLookup[$TableContent][0]['TableName'];
-			$passarray = array('TableName' => $ContentTableName);
+			$ContentXhtmlTableID = $this->TablesLookup[$TableContent][0]['TableID'];
+			$passarray = array('TableID' => $ContentXhtmlTableID);
 			$this->LayerModule->createDatabaseTable($ContentXhtmlTableName);
 			$this->LayerModule->Connect($ContentXhtmlTableName);
 			$this->LayerModule->pass ($ContentXhtmlTableName, 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect($ContentXhtmlTableName);
-			$this->TablesContent[$ContentXhtmlTableName][$ContentTableName] = $this->LayerModule->pass ($ContentXhtmlTableName, 'getMultiRowField', array());
-			foreach ($this->TablesContent[$ContentXhtmlTableName][$ContentTableName] as $CurrentRowName => $CurrentRow) {
+			$this->TablesContent[$ContentXhtmlTableName][$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentXhtmlTableName, 'getMultiRowField', array());
+			
+			$newpassarray = array();
+			$newpassarray['XhtmlTableName'] = $ContentXhtmlTableName;
+			$newpassarray['XhtmlTableID'] = $ContentXhtmlTableID;
+			$this->LayerModule->createDatabaseTable($this->TablesListingTableName);
+			$this->LayerModule->Connect($this->TablesListingTableName);
+			$this->LayerModule->pass ($this->TablesListingTableName, 'setDatabaseRow', array('PageID' => $newpassarray));
+			$this->LayerModule->Disconnect($this->TablesListingTableName);
+			$this->TablesListingContent[$ContentXhtmlTableName][$ContentXhtmlTableID] = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
+			
+			foreach ($this->TablesContent[$ContentXhtmlTableName][$ContentXhtmlTableID] as $CurrentRowName => $CurrentRow) {
 				$TableContentName = $CurrentRow['ContainerObjectTypeName'];
 				$this->LayerModule->createDatabaseTable($TableContentName);
 				$this->LayerModule->Connect($TableContentName);
 				$this->LayerModule->pass ($TableContentName, 'setDatabaseRow', array('PageID' => $passarray));
 				$this->LayerModule->Disconnect($TableContentName);
-				
 				if ($CurrentRow['ContainerObjectType'] == 'Caption') {
-					$this->TablesCaptionContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesCaptionContent[$ContentTableName] = $this->SortTableContent ($this->TablesCaptionContent[$ContentTableName], 'ObjectID');
+					$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesCaptionContent[$ContentXhtmlTableID], 'ObjectID');
 				} else if ($CurrentRow['ContainerObjectType'] == 'Col') {
-					$this->TablesColContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesColContent[$ContentTableName] = $this->SortTableContent ($this->TablesColContent[$ContentTableName], 'ObjectID');
+					$this->TablesColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColContent[$ContentXhtmlTableID], 'ObjectID');
 				} else if ($CurrentRow['ContainerObjectType'] == 'Colgroup') {
-					$this->TablesColgroupContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesColgroupContent[$ContentTableName] = $this->SortTableContent ($this->TablesColgroupContent[$ContentTableName], 'ObjectID');
-					foreach ($this->TablesColgroupContent[$ContentTableName] as $TableRowName => $TableRowContent) {
+					$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupContent[$ContentXhtmlTableID], 'ObjectID');
+					foreach ($this->TablesColgroupContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 						if ($ContainerObjectTypeName != NULL) {
@@ -280,15 +320,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 							$this->LayerModule->Disconnect($ContainerObjectTypeName);
 							
 							if ($ContainerObjectType == 'Col') {
-								$this->TablesColgroupColContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesColgroupColContent[$ContentTableName] = $this->SortTableContent ($this->TablesColgroupColContent[$ContentTableName], 'ObjectID');
+								$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupColContent[$ContentXhtmlTableID], 'ObjectID');
 							}
 						}
 					}
 				} else if ($CurrentRow['ContainerObjectType'] == 'THead') {
-					$this->TablesTHeadContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTHeadContent[$ContentTableName] = $this->SortTableContent ($this->TablesTHeadContent[$ContentTableName], 'ObjectID');
-					foreach ($this->TablesTHeadContent[$ContentTableName] as $TableRowName => $TableRowContent) {
+					$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContent[$ContentXhtmlTableID], 'ObjectID');
+					foreach ($this->TablesTHeadContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 						if ($ContainerObjectTypeName != NULL) {
@@ -298,9 +338,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 							$this->LayerModule->Disconnect($ContainerObjectTypeName);
 							
 							if ($ContainerObjectType == 'Header') {
-								$this->TablesTHeadContentContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTHeadContentContent[$ContentTableName] = $this->SortTableContent ($this->TablesTHeadContentContent[$ContentTableName], 'ObjectID');
-								foreach ($this->TablesTHeadContentContent[$ContentTableName] as $TableRowContentName => $TableRowContentContent) {
+								$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContentContent[$ContentXhtmlTableID], 'ObjectID');
+								foreach ($this->TablesTHeadContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
 									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
 									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
 									if ($ContentContainerObjectTypeName != NULL) {
@@ -310,8 +350,8 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
 										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
 										if ($ContentContainerObjectType == 'Header') {
-											$this->TablesTHeadHeaderContent[$ContentTableName] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTHeadHeaderContent[$ContentTableName] = $this->SortTableContent ($this->TablesTHeadHeaderContent[$ContentTableName], 'ObjectID');
+											$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+											$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadHeaderContent[$ContentXhtmlTableID], 'ObjectID');
 										}
 									}
 								}
@@ -319,9 +359,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}					
 				} else if ($CurrentRow['ContainerObjectType'] == 'TFoot') {
-					$this->TablesTFootContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTFootContent[$ContentTableName] = $this->SortTableContent ($this->TablesTFootContent[$ContentTableName], 'ObjectID');
-					foreach ($this->TablesTFootContent[$ContentTableName] as $TableRowName => $TableRowContent) {
+					$this->TablesTFootContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesTFootContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContent[$ContentXhtmlTableID], 'ObjectID');
+					foreach ($this->TablesTFootContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 						if ($ContainerObjectTypeName != NULL) {
@@ -331,9 +371,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 							$this->LayerModule->Disconnect($ContainerObjectTypeName);
 							
 							if ($ContainerObjectType == 'Cell') {
-								$this->TablesTFootContentContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTFootContentContent[$ContentTableName] = $this->SortTableContent ($this->TablesTFootContentContent[$ContentTableName], 'ObjectID');
-								foreach ($this->TablesTFootContentContent[$ContentTableName] as $TableRowContentName => $TableRowContentContent) {
+								$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContentContent[$ContentXhtmlTableID], 'ObjectID');
+								foreach ($this->TablesTFootContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
 									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
 									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
 									if ($ContentContainerObjectTypeName != NULL) {
@@ -343,8 +383,8 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
 										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
 										if ($ContentContainerObjectType == 'Cell') {
-											$this->TablesTFooterContent[$ContentTableName] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTFooterContent[$ContentTableName] = $this->SortTableContent ($this->TablesTFooterContent[$ContentTableName], 'ObjectID');
+											$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+											$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFooterContent[$ContentXhtmlTableID], 'ObjectID');
 										}
 									}
 								}
@@ -352,9 +392,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				} else if ($CurrentRow['ContainerObjectType'] == 'TBody') {
-					$this->TablesTBodyContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTBodyContent[$ContentTableName] = $this->SortTableContent ($this->TablesTBodyContent[$ContentTableName], 'ObjectID');
-					foreach ($this->TablesTBodyContent[$ContentTableName] as $TableRowName => $TableRowContent) {
+					$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContent[$ContentXhtmlTableID], 'ObjectID');
+					foreach ($this->TablesTBodyContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 						if ($ContainerObjectTypeName != NULL) {
@@ -364,9 +404,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 							$this->LayerModule->Disconnect($ContainerObjectTypeName);
 							
 							if ($ContainerObjectType == 'Cell') {
-								$this->TablesTBodyContentContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTBodyContentContent[$ContentTableName] = $this->SortTableContent ($this->TablesTBodyContentContent[$ContentTableName], 'ObjectID');
-								foreach ($this->TablesTBodyContentContent[$ContentTableName] as $TableRowContentName => $TableRowContentContent) {
+								$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContentContent[$ContentXhtmlTableID], 'ObjectID');
+								foreach ($this->TablesTBodyContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
 									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
 									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
 									if ($ContentContainerObjectTypeName != NULL) {
@@ -376,8 +416,8 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
 										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
 										if ($ContentContainerObjectType == 'Cell') {
-											$this->TablesTBodyCellContent[$ContentTableName] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTBodyCellContent[$ContentTableName] = $this->SortTableContent ($this->TablesTBodyCellContent[$ContentTableName], 'ObjectID');
+											$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+											$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyCellContent[$ContentXhtmlTableID], 'ObjectID');
 										}
 									}
 								}
@@ -387,9 +427,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					
 				} else if ($CurrentRow['ContainerObjectType'] == 'TableRow') {
 					$TableRowTableName = $CurrentRow['ContainerObjectTypeName'];
-					$this->TablesTableRowContent[$ContentTableName] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTableRowContent[$ContentTableName] = $this->SortTableContent ($this->TablesTableRowContent[$ContentTableName], 'ObjectID');
-					foreach ($this->TablesTableRowContent[$ContentTableName] as $TableRowName => $TableRowContent) {
+					$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+					$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowContent[$ContentXhtmlTableID], 'ObjectID');
+					foreach ($this->TablesTableRowContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 						if ($ContainerObjectTypeName != NULL) {
@@ -399,11 +439,11 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 							$this->LayerModule->Disconnect($ContainerObjectTypeName);
 							
 							if ($ContainerObjectType == 'Header') {
-								$this->TablesTableRowHeaderContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTableRowHeaderContent[$ContentTableName] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentTableName], 'ObjectID');
+								$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentXhtmlTableID], 'ObjectID');
 							} else if ($ContainerObjectType == 'Cell') {
-								$this->TablesTableRowCellContent[$ContentTableName] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTableRowCellContent[$ContentTableName] = $this->SortTableContent ($this->TablesTableRowCellContent[$ContentTableName], 'ObjectID');
+								$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+								$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowCellContent[$ContentXhtmlTableID], 'ObjectID');
 							}
 						}
 					}
@@ -425,38 +465,44 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		foreach ($this->TablesLookup as $TablesLookupKey => $TablesLookupValue) {
 			if ($TablesLookupValue[0]['Enable/Disable'] == 'Enable' & $TablesLookupValue[0]['Status'] == 'Approved') {
 				$XhtmlTableName = $TablesLookupValue[0]['XhtmlTableName'];
-				$TableName = $TablesLookupValue[0]['TableName'];
-				$this->Writer->startElement('table');
-					$this->TableElement($TablesLookupValue[0]);
-					foreach ($this->TablesContent[$XhtmlTableName][$TableName] as $TablesContentKey => $TablesContentValue) {
+				$TableID = $TablesLookupValue[0]['TableID'];
+				if ($this->DHtmlXGridTable == TRUE) {
+					$this->Writer->startElement('rows');
+				} else {
+					$this->Writer->startElement('table');
+				}
+					if ($this->DHtmlXGridTable == FALSE) {
+						$this->TableElement($this->TablesListingContent[$XhtmlTableName][$TableID][0]);
+					}
+					foreach ($this->TablesContent[$XhtmlTableName][$TableID] as $TablesContentKey => $TablesContentValue) {
 						if ($TablesContentValue['Enable/Disable'] == 'Enable' & $TablesContentValue['Status'] == 'Approved') {
 							$ObjectType = $TablesContentValue['ContainerObjectType'];
 							$ContainerObjectID = $TablesContentValue['ContainerObjectID'];
 							if ($ObjectType == 'Caption') {
-								$TableContent = $this->TablesCaptionContent[$TableName];
+								$TableContent = $this->TablesCaptionContent[$TableID];
 								$this->TableCaption($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'Col') {
-								$TableContent = $this->TablesColContent[$TableName];
+								$TableContent = $this->TablesColContent[$TableID];
 								$this->TableCol($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'Colgroup') {
-								$TableContent = $this->TablesColgroupContent[$TableName];
+								$TableContent = $this->TablesColgroupContent[$TableID];
 								$this->TableColgroup($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'THead') {
-								$TableContent = $this->TablesTHeadContent[$TableName];
+								$TableContent = $this->TablesTHeadContent[$TableID];
 								$this->TableTHead($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'TFoot') {
-								$TableContent = $this->TablesTFootContent[$TableName];
+								$TableContent = $this->TablesTFootContent[$TableID];
 								$this->TableTFoot($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'TBody') {
-								$TableContent = $this->TablesTBodyContent[$TableName];
+								$TableContent = $this->TablesTBodyContent[$TableID];
 								$this->TableTBody($TableContent, $ContainerObjectID);
 							} else if ($ObjectType == 'TableRow') {
-								$TableContent = $this->TablesTableRowContent[$TableName];
+								$TableContent = $this->TablesTableRowContent[$TableID];
 								$this->TableRow($TableContent, $ContainerObjectID);
 							}
 						}
 					}
-				$this->Writer->endElement(); // END TABLE
+				$this->Writer->endElement(); // END TABLE OR ROWS
 				
 			}
 		}
@@ -1040,7 +1086,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Col') {
-									$RowContent = $this->TablesColgroupColContent[$Content['TableName']];
+									$RowContent = $this->TablesColgroupColContent[$Content['TableID']];
 									$this->TableCol ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1067,7 +1113,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	 protected function TableTHeadContent (array $TableContent, $ObjectID) {
 	 	if ($ObjectID != NULL) {
 			if (!is_array($ObjectID)) {
-				$this->Writer->startElement('tr');
+				if ($this->DHtmlXGridTable == FALSE) {
+					$this->Writer->startElement('tr');
+				}
 				foreach ($TableContent as $Key => $Content) {
 					if ($Content['ObjectID'] != $ObjectID) {
 						unset($TableContent[$Key]);
@@ -1086,7 +1134,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Header') {
-									$RowContent = $this->TablesTHeadHeaderContent[$Content['TableName']];
+									$RowContent = $this->TablesTHeadHeaderContent[$Content['TableID']];
 									$this->TableRowHeader ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1095,7 +1143,10 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					}
 				}
 				
-				$this->Writer->endElement(); // ENDS TR
+				if ($this->DHtmlXGridTable == FALSE) {
+					$this->Writer->endElement(); // ENDS TR OR HEAD
+				} 
+				
 			}
 			
 		}
@@ -1114,7 +1165,11 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	 protected function TableTHead (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
 			if (!is_array($ObjectID)) {
-				$this->Writer->startElement('thead');
+				if ($this->DHtmlXGridTable == TRUE) {
+					$this->Writer->startElement('head');
+				} else {
+					$this->Writer->startElement('thead');
+				}
 				foreach ($TableContent as $Key => $Content) {
 					if ($Content['ObjectID'] != $ObjectID) {
 						unset($TableContent[$Key]);
@@ -1133,7 +1188,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Header') {
-									$RowContent = $this->TablesTHeadContentContent[$Content['TableName']];
+									$RowContent = $this->TablesTHeadContentContent[$Content['TableID']];
 									$this->TableTHeadContent ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1179,7 +1234,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Cell') {
-									$RowContent = $this->TablesTFooterContent[$Content['TableName']];
+									$RowContent = $this->TablesTFooterContent[$Content['TableID']];
 									$this->TableRowCell ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1225,7 +1280,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Cell') {
-									$RowContent = $this->TablesTFootContentContent[$Content['TableName']];
+									$RowContent = $this->TablesTFootContentContent[$Content['TableID']];
 									$this->TableTFootContent ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1270,7 +1325,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Cell') {
-									$RowContent = $this->TablesTBodyCellContent[$Content['TableName']];
+									$RowContent = $this->TablesTBodyCellContent[$Content['TableID']];
 									$this->TableRowCell ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1304,6 +1359,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						break;
 					}
 				}
+				
 				foreach ($TableContent as $Key => $Content) {
 					if ($Content['Enable/Disable'] == 'Enable' & $Content['Status'] == 'Approved') {
 						$ContainerObjectType = $Content['ContainerObjectType'];
@@ -1314,7 +1370,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Cell') {
-									$RowContent = $this->TablesTBodyContentContent[$Content['TableName']];
+									$RowContent = $this->TablesTBodyContentContent[$Content['TableID']];
 									$this->TableTBodyContent ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1341,7 +1397,12 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	 protected function TableRow (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
 			if (!is_array($ObjectID)) {
-				$this->Writer->startElement('tr');
+				if ($this->DHtmlXGridTable == TRUE) {
+					$this->Writer->startElement('row');
+					$this->Writer->writeAttribute('id' , $ObjectID);
+				} else {
+					$this->Writer->startElement('tr');
+				}
 				foreach ($TableContent as $Key => $Content) {
 					if ($Content['ObjectID'] != $ObjectID) {
 						unset($TableContent[$Key]);
@@ -1360,10 +1421,10 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Header') {
-									$RowContent = $this->TablesTableRowHeaderContent[$Content['TableName']];
+									$RowContent = $this->TablesTableRowHeaderContent[$Content['TableID']];
 									$this->TableRowHeader ($RowContent, $ContainerObjectID);
 								} else if ($ContainerObjectType == 'Cell') {
-									$RowContent = $this->TablesTableRowCellContent[$Content['TableName']];
+									$RowContent = $this->TablesTableRowCellContent[$Content['TableID']];
 									$this->TableRowCell ($RowContent, $ContainerObjectID);
 								}
 						} else if ($ObjectID == $StopObjectID) {
@@ -1371,7 +1432,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				$this->Writer->endElement(); // ENDS TR
+				$this->Writer->endElement(); // ENDS TR OR ROW
 			}
 		}
 	 }
@@ -1396,13 +1457,19 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				}
 			}
 			if ($CurrentRecord != NULL) {
-				$this->Writer->startElement('th');
+				if ($this->DHtmlXGridTable == TRUE) {
+					$this->Writer->startElement('column');
+				} else {
+					$this->Writer->startElement('th');
+				}
 					$Text = $CurrentRecord['TableHeaderText'];
 					if ($Text != NULL) {
-						$this->TableHeaderElement ($CurrentRecord);
+						if ($this->DHtmlXGridTable == FALSE) {
+							$this->TableHeaderElement ($CurrentRecord);
+						} 
 						$this->Writer->text($Text);
 					}
-				$this->Writer->endElement(); // END TD TAG
+				$this->Writer->endElement(); // END TD OR COLUMN TAG
 			}
 		}
 	 }
@@ -1427,13 +1494,19 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				}
 			}
 			if ($CurrentRecord != NULL) {
-				$this->Writer->startElement('td');
+				if ($this->DHtmlXGridTable == TRUE) {
+					$this->Writer->startElement('cell');
+				} else {
+					$this->Writer->startElement('td');
+				}
 					$Text = $CurrentRecord['TableCellText'];
 					if ($Text != NULL) {
-						$this->TableCellElement ($CurrentRecord);
+						if ($this->DHtmlXGridTable == FALSE) {
+							$this->TableCellElement ($CurrentRecord);
+						}
 						$this->Writer->text($Text);
 					}
-				$this->Writer->endElement(); // END TD TAG
+				$this->Writer->endElement(); // END TD OR CELL TAG
 			}
 		}
 	 }

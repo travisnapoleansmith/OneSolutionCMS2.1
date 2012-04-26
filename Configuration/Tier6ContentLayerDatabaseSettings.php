@@ -11,5 +11,8 @@
 	$Tier6Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 	$Tier6Databases->buildModules('ContentLayerModules', 'ContentLayerTables', 'ContentLayerModulesSettings');
 	$Tier6Databases->setVersionTable('ContentLayerVersion');
+	$Tier6Databases->setThemeTableName('ContentLayerTheme');
+	$Tier6Databases->setThemeGlobalLayerTable('ContentLayerThemeGlobalLayer');
+	$Tier6Databases->buildThemeGlobalLayerTable();
 	
 ?>

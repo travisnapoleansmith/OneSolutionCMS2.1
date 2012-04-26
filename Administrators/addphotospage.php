@@ -727,8 +727,8 @@
 		$ContentLayerVersion = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayerVersion.ini',FALSE);
 		$ContentLayerVersion = $Tier6Databases->EmptyStringToNullArray($ContentLayerVersion);
 		
-		$ContentLayer = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayer.ini',TRUE);
-		$ContentLayer = $Tier6Databases->EmptyStringToNullArray($ContentLayer);
+		//$ContentLayer = parse_ini_file('ModuleSettings/Tier6-ContentLayer/GlobalSettings/AddContentLayer.ini',TRUE);
+		//$ContentLayer = $Tier6Databases->EmptyStringToNullArray($ContentLayer);
 		
 		$_POST['Priority'] = $_POST['Priority'] / 10;
 		
@@ -822,7 +822,7 @@
 		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
 		$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
 		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContentPrintPreview', $ContentPrintPreview);
-		$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
+		//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 		
 		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
 		

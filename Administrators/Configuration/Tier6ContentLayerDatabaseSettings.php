@@ -11,5 +11,8 @@
 	$Tier6Databases->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 	$Tier6Databases->buildModules('AdministratorContentLayerModules', 'AdministratorContentLayerTables', 'AdministratorContentLayerModulesSettings');
 	$Tier6Databases->setVersionTable('AdministratorContentLayerVersion');
+	$Tier6Databases->setThemeTableName('AdministratorContentLayerTheme');
+	$Tier6Databases->setThemeGlobalLayerTable('AdministratorContentLayerThemeGlobalLayer');
+	$Tier6Databases->buildThemeGlobalLayerTable();
 	
 ?>

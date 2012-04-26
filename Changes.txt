@@ -1,18 +1,37 @@
+Changes For One Solution CMS 2.1.130 - Wednesday, April 25, 2012
+Added:
+	1). Added a Global Theme Content Layer.
+	2). Added XmlTable for XhtmlTable module it is inside of the XhtmlTable's folder.
+	3). Added and removed XhtmlTable tables. 
+
+Updated (Fixed):
+	1). Updated XhtmlTable so the lookup key is TableID and made TableName just a human readable name. Database has been updated.
+	2). Updated Content Page Type to turn off <p> tag. Database has also been updated.
+	3). Updated Content Page Type by moving it into the PageTypes folder inside of the Adminstrators folder.
+	4). Updated all themes to have a Global Content Layer.
+	
+Removed:
+	1). Removed the following themes:
+		- Casey Blue.
+		- Pullers Green
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.129 - Sunday, April 14, 2012
 Added:
 	1). Added TestCases Folder for all Unit Testing to be done.
 	2). Added SimpleTest inside of TestCases Folder.
-	3). Added Tier6-ContentLayer and other folders and some test cases for XhtmlTable module.
+	3). Added Tier6-ContentLayer and other folders and some testcases for XhtmlTable module.
 
 Updated (Fixed):
 	1). Updated XhtmlTables can fully display any Xhtml Table. This includes the following table tags:
-		- TR, Caption, Col, Colgroup, THead, TFoot, and TBody.
+			- TR, Caption, Col, Colgroup, THead, TFoot, and TBody.
 	2). Updated XhtmlForm:
-		- Bug #0000008 - If the first item is disabled in a form option, the rest of the list will not display correclty.
+			- Bug #0000008 - If the first item is disabled in a form option, the rest of the list will not display correclty.
 	3). Updated XhtmlCalendar:
-		- Bug #0000014 - Delete Calendar Event says event has been deleted but it still shows up on calendar pages.
-		- Bug #0000009 - If two events start at the same time and end at the same time updating them is impossible.
-		- Bug #0000011 - Allow for two event s to happen at the same time.
+			- Bug #0000014 - Delete Calendar Event says event has been deleted but it still shows up on calendar pages.
+			- Bug #0000009 - If two events start at the same time and end at the same time updating them is impossible.
+			- Bug #0000011 - Allow for two events to happen at the same time.
 Removed:
 	Nothing has been removed.
 	
