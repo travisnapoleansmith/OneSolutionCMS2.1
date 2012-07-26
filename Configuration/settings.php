@@ -16,7 +16,7 @@
 	$author = $SETTINGS['SITE SETTINGS']['AUTHOR'];
 	$copyright = $SETTINGS['SITE SETTINGS']['COPYRIGHT'];
 
-	$cmsversion = '2.1.130';
+	$cmsversion = '2.1.131';
 
 	$Writer = new XMLWriter();
 	$Writer->openMemory();

@@ -45,10 +45,18 @@
 	$databaseoptions['MainMenuBottomStyle'] = NULL;
 	$databaseoptions['MainMenuBottomInsert'] = NULL;
 
-	$databaseoptions['Insert'] = '<img src="Images/Main-Logo.png"alt="';
-	$databaseoptions['Insert'] .= $SiteName;
-	$databaseoptions['Insert'] .= '" class="main-menu-image"/>';
-
+	if ($GLOBALS['ThemeName']) {
+		$ThemeName = $GLOBALS['ThemeName'];
+		$Insert = "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Logo.png";
+		$databaseoptions['Insert'] = "<img src=\"$Insert\" alt=\"";
+		$databaseoptions['Insert'] .= $SiteName;
+		$databaseoptions['Insert'] .= '" class="main-menu-image"/>';
+	} else {
+		$databaseoptions['Insert'] = '<img src="Images/Main-Logo.png"alt="';
+		$databaseoptions['Insert'] .= $SiteName;
+		$databaseoptions['Insert'] .= '" class="main-menu-image"/>';
+	}
+	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	$Writer = $GLOBALS['Writer'];
 	$Tier6Databases = $GLOBALS['Tier6Databases'];

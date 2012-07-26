@@ -203,16 +203,17 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			unset($DatabaseOptions['FileName']);
 		}
 		
-		if ($DatabaseOptions['DHtmlXGrid']) {
-			$this->DHtmlXGridTable = $DatabaseOptions['DHtmlXGrid'];
-			unset($DatabaseOptions['DHtmlXGrid']);
-		}
-		
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
+		}
+		
+		if ($DatabaseOptions['DHtmlXGrid']) {
+			$this->DHtmlXGridTable = $DatabaseOptions['DHtmlXGrid'];
+			unset($DatabaseOptions['DHtmlXGrid']);
+			$this->Writer->startDocument('1.0', 'utf-8'); 
 		}
 		
 		if (isset($TableNames['DatabaseTable2'])) {
@@ -224,7 +225,6 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->TableNames[key($TableNames)] = current($TableNames);
 			next($TableNames);
 		}
-		
 	}
 	
 	/**
@@ -270,7 +270,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$passarray = array();
 		$passarray = &$PageID;
 		reset($this->TableNames);
-		
+
 		foreach ($this->TableNames as $TableName => $TableContent) {
 			$this->LayerModule->Connect($TableContent);
 			$this->LayerModule->pass ($TableContent, 'setDatabaseRow', array('PageID' => $passarray));
@@ -295,155 +295,173 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->LayerModule->Disconnect($this->TablesListingTableName);
 			$this->TablesListingContent[$ContentXhtmlTableName][$ContentXhtmlTableID] = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
 			
+			$DatabaseTables = array();
 			foreach ($this->TablesContent[$ContentXhtmlTableName][$ContentXhtmlTableID] as $CurrentRowName => $CurrentRow) {
-				$TableContentName = $CurrentRow['ContainerObjectTypeName'];
-				$this->LayerModule->createDatabaseTable($TableContentName);
-				$this->LayerModule->Connect($TableContentName);
-				$this->LayerModule->pass ($TableContentName, 'setDatabaseRow', array('PageID' => $passarray));
-				$this->LayerModule->Disconnect($TableContentName);
-				if ($CurrentRow['ContainerObjectType'] == 'Caption') {
-					$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesCaptionContent[$ContentXhtmlTableID], 'ObjectID');
-				} else if ($CurrentRow['ContainerObjectType'] == 'Col') {
-					$this->TablesColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColContent[$ContentXhtmlTableID], 'ObjectID');
-				} else if ($CurrentRow['ContainerObjectType'] == 'Colgroup') {
-					$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupContent[$ContentXhtmlTableID], 'ObjectID');
-					foreach ($this->TablesColgroupContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
-						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
-						if ($ContainerObjectTypeName != NULL) {
-							$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-							$this->LayerModule->Connect($ContainerObjectTypeName);
-							$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-							$this->LayerModule->Disconnect($ContainerObjectTypeName);
-							
-							if ($ContainerObjectType == 'Col') {
-								$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupColContent[$ContentXhtmlTableID], 'ObjectID');
+				$ObjectType = $CurrentRow['ContainerObjectType'];
+				$ObjectTypeName = $CurrentRow['ContainerObjectTypeName'];
+				if ($ObjectType != NULL) {
+					if ($ObjectTypeName != NULL) {
+						$DatabaseTables[$ObjectType][$ObjectTypeName] = $ObjectTypeName;
+					}
+				}
+				
+			}
+			
+			foreach ($DatabaseTables as $Key => $Content) {
+				foreach($Content as $TableContentKey => $TableContentName) {
+					$this->LayerModule->createDatabaseTable($TableContentName);
+					$this->LayerModule->Connect($TableContentName);
+					$this->LayerModule->pass ($TableContentName, 'setDatabaseRow', array('PageID' => $passarray));
+					$this->LayerModule->Disconnect($TableContentName);
+					if ($Key == 'Caption') {
+						$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesCaptionContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesCaptionContent[$ContentXhtmlTableID], 'ObjectID');
+					} else if ($Key == 'Col') {
+						$this->TablesColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColContent[$ContentXhtmlTableID], 'ObjectID');
+					} else if ($Key == 'Colgroup') {
+						$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesColgroupContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupContent[$ContentXhtmlTableID], 'ObjectID');
+						foreach ($this->TablesColgroupContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
+							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							if ($ContainerObjectTypeName != NULL) {
+								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
+								$this->LayerModule->Connect($ContainerObjectTypeName);
+								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($ContainerObjectTypeName);
+								
+								if ($ContainerObjectType == 'Col') {
+									$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupColContent[$ContentXhtmlTableID], 'ObjectID');
+								}
 							}
 						}
-					}
-				} else if ($CurrentRow['ContainerObjectType'] == 'THead') {
-					$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContent[$ContentXhtmlTableID], 'ObjectID');
-					foreach ($this->TablesTHeadContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
-						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
-						if ($ContainerObjectTypeName != NULL) {
-							$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-							$this->LayerModule->Connect($ContainerObjectTypeName);
-							$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-							$this->LayerModule->Disconnect($ContainerObjectTypeName);
-							
-							if ($ContainerObjectType == 'Header') {
-								$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContentContent[$ContentXhtmlTableID], 'ObjectID');
-								foreach ($this->TablesTHeadContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
-									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
-									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
-									if ($ContentContainerObjectTypeName != NULL) {
-										$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
-										$this->LayerModule->Connect($ContentContainerObjectTypeName);
-										$contentpassarray = $passarray;
-										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
-										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
-										if ($ContentContainerObjectType == 'Header') {
-											$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadHeaderContent[$ContentXhtmlTableID], 'ObjectID');
+					} else if ($Key == 'THead') {
+						$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContent[$ContentXhtmlTableID], 'ObjectID');
+						foreach ($this->TablesTHeadContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
+							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							if ($ContainerObjectTypeName != NULL) {
+								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
+								$this->LayerModule->Connect($ContainerObjectTypeName);
+								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($ContainerObjectTypeName);
+								
+								if ($ContainerObjectType == 'Header') {
+									$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContentContent[$ContentXhtmlTableID], 'ObjectID');
+									foreach ($this->TablesTHeadContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
+										$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
+										$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
+										if ($ContentContainerObjectTypeName != NULL) {
+											$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
+											$this->LayerModule->Connect($ContentContainerObjectTypeName);
+											$contentpassarray = $passarray;
+											$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
+											$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
+											if ($ContentContainerObjectType == 'Header') {
+												$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+												$this->TablesTHeadHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadHeaderContent[$ContentXhtmlTableID], 'ObjectID');
+											}
+										}
+									}
+								}
+							}
+						}					
+					} else if ($Key == 'TFoot') {
+						$this->TablesTFootContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesTFootContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContent[$ContentXhtmlTableID], 'ObjectID');
+						foreach ($this->TablesTFootContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
+							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							if ($ContainerObjectTypeName != NULL) {
+								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
+								$this->LayerModule->Connect($ContainerObjectTypeName);
+								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($ContainerObjectTypeName);
+								
+								if ($ContainerObjectType == 'Cell') {
+									$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContentContent[$ContentXhtmlTableID], 'ObjectID');
+									foreach ($this->TablesTFootContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
+										$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
+										$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
+										if ($ContentContainerObjectTypeName != NULL) {
+											$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
+											$this->LayerModule->Connect($ContentContainerObjectTypeName);
+											$contentpassarray = $passarray;
+											$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
+											$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
+											if ($ContentContainerObjectType == 'Cell') {
+												$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+												$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFooterContent[$ContentXhtmlTableID], 'ObjectID');
+											}
 										}
 									}
 								}
 							}
 						}
-					}					
-				} else if ($CurrentRow['ContainerObjectType'] == 'TFoot') {
-					$this->TablesTFootContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTFootContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContent[$ContentXhtmlTableID], 'ObjectID');
-					foreach ($this->TablesTFootContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
-						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
-						if ($ContainerObjectTypeName != NULL) {
-							$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-							$this->LayerModule->Connect($ContainerObjectTypeName);
-							$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-							$this->LayerModule->Disconnect($ContainerObjectTypeName);
-							
-							if ($ContainerObjectType == 'Cell') {
-								$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContentContent[$ContentXhtmlTableID], 'ObjectID');
-								foreach ($this->TablesTFootContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
-									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
-									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
-									if ($ContentContainerObjectTypeName != NULL) {
-										$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
-										$this->LayerModule->Connect($ContentContainerObjectTypeName);
-										$contentpassarray = $passarray;
-										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
-										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
-										if ($ContentContainerObjectType == 'Cell') {
-											$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTFooterContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFooterContent[$ContentXhtmlTableID], 'ObjectID');
+					} else if ($Key == 'TBody') {
+						$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContent[$ContentXhtmlTableID], 'ObjectID');
+						foreach ($this->TablesTBodyContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
+							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							if ($ContainerObjectTypeName != NULL) {
+								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
+								$this->LayerModule->Connect($ContainerObjectTypeName);
+								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($ContainerObjectTypeName);
+								
+								if ($ContainerObjectType == 'Cell') {
+									$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContentContent[$ContentXhtmlTableID], 'ObjectID');
+									foreach ($this->TablesTBodyContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
+										$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
+										$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
+										if ($ContentContainerObjectTypeName != NULL) {
+											$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
+											$this->LayerModule->Connect($ContentContainerObjectTypeName);
+											$contentpassarray = $passarray;
+											$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
+											$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
+											if ($ContentContainerObjectType == 'Cell') {
+												$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
+												$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyCellContent[$ContentXhtmlTableID], 'ObjectID');
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-				} else if ($CurrentRow['ContainerObjectType'] == 'TBody') {
-					$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTBodyContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContent[$ContentXhtmlTableID], 'ObjectID');
-					foreach ($this->TablesTBodyContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
-						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
-						if ($ContainerObjectTypeName != NULL) {
-							$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-							$this->LayerModule->Connect($ContainerObjectTypeName);
-							$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-							$this->LayerModule->Disconnect($ContainerObjectTypeName);
-							
-							if ($ContainerObjectType == 'Cell') {
-								$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContentContent[$ContentXhtmlTableID], 'ObjectID');
-								foreach ($this->TablesTBodyContentContent[$ContentXhtmlTableID] as $TableRowContentName => $TableRowContentContent) {
-									$ContentContainerObjectType = $TableRowContentContent['ContainerObjectType'];
-									$ContentContainerObjectTypeName = $TableRowContentContent['ContainerObjectTypeName'];
-									if ($ContentContainerObjectTypeName != NULL) {
-										$this->LayerModule->createDatabaseTable($ContentContainerObjectTypeName);
-										$this->LayerModule->Connect($ContentContainerObjectTypeName);
-										$contentpassarray = $passarray;
-										$this->LayerModule->pass ($ContentContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $contentpassarray));
-										$this->LayerModule->Disconnect($ContentContainerObjectTypeName);
-										if ($ContentContainerObjectType == 'Cell') {
-											$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentContainerObjectTypeName, 'getMultiRowField', array());
-											$this->TablesTBodyCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyCellContent[$ContentXhtmlTableID], 'ObjectID');
-										}
-									}
+						
+					} else if ($Key == 'TableRow') {
+						$TableRowTableName = $CurrentRow['ContainerObjectTypeName'];
+						$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
+						$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowContent[$ContentXhtmlTableID], 'ObjectID');
+						foreach ($this->TablesTableRowContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
+							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							if ($ContainerObjectTypeName != NULL) {
+								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
+								$this->LayerModule->Connect($ContainerObjectTypeName);
+								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($ContainerObjectTypeName);
+								
+								if ($ContainerObjectType == 'Header') {
+									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentXhtmlTableID], 'ObjectID');
+								} else if ($ContainerObjectType == 'Cell') {
+									$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowCellContent[$ContentXhtmlTableID], 'ObjectID');
 								}
-							}
-						}
-					}
-					
-				} else if ($CurrentRow['ContainerObjectType'] == 'TableRow') {
-					$TableRowTableName = $CurrentRow['ContainerObjectTypeName'];
-					$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
-					$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowContent[$ContentXhtmlTableID], 'ObjectID');
-					foreach ($this->TablesTableRowContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-						$ContainerObjectType = $TableRowContent['ContainerObjectType'];
-						$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
-						if ($ContainerObjectTypeName != NULL) {
-							$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-							$this->LayerModule->Connect($ContainerObjectTypeName);
-							$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-							$this->LayerModule->Disconnect($ContainerObjectTypeName);
-							
-							if ($ContainerObjectType == 'Header') {
-								$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentXhtmlTableID], 'ObjectID');
-							} else if ($ContainerObjectType == 'Cell') {
-								$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
-								$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowCellContent[$ContentXhtmlTableID], 'ObjectID');
 							}
 						}
 					}
@@ -466,46 +484,81 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			if ($TablesLookupValue[0]['Enable/Disable'] == 'Enable' & $TablesLookupValue[0]['Status'] == 'Approved') {
 				$XhtmlTableName = $TablesLookupValue[0]['XhtmlTableName'];
 				$TableID = $TablesLookupValue[0]['TableID'];
-				if ($this->DHtmlXGridTable == TRUE) {
-					$this->Writer->startElement('rows');
-				} else {
-					$this->Writer->startElement('table');
-				}
-					if ($this->DHtmlXGridTable == FALSE) {
-						$this->TableElement($this->TablesListingContent[$XhtmlTableName][$TableID][0]);
+				
+				if ($this->TablesListingContent[$XhtmlTableName][$TableID][0]['Enable/Disable'] == 'Enable' & $this->TablesListingContent[$XhtmlTableName][$TableID][0]['Status'] == 'Approved') {
+					$XhtmlTableName = $TablesLookupValue[0]['XhtmlTableName'];
+					$TableID = $TablesLookupValue[0]['TableID'];
+					if ($this->DHtmlXGridTable == TRUE) {
+						$this->Writer->startElement('rows');
+					} else {
+						$this->Writer->startElement('table');
 					}
-					foreach ($this->TablesContent[$XhtmlTableName][$TableID] as $TablesContentKey => $TablesContentValue) {
-						if ($TablesContentValue['Enable/Disable'] == 'Enable' & $TablesContentValue['Status'] == 'Approved') {
-							$ObjectType = $TablesContentValue['ContainerObjectType'];
-							$ContainerObjectID = $TablesContentValue['ContainerObjectID'];
-							if ($ObjectType == 'Caption') {
-								$TableContent = $this->TablesCaptionContent[$TableID];
-								$this->TableCaption($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'Col') {
-								$TableContent = $this->TablesColContent[$TableID];
-								$this->TableCol($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'Colgroup') {
-								$TableContent = $this->TablesColgroupContent[$TableID];
-								$this->TableColgroup($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'THead') {
-								$TableContent = $this->TablesTHeadContent[$TableID];
-								$this->TableTHead($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'TFoot') {
-								$TableContent = $this->TablesTFootContent[$TableID];
-								$this->TableTFoot($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'TBody') {
-								$TableContent = $this->TablesTBodyContent[$TableID];
-								$this->TableTBody($TableContent, $ContainerObjectID);
-							} else if ($ObjectType == 'TableRow') {
-								$TableContent = $this->TablesTableRowContent[$TableID];
-								$this->TableRow($TableContent, $ContainerObjectID);
+						if ($this->DHtmlXGridTable == FALSE) {
+							$this->TableElement($this->TablesListingContent[$XhtmlTableName][$TableID][0]);
+						}
+						foreach ($this->TablesContent[$XhtmlTableName][$TableID] as $TablesContentKey => $TablesContentValue) {
+							if ($TablesContentValue['Enable/Disable'] == 'Enable' & $TablesContentValue['Status'] == 'Approved') {
+								$ObjectType = $TablesContentValue['ContainerObjectType'];
+								$ContainerObjectID = $TablesContentValue['ContainerObjectID'];
+								if ($ObjectType == 'Caption') {
+									$TableContent = $this->TablesCaptionContent[$TableID];
+									$this->TableCaption($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'Col') {
+									$TableContent = $this->TablesColContent[$TableID];
+									$this->TableCol($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'Colgroup') {
+									$TableContent = $this->TablesColgroupContent[$TableID];
+									$this->TableColgroup($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'THead') {
+									$TableContent = $this->TablesTHeadContent[$TableID];
+									$this->TableTHead($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'TFoot') {
+									$TableContent = $this->TablesTFootContent[$TableID];
+									$this->TableTFoot($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'TBody') {
+									$TableContent = $this->TablesTBodyContent[$TableID];
+									$this->TableTBody($TableContent, $ContainerObjectID);
+								} else if ($ObjectType == 'TableRow') {
+									$TableContent = $this->TablesTableRowContent[$TableID];
+									$this->TableRow($TableContent, $ContainerObjectID);
+								}
 							}
 						}
-					}
-				$this->Writer->endElement(); // END TABLE OR ROWS
-				
+					$this->Writer->endElement(); // END TABLE OR ROWS
+				}
 			}
 		}
+	}
+	
+	/**
+	 * FetchTableListingContent
+	 * 
+	 * Retrieves data from the database the entire contents of XhtmlTableListing
+	 * 
+	 * @access public
+	 * 
+	 */
+	public function FetchTableListingContent() {
+		$ContentXhtmlTableName = $this->TablesLookup[$this->TableNames['DatabaseTable1']][0]['XhtmlTableName'];
+		$PageID = array();
+		$PageID['XhtmlTableName'] = $ContentXhtmlTableName;
+		$this->LayerModule->createDatabaseTable($this->TablesListingTableName);
+		$this->LayerModule->Connect($this->TablesListingTableName);
+		$this->LayerModule->pass ($this->TablesListingTableName, 'setDatabaseRow', array('PageID' => $PageID));
+		$this->LayerModule->Disconnect($this->TablesListingTableName);
+		$this->TablesListingContent = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
+	}
+	
+	/**
+	 * getTablesListingContent
+	 * 
+	 * Returns the TablesListingContent member. This contains the entire contents of the database table XhtmlTableListing
+	 * 
+	 * @access public
+	 * 
+	 */
+	public function getTablesListingContent(){
+		return $this->TablesListingContent;
 	}
 	
 	/**
@@ -1459,6 +1512,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			if ($CurrentRecord != NULL) {
 				if ($this->DHtmlXGridTable == TRUE) {
 					$this->Writer->startElement('column');
+					$this->Writer->writeAttribute('type', 'ed');
+					$this->Writer->writeAttribute('sort', 'str');
+					$this->Writer->writeAttribute('width', '110');
 				} else {
 					$this->Writer->startElement('th');
 				}
@@ -1535,5 +1591,153 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
+	
+	 /**
+	 * getLastTableID
+	 * 
+	 * Returns the last TableID for XhtmlTableName.
+	 * 
+	 * @param array $XhtmlTableNames = an array of XhtmlTableNames to get the Last Table ID for.
+	 * @access public
+	 * @return array LastTableID
+	 * 
+	 */
+	 
+	 public function getLastTableID($XhtmlTableNames) {
+		$LastTableID = array();
+		if (is_array($XhtmlTableNames)) {
+			foreach($XhtmlTableNames as $Key => $Value) {
+				$passarray = array();
+				$passarray['XhtmlTableName'] = $Value;
+				$this->LayerModule->Connect($this->TablesListingTableName);
+				$this->LayerModule->pass ($this->TablesListingTableName, 'setOrderbyname', array('orderbyname' => 'XhtmlTableID'));
+				$this->LayerModule->pass ($this->TablesListingTableName, 'setOrderbytype', array('orderbytype' => 'DESC'));
+				$this->LayerModule->pass ($this->TablesListingTableName, 'setLimit', array('limit' => 1));
+				$this->LayerModule->pass ($this->TablesListingTableName, 'setDatabaseRow', array('PageID' => $passarray));
+				$this->LayerModule->Disconnect($this->TablesListingTableName);
+				$hold = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
+				$TableID = $hold[0]['XhtmlTableID'];
+				$LastTableID[$Value] = $TableID;
+			}
+			return $LastTableID;
+		}
+	 }
+	 
+	 /**
+	 * createTable
+	 * 
+	 * Creates A Table.
+	 * 
+	 * @param array $Table = Table content to create, must have three fields: Content - Table Content To Add, TableName - Database Table Name, TableType - Type Of Table Added.
+	 * @access public
+	 * 
+	 */
+	public function createTable(array $Table) {
+		if ($Table != NULL) {
+			$TableContent = $Table['Content'];
+			$DatabaseTableName = $Table['TableName'];
+			
+			$this->LayerModule->createDatabaseTable($DatabaseTableName);
+			$this->LayerModule->Connect($DatabaseTableName);
+			$this->LayerModule->pass ($DatabaseTableName, 'BuildFieldNames', array('TableName' => $DatabaseTableName));
+			$this->LayerModule->Disconnect($DatabaseTableName);
+			
+			$Keys = $this->LayerModule->pass ($DatabaseTableName, 'getRowFieldNames', array());
+
+			$this->addModuleContent($Keys, $TableContent, $DatabaseTableName);
+			
+		} else {
+			array_push($this->ErrorMessage,'createTable: Table cannot be NULL!');
+		}
+	}
+	
+	 /**
+	 * updateTable
+	 * 
+	 * Updates A Table.
+	 * 
+	 * @param array $TableID = Table ID to update.
+	 * @access public
+	 * 
+	 */
+	public function updateTable(array $TableID) {
+		if ($TableID != NULL) {
+			$TableName = $TableID['TableName'];
+			$TableType = $TableID['TableType'];
+			if ($TableType === NULL) {
+				$RowName = 'TableID';
+				$RowValue = $TableID['Content'][0]['TableID'];
+				$this->LayerModule->createDatabaseTable($TableName);
+				$this->LayerModule->Connect($TableName);
+				$this->LayerModule->pass ($TableName, 'deleteRow', array('rowname' => $RowName, 'rowvalue' => $RowValue));
+				$this->LayerModule->Disconnect($TableName);
+				
+				$this->createTable($TableID);
+			} else if ($TableType == 'XhtmlTableLookup') {
+				
+			} else if ($TableType == 'XhtmlTableListing') {
+				$RowName = 'XhtmlTableID';
+				$RowValue = $TableID['Content'][0]['XhtmlTableID'];
+				
+				$this->LayerModule->createDatabaseTable($TableName);
+				$this->LayerModule->Connect($TableName);
+				$this->LayerModule->pass ($TableName, 'deleteRow', array('rowname' => $RowName, 'rowvalue' => $RowValue));
+				$this->LayerModule->Disconnect($TableName);
+				
+				$this->createTable($TableID);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateTable: TableID cannot be NULL!');
+		}
+	}
+	
+	 /**
+	 * deleteTable
+	 * 
+	 * Deletes A Table.
+	 * 
+	 * @param array $TableID = Table ID to delete.
+	 * @access public
+	 * 
+	 */
+	public function deleteTable(array $TableID) {
+		if ($TableID != NULL) {
+			$this->deleteModuleContent($TableID, $this->TablesListingTableName);
+		} else {
+			array_push($this->ErrorMessage,'deleteTable: TableID cannot be NULL!');
+		}
+	}
+	
+	 /**
+	 * updateTableStatus
+	 * 
+	 * Updates Status Of Table.
+	 * 
+	 * @param array $TableID = Table ID to update status.
+	 * @access public
+	 * 
+	 */
+	public function updateTableStatus(array $TableID) {
+		if ($TableID != NULL) {
+			if ($TableID['Enable/Disable'] == 'Enable') {
+				$this->enableModuleContent($TableID, $this->TablesListingTableName);
+			} else if ($TableID['Enable/Disable'] == 'Disable') {
+				$this->disableModuleContent($TableID, $this->TablesListingTableName);
+			}
+			
+			if ($TableID['Status'] == 'Approved') {
+				$this->approvedModuleContent($TableID, $this->TablesListingTableName);
+			} else if ($TableID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($TableID, $this->TablesListingTableName);
+			} else if ($TableID['Status'] == 'Pending') {
+				$this->pendingModuleContent($TableID, $this->TablesListingTableName);
+			} else if ($TableID['Status'] == 'Spam') {
+				$this->spamModuleContent($TableID, $this->TablesListingTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateTableStatus: TableID cannot be NULL!');
+		}
+	}
+
 }
 ?>

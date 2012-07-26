@@ -1,3 +1,17 @@
+Changes For One Solution CMS 2.1.131 - Thursday, July 26, 2012
+Added:
+	1). Added XhtmlTables Content form.
+	2). Added A Wider Administrators Panel.
+	
+Updated (Fixed):
+	1). Updated XhtmlForm - Speed improvement for options and select.
+	2). Updated XhtmlTables - Fully CRUD for Content Form.
+	
+Removed:
+	Nothing has been removed.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.130 - Wednesday, April 25, 2012
 Added:
 	1). Added a Global Theme Content Layer.

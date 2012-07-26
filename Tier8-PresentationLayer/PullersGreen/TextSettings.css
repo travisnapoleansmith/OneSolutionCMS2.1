@@ -19,7 +19,7 @@
 }
 
 .SponsorsHeading {
-	color: #FFFFFF;
+	color: #000000;
 	font-size: 18px;
 	font-weight: bold;
 	padding-left: 20px;
@@ -28,7 +28,7 @@
 }
 
 .SponsorsName {
-	color: #FFFFFF;
+	color: #000000;
 	font-size: 16px;
 	font-weight: bold;
 	padding-left: 20px;
@@ -39,7 +39,7 @@
 
 .BodyHeading{
 	color: #FFFFFF;
-	font-size: 16px;
+	font-size: 17px;
 	font-weight: bold;
 	padding-left: 20px;
 	padding-right: 30px;
@@ -48,7 +48,7 @@
 
 .BodyText{
 	color: #FFFFFF;
-	font-size: 14px;
+	font-size: 15px;
 	padding-left: 20px;
 	padding-right: 15px;
 	padding-bottom: 10px;
@@ -65,13 +65,13 @@
 }
 
 .MenuText{
-	color: #FFFFFF;
+	color: #000000;
 	font-size: 18px;
 	font-weight: bold;
 }
 
 .MenuTextSub {
-	color: #FFFFFF;
+	color: #000000;
 	font-size: 12px;
 	font-style: italic;
 }

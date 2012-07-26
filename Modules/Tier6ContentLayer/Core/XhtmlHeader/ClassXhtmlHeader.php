@@ -396,7 +396,12 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 					
 				}
 			} 
-			$this->Writer->endElement();
+			if ($starttag == 'script') {
+				$this->Writer->fullEndElement();
+				$this->Writer->writeRaw("\n");
+			} else {
+				$this->Writer->endElement();
+			}
 			$i++;
 		}
 	}
@@ -632,7 +637,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			}
 			
 			if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
-				$this->TagSheet('link', NULL, 'text/javascript', NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL);
+				$this->TagSheet('script', NULL, NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL, NULL);
 			}
 			
 			if (!empty($this->PrintPreviewStyleSheet) && $printpreviewflag && !$stylesheet) {
@@ -646,7 +651,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			if (!empty($this->ScriptStyleSheetCode) && !$printpreviewflag && !$stylesheet) {
 				$this->TagSheet('script', null, 'text/css', NULL, $this->ScriptStyleSheetDefer, NULL, NULL, NULL, $this->ScriptStyleSheetCode, 'script');
 			}
-			
 			if (!empty($this->ScriptJavaScriptSheet) && !$printpreviewflag) {
 				$this->TagSheet('script', NULL, 'text/javascript', $this->ScriptJavaScriptSheetCharset, NULL, NULL, $this->ScriptJavaScriptSheet, NULL, NULL, 'script');
 			}

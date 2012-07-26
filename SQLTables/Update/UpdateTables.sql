@@ -1,470 +1,709 @@
-UPDATE `ContentLayer` SET `Enable/Disable` = 'Disable';
--- UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable';
-UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `Authenticate` = 'true';
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 1 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 2 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 3 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 4 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 5 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 6 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 7 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 8 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
+UPDATE `AdministratorContentLayer` SET `Enable/Disable` = 'Disable' WHERE `AdministratorContentLayer`.`PageID` = 9 AND `AdministratorContentLayer`.`ObjectID` = 6 AND `AdministratorContentLayer`.`RevisionID` = 0 LIMIT 1;
 
-ALTER TABLE `XhtmlTableLookup` ADD `XhtmlTableID` INT NOT NULL AFTER `XhtmlTableName`;
-ALTER TABLE `AdministratorXhtmlTableLookup` ADD `XhtmlTableID` INT NOT NULL AFTER `XhtmlTableName`;
 
-ALTER TABLE `XhtmlTable` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTable` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorForm` VALUES(200, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/AddTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(202, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/SelectTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(203, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/UpdateTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(205, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/DeleteTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(207, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/EnableDisableStatusChangeTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableCaption` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableCaption` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTableListing` VALUES(200, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(200, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(202, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(202, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(203, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(203, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(205, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(205, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableCol` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableCol` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormLegend` VALUES(200, 1, 'Add Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(202, 1, 'Update Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(203, 1, 'Update Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(205, 1, 'Delete Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(207, 1, 'Enable / Disable Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableColGroup` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableColGroup` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormButton` VALUES(200, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '200', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(202, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'UpdateTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '202', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'UpdateTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '203', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(205, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'DeleteTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '205', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(207, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'EnableDisableTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '207', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableColGroupCol` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableColGroupCol` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 3, NULL, 'TextArea', 'AdministratorFormTextArea', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 4, NULL, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 5, NULL, 'TextArea', 'AdministratorFormTextArea', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 6, NULL, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 7, NULL, 'TextArea', 'AdministratorFormTextArea', 3, '<div>', '</div>', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'gridbox', NULL, 'width: 100%;, height: 100%;', NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 8, NULL, 'Label', 'AdministratorFormLabel', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 9, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 10, NULL, 'Label', 'AdministratorFormLabel', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 11, NULL, 'Select', 'AdministratorFormSelect', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 12, NULL, 'Label', 'AdministratorFormLabel', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 13, NULL, 'Captcha', 'AdministratorFormCaptcha', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-DROP TABLE `XhtmlTableLinkedLookup`;
-DROP TABLE `AdministratorXhtmlTableLinkedLookup`;
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 1, 'Table Name', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 2, 'Table Heading', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 3, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 4, 'Enabled', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 5, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 6, '* = Field Can Be empty. Enter NULL for empty.', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableRow` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableRow` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableName', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableHeading', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 3, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'TableContent', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableRowCell` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableRowCell` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'AddTableContent', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'CAPTCHA', 'Captcha', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'EnableDisable', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'Status', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableContent', 'HtmlTag', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableHeading', 'AlphaNum', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableName', 'AlphaNum', NULL, NULL, NULL, NULL);
 
-ALTER TABLE `XhtmlTableRowHeader` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableRowHeader` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormOption` VALUES(200, 1, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 2, 'Disable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 3, 'Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 4, 'Not-Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 5, 'Spam', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 6, 'Pending', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-DROP TABLE `XhtmlTableRowLinkedLookup`;
-DROP TABLE `AdministratorXhtmlTableRowLinkedLookup`;
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 1, 3, NULL, 'Option', 'AdministratorFormOption', 1, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 2, 3, NULL, 'Option', 'AdministratorFormOption', 2, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 4, 8, NULL, 'Option', 'AdministratorFormOption', 3, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 5, 8, NULL, 'Option', 'AdministratorFormOption', 4, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 6, 8, NULL, 'Option', 'AdministratorFormOption', 5, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 7, 8, NULL, 'Option', 'AdministratorFormOption', 6, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 8, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableTBody` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTBody` CHANGE `TableName` `TableID` INT NOT NULL;
 
-ALTER TABLE `XhtmlTableTBodyCell` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTBodyCell` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTextArea` VALUES(100, 2, 'NEWS STORY GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href=''LINK GOES HERE''>Gallery</a>', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Content', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(103, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Content', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableTBodyContent` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTBodyContent` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTextArea` VALUES(110, 6, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(110, 7, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(113, 6, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(113, 7, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-DROP TABLE `XhtmlTableTBodyLinkedLookup`;
-DROP TABLE `AdministratorXhtmlTableTBodyLinkedLookup`;
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 6, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 8, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet1TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 11, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet1BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 13, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet2TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 16, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet2BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 18, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet3TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 21, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet3BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 23, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet4TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 26, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet4BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 28, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet5TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 31, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet5BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 33, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet6TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 36, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet6BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 38, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet7TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 41, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet7BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 43, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet8TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 46, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet8BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 48, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet9TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 51, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet9BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 53, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet10TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 56, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet10BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 58, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet11TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 61, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet11BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 63, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet12TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 66, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet12BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 68, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet13TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 71, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet13BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 73, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet14TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 76, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet14BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 78, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet15TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 81, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet15BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 83, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet16TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 86, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet16BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 88, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet17TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 91, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet17BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 93, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet18TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 96, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet18BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 98, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet19TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 101, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet19BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 103, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet20TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 106, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet20BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 108, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet21TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 111, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet21BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 113, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet22TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 116, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet22BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 118, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet23TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 121, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet23BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 123, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet24TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 126, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet24BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 128, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet25TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 131, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet25BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 133, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet26TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 136, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet26BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 138, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet27TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 141, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet27BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 143, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet28TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 146, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet28BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 148, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet29TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 151, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet29BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 153, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet30TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 156, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet30BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(140, 158, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 6, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 8, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet1TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 11, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet1BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 13, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet2TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 16, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet2BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 18, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet3TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 21, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet3BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 23, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet4TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 26, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet4BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 28, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet5TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 31, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet5BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 33, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet6TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 36, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet6BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 38, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet7TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 41, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet7BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 43, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet8TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 46, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet8BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 48, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet9TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 51, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet9BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 53, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet10TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 56, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet10BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 58, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet11TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 61, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet11BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 63, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet12TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 66, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet12BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 68, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet13TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 71, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet13BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 73, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet14TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 76, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet14BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 78, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet15TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 81, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet15BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 83, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet16TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 86, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet16BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 88, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet17TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 91, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet17BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 93, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet18TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 96, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet18BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 98, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet19TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 101, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet19BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 103, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet20TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 106, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet20BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 108, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet21TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 111, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet21BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 113, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet22TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 116, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet22BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 118, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet23TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 121, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet23BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 123, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet24TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 126, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet24BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 128, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet25TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 131, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet25BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 133, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet26TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 136, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet26BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 138, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet27TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 141, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet27BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 143, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet28TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 146, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet28BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 148, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet29TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 151, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet29BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 153, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet30TopText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 156, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'PhotoSet30BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(143, 158, 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, 30, 10, NULL, 'BottomText', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableTFoot` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTFoot` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTextArea` VALUES(160, 6, 'CONTENT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href=''LINK GOES HERE''>LINK NAME GOES HERE</a>', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Content', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(163, 6, 'CONTENT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href=''LINK GOES HERE''>LINK NAME GOES HERE</a>', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Content', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableTFootCell` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTFootCell` CHANGE `TableName` `TableID` INT NOT NULL;
+REPLACE INTO `AdministratorFormTextArea` VALUES(180, 6, 'BLOCKQUOTE GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href=''LINK GOES HERE''>LINK NAME GOES HERE</a>', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Blockquote', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(183, 6, 'BLOCKQUOTE GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href=''LINK GOES HERE''>LINK NAME GOES HERE</a>', 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'Blockquote', NULL, NULL, 'ShortFormTableBox', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableTFootContent` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTFootContent` CHANGE `TableName` `TableID` INT NOT NULL;
+UPDATE `AdministratorFormSelect` SET `FormSelectStyle` = 'width: 550px;' WHERE `FormSelectStyle` = 'width: 250px;';
 
-DROP TABLE `XhtmlTableTFootLinkedLookup`;
-DROP TABLE `AdministratorXhtmlTableTFootLinkedLookup`;
+UPDATE `AdministratorContent` SET `Content` = '<script>
+  mygrid = new dhtmlXGridObject(''gridbox'');
+  mygrid.imgURL = "../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/imgs/";
+  mygrid.init();
+  mygrid.loadXML("simple-grid.xml");
+</script>' WHERE `AdministratorContent`.`PageID` = 200 AND `AdministratorContent`.`ObjectID` = 2 AND `AdministratorContent`.`RevisionID` = 0 LIMIT 1;
 
-ALTER TABLE `XhtmlTableTHead` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTHead` CHANGE `TableName` `TableID` INT NOT NULL;
+UPDATE `AdministratorMainMenu` SET `Li3Enable/Disable` = 'Disable', `Li4Enable/Disable` = 'Disable', `Li5Enable/Disable` = 'Disable' WHERE `AdministratorMainMenu`.`PageID` = 1 AND `AdministratorMainMenu`.`ObjectID` = 1 LIMIT 1;
+UPDATE `AdministratorList` SET `Li2Enable/Disable` = 'Disable', `Li3Enable/Disable` = 'Disable', `Li4Enable/Disable` = 'Disable' WHERE `AdministratorList`.`PageID` = 10 AND `AdministratorList`.`ObjectID` = 1 LIMIT 1;
+UPDATE `AdministratorList` SET `Li1Enable/Disable` = 'Disable', `Li4Enable/Disable` = 'Disable', `Li5Enable/Disable` = 'Disable' WHERE `AdministratorList`.`PageID` = 11 AND `AdministratorList`.`ObjectID` = 1 LIMIT 1;
+UPDATE `AdministratorList` SET `Li1Enable/Disable` = 'Disable' WHERE `AdministratorList`.`PageID` = 15 AND `AdministratorList`.`ObjectID` = 1 LIMIT 1;
 
-ALTER TABLE `XhtmlTableTHeadContent` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTHeadContent` CHANGE `TableName` `TableID` INT NOT NULL;
+UPDATE `AdministratorContentLayerTheme` SET `JavaScriptSheet5` = '../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.7.1.min.js' WHERE CONVERT(`AdministratorContentLayerTheme`.`ThemeName` USING utf8) = 'AdminTheme' LIMIT 1;
+UPDATE `AdministratorContentLayerTheme` SET `JavaScriptSheet5` = '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js', `PrintPreviewStyleSheet1` = '../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.7.1.min.js' WHERE CONVERT(`AdministratorContentLayerTheme`.`ThemeName` USING utf8) = 'AdminTheme' LIMIT 1;
 
-ALTER TABLE `XhtmlTableTHeadHeader` CHANGE `TableName` `TableID` INT NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableTHeadHeader` CHANGE `TableName` `TableID` INT NOT NULL;
+ALTER TABLE `AdministratorContentLayerTheme` ADD `JavaScriptSheet6` VARCHAR(200) NULL AFTER `JavaScriptSheet5`;
+UPDATE `AdministratorContentLayerTheme` SET `JavaScriptSheet6` = '../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.7.1.min.js', `PrintPreviewStyleSheet1` = NULL WHERE CONVERT(`AdministratorContentLayerTheme`.`ThemeName` USING utf8) = 'AdminTheme' LIMIT 1;
 
-ALTER TABLE `XhtmlTableLookup`
-  DROP `LinkedTable`,
-  DROP `TableBorder`,
-  DROP `TableCellPadding`,
-  DROP `TableCellSpacing`,
-  DROP `TableFrame`,
-  DROP `TablesRules`,
-  DROP `TableSummary`,
-  DROP `TableWidth`,
-  DROP `TableClass`,
-  DROP `TableDir`,
-  DROP `TableID`,
-  DROP `TableLang`,
-  DROP `TableStyle`,
-  DROP `TableTitle`,
-  DROP `TableXMLLang`;
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'XhtmlTableName', 'XhtmlTable');
 
-ALTER TABLE `AdministratorXhtmlTableLookup`
-  DROP `LinkedTable`,
-  DROP `TableBorder`,
-  DROP `TableCellPadding`,
-  DROP `TableCellSpacing`,
-  DROP `TableFrame`,
-  DROP `TablesRules`,
-  DROP `TableSummary`,
-  DROP `TableWidth`,
-  DROP `TableClass`,
-  DROP `TableDir`,
-  DROP `TableID`,
-  DROP `TableLang`,
-  DROP `TableStyle`,
-  DROP `TableTitle`,
-  DROP `TableXMLLang`;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 0 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 1 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 2 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 3 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 4 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 5 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 6 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 7 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 8 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 9 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 10 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 11 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 12 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 13 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 14 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 15 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 16 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 17 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 18 LIMIT 1;
+DELETE FROM `ContentLayerThemeGlobalLayer` WHERE CONVERT(`ContentLayerThemeGlobalLayer`.`ThemeName` USING utf8) = 'OneSolutionCMSDefault' AND `ContentLayerThemeGlobalLayer`.`ObjectID` = 19 LIMIT 1;
 
-ALTER TABLE `XhtmlTableLookup`
-  DROP `TableName`;
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 10, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 12, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-ALTER TABLE `AdministratorXhtmlTableLookup`
-  DROP `TableName`;
+REPLACE INTO `ContentLayerTheme` VALUES('OneSolutionCMSDefault', 'Tier8-PresentationLayer/OneSolutionCMSDefault/Settings.css', 'Tier8-PresentationLayer/OneSolutionCMSDefault/TextSettings.css', 'Tier8-PresentationLayer/OneSolutionCMSDefault/Menus.css', 'Tier8-PresentationLayer/OneSolutionCMSDefault/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/OneSolutionCMSDefault/SettingsIE6.css', 'Tier8-PresentationLayer/OneSolutionCMSDefault/MenuSettingsIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/OneSolutionCMSDefault/MenuSettingsIE7.css', 'Tier8-PresentationLayer/OneSolutionCMSDefault/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
 
---
--- Table structure for table `XhtmlTableListing`
---
+UPDATE `AdministratorContentLayerModules` SET `Enable/Disable` = 'Enable' WHERE CONVERT(`AdministratorContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerModules`.`ObjectTypeName` USING utf8) = 'table' LIMIT 1; UPDATE `kcphotovideo1`.`AdministratorContentLayerModules` SET `Enable/Disable` = 'Enable' WHERE CONVERT(`AdministratorContentLayerModules`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerModules`.`ObjectTypeName` USING utf8) = 'admintable' LIMIT 1;
+UPDATE `AdministratorContentLayerModulesSettings` SET `Setting` = 'TableContentDeleteSelectPage' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'table' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'TableContentSelectPage' LIMIT 1;
 
-CREATE TABLE `XhtmlTableListing` (
-  `XhtmlTableName` varchar(250) NOT NULL,
-  `XhtmlTableID` int(11) NOT NULL,
-  `TableName` varchar(250) NOT NULL,
-  `LinkedTable` enum('True','False') NOT NULL default 'False',
-  `TableBorder` int(11) default NULL,
-  `TableCellPadding` int(11) default NULL,
-  `TableCellSpacing` int(11) default NULL,
-  `TableFrame` enum('void','above','below','hsides','lhs','rhs','vsides','box','border') default NULL,
-  `TablesRules` enum('none','groups','rows','cols','all') default NULL,
-  `TableSummary` text,
-  `TableWidth` int(11) default NULL,
-  `TableClass` text,
-  `TableDir` enum('rtl','ltr') default NULL,
-  `TableID` text,
-  `TableLang` enum('af','sq','eu','be','bg','ca','zh-cn','zh-tw','hr','cs','da','nl','nl-be','nl-nl','en','en-au','en-bz','en-ca','en-ie','en-jm','en-nz','en-ph','en-za','en-tt','en-gb','en-us','en-zq','et','fo','fi','fr','fr-be','fr-ca','fr-fr','fr-lu','fr-mc','fr-ch','gl','gd','de','de-at','de-de','de-li','de-lu','de-ch','el','haw','hu','is','in','ga','it','it-it','it-ch','ja','ko','mk','no','pl','pt-br','pt-pt','ro','ro-mo','ro-ro','ru','ru-mo','ru-ru','sr','sk','sl','es','es-ar','es-bo','es-cl','es-co','es-cr','es-do','es-ec','es-sv','es-gt','es-hn','es-mx','es-ni','es-pa','es-pe','es-pr','es-es','es-ve','sv','sv-fi','sv-se','tr','uk') default NULL,
-  `TableStyle` text,
-  `TableTitle` text,
-  `TableXMLLang` enum('af','sq','eu','be','bg','ca','zh-cn','zh-tw','hr','cs','da','nl','nl-be','nl-nl','en','en-au','en-bz','en-ca','en-ie','en-jm','en-nz','en-ph','en-za','en-tt','en-gb','en-us','en-zq','et','fo','fi','fr','fr-be','fr-ca','fr-fr','fr-lu','fr-mc','fr-ch','gl','gd','de','de-at','de-de','de-li','de-lu','de-ch','el','haw','hu','is','in','ga','it','it-it','it-ch','ja','ko','mk','no','pl','pt-br','pt-pt','ro','ro-mo','ro-ro','ru','ru-mo','ru-ru','sr','sk','sl','es','es-ar','es-bo','es-cl','es-co','es-cr','es-do','es-ec','es-sv','es-gt','es-hn','es-mx','es-ni','es-pa','es-pe','es-pr','es-es','es-ve','sv','sv-fi','sv-se','tr','uk') default NULL,
-  `Enable/Disable` enum('Enable','Disable') NOT NULL default 'Enable',
-  `Status` enum('Approved','Not-Approved','Spam','Pending') NOT NULL default 'Pending',
-  UNIQUE KEY `XhtmlTableName` (`XhtmlTableName`,`XhtmlTableID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `AdministratorXhtmlTableListing`
---
+-- XhtmlTable Administrator Form
 
-CREATE TABLE `AdministratorXhtmlTableListing` (
-  `XhtmlTableName` varchar(250) NOT NULL,
-  `XhtmlTableID` int(11) NOT NULL,
-  `TableName` varchar(250) NOT NULL,
-  `LinkedTable` enum('True','False') NOT NULL default 'False',
-  `TableBorder` int(11) default NULL,
-  `TableCellPadding` int(11) default NULL,
-  `TableCellSpacing` int(11) default NULL,
-  `TableFrame` enum('void','above','below','hsides','lhs','rhs','vsides','box','border') default NULL,
-  `TablesRules` enum('none','groups','rows','cols','all') default NULL,
-  `TableSummary` text,
-  `TableWidth` int(11) default NULL,
-  `TableClass` text,
-  `TableDir` enum('rtl','ltr') default NULL,
-  `TableID` text,
-  `TableLang` enum('af','sq','eu','be','bg','ca','zh-cn','zh-tw','hr','cs','da','nl','nl-be','nl-nl','en','en-au','en-bz','en-ca','en-ie','en-jm','en-nz','en-ph','en-za','en-tt','en-gb','en-us','en-zq','et','fo','fi','fr','fr-be','fr-ca','fr-fr','fr-lu','fr-mc','fr-ch','gl','gd','de','de-at','de-de','de-li','de-lu','de-ch','el','haw','hu','is','in','ga','it','it-it','it-ch','ja','ko','mk','no','pl','pt-br','pt-pt','ro','ro-mo','ro-ro','ru','ru-mo','ru-ru','sr','sk','sl','es','es-ar','es-bo','es-cl','es-co','es-cr','es-do','es-ec','es-sv','es-gt','es-hn','es-mx','es-ni','es-pa','es-pe','es-pr','es-es','es-ve','sv','sv-fi','sv-se','tr','uk') default NULL,
-  `TableStyle` text,
-  `TableTitle` text,
-  `TableXMLLang` enum('af','sq','eu','be','bg','ca','zh-cn','zh-tw','hr','cs','da','nl','nl-be','nl-nl','en','en-au','en-bz','en-ca','en-ie','en-jm','en-nz','en-ph','en-za','en-tt','en-gb','en-us','en-zq','et','fo','fi','fr','fr-be','fr-ca','fr-fr','fr-lu','fr-mc','fr-ch','gl','gd','de','de-at','de-de','de-li','de-lu','de-ch','el','haw','hu','is','in','ga','it','it-it','it-ch','ja','ko','mk','no','pl','pt-br','pt-pt','ro','ro-mo','ro-ro','ru','ru-mo','ru-ru','sr','sk','sl','es','es-ar','es-bo','es-cl','es-co','es-cr','es-do','es-ec','es-sv','es-gt','es-hn','es-mx','es-ni','es-pa','es-pe','es-pr','es-es','es-ve','sv','sv-fi','sv-se','tr','uk') default NULL,
-  `Enable/Disable` enum('Enable','Disable') NOT NULL default 'Enable',
-  `Status` enum('Approved','Not-Approved','Spam','Pending') NOT NULL default 'Pending',
-  UNIQUE KEY `XhtmlTableName` (`XhtmlTableName`,`XhtmlTableID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+REPLACE INTO `AdministratorForm` VALUES(200, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/AddTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(202, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/SelectTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(203, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/UpdateTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(205, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/DeleteTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(207, 1, 'AdministratorFormTableListing', 'PageTypes/TablePage/EnableDisableStatusChangeTableContent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-ALTER TABLE `XhtmlTableLookup` CHANGE `XhtmlTableID` `TableID` INT(11) NOT NULL;
-ALTER TABLE `AdministratorXhtmlTableLookup` CHANGE `XhtmlTableID` `TableID` INT(11) NOT NULL;
+REPLACE INTO `AdministratorFormButton` VALUES(200, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '200', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(200, 2, 'Add Row', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddRow', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'AddRow', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(200, 3, 'Remove Row', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'RemoveRow', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'RemoveRow', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(200, 4, 'Add Column', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddColumn', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'AddColumn', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(200, 5, 'Remove Column', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'RemoveColumn', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'RemoveColumn', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(202, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'UpdateTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '202', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'UpdateTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '203', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 2, 'Add Row', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddRow', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'AddRow', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 3, 'Remove Row', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'RemoveRow', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'RemoveRow', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 4, 'Add Column', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'AddColumn', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'AddColumn', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(203, 5, 'Remove Column', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'RemoveColumn', NULL, NULL, NULL, NULL, NULL, NULL, 'button', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm ShortFormButton', 'ltr', 'RemoveColumn', 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(205, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'DeleteTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '205', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormButton` VALUES(207, 1, 'Submit', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'EnableDisableTableContent', NULL, NULL, NULL, NULL, NULL, NULL, 'submit', '207', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyTextButton ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-UPDATE `ContentLayerTables` SET `DatabaseTable2` = 'XhtmlTableListing' WHERE CONVERT(`ContentLayerTables`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`ContentLayerTables`.`ObjectTypeName` USING utf8) = 'table' LIMIT 1;
-UPDATE `AdministratorContentLayerTables` SET `DatabaseTable2` = 'XhtmlTableListing' WHERE CONVERT(`AdministratorContentLayerTables`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerTables`.`ObjectTypeName` USING utf8) = 'table' LIMIT 1;
-UPDATE `AdministratorContentLayerTables` SET `DatabaseTable2` = 'AdministratorXhtmlTableListing' WHERE CONVERT(`AdministratorContentLayerTables`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerTables`.`ObjectTypeName` USING utf8) = 'admintable' LIMIT 1;
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 1, 99, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 2, 99, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 3, 99, 'TextArea', 'AdministratorFormTextArea', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 4, 99, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 5, 99, 'TextArea', 'AdministratorFormTextArea', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 6, 99, 'FieldSet', 'AdministratorFormFieldSet', 100, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 7, 99, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 8, 99, NULL, NULL, NULL, '<div>', '</div>', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Grid', NULL, 'position:relative; left: 120px; width:550px; height:200px; background-color:white;', NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 9, 99, 'Button', 'AdministratorFormButton', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 10, 99, 'Button', 'AdministratorFormButton', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 11, 99, 'Button', 'AdministratorFormButton', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 12, 99, 'Button', 'AdministratorFormButton', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 13, 99, 'FieldSet', 'AdministratorFormFieldSet', 200, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 14, 99, 'Label', 'AdministratorFormLabel', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 15, 99, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 16, 99, 'Label', 'AdministratorFormLabel', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 17, 99, 'Select', 'AdministratorFormSelect', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 18, 99, 'Label', 'AdministratorFormLabel', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 19, 99, 'Captcha', 'AdministratorFormCaptcha', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 99, 99, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 100, 199, 'Legend', 'AdministratorFormLegend', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', 'ColumnHeadings', 'en-us', 'left: 5px;', NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 199, 199, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 200, 299, 'Legend', 'AdministratorFormLegend', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', 'ColumnFooters', 'en-us', 'left: 5px;', NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 299, 299, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(202, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(202, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(202, 3, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 1, 99, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 2, 99, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 3, 99, 'TextArea', 'AdministratorFormTextArea', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 4, 99, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 5, 99, 'TextArea', 'AdministratorFormTextArea', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 6, 99, 'FieldSet', 'AdministratorFormFieldSet', 100, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 7, 99, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 8, 99, NULL, NULL, NULL, '<div>', '</div>', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Grid', NULL, 'position:relative; left: 120px; width:550px; height:200px; background-color:white;', NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 9, 99, 'Button', 'AdministratorFormButton', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 10, 99, 'Button', 'AdministratorFormButton', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 11, 99, 'Button', 'AdministratorFormButton', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 12, 99, 'Button', 'AdministratorFormButton', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 13, 99, 'FieldSet', 'AdministratorFormFieldSet', 200, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 14, 99, 'Label', 'AdministratorFormLabel', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 15, 99, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 16, 99, 'Label', 'AdministratorFormLabel', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 17, 99, 'Select', 'AdministratorFormSelect', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 18, 99, 'Label', 'AdministratorFormLabel', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 19, 99, 'Captcha', 'AdministratorFormCaptcha', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 99, 99, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 100, 199, 'Legend', 'AdministratorFormLegend', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', 'ColumnHeadings', 'en-us', 'left: 5px;', NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 199, 199, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 200, 299, 'Legend', 'AdministratorFormLegend', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', 'ColumnFooters', 'en-us', 'left: 5px;', NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(203, 299, 299, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(205, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(205, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(205, 3, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 3, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-INSERT INTO `AdministratorFormValidation` (`PageID`, `FormFieldName`, `FormFieldAttribute`, `FormFieldMinLength`, `FormFieldMaxLength`, `FormFieldMinValue`, `FormFieldMaxValue`) VALUES ('160', 'RawData', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `AdministratorFormValidation` (`PageID`, `FormFieldName`, `FormFieldAttribute`, `FormFieldMinLength`, `FormFieldMaxLength`, `FormFieldMinValue`, `FormFieldMaxValue`) VALUES ('163', 'RawData', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 1, 'Table Name', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 2, 'Table Heading', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 3, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 4, 'Enabled', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 5, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(200, 6, '* = Field Can Be empty. Enter NULL for empty.', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(202, 1, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 1, 'Table Name', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 2, 'Table Heading', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 3, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 4, 'Enabled', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 5, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(203, 6, '* = Field Can Be empty. Enter NULL for empty.', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(205, 1, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(207, 1, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 3, NULL, 'TextArea', 'AdministratorFormTextArea', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 4, NULL, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 5, NULL, 'TextArea', 'AdministratorFormTextArea', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 6, NULL, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 7, NULL, 'TextArea', 'AdministratorFormTextArea', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 8, NULL, 'Label', 'AdministratorFormLabel', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 9, NULL, 'TextArea', 'AdministratorFormTextArea', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 10, NULL, 'Label', 'AdministratorFormLabel', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 11, NULL, 'TextArea', 'AdministratorFormTextArea', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 12, NULL, 'Label', 'AdministratorFormLabel', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 13, NULL, 'TextArea', 'AdministratorFormTextArea', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 14, NULL, 'Label', 'AdministratorFormLabel', 7, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 15, NULL, 'Input', 'AdministratorFormInput', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 16, NULL, 'Label', 'AdministratorFormLabel', 8, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 17, NULL, 'Input', 'AdministratorFormInput', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 18, NULL, 'Label', 'AdministratorFormLabel', 9, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 19, NULL, 'Input', 'AdministratorFormInput', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 20, NULL, 'Label', 'AdministratorFormLabel', 10, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 21, NULL, 'Select', 'AdministratorFormSelect', 9, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 22, NULL, 'Label', 'AdministratorFormLabel', 11, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 23, NULL, 'Select', 'AdministratorFormSelect', 20, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 24, NULL, 'Label', 'AdministratorFormLabel', 12, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 25, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 26, NULL, 'Label', 'AdministratorFormLabel', 13, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 27, NULL, 'Select', 'AdministratorFormSelect', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 28, NULL, 'Label', 'AdministratorFormLabel', 14, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(160, 29, NULL, 'Captcha', 'AdministratorFormCaptcha', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(200, 1, 'Add Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(200, 2, 'Column Headings', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(200, 3, 'Column Footers', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(202, 1, 'Update Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(203, 1, 'Update Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(203, 2, 'Column Headings', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(203, 3, 'Column Footers', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(205, 1, 'Delete Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLegend` VALUES(207, 1, 'Enable / Disable Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 3, NULL, 'TextArea', 'AdministratorFormTextArea', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 4, NULL, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 5, NULL, 'TextArea', 'AdministratorFormTextArea', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 6, NULL, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 7, NULL, 'TextArea', 'AdministratorFormTextArea', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 8, NULL, 'Label', 'AdministratorFormLabel', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 9, NULL, 'TextArea', 'AdministratorFormTextArea', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 10, NULL, 'Label', 'AdministratorFormLabel', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 11, NULL, 'TextArea', 'AdministratorFormTextArea', 5, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 12, NULL, 'Label', 'AdministratorFormLabel', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 13, NULL, 'TextArea', 'AdministratorFormTextArea', 6, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 14, NULL, 'Label', 'AdministratorFormLabel', 7, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 15, NULL, 'Input', 'AdministratorFormInput', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 16, NULL, 'Label', 'AdministratorFormLabel', 8, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 17, NULL, 'Input', 'AdministratorFormInput', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 18, NULL, 'Label', 'AdministratorFormLabel', 9, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 19, NULL, 'Input', 'AdministratorFormInput', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 20, NULL, 'Label', 'AdministratorFormLabel', 10, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 21, NULL, 'Select', 'AdministratorFormSelect', 9, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 22, NULL, 'Label', 'AdministratorFormLabel', 11, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 23, NULL, 'Select', 'AdministratorFormSelect', 20, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 24, NULL, 'Label', 'AdministratorFormLabel', 12, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 25, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 26, NULL, 'Label', 'AdministratorFormLabel', 13, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 27, NULL, 'Select', 'AdministratorFormSelect', 4, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 28, NULL, 'Label', 'AdministratorFormLabel', 14, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormFieldSet` VALUES(163, 29, NULL, 'Captcha', 'AdministratorFormCaptcha', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 1, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 2, 'Disable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 3, 'Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 4, 'Not-Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 5, 'Spam', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(200, 6, 'Pending', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 1, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 2, 'Disable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 3, 'Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 4, 'Not-Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 5, 'Spam', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(203, 6, 'Pending', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormInput` VALUES(160, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'RawData', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'checkbox', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', 'left: -15px;', NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormInput` VALUES(160, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'MenuName', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'text', 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormInput` VALUES(160, 3, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'MenuTitle', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'text', 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 1, 3, NULL, 'Option', 'AdministratorFormOption', 1, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 2, 3, NULL, 'Option', 'AdministratorFormOption', 2, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 4, 8, NULL, 'Option', 'AdministratorFormOption', 3, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 5, 8, NULL, 'Option', 'AdministratorFormOption', 4, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 6, 8, NULL, 'Option', 'AdministratorFormOption', 5, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 7, 8, NULL, 'Option', 'AdministratorFormOption', 6, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(200, 8, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(202, 999999, 999999, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 1, 3, NULL, 'Option', 'AdministratorFormOption', 1, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 2, 3, NULL, 'Option', 'AdministratorFormOption', 2, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 4, 8, NULL, 'Option', 'AdministratorFormOption', 3, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 5, 8, NULL, 'Option', 'AdministratorFormOption', 4, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 6, 8, NULL, 'Option', 'AdministratorFormOption', 5, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 7, 8, NULL, 'Option', 'AdministratorFormOption', 6, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(203, 8, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(205, 999999, 999999, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 999999, 999999, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormInput` VALUES(163, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'RawData', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'checkbox', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', 'left: -15px;', NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormInput` VALUES(163, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'MenuName', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'text', 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormInput` VALUES(163, 3, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'MenuTitle', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'text', 'NULL', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(200, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(200, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(202, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(202, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(203, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(203, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(205, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(205, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 1, 'Page Title', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 2, '*Keywords', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 3, '*Description', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 4, 'Header', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 5, '*Heading', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 6, '*Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 7, '*Raw Data', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 8, '*Menu Name', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 9, '*Menu Title', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 10, 'Priority', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 11, 'Frequency', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 12, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 13, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(160, 14, '* = Field Can Be empty. Enter NULL for empty.', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableName', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableHeading', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(200, 3, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'TableContent', NULL, NULL, 'ShortFormTableBox', 'ltr', 'Grid', 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(203, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableName', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(203, 2, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 4, NULL, 'TableHeading', NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTextArea` VALUES(203, 3, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 30, 30, NULL, 'TableContent', NULL, NULL, 'ShortFormTableBox', 'ltr', 'Grid', 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 1, 'Page Title', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 2, '*Keywords', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 3, '*Description', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 4, 'Header', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 5, '*Heading', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 6, '*Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 7, '*Raw Data', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 8, '*Menu Name', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 9, '*Menu Title', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 10, 'Priority', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 11, 'Frequency', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 12, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 13, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
-REPLACE INTO `AdministratorFormLabel` VALUES(163, 14, '* = Field Can Be empty. Enter NULL for empty.', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'AddTableContent', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'CAPTCHA', 'Captcha', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'EnableDisable', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'Status', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableContent', 'HtmlTag', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableHeading', 'AlphaNum', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(200, 'TableName', 'AlphaNum', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'AddTableContent', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'CAPTCHA', 'Captcha', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'EnableDisable', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'Status', NULL, NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'TableContent', 'HtmlTag', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'TableHeading', 'AlphaNum', NULL, NULL, NULL, NULL);
+REPLACE INTO `AdministratorFormValidation` VALUES(203, 'TableName', 'AlphaNum', NULL, NULL, NULL, NULL);
 
-UPDATE `AdministratorForm` SET `FormAction` = 'PageTypes/ContentPage/AddContentPage.php' WHERE `AdministratorForm`.`PageID` = 160 AND `AdministratorForm`.`ObjectID` = 1;
-UPDATE `AdministratorForm` SET `FormAction` = 'PageTypes/ContentPage/SelectContentPage.php' WHERE `AdministratorForm`.`PageID` = 162 AND `AdministratorForm`.`ObjectID` = 1;
-UPDATE `AdministratorForm` SET `FormAction` = 'PageTypes/ContentPage/UpdateContentPage.php' WHERE `AdministratorForm`.`PageID` = 163 AND `AdministratorForm`.`ObjectID` = 1;
-UPDATE `AdministratorForm` SET `FormAction` = 'PageTypes/ContentPage/DeleteContentPage.php' WHERE `AdministratorForm`.`PageID` = 165 AND `AdministratorForm`.`ObjectID` = 1;
-UPDATE `AdministratorForm` SET `FormAction` = 'PageTypes/ContentPage/EnableDisableStatusChangeContentPage.php' WHERE `AdministratorForm`.`PageID` = 167 AND `AdministratorForm`.`ObjectID` = 1;
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentCreatedPage', '../../index.php?PageID=201');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentCreatedUpdatePage', '../../index.php?PageID=204');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentDeletePage', '../../index.php?PageID=206');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentDeleteSelectPage', '205');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentEnableDisablePage', '../../index.php?PageID=208');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentEnableDisableSelectPage', '207');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentUpdatePage', '../../index.php?PageID=203');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'TableContentUpdateSelectPage', '202');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlTable', 'table', 'XhtmlTableName', 'XhtmlTable');
 
-UPDATE `AdministratorContentLayerModulesSettings` SET `SettingAttribute` = '../../index.php?PageID=164' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlContent' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'content' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'CreatedUpdateContentPage' LIMIT 1;
-UPDATE `AdministratorContentLayerModulesSettings` SET `SettingAttribute` = '../../index.php?PageID=161' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlContent' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'content' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'ContentPageCreatedPage' LIMIT 1;
-UPDATE `AdministratorContentLayerModulesSettings` SET `SettingAttribute` = '../../index.php?PageID=166' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlContent' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'content' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'DeletedContentPage' LIMIT 1;
-UPDATE `AdministratorContentLayerModulesSettings` SET `SettingAttribute` = '../../index.php?PageID=168' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlContent' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'content' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'EnableDisableContentPage' LIMIT 1;
-UPDATE `AdministratorContentLayerModulesSettings` SET `SettingAttribute` = '../../index.php?PageID=163' WHERE CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectType` USING utf8) = 'XhtmlContent' AND CONVERT(`AdministratorContentLayerModulesSettings`.`ObjectTypeName` USING utf8) = 'content' AND CONVERT(`AdministratorContentLayerModulesSettings`.`Setting` USING utf8) = 'UpdateContentPage' LIMIT 1;
+REPLACE INTO `AdministratorContentLayerModules` VALUES('XhtmlTable', 'admintable', 'Modules/Tier6ContentLayer/Core/XhtmlTable', NULL, 'true', 'ClassXhtmlTable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
+REPLACE INTO `AdministratorContentLayerModules` VALUES('XhtmlTable', 'table', 'Modules/Tier6ContentLayer/Core/XhtmlTable', NULL, 'true', 'ClassXhtmlTable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
 
---
--- Table structure for table `ContentLayerThemeGlobalLayer`
---
+REPLACE INTO `AdministratorContent` VALUES(200, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Add Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Please complete the form below to add table content!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(200, 1, 'XhtmlForm', 'form', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(200, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<script src="../Administrators/PageTypes/TablePage/TableContentBehavior.js" >\r\n  LoadGrid();\r\n</script>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(201, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Table Content Has Been Created!', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'The table content you wanted to create, has been created. Below is the table that has been created!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, 'BodyText', 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(201, 1, 'XhtmlContent', 'admincontent', 2, 'true', 0, 'true', 'false', '<div>', '</div>', 'Grid', 'position:relative; left: 120px; width:550px; height:200px; background-color:white;', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(201, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<script src="../Administrators/PageTypes/TablePage/TableContentReadBehavior.js" >\r\n  \r\n</script>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(202, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Update Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Please select the table content you would like to update!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(202, 1, 'XhtmlForm', 'form', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(202, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(203, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Update Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Please complete the form below to update table content!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(203, 1, 'XhtmlForm', 'form', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(203, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<script src="../Administrators/PageTypes/TablePage/TableContentBehavior.js" >\r\n  LoadGrid();\r\n</script>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(204, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Table Content Has Been Updated!', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'The table content you wanted to update, has been updated. Below is the table that has been updated!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, 'BodyText', 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(204, 1, 'XhtmlContent', 'admincontent', 2, 'true', 0, 'true', 'false', '<div>', '</div>', 'Grid', 'position:relative; left: 120px; width:550px; height:200px; background-color:white;', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(204, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<script src="../Administrators/PageTypes/TablePage/TableContentReadBehavior.js" >\r\n  \r\n</script>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(205, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Delete Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Please select the table content you would like to delete!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(205, 1, 'XhtmlForm', 'form', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(205, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(206, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Table Content Has Been Deleted!', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'The table content you wanted to delete, has been delete.', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, 'BodyText', 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(206, 1, 'XhtmlContent', 'admincontent', 2, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(207, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Enable/Disable Status Change - Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Please select the table content you would like to Enable/Disable and/or Status change! Then select Enable or Disabled or the Status desired!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(207, 1, 'XhtmlForm', 'form', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(207, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(208, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Enable/Disable Status Changed - Table Content', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'The table content''s Enable/Disable or Status has changed!', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, 'BodyText', 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(208, 1, 'XhtmlContent', 'admincontent', 2, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(209, 0, 'XhtmlContent', 'admincontent', 1, 'true', 0, 'true', 'false', '<div>', NULL, 'main-content-middle', NULL, NULL, 'Table Content Management', '<h2>', '</h2>', NULL, NULL, 'BodyHeading', 'Welcome to the Table Content Management section. This section allows you to control your table content. You can add, update and remove content. You can Enable/Disable Content and you can update the status of your content! See below for all of your options.', '<p>', '</p>', NULL, NULL, 'BodyText', NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(209, 1, 'XhtmlUnorderedList', 'adminlist', 1, 'true', 0, 'true', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorContent` VALUES(209, 2, 'XhtmlContent', 'admincontent', 3, 'true', 0, 'true', 'false', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-CREATE TABLE `ContentLayerThemeGlobalLayer` (
-  `ThemeName` varchar(100) NOT NULL default '0',
-  `ObjectID` int(4) NOT NULL default '0',
-  `ObjectType` enum('XhtmlContent','XhtmlMenu','XhtmlPicture','XhtmlTable','XhtmlForm','XhtmlUnorderedList','XhtmlFlash','XhtmlNews','XhtmlHeader','FOOTER','BACKGROUND','CONTENT','XhtmlMainMenu') default NULL,
-  `ObjectTypeName` enum('admincontent','bottompanel2','toppanel2','picture','table','form','list','flash','news','adminheader','footer','background','contentdummy','headerpanel1','adminmainmenu','adpanel1') NOT NULL default 'admincontent',
-  `ContainerObjectID` int(11) default NULL,
-  `CurrentVersion` enum('true','false') NOT NULL default 'false',
-  `Authenticate` enum('true','false') NOT NULL default 'false',
-  `PrintPreview` enum('true','false') NOT NULL default 'true',
-  `StartTag` enum('<div>','<p>') default NULL,
-  `EndTag` enum('</div>','</p>') default NULL,
-  `StartTagID` text,
-  `StartTagStyle` text,
-  `StartTagClass` text,
-  `ImportFileName` text,
-  `ImportFileType` enum('xml','html') default NULL,
-  `Enable/Disable` enum('Enable','Disable') default 'Enable',
-  `Status` enum('Approved','Not-Approved','Spam','Pending') default 'Pending',
-  UNIQUE KEY `PageID` (`ThemeName`,`ObjectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(200, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(200, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Add Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(201, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(201, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Table Content Created!</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(202, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(202, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Table Content Update!</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(203, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(203, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Update Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(204, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(204, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Updated Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(205, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(205, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Delete Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(206, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(206, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Deleted Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(207, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(207, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Enable/Disable Status Change - Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(208, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(208, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Enable/Disable Status Changed - Table Content</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(209, 1, NULL, NULL, NULL, NULL, NULL, NULL, 'header-sitename', NULL, NULL, '<h1 class=''MainHeading''>One Solution CMS</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorHeaderPanel1` VALUES(209, 2, NULL, NULL, NULL, NULL, NULL, NULL, 'header-pagename', NULL, NULL, '<h1 class=''SecondaryHeading''>Table Content Management</h1>', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
---
--- Dumping data for table `ContentLayerThemeGlobalLayer`
---
+REPLACE INTO `AdministratorList` VALUES(209, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<a href=''index.php?PageID=200''>Add - Table Content</a>', 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', '<a href=''index.php?PageID=202''>Update - Table Content</a>', 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', '<a href=''index.php?PageID=205''>Delete - Table Content</a>', 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', '<a href=''index.php?PageID=207''>Enable/Disable Change Status - Table Content</a>', 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', NULL, 'BodyText', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Enable', 'Approved');
 
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'ad-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 10, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'side-ad', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-top', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 12, 'XhtmlAd', 'ad', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 13, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-bottom', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 14, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 15, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 16, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 17, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 18, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CaseyRed', 19, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(200, 0, 'true', 'Add Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(201, 0, 'true', 'Created Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(202, 0, 'true', 'Update Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(203, 0, 'true', 'Update Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(204, 0, 'true', 'Updated Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(205, 0, 'true', 'Delete Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(206, 0, 'true', 'Deleted Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(207, 0, 'true', 'Enable/Disable Status Change - Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(208, 0, 'true', 'Enable/Disable Status Changed - Table Content', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorPageAttributes` VALUES(209, 0, 'true', 'Table Content Management', 'favicon.ico', 'rss.php', NULL, NULL, NULL, 'keywords', 'description', NULL, NULL, NULL, 'KC Photo and Video, photography, video, photos, motorsports, Northeastern NY', 'KC Photo and Video shoots photos and videos from area motorsports and team sports events. Check out the coverage of these great events in the Northeastern NY area.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'ad-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 10, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'side-ad', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-top', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 12, 'XhtmlAd', 'ad', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 13, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-bottom', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 14, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 15, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 16, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 17, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 18, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 19, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerModules` VALUES('XhtmlTable', 'table', 'Modules/Tier6ContentLayer/Core/XhtmlTable', NULL, 'true', 'ClassXhtmlTable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
 
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'ad-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 10, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'side-ad', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-top', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 12, 'XhtmlAd', 'ad', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 13, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-bottom', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 14, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 15, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 16, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 17, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 18, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('OneSolutionCMSDefault', 19, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+UPDATE `AdministratorList` SET `Li11` = '<a href=''index.php?PageID=209''>Table Content</a>' WHERE `AdministratorList`.`PageID` = 11 AND `AdministratorList`.`ObjectID` = 3 LIMIT 1;
 
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'ad-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 10, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'side-ad', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-top', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 12, 'XhtmlAd', 'ad', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 13, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-bottom', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 14, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 15, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 16, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 17, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 18, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('PullersGreen', 19, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 1, NULL, 'Caption', 'XhtmlTableCaption', 1, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 2, NULL, 'THead', 'XhtmlTableTHead', 1, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 3, NULL, 'TableRow', 'XhtmlTableRow', 1, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 4, NULL, 'TableRow', 'XhtmlTableRow', 100, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 5, NULL, 'TableRow', 'XhtmlTableRow', 200, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 6, NULL, 'TableRow', 'XhtmlTableRow', 300, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 7, NULL, 'TableRow', 'XhtmlTableRow', 400, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 8, NULL, 'TableRow', 'XhtmlTableRow', 500, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTable` VALUES(0, 9, NULL, 'TFoot', 'XhtmlTableTFoot', 1, 'Enable', 'Approved');
 
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'ad-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 10, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'side-ad', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-top', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 12, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', '</div>', 'side-ad-bottom', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 13, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 14, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 15, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 16, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 17, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 18, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableCaption` VALUES(0, 1, 'Table Caption', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
---
--- Table structure for table `AdministratorContentLayerThemeGlobalLayer`
---
+REPLACE INTO `XhtmlTableListing` VALUES('XhtmlTable', 0, 'New Table', 'True', NULL, NULL, NULL, NULL, 'all', 'Table Summary', 500, NULL, 'ltr', NULL, 'en-us', NULL, 'Table Title', 'en-us', 'Enable', 'Approved');
 
-CREATE TABLE `AdministratorContentLayerThemeGlobalLayer` (
-  `ThemeName` varchar(100) NOT NULL default '0',
-  `ObjectID` int(4) NOT NULL default '0',
-  `ObjectType` enum('XhtmlContent','XhtmlMenu','XhtmlPicture','XhtmlTable','XhtmlForm','XhtmlUnorderedList','XhtmlFlash','XhtmlNews','XhtmlHeader','FOOTER','BACKGROUND','CONTENT','XhtmlMainMenu') default NULL,
-  `ObjectTypeName` enum('admincontent','bottompanel2','toppanel2','picture','table','form','list','flash','news','adminheader','footer','background','contentdummy','headerpanel1','adminmainmenu','adpanel1') NOT NULL default 'admincontent',
-  `ContainerObjectID` int(11) default NULL,
-  `CurrentVersion` enum('true','false') NOT NULL default 'false',
-  `Authenticate` enum('true','false') NOT NULL default 'false',
-  `PrintPreview` enum('true','false') NOT NULL default 'true',
-  `StartTag` enum('<div>','<p>') default NULL,
-  `EndTag` enum('</div>','</p>') default NULL,
-  `StartTagID` text,
-  `StartTagStyle` text,
-  `StartTagClass` text,
-  `ImportFileName` text,
-  `ImportFileType` enum('xml','html') default NULL,
-  `Enable/Disable` enum('Enable','Disable') default 'Enable',
-  `Status` enum('Approved','Not-Approved','Spam','Pending') default 'Pending',
-  UNIQUE KEY `PageID` (`ThemeName`,`ObjectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+REPLACE INTO `XhtmlTableLookup` VALUES(0, 0, 0, 'true', 'XhtmlTable', 0, 'Enable', 'Approved');
 
---
--- Dumping data for table `AdministratorContentLayerThemeGlobalLayer`
---
+REPLACE INTO `XhtmlTableRow` VALUES(0, 1, 99, 'Cell', 'XhtmlTableRowCell', 1, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 2, 99, 'Cell', 'XhtmlTableRowCell', 2, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 3, 99, 'Cell', 'XhtmlTableRowCell', 3, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 4, 99, 'Cell', 'XhtmlTableRowCell', 4, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 5, 99, 'Cell', 'XhtmlTableRowCell', 5, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 99, 99, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 100, 199, 'Cell', 'XhtmlTableRowCell', 100, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 101, 199, 'Cell', 'XhtmlTableRowCell', 101, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 102, 199, 'Cell', 'XhtmlTableRowCell', 102, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 103, 199, 'Cell', 'XhtmlTableRowCell', 103, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 104, 199, 'Cell', 'XhtmlTableRowCell', 104, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 199, 199, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 200, 299, 'Cell', 'XhtmlTableRowCell', 200, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 201, 299, 'Cell', 'XhtmlTableRowCell', 201, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 202, 299, 'Cell', 'XhtmlTableRowCell', 202, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 203, 299, 'Cell', 'XhtmlTableRowCell', 203, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 204, 299, 'Cell', 'XhtmlTableRowCell', 204, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 299, 299, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 300, 399, 'Cell', 'XhtmlTableRowCell', 300, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 301, 399, 'Cell', 'XhtmlTableRowCell', 301, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 302, 399, 'Cell', 'XhtmlTableRowCell', 302, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 303, 399, 'Cell', 'XhtmlTableRowCell', 303, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 304, 399, 'Cell', 'XhtmlTableRowCell', 304, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 399, 399, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 400, 499, 'Cell', 'XhtmlTableRowCell', 400, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 401, 499, 'Cell', 'XhtmlTableRowCell', 401, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 402, 499, 'Cell', 'XhtmlTableRowCell', 402, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 403, 499, 'Cell', 'XhtmlTableRowCell', 403, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 404, 499, 'Cell', 'XhtmlTableRowCell', 404, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 499, 499, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 500, 599, 'Cell', 'XhtmlTableRowCell', 500, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 501, 599, 'Cell', 'XhtmlTableRowCell', 501, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 502, 599, 'Cell', 'XhtmlTableRowCell', 502, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 503, 599, 'Cell', 'XhtmlTableRowCell', 503, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 504, 599, 'Cell', 'XhtmlTableRowCell', 504, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRow` VALUES(0, 599, 599, NULL, NULL, NULL, 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 0, 'XhtmlHeader', 'adminheader', 0, 'true', 'true', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 1, 'BACKGROUND', 'background', 0, 'true', 'true', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 2, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 3, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 4, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'true', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 6, 'XhtmlMainMenu', 'adminmainmenu', 0, 'true', 'true', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 7, 'XhtmlContent', 'admincontent', 0, 'true', 'true', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 8, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 9, 'FOOTER', 'footer', 0, 'true', 'true', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 10, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-INSERT INTO `AdministratorContentLayerThemeGlobalLayer` VALUES('AdminTheme', 11, 'CONTENT', 'contentdummy', 0, 'true', 'true', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 1, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 2, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 3, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 4, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 5, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 100, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 101, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 102, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 103, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 104, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 200, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 201, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 202, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 203, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 204, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 300, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 301, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 302, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 303, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 304, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 400, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 401, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 402, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 403, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 404, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 500, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 501, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 502, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 503, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableRowCell` VALUES(0, 504, NULL, NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-REPLACE INTO `ContentLayerTheme` VALUES('PullersGreen', 'Tier8-PresentationLayer/PullersGreen/Settings.css', 'Tier8-PresentationLayer/PullersGreen/TextSettings.css', 'Tier8-PresentationLayer/PullersGreen/Menus.css', 'Tier8-PresentationLayer/PullersGreen/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/PullersGreen/SettingsIE6.css', 'Tier8-PresentationLayer/PullersGreen/MenuSettingsIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/PullersGreen/MenuSettingsIE7.css', 'Tier8-PresentationLayer/PullersGreen/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
-REPLACE INTO `ContentLayerTheme` VALUES('PullersRetro', 'Tier8-PresentationLayer/PullersRetro/Menus.css', 'Tier8-PresentationLayer/PullersRetro/MenuSettings.css', 'Tier8-PresentationLayer/PullersRetro/Settings.css', 'Tier8-PresentationLayer/PullersRetro/TextSettings.css', 'Tier8-PresentationLayer/PullersRetro/style_sheet.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/PullersRetro/MenuSettingsIE6.css', 'Tier8-PresentationLayer/PullersRetro/style_sheetIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/PullersRetro/MenuSettingsIE7.css', 'Tier8-PresentationLayer/PullersRetro/style_sheetIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
-REPLACE INTO `ContentLayerTheme` VALUES('ComputerAidBlue', 'Tier8-PresentationLayer/ComputerAidBlue/Settings.css', 'Tier8-PresentationLayer/ComputerAidBlue/TextSettings.css', 'Tier8-PresentationLayer/ComputerAidBlue/Menus.css', 'Tier8-PresentationLayer/ComputerAidBlue/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/ComputerAidBlue/SettingsIE6.css', 'Tier8-PresentationLayer/ComputerAidBlue/MenuSettingsIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/ComputerAidBlue/MenuSettingsIE7.css', 'Tier8-PresentationLayer/ComputerAidBlue/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
-REPLACE INTO `ContentLayerTheme` VALUES('NeoMightBlue', 'Tier8-PresentationLayer/NeoMightBlue/Settings.css', 'Tier8-PresentationLayer/NeoMightBlue/TextSettings.css', 'Tier8-PresentationLayer/NeoMightBlue/Menus.css', 'Tier8-PresentationLayer/NeoMightBlue/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/NeoMightBlue/MenuSettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
-REPLACE INTO `ContentLayerTheme` VALUES('CaseyRed', 'Tier8-PresentationLayer/CaseyRed/Settings.css', 'Tier8-PresentationLayer/CaseyRed/TextSettings.css', 'Tier8-PresentationLayer/CaseyRed/Menus.css', 'Tier8-PresentationLayer/CaseyRed/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/CaseyRed/SettingsIE6.css', 'Tier8-PresentationLayer/CaseyRed/MenuSettingsIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/CaseyRed/MenuSettingsIE7.css', 'Tier8-PresentationLayer/CaseyRed/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
-REPLACE INTO `ContentLayerTheme` VALUES('CountryPane', 'Tier8-PresentationLayer/CountryPane/Settings.css', 'Tier8-PresentationLayer/CountryPane/TextSettings.css', 'Tier8-PresentationLayer/CountryPane/Menus.css', 'Tier8-PresentationLayer/CountryPane/MenuSettings.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Tier8-PresentationLayer/CountryPane/SettingsIE6.css', 'Tier8-PresentationLayer/CountryPane/MenuSettingsIE6.css', NULL, NULL, NULL, 'Tier8-PresentationLayer/CountryPane/MenuSettingsIE7.css', 'Tier8-PresentationLayer/CountryPane/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Disable');
+REPLACE INTO `XhtmlTableTFoot` VALUES(0, 1, NULL, 'Cell', 'XhtmlTableTFootContent', 1, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 
-DELETE FROM `ContentLayerTheme` WHERE CONVERT(`ContentLayerTheme`.`ThemeName` USING utf8) = 'CaseyBlue' LIMIT 1;
+REPLACE INTO `XhtmlTableTFootCell` VALUES(0, 1, 'Footer Column 1', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootCell` VALUES(0, 2, 'Footer Column 2', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootCell` VALUES(0, 3, 'Footer Column 3', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootCell` VALUES(0, 4, 'Footer Column 4', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootCell` VALUES(0, 5, 'Footer Column 5', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+REPLACE INTO `XhtmlTableTFootContent` VALUES(0, 1, NULL, 'Cell', 'XhtmlTableTFootCell', 1, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootContent` VALUES(0, 2, NULL, 'Cell', 'XhtmlTableTFootCell', 2, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootContent` VALUES(0, 3, NULL, 'Cell', 'XhtmlTableTFootCell', 3, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootContent` VALUES(0, 4, NULL, 'Cell', 'XhtmlTableTFootCell', 4, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTFootContent` VALUES(0, 5, NULL, 'Cell', 'XhtmlTableTFootCell', 5, 'False', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+REPLACE INTO `XhtmlTableTHead` VALUES(0, 1, NULL, 'Header', 'XhtmlTableTHeadContent', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+REPLACE INTO `XhtmlTableTHeadContent` VALUES(0, 1, NULL, 'Header', 'XhtmlTableTHeadHeader', 1, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadContent` VALUES(0, 2, NULL, 'Header', 'XhtmlTableTHeadHeader', 2, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadContent` VALUES(0, 3, NULL, 'Header', 'XhtmlTableTHeadHeader', 3, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadContent` VALUES(0, 4, NULL, 'Header', 'XhtmlTableTHeadHeader', 4, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadContent` VALUES(0, 5, NULL, 'Header', 'XhtmlTableTHeadHeader', 5, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+REPLACE INTO `XhtmlTableTHeadHeader` VALUES(0, 1, 'Column 1', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadHeader` VALUES(0, 2, 'Column 2', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadHeader` VALUES(0, 3, 'Column 3', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadHeader` VALUES(0, 4, 'Column 4', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `XhtmlTableTHeadHeader` VALUES(0, 5, 'Column 5', NULL, 'center', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+INSERT INTO `AdministratorFormValidation` (`PageID`, `FormFieldName`, `FormFieldAttribute`, `FormFieldMinLength`, `FormFieldMaxLength`, `FormFieldMinValue`, `FormFieldMaxValue`) VALUES ('203', 'TableID', 'AlphaNum', NULL, NULL, NULL, NULL);
+
+INSERT INTO `AdministratorFormFieldSet` (`PageID`, `ObjectID`, `StopObjectID`, `ContainerObjectType`, `ContainerObjectTypeName`, `ContainerObjectID`, `FormFieldSetTextStartTag`, `FormFieldSetTextEndTag`, `FormFieldSetText`, `FormFieldSetTextDynamic`, `FormFieldSetTextTableName`, `FormFieldSetTextField`, `FormFieldSetTextPageID`, `FormFieldSetTextObjectID`, `FormFieldSetTextRevisionID`, `FormFieldSetClass`, `FormFieldSetDir`, `FormFieldSetID`, `FormFieldSetLang`, `FormFieldSetStyle`, `FormFieldSetTitle`, `FormFieldSetXMLLang`, `Enable/Disable`, `Status`) VALUES ('203', '20', '99', 'Input', 'AdministratorFormInput', '1', NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormInput` VALUES(203, 1, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TableID', 'false', NULL, NULL, NULL, NULL, NULL, 'readonly', NULL, NULL, 'hidden', NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+-- XHTML FLASH AND SIMPLEVIEWER UPDATE TABLES
+
+ALTER TABLE `XMLSimpleViewerLookup` ADD `XMLSimpleViewerGalleryWidth` INT(3) NULL AFTER `XMLSimpleViewerGalleryStyle`, ADD `XMLSimpleViewerGalleryHeight` VARCHAR(4) NULL AFTER `XMLSimpleViewerGalleryWidth`;
+ALTER TABLE `XMLSimpleViewerLookup` ADD `XMLSimpleViewerThumbWidth` INT(3) NULL AFTER `XMLSimpleViewerThumbRows`, ADD `XMLSimpleViewerThumbHeight` INT(3) NULL AFTER `XMLSimpleViewerThumbWidth`, ADD `XMLSimpleViewerThumbQuality` INT(3) NULL AFTER `XMLSimpleViewerThumbHeight`;
+ALTER TABLE `XMLSimpleViewerLookup` ADD `XMLSimpleViewerImageQuality` INT(3) NULL AFTER `XMLSimpleViewerShowFullscreenButton`;
+
+ALTER TABLE `Flash` ADD `Quality` VARCHAR(10) NULL AFTER `AllowScriptAccess`;
+
+ALTER TABLE `ContentLayer` CHANGE `ObjectTypeName` `ObjectTypeName` ENUM('content','bottompanel2','toppanel2','picture','table','form','list','flash','news','header','footer','background','contentdummy','headerpanel1','mainmenu','adpanel1','ad','notice') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'content';
+
+ALTER TABLE `Content` CHANGE `ContainerObjectType` `ContainerObjectType` ENUM('XhtmlContent','XhtmlPicture','XhtmlTable','XhtmlContentForm','XhtmlUnorderedList','XhtmlFlash','XhtmlNews','XhtmlMenu','XhtmlCalendarTable','XhtmlNewsStories','XhtmlForm','XhtmlSimpleViewer','XhtmlFlashJWPlayer') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `ContainerObjectTypeName` `ContainerObjectTypeName` ENUM('content','picture','newspicture','table','contentform','list','menulist','flash','adpicture1','adpanel1','calendar','news','form','simpleviewer','flashjwplayer') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'content';
+REPLACE INTO `ContentLayerModules` VALUES('XhtmlFlashJWPlayer', 'flashjwplayer', 'Modules/Tier6ContentLayer/User/XhtmlFlashJWPlayer', NULL, 'false', 'ClassXhtmlFlashJWPlayer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
+
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 1, NULL, 'Legend', 'AdministratorFormLegend', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 2, NULL, 'Label', 'AdministratorFormLabel', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 3, NULL, 'Select', 'AdministratorFormSelect', 1, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 4, NULL, 'Label', 'AdministratorFormLabel', 2, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 5, NULL, 'Select', 'AdministratorFormSelect', 1000000, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 6, NULL, 'Label', 'AdministratorFormLabel', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormFieldSet` VALUES(207, 7, NULL, 'Select', 'AdministratorFormSelect', 1000003, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormLabel` VALUES(207, 1, 'Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(207, 2, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormLabel` VALUES(207, 3, 'Status', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'BodyText ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormLegend` VALUES(207, 1, 'Enable / Disable Table Content', 'false', NULL, NULL, NULL, NULL, NULL, NULL, 'BodyHeading', 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000000, 'Enable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000001, 'Disable', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000003, 'Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000004, 'Not-Approved', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000005, 'Spam', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormOption` VALUES(207, 1000006, 'Pending', 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 999999, 999999, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000000, 1000002, NULL, 'Option', 'AdministratorFormOption', 1000000, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000001, 1000002, NULL, 'Option', 'AdministratorFormOption', 1000001, NULL, NULL, 'EnableDisable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000002, 1000002, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000003, 1000007, NULL, 'Option', 'AdministratorFormOption', 1000003, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000004, 1000007, NULL, 'Option', 'AdministratorFormOption', 1000004, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000005, 1000007, NULL, 'Option', 'AdministratorFormOption', 1000005, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000006, 1000007, NULL, 'Option', 'AdministratorFormOption', 1000006, NULL, NULL, 'Status', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', NULL, 'en-us', NULL, NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormSelect` VALUES(207, 1000007, 1000007, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 1, 'FieldSet', 'AdministratorFormFieldSet', 1, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `AdministratorFormTableListing` VALUES(207, 2, 'Button', 'AdministratorFormButton', 1, NULL, NULL, NULL, 'Enable', 'Approved');
 

@@ -13,7 +13,7 @@
 	position: relative;
 	background: url(TemplateImages/Main-Menu-Top.png);
 	width: 150px;
-	height: 18px;
+	height: 13px;
 	top: 10px;
 }
 
@@ -32,7 +32,7 @@
 	position: relative;
 	background: url(TemplateImages/Main-Menu-Bottom.png);
 	width: 150px;
-	height: 19px;
+	height: 13px;
 	top: -6px;
 }
 
@@ -42,18 +42,18 @@
 }
 
 .main-menu a:link {
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: none;
 }
 
 .main-menu a:visited {
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: none;
 }
 
 .main-menu a:hover {
 	text-decoration: none;
-	color: #FFCC00;
+	color: #FFFFFF;
 }
 
 .main-menu a:active {
@@ -88,8 +88,8 @@
 .MenuLiSubFinal {
 	background: url(TemplateImages/Main-Menu-SubMenu-Bottom.png);
 	background-repeat: no-repeat;
-	background-position: bottom;
-	min-height: 64px;
+	background-position: top;
+	min-height: 20px;
 }
 
 .MenuLiSubRoot {
@@ -101,12 +101,12 @@
 	top: -20px;
 	background: url(TemplateImages/Main-Menu-SubMenu-Top.png);
 	background-repeat: no-repeat;
-	background-position: top;
+	background-position: bottom;
 	padding-left: 0px;
 	padding-right: 10px;
 	left: 80px;
 	width: 150px;
-	height: auto;
+	height: 24px;
 	/*z-index: 10;*/
 }
 

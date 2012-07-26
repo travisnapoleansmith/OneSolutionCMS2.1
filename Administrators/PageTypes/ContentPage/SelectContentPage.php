@@ -73,6 +73,10 @@
 	$_SESSION['POST']['FilteredInput']['Heading'] = $ContentPage[0]['Heading'];
 	$_SESSION['POST']['FilteredInput']['Content'] = $ContentPage[0]['Content'];
 	
+	/*if ($ContentPage[0]['ContentStartTag'] == NULL) {
+		$_SESSION['POST']['FilteredInput']['RawData'][1] = 1;
+	}*/
+	
 	$_SESSION['POST']['FilteredInput']['Priority'] = $Sitemap[0]['Priority'];
 	$_SESSION['POST']['FilteredInput']['Frequency'] = ucfirst($Sitemap[0]['ChangeFreq']);
 	

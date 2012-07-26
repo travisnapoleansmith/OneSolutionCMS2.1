@@ -215,29 +215,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $FormLegendEnableDisable = array();
 	protected $FormLegendStatus = array();
 	
-	// Xhtml Form Select
-	protected $FormSelectPageID = array();
-	protected $FormSelectObjectID = array();
-	protected $FormSelectStopObjectID = array();
-	protected $FormSelectContinueObjectID = array();
-	protected $FormSelectContainerObjectType = array();
-	protected $FormSelectContainerObjectTypeName = array();
-	protected $FormSelectContainerObjectID = array();
-	
-	protected $FormSelectDisabled = array();
-	protected $FormSelectMultiple = array();
-	
-	// Xhtml Form Select Name
-	protected $FormSelectName = array();
-	protected $FormSelectNameDynamic = array();
-	protected $FormSelectNameTableName = array();
-	protected $FormSelectNameField = array();
-	protected $FormSelectNamePageID = array();
-	protected $FormSelectNameObjectID = array();
-	protected $FormSelectNameRevisionID = array();
-	
-	protected $FormSelectSize = array();
-	
 	// Xhtml Form Select Standard Attributes
 	protected $FormSelectClass = array();
 	protected $FormSelectDir = array();
@@ -250,41 +227,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	
 	protected $FormSelectEnableDisable = array();
 	protected $FormSelectStatus = array();
-	
-	// Xhtml Form Option 
-	protected $FormOptionPageID = array();
-	protected $FormOptionObjectID = array();
-	
-	// Xhtml Form Option Text
-	protected $FormOptionText = array();
-	protected $FormOptionTextDynamic = array();
-	protected $FormOptionTextTableName = array();
-	protected $FormOptionTextField = array();
-	protected $FormOptionTextPageID = array();
-	protected $FormOptionTextObjectID = array();
-	protected $FormOptionTextRevisionID = array();
-	
-	protected $FormOptionDisabled = array();
-	
-	// Xhtml Form Option Label
-	protected $FormOptionLabel = array();
-	protected $FormOptionLabelDynamic = array();
-	protected $FormOptionLabelTableName = array();
-	protected $FormOptionLabelField = array();
-	protected $FormOptionLabelPageID = array();
-	protected $FormOptionLabelObjectID = array();
-	protected $FormOptionLabelRevisionID = array();
-	
-	protected $FormOptionSelected = array();
-	
-	// Xhtml Form Option Value
-	protected $FormOptionValue = array();
-	protected $FormOptionValueDynamic = array();
-	protected $FormOptionValueTableName = array();
-	protected $FormOptionValueField = array();
-	protected $FormOptionValuePageID = array();
-	protected $FormOptionValueObjectID = array();
-	protected $FormOptionValueRevisionID = array();
 	
 	// Xhtml Form Option Standard Attributes
 	protected $FormOptionClass = array();
@@ -373,6 +315,20 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	protected $FormButtonTabIndex = array();
 	protected $FormButtonTitle = array();
 	protected $FormButtonXMLLang = array();
+	
+	// Xhtml Form Button Event Attributes
+	protected $FormButtonJavascriptOnBlur = array();
+	protected $FormButtonJavascriptOnClick = array();
+	protected $FormButtonJavascriptOnDblClick = array();
+	protected $FormButtonJavascriptOnFocus = array();
+	protected $FormButtonJavascriptOnMouseDown = array();
+	protected $FormButtonJavascriptOnMouseMove = array();
+	protected $FormButtonJavascriptOnMouseOut = array();
+	protected $FormButtonJavascriptOnMouseOver = array();
+	protected $FormButtonJavascriptOnMouseUp = array();
+	protected $FormButtonJavascriptOnKeyDown = array();
+	protected $FormButtonJavascriptOnKeyPress = array();
+	protected $FormButtonJavascriptOnKeyUp = array();
 	
 	protected $FormButtonEnableDisable = array();
 	protected $FormButtonStatus = array();
@@ -624,6 +580,19 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		array_push($this->FormButtonTitle, $this->FormLookupTableName['FormButton'][$i]['FormButtonTitle']);
 		array_push($this->FormButtonXMLLang, $this->FormLookupTableName['FormButton'][$i]['FormButtonXMLLang']);
 		
+		array_push($this->FormButtonJavascriptOnBlur, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnBlur']);
+		array_push($this->FormButtonJavascriptOnClick, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnClick']);
+		array_push($this->FormButtonJavascriptOnDblClick, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnDblClick']);
+		array_push($this->FormButtonJavascriptOnFocus, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnFocus']);
+		array_push($this->FormButtonJavascriptOnMouseDown, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnMouseDown']);
+		array_push($this->FormButtonJavascriptOnMouseMove, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnMouseMove']);
+		array_push($this->FormButtonJavascriptOnMouseOut, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnMouseOut']);
+		array_push($this->FormButtonJavascriptOnMouseOver, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnMouseOver']);
+		array_push($this->FormButtonJavascriptOnMouseUp, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnMouseUp']);
+		array_push($this->FormButtonJavascriptOnKeyDown, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnKeyDown']);
+		array_push($this->FormButtonJavascriptOnKeyPress, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnKeyPress']);
+		array_push($this->FormButtonJavascriptOnKeyUp, $this->FormLookupTableName['FormButton'][$i]['FormButtonJavascriptOnKeyUp']);
+		
 		array_push($this->FormButtonEnableDisable, $this->FormLookupTableName['FormButton'][$i]['Enable/Disable']);
 		array_push($this->FormButtonStatus, $this->FormLookupTableName['FormButton'][$i]['Status']);
 	}
@@ -763,37 +732,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	protected function processFormOption($i) {
-		array_push($this->FormOptionPageID, $this->FormLookupTableName['FormOption'][$i]['PageID']);
-		array_push($this->FormOptionObjectID, $this->FormLookupTableName['FormOption'][$i]['ObjectID']);
-		
-		array_push($this->FormOptionText, $this->FormLookupTableName['FormOption'][$i]['FormOptionText']);
-		array_push($this->FormOptionTextDynamic, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextDynamic']);
-		array_push($this->FormOptionTextTableName, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextTableName']);
-		array_push($this->FormOptionTextField, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextField']);
-		array_push($this->FormOptionTextPageID, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextPageID']);
-		array_push($this->FormOptionTextObjectID, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextObjectID']);
-		array_push($this->FormOptionTextRevisionID, $this->FormLookupTableName['FormOption'][$i]['FormOptionTextRevisionID']);
-		
-		array_push($this->FormOptionDisabled, $this->FormLookupTableName['FormOption'][$i]['FormOptionDisabled']);
-		
-		array_push($this->FormOptionLabel, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabel']);
-		array_push($this->FormOptionLabelDynamic, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelDynamic']);
-		array_push($this->FormOptionLabelTableName, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelTableName']);
-		array_push($this->FormOptionLabelField, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelField']);
-		array_push($this->FormOptionLabelPageID, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelPageID']);
-		array_push($this->FormOptionLabelObjectID, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelObjectID']);
-		array_push($this->FormOptionLabelRevisionID, $this->FormLookupTableName['FormOption'][$i]['FormOptionLabelRevisionID']);
-		
-		array_push($this->FormOptionSelected, $this->FormLookupTableName['FormOption'][$i]['FormOptionSelected']);
-		
-		array_push($this->FormOptionValue, $this->FormLookupTableName['FormOption'][$i]['FormOptionValue']);
-		array_push($this->FormOptionValueDynamic, $this->FormLookupTableName['FormOption'][$i]['FormOptionValueDynamic']);
-		array_push($this->FormOptionValueTableName, $this->FormLookupTableName['FormOption'][$i]['FormOptionValueTableName']);
-		array_push($this->FormOptionValueField, $this->FormLookupTableName['FormOption'][$i]['FormOptionValueField']);
-		array_push($this->FormOptionValuePageID, $this->FormLookupTableName['FormOption'][$i]['FormOptionValuePageID']);
-		array_push($this->FormOptionValueObjectID, $this->FormLookupTableName['FormOption'][$i]['FormOptionValueObjectID']);
-		array_push($this->FormOptionValueRevisionID, $this->FormLookupTableName['FormOption'][$i]['FormOptionValueRevisionID']);
-		
 		array_push($this->FormOptionClass, $this->FormLookupTableName['FormOption'][$i]['FormOptionClass']);
 		array_push($this->FormOptionDir, $this->FormLookupTableName['FormOption'][$i]['FormOptionDir']);
 		array_push($this->FormOptionID, $this->FormLookupTableName['FormOption'][$i]['FormOptionID']);
@@ -837,28 +775,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 	
 	protected function processFormSelect($i) {
-		array_push($this->FormSelectPageID, $this->FormLookupTableName['FormSelect'][$i]['PageID']);
-		array_push($this->FormSelectObjectID, $this->FormLookupTableName['FormSelect'][$i]['ObjectID']);
-		array_push($this->FormSelectStopObjectID, $this->FormLookupTableName['FormSelect'][$i]['StopObjectID']);
-		array_push($this->FormSelectContinueObjectID, $this->FormLookupTableName['FormSelect'][$i]['ContinueObjectID']);
-		
-		array_push($this->FormSelectContainerObjectType, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectType']);
-		array_push($this->FormSelectContainerObjectTypeName, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectTypeName']);
-		array_push($this->FormSelectContainerObjectID, $this->FormLookupTableName['FormSelect'][$i]['ContainerObjectID']);
-		
-		array_push($this->FormSelectDisabled, $this->FormLookupTableName['FormSelect'][$i]['FormSelectDisabled']);
-		array_push($this->FormSelectMultiple, $this->FormLookupTableName['FormSelect'][$i]['FormSelectMultiple']);
-		
-		array_push($this->FormSelectName, $this->FormLookupTableName['FormSelect'][$i]['FormSelectName']);
-		array_push($this->FormSelectNameDynamic, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameDynamic']);
-		array_push($this->FormSelectNameTableName, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameTableName']);
-		array_push($this->FormSelectNameField, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameField']);
-		array_push($this->FormSelectNamePageID, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNamePageID']);
-		array_push($this->FormSelectNameObjectID, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameObjectID']);
-		array_push($this->FormSelectNameRevisionID, $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameRevisionID']);
-		
-		array_push($this->FormSelectSize, $this->FormLookupTableName['FormSelect'][$i]['FormSelectSize']);
-		
 		array_push($this->FormSelectClass, $this->FormLookupTableName['FormSelect'][$i]['FormSelectClass']);
 		array_push($this->FormSelectDir, $this->FormLookupTableName['FormSelect'][$i]['FormSelectDir']);
 		array_push($this->FormSelectID, $this->FormLookupTableName['FormSelect'][$i]['FormSelectID']);
@@ -1567,11 +1483,46 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$flag = TRUE;
 				}
 				
+				if (current($FormFieldSetTextStartTag) != NULL) {
+					$Tag = current($FormFieldSetTextStartTag);
+					$Tag = str_replace('<', '', $Tag);
+					$Tag = str_replace('>', '', $Tag);
+					$this->Writer->startElement($Tag);
+					if (current($FormFieldSetClass) != NULL) {
+						$this->Writer->writeAttribute('class', current($FormFieldSetClass));
+					}
+					
+					if (current($FormFieldSetDir) != NULL){
+						$this->Writer->writeAttribute('dir', current($FormFieldSetDir));
+					}
+					
+					if (current($FormFieldSetID) != NULL){
+						$this->Writer->writeAttribute('id', current($FormFieldSetID));
+					}
+					
+					if (current($FormFieldSetLang) != NULL) {
+						$this->Writer->writeAttribute('lang', current($FormFieldSetLang));
+					}
+					
+					if (current($FormFieldSetStyle) != NULL) {
+						$this->Writer->writeAttribute('style', current($FormFieldSetStyle));
+					}
+					
+					if (current($FormFieldSetTitle) != NULL) {
+						$this->Writer->writeAttribute('title', current($FormFieldSetTitle));
+					}
+					
+					if (current($FormFieldSetXMLLang) != NULL) {
+						$this->Writer->writeAttribute('xmllang', current($FormFieldSetXMLLang));
+					}
+				}
+				
 				if (current($FormFieldSetPageID) == $this->PageID) {
 						$key = key($FormFieldSetObjectID);
 						$this->resetFormFieldSet($key);
-						$this->ProcessArrayStandardAttribute('FormFieldSet');
-						
+						if (current($FormFieldSetTextStartTag) == NULL) {
+							$this->ProcessArrayStandardAttribute('FormFieldSet');
+						}
 						if (current($FormFieldSetText)) {
 							$this->createTextArea('FormFieldSet', 'Text');
 						} else if (current($FormFieldSetTextDynamic)) {
@@ -1625,6 +1576,9 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				
 			}
 			
+			if (current($FormFieldSetTextEndTag) != NULL) {
+				$this->Writer->fullEndElement(); // ENDS START TAG
+			}
 			if (current($FormFieldSetStopObjectID)) {
 				if (current($FormFieldSetObjectID) == current($FormFieldSetStopObjectID)) {
 					end($FormFieldSetObjectID);
@@ -1847,251 +1801,93 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		
 	}
 	
-	protected function buildFormSelect($objectid) {
-		reset($this->FormLookupTableName['FormSelect']);
+	protected function buildFormSelect($ObjectID) {
+		$Lookup = NULL;
+		$Data = array();
+		$StopObject = NULL;
 		
-		reset($this->FormSelectPageID);
-		reset($this->FormSelectObjectID);
-		reset($this->FormSelectStopObjectID);
-		reset($this->FormSelectContinueObjectID);
-		reset($this->FormSelectContainerObjectType);
-		reset($this->FormSelectContainerObjectTypeName);
-		reset($this->FormSelectContainerObjectID);
-		
-		reset($this->FormSelectDisabled);
-		reset($this->FormSelectMultiple);
-		
-		reset($this->FormSelectName);
-		reset($this->FormSelectNameDynamic);
-		reset($this->FormSelectNameTableName);
-		reset($this->FormSelectNameField);
-		reset($this->FormSelectNamePageID);
-		reset($this->FormSelectNameObjectID);
-		reset($this->FormSelectNameRevisionID);
-		
-		reset($this->FormSelectSize);
-		
-		reset($this->FormSelectClass);
-		reset($this->FormSelectDir);
-		reset($this->FormSelectID);
-		reset($this->FormSelectLang);
-		reset($this->FormSelectStyle);
-		reset($this->FormSelectTabIndex);
-		reset($this->FormSelectTitle);
-		reset($this->FormSelectXMLLang);
-		
-		reset($this->FormSelectEnableDisable);
-		reset($this->FormSelectStatus);
-		
-		$flag = NULL;
-		
-		while (current($this->FormSelectObjectID) != $objectid) {
-			next($this->FormLookupTableName['FormSelect']);
+		foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
+			if ($Lookup === NULL) {
+				if ($Info['ObjectID'] == $ObjectID) {
+					$Lookup = $Key;
+				}
+			}
 			
-			next($this->FormSelectPageID);
-			next($this->FormSelectObjectID);
-			next($this->FormSelectStopObjectID);
-			next($this->FormSelectContinueObjectID);
-			next($this->FormSelectContainerObjectType);
-			next($this->FormSelectContainerObjectTypeName);
-			next($this->FormSelectContainerObjectID);
-			
-			next($this->FormSelectDisabled);
-			next($this->FormSelectMultiple);
-			
-			next($this->FormSelectName);
-			next($this->FormSelectNameDynamic);
-			next($this->FormSelectNameTableName);
-			next($this->FormSelectNameField);
-			next($this->FormSelectNamePageID);
-			next($this->FormSelectNameObjectID);
-			next($this->FormSelectNameRevisionID);
-			
-			next($this->FormSelectSize);
-			
-			next($this->FormSelectClass);
-			next($this->FormSelectDir);
-			next($this->FormSelectID);
-			next($this->FormSelectLang);
-			next($this->FormSelectStyle);
-			next($this->FormSelectTabIndex);
-			next($this->FormSelectTitle);
-			next($this->FormSelectXMLLang);
-			
-			next($this->FormSelectEnableDisable);
-			next($this->FormSelectStatus);
+			if ($Lookup !== NULL) {
+				$StopObjectID = $Info['StopObjectID'];
+				if ($Info['ObjectID'] == $StopObjectID) {
+					$StopObject = $Key;
+					break;
+				}
+			}
 		}
 		
-		while (isset($this->FormSelectObjectID[key($this->FormSelectObjectID)])) {
-			if (current($this->FormSelectEnableDisable) == 'Enable' && current($this->FormSelectStatus) == 'Approved') {
-				if (current($this->FormSelectObjectID) == $objectid && current($this->FormSelectPageID) == $this->PageID) {
-					$this->Writer->startElement('select');
-					$flag = TRUE;
+		foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
+			if ($Key >= $Lookup) {
+				if ($Key != $StopObject) {
+					if ($Lookup !== NULL) {
+						$Data[$Key] = $Info;
+						
+					}
+				} else {
+					$Data[$Key] = $Info;
+					if ($StopObject !== NULL) {
+						break;
+					}
+				}
+			}
+		}
+		
+		if (isset($Data)) { 
+			$EnableDisable = $this->FormLookupTableName['FormSelect'][$Lookup]['Enable/Disable'];
+			$Status = $this->FormLookupTableName['FormSelect'][$Lookup]['Status'];
+			
+			if ($EnableDisable == 'Enable' && $Status == 'Approved') {
+				$this->Writer->startElement('select');
+				$this->ProcessArrayStandardAttribute('FormSelect');
+				if ($this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectDisabled']) {
+					$this->Writer->writeAttribute('disabled', $this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectDisabled']);
 				}
 				
-				if (current($this->FormSelectPageID) == $this->PageID) {
-					$this->ProcessArrayStandardAttribute('FormSelect');
-					
-					if (current($this->FormSelectDisabled)) {
-						$this->Writer->writeAttribute('disabled', current($this->FormSelectDisabled));
+				if ($this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectMultiple']) {
+					$this->Writer->writeAttribute('multiple', $this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectMultiple']);
+				}
+				
+				if ($this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectSize']) {
+					$this->Writer->writeAttribute('size', $this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectSize']);
+				}
+				
+				if ($this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectName']) {
+					$this->Writer->writeAttribute('name', $this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectName']);
+				} else if ($this->FormLookupTableName['FormSelect'][$Lookup]['FormSelectNameDynamic']) {
+					$TableName = $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameTableName'];
+					$Field = $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameField'];
+					$PageID = $this->FormLookupTableName['FormSelect'][$i]['FormSelectNamePageID'];
+					$ObjectID = $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameObjectID'];
+					$RevisionID = $this->FormLookupTableName['FormSelect'][$i]['FormSelectNameRevisionID'];
+					$hold = $this->getDynamicElement ($TableName, $Field, $PageID, $ObjectID, $RevisionID);
+					if ($hold) {
+						$this->Writer->writeAttribute('name', $hold);
 					}
+				}
+				
+				foreach ($Data as $Key => $Info) {
+					$SelectEnableDisable = $Info['Enable/Disable'];
+					$SelectStatus = $Info['Status'];
 					
-					if (current($this->FormSelectMultiple)) {
-						$this->Writer->writeAttribute('multiple', current($this->FormSelectMultiple));
-					}
-					
-					if (current($this->FormSelectSize)) {
-						$this->Writer->writeAttribute('size', current($this->FormSelectSize));
-					}
-					
-					if (current($this->FormSelectName)) {
-						$this->Writer->writeAttribute('name', current($this->FormSelectName));
-					} else if (current($this->FormSelectNameDynamic)) {
-						$tablename = current($this->FormSelectNameTableName);
-						$field = current($this->FormSelectNameField);
-						$pageid = current($this->FormSelectNamePageID);
-						$objectid = current($this->FormSelectNameObjectID);
-						$revisionid = current($this->FormSelectNameRevisionID);
-						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
-						if ($hold) {
-							$this->Writer->writeAttribute('name', $hold);
+					if ($SelectEnableDisable == 'Enable' && $SelectStatus == 'Approved') {
+						if ($Info['ContainerObjectType'] == 'OptGroup') {
+							$this->buildFormOptGroup($Info['ContainerObjectID'], $Info['FormSelectName']);
+						} else if ($Info['ContainerObjectType'] == 'Option') {
+							$this->buildFormOption($Info['ContainerObjectID'], $Info['FormSelectName']);
+						} else if ($Info['ContainerObjectTypeName']) {
+							$this->buildObjects($Info['ContainerObjectID'], 1, $Info['ContainerObjectTypeName'], $Info['ContainerObjectType']);
 						}
-					}
-					if (current($this->FormSelectContainerObjectType) == 'OptGroup' && current($this->FormSelectContainerObjectType) == 'OptGroup') {
-						$this->buildFormOptGroup(current($this->FormSelectContainerObjectID), current($this->FormSelectName));
-					} else if (current($this->FormSelectContainerObjectType) == 'Option' && current($this->FormSelectContainerObjectType) == 'Option') {
-						$this->buildFormOption(current($this->FormSelectContainerObjectID), current($this->FormSelectName));
-					} else if (current($this->FormSelectContainerObjectType)) {
-						$this->buildObjects(current($this->FormSelectContainerObjectID), 1, current($this->FormSelectContainerObjectTypeName), current($this->FormSelectContainerObjectType));
+						
 					}
 				}
-				
-			} else if ($objectid == 1) {
-				$objectid++;
+				$this->Writer->endElement(); // ENDS SELECT
 			}
-			
-			if (current($this->FormSelectStopObjectID)) {
-				if (current($this->FormSelectObjectID) == current($this->FormSelectStopObjectID)) {
-					end($this->FormSelectObjectID);
-				}
-			}
-			
-			if (current($this->FormSelectContinueObjectID)) {
-				$ContinueObjectID = current($this->FormSelectContinueObjectID);
-				$ObjectID = current($this->FormSelectObjectID);
-				
-				reset($this->FormLookupTableName['FormSelect']);
-				
-				reset($this->FormSelectPageID);
-				reset($this->FormSelectObjectID);
-				reset($this->FormSelectStopObjectID);
-				reset($this->FormSelectContinueObjectID);
-				reset($this->FormSelectContainerObjectType);
-				reset($this->FormSelectContainerObjectTypeName);
-				reset($this->FormSelectContainerObjectID);
-				
-				reset($this->FormSelectDisabled);
-				reset($this->FormSelectMultiple);
-				
-				reset($this->FormSelectName);
-				reset($this->FormSelectNameDynamic);
-				reset($this->FormSelectNameTableName);
-				reset($this->FormSelectNameField);
-				reset($this->FormSelectNamePageID);
-				reset($this->FormSelectNameObjectID);
-				reset($this->FormSelectNameRevisionID);
-				
-				reset($this->FormSelectSize);
-				
-				reset($this->FormSelectClass);
-				reset($this->FormSelectDir);
-				reset($this->FormSelectID);
-				reset($this->FormSelectLang);
-				reset($this->FormSelectStyle);
-				reset($this->FormSelectTabIndex);
-				reset($this->FormSelectTitle);
-				reset($this->FormSelectXMLLang);
-				
-				reset($this->FormSelectEnableDisable);
-				reset($this->FormSelectStatus);
-				
-				while (current($this->FormSelectObjectID) != $ContinueObjectID) {
-					next($this->FormLookupTableName['FormSelect']);
-					
-					next($this->FormSelectPageID);
-					next($this->FormSelectObjectID);
-					next($this->FormSelectStopObjectID);
-					next($this->FormSelectContinueObjectID);
-					next($this->FormSelectContainerObjectType);
-					next($this->FormSelectContainerObjectTypeName);
-					next($this->FormSelectContainerObjectID);
-					
-					next($this->FormSelectDisabled);
-					next($this->FormSelectMultiple);
-					
-					next($this->FormSelectName);
-					next($this->FormSelectNameDynamic);
-					next($this->FormSelectNameTableName);
-					next($this->FormSelectNameField);
-					next($this->FormSelectNamePageID);
-					next($this->FormSelectNameObjectID);
-					next($this->FormSelectNameRevisionID);
-					
-					next($this->FormSelectSize);
-					
-					next($this->FormSelectClass);
-					next($this->FormSelectDir);
-					next($this->FormSelectID);
-					next($this->FormSelectLang);
-					next($this->FormSelectStyle);
-					next($this->FormSelectTabIndex);
-					next($this->FormSelectTitle);
-					next($this->FormSelectXMLLang);
-					
-					next($this->FormSelectEnableDisable);
-					next($this->FormSelectStatus);
-				}
-
-			} else {
-				next($this->FormLookupTableName['FormSelect']);
-				
-				next($this->FormSelectPageID);
-				next($this->FormSelectObjectID);
-				next($this->FormSelectStopObjectID);
-				next($this->FormSelectContinueObjectID);
-				next($this->FormSelectContainerObjectType);
-				next($this->FormSelectContainerObjectTypeName);
-				next($this->FormSelectContainerObjectID);
-				
-				next($this->FormSelectDisabled);
-				next($this->FormSelectMultiple);
-				
-				next($this->FormSelectName);
-				next($this->FormSelectNameDynamic);
-				next($this->FormSelectNameTableName);
-				next($this->FormSelectNameField);
-				next($this->FormSelectNamePageID);
-				next($this->FormSelectNameObjectID);
-				next($this->FormSelectNameRevisionID);
-				
-				next($this->FormSelectSize);
-				
-				next($this->FormSelectClass);
-				next($this->FormSelectDir);
-				next($this->FormSelectID);
-				next($this->FormSelectLang);
-				next($this->FormSelectStyle);
-				next($this->FormSelectTabIndex);
-				next($this->FormSelectTitle);
-				next($this->FormSelectXMLLang);
-				
-				next($this->FormSelectEnableDisable);
-				next($this->FormSelectStatus);
-			}
-		}
-				
-		if ($flag) {
-			$this->Writer->endElement(); // ENDS SELECT
 		}
 	}
 	
@@ -2137,6 +1933,19 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		reset($this->FormButtonTitle);
 		reset($this->FormButtonXMLLang);
 		
+		reset($this->FormButtonJavascriptOnBlur);
+		reset($this->FormButtonJavascriptOnClick);
+		reset($this->FormButtonJavascriptOnDblClick);
+		reset($this->FormButtonJavascriptOnFocus);
+		reset($this->FormButtonJavascriptOnMouseDown);
+		reset($this->FormButtonJavascriptOnMouseMove);
+		reset($this->FormButtonJavascriptOnMouseOut);
+		reset($this->FormButtonJavascriptOnMouseOver);
+		reset($this->FormButtonJavascriptOnMouseUp);
+		reset($this->FormButtonJavascriptOnKeyDown);
+		reset($this->FormButtonJavascriptOnKeyPress);
+		reset($this->FormButtonJavascriptOnKeyUp);
+		
 		reset($this->FormButtonEnableDisable);
 		reset($this->FormButtonStatus);
 		
@@ -2177,6 +1986,58 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						if ($hold) {
 							$this->Writer->writeAttribute('value', $hold);
 						}
+					}
+					
+					if (current($this->FormButtonType)) {
+						$this->Writer->writeAttribute('type', current($this->FormButtonType));
+					}
+					
+					if (current($this->FormButtonJavascriptOnBlur)) {
+						$this->Writer->writeAttribute('onblur', current($this->FormButtonJavascriptOnBlur));
+					}
+					
+					if (current($this->FormButtonJavascriptOnClick)) {
+						$this->Writer->writeAttribute('onclick', current($this->FormButtonJavascriptOnClick));
+					}
+					
+					if (current($this->FormButtonJavascriptOnDblClick)) {
+						$this->Writer->writeAttribute('ondblclick', current($this->FormButtonJavascriptOnDblClick));
+					}
+					
+					if (current($this->FormButtonJavascriptOnFocus)) {
+						$this->Writer->writeAttribute('onfocus', current($this->FormButtonJavascriptOnFocus));
+					}
+					
+					if (current($this->FormButtonJavascriptOnMouseDown)) {
+						$this->Writer->writeAttribute('onmousedown', current($this->FormButtonJavascriptOnMouseDown));
+					}
+					
+					if (current($this->FormButtonJavascriptOnMouseMove)) {
+						$this->Writer->writeAttribute('onmousemove', current($this->FormButtonJavascriptOnMouseMove));
+					}
+					
+					if (current($this->FormButtonJavascriptOnMouseOut)) {
+						$this->Writer->writeAttribute('onmouseout', current($this->FormButtonJavascriptOnMouseOut));
+					}
+					
+					if (current($this->FormButtonJavascriptOnMouseOver)) {
+						$this->Writer->writeAttribute('onmouseover', current($this->FormButtonJavascriptOnMouseOver));
+					}
+					
+					if (current($this->FormButtonJavascriptOnMouseUp)) {
+						$this->Writer->writeAttribute('onmouseup', current($this->FormButtonJavascriptOnMouseUp));
+					}
+					
+					if (current($this->FormButtonJavascriptOnKeyDown)) {
+						$this->Writer->writeAttribute('onkeydown', current($this->FormButtonJavascriptOnKeyDown));
+					}
+					
+					if (current($this->FormButtonJavascriptOnKeyPress)) {
+						$this->Writer->writeAttribute('onkeypress', current($this->FormButtonJavascriptOnKeyPress));
+					}
+					
+					if (current($this->FormButtonJavascriptOnKeyUp)) {
+						$this->Writer->writeAttribute('onkeyup', current($this->FormButtonJavascriptOnKeyUp));
 					}
 					
 					if (current($this->FormButtonText)) {
@@ -2241,120 +2102,95 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->FormButtonTitle);
 			next($this->FormButtonXMLLang);
 			
+			next($this->FormButtonJavascriptOnBlur);
+			next($this->FormButtonJavascriptOnClick);
+			next($this->FormButtonJavascriptOnDblClick);
+			next($this->FormButtonJavascriptOnFocus);
+			next($this->FormButtonJavascriptOnMouseDown);
+			next($this->FormButtonJavascriptOnMouseMove);
+			next($this->FormButtonJavascriptOnMouseOut);
+			next($this->FormButtonJavascriptOnMouseOver);
+			next($this->FormButtonJavascriptOnMouseUp);
+			next($this->FormButtonJavascriptOnKeyDown);
+			next($this->FormButtonJavascriptOnKeyPress);
+			next($this->FormButtonJavascriptOnKeyUp);
+			
 			next($this->FormButtonEnableDisable);
 			next($this->FormButtonStatus);
 		}
 	}
 	
-	protected function buildFormOption($objectid, $formselectname) {
-		reset($this->FormLookupTableName['FormOption']);
+	protected function buildFormOption($ObjectID, $FormSelectName) {
+		$Data = NULL;
 		
-		reset($this->FormOptionPageID);
-		reset($this->FormOptionObjectID);
+		foreach ($this->FormLookupTableName['FormOption'] as $Key => $Info) {
+			if ($Info['ObjectID'] == $ObjectID) {
+				$Data = $Info;
+				break;
+			}
+		}
 		
-		reset($this->FormOptionText);
-		reset($this->FormOptionTextDynamic);
-		reset($this->FormOptionTextTableName);
-		reset($this->FormOptionTextField);
-		reset($this->FormOptionTextPageID);
-		reset($this->FormOptionTextObjectID);
-		reset($this->FormOptionTextRevisionID);
-		
-		reset($this->FormOptionDisabled);
-		
-		reset($this->FormOptionLabel);
-		reset($this->FormOptionLabelDynamic);
-		reset($this->FormOptionLabelTableName);
-		reset($this->FormOptionLabelField);
-		reset($this->FormOptionLabelPageID);
-		reset($this->FormOptionLabelObjectID);
-		reset($this->FormOptionLabelRevisionID);
-		
-		reset($this->FormOptionSelected);
-		
-		reset($this->FormOptionValue);
-		reset($this->FormOptionValueDynamic);
-		reset($this->FormOptionValueTableName);
-		reset($this->FormOptionValueField);
-		reset($this->FormOptionValuePageID);
-		reset($this->FormOptionValueObjectID);
-		reset($this->FormOptionValueRevisionID);
-		
-		reset($this->FormOptionClass);
-		reset($this->FormOptionDir);
-		reset($this->FormOptionID);
-		reset($this->FormOptionLang);
-		reset($this->FormOptionStyle);
-		reset($this->FormOptionTitle);
-		reset($this->FormOptionXMLLang);
-		
-		reset($this->FormOptionEnableDisable);
-		reset($this->FormOptionStatus);
-		
-		$DestroyArray = array();
-		
-		// USED TO SORT OUT OPTIONS FOR MENU, NEEDS TO WORK WITH UPDATE PAGES
-		/*foreach($this->FormLookupTableName['FormOption'] as $Key => $Value) {
-			if ($Value['ObjectID'] == $objectid && $Value['PageID'] == $this->PageID) {
-			if ($Value['Enable/Disable'] == 'Enable' && $Value['Status'] == 'Approved') {
+		if (isset($Data)) { 
+			$EnableDisable = $Data['Enable/Disable'];
+			$Status = $Data['Status'];
+			
+			if ($EnableDisable == 'Enable' && $Status == 'Approved') {
 				$this->Writer->startElement('option');
-				
 				$this->ProcessArrayStandardAttribute('FormOption');
 				
-				if ($Value['FormOptionDisabled']) {
-					$this->Writer->writeAttribute('disabled', $Value['FormOptionDisabled']);
+				if ($Data['FormOptionDisabled']) {
+					$this->Writer->writeAttribute('disabled', $Data['FormOptionDisabled']);
 				}
 				
-				if ($Value['FormOptionLabel']) {
-					$this->Writer->writeAttribute('label', $Value['FormOptionLabel']);
-				} else if ($Value['FormOptionLabelDynamic']) {
-					$tablename = $Value['FormOptionLabelTableName'];
-					$field = $Value['FormOptionLabelField'];
-					$pageid = $Value['FormOptionLabelPageID'];
-					$objectid = $Value['FormOptionLabelObjectID'];
-					$revisionid = $Value['FormOptionLabelRevisionID'];
-					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+				if ($Data['FormOptionLabel']) {
+					$this->Writer->writeAttribute('label', $Data['FormOptionLabel']);
+				} else if ($Data['FormOptionLabelDynamic']) {
+					$TableName = $Data['FormOptionLabelTableName'];
+					$Field = $Data['FormOptionLabelField'];
+					$PageID = $Data['FormOptionLabelPageID'];
+					$ObjectID = $Data['FormOptionLabelObjectID'];
+					$RevisionID = $Data['FormOptionLabelRevisionID'];
+					$hold = $this->getDynamicElement ($TableName, $Field, $PageID, $ObjectID, $RevisionID);
 					if ($hold) {
 						$this->Writer->writeAttribute('label', $hold);
 					}
 				}
-				if (isset($this->FormSession[$formselectname])) {
-					$SessionInfo = $this->FormSession[$formselectname];
-					$CurrentInfo = current($this->FormOptionText);
-					
+				if (isset($this->FormSession[$FormSelectName])) {
+					$SessionInfo = $this->FormSession[$FormSelectName];
+					$CurrentInfo = $Data['FormOptionText'];
 					if ($SessionInfo == $CurrentInfo) {
-						$Value['FormOptionSelected'] = 'selected';
-						$DestroyArray[$Key] = $Value['FormOptionSelected'];
+						$Data['FormOptionSelected'] = 'selected';
+						$DestroyArray[$Key] = $Data['FormOptionSelected'];
 					}
 				}
 				
-				if ($Value['FormOptionSelected']) {
-					$this->Writer->writeAttribute('selected', $Value['FormOptionSelected']);
+				if ($Data['FormOptionSelected']) {
+					$this->Writer->writeAttribute('selected', $Data['FormOptionSelected']);
 				}
 				
-				if ($Value['FormOptionValue']) {
-					$this->Writer->writeAttribute('value', $Value['FormOptionValue']);
-				} else if ($Value['FormOptionValueDynamic']) {
-					$tablename = $Value['FormOptionValueTableName'];
-					$field = $Value['FormOptionValueField'];
-					$pageid = $Value['FormOptionValuePageID'];
-					$objectid = $Value['FormOptionValueObjectID'];
-					$revisionid = $Value['FormOptionValueRevisionID'];
-					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+				if ($Data['FormOptionValue']) {
+					$this->Writer->writeAttribute('value', $Data['FormOptionValue']);
+				} else if ($Data['FormOptionValueDynamic']) {
+					$TableName = $Data['FormOptionValueTableName'];
+					$Field = $Data['FormOptionValueField'];
+					$PageID = $Data['FormOptionValuePageID'];
+					$ObjectID = $Data['FormOptionValueObjectID'];
+					$RevisionID = $Data['FormOptionValueRevisionID'];
+					$hold = $this->getDynamicElement ($TableName, $Field, $PageID, $ObjectID, $RevisionID);
 					if ($hold) {
 						$this->Writer->writeAttribute('value', $hold);
 					}
 				}
 				
-				if ($Value['FormOptionText']) {
-					$this->Writer->text($Value['FormOptionText']);
-				} else if ($Value['FormOptionTextDynamic']) {
-					$tablename = $Value['FormOptionTextTableName'];
-					$field = $Value['FormOptionTextField'];
-					$pageid = $Value['FormOptionTextPageID'];
-					$objectid = $Value['FormOptionTextObjectID'];
-					$revisionid = $Value['FormOptionTextRevisionID'];
-					$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
+				if ($Data['FormOptionText']) {
+					$this->Writer->text($Data['FormOptionText']);
+				} else if ($Data['FormOptionTextDynamic']) {
+					$TableName = $Data['FormOptionTextTableName'];
+					$Field = $Data['FormOptionTextField'];
+					$PageID = $Data['FormOptionTextPageID'];
+					$ObjectID = $Data['FormOptionTextObjectID'];
+					$RevisionID = $Data['FormOptionTextRevisionID'];
+					$hold = $this->getDynamicElement ($TableName, $Field, $PageID, $ObjectID, $RevisionID);
 					$hold = $this->CreateWordWrap($hold, '    ');
 					if ($hold) {
 						$this->Writer->writeRaw("\n    ");
@@ -2363,133 +2199,11 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					}
 				}
 				
+				
 				$this->Writer->endElement(); // ENDS OPTION
 			}
-			}
-		}*/
-		
-		while (current($this->FormLookupTableName['FormOption'])) {
-			if (current($this->FormOptionObjectID) == $objectid && current($this->FormOptionPageID) == $this->PageID) {
-				if (current($this->FormOptionEnableDisable) == 'Enable' && current($this->FormOptionStatus) == 'Approved') {
-					$this->Writer->startElement('option');
-					
-					$this->ProcessArrayStandardAttribute('FormOption');
-					
-					if (current($this->FormOptionDisabled)) {
-						$this->Writer->writeAttribute('disabled', current($this->FormOptionDisabled));
-					}
-					
-					if (current($this->FormOptionLabel)) {
-						$this->Writer->writeAttribute('label', current($this->FormOptionLabel));
-					} else if (current($this->FormOptionLabelDynamic)) {
-						$tablename = current($this->FormOptionLabelTableName);
-						$field = current($this->FormOptionLabelField);
-						$pageid = current($this->FormOptionLabelPageID);
-						$objectid = current($this->FormOptionLabelObjectID);
-						$revisionid = current($this->FormOptionLabelRevisionID);
-						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
-						if ($hold) {
-							$this->Writer->writeAttribute('label', $hold);
-						}
-					}
-					if (isset($this->FormSession[$formselectname])) {
-						$SessionInfo = $this->FormSession[$formselectname];
-						$CurrentInfo = current($this->FormOptionText);
-						
-						if ($SessionInfo == $CurrentInfo) {
-							$this->FormOptionSelected[key($this->FormOptionSelected)] = 'selected';
-							$DestroyArray[key($this->FormOptionSelected)] = key($this->FormOptionSelected);
-						}
-					}
-					
-					if (current($this->FormOptionSelected)) {
-						$this->Writer->writeAttribute('selected', current($this->FormOptionSelected));
-					}
-					
-					if (current($this->FormOptionValue)) {
-						$this->Writer->writeAttribute('value', current($this->FormOptionValue));
-					} else if (current($this->FormOptionValueDynamic)) {
-						$tablename = current($this->FormOptionValueTableName);
-						$field = current($this->FormOptionValueField);
-						$pageid = current($this->FormOptionValuePageID);
-						$objectid = current($this->FormOptionValueObjectID);
-						$revisionid = current($this->FormOptionValueRevisionID);
-						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
-						if ($hold) {
-							$this->Writer->writeAttribute('value', $hold);
-						}
-					}
-					
-					if (current($this->FormOptionText)) {
-						$this->Writer->text(current($this->FormOptionText));
-					} else if (current($this->FormOptionTextDynamic)) {
-						$tablename = current($this->FormOptionTextTableName);
-						$field = current($this->FormOptionTextField);
-						$pageid = current($this->FormOptionTextPageID);
-						$objectid = current($this->FormOptionTextObjectID);
-						$revisionid = current($this->FormOptionTextRevisionID);
-						$hold = $this->getDynamicElement ($tablename, $field, $pageid, $objectid, $revisionid);
-						$hold = $this->CreateWordWrap($hold, '    ');
-						if ($hold) {
-							$this->Writer->writeRaw("\n    ");
-							$this->Writer->text($hold);
-							$this->Writer->writeRaw("\n  ");
-						}
-					}
-					
-					$this->Writer->endElement(); // ENDS OPTION
-				}
-			}
-			next($this->FormLookupTableName['FormOption']);
-			
-			next($this->FormOptionPageID);
-			next($this->FormOptionObjectID);
-			
-			next($this->FormOptionText);
-			next($this->FormOptionTextDynamic);
-			next($this->FormOptionTextTableName);
-			next($this->FormOptionTextField);
-			next($this->FormOptionTextPageID);
-			next($this->FormOptionTextObjectID);
-			next($this->FormOptionTextRevisionID);
-			
-			next($this->FormOptionDisabled);
-			
-			next($this->FormOptionLabel);
-			next($this->FormOptionLabelDynamic);
-			next($this->FormOptionLabelTableName);
-			next($this->FormOptionLabelField);
-			next($this->FormOptionLabelPageID);
-			next($this->FormOptionLabelObjectID);
-			next($this->FormOptionLabelRevisionID);
-			
-			next($this->FormOptionSelected);
-			
-			next($this->FormOptionValue);
-			next($this->FormOptionValueDynamic);
-			next($this->FormOptionValueTableName);
-			next($this->FormOptionValueField);
-			next($this->FormOptionValuePageID);
-			next($this->FormOptionValueObjectID);
-			next($this->FormOptionValueRevisionID);
-			
-			next($this->FormOptionClass);
-			next($this->FormOptionDir);
-			next($this->FormOptionID);
-			next($this->FormOptionLang);
-			next($this->FormOptionStyle);
-			next($this->FormOptionTitle);
-			next($this->FormOptionXMLLang);
-			
-			next($this->FormOptionEnableDisable);
-			next($this->FormOptionStatus);
 		}
 		
-		reset($DestroyArray);
-		if (current($DestroyArray)) {
-			$this->FormOptionSelected[key($DestroyArray)] = NULL;
-			next($DestroyArray);
-		}
 	}
 	
 	protected function buildFormOptGroup($objectid, $formselectname) {

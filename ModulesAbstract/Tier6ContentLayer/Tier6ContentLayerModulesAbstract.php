@@ -687,24 +687,31 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 					
 					libxml_use_internal_errors(true);
 					$Html = simplexml_load_string($Content);
-					
 					foreach ($Html as $Child) {
 						$hold = $Child->asXML();
 						$hold = trim($hold);
 						$Element = $Child->getName();
-						$this->Writer->startElement($Element);
-						foreach ($Child->attributes() as $Name => $Attribute) {
-							$this->Writer->writeAttribute($Name, $Attribute);
-						}
-						(string)$Text = (string)$Child[0];
-						if ($Text != NULL) {
-							$this->Writer->text($Text);
-						}
+						
 						if ($Child->children()) {
-							$ChildrenOutput = $Child->children()->asXML();
-							$this->Writer->writeRaw($ChildrenOutput);
+							$Output = $Child->asXML();
+							$this->Writer->writeRaw($Output);
+						} else {
+							$this->Writer->startElement($Element);
+							foreach ($Child->attributes() as $Name => $Attribute) {
+								$this->Writer->writeAttribute($Name, $Attribute);
+							}
+							(string)$Text = (string)$Child[0];	
+							if ($Text != NULL) {
+								if ($Element == 'script') {
+									$this->Writer->writeRaw($Text);
+								} else {
+									$this->Writer->text($Text);
+									$ChildrenOutput = $Child->children()->asXML();
+								}
+							}
+							$this->Writer->endElement();
 						}
-						$this->Writer->endElement();
+						
 					}
 				}
 			}

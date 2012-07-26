@@ -227,8 +227,8 @@ input.BodyText {
 	position: relative;
 	background: url(TemplateImages/Main-Content-Top.png);
 	width: 600px;
-	height: 7px;
-	top: 10px;
+	height: 19px;
+	top: 12px;
 	z-index: -1;
 }
 
@@ -276,7 +276,7 @@ input.BodyText {
 	position: relative;
 	background: url(TemplateImages/Main-Content-Bottom.png);
 	width: 600px;
-	height: 7px;
+	height: 19px;
 	top: -3px;
 	z-index: -1;
 }
@@ -331,7 +331,7 @@ input.BodyText {
 	position: relative;
 	background: url(TemplateImages/Main-Side-Ad-Top.png);
 	width: 200px;
-	height: 32px;
+	height: 17px;
 }
 
 #side-ad-middle {
@@ -348,23 +348,43 @@ input.BodyText {
 	position: relative;
 	background: url(TemplateImages/Main-Side-Ad-Bottom.png);
 	width: 200px;
-	height: 105px;
+	height: 17px;
 	top: -12px;
 }
 
 a:link {
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: underline;
 }
 a:visited {
-	color: #00FF00;
+	color: #004500;
 	text-decoration: underline;
 }
 a:hover {
 	text-decoration: underline;
-	color: #FFCC00;
+	color: #FFFFFF;
 }
 a:active {
+	text-decoration: none;
+}
+
+
+.BodyText a:link {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+.BodyText a:visited {
+	color: #CCFF00;
+	text-decoration: underline;
+}
+
+.BodyText a:hover {
+	text-decoration: underline;
+	color: #FFCC00;
+}
+
+.BodyText a:active {
 	text-decoration: none;
 }
 

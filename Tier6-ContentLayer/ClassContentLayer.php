@@ -261,7 +261,6 @@ class ContentLayer extends LayerModulesAbstract
 			$this->LayerModule->Disconnect($this->ContentLayerThemeGlobalLayerTableName);
 			$this->ContentLayerThemeGlobalLayerContent = $this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'getMultiRowField', array());
 			
-			//print_r($this->ContentLayerThemeGlobalLayerContent);
 		}
 	}
 

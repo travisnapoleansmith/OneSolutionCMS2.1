@@ -389,6 +389,7 @@ abstract class LayerModulesAbstract
 				$i++;
 				next($Keys);
 			}
+			$this->LayerModule->Connect($DatabaseTableName);
 			
 			if (count($Content) == count($Content, COUNT_RECURSIVE)) {
 				$i = 0;
@@ -402,12 +403,13 @@ abstract class LayerModulesAbstract
 				$passarray['rowname'] = $passarray1;
 				$passarray['rowvalue'] = $passarray2;
 				
-				$this->LayerModule->Connect($DatabaseTableName);
+				//$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
-				$this->LayerModule->Disconnect($DatabaseTableName);
+				//$this->LayerModule->Disconnect($DatabaseTableName);
 			} else {
 				$i = 0;
 				reset($Content);
+				
 				while ($Content[key($Content)]) {
 					$j = 0;
 					$hold = $Content[key($Content)];
@@ -419,14 +421,17 @@ abstract class LayerModulesAbstract
 					}
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
-
-					$this->LayerModule->Connect($DatabaseTableName);
+					
+					//$this->LayerModule->Connect($DatabaseTableName);
 					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
-					$this->LayerModule->Disconnect($DatabaseTableName);
+					//$this->LayerModule->Disconnect($DatabaseTableName);
+					
 					$i++;
 					next($Content);
 				}
+				
 			}
+			$this->LayerModule->Disconnect($DatabaseTableName);
 			
 			if (in_array('ObjectID', $Keys)) {
 				$SortOrder = array();
@@ -457,6 +462,13 @@ abstract class LayerModulesAbstract
 				$SortOrder['XMLItem'] = 'XMLItem';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
+			
+			if (in_array('TableID', $Keys)) {
+				$SortOrder = array();
+				$SortOrder['TableID'] = 'TableID';
+				$this->sortTable($SortOrder, $DatabaseTableName);
+			}
+			
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
@@ -594,6 +606,18 @@ abstract class LayerModulesAbstract
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
 			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
+			}
+			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
@@ -629,6 +653,18 @@ abstract class LayerModulesAbstract
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
 			
 			$passarray['rowname'] = $passarray1;
@@ -671,6 +707,18 @@ abstract class LayerModulesAbstract
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
 			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
+			}
+			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
@@ -709,6 +757,18 @@ abstract class LayerModulesAbstract
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
 			
 			$passarray['rowname'] = $passarray1;
@@ -751,6 +811,18 @@ abstract class LayerModulesAbstract
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
 			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
+			}
+			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
@@ -791,6 +863,18 @@ abstract class LayerModulesAbstract
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
 			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
+			}
+			
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
@@ -829,6 +913,18 @@ abstract class LayerModulesAbstract
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
+			}
+			
+			if ($PageID['XhtmlTableName']) {
+				$passarray3[0][0] = 'XhtmlTableName';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableName'];
+			}
+			
+			if ($PageID['XhtmlTableID']) {
+				$passarray3[0][0] = 'XhtmlTableID';
+				
+				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
 			
 			$passarray['rowname'] = $passarray1;

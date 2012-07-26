@@ -75,7 +75,7 @@
 	left: 5px;
 	text-indent: 20px;
 	top: 24px;
-	background: url(TemplateImages//Main-Menu-SubMenu-Middle.png);
+	background: url(TemplateImages/Main-Menu-SubMenu-Middle.png);
 	background-repeat: repeat-y;
 	overflow: visible;
 	min-width: 50px;
@@ -114,5 +114,5 @@
 	position: relative;
 	top: 30px;
 	left: 15px;
-	z-index: -1;
+	z-index: 1;
 }
