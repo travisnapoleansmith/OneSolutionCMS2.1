@@ -1,3 +1,19 @@
+Changes For One Solution CMS 2.1.132 - Saturday, July 28th, 2012
+Added:
+	Nothing has been added.
+	
+Updated (Fixed):
+	1). Updated XhtmlTables - Fixed IE Problem with logging off the system during a form submit.
+	2). Updated XhtmlTables - Fixed IE Problem with cookie being removed.
+	3). Updated XhtmlMainMenu - Fixed Menu't Not Updating, giving A 500 error.
+	4). Updated XhtmlTables - Fixed Cookie problem with not removing cookie data after form was submitted.
+	5). Updated XhtmlTables - Fixed JavaScript problem with column count, when a user removes a column. It still has a minor bug where if a user removes a column that isn't the last column.
+	
+Removed:
+	Nothing has been removed.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.131 - Thursday, July 26, 2012
 Added:
 	1). Added XhtmlTables Content form.

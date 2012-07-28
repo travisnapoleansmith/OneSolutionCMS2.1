@@ -43,6 +43,7 @@ var ColumnHeader = new Array();
 var ColumnFooter = new Array();
 
 mygrid = new dhtmlXGridObject('Grid');
+
 $(document).ready(function()
 {
 	$.ajax({
@@ -186,7 +187,7 @@ function CreateColumn(Header, Name, IDName, Count) {
 function RemoveColumn(Header, Name, IDName, Count) {
 	var ColumnName = Name + Count;
 	var LabelColumnName = Name + "Label" + Count;
-	alert(ColumnName);
+	//alert(ColumnName);
 	//alert(LastColumnName);
 	$('#' + ColumnName).remove();
 	$('#' + LabelColumnName).remove();
@@ -199,7 +200,7 @@ function ShiftColumns(Header, Name, ColumnName, LabelColumnName, Count) {
 	var NewColumnName = Name + Count;
 	var NewLabelName = Name + "Label" + Count;
 	while ($('#' + NewColumnName).length) {
-		alert ("IN HERE");
+		//alert ("IN HERE");
 		//if ($('#' + NewColumnName).length) {
 			$('#' + ColumnName).attr('id', NewColumnName);
 			$('#' + LabelColumnName).attr('id', NewLabelName);
@@ -229,7 +230,7 @@ function AddOneColumn() {
 	mygrid.insertColumn(ColumnCount, "Column " + ColumnCount, 'ed', '110', 'str'); 
 	
 	ColumnHeader[ColumnCount] = "Column " + ColumnCount;
-	ColumnFooter[ColumnCount] = "Footer Column " + ColumnCount;
+	ColumnFooter[ColumnCount] = "NULL";
 
 	CreateColumn(ColumnHeader, "Header", "ColumnHeadings", ColumnCount);
 	CreateColumn(ColumnFooter, "Footer", "ColumnFooters", ColumnCount);
@@ -251,7 +252,7 @@ function RemoveOneColumn() {
 	//alert(ColumnHeader);
 	//alert(ElementRemove);
 	RemoveColumn(ColumnHeader, "Header", "ColumnHeadings", ElementRemove);
-	//RemoveColumn(ColumnFooter, "Footer", "ColumnFooters", ElementRemove);
+	RemoveColumn(ColumnFooter, "Footer", "ColumnFooters", ElementRemove);
 }
 
 function LoadHeaderData(XML) {
@@ -270,10 +271,18 @@ function LoadHeaderData(XML) {
 function LoadFooterData(XML) {
 	var $Foot = $(XML).find("tfoot");
 	var $Foot = $Foot.find("tr");
-	
-	$Foot.find("cell").each(function() {
-		ColumnFooter.push($(this).text()); 
-	});
+	$Content = $Foot.find("cell");
+	if ($Content !== null) {
+		$Foot = $(XML).find("head");
+		$Foot.find("column").each(function(){
+			ColumnFooter.push("NULL");
+		});
+	} else {
+		$Foot.find("cell").each(function() {
+			alert ("TEST");
+			ColumnFooter.push($(this).text()); 
+		});
+	}
 }
 
 function GetUrlVars() {

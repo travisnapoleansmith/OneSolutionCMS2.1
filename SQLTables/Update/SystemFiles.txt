@@ -157,11 +157,11 @@
 ../../Administrators/PageTypes/TablePage/TableContentReadBehavior.js
 ../../Administrators/PageTypes/TablePage/UpdateTableContent.php
 ../../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php
-../../Administrators/SystemUpdater/InstallNewSystemFiles.php
-../../Administrators/SystemUpdater/RemoveOldSystemFiles.php
-../../Administrators/SystemUpdater/SystemUpdater.php
-../../Administrators/SystemUpdater/UnzipFiles.php
-../../Administrators/SystemUpdater/UpdateDatabase.php
+../../Administrators/SystemUpdater/installnewsystemfiles.php
+../../Administrators/SystemUpdater/removeoldsystemfiles.php
+../../Administrators/SystemUpdater/systemupdater.php
+../../Administrators/SystemUpdater/unzipfiles.php
+../../Administrators/SystemUpdater/updatedatabase.php
 ../../Administrators/SystemUpdater/UploadSystemUpdate.php
 ../../Configuration/.htaccess
 ../../Configuration/Tier2-DataAccessLayer/
@@ -7473,6 +7473,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.126.sql
 ../../SQLTables/Update/UpdateTables-2.1.129.sql
 ../../SQLTables/Update/UpdateTables-2.1.130.sql
+../../SQLTables/Update/UpdateTables-2.1.131.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -7848,6 +7849,7 @@
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Content.png
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Footer.png
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Header.png
+../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Logo.png
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Menu-Bottom.png
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Menu-Middle.png
 ../../Tier8-PresentationLayer/PullersGreen/TemplateImages/Main-Menu-SubMenu-Bottom.png

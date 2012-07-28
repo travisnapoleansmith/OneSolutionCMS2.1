@@ -95,40 +95,41 @@
 	$GlobalUpdateRecord = array();
 	recursiveWalk($CurrentMenu, $ChildChanges, $CurrentIDName, $ParentObjectID, $Menu);
 	
-	foreach ($GlobalUpdateRecord as $UpdateRecord) {
-		if (isset($UpdateRecord['ObjectID'])) {
-			$CurrentDatabaseRecord = $Menu[$UpdateRecord['ObjectID']];
-			$Difference = array_diff_assoc($CurrentDatabaseRecord, $UpdateRecord);
-			if (!empty($Difference)) {
-				foreach ($Difference as $Key => $Value) {
-					if (strstr($Key, 'Child')) {
-						if (!is_null($Value)) {
-							$ModifyRecord = array();
-							$ModifyRecord['PageID'] = 1;
-							$ModifyRecord['ObjectID'] = $Value;
-							$ModifyRecord['VersionID'] = 1;
-							$ModifyRecord['RevisionID'] = 1;
-							$ModifyRecord['ParentObjectID'] = NULL;
-							$ModifyRecord['ParentIDName'] = NULL;
-							$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
-						} else if (!is_null($UpdateRecord[$Key])){
-							$ModifyRecord = array();
-							$ModifyRecord['PageID'] = 1;
-							$ModifyRecord['ObjectID'] = $UpdateRecord[$Key];
-							$ModifyRecord['VersionID'] = 1;
-							$ModifyRecord['RevisionID'] = 1;
-							$ModifyRecord['ParentObjectID'] = $UpdateRecord['ObjectID'];
-							$ModifyRecord['ParentIDName'] = $UpdateRecord['ParentIDName'] . '-' . str_replace('Child', '', $Key);
-							$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+	if ($GlobalUpdateRecord != NULL) {
+		foreach ($GlobalUpdateRecord as $UpdateRecord) {
+			if (isset($UpdateRecord['ObjectID'])) {
+				$CurrentDatabaseRecord = $Menu[$UpdateRecord['ObjectID']];
+				$Difference = array_diff_assoc($CurrentDatabaseRecord, $UpdateRecord);
+				if (!empty($Difference)) {
+					foreach ($Difference as $Key => $Value) {
+						if (strstr($Key, 'Child')) {
+							if (!is_null($Value)) {
+								$ModifyRecord = array();
+								$ModifyRecord['PageID'] = 1;
+								$ModifyRecord['ObjectID'] = $Value;
+								$ModifyRecord['VersionID'] = 1;
+								$ModifyRecord['RevisionID'] = 1;
+								$ModifyRecord['ParentObjectID'] = NULL;
+								$ModifyRecord['ParentIDName'] = NULL;
+								$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+							} else if (!is_null($UpdateRecord[$Key])){
+								$ModifyRecord = array();
+								$ModifyRecord['PageID'] = 1;
+								$ModifyRecord['ObjectID'] = $UpdateRecord[$Key];
+								$ModifyRecord['VersionID'] = 1;
+								$ModifyRecord['RevisionID'] = 1;
+								$ModifyRecord['ParentObjectID'] = $UpdateRecord['ObjectID'];
+								$ModifyRecord['ParentIDName'] = $UpdateRecord['ParentIDName'] . '-' . str_replace('Child', '', $Key);
+								$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+							}
 						}
 					}
+					$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $UpdateRecord);
+					
 				}
-				$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $UpdateRecord);
-				
 			}
 		}
 	}
-	
 	
 	$UlLiMenu = $Tier6Databases->getRecord($passarray, 'MainMenu');
 	$StartTagIDParent = 'main-menu-middle';
@@ -172,40 +173,42 @@
 	$StartMenu = $Menu[1];
 	
 	$i = 2;
-	
-	
-	foreach ($StartMenu as $Key => $Value) {
-		if (strstr($Key, 'Child')) {
-			$LiNumber = str_replace('Child', '', $Key);
-			if (!is_null($Value)) {
-				$MenuChange[1]['Li' . $LiNumber] = "<a href='index.php?PageID=" . $Value . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
-			} else {
-				$MenuChange[1]['Li' . $LiNumber] = NULL;
-			}
-			
-			$MenuChange[1]['Li' . $LiNumber . 'Class'] = $LiClassParent;
-			$MenuChange[1]['Li' . $LiNumber . 'Dir'] = NULL;
-			$MenuChange[1]['Li' . $LiNumber . 'ChildID'] = NULL;
-			$MenuChange[1]['Li' . $LiNumber . 'ID'] = 'MenuItem' . $LiNumber;
-			$MenuChange[1]['Li' . $LiNumber . 'Lang'] = NULL;
-			$MenuChange[1]['Li' . $LiNumber . 'Style'] = NULL;
-			$MenuChange[1]['Li' . $LiNumber . 'Title'] = $PageVersion[$Value]['ContentPageMenuTitle'];
-			$MenuChange[1]['Li' . $LiNumber . 'XMLLang'] = NULL;
-			$MenuChange[1]['Li' . $LiNumber . 'Enable/Disable'] = 'Enable';
-			if (!is_null($Value)) {
-				if ($Key !== 'Child1') {
-					$CurrentMenu = $Menu[$Value]; 
-					if ($CurrentMenu['PageLocation'] != NULL) {
-						$MenuChange[1]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
-					}
-					$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $i, $Value);
-					if (!is_null($ReturnValue)) {
-						if ($i != $ReturnValue) {
-							$MenuChange[1]['Li' . $LiNumber . 'ChildID'] = $i;
-							$i = $ReturnValue;
+	if ($StartMenu != NULL) {
+		foreach ($StartMenu as $Key => $Value) {
+			if (strstr($Key, 'Child')) {
+				$LiNumber = str_replace('Child', '', $Key);
+				if (!is_null($Value)) {
+					$MenuChange[1]['Li' . $LiNumber] = "<a href='index.php?PageID=" . $Value . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+				} else {
+					$MenuChange[1]['Li' . $LiNumber] = NULL;
+				}
+				
+				$MenuChange[1]['Li' . $LiNumber . 'Class'] = $LiClassParent;
+				$MenuChange[1]['Li' . $LiNumber . 'Dir'] = NULL;
+				$MenuChange[1]['Li' . $LiNumber . 'ChildID'] = NULL;
+				$MenuChange[1]['Li' . $LiNumber . 'ID'] = 'MenuItem' . $LiNumber;
+				$MenuChange[1]['Li' . $LiNumber . 'Lang'] = NULL;
+				$MenuChange[1]['Li' . $LiNumber . 'Style'] = NULL;
+				$MenuChange[1]['Li' . $LiNumber . 'Title'] = $PageVersion[$Value]['ContentPageMenuTitle'];
+				$MenuChange[1]['Li' . $LiNumber . 'XMLLang'] = NULL;
+				$MenuChange[1]['Li' . $LiNumber . 'Enable/Disable'] = 'Enable';
+				
+				if (!is_null($Value)) {
+					if ($Key !== 'Child1') {
+						$CurrentMenu = $Menu[$Value]; 
+						if ($CurrentMenu['PageLocation'] != NULL) {
+							$MenuChange[1]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
 						}
-					} else {
-						$i++;
+						
+						$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $i, $Value);
+						if (!is_null($ReturnValue)) {
+							if ($i != $ReturnValue) {
+								$MenuChange[1]['Li' . $LiNumber . 'ChildID'] = $i;
+								$i = $ReturnValue;
+							}
+						} else {
+							$i++;
+						}
 					}
 				}
 			}
@@ -216,6 +219,7 @@
 	
 	$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenu', $MenuChange);	
 	$UpdateMainMenu = $Options['XhtmlMainMenu']['mainmenu']['CreatedMainMenuUpdatedPage']['SettingAttribute'];
+
 	header("Location: index.php?PageID=$UpdateMainMenu");
 	
 	function recursiveWalkUnorderedList(array $CurrentMenu, array $Menu, array $PageVersion, $NextIDNumber, $CurrentIDNumber) {
@@ -254,49 +258,53 @@
 		
 		$LiLastChildName = NULL;
 		
-		foreach ($CurrentMenu as $Key => $Value) {
-			if (strstr($Key, 'Child')) {
-				$LiNumber = str_replace('Child', '', $Key);
-				
-				if (!is_null($Value)) {
-					$MenuChange[$NextIDNumber]['Li' . $LiNumber] = "<a href='index.php?PageID=" . $Value . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
-					$TRIP = TRUE;
-				} else {
-					$MenuChange[$NextIDNumber]['Li' . $LiNumber] = NULL;
-				}
-				
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Class'] = $LiClassChild;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Dir'] = NULL;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = NULL;
-				if (!is_null($Value)) {
-					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] =  $Menu[$Value]['ParentIDName'];
-				} else {
-					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] = NULL;
-				}
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Lang'] = NULL;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Style'] = NULL;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Title'] = $PageVersion[$Value]['ContentPageMenuTitle'];
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'XMLLang'] = NULL;
-				$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Enable/Disable'] = 'Enable';
-				
-				if (!is_null($Value)) {
-					$LiLastChildName = 'Li' . $LiNumber . 'Class';
-					$CurrentMenu = $Menu[$Value]; 
-					if ($CurrentMenu['PageLocation'] != NULL) {
-						$MenuChange[$NextIDNumber]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+		if ($CurrentMenu != NULL) {
+			foreach ($CurrentMenu as $Key => $Value) {
+				if (strstr($Key, 'Child')) {
+					
+					$LiNumber = str_replace('Child', '', $Key);
+					
+					if (!is_null($Value)) {
+						$MenuChange[$NextIDNumber]['Li' . $LiNumber] = "<a href='index.php?PageID=" . $Value . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+						$TRIP = TRUE;
+					} else {
+						$MenuChange[$NextIDNumber]['Li' . $LiNumber] = NULL;
 					}
 					
-					$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $NextIDNumberChild, $Value);
-					$TRIP = 'CHANGE';
-					if (!is_null($ReturnValue)) {
-						if ($NextIDNumberChild != $ReturnValue) {
-							$NextIDNumberChild = $ReturnValue;
-							$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = $NextIDNumberChild;
-							$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID']--;
-						}
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Class'] = $LiClassChild;
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Dir'] = NULL;
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = NULL;
+					if (!is_null($Value)) {
+						$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] =  $Menu[$Value]['ParentIDName'];
 					} else {
-						$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = NULL;
-						$NextIDNumberChild++;
+						$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ID'] = NULL;
+					}
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Lang'] = NULL;
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Style'] = NULL;
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Title'] = $PageVersion[$Value]['ContentPageMenuTitle'];
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'XMLLang'] = NULL;
+					$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'Enable/Disable'] = 'Enable';
+					
+					if (!is_null($Value)) {
+						$LiLastChildName = 'Li' . $LiNumber . 'Class';
+						$CurrentMenu = $Menu[$Value]; 
+						if ($CurrentMenu['PageLocation'] != NULL) {
+							$MenuChange[$NextIDNumber]['Li' . $LiNumber] = "<a href='" . $CurrentMenu['PageLocation'] . "'>" . $PageVersion[$Value]['ContentPageMenuName'] . '</a>';
+						}
+						
+						$ReturnValue = recursiveWalkUnorderedList($CurrentMenu, $Menu, $PageVersion, $NextIDNumberChild, $Value);
+						
+						$TRIP = 'CHANGE';
+						if (!is_null($ReturnValue)) {
+							if ($NextIDNumberChild != $ReturnValue) {
+								$NextIDNumberChild = $ReturnValue;
+								$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = $NextIDNumberChild;
+								$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID']--;
+							}
+						} else {
+							$MenuChange[$NextIDNumber]['Li' . $LiNumber . 'ChildID'] = NULL;
+							$NextIDNumberChild++;
+						}
 					}
 				}
 			}
@@ -352,32 +360,34 @@
 		array_push($GlobalUpdateRecord, $UpdateRecord);
 		
 		$ChildObjectID = $CurrentMenu['ObjectID'];
-		foreach ($CurrentMenu as $Key => $Value) {
-			if (strstr($Key, 'Child')) {
-				if (!is_null($Value)) {
-					if ($Value != $CurrentMenu['ObjectID']) {
-						$ChildChanges = array();
-						$ChildMenu = $Menu[$Value];
-						foreach ($ChildMenu as $ChangesKey => $ChangesValue) {
-							if (strstr($ChangesKey, 'Child')) {
-								if ($ChangesValue == NULL) {
-									$ChildChanges[$ChangesKey] = NULL;
-								} else {
-									$ChildChanges[$ChangesKey] = $ChangesValue;
+		if ($CurrentMenu != NULL) {
+			foreach ($CurrentMenu as $Key => $Value) {
+				if (strstr($Key, 'Child')) {
+					if (!is_null($Value)) {
+						if ($Value != $CurrentMenu['ObjectID']) {
+							$ChildChanges = array();
+							$ChildMenu = $Menu[$Value];
+							foreach ($ChildMenu as $ChangesKey => $ChangesValue) {
+								if (strstr($ChangesKey, 'Child')) {
+									if ($ChangesValue == NULL) {
+										$ChildChanges[$ChangesKey] = NULL;
+									} else {
+										$ChildChanges[$ChangesKey] = $ChangesValue;
+									}
 								}
 							}
+							
+							if ($ParentIDName == 'MenuItem') {
+								$ChildIDName = 'MenuItem' . str_replace('Child','', $Key);
+							} else {
+								$ChildIDName = $ParentIDName . '-' . str_replace('Child','', $Key);
+							}
+							recursiveWalk($ChildMenu, $ChildChanges, $ChildIDName, $ChildObjectID, $Menu);
 						}
-						
-						if ($ParentIDName == 'MenuItem') {
-							$ChildIDName = 'MenuItem' . str_replace('Child','', $Key);
-						} else {
-							$ChildIDName = $ParentIDName . '-' . str_replace('Child','', $Key);
-						}
-						recursiveWalk($ChildMenu, $ChildChanges, $ChildIDName, $ChildObjectID, $Menu);
 					}
 				}
+				
 			}
-			
 		}
 	}
 	

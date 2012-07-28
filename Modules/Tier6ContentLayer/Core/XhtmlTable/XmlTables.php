@@ -6,7 +6,7 @@
 	if (is_numeric($_GET['TableID'])) {
 		$TableIdNumber['TableID'] = $_GET['TableID'];
 	} else {
-		$TableIdNumber['TableID'] = 1;
+		$TableIdNumber['TableID'] = 0;
 	}
 	
 	$TableDatabase = Array();

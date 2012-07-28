@@ -290,6 +290,11 @@ input.BodyText {
 	z-index: -1;
 }
 
+#main-content-middle table{
+	position: relative;
+	left: 15px;
+}
+
 #main-content {
 	position: relative;
 	width: 700px;

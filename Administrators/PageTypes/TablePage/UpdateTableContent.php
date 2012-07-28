@@ -66,7 +66,7 @@
 	foreach($TempTable as $Key => $Value) {
 		$NewKey = str_replace('Grid_', '', $Key);
 		$NewKey = explode('_', $NewKey);
-		$TableContent[$NewKey[0]][$NewKey[1]] = $Value;
+		$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
 		$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
 		if ($Value != NULL) {
 			setcookie($CookieKey, $Value, time()+4800, '/');
@@ -99,6 +99,21 @@
 	$PageName .= $TableID;
 
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateTableContent', $PageName);
+	
+	foreach ($_POST as $Key => $Value) {
+		if (strstr($Key, "Header") || strstr($Key, "Footer")) {
+			setcookie($Key, $Value, time()-4800, '/');
+		}
+	}
+	
+	foreach($TempTable as $Key => $Value) {
+		$NewKey = str_replace('Grid_', '', $Key);
+		$NewKey = explode('_', $NewKey);
+		$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
+		if ($Value != NULL) {
+			setcookie($CookieKey, $Value, time()-4800, '/');
+		}
+	}
 	
 	if ($hold) {
 		$XhtmlTableIDArray = $Tier6Databases->ModulePass('XhtmlTable', 'table', 'getLastTableID', array('XhtmlTableName' => 'XhtmlTable'));
@@ -137,7 +152,7 @@
 		$FormSelect['Enable/Disable'] = 'Enable';
 		$FormSelect['Status'] = 'Approved';
 		*/
-		$FormOptionText = $TableID . ' - ' . $TableHeading;
+		$FormOptionText = $TableID . ' - ' . $TableName;
 		
 		$FormOption = array();
 		//$FormOption['PageID'] = $TableContentUpdateSelectPage;
@@ -196,7 +211,7 @@
 		$TableListing[0]['TableFrame'] = NULL;
 		$TableListing[0]['TableRules'] = 'all';
 		$TableListing[0]['TableSummary'] = $TableHeading;
-		$TableListing[0]['TableWidth'] = 500;
+		$TableListing[0]['TableWidth'] = 550;
 		$TableListing[0]['TableClass'] = NULL;
 		$TableListing[0]['TableDir'] = 'ltr';
 		$TableListing[0]['TableID'] = NULL;
@@ -331,25 +346,79 @@
 		$MasterContainerObjectID = 1;
 		$StopObjectID = 99;
 		foreach ($TableContent as $Key => $Data) {
-			$Table[$TableI]['TableID'] = $TableID;
-			$Table[$TableI]['ObjectID'] = $ObjectID;
-			$Table[$TableI]['StopObjectID'] = NULL;
-			$Table[$TableI]['ContainerObjectType'] = 'TableRow';
-			$Table[$TableI]['ContainerObjectTypeName'] = 'XhtmlTableRow';
-			$Table[$TableI]['ContainerObjectID'] = $MasterContainerObjectID;
-			$Table[$TableI]['Enable/Disable'] = $EnableDisable;
-			$Table[$TableI]['Status'] = $Status;
-			
-			$ObjectID++;
-			$TableI++;
-			$ContentObjectID = $MasterContainerObjectID;
-			foreach ($Data as $SubKey => $SubData) {
+			if ($Key != 'rowsdeleted') {
+				$Table[$TableI]['TableID'] = $TableID;
+				$Table[$TableI]['ObjectID'] = $ObjectID;
+				$Table[$TableI]['StopObjectID'] = NULL;
+				$Table[$TableI]['ContainerObjectType'] = 'TableRow';
+				$Table[$TableI]['ContainerObjectTypeName'] = 'XhtmlTableRow';
+				$Table[$TableI]['ContainerObjectID'] = $MasterContainerObjectID;
+				$Table[$TableI]['Enable/Disable'] = $EnableDisable;
+				$Table[$TableI]['Status'] = $Status;
+				
+				$ObjectID++;
+				$TableI++;
+				$ContentObjectID = $MasterContainerObjectID;
+				foreach ($Data as $SubKey => $SubData) {
+					$TableRow[$i]['TableID'] = $TableID;
+					$TableRow[$i]['ObjectID'] = $ContentObjectID;
+					$TableRow[$i]['StopObjectID'] = $StopObjectID;
+					$TableRow[$i]['ContainerObjectType'] = 'Cell';
+					$TableRow[$i]['ContainerObjectTypeName'] = 'XhtmlTableRowCell';
+					$TableRow[$i]['ContainerObjectID'] = $ContentObjectID;
+					$TableRow[$i]['LinkedTableRow'] = 'False';
+					$TableRow[$i]['TableRowAlign'] = NULL;
+					$TableRow[$i]['TableRowChar'] = NULL;
+					$TableRow[$i]['TableRowCharOff'] = NULL;
+					$TableRow[$i]['TableRowVAlign'] = NULL;
+					$TableRow[$i]['TableRowClass'] = NULL;
+					$TableRow[$i]['TableRowDir'] = NULL;
+					$TableRow[$i]['TableRowID'] = NULL;
+					$TableRow[$i]['TableRowLang'] = NULL;
+					$TableRow[$i]['TableRowStyle'] = NULL;
+					$TableRow[$i]['TableRowTitle'] = NULL;
+					$TableRow[$i]['TableRowXMLLang'] = NULL;
+					$TableRow[$i]['Enable/Disable'] = $EnableDisable;
+					$TableRow[$i]['Status'] = $Status;
+					
+					$TableRowCell[$j]['TableID'] = $TableID;
+					$TableRowCell[$j]['ObjectID'] = $ContentObjectID;
+					if (isset($SubData) && strlen($SubData) != 0) {
+						$TableRowCell[$j]['TableCellText'] = stripslashes($SubData);
+					} else {
+						$TableRowCell[$j]['TableCellText'] = NULL;
+					}
+					$TableRowCell[$j]['TableCellAbbr'] = NULL;
+					$TableRowCell[$j]['TableCellAlign'] = NULL;
+					$TableRowCell[$j]['TableCellAxis'] = NULL;
+					$TableRowCell[$j]['TableCellChar'] = NULL;
+					$TableRowCell[$j]['TableCellCharoff'] = NULL;
+					$TableRowCell[$j]['TableCellColSpan'] = NULL;
+					$TableRowCell[$j]['TableCellHeaders'] = NULL;
+					$TableRowCell[$j]['TableCellRowSpan'] = NULL;
+					$TableRowCell[$j]['TableCellScope'] = NULL;
+					$TableRowCell[$j]['TableCellVAlign'] = NULL;
+					$TableRowCell[$j]['TableCellClass'] = NULL;
+					$TableRowCell[$j]['TableCellDir'] = NULL;
+					$TableRowCell[$j]['TableCellID'] = NULL;
+					$TableRowCell[$j]['TableCellLang'] = NULL;
+					$TableRowCell[$j]['TableCellStyle'] = NULL;
+					$TableRowCell[$j]['TableCellTitle'] = NULL;
+					$TableRowCell[$j]['TableCellXMLLang'] = NULL;
+					$TableRowCell[$j]['Enable/Disable'] = $EnableDisable;
+					$TableRowCell[$j]['Status'] = $Status;
+					
+					$i++;
+					$j++;
+					$ContentObjectID++;
+				}
+				
 				$TableRow[$i]['TableID'] = $TableID;
-				$TableRow[$i]['ObjectID'] = $ContentObjectID;
+				$TableRow[$i]['ObjectID'] = $StopObjectID;
 				$TableRow[$i]['StopObjectID'] = $StopObjectID;
-				$TableRow[$i]['ContainerObjectType'] = 'Cell';
-				$TableRow[$i]['ContainerObjectTypeName'] = 'XhtmlTableRowCell';
-				$TableRow[$i]['ContainerObjectID'] = $ContentObjectID;
+				$TableRow[$i]['ContainerObjectType'] = NULL;
+				$TableRow[$i]['ContainerObjectTypeName'] = NULL;
+				$TableRow[$i]['ContainerObjectID'] = NULL;
 				$TableRow[$i]['LinkedTableRow'] = 'False';
 				$TableRow[$i]['TableRowAlign'] = NULL;
 				$TableRow[$i]['TableRowChar'] = NULL;
@@ -364,66 +433,14 @@
 				$TableRow[$i]['TableRowXMLLang'] = NULL;
 				$TableRow[$i]['Enable/Disable'] = $EnableDisable;
 				$TableRow[$i]['Status'] = $Status;
-				
-				$TableRowCell[$j]['TableID'] = $TableID;
-				$TableRowCell[$j]['ObjectID'] = $ContentObjectID;
-				if (isset($SubData) && strlen($SubData) != 0) {
-					$TableRowCell[$j]['TableCellText'] = stripslashes($SubData);
-				} else {
-					$TableRowCell[$j]['TableCellText'] = NULL;
-				}
-				$TableRowCell[$j]['TableCellAbbr'] = NULL;
-				$TableRowCell[$j]['TableCellAlign'] = NULL;
-				$TableRowCell[$j]['TableCellAxis'] = NULL;
-				$TableRowCell[$j]['TableCellChar'] = NULL;
-				$TableRowCell[$j]['TableCellCharoff'] = NULL;
-				$TableRowCell[$j]['TableCellColSpan'] = NULL;
-				$TableRowCell[$j]['TableCellHeaders'] = NULL;
-				$TableRowCell[$j]['TableCellRowSpan'] = NULL;
-				$TableRowCell[$j]['TableCellScope'] = NULL;
-				$TableRowCell[$j]['TableCellVAlign'] = NULL;
-				$TableRowCell[$j]['TableCellClass'] = NULL;
-				$TableRowCell[$j]['TableCellDir'] = NULL;
-				$TableRowCell[$j]['TableCellID'] = NULL;
-				$TableRowCell[$j]['TableCellLang'] = NULL;
-				$TableRowCell[$j]['TableCellStyle'] = NULL;
-				$TableRowCell[$j]['TableCellTitle'] = NULL;
-				$TableRowCell[$j]['TableCellXMLLang'] = NULL;
-				$TableRowCell[$j]['Enable/Disable'] = $EnableDisable;
-				$TableRowCell[$j]['Status'] = $Status;
-				
 				$i++;
-				$j++;
-				$ContentObjectID++;
+				
+				if ($MasterContainerObjectID === 1) {
+					$MasterContainerObjectID = 0;
+				}
+				$MasterContainerObjectID = $MasterContainerObjectID + 100;
+				$StopObjectID = $StopObjectID + 100;
 			}
-			
-			$TableRow[$i]['TableID'] = $TableID;
-			$TableRow[$i]['ObjectID'] = $StopObjectID;
-			$TableRow[$i]['StopObjectID'] = $StopObjectID;
-			$TableRow[$i]['ContainerObjectType'] = NULL;
-			$TableRow[$i]['ContainerObjectTypeName'] = NULL;
-			$TableRow[$i]['ContainerObjectID'] = NULL;
-			$TableRow[$i]['LinkedTableRow'] = 'False';
-			$TableRow[$i]['TableRowAlign'] = NULL;
-			$TableRow[$i]['TableRowChar'] = NULL;
-			$TableRow[$i]['TableRowCharOff'] = NULL;
-			$TableRow[$i]['TableRowVAlign'] = NULL;
-			$TableRow[$i]['TableRowClass'] = NULL;
-			$TableRow[$i]['TableRowDir'] = NULL;
-			$TableRow[$i]['TableRowID'] = NULL;
-			$TableRow[$i]['TableRowLang'] = NULL;
-			$TableRow[$i]['TableRowStyle'] = NULL;
-			$TableRow[$i]['TableRowTitle'] = NULL;
-			$TableRow[$i]['TableRowXMLLang'] = NULL;
-			$TableRow[$i]['Enable/Disable'] = $EnableDisable;
-			$TableRow[$i]['Status'] = $Status;
-			$i++;
-			
-			if ($MasterContainerObjectID === 1) {
-				$MasterContainerObjectID = 0;
-			}
-			$MasterContainerObjectID = $MasterContainerObjectID + 100;
-			$StopObjectID = $StopObjectID + 100;
 		}
 		
 		// Table Footer
@@ -562,6 +579,5 @@
 		$TableContentCreatedUpdatePage = $TableContentCreatedUpdatePage . '&TableID=' . $TableID ;
 		
 		header("Location: $TableContentCreatedUpdatePage");
-		
 	}
 ?>
