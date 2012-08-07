@@ -79,6 +79,10 @@ hr.SponsorsRule {
 	margin-bottom: 40px;
 }
 
+.TableClass {
+	width: 700px;
+}
+
 .TableClass caption {
 	color: #FFCC00;
 	font-weight: bold;

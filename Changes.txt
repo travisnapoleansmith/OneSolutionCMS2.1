@@ -1,4 +1,24 @@
-Changes For One Solution CMS 2.1.132 - Saturday, July 28th, 2012
+Changes For One Solution CMS 2.1.133 - Tuesday, August 7, 2012
+Added:
+	1). Added an Installer folder to the Administrators folder for a future installer.
+	2). Added a System folder to the Administrators folder for all system pages.
+	3). Added LoginOff, PasswordChange, Menu and Register folder to Administrators/System folder for Login Logoff form, Password Change form, Menu form and Register form. They will be moved in another release.
+	
+Updated (Fixed):
+	1). Updated MediaPlayer and MediaPlayerSkins has been moved to Libraries/Tier6ContentLayer/JWPlayer.
+	2). Updated NewsPage and NewsStory - Submit forms processing files have been moved into PageTypes/NewsPage folder.
+	3). Updated MultiHeaderContentPage - Submit forms processing files have been moved into PageTypes/MultiHeaderContentPage folder.
+	4). Updated PhotosPage - Submit forms processing files have been moved into PageTypes/PhotosPage/ folder.
+	5). Updated TableContent - Fixed a bug with 1, 100, etc. showing up in the table, even though a user didn't submit that information.
+	6). Updated PhotosPage - Reworked the Add and Update Photos Pages to remove a bug with updating some of the photo page content. 
+	
+Removed:
+	1). Smarty has been removed from Tier 8 Presentation Layer Libraries. It is available as an add on library.
+	2). TinyMCE has been removed from Tier 7 Behavioral Layer Libraries. It is available as an add on library.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.132 - Saturday, July 28, 2012
 Added:
 	Nothing has been added.
 	

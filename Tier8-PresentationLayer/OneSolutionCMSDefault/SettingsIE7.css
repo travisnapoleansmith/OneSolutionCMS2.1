@@ -6,11 +6,6 @@ table.Calendar {
 	left: 20px;
 }
 
-#ad-side{
-	top: -18px;
-	
-}
-
 /*Header Styles */
 
 #header-sitename{
@@ -39,13 +34,5 @@ table.Calendar {
 }
 
 #footer-copyright{
-	top: 25px;
-}
-
-#side-ad-middle {
-	top: 0px;
-}
-
-#side-ad-bottom {
-	top: 0px;
+	top: 35px;
 }

@@ -281,7 +281,7 @@ input.BodyText {
 	z-index: -1;
 }
 
-#main-content-bottom-empty{
+#main-content-bottom-empty {
 	position: relative;
 	background: url(TemplateImages/Main-Content-Bottom.png);
 	width: 600px;
@@ -290,9 +290,14 @@ input.BodyText {
 	z-index: -1;
 }
 
-#main-content-middle table{
+#main-content-middle table {
 	position: relative;
 	left: 15px;
+}
+
+#main-content-middle table caption {
+	font-size: 16px;
+	font-weight: bold;
 }
 
 #main-content {
@@ -438,4 +443,16 @@ a:active {
 .Calendar a:hover {
 	text-decoration: none;
 	color: #000000;
+}
+
+#sv-container {
+	position:relative;
+	left: 1px;
+	height: 585px;
+	width: 585px;
+}
+
+#sv-container object {
+	position: absolute;
+	top: 0px;
 }

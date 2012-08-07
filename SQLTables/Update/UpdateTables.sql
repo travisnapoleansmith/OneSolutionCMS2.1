@@ -1,162 +1,64 @@
-UPDATE `AdministratorContentLayerTables` SET `DatabaseTable1` = 'XhtmlTableLookup' WHERE CONVERT(`AdministratorContentLayerTables`.`ObjectType` USING utf8) = 'XhtmlTable' AND CONVERT(`AdministratorContentLayerTables`.`ObjectTypeName` USING utf8) = 'table' LIMIT 1;
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'AddMultiHeaderPage', '190');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'CreatedUpdateMultiHeaderPage', '../../index.php?PageID=194');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'DeletedMultiHeaderPage', '../../index.php?PageID=196');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'EnableDisableMultiHeaderPage', '../../index.php?PageID=198');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'MultiHeaderPageCreatedPage', '../../index.php?PageID=191');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'UpdateMultiHeaderPage', '../../index.php?PageID=193');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlContent', 'content', 'UpdateMultiHeaderPageSelect', '192');
 
-DROP TABLE IF EXISTS `AdministratorContentLayerTheme`;
-CREATE TABLE `AdministratorContentLayerTheme` (
-  `ThemeName` varchar(100) NOT NULL,
-  `StyleSheet1` varchar(150) default NULL,
-  `StyleSheet2` varchar(150) default NULL,
-  `StyleSheet3` varchar(150) default NULL,
-  `StyleSheet4` varchar(150) default NULL,
-  `StyleSheet5` varchar(150) default NULL,
-  `StyleSheet6` varchar(150) default NULL,
-  `StyleSheet7` varchar(150) default NULL,
-  `StyleSheet8` varchar(150) default NULL,
-  `StyleSheet9` varchar(150) default NULL,
-  `StyleSheet10` varchar(150) default NULL,
-  `StyleSheet11` varchar(150) default NULL,
-  `StyleSheet12` varchar(150) default NULL,
-  `StyleSheet13` varchar(150) default NULL,
-  `StyleSheet14` varchar(150) default NULL,
-  `StyleSheet15` varchar(150) default NULL,
-  `StyleSheet16` varchar(150) default NULL,
-  `StyleSheet17` varchar(150) default NULL,
-  `StyleSheet18` varchar(150) default NULL,
-  `StyleSheet19` varchar(150) default NULL,
-  `StyleSheet20` varchar(150) default NULL,
-  `IE6StyleSheet1` varchar(100) default NULL,
-  `IE6StyleSheet2` varchar(100) default NULL,
-  `IE6StyleSheet3` varchar(100) default NULL,
-  `IE6StyleSheet4` varchar(100) default NULL,
-  `IE6StyleSheet5` varchar(100) default NULL,
-  `IE7StyleSheet1` varchar(100) default NULL,
-  `IE7StyleSheet2` varchar(100) default NULL,
-  `IE7StyleSheet3` varchar(100) default NULL,
-  `IE7StyleSheet4` varchar(100) default NULL,
-  `IE7StyleSheet5` varchar(100) default NULL,
-  `IE8StyleSheet1` varchar(100) default NULL,
-  `IE8StyleSheet2` varchar(100) default NULL,
-  `IE8StyleSheet3` varchar(100) default NULL,
-  `IE8StyleSheet4` varchar(100) default NULL,
-  `IE8StyleSheet5` varchar(100) default NULL,
-  `IE9StyleSheet1` varchar(100) default NULL,
-  `IE9StyleSheet2` varchar(100) default NULL,
-  `IE9StyleSheet3` varchar(100) default NULL,
-  `IE9StyleSheet4` varchar(100) default NULL,
-  `IE9StyleSheet5` varchar(100) default NULL,
-  `BlackBerryOS5StyleSheet1` varchar(100) default NULL,
-  `BlackBerryOS5StyleSheet2` varchar(100) default NULL,
-  `BlackBerryOS5StyleSheet3` varchar(100) default NULL,
-  `BlackBerryOS5StyleSheet4` varchar(100) default NULL,
-  `BlackBerryOS5StyleSheet5` varchar(100) default NULL,
-  `BlackBerryOS6StyleSheet1` varchar(100) default NULL,
-  `BlackBerryOS6StyleSheet2` varchar(100) default NULL,
-  `BlackBerryOS6StyleSheet3` varchar(100) default NULL,
-  `BlackBerryOS6StyleSheet4` varchar(100) default NULL,
-  `BlackBerryOS6StyleSheet5` varchar(100) default NULL,
-  `BlackBerryPlaybookStyleSheet1` varchar(100) default NULL,
-  `BlackBerryPlaybookStyleSheet2` varchar(100) default NULL,
-  `BlackBerryPlaybookStyleSheet3` varchar(100) default NULL,
-  `BlackBerryPlaybookStyleSheet4` varchar(100) default NULL,
-  `BlackBerryPlaybookStyleSheet5` varchar(100) default NULL,
-  `AppleiPhoneStyleSheet1` varchar(100) default NULL,
-  `AppleiPhoneStyleSheet2` varchar(100) default NULL,
-  `AppleiPhoneStyleSheet3` varchar(100) default NULL,
-  `AppleiPhoneStyleSheet4` varchar(100) default NULL,
-  `AppleiPhoneStyleSheet5` varchar(100) default NULL,
-  `AppleiPadStyleSheet1` varchar(100) default NULL,
-  `AppleiPadStyleSheet2` varchar(100) default NULL,
-  `AppleiPadStyleSheet3` varchar(100) default NULL,
-  `AppleiPadStyleSheet4` varchar(100) default NULL,
-  `AppleiPadStyleSheet5` varchar(100) default NULL,
-  `AppleiPodStyleSheet1` varchar(100) default NULL,
-  `AppleiPodStyleSheet2` varchar(100) default NULL,
-  `AppleiPodStyleSheet3` varchar(100) default NULL,
-  `AppleiPodStyleSheet4` varchar(100) default NULL,
-  `AppleiPodStyleSheet5` varchar(100) default NULL,
-  `AndroidStyleSheet1` varchar(100) default NULL,
-  `AndroidStyleSheet2` varchar(100) default NULL,
-  `AndroidStyleSheet3` varchar(100) default NULL,
-  `AndroidStyleSheet4` varchar(100) default NULL,
-  `AndroidStyleSheet5` varchar(100) default NULL,
-  `JavaScriptSheet1` varchar(100) default NULL,
-  `JavaScriptSheet2` varchar(100) default NULL,
-  `JavaScriptSheet3` varchar(100) default NULL,
-  `JavaScriptSheet4` varchar(100) default NULL,
-  `JavaScriptSheet5` varchar(100) default NULL,
-  `JavaScriptSheet6` varchar(200) default NULL,
-  `PrintPreviewStyleSheet1` varchar(100) default NULL,
-  `PrintPreviewStyleSheet2` varchar(100) default NULL,
-  `PrintPreviewStyleSheet3` varchar(100) default NULL,
-  `PrintPreviewStyleSheet4` varchar(100) default NULL,
-  `PrintPreviewStyleSheet5` varchar(100) default NULL,
-  `ScriptStyleSheet1` varchar(100) default NULL,
-  `ScriptStyleSheet2` varchar(100) default NULL,
-  `ScriptStyleSheet3` varchar(100) default NULL,
-  `ScriptStyleSheet4` varchar(100) default NULL,
-  `ScriptStyleSheet5` varchar(100) default NULL,
-  `ScriptStyleSheetCharset1` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptStyleSheetCharset2` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptStyleSheetCharset3` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptStyleSheetCharset4` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptStyleSheetCharset5` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptStyleSheetCode1` text,
-  `ScriptStyleSheetCode2` text,
-  `ScriptStyleSheetCode3` text,
-  `ScriptStyleSheetCode4` text,
-  `ScriptStyleSheetCode5` text,
-  `ScriptStyleSheetDefer1` enum('defer') default NULL,
-  `ScriptStyleSheetDefer2` enum('defer') default NULL,
-  `ScriptStyleSheetDefer3` enum('defer') default NULL,
-  `ScriptStyleSheetDefer4` enum('defer') default NULL,
-  `ScriptStyleSheetDefer5` enum('defer') default NULL,
-  `ScriptJavaScriptSheet1` varchar(100) default NULL,
-  `ScriptJavaScriptSheet2` varchar(100) default NULL,
-  `ScriptJavaScriptSheet3` varchar(100) default NULL,
-  `ScriptJavaScriptSheet4` varchar(100) default NULL,
-  `ScriptJavaScriptSheet5` varchar(100) default NULL,
-  `ScriptJavaScriptSheetCharset1` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptJavaScriptSheetCharset2` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptJavaScriptSheetCharset3` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptJavaScriptSheetCharset4` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptJavaScriptSheetCharset5` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptJavaScriptSheetCode1` text,
-  `ScriptJavaScriptSheetCode2` text,
-  `ScriptJavaScriptSheetCode3` text,
-  `ScriptJavaScriptSheetCode4` text,
-  `ScriptJavaScriptSheetCode5` text,
-  `ScriptJavaScriptSheetDefer1` enum('defer') default NULL,
-  `ScriptJavaScriptSheetDefer2` enum('defer') default NULL,
-  `ScriptJavaScriptSheetDefer3` enum('defer') default NULL,
-  `ScriptJavaScriptSheetDefer4` enum('defer') default NULL,
-  `ScriptJavaScriptSheetDefer5` enum('defer') default NULL,
-  `ScriptVBScriptSheet1` varchar(100) default NULL,
-  `ScriptVBScriptSheet2` varchar(100) default NULL,
-  `ScriptVBScriptSheet3` varchar(100) default NULL,
-  `ScriptVBScriptSheet4` varchar(100) default NULL,
-  `ScriptVBScriptSheet5` varchar(100) default NULL,
-  `ScriptVBScriptSheetCharset1` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptVBScriptSheetCharset2` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptVBScriptSheetCharset3` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptVBScriptSheetCharset4` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptVBScriptSheetCharset5` enum('ISO-8859-1','ISO-8859-2','ISO-8859-3','ISO-8859-4','ISO-8859-5','ISO-8859-6','ISO-8859-7','ISO-8859-8','ISO-8859-9','ISO-8859-10','ISO-8859-15','ISO-2022-JP','ISO-2022-JP-2','ISO-2022-KR','UTF-8','UTF-16') default NULL,
-  `ScriptVBScriptSheetCode1` text,
-  `ScriptVBScriptSheetCode2` text,
-  `ScriptVBScriptSheetCode3` text,
-  `ScriptVBScriptSheetCode4` text,
-  `ScriptVBScriptSheetCode5` text,
-  `ScriptVBScriptSheetDefer1` enum('defer') default NULL,
-  `ScriptVBScriptSheetDefer2` enum('defer') default NULL,
-  `ScriptVBScriptSheetDefer3` enum('defer') default NULL,
-  `ScriptVBScriptSheetDefer4` enum('defer') default NULL,
-  `ScriptVBScriptSheetDefer5` enum('defer') default NULL,
-  `Enable/Disable` enum('Enable','Disable') NOT NULL default 'Disable',
-  UNIQUE KEY `ThemeName` (`ThemeName`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'AddNewsPage', '110');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'CreatedUpdateNewsPage', '../../index.php?PageID=114');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'DeletedNewsPage', '../../index.php?PageID=116');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'DeleteNewsPage', '115');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'EnableDisableNewsPage', '../../index.php?PageID=118');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'EnableDisableStatusChangeNewsPage', '117');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleCreatedPage', '../../index.php?PageID=101');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleCreatedUpdatePage', '../../index.php?PageID=104');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleDeletePage', '../../index.php?PageID=106');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleDeleteSelectPage', '105');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleEnableDisablePage', '../../index.php?PageID=108');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleEnableDisableSelectPage', '107');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleUpdatePage', '../../index.php?PageID=103');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsArticleUpdateSelectPage', '102');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'NewsPageCreatedPage', '../../index.php?PageID=111');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'UpdateNewsPage', '../../index.php?PageID=113');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlNewsStories', 'news', 'UpdateNewsPageSelect', '112');
 
---
--- Dumping data for table `AdministratorContentLayerTheme`
---
+REPLACE INTO `AdministratorForm` VALUES(100, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/AddNewsStory.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(102, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/SelectNewsStory.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(103, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/UpdateNewsStory.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(105, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/DeleteNewsStory.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(107, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/EnableDisableStatusChangeNewsStory.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(110, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/AddNewsPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(112, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/SelectNewsPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(113, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/UpdateNewsPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(115, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/DeleteNewsPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(117, 1, 'AdministratorFormTableListing', 'PageTypes/NewsPage/EnableDisableStatusChangeNewsPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(120, 1, 'AdministratorFormTableListing', 'PageTypes/CalendarPage/AddCalendarEvent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(122, 1, 'AdministratorFormTableListing', 'PageTypes/CalendarPage/SelectCalendarEvent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(123, 1, 'AdministratorFormTableListing', 'PageTypes/CalendarPage/UpdateCalendarEvent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(125, 1, 'AdministratorFormTableListing', 'PageTypes/CalendarPage/DeleteCalendarEvent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(127, 1, 'AdministratorFormTableListing', 'PageTypes/CalendarPage/EnableDisableStatusChangeCalendarEvent.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-REPLACE INTO `AdministratorContentLayerTheme` VALUES('AdminTheme', '../Tier8-PresentationLayer/AdminTheme/Settings.css', '../Tier8-PresentationLayer/AdminTheme/TextSettings.css', '../Tier8-PresentationLayer/AdminTheme/Menus.css', '../Tier8-PresentationLayer/AdminTheme/MenuSettings.css', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/dhtmlxgrid.css', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '../Tier8-PresentationLayer/AdminTheme/SettingsIE6.css', '../Tier8-PresentationLayer/AdminTheme/MenuSettingsIE6.css', NULL, NULL, NULL, '../Tier8-PresentationLayer/AdminTheme/MenuSettingsIE7.css', '../Tier8-PresentationLayer/AdminTheme/SettingsIE7.css', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/dhtmlxcommon.js', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/dhtmlxgrid.js', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/dhtmlxgridcell.js', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/ext/dhtmlxgrid_form.js', '../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/ext/dhtmlxgrid_mcol.js', '../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.7.1.min.js', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable');
+REPLACE INTO `AdministratorForm` VALUES(190, 1, 'AdministratorFormTableListing', 'PageTypes/MultiHeaderContentPage/AddMultiHeaderPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(192, 1, 'AdministratorFormTableListing', 'PageTypes/MultiHeaderContentPage/SelectMultiHeaderPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(193, 1, 'AdministratorFormTableListing', 'PageTypes/MultiHeaderContentPage/UpdateMultiHeaderPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(195, 1, 'AdministratorFormTableListing', 'PageTypes/MultiHeaderContentPage/DeleteMultiHeaderPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(197, 1, 'AdministratorFormTableListing', 'PageTypes/MultiHeaderContentPage/EnableDisableStatusChangeMultiHeaderPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
 
-UPDATE `XhtmlTableListing` SET `TableWidth` = '550' WHERE CONVERT(`XhtmlTableListing`.`XhtmlTableName` USING utf8) = 'XhtmlTable' AND `XhtmlTableListing`.`XhtmlTableID` = 0 LIMIT 1;
+REPLACE INTO `AdministratorForm` VALUES(140, 1, 'AdministratorFormTableListing', 'PageTypes/PhotosPage/AddPhotosPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(142, 1, 'AdministratorFormTableListing', 'PageTypes/PhotosPage/SelectPhotosPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(143, 1, 'AdministratorFormTableListing', 'PageTypes/PhotosPage/UpdatePhotosPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(145, 1, 'AdministratorFormTableListing', 'PageTypes/PhotosPage/DeletePhotosPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+REPLACE INTO `AdministratorForm` VALUES(147, 1, 'AdministratorFormTableListing', 'PageTypes/PhotosPage/EnableDisableStatusChangePhotosPage.php', NULL, NULL, NULL, 'post', NULL, NULL, 'ltr', NULL, 'en-us', NULL, NULL, 'en-us', 'Enable', 'Approved');
+
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'AddPhotosPage', '140');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'CreatedUpdatePhotosPage', '../../index.php?PageID=144');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'DeletedPhotosPage', '../../index.php?PageID=146');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'DeletePhotosPage', '145');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'EnableDisablePhotosPage', '../../index.php?PageID=148');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'EnableDisableStatusChangePhotosPage', '147');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'PhotosPageCreatedPage', '../../index.php?PageID=141');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'UpdatePhotosPage', '../../index.php?PageID=143');
+REPLACE INTO `AdministratorContentLayerModulesSettings` VALUES('XhtmlPicture', 'picture', 'UpdatePhotosPageSelect', '142');
+
