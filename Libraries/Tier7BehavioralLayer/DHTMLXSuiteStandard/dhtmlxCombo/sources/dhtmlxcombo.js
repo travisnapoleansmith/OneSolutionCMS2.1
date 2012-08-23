@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -90,7 +90,8 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
       this._optionObject = dhtmlXCombo_optionTypes[this.optionType];
 
       this._disabled = false;
-	  
+	  this.readonlyDelay = 750;
+      this.filterEntities = ["[","]","{","}","(",")","+","*","\\","?",".","$","^"];
 	  if (!window.dhx_glbSelectAr){
           window.dhx_glbSelectAr=new Array();
           window.dhx_openedSelect=null;
@@ -128,7 +129,13 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 *     @topic: 0
 */
    dhtmlXCombo.prototype.enableFilteringMode = function(mode,url,cache,autosubload){
-      this._filter=convertStringToBoolean(mode);
+      if(mode=="between"){
+          this._filter= true;
+          this._anyPosition = true;
+          this._autoDisabled = true;
+      }
+      else
+        this._filter=convertStringToBoolean(mode);
 
       if (url){
          this._xml=url;
@@ -168,16 +175,22 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 		} else {
 			var that = this;
 			this.DOMelem.onkeyup=function(ev){ 
-				ev=ev||window.event; 
+				ev=ev||window.event;
+                if(that._searchTimeout)
+                    window.clearTimeout(that._searchTimeout);
 				if (ev.keyCode!=9) ev.cancelBubble=true;
 				if((ev.keyCode >= 48 && ev.keyCode <= 57)||(ev.keyCode >= 65 && ev.keyCode <= 90)){
+                    if (!that._searchText)
+                        that._searchText="";
+                    that._searchText += String.fromCharCode(ev.keyCode);
 					for(var i=0; i<that.optionsArr.length; i++){
 						var text = that.optionsArr[i].text;
-						if(text.toString().toUpperCase().indexOf(String.fromCharCode(ev.keyCode)) == 0){
+						if(text.toString().toUpperCase().indexOf(that._searchText) == 0){
 								that.selectOption(i);
 								break;
 						}
 					}
+                    that._searchTimeout=window.setTimeout(function() {that._searchText="";}, that.readonlyDelay);
 					ev.cancelBubble=true;
 				}
 			}
@@ -231,10 +244,14 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 */
    dhtmlXCombo.prototype.clearAll = function(all)
    {
-	  if (all) this.setComboText("");   	  
-      this.optionsArr=new Array();
-      this.redrawOptions();
-      if (all) this._confirmSelection();
+		if (all) this.setComboText("");
+        this.optionsArr=new Array();
+        this.redrawOptions();
+        if (all){
+            if(this._selOption)
+                this._selOption.RedrawHeader(this,true);
+            this._confirmSelection();
+        }
    }
 /**
 *     @desc: delete option by value
@@ -323,7 +340,6 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
          if(this.optionsArr[i].value == val) return i;
       return -1;
    }
-
 /**
 *     @desc: get value of selected item
 *     @type: public
@@ -429,8 +445,10 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
    {
       this.DOMParent.removeChild(this.DOMelem);
       this.DOMlist.parentNode.removeChild(this.DOMlist);
+      if(this.DOMlistF)
+      this.DOMlistF.parentNode.removeChild(this.DOMlistF);
       var s=dhx_glbSelectAr;
-      this.DOMParent=this.DOMlist=this.DOMelem=0;
+      this.DOMParent=this.DOMlist=this.DOMlistF=this.DOMelem=0;
       this.DOMlist.combo=this.DOMelem.combo=0;
       for(var i=0; i<s.length; i++)
       {
@@ -555,41 +573,32 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 				this.DOMlist.style.top = pos[1] - this.DOMlist.offsetHeight+"px";
             	
 				this.DOMlist.style.left = pos[0]+"px"; //mm
-          }
-		  else{
+         }
+		 else{
 			this.DOMlist.style.top = pos[1]+"px";
             this.DOMlist.style.left = pos[0]+this.DOMelem.offsetWidth+"px";
          }
-     
       }
 	  
 	dhtmlXCombo.prototype.getPosition = function(oNode,pNode){
-		if (_isChrome){ 
+		if (_isIE && _isIE<8){ 
 			if(!pNode)
-			var pNode = document.body
-			
+		        pNode = document.body;
 			var oCurrentNode=oNode;
 			var iLeft=0;
 			var iTop=0;
 			while ((oCurrentNode)&&(oCurrentNode!=pNode)){
-			iLeft+=oCurrentNode.offsetLeft-oCurrentNode.scrollLeft;
-			iTop+=oCurrentNode.offsetTop-oCurrentNode.scrollTop;
-			oCurrentNode=oCurrentNode.offsetParent;
+				iLeft+=oCurrentNode.offsetLeft-oCurrentNode.scrollLeft+oCurrentNode.clientLeft;
+				iTop+=oCurrentNode.offsetTop-oCurrentNode.scrollTop+oCurrentNode.clientTop;
+				oCurrentNode=oCurrentNode.offsetParent;
 			}
-			if (pNode == document.body ){
-			if (_isIE && _isIE<8){
-			
-			if (document.documentElement.scrollTop)
-			iTop+=document.documentElement.scrollTop;
-			if (document.documentElement.scrollLeft)
-			iLeft+=document.documentElement.scrollLeft;
-			}
-			else
-			if (!_isFF){
-			iLeft+=document.body.offsetLeft;
-			iTop+=document.body.offsetTop;
-			}
-			}
+
+            if (document.documentElement.scrollTop){
+                iTop+=document.documentElement.scrollTop;
+            }
+            if (document.documentElement.scrollLeft){
+                iLeft+=document.documentElement.scrollLeft;
+            }
 			return new Array(iLeft,iTop);
 		}
 		var pos = getOffset(oNode);
@@ -702,6 +711,7 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
           var self = this.parentNode._self;
           window.setTimeout(function(){
           	if (self.DOMlist._skipBlur) return !(self.DOMlist._skipBlur=false);
+			self._skipFocus = true;
           	self._confirmSelection();        
           	self.callEvent("onBlur",[]);
           },100)
@@ -813,14 +823,16 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
             obj.loadXML(obj._load);
          else{
             obj._load=false;
-             if ((!obj._lkmode)&&(obj._filter))
-               obj._correctSelection();
+
+             if ((!obj._lkmode)&&(obj._filter)&&!obj._autoDisabled) {
+                 obj._correctSelection();
+             }
+
             }
 
          var selected=xml.doXPath("//option[@selected]");
          if (selected.length)
          	obj.selectOption(obj.getIndexByValue(selected[0].getAttribute("value")),false,true);
-
          obj.callEvent("onXLE",[]);
 
       }
@@ -846,14 +858,24 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 	  
 	  
       dhtmlXCombo.prototype._confirmSelection = function(data,status){
+        var text = this.getComboText();
+        this.setComboText("");
+        this.setComboText(text);
       	if(arguments.length==0){
       	    var z=this.getOptionByLabel(this.DOMelem_input.value);
           	data = z?z.value:this.DOMelem_input.value;
           	status = (z==null);
-          	if (data==this.getActualValue()) return;
+          	if (data==this.getActualValue()) return this._skipFocus = false;
       	}
-        	this.DOMelem_input.focus();
-      	this.DOMelem_hidden_input.value=data;
+		if(!this._skipFocus&&!this._disabled){
+        	try{
+                this.DOMelem_input.focus();
+            }
+            catch(err){};
+        }
+
+      	this._skipFocus = false;
+		this.DOMelem_hidden_input.value=data;
         this.DOMelem_hidden_input2.value = (status?"true":"false");
       	this.callEvent("onChange",[]);
       	this._activeMode=false;
@@ -940,12 +962,13 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 */
    dhtmlXCombo.prototype.openSelect = function(){ 
    	
-	
-    
+
+
 	  if (this._disabled) return;
       this.closeAll();
-      this._positList();
+
       this.DOMlist.style.display="block";
+      this._positList();
       this.callEvent("onOpen",[]);
 	  if(this._tempSel) this._tempSel.deselect();
 	  if(this._selOption) this._selOption.select();
@@ -955,17 +978,7 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
             corr=this.DOMlist.scrollTop-this._selOption.content.offsetTop;
          if (corr>0) this.DOMlist.scrollTop-=corr;
 	  }
-	  /* if (this.autoOptionSize){
-        	var x=this.DOMlist.offsetWidth; 
-			
-        	for ( var i=0; i<this.optionsArr.length; i++){
-				if(i==0) alert("this.DOMlist.childNodes[i].scrollWidth ="+ this.DOMlist.childNodes[i].scrollWidth + "> x= "+ x);
-        		if (this.DOMlist.childNodes[i].scrollWidth > x)
-        			x=this.DOMlist.childNodes[i].scrollWidth;
-			}
-        			
-			this.DOMlist.style.width=x+"px";
-		}*/
+	  
 		
 		      
       if (_isIE) this._IEFix(true);
@@ -998,7 +1011,16 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 			if (!this.callEvent("onDynXLS",[text,ind])) return;
 			this.loadXML(url);
      	 }
-    }
+    };
+    /**
+     *     @desc: disables autocomplete in filtering mode
+     *     @type: public
+     *     @topic: 2
+     */
+    dhtmlXCombo.prototype.disableAutocomplete = function()
+    {
+        this._autoDisabled = true;
+    };
 /**
 *     @desc: filter list of options
 *     @type: private
@@ -1011,7 +1033,10 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
          this._lkmode=mode;
          this._fetchOptions(0,text);
       }
-      var filter=new RegExp("^"+text.replace(/([\[\]\{\}\(\)\+\*\\\?\.])/g,"\\$1"),"i");
+      var escapeExp = new RegExp("(["+this.filterEntities.join("\\")+"])","g");
+      text = text.replace(escapeExp,"\\$1");
+      var filterExp = (this._anyPosition?"":"^")+text;
+      var filter=new RegExp(filterExp,"i");
       this.filterAny=false;
       for(var i=0; i<this.optionsArr.length; i++){
       	 var z=filter.test(this.optionsArr[i].content?this.optionsArr[i].data()[1]:this.optionsArr[i].text);
@@ -1022,14 +1047,15 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 		  this.closeAll();
 		  this._activeMode=true;
 	  }
-      else {
-      	  if (this.DOMlist.style.display!="block")
-      	   		this.openSelect();
-	      if (_isIE) this._IEFix(true);
-  		}
+     else {
+          if (this.DOMlist.style.display!="block")
+			      this.openSelect();
+		  if (_isIE) this._IEFix(true);
+      }
          
-        if (!mode)
-         this._correctSelection();   
+       if (!mode&&!this._autoDisabled){
+           this._correctSelection();
+       }
         else this.unSelectOption();
    }
  
@@ -1042,10 +1068,12 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
 *     @topic: 2
 */
    dhtmlXCombo.prototype._IEFix = function(mode){
-      this.DOMlistF.style.display=(mode?"block":"none");
-        this.DOMlistF.style.top=this.DOMlist.style.top;
-        this.DOMlistF.style.left=this.DOMlist.style.left;
-   }
+       this.DOMlistF.style.display=(mode?"block":"none");
+       this.DOMlistF.style.top=this.DOMlist.style.top;
+       this.DOMlistF.style.left=this.DOMlist.style.left;
+       this.DOMlistF.style.width=this.DOMlist.offsetWidth+"px";
+       this.DOMlistF.style.height=this.DOMlist.offsetHeight+"px";
+   };
 /**
 *     @desc: close opened combobox list
 *     @type: public
@@ -1062,6 +1090,9 @@ function dhtmlXCombo(parent,name,width,optionType,tabIndex){
             dhx_glbSelectAr[i]._activeMode=false;
         }
    }
+   dhtmlXCombo.prototype.changeOptionId = function(oldId,newId){
+        (this.getOption(oldId)||{}).value = newId;
+   };
  
 		
 /**
@@ -1181,7 +1212,7 @@ dhtmlXCombo_defaultOption.prototype.setValue = function(attr){
             this.content.style.cssText='width:100%; overflow:hidden;'+this.css;
             if (_isOpera || _isKHTML ) this.content.style.padding="2px 0px 2px 0px";
             this.content.innerHTML=this.text;
-            this._ctext=_isIE?this.content.innerText:this.content.textContent;
+            this._ctext=(typeof this.content.textContent!="undefined")?this.content.textContent:this.content.innerText;
          }
          return this.content;
       }

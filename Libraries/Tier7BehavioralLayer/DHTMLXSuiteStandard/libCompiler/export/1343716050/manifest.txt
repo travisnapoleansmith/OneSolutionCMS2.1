@@ -1,0 +1,13 @@
+Skin: dhx_skyblue
+
+======== JS CODE =========
+./dhtmlxcommon.js
+./message/message.js
+../dhtmlxMenu/codebase/dhtmlxmenu.js
+../dhtmlxMenu/codebase/ext/dhtmlxmenu_ext.js
+../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js
+../dhtmlxDataStore/codebase/datastore.js
+
+======== CSS CODE ========
+./message/message.css
+../dhtmlxMenu/codebase/skins/dhtmlxmenu_dhx_skyblue.css

@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -60,7 +60,7 @@ function dhtmlXWindows() {
 	}
 	
 	// skins
-	this.skin = "dhx_skyblue";
+	this.skin = (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue");
 	this.skinParams = { // dhx
 			    "dhx_black"		: { "header_height": 21, "border_left_width": 2, "border_right_width": 2, "border_bottom_height": 2 },
 			    "dhx_blue"		: { "header_height": 21, "border_left_width": 2, "border_right_width": 2, "border_bottom_height": 2 },
@@ -233,7 +233,7 @@ function dhtmlXWindows() {
 		this.vp.appendChild(this._carcass);
 	}
 	this._clearVPCss = function(css) {
-		this.vp.className = String(this.vp.className).replace(/[a-z_]{1,}/gi,function(t){return({"dhtmlx_skin_dhx_skyblue":1,"dhtmlx_skin_dhx_blue":1,"dhtmlx_skin_dhx_black":1,"dhtmlx_skin_dhx_web":1}[t]==1?"":t);});
+		this.vp.className = String(this.vp.className).replace(/[a-z_]{1,}/gi,function(t){return({"dhtmlx_skin_dhx_skyblue":1,"dhtmlx_skin_dhx_blue":1,"dhtmlx_skin_dhx_black":1,"dhtmlx_skin_dhx_web":1,"dhtmlx_skin_dhx_terrace":1}[t]==1?"":t);});
 	}
 	this._autoResizeViewport = function() {
 		for (var a in this.wins) {
@@ -254,8 +254,8 @@ function dhtmlXWindows() {
 				this.wins[a].updateNestedObjects();
 			}
 			if (this.wins[a]._isMaximized && this.wins[a].style.display != "none") {
-				this._restoreWindow(this.wins[a]);
-				this._maximizeWindow(this.wins[a]);
+				this._restoreWindow(a);
+				this._maximizeWindow(a);
 			}
 		}
 		
@@ -294,7 +294,14 @@ function dhtmlXWindows() {
 		if (this.vp != document.body) return;
 		this.autoViewport = state;
 		if (state == false) {
-			document.body.className = this.vp._css;
+			// clear old vp
+			if (this.vp == document.body) document.body.className = this.vp._css;
+			this.vp.removeChild(this.modalCoverI);
+			this.vp.removeChild(this.modalCoverD);
+			this.vp.removeChild(this._vpcover);
+			this.vp.removeChild(this._carcass);
+			this.vp = null;
+			// create a new one
 			this.vp = document.createElement("DIV");
 			this.vp.autocreated = true;
 			this.vp.className = "dhtmlx_winviewport dhtmlx_skin_"+this.skin+(this._r?" dhx_wins_rtl":"");
@@ -306,6 +313,7 @@ function dhtmlXWindows() {
 			this._autoResizeViewport();
 			this.vp.appendChild(this.modalCoverI);
 			this.vp.appendChild(this.modalCoverD);
+			this.vp.appendChild(this._vpcover);
 			this.vp.appendChild(this._carcass);
 		}
 	}
@@ -316,7 +324,14 @@ function dhtmlXWindows() {
 	*/
 	this.attachViewportTo = function(objId) {
 		if (this.autoViewport == false) {
-			if (this.vp != document.body) { this.vp.parentNode.removeChild(this.vp); }
+			// clear old vp
+			this.vp.removeChild(this.modalCoverI);
+			this.vp.removeChild(this.modalCoverD);
+			this.vp.removeChild(this._vpcover);
+			this.vp.removeChild(this._carcass);
+			if (this.vp != document.body) this.vp.parentNode.removeChild(this.vp);
+			this.vp = null;
+			// create a new one
 			this.vp = (typeof(objId)=="string"?document.getElementById(objId):objId);
 			this.vp.autocreated = false;
 			this._clearVPCss();
@@ -325,8 +340,10 @@ function dhtmlXWindows() {
 			this.vp.style.overflow = "hidden";
 			this.vp.ax = 0;
 			this.vp.ay = 0;
+			// attach data
 			this.vp.appendChild(this.modalCoverI);
 			this.vp.appendChild(this.modalCoverD);
+			this.vp.appendChild(this._vpcover);
 			this.vp.appendChild(this._carcass);
 		}
 	}
@@ -466,7 +483,7 @@ function dhtmlXWindows() {
 			
 			if (!w._allowMove || !w._allowMoveGlobal) return;
 			
-			this._wasMoved = false;
+			that._wasMoved = false;
 			//
 			w.moveOffsetX = w.x - (that._isIPad?e.touches[0].clientX:e.clientX);
 			w.moveOffsetY = w.y - (that._isIPad?e.touches[0].clientY:e.clientY);
@@ -561,17 +578,20 @@ function dhtmlXWindows() {
 			if (!that._engineCheckHeaderMouseDown(w, e||event)) { return; }
 			if (w._allowResizeGlobal && !w._isParked) {
 				if (w._isMaximized == true) {
-					that._restoreWindow(w);
+					that._restoreWindow(w.idd);
 				} else {
-					that._maximizeWindow(w);
+					that._maximizeWindow(w.idd);
 				}
 			}
+			
 			// parkup/parkup
 			/*
 			if (w._isParkedAllowed && w.button("park").isEnabled()) {
 				that._parkWindow(w);
 			}
 			*/
+			
+			w = null;
 			
 		}
 		
@@ -622,7 +642,7 @@ function dhtmlXWindows() {
 		*   @type: public
 		*/
 		win.minimize = function() {
-			that._restoreWindow(this);
+			that._restoreWindow(this.idd);
 		}
 		// maximize
 		/**
@@ -630,7 +650,7 @@ function dhtmlXWindows() {
 		*   @type: public
 		*/
 		win.maximize = function() {
-			that._maximizeWindow(this);
+			that._maximizeWindow(this.idd);
 		}
 		// close
 		/**
@@ -638,7 +658,7 @@ function dhtmlXWindows() {
 		*   @type: public
 		*/
 		win.close = function() {
-			that._closeWindow(this);
+			that._closeWindow(this.idd);
 		}
 		// park
 		/**
@@ -647,7 +667,7 @@ function dhtmlXWindows() {
 		*/
 		win.park = function() {
 			if (this._isParkedAllowed) {
-				that._parkWindow(this);
+				that._parkWindow(this.winId);
 			}
 		}
 		// stick/unstick
@@ -656,14 +676,14 @@ function dhtmlXWindows() {
 		*   @type: public
 		*/
 		win.stick = function() {
-			that._stickWindow(this);
+			that._stickWindow(this.idd);
 		}
 		/**
 		*   @desc: unsticks a window
 		*   @type: public
 		*/
 		win.unstick = function() {
-			that._unstickWindow(this);
+			that._unstickWindow(this.idd);
 		}
 		/**
 		*   @desc: returns true if the window is sticked
@@ -1047,6 +1067,7 @@ function dhtmlXWindows() {
 		*   @type: public
 		*/
 		win.removeUserButton = function(id) {
+			id = String(id).toLowerCase();
 			if (!((id == "minmax1") || (id == "minmax2") || (id == "park") || (id == "close") || (id == "stick") || (id == "unstick") || (id == "help"))) {
 				if (btn != null) { that._removeUserButton(this, id); }
 			}
@@ -1217,11 +1238,12 @@ function dhtmlXWindows() {
 			
 		}
 		// add buttons
-		this._addDefaultButtons(win);
+		this._addDefaultButtons(win.idd);
 		//
 //#wind_buttons:09062008{
 		// return button handler
 		win.button = function(id) {
+			id = String(id).toLowerCase();
 			var b = null;
 			if (this.btns[id] != null) { b = this.btns[id]; }
 			return b;
@@ -1305,6 +1327,8 @@ function dhtmlXWindows() {
 				//
 				this._carcass.x = (this._isIPad?e.touches[0].clientX:e.clientX) + this.movingWin.moveOffsetX;
 				this._carcass.y = (this._isIPad?e.touches[0].clientY:e.clientY) + this.movingWin.moveOffsetY;
+				
+				this._wasMoved = true;
 				
 				// this._fixWindowPositionInViewport(this._carcass);
 				
@@ -1592,8 +1616,10 @@ function dhtmlXWindows() {
 		this._engineRedrawWindowPos(win);
 	}
 	
-	this._addDefaultButtons = function(win) {
+	this._addDefaultButtons = function(winId) {
 //#wind_buttons:09062008{
+		
+		var win = this.wins[winId];
 		
 		// stick
 		var btnStick = this._engineGetWindowButton(win, "stick");
@@ -1605,7 +1631,7 @@ function dhtmlXWindows() {
 		btnStick.label = "stick";
 		btnStick._doOnClick = function() {
 			this.isPressed = true;
-			that._stickWindow(win);
+			that._stickWindow(this.winId);
 		}
 		
 		// sticked
@@ -1618,7 +1644,7 @@ function dhtmlXWindows() {
 		btnSticked.label = "sticked";
 		btnSticked._doOnClick = function() {
 			this.isPressed = false;
-			that._unstickWindow(win);
+			that._unstickWindow(this.winId);
 		}
 		
 		// help
@@ -1629,7 +1655,7 @@ function dhtmlXWindows() {
 		btnHelp._isEnabled = true;
 		btnHelp.isPressed = false;
 		btnHelp.label = "help";
-		btnHelp._doOnClick = function() { that._needHelp(win); }
+		btnHelp._doOnClick = function() { that._needHelp(this.winId); }
 		
 		// park
 		var btnPark = this._engineGetWindowButton(win, "park");
@@ -1640,7 +1666,7 @@ function dhtmlXWindows() {
 		btnPark._isEnabled = true;
 		btnPark.isPressed = false;
 		btnPark.label = "park";
-		btnPark._doOnClick = function() { that._parkWindow(win); }
+		btnPark._doOnClick = function() { that._parkWindow(this.winId); }
 		
 		// minmax maximize
 		var btnMinMax1 = this._engineGetWindowButton(win, "minmax1");
@@ -1649,7 +1675,7 @@ function dhtmlXWindows() {
 		btnMinMax1._isEnabled = true;
 		btnMinMax1.isPressed = false;
 		btnMinMax1.label = "minmax1";
-		btnMinMax1._doOnClick = function() { that._maximizeWindow(win); }
+		btnMinMax1._doOnClick = function() { that._maximizeWindow(this.winId); }
 		
 		// minmax restore
 		var btnMinMax2 = this._engineGetWindowButton(win, "minmax2");
@@ -1659,7 +1685,7 @@ function dhtmlXWindows() {
 		btnMinMax2._isEnabled = true;
 		btnMinMax2.isPressed = false;
 		btnMinMax2.label = "minmax2";
-		btnMinMax2._doOnClick = function() { that._restoreWindow(win); }
+		btnMinMax2._doOnClick = function() { that._restoreWindow(this.winId); }
 		
 		// close
 		var btnClose = this._engineGetWindowButton(win, "close");
@@ -1668,7 +1694,7 @@ function dhtmlXWindows() {
 		btnClose._isEnabled = true;
 		btnClose.isPressed = false;
 		btnClose.label = "close";
-		btnClose._doOnClick = function() { that._closeWindow(win); }
+		btnClose._doOnClick = function() { that._closeWindow(this.winId); }
 		
 		// dock
 		var btnDock = this._engineGetWindowButton(win, "dock");
@@ -1701,30 +1727,21 @@ function dhtmlXWindows() {
 		win.btns["close"] = btnClose;
 		win.btns["dock"] = btnDock;
 		
-		
-		// var b = win.childNodes[3].childNodes[0].childNodes[0].childNodes[0];
-		
 		// events
 		for (var a in win.btns) {
-			/*
-			var btn = win.btns[a];
-			
-			// add on header
-			var td = document.createElement("TD");
-			td.className = "dhtmlx_wins_btn_" + (btn.isVisible ? "visible" : "hidden");
-			b.appendChild(td);
-			td.appendChild(btn);
-			// attach events
-			*/
-			this._attachEventsOnButton(win, win.btns[a]);
-			//
-			// btn = null;
+			win.btns[a].winId = win.idd;
+			this._attachEventsOnButton(win.idd, a);
 		}
+		
+		win = btnStick = btnSticked = btnHelp = btnPark = btnMinMax1 = btnMinMax2 = btnClose = btnDock = null;
 		//*/
 //#}		
 	}
 //#wind_buttons:09062008{
-	this._attachEventsOnButton = function(win, btn) {
+	this._attachEventsOnButton = function(winId, btnId) {
+		
+		var btn = this.wins[winId].btns[btnId];
+		
 		// add events
 		if (!this._isIPad) {
 			
@@ -1759,7 +1776,7 @@ function dhtmlXWindows() {
 					if (wasPressed) {
 						// events
 						if (this.checkEvent("onClick")) {
-							this.callEvent("onClick", [win, this]);
+							this.callEvent("onClick", [that.wins[this.winId], this]);
 						} else {
 							this._doOnClick();
 						}
@@ -1783,7 +1800,7 @@ function dhtmlXWindows() {
 				
 				// events
 				if (this.checkEvent("onClick")) {
-					this.callEvent("onClick", [win, this]);
+					this.callEvent("onClick", [that.wins[this.winId], this]);
 				} else {
 					this._doOnClick();
 				}
@@ -1799,14 +1816,14 @@ function dhtmlXWindows() {
 *   @type:  public
 */
 		btn.show = function() {
-			that._showButton(win, this.label);
+			that._showButton(that.wins[this.winId], this.label, true);
 		}
 /**
 *   @desc: hides a button
 *   @type:  public
 */
 		btn.hide = function() {
-			that._hideButton(win, this.label);
+			that._hideButton(that.wins[this.winId], this.label, true);
 		}
 /**
 *   @desc: enables a button
@@ -1814,7 +1831,7 @@ function dhtmlXWindows() {
 */
 
 		btn.enable = function() {
-			that._enableButton(win, this.label);
+			that._enableButton(that.wins[this.winId], this.label);
 		}
 
 /**
@@ -1822,7 +1839,7 @@ function dhtmlXWindows() {
 *   @type:  public
 */
 		btn.disable = function() {
-			that._disableButton(win, this.label);
+			that._disableButton(that.wins[this.winId], this.label);
 		}
 /**
 *   @desc: checks if a button is enabled
@@ -1841,11 +1858,15 @@ function dhtmlXWindows() {
 		btn.isHidden = function() {
 			return (!this.isVisible);
 		}
+		
 		dhtmlxEventable(btn);
+		
+		btn = null;
 	}
 //#}	
 //#wind_park:09062008{
-	this._parkWindow = function(win, parkBeforeMinMax) {
+	this._parkWindow = function(winId, parkBeforeMinMax) {
+		var win = this.wins[winId];
 		if (!win._isParkedAllowed && !parkBeforeMinMax) return;
 		if (this.enableParkEffect && win.parkBusy) return;
 		if (win._isParked) {
@@ -1896,6 +1917,7 @@ function dhtmlXWindows() {
 				if (!parkBeforeMinMax) if (win.checkEvent("onParkUp")) win.callEvent("onParkUp", [win]); else this.callEvent("onParkUp", [win]);
 			}
 		}
+		win = null;
 	}
 	
 	this._allowParking = function(win) {
@@ -1962,6 +1984,7 @@ function dhtmlXWindows() {
 		if (!button) return;
 		button._isEnabled = true;
 		button.className = "dhtmlx_wins_btns_button dhtmlx_button_"+button.label+"_default";
+		button = null;
 	}
 	
 	this._disableButton = function(win, btn) {
@@ -1969,6 +1992,7 @@ function dhtmlXWindows() {
 		if (!button) return;
 		button._isEnabled = false;
 		button.className = "dhtmlx_wins_btns_button dhtmlx_button_"+win.btns[btn].label+"_disabled";
+		button = null;
 	}
 //#}
 	// resize
@@ -1984,11 +2008,14 @@ function dhtmlXWindows() {
 		this._disableButton(win, "minmax2");
 	}
 	
-	this._maximizeWindow = function(win) {
+	this._maximizeWindow = function(winId) {
+		
+		var win = this.wins[winId];
+		
 		if (win._allowResizeGlobal == false) return;
 		
 		var isParkedBeforeMinMax = win._isParked;
-		if (isParkedBeforeMinMax) this._parkWindow(win, true);
+		if (isParkedBeforeMinMax) this._parkWindow(win.idd, true);
 		
 		win.lastMaximizeX = win.x;
 		win.lastMaximizeY = win.y;
@@ -2018,21 +2045,23 @@ function dhtmlXWindows() {
 		this._engineRedrawWindowPos(win);
 		
 		if (isParkedBeforeMinMax) {
-			this._parkWindow(win, true);
+			this._parkWindow(win.idd, true);
 		} else {
 			this._engineRedrawWindowSize(win);
 			win.updateNestedObjects();
 		}
 		// event
 		if (win.checkEvent("onMaximize")) win.callEvent("onMaximize", [win]); else this.callEvent("onMaximize", [win]);
+		win = null;
 	}
 	
-	this._restoreWindow = function(win) {
+	this._restoreWindow = function(winId) {
+		var win = this.wins[winId];
 		if (win._allowResizeGlobal == false) return;
 		if (win.layout) win.layout._defineWindowMinDimension(win);
 		
 		var isParkedBeforeMinMax = win._isParked;
-		if (isParkedBeforeMinMax) this._parkWindow(win, true);
+		if (isParkedBeforeMinMax) this._parkWindow(win.idd, true);
 		
 		// put window to prev place if auto max dimension or center
 		if (win.maxW != "auto" && win.maxW != "auto") {
@@ -2053,31 +2082,37 @@ function dhtmlXWindows() {
 		this._engineRedrawWindowPos(win);
 		
 		if (isParkedBeforeMinMax) {
-			this._parkWindow(win, true);
+			this._parkWindow(win.idd, true);
 		} else {
 			this._engineRedrawWindowSize(win);
 			win.updateNestedObjects();
 		}
 		// events
 		if (win.checkEvent("onMinimize")) win.callEvent("onMinimize", [win]); else this.callEvent("onMinimize", [win]);
+		win = null;
 	}
 //#wind_buttons:09062008{	
-	this._showButton = function(win, btn) {
+	this._showButton = function(win, btn, userShow) {
 		var button = this._engineGetWindowButton(win, btn);
 		if (!button) return;
+		if ((!userShow && button._userHide) || button.isVisible === true) return;
 		button.isVisible = true;
 		button.style.display = "";
 		button.style.visibility = "visible";
+		button._userHide = !(userShow==true);
 		this._engineRedrawWindowTitle(win);
+		button = null;
 	}
 	
-	this._hideButton = function(win, btn) {
+	this._hideButton = function(win, btn, userHide) {
 		var button = this._engineGetWindowButton(win, btn);
-		if (!button) return;
+		if (!button || (!userHide && button.isVisible === false)) return;
 		button.isVisible = false;
 		button.style.display = "none";
 		button.style.visibility = "hidden";
+		button._userHide = (userHide==true);
 		this._engineRedrawWindowTitle(win);
+		button = null;
 	}
 //#}	
 	this._showWindow = function(win) {
@@ -2120,11 +2155,13 @@ function dhtmlXWindows() {
 		return isHidden;
 	}
 	
-	this._closeWindow = function(win) {
+	this._closeWindow = function(winId) {
+		
+		var win = this.wins[winId];
 		
 		// ie focus fix
 		if (this._focusFixIE) {
-			this._focusFixIE.style.top = (this.vp==document.body?0:getAbsoluteTop(this.vp))+win.y+"px";
+			this._focusFixIE.style.top = (this.vp==document.body?0:getAbsoluteTop(this.vp))+Number(win.y)+"px";
 			this._focusFixIE.focus();
 		}
 		
@@ -2137,7 +2174,10 @@ function dhtmlXWindows() {
 		
 		// closing
 		// for (var a in win.btns) { this._removeButtonGlobal(win, a, win.btns[a]); }
-		this._removeWindowGlobal(win);
+		
+		win = null;
+		
+		this._removeWindowGlobal(winId);
 		
 		/*
 		this.vp.removeChild(win);
@@ -2159,13 +2199,15 @@ function dhtmlXWindows() {
 		*/
 	}
 	
-	this._needHelp = function(win) {
+	this._needHelp = function(winId) {
 		// event only
+		var win = this.wins[winId];
 		if (win.checkEvent("onHelp")) {
 			win.callEvent("onHelp", [win]);
 		} else {
 			this.callEvent("onHelp", [win]);
 		}
+		win = null;
 	}
 	this._setWindowIcon = function(win, iconEnabled, iconDisabled) {
 		win.iconsPresent = true;
@@ -2302,22 +2344,27 @@ function dhtmlXWindows() {
 		return state;
 	}
 	
-	this._stickWindow = function(win) {
+	this._stickWindow = function(winId) {
+		var win = this.wins[winId];
 		win._isSticked = true;
 		this._hideButton(win, "stick");
 		this._showButton(win, "sticked");
 		this._bringOnTop(win);
+		win = null;
 	}
 	
-	this._unstickWindow = function(win) {
+	this._unstickWindow = function(winId) {
+		var win = this.wins[winId];
 		win._isSticked = false;
 		this._hideButton(win, "sticked");
 		this._showButton(win, "stick");
 		this._bringOnTopAnyStickedWindows();
+		win = null;
 	}
 //#wind_buttons:09062008{
 	// add user button
 	this._addUserButton = function(win, id, pos, title) {
+		id = String(id).toLowerCase();
 		var userButton = this._engineAddUserButton(win, id, pos);
 		userButton.title = title;
 		userButton.isVisible = true;
@@ -2325,9 +2372,11 @@ function dhtmlXWindows() {
 		userButton.isPressed = false;
 		userButton.label = id;
 		win.btns[id] = userButton;
-		userButton._doOnClick = function() {}
+		win.btns[id].winId = win.idd
+		win.btns[id]._doOnClick = function(){};
 		// attach events
-		this._attachEventsOnButton(win, userButton);
+		this._attachEventsOnButton(win.idd, id);
+		userButton = null;
 	}
 	
 	// remove user button
@@ -2459,11 +2508,13 @@ function dhtmlXWindows() {
 		this._clearAll();
 	}
 	
-	this._removeButtonGlobal = function(win, buttonId) {
+	this._removeButtonGlobal = function(winId, buttonId) {
 //#wind_buttons:09062008{
-		if (!win.btns[buttonId]) return;
+		//
+		if (!this.wins[winId]) return;
+		if (!this.wins[winId].btns[buttonId]) return;
 		
-		var btn = win.btns[buttonId];
+		var btn = this.wins[winId].btns[buttonId];
 		
 		btn.title = null;
 		btn.isVisible = null;
@@ -2473,10 +2524,13 @@ function dhtmlXWindows() {
 		
 		btn._doOnClick = null;
 		
+		btn.detachAllEvents();
+		
 		btn.attachEvent = null;
 		btn.callEvent = null;
 		btn.checkEvent = null;
 		btn.detachEvent = null;
+		btn.detachAllEvents = null;
 		btn.disable = null;
 		btn.enable = null;
 		btn.eventCatcher = null;
@@ -2489,19 +2543,24 @@ function dhtmlXWindows() {
 		btn.onmouseout = null;
 		btn.onmouseover = null;
 		btn.onmouseup = null;
+		btn.ontouchstart = null;
+		btn.ontouchend = null;
 		
 		if (btn.parentNode) btn.parentNode.removeChild(btn);
 		btn = null;
 		
-		win.btns[buttonId] = null;
+		this.wins[winId].btns[buttonId] = null;
+		delete this.wins[winId].btns[buttonId];
 //#}
 	}
 	
 	
-	this._removeWindowGlobal = function(win) {
+	this._removeWindowGlobal = function(winId) {
+		
+		var win = this.wins[winId];
+		
 		// modal check
 		if (this.modalWin == win) this._setWindowModal(win, false);
-		var idd = win.idd;
 		
 		// clear attached frame events
 		/*
@@ -2521,13 +2580,15 @@ function dhtmlXWindows() {
 		}
 		*/
 		// clear cover events
-		win.coverBlocker().onselectstart = null;
-		
-		// remove dhxcont
-		win._dhxContDestruct();
+		var t = win.coverBlocker();
+		t.onselectstart = null;
+		t = null;
 		
 		// remove onselect event
 		this._engineDiableOnSelectInWindow(win, false);
+		
+		// remove dhxcont
+		win._dhxContDestruct();
 		
 		// remove header events
 		this._engineGetWindowHeader(win).onmousedown = null;
@@ -2541,12 +2602,16 @@ function dhtmlXWindows() {
 		for (var a in win.btns) this._removeButtonGlobal(win, a);
 		win.btns = null;
 		
+		win.detachAllEvents();
+		
 		// clear win other events
 		win._adjustToContent = null;
 		win._doOnAttachMenu = null;
 		win._doOnAttachStatusBar = null;
 		win._doOnAttachToolbar = null;
-		// win._doOnAttachURL = null;
+		win._doOnFrameMouseDown = null;
+		win._doOnFrameContentLoaded = null;
+		//
 		win._redraw = null;
 		win.addUserButton = null;
 		win.allowMove = null;
@@ -2565,6 +2630,7 @@ function dhtmlXWindows() {
 		win.denyPark = null;
 		win.denyResize = null;
 		win.detachEvent = null;
+		win.detachAllEvents = null;
 		win.eventCatcher = null;
 		win.getDimension = null;
 		win.getIcon = null;
@@ -2632,11 +2698,11 @@ function dhtmlXWindows() {
 		win._content = null;
 		win.innerHTML = "";
 		win.parentNode.removeChild(win);
-		win = null;
-		this.wins[idd] = null;
-		delete this.wins[idd];
 		
-		idd = null;
+		win = null;
+		
+		this.wins[winId] = null;
+		delete this.wins[winId];
 		
 	}
 	
@@ -2654,12 +2720,14 @@ function dhtmlXWindows() {
 		obj.onselectstart = null;
 		obj.onfocus = null;
 		obj.style.display = "";
+		obj = null;
 	}
 	this._parseNestedForEvents = function(obj) {
 		this._removeEvents(obj);
 		for (var q=0; q<obj.childNodes.length; q++) {
 			if (obj.childNodes[q].tagName != null) { this._parseNestedForEvents(obj.childNodes[q]); }
 		}
+		obj = null;
 	}
 	
 	this._clearAll = function() {
@@ -2668,7 +2736,7 @@ function dhtmlXWindows() {
 		this._clearDocumentEvents();
 		
 		// remove windows
-		for (var a in this.wins) this._removeWindowGlobal(this.wins[a]);
+		for (var a in this.wins) this._removeWindowGlobal(a);
 		this.wins = null;
 		
 		// remove carcass
@@ -2703,7 +2771,6 @@ function dhtmlXWindows() {
 		
 		this._effects = null;
 		this._engineSkinParams = null;
-		wins = null;
 		
 		this._addDefaultButtons = null;
 		this._addUserButton = null;
@@ -2857,7 +2924,8 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 	this._engineSkinParams = {dhx_blue:	{"hh": 21, "lbw": 2, "rbw": 2, "lch": 2, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 2, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": null, "noh_h": null},
 				  dhx_black:	{"hh": 21, "lbw": 2, "rbw": 2, "lch": 2, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 2, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": null, "noh_h": null},
 				  dhx_skyblue:	{"hh": 29, "lbw": 2, "rbw": 2, "lch": 2, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 2, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": 5, "noh_h": -10},
-				  dhx_web:	{"hh": 27, "lbw": 5, "rbw": 5, "lch": 5, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 5, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": 5, "noh_h": -10}
+				  dhx_web:	{"hh": 27, "lbw": 5, "rbw": 5, "lch": 5, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 5, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": 5, "noh_h": -10},
+				  dhx_terrace:	{"hh": 37, "lbw": 5, "rbw": 5, "lch": 5, "lcw": 14, "rch": 14, "rcw": 14, "bbh": 5, "mnh": 23, "tbh": 25, "sbh": 20, "noh_t": 5, "noh_h": -10}
 	};
 	
 	this._isIE6 = false;
@@ -2866,7 +2934,7 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 	// forms window html
 	this._engineSetWindowBody = function(win) {
 		win.innerHTML = "<div iswin='1' class='dhtmlx_wins_body_outer' style='position: relative;'>"+
-					(this._isIE6?"<iframe frameborder='0' class='dhtmlx_wins_ie6_cover_fix' onload='this.contentWindow.document.body.style.overflow=\"hidden\";'></iframe>":"")+
+					(this._isIE6?"<iframe src='javascript:false;' frameborder='0' class='dhtmlx_wins_ie6_cover_fix' onload='this.contentWindow.document.body.style.overflow=\"hidden\";'></iframe>":"")+
 					"<div class='dhtmlx_wins_icon'></div>"+
 					"<div class='dhtmlx_wins_progress'></div>"+
 					"<div class='dhtmlx_wins_title'>dhtmlxWindow</div>"+
@@ -2905,11 +2973,15 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 		}
 		win.skin = this.skin;
 		win.dhxContGlobal.setContent(win.childNodes[0].childNodes[(this._isIE6?5:4)]);
-		win.coverBlocker().onselectstart = function(e) {
+		
+		var t = win.coverBlocker();
+		t.onselectstart = function(e) {
 			e = e||event;
 			e.returnValue = false;
 			e.cancelBubble = true;
 		}
+		t = null;
+		
 	}
 	
 	// block selection
@@ -2927,7 +2999,9 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 		for (var q=0; q<data.length; q++) {
 			//console.log(data[q])
 			data[q].onselectstart = (state?function(e){e=e||event;e.returnValue=false;return false;}:null);
+			data[q] = null;
 		}
+		data = null;
 	}
 	
 	// return window header
@@ -3034,11 +3108,13 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 	
 	// return window button
 	this._engineGetWindowButton = function(win, buttonName) {
+		buttonName = String(buttonName).toLowerCase();
 		var buttonObj = null;
-		var buttonStyle = "dhtmlx_button_"+String(buttonName).toLowerCase()+"_";
+		var buttonStyle = "dhtmlx_button_"+buttonName+"_";
 		for (var q=0; q<win.childNodes[0].childNodes[(this._isIE6?4:3)].childNodes.length; q++) {
 			var buttonTemp = win.childNodes[0].childNodes[(this._isIE6?4:3)].childNodes[q];
 			if (String(buttonTemp.className).search(buttonStyle) != -1) { buttonObj = buttonTemp; }
+			buttonTemp = null;
 		}
 		return buttonObj;
 	}
@@ -3139,7 +3215,7 @@ dhtmlXWindows.prototype._dhx_Engine = function() {
 	
 	// redraw windows skin
 	this._engineRedrawSkin = function() {
-		this.vp.className = "dhtmlx_winviewport dhtmlx_skin_"+this.skin+(this._r?" dhx_wins_rtl":"");
+		this.vp.className = (this.vp==document.body&&this.vp._css?this.vp._css+" ":"")+"dhtmlx_winviewport dhtmlx_skin_"+this.skin+(this._r?" dhx_wins_rtl":"");
 		var sk = this._engineSkinParams[this.skin];
 		for (var a in this.wins) {
 			if (this.skin == "dhx_skyblue") {

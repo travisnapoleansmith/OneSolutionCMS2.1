@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -68,7 +68,7 @@ dhtmlXColorPicker.prototype.hideOnSelect=function(a){this.hideSelfOnSelect=a};dh
 dhtmlXColorPicker.prototype.loadUserLanguage=function(a){if(window.dhtmlxColorPickerLangModules[a])this.language=window.dhtmlxColorPickerLangModules[a],this.ready&&(this.generate(),this.show())};dhtmlXColorPicker.prototype.setSkin=function(a){this.skinName=a;if(this.elements.cs_Content)this.elements.cs_Content.className="dhtmlxcolorpicker"+(a?"_"+a:a)};dhtmlXColorPicker.prototype.isVisible=function(){return this.elements.cs_Content.style.display!="none"};
 dhtmlXColorPicker.prototype.hoverButton=function(){this.className+="_Hover"};dhtmlXColorPicker.prototype.normalButton=function(){this.className=this.className.substr(0,this.className.length-6)};(function(){dhtmlx.extend_api("dhtmlXColorPicker",{_init:function(a){return[a.parent,a.click,a.colors,a.hide,a.full]},show:"showA",link:"linkTo",image_path:"setImagePath",color:"setColor"},{showA:function(){this.init();this.show()}})})();
 
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

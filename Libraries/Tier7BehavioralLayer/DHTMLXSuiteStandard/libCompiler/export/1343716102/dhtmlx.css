@@ -1,0 +1,139 @@
+
+.dhtmlx_message_area{position:fixed; right:5px; width:250px; z-index:1000}
+.dhtmlx-info{min-width: 120px; padding:4px 4px 4px 20px; font-family:Tahoma; z-index: 10000; margin:5px; margin-bottom:10px; -webkit-transition: all .5s ease; -moz-transition: all .5s ease; -o-transition: all .5s ease; transition: all .5s ease}
+.dhtmlx-info.hidden{height:0px; padding:0px; border-width:0px; margin:0px; overflow:hidden}
+.dhtmlx_modal_box{overflow:hidden; display: inline-block; min-width: 300px; width: 300px; text-align: center; position:fixed; background-color: #fff; background:-webkit-linear-gradient(top, #ffffff 1%, #d0d0d0 99%); background:-moz-linear-gradient(top, #ffffff 1%, #d0d0d0 99%); box-shadow: 0px 0px 14px #888; font-family: Tahoma; z-index:20000; border-radius:6px; border: 1px solid #ffffff}
+.dhtmlx_popup_title{border-top-left-radius:5px; border-top-right-radius:5px; border-width:0px; 
+ background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAMAAAAIaGBFAAAAhFBMVEVwcHBubm5sbGxqampoaGhmZmZlZWVjY2NhYWFfX19dXV1bW1taWlpYWFhWVlZUVFRSUlJRUVFPT09NTU1LS0tJSUlHR0dGRkZERERCQkJAQEA+Pj49PT09PT0+Pj5AQEBBQUFDQ0NERERGRkZHR0dJSUlKSkpMTExMTEw5OTk5OTk5OTkny8YEAAAAQklEQVQImQXBCRJCAAAAwKVSQqdyjSPXNP7/QLsIhA6OTiJnF7GrRCpzc/fw9PKW+/gqlCq1RqvTG/yMJrPF6m/bAVEhAxxnHG0oAAAAAElFTkSuQmCC); background-image: -webkit-linear-gradient(top, #707070 1%, #3d3d3d 70%, #4c4c4c 97%, #393939 97%); background-image: -moz-linear-gradient(top, #707070 1%, #3d3d3d 70%, #4c4c4c 97%, #393939 97%)}
+.dhtmlx-info, .dhtmlx_popup_button, .dhtmlx_button{user-select: none; -webkit-user-select: none; -moz-user-select:-moz-none; cursor:pointer}
+.dhtmlx_popup_text{overflow:hidden}
+.dhtmlx_popup_controls{border-radius:6px; padding:5px}
+.dhtmlx_popup_button, .dhtmlx_button{height: 30px; line-height:30px; display: inline-block; margin: 0 5px; border-radius: 6px; color:#FFF}
+.dhtmlx_popup_button{min-width: 120px}
+div.dhx_modal_cover {background-color:#000; cursor:default; filter:alpha(opacity = 20); opacity: 0.2; position: fixed; z-index:19999; left: 0px; top: 0px; width: 100%; height: 100%; border: none; zoom: 1}
+.dhtmlx-info img, .dhtmlx_modal_box img{float:left; margin-right:20px}
+.dhtmlx-alert-error .dhtmlx_popup_title, .dhtmlx-confirm-error .dhtmlx_popup_title{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAIAAAArRUU2AAAATklEQVR4nIWLuw2AMBBDjVuQiBT2oWbRDATrnB0KQOJoqPzRe3BrHI6dcBASYREKovtK6/6DsDOX+stN+3H1YX9ciRgnYq5EWYhS2dftBIuLT4JyIrPCAAAAAElFTkSuQmCC)}
+.dhtmlx-alert-error, .dhtmlx-confirm-error {border: 1px solid #ff0000}
+.dhtmlx_button, .dhtmlx_popup_button{box-shadow: 0px 0px 4px #888; border:1px solid #838383}
+.dhtmlx_button input, .dhtmlx_popup_button div{border:1px solid #FFF; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAMAAADaS4T1AAAAYFBMVEVwcHBtbW1ra2toaGhmZmZjY2NhYWFeXl5cXFxaWlpXV1dVVVVSUlJQUFBNTU1LS0tJSUlGRkZERERBQUE/Pz88PDw9PT0+Pj5AQEBCQkJDQ0NFRUVHR0dISEhKSkpMTEzqthaMAAAAMklEQVQImQXBhQ2AMAAAsOIMlwWH/8+kRSKVyRVKlVrQaHV6g9FktlhFm93hdLk9Xt8PIfgBvdUqyskAAAAASUVORK5CYII=); background-image: -webkit-linear-gradient(top, #707070 1%, #3d3d3d 70%, #4c4c4c 99%); background-image: -moz-linear-gradient(top, #707070 1%, #3d3d3d 70%, #4c4c4c 99%); border-radius:6px; font-size:15px; font-weight:normal; 
+ -moz-box-sizing:content-box; box-sizing:content-box; color:#fff; padding:0px; margin:0px; vertical-align:top; height:28px; line-height:28px}
+.dhtmlx_button input:focus, .dhtmlx_button input:active, .dhtmlx_popup_button div:active, .dhtmlx_popup_button div:focus{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAMAAADaS4T1AAAAXVBMVEVwcHBubm5tbW1sbGxra2tpaWloaGhnZ2dmZmZlZWVjY2NiYmJhYWFgYGBfX19dXV1cXFxbW1taWlpZWVlXV1dWVlZVVVVUVFRTU1NRUVFQUFBPT09OTk5NTU1LS0tT9SY0AAAAMUlEQVQImQXBhQGAMAAAIGxnx2z9/00BiVQmVyhVakGj1ekNRpPZYhVtdofT5fZ4fT8hpwG05JjexgAAAABJRU5ErkJggg==); background-image: -webkit-linear-gradient(top, #707070 1%, #4c4c4c 99%); background-image: -moz-linear-gradient(top, #707070 1%, #4c4c4c 99%); 
+}
+.dhtmlx_popup_title{color:#fff; text-shadow: 1px 1px #000; height:40px; line-height:40px; font-size:20px}
+.dhtmlx_popup_text{margin:15px 15px 5px 15px; font-size:14px; color:#000; min-height:30px; border-radius:6px}
+.dhtmlx-info, .dhtmlx-error{font-size:14px; color:#000; box-shadow: 0px 0px 10px #888; 
+ padding:0px; 
+ background-color:#FFF; border-radius:3px; border:1px solid #ffffff}
+.dhtmlx-info div{padding:5px 10px 5px 10px; background-color: #fff; border-radius:3px; border:1px solid #B8B8B8}
+.dhtmlx-error{background-color: #d81b1b; border:1px solid #ff3c3c; box-shadow: 0px 0px 10px #000}
+.dhtmlx-error div{background-color: #d81b1b; 
+ border:1px solid #940000; color:#FFF}
+div.dhtmlx_winviewport {position: absolute; 
+ overflow: hidden}
+div.dhtmlx_window_active {position: absolute; overflow: hidden}
+div.dhtmlx_window_inactive {position: absolute; overflow: hidden}
+div.dhx_content_cover_blocker {position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; 
+ filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; background: #FFFFFF}
+iframe.dhx_modal_cover_ifr {position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; background-color: #FFFFFF}
+div.dhx_modal_cover_dv {position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; border: none; filter: alpha(opacity=50); -moz-opacity: 0.5; opacity: 0.5; background-color: #EEEEEE; 
+}
+iframe.dhx_ie6_wincover_forsel {position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; overflow: hidden; filter: alpha(opacity=0); background-color: #FFFFFF; z-index: -1}
+div.dhx_carcass_resmove {position: absolute; filter: alpha(opacity=50); -moz-opacity: 0.5; opacity: 0.5; background-color: #E0E0E0; border: #909090 1px solid}
+div.dhx_content_vp_cover {position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; background-color: #FFFFFF}
+iframe.dhtmlx_wins_ie6_cover_fix {position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; overflow: hidden; filter: alpha(opacity=0); background-color: #FFFFFF}
+div.dhxcont_content_blocker {position: absolute; left: 0px; top: 0px; width: 101%; height: 101%; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; background: #FFFFFF; z-index: 1; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_body_outer {position: absolute; overflow: hidden; left: 0px; top: 0px; abackground-color: #FFFFFF; background-color: #c2d5dc; background-image: url('imgs//dhxwins_dhx_skyblue/active/header_bg.gif'); background-repeat: repeat-x; background-position: top; border: #a4bed4 1px solid}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_body_outer div.dhtmlx_wins_body_inner {position: absolute; overflow: hidden; 
+ aborder: #c2d5dc 5px solid; aborder: #a4bed4 1px solid; aborder-top: none; 
+ background-color: #ebebeb !important; border: #ebebeb 2px solid !important}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active .dhtmlx_wins_no_header {
+ border-top: #c2d5dc 6px solid !important}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_title {position: absolute; top: 0px; height: 29px; line-height: 29px; vertical-align: middle; padding-left: 28px; left: 0px; color: #000000; font-family: Tahoma; font-size: 11px; font-weight: bold; cursor: default; white-space: nowrap; overflow: hidden; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_progress {background-image: url('imgs//dhxwins_dhx_skyblue/active/progress.gif')}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_close_default {background-position: -96px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_close_disabled {background-position: -96px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_close_over_default {background-position: -96px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_close_over_pressed {background-position: -96px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax1_default {background-position: -64px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax1_disabled {background-position: -64px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax1_over_default {background-position: -64px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax1_over_pressed {background-position: -64px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax2_default {background-position: -80px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax2_disabled {background-position: -80px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax2_over_default {background-position: -80px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_minmax2_over_pressed {background-position: -80px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_park_default {background-position: -48px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_park_disabled {background-position: -48px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_park_over_default {background-position: -48px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_park_over_pressed {background-position: -48px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_stick_default {background-position: 0px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_stick_disabled {background-position: 0px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_stick_over_default {background-position: 0px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_stick_over_pressed {background-position: 0px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_sticked_default {background-position: -16px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_sticked_disabled {background-position: -16px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_sticked_over_default {background-position: -16px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_sticked_over_pressed {background-position: -16px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_help_default {background-position: -32px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_help_disabled {background-position: -32px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_help_over_default {background-position: -32px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_help_over_pressed {background-position: -32px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_dock_default {background-position: -112px 0px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_dock_disabled {background-position: -112px -48px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_dock_over_default {background-position: -112px -16px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_btns .dhtmlx_button_dock_over_pressed {background-position: -112px -32px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_body_outer {position: absolute; overflow: hidden; left: 0px; top: 0px; background-color: #dbe6f3; background-image: url('imgs//dhxwins_dhx_skyblue/inactive/header_bg.gif'); background-repeat: repeat-x; background-position: top; border: #c9d9e6 1px solid}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_body_outer div.dhtmlx_wins_body_inner {position: absolute; overflow: hidden; aaborder: #dbe6f3 5px solid; border-top: none; aabackground-color: #FFFFFF; background-color: #ebebeb !important; border: #ebebeb 2px solid !important}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive .dhtmlx_wins_no_header {
+ border-top: #c2d5dc 6px solid}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_title {position: absolute; top: 0px; height: 29px; line-height: 29px; vertical-align: middle; padding-left: 28px; left: 0px; color: #686868; font-family: Tahoma; font-size: 11px; font-weight: bold; cursor: default; white-space: nowrap; overflow: hidden; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_progress {background-image: url('imgs//dhxwins_dhx_skyblue/inactive/progress.gif')}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_close_default {background-position: -96px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_close_disabled {background-position: -96px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_close_over_default {background-position: -96px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_close_over_pressed {background-position: -96px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax1_default {background-position: -64px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax1_disabled {background-position: -64px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax1_over_default {background-position: -64px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax1_over_pressed {background-position: -64px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax2_default {background-position: -80px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax2_disabled {background-position: -80px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax2_over_default {background-position: -80px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_minmax2_over_pressed {background-position: -80px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_park_default {background-position: -48px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_park_disabled {background-position: -48px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_park_over_default {background-position: -48px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_park_over_pressed {background-position: -48px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_stick_default {background-position: 0px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_stick_disabled {background-position: 0px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_stick_over_default {background-position: 0px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_stick_over_pressed {background-position: 0px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_sticked_default {background-position: -16px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_sticked_disabled {background-position: -16px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_sticked_over_default {background-position: -16px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_sticked_over_pressed {background-position: -16px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_help_default {background-position: -32px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_help_disabled {background-position: -32px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_help_over_default {background-position: -32px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_help_over_pressed {background-position: -32px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_dock_default {background-position: -112px -64px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_dock_disabled {background-position: -112px -112px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_dock_over_default {background-position: -112px -80px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_btns .dhtmlx_button_dock_over_pressed {background-position: -112px -96px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_icon {position: absolute; top: 7px; left: 8px; width: 16px; height: 16px; border: none; z-index: 1; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none; background-repeat: no-repeat; font-size: 1px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_btns {position: absolute; right: 5px; top: 6px; font-size: 1px}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_btns div.dhtmlx_wins_btns_button {float: left; width: 16px; height: 16px; background-image: url('imgs//dhxwins_dhx_skyblue/buttons.gif')}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_resizer_t {position: absolute; left: 0px; top: 0px; width: 100%; height: 5px; 
+ font-size: 1px; background: #FFFFFF; z-index: 1; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_resizer_l {position: absolute; left: 0px; top: 0px; width: 5px; 
+ height: 100%; font-size: 1px; background: #FFFFFF; z-index: 1; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_resizer_r {position: absolute; right: 0px; top: 0px; width: 5px; 
+ height: 100%; font-size: 1px; background: #FFFFFF; z-index: 1; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_resizer_b {position: absolute; left: 0px; bottom: 0px; width: 100%; height: 5px; 
+ font-size: 1px; background: #FFFFFF; z-index: 1; filter: alpha(opacity=0); -moz-opacity: 0; opacity: 0; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none}
+.dhtmlx_skin_dhx_skyblue div.dhtmlx_wins_progress {position: absolute; top: 5px; left: 5px; width: 16px; height: 16px; background-repeat: no-repeat}
+.dhtmlx_skin_dhx_skyblue div.dhxcont_sb_container {position: relative; height: 24px}
+.dhtmlx_skin_dhx_skyblue div.dhxcont_sb_container div.dhxcont_statusbar {position: relative; top: 2px; height: 22px; line-height: 22px; background-image: url('imgs//dhxwins_dhx_skyblue/statusbar_bg.gif'); background-repeat: repeat-x; width: auto; padding: 0px 4px; overflow: hidden; white-space: nowrap; border-top: none; border-bottom: none; border-left: #a4bed4 1px solid; border-right: #a4bed4 1px solid; font-family: Tahoma; font-size: 11px; vertical-align: middle; color: #000000}
+.dhtmlx_skin_dhx_skyblue div.white_line {border-left: #FFFFFF 1px solid; border-right: #FFFFFF 1px solid; border-top: #FFFFFF 1px solid; height: 100%}
+.dhtmlx_skin_dhx_skyblue div.white_line2 {position: absolute; bottom: 0px; height: 10px; width: 100%; border-bottom: #FFFFFF 1px solid; font-size: 1px}
+.dhtmlx_skin_dhx_skyblue .dhtmlxMenu_in_Window {aborder-bottom: #cedce8 1px solid; border-bottom: #a4bed4 1px solid}

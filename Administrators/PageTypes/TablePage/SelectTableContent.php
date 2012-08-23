@@ -20,7 +20,7 @@
 	$TableSelected = $Tier6Databases->getRecord($passarray, 'XhtmlTableListing', TRUE, array());
 	
 	$TableName = $TableSelected[0]['TableName'];
-	$TableHeading = $TableSelected[0]['TableSummary'];
+	$TableHeading = $TableSelected[0]['TableTitle'];
 	$EnableDisable = $TableSelected[0]['Enable/Disable'];
 	$Status = $TableSelected[0]['Status'];
 	

@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -70,7 +70,7 @@ function dhtmlXGridObject(id){
 	if (id){
 		if (typeof (id) == 'object'){
 			this.entBox=id
-			this.entBox.id="cgrid2_"+this.uid();
+			if (!this.entBox.id) this.entBox.id="cgrid2_"+this.uid();
 		} else
 			this.entBox=document.getElementById(id);
 	} else {
@@ -221,7 +221,8 @@ function dhtmlXGridObject(id){
 	*/
 	this.setSkin=function(name){
 		this.skin_name=name;
-		this.entBox.className="gridbox gridbox_"+name;
+		var classname = this.entBox.className.split(" gridbox")[0];
+		this.entBox.className=classname + " gridbox gridbox_"+name;
 		this.skin_h_correction=0;
 		
 //#alter_css:06042008{		
@@ -240,8 +241,14 @@ function dhtmlXGridObject(id){
 				this._botMb.innerHTML="<img style='left:0px'   src='"+this.imgURL
 					+"skinD_bottom_left.gif'><img style='right:20px' src='"+this.imgURL+"skinD_bottom_right.gif'>";
 				this.entBox.appendChild(this._botMb);
-				this.entBox.style.position="relative";
+				if (this.entBox.style.position != "absolute") 
+					this.entBox.style.position="relative";
 				this.skin_h_correction=20;
+				break;
+
+			case "white":
+				this._srdh=40;
+				this.forceDivInHeader=true;
 				break;
 
 			case "dhx_skyblue":
@@ -258,13 +265,13 @@ function dhtmlXGridObject(id){
 			case "xp":
 				this.forceDivInHeader=true;
 				if ((_isIE)&&(document.compatMode != "BackCompat"))
-					this._srdh=25;
+					this._srdh=26;
 				else this._srdh=22;
 				break;
 
 			case "mt":
 				if ((_isIE)&&(document.compatMode != "BackCompat"))
-					this._srdh=25;
+					this._srdh=26;
 				else this._srdh=22;
 				break;
 
@@ -482,7 +489,8 @@ function dhtmlXGridObject(id){
 	this.setColumnSizes=function(gridWidth){
 		var summ = 0;
 		var fcols = []; //auto-size columns
-		
+
+		var fix = 0;
 		for (var i = 0; i < this._cCount; i++){
 			if ((this.initCellWidth[i] == "*") && !this._hrrar[i]){
 				this._awdth=false; //disable auto-width
@@ -493,7 +501,13 @@ function dhtmlXGridObject(id){
 			if (this.cellWidthType == '%'){
 				if (typeof this.cellWidthPC[i]=="undefined")
 					this.cellWidthPC[i]=this.initCellWidth[i];
-				this.cellWidthPX[i]=Math.floor(gridWidth*this.cellWidthPC[i]/100)||0;
+				var cwidth = (gridWidth*this.cellWidthPC[i]/100)||0;
+				if (fix>0.5){
+					cwidth++;
+					fix--;
+				}
+				var rwidth = this.cellWidthPX[i]=Math.floor(cwidth);
+				var fix =fix + cwidth - rwidth;
 			} else{
 				if (typeof this.cellWidthPX[i]=="undefined")
 					this.cellWidthPX[i]=this.initCellWidth[i];
@@ -501,7 +515,7 @@ function dhtmlXGridObject(id){
 			if (!this._hrrar[i])
 				summ+=this.cellWidthPX[i]*1;
 		}
-		
+
 		//auto-size columns
 		if (fcols.length){
 			var ms = Math.floor((gridWidth-summ)/fcols.length);
@@ -543,33 +557,35 @@ function dhtmlXGridObject(id){
 		var quirks=this.quirks = (_isIE && document.compatMode=="BackCompat");
 		var outerBorder=(this.entBox.offsetWidth-this.entBox.clientWidth)/2;		
 		
-		if (this.globalBox){
-			var splitOuterBorder=(this.globalBox.offsetWidth-this.globalBox.clientWidth)/2;		
-			if (this._delta_x && !this._realfake){
-				var ow = this.globalBox.clientWidth;
-				this.globalBox.style.width=this._delta_x;
-				this.entBox.style.width=Math.max(0,(this.globalBox.clientWidth+(quirks?splitOuterBorder*2:0))-this._fake.entBox.clientWidth)+"px";
-				if (ow != this.globalBox.clientWidth){
-					this._fake._correctSplit(this._fake.entBox.clientWidth);
+		if (!this.dontSetSizes){
+			if (this.globalBox){
+				var splitOuterBorder=(this.globalBox.offsetWidth-this.globalBox.clientWidth)/2;		
+				if (this._delta_x && !this._realfake){
+					var ow = this.globalBox.clientWidth;
+					this.globalBox.style.width=this._delta_x;
+					this.entBox.style.width=Math.max(0,(this.globalBox.clientWidth+(quirks?splitOuterBorder*2:0))-this._fake.entBox.clientWidth)+"px";
+					if (ow != this.globalBox.clientWidth){
+						this._fake._correctSplit(this._fake.entBox.clientWidth);
+					}
 				}
+				if (this._delta_y && !this._realfake){
+					this.globalBox.style.height = this._delta_y;
+					this.entBox.style.overflow = this._fake.entBox.style.overflow="hidden";
+					this.entBox.style.height = this._fake.entBox.style.height=this.globalBox.clientHeight+(quirks?splitOuterBorder*2:0)+"px";
+				}
+			} else {
+				if (this._delta_x){
+					/*when placed directly in TD tag, container can't use native percent based sizes, 
+						because table auto-adjust to show all content - too clever*/
+					if (this.entBox.parentNode && this.entBox.parentNode.tagName=="TD"){
+						this.entBox.style.width="1px";
+						this.entBox.style.width=parseInt(this._delta_x)*this.entBox.parentNode.clientWidth/100-outerBorder*2+"px";
+					}else
+						this.entBox.style.width=this._delta_x;
+				}
+				if (this._delta_y)
+					this.entBox.style.height=this._delta_y;
 			}
-			if (this._delta_y && !this._realfake){
-				this.globalBox.style.height = this._delta_y;
-				this.entBox.style.overflow = this._fake.entBox.style.overflow="hidden";
-				this.entBox.style.height = this._fake.entBox.style.height=this.globalBox.clientHeight+(quirks?splitOuterBorder*2:0)+"px";
-			}
-		} else {
-			if (this._delta_x){
-				/*when placed directly in TD tag, container can't use native percent based sizes, 
-					because table auto-adjust to show all content - too clever*/
-				if (this.entBox.parentNode.tagName=="TD"){
-					this.entBox.style.width="1px";
-					this.entBox.style.width=parseInt(this._delta_x)*this.entBox.parentNode.clientWidth/100-outerBorder*2+"px";
-				}else
-					this.entBox.style.width=this._delta_x;
-			}
-			if (this._delta_y)
-				this.entBox.style.height=this._delta_y;
 		}
 			
 		//if we have container without sizes, wait untill sizes defined
@@ -582,8 +598,8 @@ function dhtmlXGridObject(id){
 			return;
 		}		
 		
-		var border_x = (((this.entBox.cmp||this._delta_x) && (this.skin_name||"").indexOf("dhx")==0 && !quirks)?2:0);
-		var border_y = (((this.entBox.cmp||this._delta_y) && (this.skin_name||"").indexOf("dhx")==0 && !quirks)?2:0);
+		var border_x = ((!this._wthB) && ((this.entBox.cmp||this._delta_x) && (this.skin_name||"").indexOf("dhx")==0 && !quirks)?2:0);
+		var border_y = ((!this._wthB) && ((this.entBox.cmp||this._delta_y) && (this.skin_name||"").indexOf("dhx")==0 && !quirks)?2:0);
 		
 		var isVScroll = this.parentGrid?false:(this.objBox.scrollHeight > this.objBox.offsetHeight);
 		
@@ -637,8 +653,10 @@ function dhtmlXGridObject(id){
 		this._ff_size_delta=(this._ff_size_delta==0.1)?0.2:0.1;
 		if (!_isFF) this._ff_size_delta=0;
 		
-		this.entBox.style.width=Math.max(0,newWidth+(quirks?2:0)*outerBorder+this._ff_size_delta)+"px";
-		this.entBox.style.height=newHeight+(quirks?2:0)*outerBorder+headerHeight+footerHeight+"px";
+		if (!this.dontSetSizes){
+			this.entBox.style.width=Math.max(0,newWidth+(quirks?2:0)*outerBorder+this._ff_size_delta)+"px";
+			this.entBox.style.height=newHeight+(quirks?2:0)*outerBorder+headerHeight+footerHeight+"px";
+		}
 		this.objBox.style.height=newHeight+((quirks&&!isVScroll)?2:0)*outerBorder+"px";//):this.entBox.style.height);
 		this.hdrBox.style.height=headerHeight+"px";		
 		
@@ -944,7 +962,7 @@ function dhtmlXGridObject(id){
 
 		if (!convertStringToBoolean(state)){
 			this.sortImg.style.display="none";
-			this.fldSorted=null;
+			this.fldSorted=this.r_fldSorted = null;
 			return;
 		}
 
@@ -952,6 +970,7 @@ function dhtmlXGridObject(id){
 			this.sortImg.src=this.imgURL+"sort_asc.gif";
 		else
 			this.sortImg.src=this.imgURL+"sort_desc.gif";
+
 		this.sortImg.style.display="";
 		this.fldSorted=this.hdr.rows[0].childNodes[ind];
 		var r = this.hdr.rows[row||1];
@@ -1069,8 +1088,10 @@ function dhtmlXGridObject(id){
 	this._doContClick=function(ev){ 
 		var el = this.getFirstParentOfType(_isIE ? ev.srcElement : ev.target, "TD");
 
-		if ((!el)||( typeof (el.parentNode.idd) == "undefined"))
+		if ((!el)||( typeof (el.parentNode.idd) == "undefined")){
+			this.callEvent("onEmptyClick", [ev]);
 			return true;
+		}
 
 		if (ev.button == 2||(_isMacOS&&ev.ctrlKey)){
 			if (!this.callEvent("onRightClick", [
@@ -1195,6 +1216,7 @@ if (_isIE){
 					el.parentNode.className=el.parentNode.className.replace(/rowselected/g, "");
 					this.selectedRows._dhx_removeAt(this.selectedRows._dhx_find(el.parentNode))
 					var skipRowSelection = true;
+					show = false;
 				}
 			}
 			this.editStop()
@@ -1206,26 +1228,29 @@ if (_isIE){
 					el.parentNode.idd,
 					psid
 				])){
-					if (selMethod == 0){
-						if (this.getSelectedRowId() == el.parentNode.idd) return this.cell = el;
-						this.clearSelection();
+					if (this.getSelectedRowId() != el.parentNode.idd){
+						if (selMethod == 0)
+							this.clearSelection();
+						this.cell=el;
+						if ((prow == el.parentNode)&&(this._chRRS))
+							fl=false;
+						this.row=el.parentNode;
+						this.row.className+=" rowselected"
+						
+						if (this.cell && _isIE && _isIE == 8 ){
+							//fix incorrect table cell size in IE8 bug
+							var next = this.cell.nextSibling;
+							var parent = this.cell.parentNode;
+							parent.removeChild(this.cell)
+							parent.insertBefore(this.cell,next);
+						}
+						
+						if (this.selectedRows._dhx_find(this.row) == -1)
+							this.selectedRows[this.selectedRows.length]=this.row;
+					} else {
+						this.cell=el;
+						this.row = el.parentNode;
 					}
-					this.cell=el;
-					if ((prow == el.parentNode)&&(this._chRRS))
-						fl=false;
-					this.row=el.parentNode;
-					this.row.className+=" rowselected"
-					
-					if (this.cell && _isIE && _isIE == 8 ){
-						//fix incorrect table cell size in IE8 bug
-						var next = this.cell.nextSibling;
-						var parent = this.cell.parentNode;
-						parent.removeChild(this.cell)
-						parent.insertBefore(this.cell,next);
-					}
-					
-					if (this.selectedRows._dhx_find(this.row) == -1)
-						this.selectedRows[this.selectedRows.length]=this.row;
 				} else fl = false;
 			} 
 
@@ -1311,11 +1336,14 @@ if (_isIE){
 
 		if (!c)
 			c=r.childNodes[0];
-
-		if (preserve)
-			this.doClick(c, fl, 3, show)
-		else
-			this.doClick(c, fl, 0, show)
+        if(!this.markedCells){
+			if (preserve)
+				this.doClick(c, fl, 3, show)
+			else
+				this.doClick(c, fl, 0, show)
+		}
+		else 
+			this.doMark(c,preserve?2:0);
 
 		if (edit)
 			this.editCell();
@@ -1795,11 +1823,15 @@ if (_isIE){
 	*   @topic: 3,7
 	*/
 	this.setColWidth=function(ind, value){
-		if (this._hrrar[ind]) return; //hidden
-		if (this.cellWidthType == 'px')
-			this.cellWidthPX[ind]=parseInt(value);
-		else
-			this.cellWidthPC[ind]=parseInt(value);
+		if (value == "*")
+			this.initCellWidth[ind] = "*";
+		else {
+			if (this._hrrar[ind]) return; //hidden
+			if (this.cellWidthType == 'px')
+				this.cellWidthPX[ind]=parseInt(value);
+			else
+				this.cellWidthPC[ind]=parseInt(value);
+		}
 		this.setSizes();
 	}
 	/**
@@ -2348,6 +2380,8 @@ if (_isIE){
 			this._hrrar=[];
 			this.columnIds=[];
 			this.combos=[];
+			this._strangeParams=[];
+			this.defVal = [];
 			this._ivizcol = null;
 		}
 
@@ -2783,6 +2817,14 @@ if (_isIE){
 	this.objBox.onscroll=function(){
 		this.grid._doOnScroll();
 	};
+	this.hdrBox.onscroll=function(){
+		if (this._try_header_sync) return;
+		this._try_header_sync = true;
+		if (this.grid.objBox.scrollLeft != this.scrollLeft){
+			this.grid.objBox.scrollLeft = this.scrollLeft;
+		}
+		this._try_header_sync = false;
+	}
 //#column_resize:06042008{
 	if ((!_isOpera)||(_OperaRv > 8.5)){
 		this.hdr.onmousemove=function(e){
@@ -2803,6 +2845,9 @@ if (_isIE){
 		this.grid._doClick(e||window.event);
 		if (this.grid._sclE) 
 			this.grid.editCell(e||window.event); 
+		else
+			this.grid.editStop();
+					
 		(e||event).cancelBubble=true;
 	};
 //#context_menu:06042008{
@@ -2849,7 +2894,7 @@ if (_isIE){
 
 
 	if (!document.body._dhtmlxgrid_onkeydown){
-		dhtmlxEvent(document, _isOpera?"keypress":"keydown",function(e){ //starting from Opera 9.5
+		dhtmlxEvent(document, "keydown",function(e){
 			if (globalActiveDHTMLGridObject) 
 				return globalActiveDHTMLGridObject.doKey(e||window.event);
 		});
@@ -3142,6 +3187,11 @@ dhtmlXGridObject.prototype={
 		this.entBox.onclick = this.entBox.onmousedown = this.entBox.onbeforeactivate = this.entBox.onbeforedeactivate = this.entBox.onbeforedeactivate = this.entBox.onselectstart = dummy;
 		this.setSizes = this._update_srnd_view = this.callEvent = dummy;
 		this.entBox.grid=this.objBox.grid=this.hdrBox.grid=this.obj.grid=this.hdr.grid=null;
+		if (this._fake){
+			this.globalBox.innerHTML = "";
+			this._fake.setSizes = this._fake._update_srnd_view = this._fake.callEvent = dummy;
+			this.globalBox.onclick = this.globalBox.onmousedown = this.globalBox.onbeforeactivate = this.globalBox.onbeforedeactivate = this.globalBox.onbeforedeactivate = this.globalBox.onselectstart = dummy;
+		}
 	
 		for (a in this){
 			if ((this[a])&&(this[a].m_obj))
@@ -3741,7 +3791,7 @@ dhtmlXGridObject.prototype={
 			var t = document.createElement("TABLE");
 			t.cellPadding=t.cellSpacing=0;
 	
-			if (!_isIE){
+			if (!_isIE || _isIE == 8){
 				t.width="100%";
 				t.style.paddingRight="20px";
 			}
@@ -4210,19 +4260,38 @@ dhtmlXGridObject.prototype={
 		return data[ind];
 	},
 	_process_json_row:function(r, data){
-		r._attrs={
-		};
+		data = this._c_order ? this._swapColumns(data.data) : data.data;
+		return this._process_some_row(r, data);
+	},
+	_process_some_row:function(r,data){
+		r._attrs={};
 	
-		for (var j = 0; j < r.childNodes.length; j++)r.childNodes[j]._attrs={
-		};
+		for (var j = 0; j < r.childNodes.length; j++)
+			r.childNodes[j]._attrs={};
 	
-		this._fillRow(r, (this._c_order ? this._swapColumns(data.data) : data.data));
+		this._fillRow(r, data);
 		return r;
 	},
 	_get_json_data:function(data, ind){
 		return data.data[ind];
 	},
-	
+
+
+	_process_js_row:function(r, data){
+		var arr = [];
+		for (var i=0; i<this.columnIds.length; i++){
+			arr[i] = data[this.columnIds[i]];
+			if (!arr[i] && arr[i]!==0)
+				arr[i]="";
+		}
+		this._process_some_row(r,arr);
+
+		r._attrs = data;
+		return r;
+	},
+	_get_js_data:function(data, ind){
+		return data[this.columnIds[ind]];
+	},
 	_process_csv_row:function(r, data){
 		r._attrs={
 		};
@@ -4245,7 +4314,7 @@ dhtmlXGridObject.prototype={
 		row.childNodes[j]._attrs={};
 
 		row._attrs = data;
-		this._fillRow(row, (this._c_order ? this._swapColumns(result) : result));
+		this._fillRow(row, result);
 	},	
 //#xml_data:06042008{
 	_process_xml_row:function(r, xml){		
@@ -4491,7 +4560,11 @@ dhtmlXGridObject.prototype={
 		if (this._refresh_mode) return this._refreshFromXML(xml);		
 		this._parsing=true;
 		var top = xml.getXMLTopNode(this.xml.top)
-		if (top.tagName.toLowerCase()!=this.xml.top) return;
+		if (top.tagName!=this.xml.top) return;
+		var skey = top.getAttribute("dhx_security");
+		if (skey)
+			dhtmlx.security_key = skey;
+
 		//#config_from_xml:20092006{
 		this._parseHead(top);
 		//#}
@@ -4500,7 +4573,7 @@ dhtmlXGridObject.prototype={
 		var total = parseInt(xml.doXPath("//"+this.xml.top)[0].getAttribute("total_count")||0);
 	
 		var reset = false;
-		if (total){
+		if (total && total!=this.rowsBuffer.length){
 			if (!this.rowsBuffer[total-1]){
 				if (this.rowsBuffer.length)
 					reset=true;
@@ -4611,7 +4684,11 @@ dhtmlXGridObject.prototype={
 		this._parsing=false;
 	},
 	
-	_process_json:function(data){
+	_process_js:function(data){
+		return this._process_json(data, "js");
+	},
+
+	_process_json:function(data, mode){
 		this._parsing=true;
 	
 		if (data&&data.xmlDoc){
@@ -4619,18 +4696,37 @@ dhtmlXGridObject.prototype={
 			data = dhtmlx.temp;
 		}
 	
-		for (var i = 0; i < data.rows.length; i++){
-			var id = data.rows[i].id;
-			this.rowsBuffer.push({
-				idd: id,
-				data: data.rows[i],
-				_parser: this._process_json_row,
-				_locator: this._get_json_data
-				});
-	
-			this.rowsAr[id]=data[i];
-		//this.callEvent("onRowCreated",[r.idd]);
+		if (mode == "js"){
+			if (data.data)
+				data = data.data;
+			for (var i = 0; i < data.length; i++){
+				var row = data[i];
+				var id  = row.id||(i+1);
+				this.rowsBuffer.push({
+					idd: id,
+					data: row,
+					_parser: this._process_js_row,
+					_locator: this._get_js_data
+					});
+		
+				this.rowsAr[id]=data[i];
+			}
+		} else {
+			for (var i = 0; i < data.rows.length; i++){
+				var id = data.rows[i].id;
+				this.rowsBuffer.push({
+					idd: id,
+					data: data.rows[i],
+					_parser: this._process_json_row,
+					_locator: this._get_json_data
+					});
+		
+				this.rowsAr[id]=data[i];
+			}
 		}
+		if (data.dhx_security)
+			dhtmlx.security_key = data.dhx_security;
+		
 		this.render_dataset();
 		this._parsing=false;
 	},
@@ -4694,8 +4790,19 @@ dhtmlXGridObject.prototype={
 			}
 		}
 	
-		if (this._srnd&&!this._fillers)
-			this._fillers=[this._add_filler(max, this.rowsBuffer.length-max)];
+		if (this._srnd&&!this._fillers){
+			var add_count = this.rowsBuffer.length-max;
+			this._fillers = [];
+
+			while (add_count > 0){
+				var add_step = _isIE?Math.min(add_count, 50000):add_count;
+				var new_filler = this._add_filler(max, add_step);
+				if (new_filler)
+					this._fillers.push(new_filler);
+				add_count -= add_step;
+				max += add_step;
+			}				
+		}
 	
 		//p.appendChild(this.obj)
 		this.setSizes();
@@ -4939,8 +5046,8 @@ dhtmlXGridObject.prototype={
 	
 		this.rowsAr[row.idd]=row;
 		if (this._h2) this._h2.get[row.idd].buff=row;	//treegrid specific
-		this._fillRow(row, text)
-		this._postRowProcessing(row)
+		this._fillRow(row, text);
+		this._postRowProcessing(row);
 		if (this._skipInsert){
 			this._skipInsert=false;
 			return this.rowsAr[row.idd]=row;
@@ -4979,7 +5086,7 @@ dhtmlXGridObject.prototype={
 				this._fillers.push(this._add_filler(ind, 1, (ind == 0 ? {
 					parentNode: this.obj.rows[0].parentNode,
 					nextSibling: (this.rowsCol[1])
-					} : this.rowsCol[ind-1]), true));
+					} : this.rowsCol[ind-1])));
 	
 			return row;
 		}
@@ -5202,7 +5309,7 @@ dhtmlXGridObject.prototype={
 		this.tabStart=( typeof (start) == "object") ? start : document.getElementById(start);
 		this.tabStart.onkeydown=function(e){
 			var ev = (e||window.event);
-			if (ev.keyCode == 9){
+			if (ev.keyCode == 9 && !ev.shiftKey){
 				
 				ev.cancelBubble=true;		
 				grid.selectCell(0, 0, 0, 0, 1);
@@ -5218,7 +5325,7 @@ dhtmlXGridObject.prototype={
 		this.tabEnd=( typeof (end) == "object") ? end : document.getElementById(end);
 		this.tabEnd.onkeydown=this.tabEnd.onkeypress=function(e){
 			var ev = (e||window.event);
-			if ((ev.keyCode == 9)&&ev.shiftKey){
+			if (ev.keyCode == 9 && ev.shiftKey){
 				ev.cancelBubble=true;
 				grid.selectCell((grid.getRowsNum()-1), (grid.getColumnCount()-1), 0, 0, 1);
 	
@@ -5483,6 +5590,9 @@ dhtmlXGridObject.prototype._dp_init=function(dp){
 		dp.setUpdated(rowId,true,"deleted");
 		return false;
 	});
+	this.attachEvent("onBindUpdate", function(id){
+		dp.setUpdated(id,true);
+	});
 	this.attachEvent("onRowAdded",function(rowId){
 		if (this.dragContext && dp.dnd) return true;
 		dp.setUpdated(rowId,true,"inserted")
@@ -5513,7 +5623,7 @@ dhtmlXGridObject.prototype._dp_init=function(dp){
 		var udata=this.obj.UserData[rowId];
 		if (udata){
 			for (var j=0; j<udata.keys.length; j++)
-				if (udata.keys[j].indexOf("__")!=0)
+				if (udata.keys[j] && udata.keys[j].indexOf("__")!=0)
 					data[udata.keys[j]]=udata.values[j];
 		}
 		var udata=this.obj.UserData["gridglobaluserdata"];
@@ -5549,6 +5659,5 @@ dhtmlXGridObject.prototype._dp_init=function(dp){
 		return valid;
 	};	
 };
-
 
 //(c)dhtmlx ltd. www.dhtmlx.com

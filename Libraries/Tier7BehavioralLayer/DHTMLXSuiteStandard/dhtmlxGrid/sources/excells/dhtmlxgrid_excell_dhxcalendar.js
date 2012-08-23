@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -84,7 +84,7 @@ eXcell_dhxCalendar.prototype = new eXcell;
 								
 	eXcell_dhxCalendar.prototype.setValue = function(val){
 						
-						if (typeof val == "object"){
+						if (val && typeof val == "object"){
 							this.cell.val=val;
 							this.cell._clearCell=false;
 							this.setCValue(this.grid._grid_calendarA.getFormatedDate((this.grid._dtmask||"%d/%m/%Y"),val).toString(),this.cell.val);
@@ -218,7 +218,7 @@ eXcell_dhxCalendarA.prototype = new eXcell;
 						return (this.cell.val.valueOf()!=(t||"").valueOf());
 				}
 eXcell_dhxCalendarA.prototype.setValue = function(val){
-						if (typeof val == "object"){
+						if (val && typeof val == "object"){
 							this.cell.val=val;
 							this.cell._clearCell=false;
 							this.setCValue(this.grid._grid_calendarA.getFormatedDate((this.grid._dtmask||"%d/%m/%Y"),val).toString(),this.cell.val);

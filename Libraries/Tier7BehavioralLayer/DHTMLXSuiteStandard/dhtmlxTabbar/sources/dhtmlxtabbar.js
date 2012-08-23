@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -31,6 +31,7 @@ function dhtmlXTabBar(parentObject,mode,height){
 	
 	this._s.mode=mode;
 	this._s.scrolls=true;
+	this._custom_height = height;
 	this._s.line_height=(parseInt(height)||20)+3;//+3 to be compatible with 1.x sizes 
 	this._s.skin_line = 1;
 	this._s.tab_margin = 0;
@@ -75,6 +76,7 @@ function dhtmlXTabBar(parentObject,mode,height){
 		"silver":{ left:7, right:7, select_shift:3, select_top:2, margin:1, offset:5, tab_color:"#F4F3EE", data_color:"#F0F8FF" },
 		"dark_blue":{ left:2, right:2, select_shift:3, select_top:2, margin:1, offset:5 },
 		"glassy_blue":{ left:2, right:3, select_shift:3, select_top:2, margin:1, offset:5 },
+		"dhx_terrace":{ left:7, right:7, select_shift:0, select_top:0, margin:-1, offset:0, tab_color:"", data_color:"#ffffff" },
 		
 		"dhx_black":{ left:2, right:2, select_shift:3, select_top:0, margin:1, offset:5},
 		"dhx_blue":{ left:2, right:2, select_shift:3, select_top:0, margin:1, offset:5, tab_color:"#F4F3EE", data_color:"#F0F8FF" },
@@ -128,6 +130,13 @@ dhtmlXTabBar.prototype={
 		
 		var sky_mode = name.indexOf("dhx_sky")==0;
 		var simple_mode = name.indexOf("dhx_web")==0;
+		var terrace_mode = name.indexOf("dhx_terrace")==0;
+		
+		if (terrace_mode&&!this._custom_height){
+			this._s.line_height = 37;
+			this._setRowSizes();
+		}
+
 		if (sky_mode) 
 			this._s.skin_line=0;
 		if (simple_mode){
@@ -165,7 +174,7 @@ dhtmlXTabBar.prototype={
 		
 			this._getCoverLine();
 			this._s._rendered = [d1,d2,d3,d4];
-					
+
 			if (this._s.expand){
 				this._conZone.style.borderWidth="0px 0px 0px 0px";
 				this._tabZone.firstChild.style.borderWidth="0px 0px 0px 0px";
@@ -177,6 +186,9 @@ dhtmlXTabBar.prototype={
 					this._lineA.style.borderWidth="1px 0px 0px 0px";
 				
 				d2.style.left = "1px"
+
+				this._s.ext_border = 0;
+				//this._s.skin_line_x=false;
 			}
 					
 			var f = function(){
@@ -250,6 +262,9 @@ dhtmlXTabBar.prototype={
             this._tabAll.className+='B';
         this._tabZone.className='dhx_tablist_zone';
         this._conZone.className='dhx_tabcontent_zone';
+        if (this.entBox._hideBorders) {
+        	this._conZone.style.borderLeft = this._conZone.style.borderRight = this._conZone.style.borderBottom = "0px solid white";
+        }
         if (this._a.data_color)
         	this._conZone.style.backgroundColor=this._a.data_color;
 
@@ -286,7 +301,7 @@ dhtmlXTabBar.prototype={
 		
 		var _h=y||(this.entBox[dim[0]]+(_quirks?outerBorder:0));
 		var _w=x||(this.entBox[dim[1]]+(_quirks?outerBorder:0));
-		
+
 		var _t=this._rows.length*(this._s.line_height-(this._s.skin_line_x?4:2))+(this._s.skin_line_x?2:0);
 		this._tabZone.style[this._dy]=_t+"px";
 		this._conZone.style[this._dy]=Math.max(0,_h-this._s.ext_border-_t-(this._s.skin_line_x?3:0)-this._s.tab_margin)+"px";		
@@ -325,6 +340,7 @@ dhtmlXTabBar.prototype={
 //#scrollers:23052006{	
 	_showScroll:function(i){
 		if (this._rows[i]._scroll) return;
+		this.callEvent("onBeforeShowScroll",[i]);
 		var a=this._rows[i]._scroll=[];
 		var top = Math.max(0,this._s.line_height-23);
 		a[0]=document.createElement("DIV");
@@ -338,7 +354,10 @@ dhtmlXTabBar.prototype={
 		this._rows[i].appendChild(a[1]);
 	},
 	_hideScroll:function(i){
-		if (!this._rows[i]._scroll) return;
+		if(this._rows[i]._scroll){
+		    this.callEvent("onBeforeHideScroll",[i]);
+        }
+        if (!this._rows[i]._scroll) return;
 		this._rows[i].removeChild(this._rows[i]._scroll[0])
 		this._rows[i].removeChild(this._rows[i]._scroll[1])
 		this._rows[i]._scroll=null;
@@ -354,7 +373,7 @@ dhtmlXTabBar.prototype={
 	},
 	_setTabSizes:function(row){
 		var pos=this._a.offset;
-		var px = this._vMode?this._pxc:this._px;
+		var px = this._s.align?this._pxc:this._px;
 		for (var i=0; i < row.tabCount; i++) {
 			var tab=row.childNodes[i];
 			if (tab.style.display=="none") continue;
@@ -581,7 +600,7 @@ dhtmlXTabBar.prototype={
 	    		tag=src.previousSibling;
 	    		this.tabbar._setTabTop(this.tabbar._lastActive);
     		}
-    		if (tag && tag.parentNode){
+    		if (tag && tag.parentNode&&tag.parentNode.tagName){
     			tag.style.left=tag.parentNode.scrollLeft+"px";
     			if (!_isIE || window.XMLHttpRequest)
     				tag.nextSibling.style.right=tag.parentNode.scrollLeft*(-1)+"px";
@@ -663,6 +682,8 @@ dhtmlXTabBar.prototype={
 //#}
 	},
 	_setTabTop:function(tab){
+        if(!tab)
+            return false;
 //#multiline:23052006{		
 		var t = this._rows.length-1;
 	    for (var i=0; i<this._rows.length; i++)
@@ -848,7 +869,6 @@ dhtmlXTabBar.prototype={
 *   @type: public
 *   @topic: 1
 */
-	
 	setTabActive:function(id,mode){
 		this._setTabActive(this._tabs[id],mode===false);
 	},
@@ -1031,6 +1051,18 @@ dhtmlXTabBar.prototype={
 		if (!next && tab.parentNode[alt])
 			next=tab.parentNode[alt].childNodes[0];
 		return next||tab;
+	},
+/**
+*     @desc: returns array of ids for all tabs
+*     @type: public
+*     @return: array
+*     @topic: 0
+*/
+    getAllTabs:function(){
+        var tabs = [];
+        for(var id in this._tabs)
+		    tabs.push(id);
+		return tabs;
 	},
 /**
 *     @desc: select tab next to active
@@ -1514,7 +1546,7 @@ window.dhtmlXContainer=function(obj) {
 		for (var i=0; i<z.length; i++){
 			var s=z[i].replace(/<([\/]{0,1})script[^>]*>/g,"")
 			if (window.execScript){
-				var url = z[i].match(/src=("|')([^"']+)("|')/);
+				var url = z[i].match(/<script[^>]*src\s*=\s*("|')([^"']+)("|')/);
 				if (url)
 					var s = dhtmlxAjax.getSync(url[2]).xmlDoc.responseText;
 				if (s)

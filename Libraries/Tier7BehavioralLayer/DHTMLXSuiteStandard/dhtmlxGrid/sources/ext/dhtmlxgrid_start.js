@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -8,11 +8,13 @@ To use it on other terms or get Professional edition of the component please con
 function dhtmlXGridFromTable(obj,init){
       if(typeof(obj)!='object')
          obj = document.getElementById(obj);
-			obj.className="";
             var w=document.createElement("DIV");
-	            w.setAttribute("width",obj.getAttribute("gridWidth")||(obj.offsetWidth?(obj.offsetWidth+"px"):0)||(window.getComputedStyle?window.getComputedStyle(obj,null)["width"]:(obj.currentStyle?obj.currentStyle["width"]:0)));
-	            w.setAttribute("height",obj.getAttribute("gridHeight")||(obj.offsetHeight?(obj.offsetHeight+"px"):0)||(window.getComputedStyle?window.getComputedStyle(obj,null)["height"]:(obj.currentStyle?obj.currentStyle["height"]:0)));
-	            
+            w.setAttribute("width",obj.getAttribute("gridWidth")||(obj.offsetWidth?(obj.offsetWidth+"px"):0)||(window.getComputedStyle?window.getComputedStyle(obj,null)["width"]:(obj.currentStyle?obj.currentStyle["width"]:0)));
+            w.setAttribute("height",obj.getAttribute("gridHeight")||(obj.offsetHeight?(obj.offsetHeight+"px"):0)||(window.getComputedStyle?window.getComputedStyle(obj,null)["height"]:(obj.currentStyle?obj.currentStyle["height"]:0)));
+			w.className = obj.className;
+			obj.className="";
+			if (obj.id) w.id = obj.id;
+
             var mr=obj;
             var drag=obj.getAttribute("dragAndDrop");
             mr.parentNode.insertBefore(w,mr);
@@ -26,7 +28,9 @@ function dhtmlXGridFromTable(obj,init){
 
 			if (acs) eval(acs);
 
-        	windowf.setImagePath(windowf.imgURL||(mr.getAttribute("imgpath")||""));
+        	windowf.setImagePath(windowf.imgURL||(mr.getAttribute("imgpath")|| mr.getAttribute("image_path") ||""));
+			var skin = mr.getAttribute("skin");
+			if (skin) windowf.setSkin(skin);
 
         	if (init) init(windowf);
 

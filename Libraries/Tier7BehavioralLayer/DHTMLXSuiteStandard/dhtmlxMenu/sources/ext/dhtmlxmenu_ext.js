@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -711,6 +711,13 @@ dhtmlXMenuObject.prototype._countPolygonItems = function(id) {
 *   @type: public
 */
 dhtmlXMenuObject.prototype.setOverflowHeight = function(itemsNum) {
+	
+	// set auto overflow mode
+	if (itemsNum === "auto") {
+		this.limit = 0;
+		this.autoOverflow = true;
+		return;
+	}
 	
 	// no existing limitation, now new limitation
 	if (this.limit == 0 && itemsNum <= 0) return;

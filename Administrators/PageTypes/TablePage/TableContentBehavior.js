@@ -3,8 +3,8 @@ document.getElementById("AddColumn").setAttribute('onclick', 'AddOneColumn();');
 document.getElementById("RemoveColumn").setAttribute('onclick', 'RemoveOneColumn();');
 document.getElementById("RemoveRow").setAttribute('onClick', 'DeleteCurrentRows();');
 
-var RowCount = 500;
-var ColumnCount = 5;
+var RowCount = null;
+var ColumnCount = null;
 
 var GET = GetUrlVars();
 var COOKIE = document.cookie.split(';');
@@ -13,6 +13,8 @@ var PageID = 0;
 
 var TableContentTemp = COOKIE;
 var TableContent = new Array();
+
+var mygrid = null;
 
 if (TableContentTemp instanceof Array) {
 	for (Index in TableContentTemp) {
@@ -55,7 +57,8 @@ $(document).ready(function()
 	LoadGrid();
 });
 
-window.onload=setTimeout("LoadCookieData()", 60);
+//window.onload=setTimeout("LoadRowColumnCount()", 60);
+window.onload=setTimeout("LoadCookieData()", 90);
 
 function LoadGrid() {
 	mygrid.setImagePath("../../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/imgs/");
@@ -63,8 +66,30 @@ function LoadGrid() {
 	mygrid.setSkin("dhx_skyblue");
 	mygrid.setStyle("", "color: black;");
 	mygrid.loadXML(PageLocation);
+	//mygrid.enableDragAndDrop(true);
 	
-	mygrid.submitOnlyChanged(false);	
+	mygrid.submitOnlyChanged(false);
+	
+	var Start = confirm("Click OK when table data has been loaded!");
+	if (Start == true) {
+		LoadRowColumnCount();
+	} else {
+		alert("Data needs to load, data may not save properly, please refresh and try again!");
+	}
+	
+}
+
+function LoadRowColumnCount() {
+	ColumnCount = mygrid.getColumnsNum();
+	RowCount = mygrid.getRowsNum();
+	if (RowCount == 0) {
+		alert("Data has not loaded, data may not save properly, please refresh the page!");
+	} else {
+		RowCount = Number(RowCount) * 100;
+		RowCount = Number(RowCount) - 100;
+		//alert(RowCount);
+	}
+	
 }
 
 function LoadCookieData() {
@@ -214,8 +239,31 @@ function ShiftColumns(Header, Name, ColumnName, LabelColumnName, Count) {
 }
 
 function AddOneRow() {
-	RowCount = RowCount + 100;
-	mygrid.addRow(RowCount, "");
+	RowCount = +RowCount + 100;
+	var Id = mygrid.getSelectedId();
+	if (Id != null) {
+		//mygrid.moveRowDown(Id);
+		var NewRow;
+		var OldRow;
+		var LastRow;
+		NewRow = RowCount -0;
+		OldRow = RowCount - 100;
+		for(var i = 0; NewRow != Id; i++) {
+			//alert(NewRow);
+			mygrid.changeRowId(OldRow, NewRow);
+			NewRow = NewRow - 100;
+			OldRow = OldRow - 100;
+		}
+		
+		var RowPosition;
+		RowPosition = null;
+		RowPosition = Id / 100;
+		mygrid.addRow(Id, "", RowPosition);
+	} else {
+		mygrid.addRow(RowCount, "");
+	}
+	
+	
 	// THIS WORKS!
 	//mygrid.addRow("TEST", "10, Dog, Cat, Bird");
 	//mygrid.cells(100, 1).cell.innerHTML="Chicken";

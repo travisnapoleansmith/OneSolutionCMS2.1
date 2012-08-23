@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -535,8 +535,8 @@ function dhtmlXTreeItemObject(itemId,itemText,parentObject,treeObject,actionHand
          if ((this.XMLloadingWarning)||(this._hAdI))
             n.htmlNode.parentNode.parentNode.style.display="none";
 
-
-            if ((beforeNode)&&(beforeNode.tr.nextSibling))
+           
+            if ((beforeNode)&&beforeNode.tr&&(beforeNode.tr.nextSibling))
                parentObject.htmlNode.childNodes[0].insertBefore(tr,beforeNode.tr.nextSibling);
             else
                if (this.parsingOn==parentObject.id){
@@ -638,6 +638,8 @@ function dhtmlXTreeItemObject(itemId,itemText,parentObject,treeObject,actionHand
       var parentObject=this._globalIdStorageFind(parentId);
       if (!parentObject) return (-1);
       var nodez=this._attachChildNode(parentObject,itemId,itemText,itemActionHandler,image1,image2,image3,optionStr,children);
+      if(!this._idpull[this.rootId].XMLload)
+         this._idpull[this.rootId].XMLload = 1;
 
         return nodez;
    };
@@ -709,6 +711,7 @@ function dhtmlXTreeItemObject(itemId,itemText,parentObject,treeObject,actionHand
 							else preNode=temp.childNodes[this.npl];
 
 		                    var newNode=this._attachChildNode(temp,a.id,a.text,0,a.im0,a.im1,a.im2,zST.join(","),a.child,0,preNode);
+                        a.id = newNode.id;
 							preNode=null;
 						}
 					 }
@@ -777,6 +780,10 @@ function dhtmlXTreeItemObject(itemId,itemText,parentObject,treeObject,actionHand
 		
 		if (!parentId) {          //top level  
 			parentId=p.get("id");
+      var skey = p.get("dhx_security");
+      if (skey)
+          dhtmlx.security_key = skey;
+
 			if (p.get("radio"))
 				this.htmlNode._r_logic=true;
 			this.parsingOn=parentId;                 
@@ -1285,7 +1292,6 @@ SELECTION
                         this._selected.splice(i,1);
                         break;
                  }
-
             }
        }
 
@@ -2906,6 +2912,8 @@ dhtmlXTreeObject.prototype._deleteItem=function(itemId,selectParent,skip){
 
       var zTemp=sNode.parentObject;
       this._deleteNode(itemId,sNode,skip);
+      if(this._editCell&&this._editCell.id==itemId)
+     	this._editCell = null;
       this._correctPlus(zTemp);
       this._correctLine(zTemp);
 
@@ -3703,6 +3711,8 @@ dhtmlXTreeObject.prototype.enableImageDrag=function(mode){
 dhtmlXTreeObject.prototype.setSkin=function(name){
 	var tmp = this.parentObject.className.replace(/dhxtree_[^ ]*/gi,"");
 	this.parentObject.className= tmp+" dhxtree_"+name;
+  if (name == "dhx_terrace")
+    this.enableTreeLines(false);
 };
 
 //tree
@@ -3810,6 +3820,5 @@ dhtmlXTreeObject.prototype._dp_init=function(dp){
     	return data;
 	};	
 };
-
 
 //(c)dhtmlx ltd. www.dhtmlx.com

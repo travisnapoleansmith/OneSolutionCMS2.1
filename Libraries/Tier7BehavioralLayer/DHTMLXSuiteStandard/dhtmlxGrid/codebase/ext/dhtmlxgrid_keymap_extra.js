@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -7,7 +7,7 @@ To use it on other terms or get Professional edition of the component please con
 */
 dhtmlXGridObject.prototype._key_events={k45_0_0:function(){this.editor||this.addRow((new Date).valueOf(),[],this.row.rowIndex)},k46_0_0:function(){this.editor||this.cells4(this.cell).setValue("")}};
 
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

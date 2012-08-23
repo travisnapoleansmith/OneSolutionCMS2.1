@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -72,8 +72,8 @@ function dhtmlxSlider(base,size,skin,vertical,min,max,value,step){
   this.isInit = false;
   this.disabled = false;
                           
-	this.value = value || min || 0;
-	this.inputPriority = true; 
+	this.value = (value == "undefined"? (min || 0):value);
+	this.inputPriority = true;
 	this.stepping = false;
 	
 	this.imgURL = window.dhx_globalImgPath||dhtmlx.image_path||"";
@@ -87,7 +87,7 @@ function dhtmlxSlider(base,size,skin,vertical,min,max,value,step){
      simplesilver:{lz:1,ls:1,rs:1,rz:1},
      simplegray:  {lz:1,ls:1,rs:1,rz:1},
      bar:         {bg:1,ls:1,rs:1},
-     dhx_skyblue: {bg:1,ls:1,rs:1}
+     dhx_skyblue: {bg:1}
   };
             
 	this._def = [min-0||0,max-0||100,step-0||1,value-0||0,size-0];
@@ -251,7 +251,7 @@ dhtmlxSlider.prototype.setStep=function(val){
 */
 dhtmlxSlider.prototype._applyPos=function(skip){
   if (!this.isInit) return;
-	if (this.step!=1)
+   	if (this.step!=1&&this.step)
 		this.posX=Math.round(this.posX/this.step)*this.step;	
 	if (this.posX<0)
 		this.posX=0;

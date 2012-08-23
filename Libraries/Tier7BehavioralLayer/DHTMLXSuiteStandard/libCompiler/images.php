@@ -1,4 +1,5 @@
 <?php
+$java = "java";
 function copyImgsFiles($source,$dest,$skin)
 { 
 if (!is_dir($source)) return;
@@ -10,7 +11,7 @@ if ($file == '.' || $file == '..') {
        }
        if(is_dir($source.$file))
        {
-       		if ($file!=".svn" && (strpos($file,"dhx")===false || preg_match("#(dhx|skin)_".$skin."#i",$file)==1)){
+       		if ($file!=".svn" && (strpos($file,"dhx")===false || preg_match("#(csh|dhx|skin)_".$skin."#i",$file)==1)){
        			@mkdir($dest.$file);
        			copyImgsFiles($source.$file."/",$dest.$file."/",$skin);
    			}
@@ -100,6 +101,7 @@ To use this library please contact sales@dhtmlx.com to obtain license
 		//$css_code=preg_replace("/\n/","\\n",$css_code);
 	
 		$css_code=preg_replace("/\{ /","{",$css_code);
+		$css_code=str_replace("img//","",$css_code);
 		$css_code=preg_replace("/[; ]+\}/","}",$css_code);
 
 		return $css_code;
@@ -176,13 +178,14 @@ To use this library please contact sales@dhtmlx.com to obtain license
    
 	function process_request($files, $chunks, $skin, $icons, $yui=false){
 		global $js_header;
+		global $java;
 		
 		$files=explode(";",$files);
 		$chunks=explode(";",$chunks);
 		array_push($chunks,"__pro_feature");
 
-		$js_list=array("./dhtmlxcommon.js");
-		$css_list=array();
+		$js_list=array("./dhtmlxcommon.js", "./message/message.js");
+		$css_list=array("./message/message.css");
 		$manifest = array("Skin: ".$skin);
 		
 		for ($i=0; $i<sizeof($files); $i++){
@@ -279,11 +282,9 @@ To use this library please contact sales@dhtmlx.com to obtain license
 		if ($js_code!="")
 			$js_code.="\ndhtmlx.skin='".$skin."';";
 
-		if (!$yui){
-			$js_code=replaceWhitespaces(replaceComments($js_code));
-		}else{
+		
 			file_put_contents($location."/temp.js",$js_code);
-			`java  -jar ./yui/compiler.jar --dhx_safe --js {$location}/temp.js > {$location}/temp2.js`;
+			exec("${java}  -jar ./yui/compiler.jar --dhx_safe --js {$location}/temp.js > {$location}/temp2.js");
 			$new_js_code=file_get_contents($location."/temp2.js");
 			if ($new_js_code == "")
 				$js_code=replaceWhitespaces(replaceComments($js_code));
@@ -292,17 +293,15 @@ To use this library please contact sales@dhtmlx.com to obtain license
 
 			unlink($location."/temp.js");
 			unlink($location."/temp2.js");
-		}
+		
 			
 	    $css_code=preg_replace('/"/',"'",$css_code);
 	    $css_code=str_replace("../imgs","imgs/",$css_code);
 	    $css_code=str_replace("../../codebase/","",$css_code);
 	
-	   if (!$yui){
-	   		$css_code=replaceCssWhitespaces($css_code);
-	   }else{
+	  
 	   		file_put_contents($location."/temp.css",$css_code);
-			`java  -jar ./yui/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar {$location}/temp.css > {$location}/temp2.css`;
+			exec("${java}  -jar ./yui/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar {$location}/temp.css > {$location}/temp2.css");
 			$new_css_code=file_get_contents($location."/temp2.css");
 			if ($new_css_code == "")
 				$css_code=replaceCssWhitespaces($css_code);
@@ -311,8 +310,7 @@ To use this library please contact sales@dhtmlx.com to obtain license
 
 			unlink($location."/temp.css");
 			unlink($location."/temp2.css");
-	   }
-	    
+	   
 	
 		file_put_contents($location."/dhtmlx.js",$js_header.$js_code);
 		file_put_contents($location."/dhtmlx.css",$css_code);

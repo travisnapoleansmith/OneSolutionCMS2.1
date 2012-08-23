@@ -15,7 +15,8 @@
 	$TempTable = array();
 	$Header = array();
 	$Footer = array();
-
+	
+	
 	foreach ($_COOKIE as $Key => $Value) {
 		if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 			setcookie($Key, '', time()-4800, '/');
@@ -34,7 +35,7 @@
 			}
 		}
 	}
-
+	
 	foreach ($_POST as $Key => $Value) {
 		if (strstr($Key, 'Grid_')) {
 			if ($Key == 'Grid_rowsadded' || $Key == 'Grid_rowsdeleted') {
@@ -72,12 +73,12 @@
 		$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
 		$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
 		if ($Value != NULL) {
-			setcookie($CookieKey, $Value, time()+4800, '/');
+			////////setcookie($CookieKey, $Value, time()+4800, '/');
 		} else {
 			//setcookie($CookieKey, "NULL", time()+4800, '/');
 		}
 	}
-
+	
 	foreach ($TableContent as $Key => $Value) {
 		$EMPTY = FALSE;
 		if ($Value != NULL) {
@@ -99,7 +100,7 @@
 	$PageName .= $_POST['UpdateTableContent'];
 	$PageName .= "&TableID=";
 	$PageName .= $TableID;
-
+	
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateTableContent', $PageName);
 
 	if ($hold) {
@@ -108,7 +109,7 @@
 				setcookie($Key, $Value, time()-4800, '/');
 			}
 		}
-	
+		/*
 		foreach($TempTable as $Key => $Value) {
 			$NewKey = str_replace('Grid_', '', $Key);
 			$NewKey = explode('_', $NewKey);
@@ -117,6 +118,7 @@
 				setcookie($CookieKey, $Value, time()-4800, '/');
 			}
 		}
+		*/
 		
 		$XhtmlTableIDArray = $Tier6Databases->ModulePass('XhtmlTable', 'table', 'getLastTableID', array('XhtmlTableName' => 'XhtmlTable'));
 		//$TableID = $XhtmlTableIDArray['XhtmlTable'];
@@ -155,7 +157,7 @@
 		$FormSelect['Status'] = 'Approved';
 		*/
 		$FormOptionText = $TableID . ' - ' . $TableName;
-
+		
 		$FormOption = array();
 		//$FormOption['PageID'] = $TableContentUpdateSelectPage;
 		//$FormOption['ObjectID'] = $TableID;
@@ -251,8 +253,7 @@
 
 		$ObjectID++;
 		$TableI++;
-
-
+		
 		// Table Header
 		$TableTHead = array();
 		$TableTHeadContent = array();
@@ -339,7 +340,7 @@
 			$i++;
 			$HeaderObjectID++;
 		}
-
+		
 		// Table Body
 		$TableRow = array();
 		$TableRowCell = array();
@@ -444,7 +445,7 @@
 				$StopObjectID = $StopObjectID + 100;
 			}
 		}
-
+		
 		// Table Footer
 		$TableTFoot = array();
 		$TableTFootContent = array();
@@ -546,7 +547,7 @@
 				$FooterObjectID++;
 			}
 		}
-
+		
 		// SUBMIT FORM DATA
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $TableContentUpdateSelectPage, 'ObjectID' => $TableID), 'Content' => $FormOption));
 

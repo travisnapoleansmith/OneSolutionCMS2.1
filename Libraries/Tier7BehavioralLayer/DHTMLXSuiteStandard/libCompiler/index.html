@@ -1,6 +1,6 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>dhtlmx composer</title>
+	<title>DHTMLX Lib Compiler</title>
 	
 	
 </head>
@@ -153,7 +153,7 @@ var dhxLayout,mygrid,webbar;
   			return true;
   		})
 
-      	mytree.loadXML("components.xml");
+      	mytree.loadXML("components.xml?1");
 
 
 		dhxWins = new dhtmlXWindows();
@@ -172,10 +172,8 @@ var dhxLayout,mygrid,webbar;
 		var tabbar = dhxLayout.items[1].attachTabbar();
 		tabbar.setImagePath("../dhtmlxTabbar/codebase/imgs/");
 		tabbar.addTab("skins", "Skin", "200px", 1);
-		tabbar.addTab("icons", "Icon set", "200px", 2);
 		tabbar.setTabActive("skins");
 		tabbar.cells("skins").attachObject("skins");
-		tabbar.cells("icons").attachObject("icons");
 	}
 
 	function check_dependencies(){
@@ -222,17 +220,9 @@ var dhxLayout,mygrid,webbar;
 				break;
 			}
 
-		els =  document.getElementsByName('icons');
 		
-		var iconset = 'main';
-		for (var i = 0; i < els.length; i++)
-			if (els[i].checked == true) {
-				iconset = els[i].value;
-				break;
-			}
-
 		document.getElementById('form_skin').value = skin;
-		document.getElementById('form_iconset').value = iconset;
+		document.getElementById('form_iconset').value = "";
 		document.forms[0].submit();
 	}
 	function set_details(data) {
@@ -335,110 +325,29 @@ var dhxLayout,mygrid,webbar;
 		<input type="hidden" name="iconset" value="main" id="form_iconset">
 	</form>
 	<div id="skins">
-
 		<div class="skin_cont">
-	        <input type="radio" name="skin" value="dhx_web" id="skin_dhx_web"/>
-			<label for="skin_dhx_web">
-				dhx_web<br/>
-				<img src='./imgs/skins/skins_dhx_web.gif' border="0" />
-	        </label>
-        </div>
-        <div class="skin_cont">
 	        <input type="radio" name="skin" value="dhx_skyblue" id="skin_dhx_skyblue" checked="true"/>
 			<label for="skin_dhx_skyblue">
-				dhx_skyblue<br/>
+				skyblue<br/>
 				<img src='./imgs/skins/skins_dhx_skyblue.gif' border="0" />
 			</label>
         </div>
-	    <div class="skin_cont">
-	        <input type="radio" name="skin" value="dhx_blue" id="skin_dhx_blue" />
-			<label for="skin_dhx_blue">
-				dhx_blue<br/>
-				<img src='./imgs/skins/skins_dhx_blue.gif' border="0" />
+        <div class="skin_cont">
+	        <input type="radio" name="skin" value="dhx_terrace" id="skin_dhx_terrace"/>
+			<label for="skin_dhx_terrace">
+				terrace<br/>
+				<img src='./imgs/skins/skins_dhx_terrace.png' border="0" />
+			</label>
+        </div>
+		<div class="skin_cont">
+	        <input type="radio" name="skin" value="dhx_web" id="skin_dhx_web"/>
+			<label for="skin_dhx_web">
+				web<br/>
+				<img src='./imgs/skins/skins_dhx_web.gif' border="0" />
 	        </label>
         </div>
-        <div class="skin_cont">
-	        <input type="radio" name="skin" value="dhx_black" id="skin_dhx_black"/>
-			<label for="skin_dhx_black">
-				dhx_black<br/>
-				<img src='./imgs/skins/skins_dhx_black.gif' border="0" />
-			</label>
-        </div>
+        
 	</div>
 
-	<div id="icons">
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="default" id="icons_default" checked="true" />
-			<label for="icons_default">
-				default<br/>
-				<img src='./imgs/iconsets/iconset_default.gif' border="0">
-			</label>
-		</div>
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_bluebooks" id="icons_csh_bluebooks"/>
-			<label for="icons_csh_bluebooks">
-				csh_bluebooks<br/>
-				<img src='./imgs/iconsets/iconset_csh_bluebooks.gif' border="0">
-			</label>
-		</div>
-
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_bluefolders" id="icons_csh_bluefolders"/>
-			<label for="icons_csh_bluefolders">
-				csh_bluefolders<br/>
-				<img src='./imgs/iconsets/iconset_csh_bluefolders.gif' border="0">
-			</label>
-		</div>
-		
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_books" id="icons_csh_books"/>
-			<label for="icons_csh_books">
-				csh_books<br/>
-				<img src='./imgs/iconsets/iconset_csh_books.gif' border="0">
-			</label>
-		</div>
-
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_dhx_skyblue" id="icons_csh_dhx_skyblue"/>
-			<label for="icons_csh_dhx_skyblue">
-				csh_dhx_skyblue<br/>
-				<img src='./imgs/iconsets/iconset_csh_dhx_skyblue.gif' border="0">
-			</label>
-		</div>
-		
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_scbrblue" id="icons_csh_scbrblue"/>
-			<label for="icons_csh_scbrblue">
-				csh_scbrblue<br/>
-				<img src='./imgs/iconsets/iconset_csh_scbrblue.gif' border="0">
-			</label>
-		</div>
-
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_vista" id="icons_csh_vista"/>
-			<label for="icons_csh_vista">
-				csh_vista<br/>
-				<img src='./imgs/iconsets/iconset_csh_vista.gif' border="0">
-			</label>
-		</div>
-
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_csh_winstyle" id="icons_csh_winstyle"/>
-			<label for="icons_csh_winstyle">
-				csh_winstyle<br/>
-				<img src='./imgs/iconsets/iconset_csh_winstyle.gif' border="0">
-			</label>
-		</div>
-
-		<div class="iconset_cont">
-			<input type="radio" name="icons" value="csh_csh_yellowbooks" id="icons_csh_yellowbooks"/>
-			<label for="icons_csh_yellowbooks">
-				csh_yellowbooks<br/>
-				<img src='./imgs/iconsets/iconset_csh_yellowbooks.gif' border="0">
-			</label>
-		</div>
-
-		<div class="clear">&nbsp;</div>
-
-	</div>
+	
 </body>

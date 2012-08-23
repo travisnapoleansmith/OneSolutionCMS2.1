@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -16,6 +16,9 @@ dataProcessor.prototype.init=function(obj){
 }
 
 dataProcessor.prototype._createConsole=function(){
+	if (window.dataProcessorConsole)
+		return window.dataProcessorConsole;
+
     var c=document.createElement("DIV");
     c.style.cssText='width:450px; height:420px; overflow:auto; position:absolute; z-index:99999; background-color:white; top:0px; right:0px; border:1px dashed black; font-family:Tahoma; Font-size:10pt;';
     c.innerHTML="<div style='width:100%; background-color:gray; font-weight:bold; color:white;'><span style='cursor:pointer;float:right;' onclick='this.parentNode.parentNode.style.display=\"none\"'><sup>[close]&nbsp;</sup></span><span style='cursor:pointer;float:right;' onclick='this.parentNode.parentNode.childNodes[2].innerHTML=\"\"'><sup>[clear]&nbsp;</sup></span>&nbsp;DataProcessor</div><div style='width:100%; height:200px; overflow-Y:scroll;'>&nbsp;Current state</div><div style='width:100%; height:200px; overflow-Y:scroll;'>&nbsp;Log:</div>";
@@ -26,6 +29,7 @@ dataProcessor.prototype._createConsole=function(){
     dhtmlxEvent(window,"dblclick",function(){ 
         c.style.display='';
     })    
+    window.dataProcessorConsole = c;
     return c;
 }
 
@@ -92,7 +96,7 @@ dataProcessor.wrap("sendData",function(rowId){
 		if (this.obj.mytype=="tree"){
         	if (!this.obj._idpull[rowId])
 	    		this._log("&nbsp;Error! item with such ID not exists <b>"+rowId+"</b>");
-		} else {
+		} else  if (this.obj.rowsAr) {
 			if (!this.obj.rowsAr[rowId])
 	        	this._log("&nbsp;Error! row with such ID not exists <b>"+rowId+"</b>");
         }
@@ -156,7 +160,7 @@ dataProcessor.wrap("afterUpdate",function(that,b,c,d,xml){
 dataProcessor.wrap("afterUpdateCallback",function(sid,tid,action){
 	if (this.obj.mytype=="tree"){
 		if (!this.obj._idpull[sid]) this._log("Incorrect SID, item with such ID not exists in grid");
-	} else {
+	} else if (this.obj.rowsAr) {
 		if (!this.obj.rowsAr[sid]) this._log("Incorrect SID, row with such ID not exists in grid");
 	}
 	this._log("&nbsp;Action: "+action+" SID:"+sid+" TID:"+tid);

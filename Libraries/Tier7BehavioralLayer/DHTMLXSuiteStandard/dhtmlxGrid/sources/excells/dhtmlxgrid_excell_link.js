@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -34,8 +34,11 @@ function eXcell_link(cell){
     this.isDisabled=function(){return true;}
 	this.edit = function(){}
 	this.getValue = function(){
-		if(this.cell.firstChild.getAttribute)
-			return this.cell.firstChild.innerHTML+"^"+this.cell.firstChild.getAttribute("href")
+		if(this.cell.firstChild.getAttribute){
+			var target = this.cell.firstChild.getAttribute("target")
+			return this.cell.firstChild.innerHTML+"^"+this.cell.firstChild.getAttribute("href")+(target?("^"+target):"");
+		}
+
 		else
 			return "";
 	}

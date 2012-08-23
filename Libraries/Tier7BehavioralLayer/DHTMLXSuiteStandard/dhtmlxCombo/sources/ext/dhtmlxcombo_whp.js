@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -39,6 +39,8 @@ dhtmlXCombo.prototype._setOptionAutoPositioning = function(fl){
 	}
 	else this.ListPosition = "Bottom";
 	this._positList();
+    if(_isIE)
+        this._IEFix(true);
 }
 
 /**
@@ -136,21 +138,33 @@ dhtmlXCombo.prototype.enableOptionAutoHeight = function(fl,maxHeight){
 	if(!this._listHeightConf) this._listHeightConf = (this.DOMlist.style.height=="")?100:parseInt(this.DOMlist.style.height);
 	if(arguments.length==0) var fl = 1; 
 	this.autoHeight = convertStringToBoolean(fl);
+    var combo = this;
 	if(this.autoHeight){
-		this.ahOnOpen = this.attachEvent("onOpen",function(){
-			this._setOptionAutoHeight(fl,maxHeight);
-			if(_isIE) this._setOptionAutoHeight(fl,maxHeight);
-		})
-		if(!this.awOnOpen)
-		this.ahOnXLE = this.attachEvent("onXLE",function(){
-			var that = this;
-			window.setTimeout(function(){that.callEvent("onOpen",[]);},1);
-		})
+        var f = function(){
+			window.setTimeout(function(){combo._setOptionAutoHeight(fl,maxHeight)},1)
+        }
+		this.ahOnOpen = this.attachEvent("onOpen",f);
+        if(!this.awOnOpen)
+		    this.ahOnXLE = this.attachEvent("onXLE",f);
+        var t;
+        this.ahOnKey = this.attachEvent("onKeyPressed",function(){
+            if(!this._filter)
+                return;
+            if(t)
+                window.clearTimeout(t);
+            window.setTimeout(function(){
+                if(combo.DOMlist.style.display=="block")
+                    combo._setOptionAutoHeight(fl,maxHeight);
+            },50)
+        });
 	}
 	else {
 		if(typeof(this.ahOnOpen)!= "undefined"){
 			this.detachEvent(this.ahOnOpen);
-			this.detachEvent(this.ahOnXLE);
+            if(this.ahOnXLE)
+			    this.detachEvent(this.ahOnXLE);
+            if(this.ahOnKey)
+                this.detachEvent(this.ahOnKey);
 			this.setOptionHeight(this._listHeightConf);
 		}
 	}

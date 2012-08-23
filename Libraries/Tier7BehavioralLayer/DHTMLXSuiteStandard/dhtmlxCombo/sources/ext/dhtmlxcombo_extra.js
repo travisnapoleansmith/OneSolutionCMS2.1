@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -60,10 +60,10 @@ dhtmlXCombo_imageOption.prototype._DrawHeaderImage = function(self, name, width)
 	self.DOMelem_image=z;
 }
 
-dhtmlXCombo_imageOption.prototype.RedrawHeader = function(self)
+dhtmlXCombo_imageOption.prototype.RedrawHeader = function(self,hide)
 {
-	self.DOMelem_image.style.visibility = 'visible';
-	self.DOMelem_image.src = this.img_src;
+	self.DOMelem_image.style.visibility = hide?'hidden':'visible';
+	self.DOMelem_image.src = hide?"":this.img_src;
 }
 
 dhtmlXCombo_imageOption.prototype.getDefImage = function(self){ return ""; }
@@ -153,11 +153,10 @@ dhtmlXCombo_checkboxOption.prototype._DrawHeaderCheckbox = function(self, name, 
 	self.DOMelem_checkbox = z;
 }
 
-dhtmlXCombo_checkboxOption.prototype.RedrawHeader = function(self)
+dhtmlXCombo_checkboxOption.prototype.RedrawHeader = function(self,hide)
 {
-	
-    self.DOMelem_checkbox.style.visibility = '';
-	self.DOMelem_checkbox.checked = this.content.firstChild.checked;
+		self.DOMelem_checkbox.style.visibility = hide?'hidden':'';
+		self.DOMelem_checkbox.checked = hide?false:this.content.firstChild.checked;
 }
 
 

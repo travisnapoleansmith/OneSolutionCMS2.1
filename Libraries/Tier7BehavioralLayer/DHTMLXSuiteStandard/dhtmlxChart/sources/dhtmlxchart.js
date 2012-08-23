@@ -1,5 +1,5 @@
 /*
-2011 July 13
+2012 July 31
 */
 
 
@@ -260,6 +260,13 @@ dhtmlx.version="3.0";
 dhtmlx.codebase="./";
 
 //coding helpers
+
+dhtmlx.copy = function(source){
+	var f = dhtmlx.copy._function;
+	f.prototype = source;
+	return new f();
+};
+dhtmlx.copy._function = function(){};
 
 //copies methods and properties from source to the target
 dhtmlx.extend = function(target, source){
@@ -595,7 +602,7 @@ else{
 	if (navigator.appVersion.indexOf("MSIE 8.0")!= -1 && document.compatMode != "BackCompat") 
 		dhtmlx._isIE=8;
 	if (navigator.appVersion.indexOf("MSIE 9.0")!= -1 && document.compatMode != "BackCompat") 
-		dhtmlx._isIE=8;
+		dhtmlx._isIE=9;
 }
 
 dhtmlx.env = {};
@@ -607,7 +614,7 @@ dhtmlx.env = {};
 	dhtmlx.env.transition = false;
 	var options = {};
 	options.names = ['transform', 'transition'];
-	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'oTransform'];
+	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'oTransform','msTransform'];
 	options.transition = ['transition', 'WebkitTransition', 'MozTransition', 'oTransition'];
 	
 	var d = document.createElement("DIV");
@@ -758,7 +765,9 @@ dhtmlx.html={
 		dhtmlx.codebase = temp.slice(0, temp.length).join("/")+"/";
 	}
 })();
-if(dhtmlx.ui)dhtmlx.ui={};
+
+if (!dhtmlx.ui)
+	dhtmlx.ui={};
 
 
 /* DHX DEPEND FROM FILE 'destructor.js'*/
@@ -837,8 +846,237 @@ dhtmlx.math.toHex = function(number, length){
 			str = "0"+str;
 	return str;
 };
+dhtmlx.math.hexToDec = function(hex){
+   	return parseInt(hex, 16);
+};
+dhtmlx.math.toRgb = function(rgb){
+   	var r,g,b,rgbArr;
+   	if (typeof(rgb) != 'string') {
+    	r = rgb[0];
+       	g = rgb[1];
+       	b = rgb[2];
+   	} else if (rgb.indexOf('rgb')!=-1) {
+		rgbArr = rgb.substr(rgb.indexOf("(")+1,rgb.lastIndexOf(")")-rgb.indexOf("(")-1).split(",");
+	   	r = rgbArr[0];
+	   	g = rgbArr[1];
+	   	b = rgbArr[2];
+   	} else {
+       	if (rgb.substr(0, 1) == '#') {
+        	rgb = rgb.substr(1);
+       	}
+       	r = this.hexToDec(rgb.substr(0, 2));
+       	g = this.hexToDec(rgb.substr(2, 2));
+       	b = this.hexToDec(rgb.substr(4, 2));
+   	}
+   	r = (parseInt(r,10)||0);
+   	g = (parseInt(g,10)||0);
+   	b = (parseInt(b,10)||0);
+   	if (r < 0 || r > 255)
+      	r = 0;
+   	if (g < 0 || g > 255)
+      	g = 0;
+   	if (b < 0 || b > 255)
+      	b = 0;
+   	return [r,g,b];
+}
+dhtmlx.math.hsvToRgb = function(h, s, v){
+	var hi,f,p,q,t,r,g,b;
+   	hi = Math.floor((h/60))%6;
+   	f = h/60-hi;
+   	p = v*(1-s);
+   	q = v*(1-f*s);
+   	t = v*(1-(1-f)*s);
+   	r = 0;
+   	g = 0;
+   	b = 0;
+   	switch(hi) {
+    	case 0:
+        	r = v; g = t; b = p;
+         	break;
+      	case 1:
+        	r = q; g = v; b = p;
+         	break;
+      	case 2:
+        	r = p; g = v; b = t;
+        	 break;
+      	case 3:
+        	r = p; g = q; b = v;
+        	break;
+      	case 4:
+        	r = t; g = p; b = v;
+        	break;
+      	case 5:
+        	r = v; g = p; b = q;
+         	break;
+   	}
+    r = Math.floor(r*255);
+    g = Math.floor(g*255);
+    b = Math.floor(b*255);
+    return [r, g, b];
+};
+dhtmlx.math.rgbToHsv = function(r, g, b){
+   	var r0,g0,b0,min0,max0,s,h,v;
+   	r0 = r/255;
+   	g0 = g/255;
+   	b0 = b/255;
+   	var min0 = Math.min(r0, g0, b0);
+   	var max0 = Math.max(r0, g0, b0);
+   	h = 0;
+   	s = max0==0?0:(1-min0/max0);
+   	v = max0;
+   	if (max0 == min0) {
+   		h = 0;
+   	} else if (max0 == r0 && g0>=b0) {
+    	h = 60*(g0 - b0)/(max0 - min0)+0;
+   	} else if (max0 == r0 && g0 < b0) {
+    	h = 60*(g0 - b0)/(max0 - min0)+360;
+   	} else if (max0 == g0) {
+      	h = 60*(b0 - r0)/(max0-min0)+120;
+   	} else if (max0 == b0) {
+      	h = 60*(r0 - g0)/(max0 - min0)+240;
+   	}
+   	return [h, s, v];
+}
 
 
+
+
+/* DHX DEPEND FROM FILE 'ext/chart/presets.js'*/
+
+
+/*chart presents*/
+if(!dhtmlx.presets)
+    dhtmlx.presets = {};
+dhtmlx.presets.chart = {
+    "simple":{
+        item:{
+            borderColor: "#ffffff",
+            color: "#2b7100",
+            shadow: false,
+            borderWidth:2
+        },
+		line:{
+			color:"#8ecf03",
+            width:2
+		}
+    },
+    "plot":{
+        color:"#1293f8",
+        item:{
+            borderColor:"#636363",
+            borderWidth:1,
+            color: "#ffffff",
+            type:"r",
+            shadow: false
+        },
+	    line:{
+			color:"#1293f8",
+            width:2
+	    }
+    },
+    "diamond":{
+        color:"#b64040",
+        item:{
+			borderColor:"#b64040",
+			color: "#b64040",
+            type:"d",
+            radius:3,
+            shadow:true
+        },
+		line:{
+			color:"#ff9000",
+            width:2
+		}
+    },
+    "point":{
+        color:"#fe5916",
+		disableLines:true,
+        fill:false,
+        disableItems:false,
+        item:{
+            color:"#feb916",
+            borderColor:"#fe5916",
+            radius:2,
+            borderWidth:1,
+            type:"r"
+	    },
+        alpha:1
+    },
+    "line":{
+        line:{
+            color:"#3399ff",
+            width:2
+        },
+        item:{
+            color:"#ffffff",
+            borderColor:"#3399ff",
+            radius:2,
+            borderWidth:2,
+            type:"d"
+        },
+        fill:false,
+        disableItems:false,
+        disableLines:false,
+        alpha:1
+    },
+    "area":{
+        fill:"#3399ff",
+        line:{
+            color:"#3399ff",
+            width:1
+        },
+        disableItems:true,
+        alpha: 0.2,
+        disableLines:false
+    },
+    "round":{
+        item:{
+            radius:3,
+            borderColor:"#3f83ff",
+            borderWidth:1,
+            color:"#3f83ff",
+            type:"r",
+            shadow:false,
+            alpha:0.6
+        }
+    },
+    "square":{
+         item:{
+            radius:3,
+            borderColor:"#447900",
+            borderWidth:2,
+            color:"#69ba00",
+            type:"s",
+            shadow:false,
+            alpha:1
+        }
+    },
+    /*bar*/
+    "column":{
+        color:"RAINBOW",
+        gradient:false,
+        width:45,
+        radius:0,
+        alpha:1,
+        border:true
+    },
+    "stick":{
+        width:5,
+        gradient:false,
+		color:"#67b5c9",
+        radius:2,
+        alpha:1,
+        border:false
+    },
+    "alpha":{
+        color:"#b9a8f9",
+        width:70,
+        gradient:"falling",
+        radius:0,
+        alpha:0.5,
+        border:true
+    }
+};
 
 
 
@@ -902,6 +1140,326 @@ dhtmlx.ui.Map.prototype = {
 dhtmlx.chart = {};
 
 
+/* DHX DEPEND FROM FILE 'ext/chart/chart_scatter.js'*/
+
+
+/*DHX:Depend ext/chart/chart_base.js*/
+dhtmlx.chart.scatter = {
+
+	/**
+	*   renders a graphic
+	*   @param: ctx - canvas object
+	*   @param: data - object those need to be displayed
+	*   @param: point0  - top left point of a chart
+	*   @param: point1  - right bottom point of a chart
+	*   @param: sIndex - index of drawing chart
+    *   @param: map - map object
+	*/
+	pvt_render_scatter:function(ctx, data, point0, point1, sIndex, map){
+        if(!this._settings.xValue)
+            return dhtmlx.log("warning","Undefined propery: xValue");
+        /*max in min values*/
+        var limitsY = this._getLimits();
+        var limitsX = this._getLimits("h","xValue");
+        /*render scale*/
+        if(!sIndex){
+            this._drawYAxis(ctx,data,point0,point1,limitsY.min,limitsY.max);
+		    this._drawHXAxis(ctx,data,point0,point1,limitsX.min,limitsX.max);
+        }
+        limitsY = {min:this._settings.yAxis.start,max:this._settings.yAxis.end};
+        limitsX = {min:this._settings.xAxis.start,max:this._settings.xAxis.end};
+        var params = this._getScatterParams(ctx,data,point0,point1,limitsX,limitsY);
+	    for(var i=0;i<data.length;i++){
+            this._drawScatterItem(ctx,map,point0, point1, params,limitsX,limitsY,data[i],sIndex);
+        }
+    },
+    _getScatterParams:function(ctx, data, point0, point1,limitsX,limitsY){
+        var params = {};
+		/*available space*/
+		params.totalHeight = point1.y-point0.y;
+        /*available width*/
+        params.totalWidth = point1.x-point0.x;
+		/*unit calculation (y_position = value*unit)*/
+        this._calcScatterUnit(params,limitsX.min,limitsX.max,params.totalWidth,"X");
+        this._calcScatterUnit(params,limitsY.min,limitsY.max,params.totalHeight,"Y");
+		return params;
+    },
+    _drawScatterItem:function(ctx,map,point0, point1,params,limitsX,limitsY,obj,sIndex){
+        var x0 = this._calculateScatterItemPosition(params, point1, point0, limitsX, obj, "X");
+        var y0 = this._calculateScatterItemPosition(params, point0, point1, limitsY, obj, "Y");
+        this. _drawItemOfLineChart(ctx,x0,y0,obj,1);
+        var config = this._settings;
+        var areaWidth = (config.eventRadius||Math.floor(config.item.radius+1));
+        map.addRect(obj.id,[x0-areaWidth,y0-areaWidth,x0+areaWidth,y0+areaWidth],sIndex);
+    },
+    _calculateScatterItemPosition:function(params, point0, point1, limits, obj, axis){
+		/*the real value of an object*/
+		var value = this._settings[axis=="X"?"xValue":"value"].call(this,obj);
+		/*a relative value*/
+        var valueFactor = params["valueFactor"+axis];
+		var v = (parseFloat(value||0) - limits.min)*valueFactor;
+		/*a vertical coordinate*/
+        var unit = params["unit"+axis];
+		var pos = point1[axis.toLowerCase()] - (axis=="X"?(-1):1)*Math.floor(unit*v);
+		/*the limit of the minimum value is  the minimum visible value*/
+		if(v<0)
+			pos = point1[axis.toLowerCase()];
+		/*the limit of the maximum value*/
+		if(value > limits.max)
+			pos = point0[axis.toLowerCase()];
+		/*the limit of the minimum value*/
+		if(value < limits.min)
+			pos = point1[axis.toLowerCase()];
+        return pos;
+    },
+    _calcScatterUnit:function(p,min,max,size,axis){
+        var relativeValues = this._getRelativeValue(min,max);
+        axis = (axis||"");
+		p["relValue"+axis] = relativeValues[0];
+		p["valueFactor"+axis] = relativeValues[1];
+		p["unit"+axis] = (p["relValue"+axis]?size/p["relValue"+axis]:10);
+    }
+};
+
+
+
+/* DHX DEPEND FROM FILE 'ext/chart/chart_radar.js'*/
+
+
+/*DHX:Depend ext/chart/chart_base.js*/
+dhtmlx.chart.radar = {
+	pvt_render_radar:function(ctx,data,x,y,sIndex,map){
+		this._renderRadarChart(ctx,data,x,y,sIndex,map);
+		
+	}, 
+	/**
+	*   renders a pie chart
+	*   @param: ctx - canvas object
+	*   @param: data - object those need to be displayed
+	*   @param: x - the width of the container
+	*   @param: y - the height of the container
+	*   @param: ky - value from 0 to 1 that defines an angle of inclination (0<ky<1 - 3D chart)
+	*/
+	_renderRadarChart:function(ctx,data,point0,point1,sIndex,map){
+		if(!data.length)
+			return;
+		var coord = this._getPieParameters(point0,point1);
+		/*scale radius*/
+		var radius = (this._settings.radius?this._settings.radius:coord.radius);
+    	/*scale center*/
+		var x0 = (this._settings.x?this._settings.x:coord.x);
+		var y0 = (this._settings.y?this._settings.y:coord.y);
+        /*angles for each unit*/
+		var ratioUnits = [];
+        for(var i=0;i<data.length;i++)
+           ratioUnits.push(1)
+		var ratios = this._getRatios(ratioUnits,data.length);
+		if(!sIndex)
+            this._drawRadarAxises(ctx,ratios,x0,y0,radius,data);
+        this._drawRadarData(ctx,ratios,x0,y0,radius,data,sIndex,map);
+	},
+     _drawRadarData:function(ctx,ratios,x,y,radius,data,sIndex,map){
+        var alpha0,alpha1,areaWidth,config,i,min,max,pos0,pos1,posArr,r0,r1,relValue,startAlpha,value,value0,value1,valueFactor,unit,unitArr;
+        config = this._settings;
+		/*unit calculation (item_radius_pos = value*unit)*/
+        min = config.yAxis.start;
+        max = config.yAxis.end;
+		unitArr = this._getRelativeValue(min,max);
+        relValue = unitArr[0];
+		unit = (relValue?radius/relValue:radius/2);
+        valueFactor = unitArr[1];
+
+        startAlpha = -Math.PI/2;
+        alpha0 =  alpha1 = startAlpha;
+        posArr = [];
+        for(i=0;i<data.length;i++){
+            if(!value1){
+                value = config.value(data[i]);
+                /*a relative value*/
+                value0 = (value1||(parseFloat(value||0) - min)*valueFactor);
+            }
+            else
+                value0 = value1;
+            r0 = Math.floor(unit*value0);
+
+            value = config.value((i!=(data.length-1))?data[i+1]:data[0]);
+            value1 = (parseFloat(value||0) - min)*valueFactor;
+            r1 = Math.floor(unit*value1);
+            alpha0 = alpha1;
+            alpha1 = ((i!=(data.length-1))?(startAlpha+ratios[i]-0.0001):startAlpha);
+            pos0 = (pos1||this._getPositionByAngle(alpha0,x,y,r0));
+            pos1 = this._getPositionByAngle(alpha1,x,y,r1);
+            /*creates map area*/
+			areaWidth  = (config.eventRadius||(parseInt(config.item.radius.call(this,data[i]),10)+config.item.borderWidth));
+		    map.addRect(data[i].id,[pos0.x-areaWidth,pos0.y-areaWidth,pos0.x+areaWidth,pos0.y+areaWidth],sIndex);
+            //this._drawLine(ctx,pos0.x,pos0.y,pos1.x,pos1.y,config.line.color.call(this,data[i]),config.line.width)
+            posArr.push(pos0);
+        }
+         if(config.fill)
+             this._fillRadarChart(ctx,posArr,data);
+         if(!config.disableLines)
+            this._strokeRadarChart(ctx,posArr,data);
+         if(!config.disableItems)
+             this._drawRadarItemMarkers(ctx,posArr,data);
+         posArr = null;
+    },
+    _drawRadarItemMarkers:function(ctx,points,data){
+        for(var i=0;i < points.length;i++){
+            this._drawItemOfLineChart(ctx,points[i].x,points[i].y,data[i]);
+        }
+    },
+     _fillRadarChart:function(ctx,points,data){
+        var pos0,pos1;
+        ctx.globalAlpha= this._settings.alpha.call(this,{});
+
+		ctx.beginPath();
+        for(var i=0;i < points.length;i++){
+            ctx.fillStyle = this._settings.fill.call(this,data[i]);
+            pos0 = points[i];
+            pos1 = (points[i+1]|| points[0]);
+            if(!i){
+
+                ctx.moveTo(pos0.x,pos0.y);
+            }
+            ctx.lineTo(pos1.x,pos1.y)
+        }
+         ctx.fill();
+         ctx.globalAlpha=1;
+    },
+    _strokeRadarChart:function(ctx,points,data){
+        var pos0,pos1;
+        for(var i=0;i < points.length;i++){
+            pos0 = points[i];
+            pos1 = (points[i+1]|| points[0]);
+            this._drawLine(ctx,pos0.x,pos0.y,pos1.x,pos1.y,this._settings.line.color.call(this,data[i]),this._settings.line.width)
+        }
+    },
+    _drawRadarAxises:function(ctx,ratios,x,y,radius,data){
+        var configY = this._settings.yAxis;
+        var configX = this._settings.xAxis;
+        var start = configY.start;
+        var end = configY.end;
+        var step = configY.step;
+        var scaleParam= {};
+        var config = this._settings.configYAxis;
+        if(typeof config.step =="undefined"||typeof config.start=="undefined"||typeof config.end =="undefined"){
+            var limits = this._getLimits();
+			scaleParam = this._calculateScale(limits.min,limits.max);
+			start = scaleParam.start;
+			end = scaleParam.end;
+			step = scaleParam.step;
+			configY.end = end;
+			configY.start = start;
+		}
+        var units = [];
+        var i,j,p;
+        var c=0;
+        var stepHeight = radius*step/(end-start);
+        /*correction for small step*/
+        var power,corr;
+        if(step<1){
+			power = Math.min(this._log10(step),(start<=0?0:this._log10(start)));
+			corr = Math.pow(10,-power);
+        }
+        var angles = [];
+        for(i = end; i>=start; i -=step){
+			if(scaleParam.fixNum)  i = parseFloat((new Number(i)).toFixed(scaleParam.fixNum));
+            units.push(Math.floor(c*stepHeight)+ 0.5);
+            if(corr){
+				i = Math.round(i*corr)/corr;
+			}
+            var unitY = y-radius+units[units.length-1];
+            this.renderTextAt("middle","left",x,unitY,
+				configY.template(i.toString()),
+				"dhx_axis_item_y dhx_radar"
+			);
+            if(ratios.length<2){
+                this._drawScaleSector(ctx,"arc",x,y,radius-units[units.length-1],-Math.PI/2,3*Math.PI/2,i);
+                return;
+            }
+            var startAlpha = -Math.PI/2;/*possibly need  to moved in config*/
+            var alpha0 = startAlpha;
+            var alpha1;
+            for(j=0;j< ratios.length;j++){
+                if(i==end)
+                   angles.push(alpha0);
+                alpha1 = startAlpha+ratios[j]-0.0001;
+                this._drawScaleSector(ctx,(config.lineShape||"line"),x,y,radius-units[units.length-1],alpha0,alpha1,i,j,data[i]);
+                alpha0 = alpha1;
+            }
+            c++;
+        }
+         /*renders radius lines and labels*/
+        for(i=0;i< angles.length;i++){
+            p = this._getPositionByAngle(angles[i],x,y,radius);
+            this._drawLine(ctx,x,y,p.x,p.y,(configX?configX.lineColor.call(this,data[i]):"#cfcfcf"),((configX&&configX.lineWidth)?configX.lineWidth.call(this,data[i]):1));
+            this._drawRadarScaleLabel(ctx,x,y,radius,angles[i],(configX?configX.template.call(this,data[i]):"&nbsp;"));
+        }
+
+    },
+    _drawScaleSector:function(ctx,shape,x,y,radius,a1,a2,i,j){
+         var pos1, pos2;
+         if(radius<0)
+            return false;
+         pos1 = this._getPositionByAngle(a1,x,y,radius);
+         pos2 = this._getPositionByAngle(a2,x,y,radius);
+         var configY = this._settings.yAxis;
+         if(configY.bg){
+             ctx.beginPath();
+             ctx.moveTo(x,y);
+             if(shape=="arc")
+                 ctx.arc(x,y,radius,a1,a2,false);
+             else{
+                 ctx.lineTo(pos1.x,pos1.y);
+                 ctx.lineTo(pos2.x,pos2.y);
+             }
+             ctx.fillStyle =  configY.bg(i,j);
+             ctx.moveTo(x,y);
+             ctx.fill();
+             ctx.closePath();
+         }
+         if(configY.lines(i,j)){
+             ctx.lineWidth = 1;
+             ctx.beginPath();
+              if(shape=="arc")
+                 ctx.arc(x,y,radius,a1,a2,false);
+             else{
+                 ctx.moveTo(pos1.x,pos1.y);
+                 ctx.lineTo(pos2.x,pos2.y);
+             }
+             ctx.strokeStyle = configY.lineColor(i,j);
+             ctx.stroke();
+         }
+    },
+    _drawRadarScaleLabel:function(ctx,x,y,r,a,text){
+         var t = this.renderText(0,0,text,"dhx_axis_radar_title",1);
+         var width = t.scrollWidth;
+         var height = t.offsetHeight;
+         var delta = 0.001;
+         var pos =  this._getPositionByAngle(a,x,y,r+5);
+         var corr_x=0,corr_y=0;
+         if(a<0||a>Math.PI){
+             corr_y = -height;
+         }
+         if(a>Math.PI/2){
+             corr_x = -width;
+         }
+         if(Math.abs(a+Math.PI/2)<delta||Math.abs(a-Math.PI/2)<delta){
+            corr_x = -width/2;
+         }
+         else if(Math.abs(a)<delta||Math.abs(a-Math.PI)<delta){
+            corr_y = -height/2;
+         }
+         t.style.top  = pos.y+corr_y+"px";
+	     t.style.left = pos.x+corr_x+"px";
+		 t.style.width = width+"px";
+		 t.style.whiteSpace = "nowrap";
+    }
+};
+
+
+
+
 /* DHX DEPEND FROM FILE 'ext/chart/chart_area.js'*/
 
 
@@ -920,7 +1478,7 @@ dhtmlx.chart.area = {
 	    var params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
 			
 		/*the value that defines the map area position*/
-		var areaPos = Math.floor(params.cellWidth/2);
+		var areaPos = (this._settings.eventRadius||Math.floor(params.cellWidth/2));
 	
 		/*drawing all items*/
 		if (data.length) {
@@ -936,7 +1494,7 @@ dhtmlx.chart.area = {
 			ctx.lineTo(x0,y0);
 			
 			/*creates map area*/
-			map.addRect(data[0].id,[x0-areaPos,y0-areaPos,x0+areaPos,y0+areaPos]);
+			map.addRect(data[0].id,[x0-areaPos,y0-areaPos,x0+areaPos,y0+areaPos],sIndex);
 			/*item label*/
 			if(!this._settings.yAxis)
 		    	this.renderTextAt(false, (!this._settings.offset?false:true), x0, y0-this._settings.labelOffset, this._settings.label(data[0]));
@@ -948,7 +1506,7 @@ dhtmlx.chart.area = {
 				var yi = this._getYPointOfLineChart(data[i],point0,point1,params);
 				ctx.lineTo(xi,yi);
 				/*creates map area*/
-				map.addRect(data[i].id,[xi-areaPos,yi-areaPos,xi+areaPos,yi+areaPos]);
+				map.addRect(data[i].id,[xi-areaPos,yi-areaPos,xi+areaPos,yi+areaPos],sIndex);
 				/*item label*/
 				if(!this._settings.yAxis)
 					this.renderTextAt(false, (!this._settings.offset&&i==(data.length-1)?"left":"center"), xi, yi-this._settings.labelOffset, this._settings.label(data[i]));
@@ -973,7 +1531,7 @@ dhtmlx.chart.stackedArea ={
 	  	var params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
 			
 		/*the value that defines the map area position*/
-		var areaPos = Math.floor(params.cellWidth/2);
+		var areaPos = (this._settings.eventRadius||Math.floor(params.cellWidth/2));
 	  
 	    var y1 = [];
 	
@@ -997,11 +1555,11 @@ dhtmlx.chart.stackedArea ={
 			ctx.lineTo(x0,y02);
 			
 			/*creates map area*/
-			map.addRect(data[0].id,[x0-areaPos,y02-areaPos,x0+areaPos,y02+areaPos]);
+			map.addRect(data[0].id,[x0-areaPos,y02-areaPos,x0+areaPos,y02+areaPos],sIndex);
 			/*item label*/
 			if(!this._settings.yAxis)
 		    	this.renderTextAt(false, true, x0, y02-this._settings.labelOffset, this._settings.label(data[0]));
-			
+
 			/*drawing the previous item and the line between to items*/
 			for(var i=1; i < data.length;i ++){
 				/*horizontal positions of the previous and current items (0.5 - the fix for line width)*/
@@ -1012,7 +1570,7 @@ dhtmlx.chart.stackedArea ={
 				
 				ctx.lineTo(xi,yi2);
 				/*creates map area*/
-				map.addRect(data[i].id,[xi-areaPos,yi2-areaPos,xi+areaPos,yi2+areaPos]);
+				map.addRect(data[i].id,[xi-areaPos,yi2-areaPos,xi+areaPos,yi2+areaPos],sIndex);
 				/*item label*/
 				if(!this._settings.yAxis)
 					this.renderTextAt(false, true, xi, yi2-this._settings.labelOffset, this._settings.label(data[i]));
@@ -1052,50 +1610,54 @@ dhtmlx.chart.spline = {
 	*   @param: sIndex - index of drawing chart
 	*/
 	pvt_render_spline:function(ctx, data, point0, point1, sIndex, map){
-			
-		var params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
-		
-		/*the value that defines the map area position*/
-		var areaPos = Math.floor(params.cellWidth/2);
-		areaPos = (this._settings.eventRadius||areaPos);
-		
+		var areaPos,config,i,items,j,params,radius,sparam,x,x0,x1,x2,y,y1,y2;
+		params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
+		config = this._settings;
+
 		/*array of all points*/
-		var items = [];
-		
+		items = [];
 		/*drawing all items*/
 		if (data.length) {
-		   
+
 			/*getting all points*/
-			var x0 = (this._settings.offset?point0.x+params.cellWidth*0.5:point0.x);
-			for(var i=0; i < data.length;i ++){
-				var x = ((!i)?x0:Math.floor(params.cellWidth*i) - 0.5 + x0);
-			    var y = this._getYPointOfLineChart(data[i],point0,point1,params);		
+			x0 = (config.offset?point0.x+params.cellWidth*0.5:point0.x);
+			for(i=0; i < data.length;i ++){
+				x = ((!i)?x0:Math.floor(params.cellWidth*i) - 0.5 + x0);
+
+			    y = this._getYPointOfLineChart(data[i],point0,point1,params);
 				items.push({x:x,y:y});
 			}
-			var sparam = this._getSplineParameters(items);
-			
-			for(var i =0; i< items.length-1; i++){
-				var x1 = items[i].x;
-				var y1 = items[i].y;
-				var x2 = items[i+1].x;
-				var y2 = items[i+1].y;
-				
-				
-				for(var j = x1; j < x2; j++)
-					this._drawLine(ctx,j,this._getSplineYPoint(j,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),j+1,this._getSplineYPoint(j+1,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),this._settings.line.color(data[i]),this._settings.line.width);
-				this._drawLine(ctx,x2-1,this._getSplineYPoint(j,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),x2,y2,this._settings.line.color(data[i]),this._settings.line.width);
-				this._drawItemOfLineChart(ctx,x1,y1,data[i],this._settings.label(data[i]));
+			sparam = this._getSplineParameters(items);
+
+			for(i =0; i< items.length; i++){
+				x1 = items[i].x;
+				y1 = items[i].y;
+				if(i<items.length-1){
+					x2 = items[i+1].x;
+					y2 = items[i+1].y;
+					for(j = x1; j < x2; j++)
+						this._drawLine(ctx,j,this._getSplineYPoint(j,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),j+1,this._getSplineYPoint(j+1,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),config.line.color(data[i]),config.line.width);
+					this._drawLine(ctx,x2-1,this._getSplineYPoint(j,x1,i,sparam.a,sparam.b,sparam.c,sparam.d),x2,y2,config.line.color(data[i]),config.line.width);
+
+				}
+				this._drawItemOfLineChart(ctx,x1,y1,data[i],config.label(data[i]));
+				/*creates map area*/
+				radius = (parseInt(config.item.radius.call(this,data[i-1]),10)||2);
+			    areaPos = (config.eventRadius||radius+1);
+				map.addRect(data[i].id,[x1-areaPos,y1-areaPos,x1+areaPos,y1+areaPos],sIndex);
+
 			}
-			this._drawItemOfLineChart(ctx,x2,y2,data[i],this._settings.label(data[i]));
+			//this._drawItemOfLineChart(ctx,x2,y2,data[i],config.label(data[i]));
+
 		}
 	},
 	/*gets spline parameter*/
 	_getSplineParameters:function(points){
-		var h,u,v,s,a,b,c,d,n;
+		var h,i,u,v,s,a,b,c,d,n;
 		h = [];	m = [];
 		n = points.length;
 		
-		for(var i =0; i<n-1;i++){
+		for(i =0; i<n-1;i++){
 			h[i] = points[i+1].x - points[i].x;
 			m[i] = (points[i+1].y - points[i].y)/h[i];
 		}
@@ -1104,19 +1666,19 @@ dhtmlx.chart.spline = {
 		u[1] = 2*(h[0] + h[1]);
 		v[0] = 0;
 		v[1] = 6*(m[1] - m[0]);
-		for(var i =2; i < n-1; i++){
+		for(i =2; i < n-1; i++){
 			u[i] = 2*(h[i-1]+h[i]) - h[i-1]*h[i-1]/u[i-1];
 	    	v[i] = 6*(m[i]-m[i-1]) - h[i-1]*v[i-1]/u[i-1];
 		}
 		
 		s = [];
 		s[n-1] = s[0] = 0;
-		for(var i = n -2; i>=1; i--)
+		for(i = n -2; i>=1; i--)
 	   		s[i] = (v[i] - h[i]*s[i+1])/u[i];
 	
         a = []; b = []; c = [];	d = []; 
 		
-		for(var i =0; i<n-1;i++){
+		for(i =0; i<n-1;i++){
 			a[i] = points[i].y;
 			b[i] = - h[i]*s[i+1]/6 - h[i]*s[i]/3 + (points[i+1].y-points[i].y)/h[i];
 			c[i] = s[i]/2;
@@ -1170,7 +1732,7 @@ dhtmlx.chart.barH = {
 		/*necessary for automatic scale*/
 		if(yax){
 		    maxValue = parseFloat(this._settings.xAxis.end);
-			minValue = parseFloat(this._settings.xAxis.start);      
+			minValue = parseFloat(this._settings.xAxis.start);
 		}
 		
 		/*unit calculation (bar_height = value*unit)*/
@@ -1244,12 +1806,11 @@ dhtmlx.chart.barH = {
 			/*drawing bar body*/
 			ctx.globalAlpha = this._settings.alpha.call(this,data[i]);
 			var points = this._drawBarH(ctx,point0,x0,y0,barWidth,minValue,radius,unit,value,color,gradient,inner_gradient);
-			ctx.globalAlpha = 1;
-			
 			if (inner_gradient!=false){
 				this._drawBarHGradient(ctx,x0,y0,barWidth,minValue,radius,unit,value,color,inner_gradient);
 
 			}
+			ctx.globalAlpha = 1;
 			
 			
 			/*sets a bar label and map area*/
@@ -1276,7 +1837,7 @@ dhtmlx.chart.barH = {
 	*   @param: value - item value
 	*   @param: offset - the offset from expected bar edge (necessary for drawing border)
 	*/
-	_setBarHPoints:function(ctx,x0,y0,barWidth,radius,unit,value,offset){
+	_setBarHPoints:function(ctx,x0,y0,barWidth,radius,unit,value,offset,skipLeft){
 		/*correction for displaing small values (when rounding radius is bigger than bar height)*/
 		var angle_corr = 0;
 		if(radius>unit*value){
@@ -1291,7 +1852,7 @@ dhtmlx.chart.barH = {
 			ctx.lineTo(x1,y0+offset);
    		/*left rounding*/
 		var y2 = y0 + radius;
-		if (radius)
+		if (radius&&radius>0)
 			ctx.arc(x1,y2,radius-offset,-Math.PI/2+angle_corr,0,false);
    		/*start of right rounding*/
 		var y3 = y0 + barWidth - radius - (radius?0:offset);
@@ -1299,14 +1860,16 @@ dhtmlx.chart.barH = {
 		ctx.lineTo(x3,y3);
 		/*right rounding*/
 		var x4 = x1;
-		if (radius)
+		if (radius&&radius>0)
 			ctx.arc(x4,y3,radius-offset,0,Math.PI/2-angle_corr,false);
    		/*bottom right point*/
 		var y5 = y0 + barWidth-offset;
         ctx.lineTo(x0,y5);
 		/*line to the start point*/
-   		ctx.lineTo(x0,y0+offset);
-   	//	ctx.lineTo(x0,0); //IE fix!
+		if(!skipLeft){
+   			ctx.lineTo(x0,y0+offset);
+   		}
+	//	ctx.lineTo(x0,0); //IE fix!
 		return [x3,y5];
 	},
 	 _drawHScales:function(ctx,data,point0,point1,start,end,cellWidth){
@@ -1315,23 +1878,27 @@ dhtmlx.chart.barH = {
 	},
 	_drawHYAxis:function(ctx,data,point0,point1,cellWidth,yAxisX){
 		if (!this._settings.yAxis) return;
-		
+		var unitPos;
 		var x0 = parseInt((yAxisX?yAxisX:point0.x),10)-0.5;
 		var y0 = point1.y+0.5;
 		var y1 = point0.y;
 		this._drawLine(ctx,x0,y0,x0,y1,this._settings.yAxis.color,1);
-		
 
-		
+
+
 		for(var i=0; i < data.length;i ++){
-				
+
 			/*scale labels*/
 			var right = ((this._settings.origin!="auto")&&(this._settings.view=="barH")&&(parseFloat(this._settings.value(data[i]))<this._settings.origin));
-			this.renderTextAt("middle",(right?false:"left"),(right?x0+5:x0-5),y1+cellWidth/2+i*cellWidth,
+			unitPos = y1+cellWidth/2+i*cellWidth;
+			this.renderTextAt("middle",(right?false:"left"),(right?x0+5:x0-5),unitPos,
 				this._settings.yAxis.template(data[i]),
 				"dhx_axis_item_y",(right?0:x0-10)
 			);
+			if(this._settings.yAxis.lines.call(this,data[i]))
+				this._drawLine(ctx,point0.x,unitPos,point1.x,unitPos,this._settings.yAxis.lineColor.call(this,data[i]),1);
 		}
+		this._drawLine(ctx,point0.x+0.5,y1+0.5,point1.x,y1+0.5,this._settings.yAxis.lineColor.call(this,{}),1);
 		this._setYAxisTitle(point0,point1);
 	},
 	_drawHXAxis:function(ctx,data,point0,point1,start,end){
@@ -1349,7 +1916,7 @@ dhtmlx.chart.barH = {
 		if(axis.step)
 		     step = parseFloat(axis.step);
 		
-		if(typeof axis.step =="undefined"||typeof axis.start=="undefined"||typeof axis.end =="undefined"){
+		if(typeof this._settings.configXAxis.step =="undefined"||typeof this._settings.configXAxis.start=="undefined"||typeof this._settings.configXAxis.end =="undefined"){
 			scaleParam = this._calculateScale(start,end);
 			start = scaleParam.start;
 			end = scaleParam.end;
@@ -1365,8 +1932,8 @@ dhtmlx.chart.barH = {
 		for(var i = start; i<=end; i += step){
 			if(scaleParam.fixNum)  i = parseFloat((new Number(i)).toFixed(scaleParam.fixNum));
 			var xi = Math.floor(x0+c*stepHeight)+ 0.5;/*canvas line fix*/
-			if(!(i==start&&this._settings.origin=="auto") &&axis.lines)
-				this._drawLine(ctx,xi,y0,xi,point0.y,this._settings.xAxis.color,0.2);	
+			if(!(i==start&&this._settings.origin=="auto") &&axis.lines.call(this,i))
+				this._drawLine(ctx,xi,y0,xi,point0.y,this._settings.xAxis.lineColor.call(this,i),1);
 			if(i == this._settings.origin) yAxisStart = xi+1;
 			this.renderTextAt(false, true,xi,y0+2,axis.template(i.toString()),"dhx_axis_item_x");
 			c++;
@@ -1422,17 +1989,11 @@ dhtmlx.chart.barH = {
 		var p = this._correctBarHParams(ctx,x0,y0,value,unit,barWidth,minValue);	
 		
 		ctx.beginPath();
-		ctx.fillStyle = color;
-		this._setBarHPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,0);
-		ctx.lineTo(x0,0);
-		ctx.fill();
-
-		ctx.fillStyle = "#000000";
-		ctx.globalAlpha = 0.37;
-		ctx.beginPath();
-		this._setBarHPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,0);
-		ctx.fill();
-				
+		this._setBorderStyles(ctx,color);
+		ctx.globalAlpha =0.9;
+		this._setBarHPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,ctx.lineWidth/2,1);
+		
+		ctx.stroke();	
 	    ctx.restore();
 	},
 	_drawBarHGradient:function(ctx,x0,y0,barWidth,minValue,radius,unit,value,color,inner_gradient){
@@ -1478,7 +2039,6 @@ dhtmlx.chart.stackedBarH = {
 		var total_width = point1.x-point0.x;
 		
 		var yax = !!this._settings.yAxis;
-		var xax = !!this._settings.xAxis;
 		
 		var limits = this._getStackedLimits(data);
 		maxValue = limits.max;
@@ -1516,16 +2076,12 @@ dhtmlx.chart.stackedBarH = {
 		var barOffset = Math.floor((cellWidth - barWidth)/2);
 		/*the radius of rounding in the top part of each bar*/
 		var radius = 0;
-		
-		var inner_gradient = false;
-		var gradient = this._settings.gradient;
-	
+
 		var inner_gradient = false;
 		var gradient = this._settings.gradient;
 		if (gradient){
 			inner_gradient = true;
-		} 
-		var scaleY = 0;
+		}
 		/*draws a black line if the horizontal scale isn't defined*/
 		if(!yax){
 			this._drawLine(ctx,point0.x-0.5,point0.y,point0.x-0.5,point1.y,"#000000",1); //hardcoded color!
@@ -1545,8 +2101,9 @@ dhtmlx.chart.stackedBarH = {
 			var x0 = point0.x;
 			var y0 = point0.y+ barOffset + i*cellWidth;
 			
-			/*for the 2nd, 3rd, etc. series*/
-			if(sIndex)
+			if(!sIndex)
+                data[i].$startX = x0;
+			else
 			    x0 = data[i].$startX;
 			
 			if(value<0||(this._settings.yAxis&&value===0)){
@@ -1558,21 +2115,7 @@ dhtmlx.chart.stackedBarH = {
 			if(!yax) value += startValue/unit;
 			var color = this._settings.color.call(this,data[i]);
 			
-			/*drawing the gradient border of a bar*/
-			if(this._settings.border){
-				ctx.beginPath();
-				ctx.fillStyle = color;
-				this._setBarHPoints(ctx,x0,y0,barWidth,radius,unit,value,0);
-				ctx.lineTo(x0,0);
-				ctx.fill();
-
-				ctx.fillStyle = "#000000";
-				ctx.globalAlpha = 0.37;
-				ctx.beginPath();
-				this._setBarHPoints(ctx,x0,y0,barWidth,radius,unit,value,0);
-				ctx.fill();
-			}
-			ctx.globalAlpha = 1;
+			
 			/*drawing bar body*/
 			ctx.globalAlpha = this._settings.alpha.call(this,data[i]);
 			ctx.fillStyle = this._settings.color.call(this,data[i]);
@@ -1582,13 +2125,18 @@ dhtmlx.chart.stackedBarH = {
    			ctx.fill();
 			
 			if (inner_gradient!=false){
-				var gradParam = this._setBarGradient(ctx,x0,y0+barWidth,x0,y0,inner_gradient,color,"x")
+				var gradParam = this._setBarGradient(ctx,x0,y0+barWidth,x0,y0,inner_gradient,color,"x");
 				ctx.fillStyle = gradParam.gradient;
 				ctx.beginPath();
-				var points = this._setBarHPoints(ctx,x0,y0, barWidth,radius,unit,value,0);
+				points = this._setBarHPoints(ctx,x0,y0, barWidth,radius,unit,value,0);
 				ctx.fill();
-				ctx.globalAlpha = 1;
 			}
+			/*drawing the gradient border of a bar*/
+			if(this._settings.border){
+				this._drawBarHBorder(ctx,x0,y0,barWidth,minValue,radius,unit,value,color);
+			}
+			
+			ctx.globalAlpha = 1;
 			
 			/*sets a bar label*/
 			this.renderTextAt("middle",true,data[i].$startX+(points[0]-data[i].$startX)/2-1, y0+(points[1]-y0)/2, this._settings.label(data[i]));
@@ -1598,7 +2146,7 @@ dhtmlx.chart.stackedBarH = {
 			data[i].$startX = points[0];
 		}
 	}
-}
+};
 
 
 /* DHX DEPEND FROM FILE 'ext/chart/chart_stackedbar.js'*/
@@ -1659,7 +2207,6 @@ dhtmlx.chart.stackedBar = {
 		
 		var inner_gradient = (this._settings.gradient?this._settings.gradient:false);
 		
-		var scaleY = 0;
 		/*draws a black line if the horizontal scale isn't defined*/
 		if(!xax){
 			//scaleY = y-bottomPadding;
@@ -1668,8 +2215,9 @@ dhtmlx.chart.stackedBar = {
 		
 		for(var i=0; i < data.length;i ++){
 			var value =  parseFloat(this._settings.value(data[i]||0));
+
 			if(!value){
-				if(!data[i].$startY)
+				if(!sIndex||!data[i].$startY)
 					data[i].$startY = point1.y;
 				continue;
 			}
@@ -1682,11 +2230,11 @@ dhtmlx.chart.stackedBar = {
 			/*start point (bottom left)*/
 			var x0 = point0.x + barOffset + i*cellWidth;
 			var y0 = point1.y;
-			
-			/*for the 2nd, 3rd, etc. series*/
-			if(sIndex)
+			if(!sIndex)
+                data[i].$startY = y0;
+			else
 			    y0 = data[i].$startY;
-			
+
 			/*the max height limit*/
 			if(y0 < (point0.y+1)) continue;
 			
@@ -1697,38 +2245,36 @@ dhtmlx.chart.stackedBar = {
 			
 			var color = this._settings.color.call(this,data[i]);
 			
-			/*drawing the gradient border of a bar*/
-			if(this._settings.border){
-				ctx.beginPath();
-				ctx.fillStyle = color;
-				this._setStakedBarPoints(ctx,x0-1,y0,barWidth+2,unit,value,0,point0.y);
-				ctx.lineTo(x0,y0);
-				ctx.fill();
-
-				ctx.fillStyle = "#000000";
-				ctx.globalAlpha = 0.37;
-				ctx.beginPath();
-				this._setStakedBarPoints(ctx,x0-1,y0,barWidth+2,unit,value,0,point0.y);
-				ctx.fill();
-			}
+			
 			
 			/*drawing bar body*/
 			ctx.globalAlpha = this._settings.alpha.call(this,data[i]);
 			ctx.fillStyle = this._settings.color.call(this,data[i]);
 			ctx.beginPath();
-			var points = this._setStakedBarPoints(ctx,x0,y0,barWidth,unit,value,(this._settings.border?1:0),point0.y);
+			var points = this._setStakedBarPoints(ctx,x0-(this._settings.border?0.5:0),y0,barWidth+(this._settings.border?0.5:0),unit,value,0,point0.y);
    			ctx.fill();
-			ctx.globalAlpha = 1;
 			
 			/*gradient*/
 			if (inner_gradient){
+			  	ctx.save();
 				var gradParam = this._setBarGradient(ctx,x0,y0,x0+barWidth,points[1],inner_gradient,color,"y");
 				ctx.fillStyle = gradParam.gradient;
 				ctx.beginPath();
-				var points = this._setStakedBarPoints(ctx,x0+gradParam.offset,y0,barWidth-gradParam.offset*2,unit,value,(this._settings.border?1:0),point0.y);
+				points = this._setStakedBarPoints(ctx,x0+gradParam.offset,y0,barWidth-gradParam.offset*2,unit,value,(this._settings.border?1:0),point0.y);
 				ctx.fill();
-				ctx.globalAlpha = 1;
+				ctx.restore()
 			}
+			/*drawing the gradient border of a bar*/
+			if(this._settings.border){
+				ctx.save();
+				this._setBorderStyles(ctx,color);
+				ctx.beginPath();
+				
+				this._setStakedBarPoints(ctx,x0-0.5,y0,barWidth+1,unit,value,0,point0.y,1);
+				ctx.stroke();
+				ctx.restore();
+			}
+			ctx.globalAlpha = 1;
 			
 			/*sets a bar label*/
 			this.renderTextAt(false, true, x0+Math.floor(barWidth/2),(points[1]+(y0-points[1])/2)-7,this._settings.label(data[i]));
@@ -1751,7 +2297,7 @@ dhtmlx.chart.stackedBar = {
 	*   @param: offset - the offset from expected bar edge (necessary for drawing border)
 	*   @param: minY - the minimum y position for the bars ()
 	*/
-	_setStakedBarPoints:function(ctx,x0,y0,barWidth,unit,value,offset,minY){
+	_setStakedBarPoints:function(ctx,x0,y0,barWidth,unit,value,offset,minY,skipBottom){
 		/*start*/
 		ctx.moveTo(x0,y0);
 		/*start of left rounding*/
@@ -1764,13 +2310,14 @@ dhtmlx.chart.stackedBar = {
 		var y3 = y1; 
 		ctx.lineTo(x3,y3);
 		/*right rounding*/
-		var y4 = y1;
    		/*bottom right point*/
 		var x5 = x0 + barWidth;
         ctx.lineTo(x5,y0);
 		/*line to the start point*/
-   		ctx.lineTo(x0,y0);
-   	//	ctx.lineTo(x0,0); //IE fix!
+		if(!skipBottom){
+   			ctx.lineTo(x0,y0);
+   		}
+		//	ctx.lineTo(x0,0); //IE fix!
 		return [x5,y3-2*offset];
 	}
 };
@@ -1792,44 +2339,53 @@ dhtmlx.chart.line = {
 	*   @param: sIndex - index of drawing chart
 	*/
 	pvt_render_line:function(ctx, data, point0, point1, sIndex, map){
-				
-	    var params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
-		
-		/*the value that defines the map area position*/
-		var areaPos = (this._settings.eventRadius||Math.floor(params.cellWidth/2));
-		
-		/*drawing all items*/
-		if (data.length) {
-		    /*gets the vertical coordinate of an item*/
-			
-			/*the position of the first item*/
-			var y1 = this._getYPointOfLineChart(data[0],point0,point1,params);
-			var x1 = (this._settings.offset?point0.x+params.cellWidth*0.5:point0.x);
-			var x0 = x1;
-			/*drawing the previous item and the line between to items*/
-			for(var i=1; i <= data.length;i ++){
-								
-				/*horizontal positions of the item (0.5 - the fix for line width)*/
-				//var x1 = Math.floor(params.cellWidth*(i-0.5)) - 0.5 + point0.x;
-				var x2 = Math.floor(params.cellWidth*i) - 0.5 + x0;
+			var areaPos,config,i,params,radius,x0,x1,x2,y1,y2;
+		    params = this._calculateParametersOfLineChart(ctx,data,point0,point1,sIndex);
+			config = this._settings;
 
-				/*a line between items*/
-				if (data.length!=i){
-					var y2 = this._getYPointOfLineChart(data[i],point0,point1,params);
-					this._drawLine(ctx,x1,y1,x2,y2,this._settings.line.color(data[i-1]),this._settings.line.width);
+			/*drawing all items*/
+			if (data.length) {
+			    /*gets the vertical coordinate of an item*/
+
+				/*the position of the first item*/
+				y1 = this._getYPointOfLineChart(data[0],point0,point1,params);
+				x1 = (config.offset?point0.x+params.cellWidth*0.5:point0.x);
+				x0 = x1;
+				/*drawing the previous item and the line between to items*/
+				for(i=1; i <= data.length;i ++){
+
+					/*horizontal positions of the item (0.5 - the fix for line width)*/
+					//var x1 = Math.floor(params.cellWidth*(i-0.5)) - 0.5 + point0.x;
+					x2 = ((i==data.length-1)&&!this._settings.offset)?point1.x:Math.floor(params.cellWidth*i) - 0.5 + x0;
+
+					/*a line between items*/
+					if (data.length!=i){
+						y2 = this._getYPointOfLineChart(data[i],point0,point1,params);
+	                    if(!y2)
+	                        continue;
+	                    if(config.line.width){
+	                    	this._drawLine(ctx,x1,y1,x2,y2,config.line.color.call(this,data[i-1]),config.line.width);
+							if(config.line&&config.line.shadow){
+								ctx.globalAlpha = 0.3;
+								this._drawLine(ctx,x1+2,y1+config.line.width+8,x2+2,y2+config.line.width+8,"#eeeeee",config.line.width+3);
+								ctx.globalAlpha = 1;
+							}
+	                    }
+					}
+
+					/*draws prevous item*/
+					this._drawItemOfLineChart(ctx,x1,y1,data[i-1],!!config.offset);
+
+					/*creates map area*/
+					radius = (parseInt(config.item.radius.call(this,data[i-1]),10)||2);
+					areaPos = (config.eventRadius||radius+1);
+					map.addRect(data[i-1].id,[x1-areaPos,y1-areaPos,x1+areaPos,y1+areaPos],sIndex);
+
+					y1=y2;
+					x1=x2;
 				}
-				
-				/*draws prevous item*/
-				this._drawItemOfLineChart(ctx,x1,y1,data[i-1],!!this._settings.offset);
-				
-				/*creates map area*/
-				map.addRect(data[i-1].id,[x1-areaPos,y1-areaPos,x1+areaPos,y1+areaPos],sIndex);
-				
-				y1=y2;
-				x1=x2;
 			}
-		}
-	},
+		},
 	/**
 	*   draws an item and its label
 	*   @param: ctx - canvas object
@@ -1839,18 +2395,67 @@ dhtmlx.chart.line = {
 	*   @param: label - (boolean) defines wherether label needs being drawn 
 	*/
 	_drawItemOfLineChart:function(ctx,x0,y0,obj,label){
-		var R = parseInt(this._settings.item.radius,10);
-		ctx.lineWidth = parseInt(this._settings.item.borderWidth,10);
-		ctx.fillStyle = this._settings.item.color(obj);
-		ctx.strokeStyle = this._settings.item.borderColor(obj);
+		var config = this._settings.item;
+		var R = parseInt(config.radius.call(this,obj),10);
+        ctx.save();
+         if(config.shadow){
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#bdbdbd";
+            ctx.fillStyle = "#bdbdbd";
+            var alphas = [0.1,0.2,0.3];
+            for(var i=(alphas.length-1);i>=0;i--){
+                ctx.globalAlpha = alphas[i];
+                ctx.strokeStyle = "#d0d0d0";
+			    ctx.beginPath();
+                this._strokeChartItem(ctx,x0,y0+2*R/3,R+i+1,config.type);
+                ctx.stroke();
+            }
+			ctx.beginPath();
+            ctx.globalAlpha = 0.3;
+            ctx.fillStyle = "#bdbdbd";
+            this._strokeChartItem(ctx,x0,y0+2*R/3,R+1,config.type);
+		    ctx.fill();
+        }
+        ctx.restore();
+		ctx.lineWidth = config.borderWidth;
+		ctx.fillStyle = config.color.call(this,obj);
+		ctx.strokeStyle = config.borderColor.call(this,obj);
+        ctx.globalAlpha = config.alpha.call(this,obj);
 		ctx.beginPath();
-		ctx.arc(x0,y0,R,0,Math.PI*2,true);
+        this._strokeChartItem(ctx,x0,y0,R+1,config.type);
 		ctx.fill();
 		ctx.stroke();
+         ctx.globalAlpha = 1;
 		/*item label*/
 		if(label)
-			this.renderTextAt(false, true, x0,y0-R-this._settings.labelOffset,this._settings.label(obj));
+			this.renderTextAt(false, true, x0,y0-R-this._settings.labelOffset,this._settings.label.call(this,obj));
 	},
+    _strokeChartItem:function(ctx,x0,y0,R,type){
+        if(type && (type=="square" || type=="s")){
+		    R *= Math.sqrt(2)/2;
+		    ctx.moveTo(x0-R-ctx.lineWidth/2,y0-R);
+		    ctx.lineTo(x0+R,y0-R);
+		    ctx.lineTo(x0+R,y0+R);
+		    ctx.lineTo(x0-R,y0+R);
+		    ctx.lineTo(x0-R,y0-R);
+		}
+        else if(type && (type=="diamond" || type=="d")){
+		    var corr = (ctx.lineWidth>1?ctx.lineWidth*Math.sqrt(2)/4:0);
+            ctx.moveTo(x0,y0-R);
+		    ctx.lineTo(x0+R,y0);
+		    ctx.lineTo(x0,y0+R);
+		    ctx.lineTo(x0-R,y0);
+		    ctx.lineTo(x0+corr,y0-R-corr);
+        }
+        else if(type && (type=="triangle" || type=="t")){
+            ctx.moveTo(x0,y0-R);
+		    ctx.lineTo(x0+Math.sqrt(3)*R/2,y0+R/2);
+		    ctx.lineTo(x0-Math.sqrt(3)*R/2,y0+R/2);
+		    ctx.lineTo(x0,y0-R);
+        }
+		else
+			ctx.arc(x0,y0,R,0,Math.PI*2,true);
+    },
 	/**
 	*   gets the vertical position of the item
 	*   @param: data - data object
@@ -1897,7 +2502,6 @@ dhtmlx.chart.line = {
 		
 		/*scales*/
 		var yax = !!this._settings.yAxis;
-		var xax = !!this._settings.xAxis;
 		
 		var limits = (this._settings.view.indexOf("stacked")!=-1?this._getStackedLimits(data):this._getLimits());
 		params.maxValue = limits.max;
@@ -1922,8 +2526,9 @@ dhtmlx.chart.line = {
 		params.startValue = 0;
 		if(!yax){
 			/*defines start value for better representation of small values*/
-			params.startValue = (params.unit>10?params.unit:10);
-			params.unit = (relValue?(params.totalHeight - params.startValue)/relValue:10);
+			params.startValue = 10;
+			if(params.unit!=params.totalHeight)
+				params.unit = (relValue?(params.totalHeight - params.startValue)/relValue:10);
 		}
 		return params;
 	}
@@ -1992,7 +2597,7 @@ dhtmlx.chart.bar = {
 		
 		/*a real bar width */
 		var barWidth = parseInt(this._settings.width,10);
-		if(this._series&&(barWidth*this._series.length+4)>cellWidth) barWidth = cellWidth/this._series.length-4;
+		if(this._series&&(barWidth*this._series.length+4)>cellWidth) barWidth = parseInt(cellWidth/this._series.length-4,10);
 		/*the half of distance between bars*/
 		var barOffset = Math.floor((cellWidth - barWidth*this._series.length)/2);
 		/*the radius of rounding in the top part of each bar*/
@@ -2008,7 +2613,6 @@ dhtmlx.chart.bar = {
 			gradient = ctx.createLinearGradient(0,point1.y,0,point0.y);
 			this._settings.gradient(gradient);
 		}
-		var scaleY = 0;
 		/*draws a black line if the horizontal scale isn't defined*/
 		if(!xax){
 			this._drawLine(ctx,point0.x,point1.y+0.5,point1.x,point1.y+0.5,"#000000",1); //hardcoded color!
@@ -2023,7 +2627,7 @@ dhtmlx.chart.bar = {
 			
 			/*start point (bottom left)*/
 			var x0 = point0.x + barOffset + i*cellWidth+(barWidth+1)*sIndex;
-			var y0 = point1.y;
+			var y0 = point1.y+0.5;
 		
 			if(value<0||(this._settings.yAxis&&value===0&&!(this._settings.origin!="auto"&&this._settings.origin>minValue))){
 				this.renderTextAt(true, true, x0+Math.floor(barWidth/2),y0,this._settings.label(data[i]));
@@ -2035,18 +2639,19 @@ dhtmlx.chart.bar = {
 			
 			var color = gradient||this._settings.color.call(this,data[i]);
 	
-			/*drawing the gradient border of a bar*/
-			if(this._settings.border)
-				this._drawBarBorder(ctx,x0,y0,barWidth,minValue,radius,unit,value,color);
 			
 			/*drawing bar body*/
 			ctx.globalAlpha = this._settings.alpha.call(this,data[i]);
 			var points = this._drawBar(ctx,point0,x0,y0,barWidth,minValue,radius,unit,value,color,gradient,inner_gradient);
-			ctx.globalAlpha = 1;
-			
 			if (inner_gradient){
 				this._drawBarGradient(ctx,x0,y0,barWidth,minValue,radius,unit,value,color,inner_gradient);
 			}
+			/*drawing the gradient border of a bar*/
+			if(this._settings.border)
+				this._drawBarBorder(ctx,x0,y0,barWidth,minValue,radius,unit,value,color);
+			
+			ctx.globalAlpha = 1;
+			
 			/*sets a bar label*/
 			if(points[0]!=x0)
 				this.renderTextAt(false, true, x0+Math.floor(barWidth/2),points[1],this._settings.label(data[i]));
@@ -2073,7 +2678,7 @@ dhtmlx.chart.bar = {
 			y -= 0.5;
 		}
 		
-		return {value:value,x0:x,y0:y,start:axisStart}
+		return {value:value,x0:parseInt(x,10),y0:parseInt(y,10),start:axisStart}
 	},
 	_drawBar:function(ctx,point0,x0,y0,barWidth,minValue,radius,unit,value,color,gradient,inner_gradient){
 		ctx.save();
@@ -2081,7 +2686,7 @@ dhtmlx.chart.bar = {
 		var p = this._correctBarParams(ctx,x0,y0,value,unit,barWidth,minValue);
 		var points = this._setBarPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,(this._settings.border?1:0));
 		if (gradient&&!inner_gradient) ctx.lineTo(p.x0+(this._settings.border?1:0),point0.y); //fix gradient sphreading
-   		ctx.fill()
+   		ctx.fill();
 	    ctx.restore();
 		var x1 = p.x0;
 		var x2 = (p.x0!=x0?x0+points[0]:points[0]);
@@ -2089,11 +2694,24 @@ dhtmlx.chart.bar = {
 		var y2 = (p.x0!=x0?p.start:points[1]);
 		return [x1,y1,x2,y2];
 	},
+	_setBorderStyles:function(ctx,color){
+		var hsv,rgb;
+		rgb = dhtmlx.math.toRgb(color);
+		hsv = dhtmlx.math.rgbToHsv(rgb[0],rgb[1],rgb[2]);
+		hsv[2] /= 2;
+		color = "rgb("+dhtmlx.math.hsvToRgb(hsv[0],hsv[1],hsv[2])+")";
+		ctx.strokeStyle = color;
+		if(ctx.globalAlpha==1)
+			ctx.globalAlpha = 0.9;
+	},
 	_drawBarBorder:function(ctx,x0,y0,barWidth,minValue,radius,unit,value,color){
+	    var p;
 		ctx.save();
-		var p = this._correctBarParams(ctx,x0,y0,value,unit,barWidth,minValue);
-		
-		ctx.fillStyle = color;
+		p = this._correctBarParams(ctx,x0,y0,value,unit,barWidth,minValue);
+		this._setBorderStyles(ctx,color);
+		this._setBarPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,ctx.lineWidth/2,1);
+		ctx.stroke();
+		/*ctx.fillStyle = color;
 		this._setBarPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,0);
 		ctx.lineTo(p.x0,0);
 		ctx.fill()
@@ -2104,6 +2722,7 @@ dhtmlx.chart.bar = {
 		
 		this._setBarPoints(ctx,p.x0,p.y0,barWidth,radius,unit,p.value,0);
 		ctx.fill()
+		*/
 	    ctx.restore();
 	},
 	_drawBarGradient:function(ctx,x0,y0,barWidth,minValue,radius,unit,value,color,inner_gradient){
@@ -2111,9 +2730,10 @@ dhtmlx.chart.bar = {
 		//y0 -= (dhtmlx._isIE?0:0.5);
 		var p = this._correctBarParams(ctx,x0,y0,value,unit,barWidth,minValue);
 		var gradParam = this._setBarGradient(ctx,p.x0,p.y0,p.x0+barWidth,p.y0-unit*p.value+2,inner_gradient,color,"y");
+		var borderOffset = this._settings.border?1:0;
 		ctx.fillStyle = gradParam.gradient;
-		this._setBarPoints(ctx,p.x0+gradParam.offset,p.y0,barWidth-gradParam.offset*2,radius,unit,p.value,gradParam.offset);
-		ctx.fill()
+		this._setBarPoints(ctx,p.x0+gradParam.offset,p.y0,barWidth-gradParam.offset*2,radius,unit,p.value,gradParam.offset+borderOffset);
+		ctx.fill();
 	    ctx.restore();
 	},
 	/**
@@ -2127,14 +2747,15 @@ dhtmlx.chart.bar = {
 	*   @param: value - item value
 	*   @param: offset - the offset from expected bar edge (necessary for drawing border)
 	*/
-	_setBarPoints:function(ctx,x0,y0,barWidth,radius,unit,value,offset){
+	_setBarPoints:function(ctx,x0,y0,barWidth,radius,unit,value,offset,skipBottom){
 		/*correction for displaing small values (when rounding radius is bigger than bar height)*/
 		ctx.beginPath();
 		//y0 = 0.5;
 		var angle_corr = 0;
 		if(radius>unit*value){
 			var cosA = (radius-unit*value)/radius;
-			angle_corr = -Math.acos(cosA)+Math.PI/2;
+			if(cosA<=1&&cosA>=-1)
+				angle_corr = -Math.acos(cosA)+Math.PI/2;
 		}
 		/*start*/
 		ctx.moveTo(x0+offset,y0);
@@ -2144,21 +2765,22 @@ dhtmlx.chart.bar = {
 			ctx.lineTo(x0+offset,y1);
    		/*left rounding*/
 		var x2 = x0 + radius;
-		if (radius)
+		if (radius&&radius>0)
 			ctx.arc(x2,y1,radius-offset,-Math.PI+angle_corr,-Math.PI/2,false);
    		/*start of right rounding*/
 		var x3 = x0 + barWidth - radius - (radius?0:offset);
 		var y3 = y1 - radius+(radius?offset:0);
 		ctx.lineTo(x3,y3);
 		/*right rounding*/
-		var y4 = y1;
-		if (radius)
-			ctx.arc(x3,y4,radius-offset,-Math.PI/2,0-angle_corr,false);
+		if (radius&&radius>0)
+			ctx.arc(x3,y1,radius-offset,-Math.PI/2,0-angle_corr,false);
    		/*bottom right point*/
 		var x5 = x0 + barWidth-offset;
         ctx.lineTo(x5,y0);
 		/*line to the start point*/
-   		ctx.lineTo(x0+offset,y0);
+		if(!skipBottom){
+   			ctx.lineTo(x0+offset,y0);
+		}
    	//	ctx.lineTo(x0,0); //IE fix!
 		return [x5,y3];
 	}
@@ -2173,7 +2795,7 @@ dhtmlx.chart.pie = {
 	pvt_render_pie:function(ctx,data,x,y,sIndex,map){
 		this._renderPie(ctx,data,x,y,1,map);
 		
-	}, 
+	},
 	/**
 	*   renders a pie chart
 	*   @param: ctx - canvas object
@@ -2185,25 +2807,20 @@ dhtmlx.chart.pie = {
 	_renderPie:function(ctx,data,point0,point1,ky,map){
 		if(!data.length)
 			return;
-		var totalValue = 0;
 		var coord = this._getPieParameters(point0,point1);
 		/*pie radius*/
 		var radius = (this._settings.radius?this._settings.radius:coord.radius);
-		var maxValue = this.max(this._settings.value);
-		/*weighed values (the ratio of object value to total value)*/
-		var ratios = [];
-		/*real values*/
-		var values = [];
-		var prevSum = 0;
-
-		for(var i = 0; i < data.length;i++)
-           totalValue += parseFloat(this._settings.value(data[i])||0);
+		if(radius<0)
+			return;
 		
-		for(var i = 0; i < data.length;i++){
-			values[i] = parseFloat(this._settings.value(data[i]));
-			ratios[i] = Math.PI*2*(totalValue?((values[i]+prevSum)/totalValue):(1/data.length));
-			prevSum += values[i];
-		}
+		/*real values*/
+		var values = this._getValues(data);
+
+        var totalValue = this._getTotalValue(values);
+
+        /*weighed values (the ratio of object value to total value)*/
+		var ratios = this._getRatios(values,totalValue);
+
 		/*pie center*/
 		var x0 = (this._settings.x?this._settings.x:coord.x);
 		var y0 = (this._settings.y?this._settings.y:coord.y);
@@ -2215,15 +2832,23 @@ dhtmlx.chart.pie = {
 		y0 = y0/ky;
 		/*the angle defines the 1st edge of the sector*/
 		var alpha0 = -Math.PI/2;
+        var angles = [];
 		/*changes Canvas vertical scale*/
 		ctx.scale(1,ky); 
-		
+		/*adds radial gradient to a pie*/
+		if (this._settings.gradient){
+			var x1 = (ky!=1?x0+radius/3:x0);
+			var y1 = (ky!=1?y0+radius/3:y0);
+			this._showRadialGradient(ctx,x0,y0,radius,x1,y1);
+		}
 		for(var i = 0; i < data.length;i++){
 			if (!values[i]) continue;
 			/*drawing sector*/
-			ctx.lineWidth = 2;
+			//ctx.lineWidth = 2;
+            ctx.strokeStyle = this._settings.lineColor.call(this,data[i]);
 			ctx.beginPath(); 
 	    	ctx.moveTo(x0,y0);
+            angles.push(alpha0);
 			/*the angle defines the 2nd edge of the sector*/
 			alpha1 = -Math.PI/2+ratios[i]-0.0001;
 			ctx.arc(x0,y0,radius,alpha0,alpha1,false);
@@ -2231,9 +2856,6 @@ dhtmlx.chart.pie = {
 
 			var color = this._settings.color.call(this,data[i]);
 			ctx.fillStyle = color;
-
-			ctx.strokeStyle = this._settings.lineColor(data[i]);
-			ctx.stroke();
 			ctx.fill();
 
 			/*text that needs being displayed inside the sector*/
@@ -2244,30 +2866,73 @@ dhtmlx.chart.pie = {
 				this._drawSectorLabel(x0,y0,radius+this._settings.labelOffset,alpha0,alpha1,ky,this._settings.label(data[i]));
 			/*drawing lower part for 3D pie*/
 			if(ky!=1){
-				this._createLowerSector(ctx,x0,y0,alpha0,alpha1,radius,true);
-				ctx.fillStyle = "#000000";
+               	this._createLowerSector(ctx,x0,y0,alpha0,alpha1,radius,true);
+              	ctx.fillStyle = "#000000";
 				ctx.globalAlpha = 0.2;
 				this._createLowerSector(ctx,x0,y0,alpha0,alpha1,radius,false);
 				ctx.globalAlpha = 1;
 				ctx.fillStyle = color;
-			}
-			
+            }
 			/*creats map area (needed for events)*/
 			map.addSector(data[i].id,alpha0,alpha1,x0,y0,radius,ky);
 			
 			alpha0 = alpha1;
-			
-			
 		}
-		
-		/*adds radial gradient to a pie*/
-		if (this._settings.gradient){
-			var x1 = (ky!=1?x0+radius/3:x0);
-			var y1 = (ky!=1?y0+radius/3:y0);
-			this._showRadialGradient(ctx,x0,y0,radius,x1,y1);	
-		}
+        /*renders radius lines and labels*/
+       	ctx.globalAlpha = 0.8;
+        var p;
+        for(i=0;i< angles.length;i++){
+            p = this._getPositionByAngle(angles[i],x0,y0,radius);
+            this._drawLine(ctx,x0,y0,p.x,p.y,this._settings.lineColor.call(this,data[i]),2);
+        }
+        if(ky==1){
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#ffffff";
+			ctx.beginPath();
+	    	ctx.arc(x0,y0,radius+1,0,2*Math.PI,false);
+			ctx.stroke();
+        }
+		ctx.globalAlpha =1;
+
 		ctx.scale(1,1/ky); 
 	},
+     /**
+	*   returns list of values
+	*   @param: data array
+	*/
+    _getValues:function(data){
+        var v = [];
+        for(var i = 0; i < data.length;i++)
+           v.push(parseFloat(this._settings.value(data[i])||0));
+        return v;
+    },
+    /**
+	*   returns total value
+	*   @param: the array of values
+	*/
+    _getTotalValue:function(values){
+        var t=0;
+        for(var i = 0; i < values.length;i++)
+           t += values[i];
+        return  t;
+    },
+     /**
+	*   gets angles for all values
+	*   @param: the array of values
+    *   @param: total value (optional)
+	*/
+    _getRatios:function(values,totalValue){
+        var value;
+        var ratios = [];
+        var prevSum = 0;
+        totalValue = totalValue||this._getTotalValue(values);
+		for(var i = 0; i < values.length;i++){
+			value = values[i];
+			ratios[i] = Math.PI*2*(totalValue?((value+prevSum)/totalValue):(1/data.length));
+			prevSum += value;
+		}
+        return ratios;
+    },
 	/**
 	*   returns calculated pie parameters: center position and radius
 	*   @param: x - the width of a container
@@ -2285,7 +2950,7 @@ dhtmlx.chart.pie = {
 		var width = point1.x-point0.x;
 		var height = point1.y-point0.y;
 		var x0 = point0.x+width/2;
-		var y0 = point0.y+height/2
+		var y0 = point0.y+height/2;
 		var radius = Math.min(width/2,height/2);
 		return {"x":x0,"y":y0,"radius":radius};
 	},
@@ -2302,7 +2967,7 @@ dhtmlx.chart.pie = {
 	_createLowerSector:function(ctx,x0,y0,a1,a2,R,line){
 		ctx.lineWidth = 1;
 		/*checks if the lower sector needs being displayed*/
-		if(!((a1<=0 && a2>=0)||(a1>=0 && a2<=Math.PI)||(a1<=Math.PI && a2>=Math.PI))) return;
+		if(!((a1<=0 && a2>=0)||(a1>=0 && a2<=Math.PI)||(Math.abs(a1-Math.PI)>0.003&&a1<=Math.PI && a2>=Math.PI))) return;
 		
 		if(a1<=0 && a2>=0){
 			a1 = 0;
@@ -2322,7 +2987,7 @@ dhtmlx.chart.pie = {
 		ctx.arc(x0,y0+offset,R,a2,a1,true);
 		ctx.lineTo(x0+R*Math.cos(a1),y0+R*Math.sin(a1));
 		ctx.fill();
-		if(line)		
+		if(line)
 			ctx.stroke();
 	},
 	/**
@@ -2341,13 +3006,15 @@ dhtmlx.chart.pie = {
 	*   @param: R - pie radius
 	*/
 	_addShadow:function(ctx,x,y,R){
-		var shadows = ["#676767","#7b7b7b","#a0a0a0","#bcbcbc","#d1d1d1","#d6d6d6"];
+        ctx.globalAlpha = 0.5;
+		var shadows = ["#c4c4c4","#c6c6c6","#cacaca","#dcdcdc","#dddddd","#e0e0e0","#eeeeee","#f5f5f5","#f8f8f8"];
 		for(var i = shadows.length-1;i>-1;i--){
 			ctx.beginPath();
 			ctx.fillStyle = shadows[i]; 
-			ctx.arc(x+2,y+2,R+i,0,Math.PI*2,true);  
+			ctx.arc(x+1,y+1,R+i,0,Math.PI*2,true);
 			ctx.fill();  
-		} 
+		}
+         ctx.globalAlpha = 1
 	},
 	/**
 		*   returns a gray gradient
@@ -2369,7 +3036,7 @@ dhtmlx.chart.pie = {
 	*   @param: y0 - the vertical position of a gradient center
 	*/
 	_showRadialGradient:function(ctx,x,y,radius,x0,y0){
-			ctx.globalAlpha = 0.3;
+			//ctx.globalAlpha = 0.3;
 			ctx.beginPath();
 			var gradient; 
 			if(typeof this._settings.gradient!= "function"){
@@ -2380,7 +3047,8 @@ dhtmlx.chart.pie = {
 			ctx.fillStyle = gradient;
 			ctx.arc(x,y,radius,0,Math.PI*2,true);
 			ctx.fill();
-			ctx.globalAlpha = 1;
+			//ctx.globalAlpha = 1;
+			ctx.globalAlpha = 0.7;
 	},
 	/**
 	*   returns the calculates pie parameters: center position and radius
@@ -2397,54 +3065,54 @@ dhtmlx.chart.pie = {
 	_drawSectorLabel:function(x0,y0,R,alpha1,alpha2,ky,text,in_width){
 		var t = this.renderText(0,0,text,0,1);
 		if (!t) return;
-		
+
 		//get existing width of text
 		var labelWidth = t.scrollWidth;
 		t.style.width = labelWidth+"px";	//adjust text label to fit all text
 		if (labelWidth>x0) labelWidth = x0;	//the text can't be greater than half of view
-		
+
 		//calculate expected correction based on default font metrics
-		var width = 8;
+		var width = (alpha2-alpha1<0.2?4:8);
 		if (in_width) width = labelWidth/1.8;
 		var alpha = alpha1+(alpha2-alpha1)/2;
-		
-		//calcualteion position and correction
+
+		//position and its correction
 		R = R-(width-8)/2;
 		var corr_x = - width;
 		var corr_y = -8;
-		var align = "left";
-		
-		//for items in right upper sector
-		if(alpha>=Math.PI/2 && alpha<Math.PI){
-			//correction need to be applied because of righ align
-			//we need to count right upper angle instead of left upper angle
+		var align = "right";
+
+		//for items in left upper and lower sector
+		if(alpha>=Math.PI/2 && alpha<Math.PI || alpha<=3*Math.PI/2 && alpha>=Math.PI){
 			corr_x = -labelWidth-corr_x+1;/*correction for label width*/
-			align = "right";
+			align = "left";
 		}
-		//for items in right lower sector
-		if(alpha<=3*Math.PI/2 && alpha>=Math.PI){
-			corr_x = -labelWidth-corr_x+1;
-			align = "right";
-		}
-		
+
 		//calculate position of text
 		//basically get point at center of pie sector
-		var y = (y0+Math.floor(R*Math.sin(alpha)))*ky+corr_y;
+		var offset = 0;
+
+		if(!in_width&&ky<1&&(alpha>0&&alpha<Math.PI))
+			offset = (this._settings.height||Math.floor(R/4))/ky;
+
+		var y = (y0+Math.floor((R+offset)*Math.sin(alpha)))*ky+corr_y;
 		var x = x0+Math.floor((R+width/2)*Math.cos(alpha))+corr_x;
 		
 		//if pie sector starts in left of right part pie, related text
 		//must be placed to the left of to the right of pie as well
-		var left_end = (alpha2 < Math.PI/2+0.01)
-		var left_start = (alpha < Math.PI/2);
-		if (left_start && left_end)
+		var left_end = (alpha2 < Math.PI/2+0.01);
+		var left_start = (alpha1 < Math.PI/2);
+		if (left_start && left_end){
 			x = Math.max(x,x0+3);	//right part of pie
+			if(alpha2-alpha1<0.2)
+				x = x0;
+		}
 		else if (!left_start && !left_end)
 			x = Math.min(x,x0-labelWidth);	//left part of pie
-		
-		/*correction for the lower sector of the 3D pie*/
-		if (!in_width && ky<1 && y > y0*ky){
-			y+= (this._settings.height||Math.floor(R/4));
+		else if (!in_width&&(alpha>=Math.PI/2 && alpha<Math.PI || alpha<=3*Math.PI/2 && alpha>=Math.PI)){
+			x += labelWidth/3;
 		}
+		
 
 		//we need to set position of text manually, based on above calculations
 		t.style.top  = y+"px";
@@ -2459,7 +3127,24 @@ dhtmlx.chart.pie3D = {
 	pvt_render_pie3D:function(ctx,data,x,y,sIndex,map){
 		this._renderPie(ctx,data,x,y,this._settings.cant,map);
 	}
-}
+};
+dhtmlx.chart.donut = {
+	pvt_render_donut:function(ctx,data,point0,point1,sIndex,map){
+        if(!data.length)
+			return;
+		this._renderPie(ctx,data,point0,point1,1,map);
+        var config = this._settings;
+		var coord = this._getPieParameters(point0,point1);
+		var pieRadius = (config.radius?config.radius:coord.radius);
+	    var innerRadius = ((config.innerRadius&&(config.innerRadius<pieRadius))?config.innerRadius:pieRadius/3);
+        var x0 = (config.x?config.x:coord.x);
+		var y0 = (config.y?config.y:coord.y);
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+		ctx.arc(x0,y0,innerRadius,0,Math.PI*2,true);
+		ctx.fill();
+    }
+};
 
 
 /* DHX DEPEND FROM FILE 'template.js'*/
@@ -2740,7 +3425,7 @@ dhtmlx.ajax = function(url,call,master){
 dhtmlx.ajax.prototype={
 	//creates xmlHTTP object
 	getXHR:function(){
-		if (dhtmlx.env.isIE)
+		if (dhtmlx._isIE)
 		 return new ActiveXObject("Microsoft.xmlHTTP");
 		else 
 		 return new XMLHttpRequest();
@@ -2865,6 +3550,8 @@ dhtmlx.AtomDataLoader={
 	_check_data_feed:function(data){
 		if (!this._settings.dataFeed || this._ignore_feed || !data) return true;
 		var url = this._settings.dataFeed;
+		if (typeof url == "function")
+			return url.call(this, (data.id||data), data);
 		url = url+(url.indexOf("?")==-1?"?":"&")+"action=get&id="+encodeURIComponent(data.id||data);
 		this.callEvent("onXLS",[]);
 		dhtmlx.ajax(url, function(text,xml){
@@ -2906,7 +3593,8 @@ dhtmlx.DataDriver.json={
 	getInfo:function(data){
 		return { 
 		 _size:(data.total_count||0),
-		 _from:(data.pos||0)
+		 _from:(data.pos||0),
+		 _key:(data.dhx_security)
 		};
 	}
 };
@@ -3081,7 +3769,8 @@ dhtmlx.DataDriver.xml={
 	getInfo:function(data){
 		return { 
 		 _size:(data.documentElement.getAttribute("total_count")||0),
-		 _from:(data.documentElement.getAttribute("pos")||0)
+		 _from:(data.documentElement.getAttribute("pos")||0),
+		 _key:(data.documentElement.getAttribute("dhx_security"))
 		};
 	},
 	//xpath helper
@@ -3202,7 +3891,7 @@ dhtmlx.DataLoader={
 	_init:function(config){
 		//prepare data store
 		config = config || "";
-		name = "DataStore";
+		this.name = "DataStore";
 		this.data = (config.datastore)||(new dhtmlx.DataStore());
 		this._readyHandler = this.data.attachEvent("onStoreLoad",dhtmlx.bind(this._call_onready,this));
 	},
@@ -3249,6 +3938,8 @@ dhtmlx.DataLoader={
 
 				this.clearAll();
 				var url = this._settings.dataFeed;
+				if (typeof url == "function")
+					return url.call(this, value, filter);
 				var urldata = [];
 				for (var key in filter)
 					urldata.push("dhx_filter["+key+"]="+encodeURIComponent(filter[key]));
@@ -3312,6 +4003,8 @@ dhtmlx.DataStore.prototype={
 			
 		//get size and position of data
 		var info = this.driver.getInfo(data);
+		if (info._key)
+			dhtmlx.security_key = info._key;
 		//get array of records
 
 		var recs = this.driver.getRecords(data);
@@ -3479,16 +4172,17 @@ dhtmlx.DataStore.prototype={
 			this.debug_sync_master = source; 
 			dhtmlx.log("[sync] "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id+" <= "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id);
 		}
-
+		
+		var topsource = source;
 		if (source.name != "DataStore")
 			source = source.data;
 
-		var sync_logic = dhx.bind(function(id, data, mode){
+		var sync_logic = dhtmlx.bind(function(id, data, mode){
 			if (mode != "update" || filter) 
 				id = null;
 
 			if (!id){
-				this.order = dhx.toArray([].concat(source.order));
+				this.order = dhtmlx.toArray([].concat(source.order));
 				this._filter_order = null;
 				this.pull = source.pull;
 				
@@ -3499,8 +4193,8 @@ dhtmlx.DataStore.prototype={
 					this._on_sync();
 			}
 
-			if (dhx.debug_bind)
-				dhx.log("[sync:request] "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id + " <= "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id);
+			if (dhtmlx.debug_bind)
+				dhtmlx.log("[sync:request] "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id + " <= "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id);
 			if (!silent) 
 				this.refresh(id);
 			else
@@ -3508,6 +4202,9 @@ dhtmlx.DataStore.prototype={
 		}, this);
 		
 		source.attachEvent("onStoreUpdated", sync_logic);
+		this.feed = function(from, count){
+			topsource.loadNext(count, from);
+		};
 		sync_logic();
 	},
 	//adds item to the store
@@ -3602,8 +4299,8 @@ dhtmlx.DataStore.prototype={
 	indexById:function(id){
 		var res = this.order.find(id);	//slower than idByIndex
 		
-		if (!this.pull[id])
-			dhtmlx.log("Warning","DataStore::indexById Non-existing ID: "+ id);
+		//if (!this.pull[id])
+		//	dhtmlx.log("Warning","DataStore::indexById Non-existing ID: "+ id);
 			
 		return res;
 	},
@@ -3828,8 +4525,11 @@ dhtmlx.Group = {
 	},
 	_init_group_data_event:function(data,master){
 		data.attachEvent("onClearAll",dhtmlx.bind(function(){
-			this.ungroup(false);
-		},master));		
+            this.ungroup(false);
+            this.block();
+            this.clearAll();
+            this.unblock();
+        },master));
 	},
 	sum:function(property, data){
 		property = dhtmlx.Template.setter(property);
@@ -4444,7 +5144,9 @@ dhtmlx.Canvas = {
 /*DHX:Depend ext/chart/chart_stackedbarh.js*/
 /*DHX:Depend ext/chart/chart_spline.js*/	
 /*DHX:Depend ext/chart/chart_area.js*/	 	//+stackedArea
-
+/*DHX:Depend ext/chart/chart_radar.js*/	 	
+/*DHX:Depend ext/chart/chart_scatter.js*/
+/*DHX:Depend ext/chart/presets.js*/
 /*DHX:Depend math.js*/
 /*DHX:Depend destructor.js*/
 /*DHX:Depend dhtmlx.js*/
@@ -4473,26 +5175,12 @@ dhtmlXChart = function(container){
 	
 	for (var key in dhtmlx.chart)
 		dhtmlx.extend(this, dhtmlx.chart[key]);
-	
-	this._parseSettings(container,{
-		color:"RAINBOW",
-		alpha:"1",
-		label:false,
-		value:"{obj.value}",
-		padding:{},
-		view:"pie",
-		lineColor:"#ffffff",
-		cant:0.5,
-		width: 15,
-		labelWidth:100,
-		line:{},
-		item:{},
-		shadow:true,
-		gradient:false,
-		border:true,
-		labelOffset: 20,
-		origin:"auto"
-	});
+
+
+    if(container.preset){
+        this.definePreset(container);
+    }
+	this._parseSettings(container,this.defaults);
 	this._series = [this._settings];
 	this.data.attachEvent("onStoreUpdated",dhtmlx.bind(function(){
 		this.render();  
@@ -4523,25 +5211,29 @@ dhtmlXChart.prototype={
 		//if you will need to add more such settings - move them ( and this one ) in a separate methods
 		
 		if (typeof this._settings.offset == "undefined"){
-			if (val == "area" || val == "stackedArea") 
-				this._settings.offset = false;
-			else
-				this._settings.offset = true;
+			this._settings.offset = !(val == "area" || val == "stackedArea");
 		}
-			
-			
+
+        if(val=="radar"&&!this._settings.yAxis)
+		    this.define("yAxis",{});
+        if(val=="scatter"){
+            if(!this._settings.yAxis)
+                this.define("yAxis",{});
+            if(!this._settings.xAxis)
+                this.define("xAxis",{});
+        }
+
 		return val;
 	},
 	render:function(){
 		if (!this.callEvent("onBeforeRender",[this.data]))
 			return;
-			
+
 		this.clearCanvas();
 		if(this._settings.legend){
 			this._drawLegend(this.getCanvas(),
 				this.data.getRange(),
-				this._obj.offsetWidth,
-				this._obj.offsetHeight
+				this._obj.offsetWidth
 			);
 		}
 		var bounds = this._getChartBounds(this._obj.offsetWidth,this._obj.offsetHeight);
@@ -4562,26 +5254,62 @@ dhtmlXChart.prototype={
 		map.render(this._obj);
 		this._settings = temp;
 	},
-	
-	value_setter:dhtmlx.Template.obj_setter,	
+	value_setter:dhtmlx.Template.obj_setter,
+    xValue_setter:dhtmlx.Template.obj_setter,
+    yValue_setter:function(config){
+        this.define("value",config);
+    },
 	alpha_setter:dhtmlx.Template.obj_setter,	
 	label_setter:dhtmlx.Template.obj_setter,
 	lineColor_setter:dhtmlx.Template.obj_setter,	
 	pieInnerText_setter:dhtmlx.Template.obj_setter,
 	gradient_setter:function(config){
-		if((typeof(config)!="function")&&config&&(config === true||config!="3d"))
+		if((typeof(config)!="function")&&config&&(config === true))
 			config = "light";
 		return config;
 	},
 	colormap:{
 		"RAINBOW":function(obj){
-			var pos = Math.floor(this.indexById(obj.id)/this.dataCount()*1536);
+            var pos = Math.floor(this.indexById(obj.id)/this.dataCount()*1536);
 			if (pos==1536) pos-=1;
 			return this._rainbow[Math.floor(pos/256)](pos%256);
 		}
 	},
-	color_setter:function( value){
+	color_setter:function(value){
 		return this.colormap[value]||dhtmlx.Template.obj_setter( value);
+	},
+    fill_setter:function(value){
+        return ((!value||value==0)?false:dhtmlx.Template.obj_setter( value));
+    },
+    definePreset:function(obj){
+        this.define("preset",obj.preset);
+        delete obj.preset;
+    },
+	preset_setter:function(value){
+        var a, b, preset;
+        this.defaults = dhtmlx.extend({},this.defaults);
+        if(typeof dhtmlx.presets.chart[value]=="object"){
+
+            preset =  dhtmlx.presets.chart[value];
+            for(a in preset){
+
+                if(typeof preset[a]=="object"){
+                    if(!this.defaults[a]||typeof this.defaults[a]!="object"){
+                         this.defaults[a] = dhtmlx.extend({},preset[a]);
+                    }
+                    else{
+                        this.defaults[a] = dhtmlx.extend({},this.defaults[a]);
+                        for(b in preset[a]){
+                            this.defaults[a][b] = preset[a][b];
+                        }
+                    }
+                }else{
+                     this.defaults[a] = preset[a];
+                }
+            }
+            return value;
+        }
+		return false;
 	},
 	legend_setter:function( config){
 		if(!config){
@@ -4603,38 +5331,62 @@ dhtmlXChart.prototype={
 			template:"",
 			marker:{
 				type:"square",
-				width:25,
-				height:15
-			}
+				width:15,
+				height:15,
+                radius:3
+			},
+            margin: 4,
+            padding: 3
 		});
 		
 		config.template = dhtmlx.Template.setter(config.template);
 		return config;
 	},
+    defaults:{
+        color:"RAINBOW",
+		alpha:"1",
+		label:false,
+		value:"{obj.value}",
+		padding:{},
+		view:"pie",
+		lineColor:"#ffffff",
+		cant:0.5,
+		width: 30,
+		labelWidth:100,
+		line:{
+            width:2,
+			color:"#1293f8"
+        },
+		item:{
+			radius:3,
+			borderColor:"#636363",
+            borderWidth:1,
+            color: "#ffffff",
+            alpha:1,
+            type:"r",
+            shadow:false
+		},
+		shadow:true,
+		gradient:false,
+		border:true,
+		labelOffset: 20,
+		origin:"auto"
+    },
 	item_setter:function( config){
 		if(typeof(config)!="object")
 			config={color:config, borderColor:config};
-			
-		this._mergeSettings(config,{
-			radius:4,
-			color:"#000000",
-			borderColor:"#000000",
-			borderWidth:2
-		});
-		
+        this._mergeSettings(config,dhtmlx.extend({},this.defaults.item));
+		config.alpha = dhtmlx.Template.setter(config.alpha);
+        config.borderColor = dhtmlx.Template.setter(config.borderColor);
 		config.color = dhtmlx.Template.setter(config.color);
-		config.borderColor = dhtmlx.Template.setter(config.borderColor);
+        config.radius = dhtmlx.Template.setter(config.radius);
 		return config;
 	},
 	line_setter:function( config){
 		if(typeof(config)!="object")
 			config={color:config};
-			
-		this._mergeSettings(config,{
-			width:3,
-			color:"#d4d4d4"
-		});
-		
+	    dhtmlx.extend(this.defaults.line,config);
+        config = dhtmlx.extend({},this.defaults.line);
 		config.color = dhtmlx.Template.setter(config.color);
 		return config;
 	},
@@ -4657,26 +5409,34 @@ dhtmlXChart.prototype={
 		this._mergeSettings(config,{
 			title:"",
 			color:"#000000",
+			lineColor:"#cfcfcf",
 			template:"{obj}",
-			lines:false
+			lines:true
 		});
-		
-		if(config.template)
-			config.template = dhtmlx.Template.setter(config.template);
+		var templates = ["lineColor","template","lines"];
+        this._converToTemplate(templates,config);
+		this._settings.configXAxis = dhtmlx.extend({},config);
 		return config;
 	},
     yAxis_setter:function( config){
 	    this._mergeSettings(config,{
 			title:"",
 			color:"#000000",
+			lineColor:"#cfcfcf",
 			template:"{obj}",
-			lines:true
+			lines:true,
+            bg:"#ffffff"
 		});
-		
-		if(config.template)
-			config.template = dhtmlx.Template.setter(config.template);
+		var templates = ["lineColor","template","lines","bg"];
+        this._converToTemplate(templates,config);
+		this._settings.configYAxis = dhtmlx.extend({},config);
 		return config;
 	},
+    _converToTemplate:function(arr,config){
+        for(var i=0;i< arr.length;i++){
+            config[arr[i]] = dhtmlx.Template.setter(config[arr[i]]);
+        }
+    },
     _drawScales:function(ctx,data,point0,point1,start,end,cellWidth){
 	    var y = this._drawYAxis(ctx,data,point0,point1,start,end);
 		this._drawXAxis(ctx,data,point0,point1,cellWidth,y);
@@ -4692,20 +5452,21 @@ dhtmlXChart.prototype={
 		var center = true;
 		
 		this._drawLine(ctx,x0,y0,x1,y0,this._settings.xAxis.color,1);
-		
 		for(var i=0; i < data.length;i ++){
 			if(this._settings.offset === true)
 				unit_pos = x0+cellWidth/2+i*cellWidth;
 			else{
-				unit_pos = x0+i*cellWidth;
+				unit_pos = (i==data.length-1)?point1.x:x0+i*cellWidth;
 				center = !!i;
 			}
+			unit_pos = parseInt(unit_pos,10)-0.5;
 			/*scale labels*/
 			var top = ((this._settings.origin!="auto")&&(this._settings.view=="bar")&&(parseFloat(this._settings.value(data[i]))<this._settings.origin));
 			this._drawXAxisLabel(unit_pos,y0,data[i],center,top);
 			/*draws a vertical line for the horizontal scale*/
-			if(this._settings.view_setter != "bar")
-		    	this._drawXAxisLine(ctx,unit_pos,point1.y,point0.y);
+
+			if((this._settings.offset||i)&&this._settings.xAxis.lines.call(this,data[i]))
+		    	this._drawXAxisLine(ctx,unit_pos,point1.y,point0.y,data[i]);
 		}
 		
 		this.renderTextAt(true, false, x0,point1.y+this._settings.padding.bottom-3,
@@ -4715,7 +5476,7 @@ dhtmlXChart.prototype={
 		);
 		
 		/*the right border in lines in scale are enabled*/
-		if (!this._settings.xAxis.lines || !this._settings.offset) return;
+		if (!this._settings.xAxis.lines.call(this,{}) || !this._settings.offset) return;
 		this._drawLine(ctx,x1+0.5,point1.y,x1+0.5,point0.y+0.5,this._settings.xAxis.color,0.2);
 	},
 	_drawYAxis:function(ctx,data,point0,point1,start,end){
@@ -4728,12 +5489,12 @@ dhtmlXChart.prototype={
 		var y1 = point0.y;
 		var lineX = point1.y;
 		
-		this._drawLine(ctx,x0,y0,x0,y1,this._settings.yAxis.color,1);
+		//this._drawLine(ctx,x0,y0,x0,y1,this._settings.yAxis.color,1);
 		
 		if(this._settings.yAxis.step)
 		     step = parseFloat(this._settings.yAxis.step);
 
-		if(typeof this._settings.yAxis.step =="undefined"||typeof this._settings.yAxis.start=="undefined"||typeof this._settings.yAxis.end =="undefined"){
+		if(typeof this._settings.configYAxis.step =="undefined"||typeof this._settings.configYAxis.start=="undefined"||typeof this._settings.configYAxis.end =="undefined"){
 			scaleParam = this._calculateScale(start,end);
 			start = scaleParam.start;
 			end = scaleParam.end;
@@ -4752,15 +5513,16 @@ dhtmlXChart.prototype={
 		for(var i = start; i<=end; i += step){
 			if(scaleParam.fixNum)  i = parseFloat((new Number(i)).toFixed(scaleParam.fixNum));
 			var yi = Math.floor(y0-c*stepHeight)+ 0.5;/*canvas line fix*/
-			if(!(i==start&&this._settings.origin=="auto") &&this._settings.yAxis.lines)
-				this._drawLine(ctx,x0,yi,point1.x,yi,this._settings.yAxis.color,0.2);
+			if(!(i==start&&this._settings.origin=="auto") &&this._settings.yAxis.lines(i))
+				this._drawLine(ctx,x0,yi,point1.x,yi,this._settings.yAxis.lineColor(i),1);
 			if(i == this._settings.origin) lineX = yi;
 			/*correction for JS float calculation*/
 			var label = i;
 			if(step<1){
-				var power = Math.min(this._log10(step),(start===0?0:this._log10(start)));
+				var power = Math.min(this._log10(step),(start<=0?0:this._log10(start)));
 				var corr = Math.pow(10,-power);
 				label = Math.round(i*corr)/corr;
+				i = label;
 			}
 			this.renderText(0,yi-5,
 				this._settings.yAxis.template(label.toString()),
@@ -4769,11 +5531,13 @@ dhtmlXChart.prototype={
 			);	
 			c++;
 		}
+		this._drawLine(ctx,x0,y0+1,x0,y1,this._settings.yAxis.color,1);
 		return lineX;
 	},
 	_setYAxisTitle:function(point0,point1){
-		var text=this.renderTextAt("middle",false,0,parseInt((point1.y-point0.y)/2+point0.y,10),this._settings.yAxis.title,"dhx_axis_title_y");
-		if (text)
+        var className = "dhx_axis_title_y"+(dhtmlx._isIE&&dhtmlx._isIE !=9?" dhx_ie_filter":"");
+		var text=this.renderTextAt("middle",false,0,parseInt((point1.y-point0.y)/2+point0.y,10),this._settings.yAxis.title,className);
+        if (text)
 			text.style.left = (dhtmlx.env.transform?(text.offsetHeight-text.offsetWidth)/2:0)+"px";
 	},
 	_calculateScale:function(nmin,nmax){
@@ -4794,29 +5558,35 @@ dhtmlXChart.prototype={
 			var powerStart = Math.floor(this._log10(absNmin));
 			var nminVal = absNmin/Math.pow(10,powerStart);
 			start = Math.ceil(nminVal*10)/10*Math.pow(10,powerStart)-step;
+			if(absNmin>1&&step>0.1){
+				start = Math.ceil(start);
+			}
+			while(nmin<0?start<=nmin:start>=nmin)
+				start -= step;
 			if(nmin<0) start =-start-2*step;
+			
 		}
-		var end = start;
+	     end = start;
 		while(end<nmax){
 			end += step;
 			end = parseFloat((new Number(end)).toFixed(Math.abs(power)));
 		}
 		return { start:start,end:end,step:step,fixNum:Math.abs(power) };
 	},
-	_getLimits:function(orientation){
+	_getLimits:function(orientation,value){
 		var maxValue,minValue;
-		var axis = ((arguments.length && orientation=="h")?this._settings.xAxis:this._settings.yAxis);
+		var axis = ((arguments.length && orientation=="h")?this._settings.configXAxis:this._settings.configYAxis);
 		if(axis&&(typeof axis.end!="undefined")&&(typeof axis.start!="undefined")&&axis.step){
 		    maxValue = parseFloat(axis.end);
 			minValue = parseFloat(axis.start);      
 		}
 		else{
-			maxValue = this.max(this._series[0].value);
-			minValue = this.min(this._series[0].value);
+			maxValue = this.max(this._series[0][value||"value"]);
+			minValue = (axis&&(typeof axis.start!="undefined"))?parseFloat(axis.start):this.min(this._series[0][value||"value"]);
 			if(this._series.length>1)
 			for(var i=1; i < this._series.length;i++){
-				var maxI = this.max(this._series[i].value);
-				var minI = this.min(this._series[i].value);
+				var maxI = this.max(this._series[i][value||"value"]);
+				var minI = this.min(this._series[i][value||"value"]);
 				if (maxI > maxValue) maxValue = maxI;
 		    	if (minI < minValue) minValue = minI;
 			}
@@ -4829,13 +5599,13 @@ dhtmlXChart.prototype={
     },
 	_drawXAxisLabel:function(x,y,obj,center,top){
 		if (!this._settings.xAxis) return;
-		var elem = this.renderTextAt(top, center, x,y,this._settings.xAxis.template(obj));
+		var elem = this.renderTextAt(top, center, x,y-(top?2:0),this._settings.xAxis.template(obj));
 		if (elem)
 			elem.className += " dhx_axis_item_x";
 	},
-	_drawXAxisLine:function(ctx,x,y1,y2){
+	_drawXAxisLine:function(ctx,x,y1,y2,obj){
 		if (!this._settings.xAxis||!this._settings.xAxis.lines) return;
-		this._drawLine(ctx,x,y1,x,y2,this._settings.xAxis.color,0.2);
+		this._drawLine(ctx,x,y1,x,y2,this._settings.xAxis.lineColor.call(this,obj),1);
 	},
 	_drawLine:function(ctx,x1,y1,x2,y2,color,width){
 		ctx.strokeStyle = color;
@@ -4844,18 +5614,21 @@ dhtmlXChart.prototype={
 		ctx.moveTo(x1,y1);
 		ctx.lineTo(x2,y2);
 		ctx.stroke();
+        ctx.lineWidth = 1;
 	},
 	_getRelativeValue:function(minValue,maxValue){
-	    var relValue;
+	    var relValue, origRelValue;
 		var valueFactor = 1;
 		if(maxValue != minValue){
-		    relValue = maxValue - minValue;
+		    origRelValue = maxValue - minValue;
 			if(Math.abs(relValue) < 1){
 			    while(Math.abs(relValue)<1){
 				    valueFactor *= 10;
-					relValue *= valueFactor;
+					origRelValue = relValue* valueFactor;
 				}
+
 			}
+			relValue = origRelValue;
 		}
 		else relValue = minValue;
 		return [relValue,valueFactor];
@@ -4879,15 +5652,16 @@ dhtmlXChart.prototype={
 		this._settings = temp;
     },
     /*switch global settings to serit in question*/
-    _switchSerie:function(id, tag){ 
+    _switchSerie:function(id, tag){
+        var tip;
     	this._active_serie = tag.getAttribute("userdata");
     	if (!this._series[this._active_serie]) return;
     	for (var i=0; i < this._series.length; i++) {
-    		var tip = this._series[i].tooltip;
+    		tip = this._series[i].tooltip;
     		if (tip)
     			tip.disable();
 		}
-		var tip = this._series[this._active_serie].tooltip;
+	    tip = this._series[this._active_serie].tooltip;
     	if (tip)
     		tip.enable();
     },
@@ -4898,62 +5672,71 @@ dhtmlXChart.prototype={
 	*   @param: width - the width of the container
 	*   @param: height - the height of the container
 	*/
-	_drawLegend:function(ctx,data,width,height){
-		/*position of the legend block*/
-		var x=0,y=0;
+	_drawLegend:function(ctx,data,width){
+        var i,legend,legendContainer,legendHeight,legendItems,legendWidth, style, x=0,y=0;
 		/*legend config*/
-		var legend = this._settings.legend;
-		 /*the legend sizes*/
-		var legendHeight,legendWidth;
-		
-		var style = (this._settings.legend.layout!="x"?"width:"+legend.width+"px":"");
+		legend = this._settings.legend;
+        
+		style = (this._settings.legend.layout!="x"?"width:"+legend.width+"px":"");
 		/*creation of legend container*/
 		if(this.legendObj)
 			this.legendObj.innerHTML = "";
-		var legendContainer = dhtmlx.html.create("DIV",{
+		legendContainer = dhtmlx.html.create("DIV",{
 			"class":"dhx_chart_legend",
 			"style":"left:"+x+"px; top:"+y+"px;"+style
 		},"");
+        if(legend.padding){
+            legendContainer.style.padding =  legend.padding+"px";
+        }
 		this.legendObj = legendContainer;
 		this._obj.appendChild(legendContainer);
 		/*rendering legend text items*/
-		var legendItems = [];
+		legendItems = [];
 		if(!legend.values)
-			for(var i = 0; i < data.length; i++){
+			for(i = 0; i < data.length; i++){
 				legendItems.push(this._drawLegendText(legendContainer,legend.template(data[i])));
 			}
 		else
-			for(var i = 0; i < legend.values.length; i++){
+			for(i = 0; i < legend.values.length; i++){
 				legendItems.push(this._drawLegendText(legendContainer,legend.values[i].text));
 			}
 	   	legendWidth = legendContainer.offsetWidth;
 	    legendHeight = legendContainer.offsetHeight;
-		this._settings.legend.width = legendWidth;
-		this._settings.legend.height = legendHeight;
+		/*this._settings.legend.width = legendWidth;
+		this._settings.legend.height = legendHeight;*/
+
 		/*setting legend position*/
 		if(legendWidth<this._obj.offsetWidth){
-			if(legend.layout == "x"&&legend.align == "center")
-				x = (this._obj.offsetWidth-legendWidth)/2;
+			if(legend.layout == "x"&&legend.align == "center"){
+			    x = (this._obj.offsetWidth-legendWidth)/2;
+            }
 			if(legend.align == "right"){
 				x = this._obj.offsetWidth-legendWidth;
 			}
-		}
-		
+            if(legend.margin&&legend.align != "center"){
+                x += (legend.align == "left"?1:-1)*legend.margin;
+            }
+        }
 		if(legendHeight<this._obj.offsetHeight){
 			if(legend.valign == "middle"&&legend.align != "center"&&legend.layout != "x")
 				y = (this._obj.offsetHeight-legendHeight)/2;
 			else if(legend.valign == "bottom")
 				y = this._obj.offsetHeight-legendHeight;
+            if(legend.margin&&legend.valign != "middle"){
+                y += (legend.valign == "top"?1:-1)*legend.margin;
+            }
 		}
 		legendContainer.style.left = x+"px";
 		legendContainer.style.top = y+"px";
-		
+
 		/*drawing colorful markers*/
-		for(var i = 0; i < legendItems.length; i++){
+		ctx.save();
+		for(i = 0; i < legendItems.length; i++){
 			var item = legendItems[i];
 			var itemColor = (legend.values?legend.values[i].color:this._settings.color.call(this,data[i]));
-			this._drawLegendMarker(ctx,item.offsetLeft+x,item.offsetTop+y,itemColor);
+			this._drawLegendMarker(ctx,item.offsetLeft+x,item.offsetTop+y,itemColor,item.offsetHeight);
 		}
+		ctx.restore();
 		legendItems = null;
 	},
 	/**
@@ -4980,20 +5763,39 @@ dhtmlXChart.prototype={
 	*   @param: y - the vertical position of the marker
 	*   @param: obj - data object which color needs being used
 	*/
-	_drawLegendMarker:function(ctx,x,y,color){
-		var details = this._settings.legend;
-		
-		ctx.strokeStyle = ctx.fillStyle = color;
-		ctx.lineWidth = details.marker.height;  
-		ctx.lineCap = details.marker.type;
-		ctx.beginPath();
-		/*start of marker*/
-		x += ctx.lineWidth/2+5;
-		y += ctx.lineWidth/2+3;
-		ctx.moveTo(x,y);
-		var x1 = x + details.marker.width-details.marker.height +1;
-		ctx.lineTo(x1,y);  
-    	ctx.stroke(); 
+	_drawLegendMarker:function(ctx,x,y,color,height){
+		var marker = this._settings.legend.marker;
+        ctx.strokeStyle = ctx.fillStyle = color;
+        ctx.beginPath();
+		if(marker.type=="round"||!marker.radius){
+            ctx.lineWidth = marker.height;
+		    ctx.lineCap = marker.type;
+		    /*start of marker*/
+		    x += ctx.lineWidth/2+5;
+		    y += height/2;
+		    ctx.moveTo(x,y);
+		    var x1 = x + marker.width-marker.height +1;
+		    ctx.lineTo(x1,y);
+
+        }else{
+            ctx.lineWidth = 1;
+            var x0,y0;
+            x += 5;
+            y += height/2-marker.height/2;
+            x0 = x+ marker.width/2;
+            y0= y+marker.height/2;
+    	    //ctx.moveTo(x-marker.width/2,y-marker.height/2+marker.radius);
+            ctx.arc(x+marker.radius,y+marker.radius,marker.radius,Math.PI,3*Math.PI/2,false);
+            ctx.lineTo(x+marker.width-marker.radius,y);
+            ctx.arc(x+marker.width-marker.radius,y+marker.radius,marker.radius,-Math.PI/2,0,false);
+            ctx.lineTo(x+marker.width,y+marker.height-marker.radius);
+            ctx.arc(x+marker.width-marker.radius,y+marker.height-marker.radius,marker.radius,0,Math.PI/2,false);
+            ctx.lineTo(x+marker.radius,y+marker.height);
+            ctx.arc(x+marker.radius,y+marker.height-marker.radius,marker.radius,Math.PI/2,Math.PI,false);
+            ctx.lineTo(x,y+marker.radius);
+        }
+         ctx.stroke();
+         ctx.fill();
 	},
 	/**
 	*   gets the points those represent chart left top and right bottom bounds
@@ -5044,17 +5846,17 @@ dhtmlXChart.prototype={
 	*   @param: data - data set
 	*/
 	_getStackedLimits:function(data){
-		var maxValue,minValue;
-		if(this._settings.yAxis&&(typeof this._settings.yAxis.end!="undefied")&&(typeof this._settings.yAxis.start!="undefied")&&this._settings.yAxis.step){
+		var i,j,maxValue,minValue,value;
+		if(this._settings.yAxis&&(typeof this._settings.yAxis.end!="undefined")&&(typeof this._settings.yAxis.start!="undefined")&&this._settings.yAxis.step){
 		    maxValue = parseFloat(this._settings.yAxis.end);
-			minValue = parseFloat(this._settings.yAxis.start);      
+			minValue = parseFloat(this._settings.yAxis.start);
 		}
 		else{
-			for(var i=0; i < data.length; i++){
+			for(i=0; i < data.length; i++){
 				data[i].$sum = 0 ;
 				data[i].$min = Infinity;
-				for(var j =0; j < this._series.length;j++){
-					var value = parseFloat(this._series[j].value(data[i]));
+				for(j =0; j < this._series.length;j++){
+					value = parseFloat(this._series[j].value(data[i])||0);
 					if(isNaN(value)) continue;
 					data[i].$sum += value;
 					if(value < data[i].$min) data[i].$min = value;
@@ -5062,7 +5864,7 @@ dhtmlXChart.prototype={
 			}
 			maxValue = -Infinity;
 			minValue = Infinity;
-			for(var i=0; i < data.length; i++){
+			for(i=0; i < data.length; i++){
 				if (data[i].$sum > maxValue) maxValue = data[i].$sum ;
 				if (data[i].$min < minValue) minValue = data[i].$min ;
 			}
@@ -5072,7 +5874,7 @@ dhtmlXChart.prototype={
 	},
 	/*adds colors to the gradient object*/
 	_setBarGradient:function(ctx,x1,y1,x2,y2,type,color,axis){
-		var gradient,offset;
+		var gradient,offset,rgb,hsv,color0;
 		if(type == "light"){
 			if(axis == "x")
 				gradient = ctx.createLinearGradient(x1,y1,x2,y1);
@@ -5083,6 +5885,27 @@ dhtmlXChart.prototype={
 			gradient.addColorStop(1,color);
 			offset = 2;
 		}
+		else if(type == "falling"||type == "rising"){
+			if(axis == "x")
+				gradient = ctx.createLinearGradient(x1,y1,x2,y1);
+			else
+				gradient = ctx.createLinearGradient(x1,y1,x1,y2);
+			rgb = dhtmlx.math.toRgb(color);
+			hsv = dhtmlx.math.rgbToHsv(rgb[0],rgb[1],rgb[2]);
+			hsv[1] *= 1/2;
+			color0 = "rgb("+dhtmlx.math.hsvToRgb(hsv[0],hsv[1],hsv[2])+")";
+			if(type == "falling"){
+				gradient.addColorStop(0,color0);
+				gradient.addColorStop(0.7,color);
+				gradient.addColorStop(1,color);
+			}
+			else if(type == "rising"){
+				gradient.addColorStop(0,color);
+				gradient.addColorStop(0.3,color);
+				gradient.addColorStop(1,color0);
+			}
+			offset = 0;
+		}
 		else{
 			ctx.globalAlpha = 0.37;
 			offset = 0;
@@ -5090,13 +5913,32 @@ dhtmlXChart.prototype={
 				gradient = ctx.createLinearGradient(x1,y2,x1,y1);
 			else
 				gradient = ctx.createLinearGradient(x1,y1,x2,y1);
-			gradient.addColorStop(0,"#000000");
-			gradient.addColorStop(0.5,"#FFFFFF");
+			/*gradient.addColorStop(0,"#9d9d9d");
+			gradient.addColorStop(0.4,"#FFFFFF");
 			gradient.addColorStop(0.6,"#FFFFFF");
-			gradient.addColorStop(1,"#000000");
+			gradient.addColorStop(1,"#9d9d9d");*/
+            gradient.addColorStop(0,"#9d9d9d");
+            gradient.addColorStop(0.3,"#e8e8e8");
+            gradient.addColorStop(0.45,"#ffffff");
+            gradient.addColorStop(0.55,"#ffffff");
+			gradient.addColorStop(0.7,"#e8e8e8");
+			gradient.addColorStop(1,"#9d9d9d");
 		}
 		return {gradient:gradient,offset:offset};
-	}
+	},
+    /**
+	*   returns the x and y position
+    *   @param: a - angle
+    *   @param: x - start x position
+    *   @param: y - start y position
+	*   @param: r - destination to the point
+	*/
+     _getPositionByAngle:function(a,x,y,r){
+         a *= (-1);
+         x = x+Math.cos(a)*r;
+         y = y-Math.sin(a)*r;
+         return {x:x,y:y};
+    }
 };
 
 dhtmlx.compat("layout");

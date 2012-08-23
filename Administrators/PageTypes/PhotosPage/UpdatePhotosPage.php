@@ -248,7 +248,48 @@
 				unset($ImageContent[$Value]);
 			}
 
-			//print_r($ImageContent);
+			$ImageContentNew = array();
+			$ImageContentNoOrder = array();
+			$ImageContentMove = array();
+
+			$PopKey = array();
+			foreach ($ImageContent as $Key => $Content) {
+				if ($Key == $Content['Order']) {
+					$ImageContentNew[$Key] = $Content;
+					array_push($PopKey, $Key);
+				} else if ($Content['Order'] == NULL) {
+					$ImageContentNoOrder[$Key] = $Content;
+					array_push($PopKey, $Key);
+				} else {
+					$ImageContentMove[$Key] = $Content;
+					array_push($PopKey, $Key);
+				}
+				
+			}
+			foreach ($PopKey as $Value) {
+				if ($Value != NULL) {
+					unset($ImageContent[$Value]);
+				}
+			}
+				
+			$ImageContent = $ImageContentNew;
+			unset($ImageContentNew);
+			foreach ($ImageContentMove as $Key => $Content) {
+				$Order = $Content['Order'];
+				if (isset($ImageContent[$Order])) {
+					array_push($ImageContent, $Content);
+				} else {
+					$ImageContent[$Order] = $Content;
+				}
+			}
+			unset($ImageContentMove);
+			
+			foreach($ImageContentNoOrder as $Content) {
+				array_push($ImageContent, $Content);
+			}
+			unset($ImageContentNoOrder);
+			
+			ksort($ImageContent);
 			
 			$Content = array();
 			

@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -29,8 +29,7 @@ function dhtmlXAccordion(baseId, skin) {
 	
 	var that = this;
 	
-	this.skin = (skin!=null?skin:"dhx_skyblue");
-	
+	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue"));
 	
 	if (baseId == document.body) {
 		//
@@ -88,7 +87,8 @@ function dhtmlXAccordion(baseId, skin) {
 	this.skinParams = { "dhx_blue":		{ "cell_height": 24, "cell_space": 1, "content_offset": 1 },
 			    "dhx_skyblue":	{ "cell_height": 27, "cell_space":-1, "content_offset":-1 },
 			    "dhx_black":	{ "cell_height": 24, "cell_space": 1, "content_offset": 1 },
-			    "dhx_web":		{ "cell_height": 26, "cell_space": 9, "content_offset": 0, "cell_pading_max": 1, "cell_pading_min": 0 }
+			    "dhx_web":		{ "cell_height": 26, "cell_space": 9, "content_offset": 0, "cell_pading_max": 1, "cell_pading_min": 0 },
+			    "dhx_terrace":	{ "cell_height": 37, "cell_space":-1, "content_offset": -1 }
 	};
 	
 	this.sk = this.skinParams[this.skin];
@@ -136,6 +136,9 @@ function dhtmlXAccordion(baseId, skin) {
 			if (!this.userOffset) this.skinParams["dhx_skyblue"]["cell_space"] = 3;
 			this.multiMode = true;
 		}
+		if (this.skin == "dhx_terrace") {
+			this.skinParams["dhx_terrace"]["cell_space"] = 12;
+		}
 	}
 	
 	this.userOffset = false;
@@ -163,6 +166,12 @@ function dhtmlXAccordion(baseId, skin) {
 	*	@type: public
 	*/
 	this.addItem = function(itemId, itemText) {
+		
+		if (this.multiMode) {
+			var lastVis = this._lastVisible();
+		} else {
+			
+		}
 		
 		// adding new item
 		var item = document.createElement("DIV");
@@ -204,6 +213,7 @@ function dhtmlXAccordion(baseId, skin) {
 						that.openItem(this._idd, "dhx_accord_outer_event");
 					}
 				}
+				if (that._autoHeightEnabled) that.setSizes();
 				return;
 			}
 			// single mode
@@ -226,6 +236,11 @@ function dhtmlXAccordion(baseId, skin) {
 		item.appendChild(contObj);
 		var cont = new dhtmlXContainer(item);
 		cont.setContent(contObj);
+		
+		if (this.skin == "dhx_terrace" && this._hideBorders === true) {
+			item._setPadding([0,-1,2,0]); // top, left, width, height
+		}
+		
 		item.adjustContent(item, this.sk["cell_height"]+this.sk["content_offset"]);
 		
 		
@@ -345,14 +360,32 @@ function dhtmlXAccordion(baseId, skin) {
 			that.callEvent("onContentLoaded",[this]);
 		}
 		//
+		if (this.multiMode && lastVis != null) {
+			if (lastVis._isActive == true) {
+				this.idPull[lastVis._id].adjustContent(this.idPull[lastVis._id], this.sk["cell_height"]+this.sk["content_offset"], null, null, this.sk["cell_space"]);
+				this.idPull[lastVis._id].updateNestedObjects();
+			} else {
+				this.idPull[lastVis._id].style.height = this.sk["cell_height"]+this.sk["cell_space"]+"px";
+			}
+			lastVis = null;
+		}
+		
+		//
+		var e = this._enableOpenEffect;
+		this._enableOpenEffect = false;
+		
 		this.openItem(itemId);
+		
+		this._enableOpenEffect = e;
 		//
-		if (!this.multiMode) this._defineLastItem();
+		if (!this.multiMode) this._defineLastItem(); else this.setSizes();
 		//
+		
 		return item;
 	}
 	
 	this.openItem = function(itemId, callEvent, reOpenItem) {
+		if (this.multiMode) this._checkAutoHeight();
 		// check if open/close state buzy
 		if (this._openBuzy) return;
 		// open with effect
@@ -555,6 +588,11 @@ function dhtmlXAccordion(baseId, skin) {
 		this._reopenItem();
 	}
 	
+	this.isItemHidden = function(itemId) {
+		if (this.idPull[itemId] == null) return;
+		return (this.idPull[itemId]._isHidden == true);
+	}
+	
 	this._reopenItem = function() {
 		var toOpen = null;
 		for (var a in this.idPull) if (this.idPull[a]._isActive && !this.idPull[a]._isHidden) toOpen = a;
@@ -604,7 +642,7 @@ function dhtmlXAccordion(baseId, skin) {
 			var stopOpen = false;
 			// opening item
 			if (toOpen) {
-				var newH = parseInt(this.idPull[toOpen].style.height)+step;
+				var newH = parseInt(this.idPull[toOpen].style.height||0)+step;
 				if (newH > maxH) { newH = maxH; stopOpen = true; }
 				this.idPull[toOpen].style.height = newH+"px";
 			}
@@ -708,9 +746,48 @@ function dhtmlXAccordion(baseId, skin) {
 	
 	this.setItemHeight = function(itemId, height) {
 		if (!this.multiMode) return;
-		if (isNaN(height)) return;
-		this.idPull[itemId].h = height;
+		if (height == "*") {
+			this.idPull[itemId].h_auto = true;
+		} else {
+			if (!isNaN(height)) return;
+			this.idPull[itemId].h_auto = false;
+			this.idPull[itemId].h = height;
+		}
 		this._reopenItem();
+	}
+	
+	this._checkAutoHeight = function() {
+		
+		var h = this.base.offsetHeight; // main parent
+		
+		this._autoHeightEnabled = false;
+		
+		// find items with * and check avail size for them
+		var k = [];
+		for (var a in this.idPull) {
+			
+			if (!this._autoHeightEnabled && this.idPull[a].h_auto) this._autoHeightEnabled = true;
+			
+			if (this.idPull[a].h_auto && this.idPull[a]._isActive) {
+				k.push(a);
+			} else {
+				if (this.idPull[a]._isActive) {
+					h = Math.max(0, h-this.idPull[a].h);
+				} else {
+					h = Math.max(0, h-this.idPull[a].offsetHeight);
+				}
+			}
+		}
+		
+		if (k.length > 0) {
+			var h1 = Math.floor(h/k.length);
+			for (var q=0; q<k.length; q++) {
+				if (q == k.length-1) h1 = h; else h -= h1; // last item will take all height
+				this.idPull[k[q]].h = h1;
+				
+			}
+		}
+		
 	}
 	
 	this.setIcon = function(itemId, icon) {
@@ -763,6 +840,8 @@ function dhtmlXAccordion(baseId, skin) {
 				
 				if (this.base.childNodes[q]._isHidden || done) {
 					this.base.childNodes[q].className = String(this.base.childNodes[q].className).replace(/last_item/gi,"");
+				} else {
+					done = true;
 				}
 				
 			} else {
@@ -948,5 +1027,67 @@ dhtmlXAccordion.prototype.i18n = {
 			for (var q=0; q<toOpen.length; q++) this.cells(toOpen[q]).open();
 			for (var q=0; q<toClose.length; q++) this.cells(toClose[q]).close();
 		}
-	});	
+	});
 })();
+
+dhtmlXAccordion.prototype.loadJSON = function(t) {
+	
+	// main params
+	var k = {skin:"setSkin",icons_path:"setIconsPath",multi_mode:"enableMultiMode",effect:"setEffect"};
+	for (var a in k) if (typeof(t[a]) != "undefined") this[k[a]](t[a]);
+	
+	// cells
+	var toOpen = null;
+	for (var q=0; q<t.cells.length; q++) {
+		this.addItem(t.cells[q].id, t.cells[q].text);
+		if (typeof(t.cells[q].icon) != "undefined") this.setIcon(t.cells[q].id, t.cells[q].icon);
+		if (typeof(t.cells[q].height) != "undefined") this.setItemHeight(t.cells[q].id, t.cells[q].height);
+		if (typeof(t.cells[q].open) != "undefined") toOpen = t.cells[q].id;
+	}
+	
+	if (toOpen != null) this.openItem(toOpen);
+	
+};
+
+dhtmlXAccordion.prototype.loadXML = function(url, onLoad) {
+	
+	var that = this;
+	
+	this.callEvent("onXLS", []);
+	
+	dhtmlxAjax.get(url, function(r){
+		// init
+		var root = r.xmlDoc.responseXML.getElementsByTagName("accordion")[0];
+		
+		var k = {0:false,"true":true,"1":true,"y":true,"yes":true};
+		
+		var t = {cells:[]};
+		// conf
+		if (root.getAttribute("skin") != null) t.skin = root.getAttribute("skin"); //that.setSkin(root.getAttribute("skin"));
+		if (root.getAttribute("iconsPath") != null) t.icons_path = root.getAttribute("iconsPath"); //that.setIconsPath(root.getAttribute("iconsPath"));
+		if (root.getAttribute("mode") == "multi") t.multi_mode = true;//that.enableMultiMode(true);
+		if (k[root.getAttribute("openEffect")||0]) t.effect = true; //that.setEffect(true);
+		
+		// cells
+		var toOpen = null;
+		for (var q=0; q<root.childNodes.length; q++) {
+			if (typeof(root.childNodes[q].tagName) != "indefined" && String(root.childNodes[q].tagName).toLowerCase() == "cell") {
+				var id = (root.childNodes[q].getAttribute("id")||that._genStr(12));
+				var text = (root.childNodes[q].firstChild.nodeValue||"");
+				t.cells.push({id:id,text:text});
+				
+				if (root.childNodes[q].getAttribute("icon") != null) t.cells[t.cells.length-1].icon = root.childNodes[q].getAttribute("icon");
+				if (root.childNodes[q].getAttribute("height") != null) t.cells[t.cells.length-1].height = root.childNodes[q].getAttribute("height");
+				if (k[root.childNodes[q].getAttribute("open")||0]) t.cells[t.cells.length-1].open = true;
+			}
+		}
+		console.log(t)
+		that.loadJSON(t);
+		
+		// callbacks
+		that.callEvent("onXLE",[]);
+		if (typeof(onLoad) == "function") onLoad();
+		that = onLoad = null;
+	});
+	
+};

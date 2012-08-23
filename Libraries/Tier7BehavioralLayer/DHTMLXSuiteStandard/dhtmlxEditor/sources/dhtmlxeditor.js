@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -25,13 +25,13 @@ function dhtmlXEditor(base, skin) {
 	
 	// skin config
 	this.skin = (skin||dhtmlx.skin||"dhx_skyblue");
-	
 	this.iconsPath = dhtmlx.image_path||"../../codebase/imgs/";
 	
 	// configure base
 	if (typeof(base) == "string") base = document.getElementById(base);
 	
 	this.base = base;
+	
 	while (this.base.childNodes.length > 0) this.base.removeChild(this.base.childNodes[0]);
 	
 	// search for extended toolbar
@@ -146,16 +146,16 @@ function dhtmlXEditor(base, skin) {
 		var edDoc = this.editor.contentWindow.document;
 		edDoc.open("text/html", "replace");
 		if (_isOpera) {
-			edDoc.write("<html><head><style> html, body { overflow:auto; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
+			edDoc.write("<html><head><style> html, body { overflow:auto;-webkit-overflow-scrolling: touch; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
 		} else {
 			if (window._KHTMLrv) {
-				edDoc.write("<html><head><style> html {overflow-x: auto; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
+				edDoc.write("<html><head><style> html {overflow-x: auto;-webkit-overflow-scrolling: touch; overflow-y: auto;} body { overflow: auto; overflow-y: scroll;} html,body { padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
 			} else {
 				if (_isIE) {
 					// && navigator.appVersion.indexOf("MSIE 9.0")!= -1
-					edDoc.write("<html><head><style> html {overflow-y: auto;} body {overflow-y: scroll;} html,body { overflow-x: auto; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
+					edDoc.write("<html><head><style> html {overflow-y: auto;} body {overflow-y: scroll;-webkit-overflow-scrolling: touch;} html,body { overflow-x: auto; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
 				} else {
-					edDoc.write("<html><head><style> html,body { overflow-x: auto; overflow-y: scroll; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
+					edDoc.write("<html><head><style> html,body { overflow-x: auto; overflow-y:-webkit-overflow-scrolling: touch; scroll; padding:0px; padding-left:1px !important; height:100%; margin:0px; font-family:Tahoma; font-size:10pt; background-color:#ffffff;} </style></head><body "+(roMode!==true?"contenteditable='true'":"")+" tabindex='0'></body></html>");
 				}
 			}
 		}
@@ -296,7 +296,6 @@ function dhtmlXEditor(base, skin) {
 	this.showInfo = function(el){
 		
 		var el = (this.getSelectionBounds().end)?this.getSelectionBounds().end : el;
-
 		if(!el) return
 		try{
 			if(this.edWin.getComputedStyle){
@@ -401,6 +400,7 @@ function dhtmlXEditor(base, skin) {
 			return "";
 		} else {
 			if (_isFF) return this.editor.contentWindow.document.body.innerHTML.replace(/<\/{0,}br\/{0,}>\s{0,}$/gi,"");
+			if (_isIE && this.edDoc.body.innerText.length == 0) return "";
 			return this.edDoc.body.innerHTML;
 		}
 	}
@@ -411,6 +411,7 @@ function dhtmlXEditor(base, skin) {
 	* @topic: 0
 	*/
 	this.setContent = function(str){
+		str = str||"";
 		if (this.edDoc.body) {
 			if (navigator.userAgent.indexOf('Firefox') != -1) {
 				if (typeof(this._ffTest) == "undefined") {
@@ -525,7 +526,17 @@ function dhtmlXContainerLite(obj) {
 		if (that.skin == "dhx_web") {
 			this.toolbarHeight = 32;
 			this.dhxcont.className = "dhtmlx_editor_extended_"+that.skin;
-			
+		} else if (that.skin == "dhx_terrace") {
+			if (this._attached) {
+				this.toolbarHeight = 46;
+				toolbarObj.style.marginBottom = "14px";
+			} else {
+				this.toolbarHeight = 34;
+				toolbarObj.style.marginTop = "2px";
+				toolbarObj.style.marginLeft = "2px";
+				toolbarObj.style.marginBottom = "2px";
+			}
+			this.dhxcont.className = "dhtmlx_editor_extended_"+that.skin;
 		} else {
 			this.toolbarHeight = toolbarObj.offsetHeight+(this._isLayout&&this.skin=="dhx_skyblue"?2:0);
 		}

@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -45,10 +45,11 @@ function dhtmlXLayoutObject(base, view, skin) {
 		if (w == 299) return "dhx_blue";
 		if (w == 399) return "dhx_black";
 		if (w == 499) return "dhx_web";
+		if (w == 599) return "dhx_terrace";
 		return "dhx_skyblue";
 	}
 	
-	this.skin = (skin!=null?skin:this._autodetectSkin());
+	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : this._autodetectSkin()));
 	
 	this.setSkin = function(skin) {
 		if (!this.skinParams[skin]) return;
@@ -74,7 +75,7 @@ function dhtmlXLayoutObject(base, view, skin) {
 	
 	this._isIPad = (navigator.userAgent.search(/iPad/gi)>=0);
 	
-	this._dblClickTM = 200;
+	this._dblClickTM = 600;
 	
 	this._mTop = 0;
 	this._mBottom = 0;
@@ -118,6 +119,12 @@ function dhtmlXLayoutObject(base, view, skin) {
 				this.cont.obj._offsetLeft = 9;
 				this.cont.obj._offsetHeight = -18;
 				this.cont.obj._offsetWidth = -18;
+			}
+			if (this.skin == "dhx_terrace") {
+				this.cont.obj._offsetTop = 14;
+				this.cont.obj._offsetLeft = 14;
+				this.cont.obj._offsetHeight = -28;
+				this.cont.obj._offsetWidth = -28;
 			}
 			document.body.className += " dhxlayout_fullscreened";
 		}
@@ -177,6 +184,9 @@ function dhtmlXLayoutObject(base, view, skin) {
 			// dhtmlxEvent(window, "resize", that._doOnResizeStart);
 		}
 		
+		base._doOnAttachToolbar = function(){
+			that.setSizes();
+		}
 	}
 	
 	this.items = new Array();
@@ -242,7 +252,8 @@ function dhtmlXLayoutObject(base, view, skin) {
 			    "dhx_blue"		: {"hor_sep_height": 5, "ver_sep_width": 5, "cpanel_height": 34, "cpanel_collapsed_width":  18, "cpanel_collapsed_height": 18},
 			    "dhx_skyblue"	: {"hor_sep_height": 5, "ver_sep_width": 5, "cpanel_height": 26, "cpanel_collapsed_width":  18, "cpanel_collapsed_height": 18},
 			    
-			    "dhx_web"		: {"hor_sep_height": 9, "ver_sep_width": 9, "cpanel_height": 27, "cpanel_collapsed_width":  18, "cpanel_collapsed_height": 18, "cell_pading_max": 1, "cell_pading_min": 0}
+			    "dhx_web"		: {"hor_sep_height": 9, "ver_sep_width": 9, "cpanel_height": 27, "cpanel_collapsed_width":  18, "cpanel_collapsed_height": 18, "cell_pading_max": 1, "cell_pading_min": 0},
+			    "dhx_terrace"	: {"hor_sep_height": 14, "ver_sep_width": 14, "cpanel_height": 37, "cpanel_collapsed_width":  18, "cpanel_collapsed_height": 18, "cell_pading_max": 1, "cell_pading_min": 0}
 			    // cell_padding - new dhx_web feature, inner cell's padding max - with header
 	};
 	// ff - 34,18
@@ -324,7 +335,6 @@ function dhtmlXLayoutObject(base, view, skin) {
 				that.tpl.childNodes[0].appendChild(tr);
 				for (var w=0; w<row.childNodes.length; w++) {
 					if (row.childNodes[w].tagName == "cell") {
-						
 						var cell = row.childNodes[w];
 						var td = document.createElement("TD");
 						td._dir = "null";
@@ -607,7 +617,10 @@ function dhtmlXLayoutObject(base, view, skin) {
 					*/
 					td.setWidth = function(width) {
 						if (!Number(width)) return;
+						var k = this._isBlockedWidth||false;
+						this._isBlockedWidth = false;
 						that._setWidth(this._idd, width);
+						this._isBlockedWidth = k;
 					}
 					/**
 					*	@desc: returns cell's width
@@ -623,7 +636,10 @@ function dhtmlXLayoutObject(base, view, skin) {
 					*/
 					td.setHeight = function(height) {
 						if (!Number(height)) return;
+						var k = this._isBlockedHeight||false;
+						this._isBlockedHeight = false;
 						that._setHeight(this._idd, height);
+						this._isBlockedHeight = k;
 					}
 					/**
 					*	@desc: returns cell's height
@@ -703,15 +719,22 @@ function dhtmlXLayoutObject(base, view, skin) {
 				//
 				if (td._dir == "ver") {
 					td.onselectstart = function(e) { e = e||event; e.returnValue = false; }
+					if (_isIE) {
+						td["ondblclick"] = function() {
+							that._doOnDoubleClick(this);
+						}
+					}
 					td[this._isIPad?"ontouchstart":"onmousedown"] = function(e) {
 						e = e||event;
-						if (!this._lastClick) {
-							this._lastClick = new Date().getTime();
-						} else {
-							var t = this._lastClick;
-							this._lastClick = new Date().getTime();
-							if (t + that._dblClickTM >= this._lastClick) {
-								if (that._doOnDoubleClick(this) === true) return;
+						if (!_isIE) {
+							if (!this._lastClick) {
+								this._lastClick = new Date().getTime();
+							} else {
+								var t = this._lastClick;
+								this._lastClick = new Date().getTime();
+								if (t + that._dblClickTM >= this._lastClick) {
+									if (that._doOnDoubleClick(this) === true) return;
+								}
 							}
 						}
 						var p = that._findDockCellsVer(this);
@@ -894,6 +917,7 @@ function dhtmlXLayoutObject(base, view, skin) {
 			
 			// dhx_web's feature, set cell's padding, adjust content required
 			if (this.skin == "dhx_web") this.polyObj[a]._setPadding(this.skinParams[this.skin]["cell_pading_max"], "dhxcont_layout_dhx_web");
+			if (this.skin == "dhx_terrace") this.polyObj[a]._setPadding(this.skinParams[this.skin]["cell_pading_max"], "dhxcont_layout_dhx_terrace");
 			
 			this.polyObj[a].adjustContent(this.polyObj[a].childNodes[0], this.skinParams[this.skin]["cpanel_height"]);
 		}
@@ -1160,7 +1184,14 @@ function dhtmlXLayoutObject(base, view, skin) {
 			}
 			// get used cells
 			var objs = {};
-			var parseData = function(data) { for (var a in data) { if (typeof(data[a])=="object") { parseData(data[a]); } objs[data[a]] = true; } }
+			var parseData = function(data) {
+				if (data != null) {
+					for (var q=0; q<data.length; q++) {
+						if (typeof(data[q]) == "object") parseData(data[q]);
+						objs[data[q]] = true;
+					}
+				}
+			}
 			parseData(this._anyExpT);
 			parseData(this._anyExpB);
 			parseData(this._anyExpL);
@@ -1179,6 +1210,8 @@ function dhtmlXLayoutObject(base, view, skin) {
 			this._resFunc = null;
 			this._hideCovers();
 			//
+			this._fixToolbars();
+			this._fixCollapsedText();
 			this.callEvent("onPanelResizeFinish", [ids]);
 			//
 			return;
@@ -1203,13 +1236,16 @@ function dhtmlXLayoutObject(base, view, skin) {
 		}
 		for (var q=0; q<cells.length; q++) cells[q].updateNestedObjects();
 		//
+		this._fixCollapsedText();
 		this.callEvent("onPanelResizeFinish", []);
 	}
 	this._showCovers = function() {
 		for (var a in this.polyObj) { if (this._effects["highlight"] && this._isResizable(a)) { this.polyObj[a].showCoverBlocker(); } }
+		this._fixToolbars();
 	}
 	this._hideCovers = function() {
 		for (var a in this.polyObj) { this.polyObj[a].hideCoverBlocker(); }
+		this._fixToolbars();
 	}
 	this._isResizable = function(pId) {
 		var need = false;
@@ -1408,6 +1444,7 @@ function dhtmlXLayoutObject(base, view, skin) {
 					this._fixIcons();
 					// remove tooltip
 					this.polyObj[anyExp].removeAttribute("title");
+					this._fixToolbars();
 					// event
 					this.callEvent("onExpand", [anyExp]);
 				}
@@ -1510,6 +1547,7 @@ function dhtmlXLayoutObject(base, view, skin) {
 			this._fixIcons();
 			// remove tooltip
 			obj.removeAttribute("title");
+			this._fixToolbars();
 			// event
 			this.callEvent("onExpand", [obj._idd]);
 		}
@@ -1604,6 +1642,8 @@ function dhtmlXLayoutObject(base, view, skin) {
 			this._fixIcons();
 			// set tooltip
 			obj.title = this.getTextTooltip(obj._idd);
+			this._fixToolbars();
+			this._fixCollapsedText();
 			//
 			// events
 			this.callEvent("onCollapse", [obj._idd]);
@@ -1771,7 +1811,10 @@ function dhtmlXLayoutObject(base, view, skin) {
 		//this.polyObj[pId].childNodes[1].style.height = parseInt(this.polyObj[pId].style.height) - bar._h + "px";
 		bar.style.display = "";
 		this.polyObj[pId]._noHeader = false;
+		
 		if (this.skin == "dhx_web") this.polyObj[pId]._setPadding(this.skinParams[this.skin]["cell_pading_max"], "dhxcont_layout_dhx_web");
+		if (this.skin == "dhx_terrace") this.polyObj[pId]._setPadding(this.skinParams[this.skin]["cell_pading_max"], "dhxcont_layout_dhx_terrace");
+		
 		this.polyObj[pId].adjustContent(this.polyObj[pId].childNodes[0], this.skinParams[this.skin]["cpanel_height"]);
 		this.polyObj[pId].updateNestedObjects();
 	}
@@ -1799,6 +1842,10 @@ function dhtmlXLayoutObject(base, view, skin) {
 		// bar._h = 0;
 		this.polyObj[pId]._noHeader = true;
 		if (this.skin == "dhx_web") this.polyObj[pId]._setPadding(this.skinParams[this.skin]["cell_pading_min"], "");
+		if (this.skin == "dhx_terrace") {
+			this.polyObj[pId]._setPadding(this.skinParams[this.skin]["cell_pading_min"], "");
+			//if (this.polyObj[pId].className.search(/polyobj_transp/) <= 0) this.polyObj[pId].className += " polyobj_transp";
+		}
 		this.polyObj[pId].adjustContent(this.polyObj[pId].childNodes[0], 0);
 		this.polyObj[pId].updateNestedObjects();
 	}
@@ -2609,9 +2656,19 @@ dhtmlXLayoutObject.prototype.setCollapsedText = function(cell, text) {
 		bar.appendChild(p);
 	}
 	p.innerHTML = text;
+	this._fixCollapsedText();
 	bar = null;
 };
-
+dhtmlXLayoutObject.prototype._fixCollapsedText = function() {
+	for (var a in this.polyObj) {
+		if (this.polyObj[a]._resize == "hor") {
+			var bar = this.polyObj[a].childNodes[0].childNodes[0];
+			if (bar.childNodes[bar.childNodes.length-1]._ct === true) {
+				bar.childNodes[bar.childNodes.length-1].style.width = Math.max(0,bar.offsetHeight-bar.childNodes[4].offsetTop-bar.childNodes[4].offsetHeight-12)+"px";
+			}
+		}
+	}
+}
 /*
 dhtmlXLayoutObject.prototype._doOnAttachURL = function(id, addIFrameEvents) {
 	if (!addIFrameEvents) {
@@ -2727,3 +2784,20 @@ dhtmlXLayoutObject.prototype.attachFooter = function(obj) {
 	
 }
 
+dhtmlXLayoutObject.prototype._fixToolbars = function() {
+	if (!_isIE) return;
+	for (var a in this.polyObj) {
+		if (this.polyObj[a].vs[this.polyObj[a].av].toolbar != null) this.polyObj[a].vs[this.polyObj[a].av].toolbar._fixSpacer();
+	}
+}
+
+dhtmlXLayoutObject.prototype._hideBorders = function() {
+	if (this.skin != "dhx_terrace") return;
+	this._cpm_old = this.skinParams[this.skin].cell_pading_max;
+	this.skinParams[this.skin].cell_pading_max = [1,0,0,0];
+	for (var a in this.polyObj) {
+		this.polyObj[a]._setPadding(this.skinParams[this.skin]["cell_pading_max"], "dhxcont_layout_"+this.skin);
+		this.polyObj[a].adjustContent(this.polyObj[a].childNodes[0], this.skinParams[this.skin]["cpanel_height"]);
+	}
+	
+}

@@ -10,13 +10,13 @@ dhtmlXForm.prototype.items.editor = {
 		item._enabled = true;
 		
 		this.doAddLabel(item, data);
-		this.doAddInput(item, data, "DIV", null, true, true, "dhxlist_item_template");
+		this.doAddInput(item, data, "DIV", null, true, true, "dhxform_item_template");
 		
 		item._value = (data.value||"");
-		item.childNodes[1].childNodes[0].className += " dhxeditor_inside";
+		item.childNodes[item._ll?1:0].childNodes[0].className += " dhxeditor_inside";
 		
 		var that = this;
-		this.editor[item._idd] = new dhtmlXEditor(item.childNodes[1].childNodes[0]);
+		this.editor[item._idd] = new dhtmlXEditor(item.childNodes[item._ll?1:0].childNodes[0]);
 		this.editor[item._idd].setContent(item._value);
 		this.editor[item._idd].attachEvent("onAccess",function(t, ev){
 			// generate body click to hide menu/toolbar/calendar/combo/other stuff if any
@@ -30,9 +30,11 @@ dhtmlXForm.prototype.items.editor = {
 			item.callEvent("onEditorToolbarClick", [item._idd, a, this, item.getForm()]);
 		});
 		
+		if (data.readonly) this.setReadonly(item, true);
+		
 		// emulate label-for
-		item.childNodes[0].childNodes[0].removeAttribute("for");
-		item.childNodes[0].childNodes[0].onclick = function() {
+		item.childNodes[item._ll?0:1].childNodes[0].removeAttribute("for");
+		item.childNodes[item._ll?0:1].childNodes[0].onclick = function() {
 			that.editor[item._idd]._focus();
 		}
 		
@@ -80,6 +82,10 @@ dhtmlXForm.prototype.items.editor = {
 		this.doDis(item);
 	},
 	
+	setReadonly: function(item, mode) {
+		this.editor[item._idd].setReadonly(mode);
+	},
+	
 	getEditor: function(item) {
 		return (this.editor[item._idd]||null);
 	},
@@ -87,7 +93,7 @@ dhtmlXForm.prototype.items.editor = {
 	destruct: function(item) {
 		
 		// custom editor functionality
-		item.childNodes[0].childNodes[0].onclick = null;
+		item.childNodes[item._ll?0:1].childNodes[0].onclick = null;
 		
 		// unload editor
 		this.editor[item._idd].unload();
@@ -106,7 +112,7 @@ dhtmlXForm.prototype.items.editor = {
 };
 
 (function(){
-	for (var a in {doAddLabel:1,doAddInput:1,doUnloadNestedLists:1,setText:1,getText:1,setWidth:1})
+	for (var a in {doAddLabel:1,doAddInput:1,doUnloadNestedLists:1,setText:1,getText:1,setWidth:1,isEnabled:1})
 		dhtmlXForm.prototype.items.editor[a] = dhtmlXForm.prototype.items.template[a];
 })();
 

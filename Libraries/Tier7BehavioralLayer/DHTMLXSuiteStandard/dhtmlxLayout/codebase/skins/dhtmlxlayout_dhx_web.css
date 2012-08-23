@@ -72,7 +72,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutSinglePoly div.dhtmlxPoly
 	vertical-align: middle;
 	cursor: default;
 	position: absolute;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedVer div.dhtmlxInfoBarLabel {
 	display: none;
@@ -253,7 +257,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutPolySplitterHor {
 	height: 9px;
 	line-height: 9px;
 	cursor: n-resize;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-image: url("../imgs/dhxlayout_dhx_web/dhxlayout_drag_hor.gif") !important;
 	background-repeat: no-repeat !important;
 	background-position: center center !important;
@@ -265,7 +273,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutPolySplitterHorInactive {
 	height: 9px;
 	line-height: 9px;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	vertical-align: top;
 }
 /* ver-based splitter */
@@ -277,7 +289,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutPolySplitterVer {
 	background-repeat: no-repeat !important;
 	background-position: 50% center !important;
 	vertical-align: top;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* ver-based splitter inactive */
 table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutPolySplitterVerInactive {
@@ -285,7 +301,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutPolySplitterVerInactive {
 	width: 9px;
 	cursor: default;
 	vertical-align: top;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* DEFAULT SINGLE POLYGON WITH ATTACHED TABBAR */
 /* polygon */
@@ -396,6 +416,7 @@ table.dhtmlxLayoutPolyContainer_dhx_web div.dhtmlxLayoutPolyProgress {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #93C0E7;
+	z-index: 1;
 }
 table.dhtmlxLayoutPolyContainer_dhx_web div.dhtmlxLayoutPolyProgressBGIMG {
 	position: absolute;
@@ -406,6 +427,7 @@ table.dhtmlxLayoutPolyContainer_dhx_web div.dhtmlxLayoutPolyProgressBGIMG {
 	background-image: url("../imgs/dhxlayout_dhx_web/dhxlayout_progress.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
+	z-index: 1;
 }
 /* progres cover global */
 div.dhtmlxLayoutPolyProgressGlobal_dhx_web {
@@ -418,6 +440,7 @@ div.dhtmlxLayoutPolyProgressGlobal_dhx_web {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #93C0E7;
+	z-index: 1;
 }
 div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_web {
 	position: absolute;
@@ -428,6 +451,7 @@ div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_web {
 	background-image: url("../imgs/dhxlayout_dhx_web/dhxlayout_progress_global.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
+	z-index: 1;
 }
 /* status bar */
 div.dhxcont_global_layout_area div.dhxcont_sb_container {
@@ -485,7 +509,11 @@ table.dhtmlxLayoutPolyContainer_dhx_web div.dhxcont_statusbar {
 	vertical-align: middle;
 	line-height: 20px;
 	height: 20px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	cursor: default;
 	padding-left: 4px;
 }
@@ -544,10 +572,14 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutSinglePoly div.dhtmlxPoly
 	font-family: Tahoma;
 	font-size: 11px;
 	font-weight: normal;
-	color: #666666;
+	color: #f5f5f5;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* vertical */
 table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBar div.dhtmlxInfoBarLabel_collapsed_hor {
@@ -563,6 +595,10 @@ table.dhtmlxLayoutPolyContainer_dhx_web td.dhtmlxLayoutSinglePoly div.dhtmlxPoly
 	color: #666666;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 

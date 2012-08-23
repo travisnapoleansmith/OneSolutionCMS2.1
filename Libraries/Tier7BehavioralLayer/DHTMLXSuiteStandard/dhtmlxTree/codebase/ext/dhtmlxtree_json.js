@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -20,7 +20,7 @@ dhtmlXTreeObject.prototype._serializeItemJSON=function(a){var b=[];if(a.unParsed
 '" '+(a.acolor?', "aCol":"'+a.acolor+'" ':"")+(a.scolor?', "sCol":"'+a.scolor+'" ':"")+(a.checkstate==1?', "checked":"1" ':a.checkstate==2?', "checked":"-1"':"")+(a.closeable?', "closeable":"1" ':"")+(this.XMLsource&&a.XMLload==0?', "child":"1" ':"")):b.push('{ "id":"'+a.id+'", '+(this._getOpenState(a)==1?' "open":"1", ':"")+(d==a.id?' "select":"1",':"")+' "text":"'+e+'"'+(this.XMLsource&&a.XMLload==0?', "child":"1" ':""));if(this._xuserData&&a._userdatalist){b.push(', "userdata":[');for(var f=a._userdatalist.split(","),
 g=[],c=0;c<f.length;c++)g.push('{ "name":"'+f[c]+'" , "content":"'+a.userData["t_"+f[c]]+'" }');b.push(g.join(","));b.push("]")}if(a.childsCount){b.push(', "item":[');g=[];for(c=0;c<a.childsCount;c++)g.push(this._serializeItemJSON(a.childNodes[c]));b.push(g.join(","));b.push("]\n")}b.push("}\n");return b.join("")};
 
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

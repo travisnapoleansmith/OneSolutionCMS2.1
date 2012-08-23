@@ -3,64 +3,94 @@
 <simpleviewergallery
 	
 	galleryStyle="MODERN"
-	title="2010 Baseball"
+	title="SimpleViewer Gallery"
 	textColor="FFFFFF"
 	frameColor="FFFFFF"
-	frameWidth="2"
-	thumbPosition="RIGHT"
+	frameWidth="20"
+	thumbPosition="LEFT"
 	thumbColumns="3"
-	thumbRows="5"
-	showOpenButton="FALSE"
-	showFullscreenButton="FALSE"	
-	maxImageWidth="300"
-	maxImageHeight="300"
+	thumbRows="3"
+	showOpenButton="TRUE"
+	showFullscreenButton="TRUE"	
+	maxImageWidth="640"
+	maxImageHeight="640"
 	useFlickr="false"
 	flickrUserName=""
 	flickrTags=""
-	languageCode="EN"
+	languageCode="AUTO"
 	languageList=""		
 	imagePath="images/"
 	thumbPath="thumbs/"
 	
 >
 
-<image imageURL="../../../../Images/baseball/2010/padres_v_as_1.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Hockey Plus Loreman's Padres Shane Perrotte (#2) slides in safe at second base with the steal. During a hard fought playoff game against the Fourth Ward Athletics. <a href="http://kcphotovideo.exposuremanager.com/g/072609_hockey_plusloremans_padres_vs_fourth_ward_as">Gallery</a></caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[Welcome to <u><a href="http://www.simpleviewer.net" target="_blank">SimpleViewer</a></u>.]]></caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_as_2.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Airborne Speedway/Hockey Plus Padres Matt Rivers (88) game one starting pitcher deliveries the fastball for strike against the Fourth Ward Athletics. The Padres would gone to sweep the Athletics 18-2 f/5 and 14-1 f/5. <a href="http://kcphotovideo.exposuremanager.com/g/072609_hockey_plusloremans_padres_vs_fourth_ward_as">Gallery</a></caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption>SimpleViewer is a free, customizable image gallery. Use it to display your images on any web page in a professional, intuitive and simple way.</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_cards_2.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Airborne Speedway/Hockey Plus Padres Joey Painter (12) slides in safe at second base during the second game of the doubleheader against the Plattsburgh Cardinals. The Cardinals would go on to sweep the Padres 8-1 and 3-0. <a href="http://kcphotovideo.exposuremanager.com/g/051610_airborne_speedway_hockey_plus_padres_vs_plattsburgh_cardinals">Gallery</a></caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption>SimpleViewer supports Universal Playback and can be viewed on Windows, Mac, Linux, iPhone, iPad and Android. Try it and see!</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_cards_3.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Airborne Speedway/Hockey Plus Padres Chris Markwicka (7) sends a long fly to left field for the hit. <a href="http://kcphotovideo.exposuremanager.com/g/051610_airborne_speedway_hockey_plus_padres_vs_plattsburgh_cardinals">Gallery</a></caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[Easily create SimpleViewer galleries using <u><a href="http://www.simpleviewer.net/simpleviewer/support/svbuilder" target="_blank">svBuilder</a></u>, our free desktop app.]]></caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_1.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Padres vs TJAXX</caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption>SimpleViewer features intuitive image navigation, smart image pre-loading and a resizable interface that scales to fit the browser window (try resizing your browser).</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_2.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Padres vs TJAXX</caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[Supports optional <b>fullscreen mode</b> and <b>external image links</b> via the Button Bar at top-right and the right-click menu.]]></caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/padres_v_tjaxx_3.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Padres vs TJAXX</caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="http://www.simpleviewer.net" linkTarget="_blank" >
+	<caption>This image use the linkURL attribute to link to a specific URL (use the arrow icon button at top-right to navigate).</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_fre_1.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs Fredonia</caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[Captions can be HTML formatted. Supported tags are <b>bold</b>, <u>underline</u>, <i>italics</i>, <u><a href="http://www.simpleviewer.net" target="_blank">hyperlinks</a></u>, linebreaks<br> and <font color="#ffff00" size="30">font tags</font>]]></caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_fre_2.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs Fredonia</caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption>Handles images with different aspect ratios. Images can be tall or wide.</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_fre_3.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs Fredonia</caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption>Images can be loaded via an XML document or directly from Flickr using a Flickr user name and/or tags..</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_np_1.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs New Paltz</caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption>3 different standard gallery styles: Modern, Classic and Compact.</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_np_2.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs New Paltz</caption>	
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption>Navigate through the images by clicking or using the keyboard: Cursor keys, Home, End, Page Up/Down.</caption>	
 </image>
-<image imageURL="../../../../Images/baseball/2010/platts_v_np_3.jpg" thumbURL="" linkURL="" linkTarget="" >
-	<caption>Plattsburgh State vs New Paltz</caption>	
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[View available <u><a href="http://www.simpleviewer.net/simpleviewer/support/standard_options.html" target="_blank">configuration options</a></u>.]]></caption>	
+</image>
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[Includes automatic international language support, and supports non-english characters<br><br>ンツを活用して広告収入を得ることが可能]]></caption>	
+</image>
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[For SimpleViewer support and documentation, view the <u><a href="http://www.simpleviewer.net/simpleviewer/support" target="_blank">SimpleViewer Support Page</a></u>.]]></caption>	
+</image>
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption><![CDATA[For advanced customization options, no download link and more - upgrade to <br><u><a href="http://www.simpleviewer.net/simpleviewer/pro" target="_blank">SimpleViewer-Pro</a></u>.]]></caption>	
+</image>
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/tall.jpg" thumbURL="thumbs/tall.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
+</image>
+<image imageURL="images/wide.jpg" thumbURL="thumbs/wide.jpg" linkURL="" linkTarget="" >
+	<caption></caption>	
 </image>
 </simpleviewergallery>

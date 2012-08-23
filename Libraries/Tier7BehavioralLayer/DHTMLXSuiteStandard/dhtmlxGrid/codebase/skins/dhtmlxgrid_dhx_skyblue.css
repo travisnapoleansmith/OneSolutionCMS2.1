@@ -1,4 +1,4 @@
-div.gridbox_dhx_skyblue .xhdr{
+div.gridbox_dhx_skyblue .ftr, div.gridbox_dhx_skyblue .xhdr{
 	background-image:url(../imgs/sky_blue_grid.gif);	
 }
 
@@ -40,24 +40,24 @@ div.gridbox_dhx_skyblue table.hdr td {
 div.gridbox_dhx_skyblue {
   border:1px solid  #A4BED4;
 }
-div.gridbox table.obj tr  td{
+div.gridbox_dhx_skyblue table.obj tr  td{
     padding-top:3px;
     padding-bottom:3px;
 }
-* html .gridbox .obj td{
+* html .gridbox_dhx_skyblue .obj td{
     height:auto;
     padding-top=3px;
     padding-bottom=3px;
 }
-div.gridbox table.obj.row20px tr  td{
+div.gridbox_dhx_skyblue table.obj.row20px tr  td{
     padding-top:0px;
     padding-bottom:0px;
 }
 
-div.gridbox table.obj tr  td.editable{
+div.gridbox_dhx_skyblue table.obj.row20px tr  td.editable{
     padding:0px;
 }
-div.gridbox table.obj tr  td.editable div.treegrid_cell{
+div.gridbox_dhx_skyblue table.obj tr  td.editable div.treegrid_cell{
 	padding-left:4px;
 	padding-top:1px;
 }

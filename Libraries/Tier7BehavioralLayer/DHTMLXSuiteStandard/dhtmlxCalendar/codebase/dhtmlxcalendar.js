@@ -27,10 +27,12 @@ function dhtmlXCalendarObject(inps, skin) {
 		inps[q] = null;
 	}
 	
-	this.skin = skin||"dhx_skyblue";
+	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue"));
+	
 	this.setSkin = function(skin){
 		this.skin = skin;
 		this.base.className = "dhtmlxcalendar_container dhtmlxcalendar_skin_"+this.skin;
+		this._ifrSize();
 	}
 	
 	// create base
@@ -103,7 +105,9 @@ function dhtmlXCalendarObject(inps, skin) {
 		if (t.className && t.className.indexOf("dhtmlxcalendar_month_arrow") === 0) {
 			that._hideSelector();
 			var ind = (t.parentNode.firstChild==t?-1:1);
+			var k0 = new Date(that._activeMonth);
 			that._drawMonth(new Date(that._activeMonth.getFullYear(), that._activeMonth.getMonth()+ind, 1, 0, 0, 0, 0));
+			that.callEvent("onArrowClick", [k0, new Date(that._activeMonth)]);
 			return;
 		}
 		// show month selector
@@ -176,6 +180,7 @@ function dhtmlXCalendarObject(inps, skin) {
 			
 			var t1 = that._activeDate.getHours();
 			var t2 = that._activeDate.getMinutes();
+			var d0 = t._date;
 			
 			// cjeck if allow to modify input
 			if (that.checkEvent("onBeforeChange")) {
@@ -188,9 +193,10 @@ function dhtmlXCalendarObject(inps, skin) {
 			}
 			
 			// update month if day from prev/next month clicked
-			var refreshView = (that._hasParent && that._activeDate.getFullYear()+"_"+that._activeDate.getMonth() != t._date.getFullYear()+"_"+t._date.getMonth());
+			var refreshView = (that._hasParent && that._activeDate.getFullYear()+"_"+that._activeDate.getMonth() != d0.getFullYear()+"_"+d0.getMonth());
 			
-			that._activeDate = new Date(t._date.getFullYear(),t._date.getMonth(),t._date.getDate(),t1,t2);
+			that._nullDate = false;
+			that._activeDate = new Date(d0.getFullYear(),d0.getMonth(),d0.getDate(),t1,t2);
 			
 			that._activeDateCell = t;
 			that._activeDateCell._css_date = true;
@@ -254,10 +260,12 @@ function dhtmlXCalendarObject(inps, skin) {
 	
 	this.showTime = function() {
 		if (String(this.base.className).search("dhtmlxcalendar_time_hidden") > 0) this.base.className = String(this.base.className).replace(/dhtmlxcalendar_time_hidden/gi,"");
+		this._ifrSize();
 	}
 	
 	this.hideTime = function() {
 		if (String(this.base.className).search("dhtmlxcalendar_time_hidden") < 0) this.base.className += " dhtmlxcalendar_time_hidden";
+		this._ifrSize();
 	}
 	
 	var ul = document.createElement("UL");
@@ -295,8 +303,13 @@ function dhtmlXCalendarObject(inps, skin) {
 	this._activeDateCell = null;
 	
 	this.setDate = function(d) {
-		if (d === "") d = new Date();
-		if (!(d instanceof Date)) d = this._strToDate(d,false);
+		
+		this._nullDate = (typeof(d) == "undefined" || d === "" || !d);
+		
+		if (!(d instanceof Date)) {
+			d = this._strToDate(String(d||""));
+			if (d == "Invalid Date") d = new Date();
+		}
 		
 		var time = d.getTime();
 		
@@ -304,12 +317,13 @@ function dhtmlXCalendarObject(inps, skin) {
 		if (this._isOutOfRange(time)) return;
 		
 		this._activeDate = new Date(time);
-		this._drawMonth(this._activeDate);
+		this._drawMonth(this._nullDate?new Date():this._activeDate);
 		this._updateVisibleHours();
 		this._updateVisibleMinutes();
 	}
 	
 	this.getDate = function(formated) {
+		if (this._nullDate) return null;
 		var t = new Date(this._activeDate.getTime());
 		if (formated) return this._dateToStr(t);
 		return t;
@@ -345,7 +359,7 @@ function dhtmlXCalendarObject(inps, skin) {
 				this.contDates.childNodes[q].childNodes[w]._q = q;
 				this.contDates.childNodes[q].childNodes[w]._w = w;
 				this.contDates.childNodes[q].childNodes[w]._css_month = (d2.getMonth()==mx);
-				this.contDates.childNodes[q].childNodes[w]._css_date = (time==dx);
+				this.contDates.childNodes[q].childNodes[w]._css_date = (!this._nullDate&&time==dx);
 				this.contDates.childNodes[q].childNodes[w]._css_weekend = (ws>=6);
 				this.contDates.childNodes[q].childNodes[w]._css_dis = this._isOutOfRange(time);
 				this.contDates.childNodes[q].childNodes[w]._css_holiday = (this._holidays[time] == true);
@@ -644,6 +658,11 @@ function dhtmlXCalendarObject(inps, skin) {
 			return;
 		}
 		
+		if (this.skin == "dhx_terrace") {
+			x += {month: 14, year:27, hours: 19, minutes: 24}[type];
+			y += {month:  8, year: 8, hours: 14, minutes: 14}[type];
+		}
+		
 		if (!this._sel || !this._sel._ta[type]) this._initSelector(type,css);
 		
 		// show selector cover
@@ -771,39 +790,123 @@ function dhtmlXCalendarObject(inps, skin) {
 		this._dateFormatRE = new RegExp(String(this._dateFormat).replace(/%[a-zA-Z]+/g,function(t){
 			var t2 = t.replace(/%/,"");
 			switch (t2) {
+				case "n":
+				case "j":
+				case "g":
+				case "G":
+					return "\\d{1,2}";
 				case "m":
 				case "d":
 				case "H":
 				case "i":
 				case "s":
+				case "y":
 					return "\\d{2}";
 				case "Y":
 					return "\\d{4}";
+				case "M":
+					return "("+that.langData[that.lang].monthesSNames.join("|").toLowerCase()+"){1,}";
+				case "F":
+					return "("+that.langData[that.lang].monthesFNames.join("|").toLowerCase()+"){1,}";
 			}
 			return t;
-		}));
+		}),"i");
 	}
 	
 	this.setDateFormat("%Y-%m-%d");
 	
-	this._strToDate = function(val,getSet,format) {
-		var i = {Y:false, m:false, d:false, H:false, i:false, s:false};
+	// get index by value
+	this._getInd = function(val,ar) {
+		for (var q=0; q<ar.length; q++) if (ar[q].toLowerCase() == val) return q;
+		return -1;
+	}
+	
+	this._strToDate = function(val, format) {
 		
-		var a = String(val).match(/[0-9]{1,}/g);
-		var b = (format||this._dateFormat).match(/%[a-zA-Z]/g);
+		format = (format||this._dateFormat);
 		
-		if (!a) return "Invalid Date";
-
-		for (var q=0; q<b.length; q++) {
-			var r = b[q].replace(/%/g,"");
-			if (typeof(i[r]) != "undefined") i[r] = Number(a[q]);
+		
+		var v = val.match(/[a-z0-9]{1,}/gi);
+		var f = format.match(/%[a-zA-Z]/g);
+		
+		if (!v || v.length != f.length) return "Invalid Date";
+		
+		// sorting
+		/*
+		Year	y,Y	1
+		Month	n,m,M,F	2
+		Day	d,j	3
+		Hours	H,G,h,g	4
+		Minutes	i	5
+		Seconds	s	6
+		*/
+		
+		var p = {"%y":1,"%Y":1,"%n":2,"%m":2,"%M":2,"%F":2,"%d":3,"%j":3,"%H":4,"%G":4,"%h":4,"%g":4,"%i":5,"%s":6};
+		var v2 = {};
+		var f2 = {};
+		for (var q=0; q<f.length; q++) {
+			if (typeof(p[f[q]]) != "undefined") {
+				var ind = p[f[q]];
+				if (!v2[ind]){v2[ind]=[];f2[ind]=[];}
+				v2[ind].push(v[q]);
+				f2[ind].push(f[q]);
+			}
+		}
+		v = [];
+		f = [];
+		for (var q=1; q<=6; q++) {
+			if (v2[q] != null) {
+				for (var w=0; w<v2[q].length; w++) {
+					v.push(v2[q][w]);
+					f.push(f2[q][w]);
+				}
+			}
 		}
 		
-		if (getSet) return i;
+		// parsing date
+		var r = new Date();
+		r.setDate(1); // fix for 31th
 		
-		for (var a in i) if (i[a] === false) i[a] = 0;
-		return new Date(i.Y,i.m-1,i.d,i.H,i.i,i.s,0);
+		for (var q=0; q<v.length; q++) {
+			
+			switch (f[q]) {
+				case "%d":
+				case "%j":
+				case "%d":
+				case "%j":
+				case "%n":
+				case "%m":
+				case "%Y":
+				case "%H":
+				case "%G":
+				case "%i":
+				case "%s":
+					if (!isNaN(v[q])) r[{"%d":"setDate","%j":"setDate","%n":"setMonth","%m":"setMonth","%Y":"setFullYear","%H":"setHours","%G":"setHours","%i":"setMinutes","%s":"setSeconds"}[f[q]]](Number(v[q])+(f[q]=="%m"||f[q]=="%n"?-1:0));
+					break;
+				case "%M":
+				case "%F":
+					var k = this._getInd(v[q].toLowerCase(),that.langData[that.lang][{"%M":"monthesSNames","%F":"monthesFNames"}[f[q]]]);
+					if (k >= 0) r.setMonth(k);
+					break;
+				case "%y":
+					if (!isNaN(v[q])) {
+						var v0 = Number(v[q]);
+						r.setFullYear(v0+(v0>50?1900:2000));
+					}
+					break;
+				case "%g":
+				case "%h":
+					if (!isNaN(v[q])) {
+						var v0 = Number(v[q]);
+						if (v0 <= 12 && v0 >= 0) r.setHours(v0+(this._getInd("pm",v)>=0?12:0));
+					}
+					break;
+
+			}
+			
+		}
 		
+		return r;
 	}
 	
 	this._dateToStr = function(val, format) {
@@ -819,7 +922,7 @@ function dhtmlXCalendarObject(inps, skin) {
 					case "%l": return that.langData[that.lang].daysFNames[val.getDay()];
 					// %W - ISO-8601 week number of year, weeks starting on Monday; 1)
 					case "%m": return z(val.getMonth()+1);
-					case "%n": return date.getMonth()+1;
+					case "%n": return val.getMonth()+1;
 					case "%M": return that.langData[that.lang].monthesSNames[val.getMonth()];
 					case "%F": return that.langData[that.lang].monthesFNames[val.getMonth()];
 					case "%y": return z(val.getYear()%100);
@@ -852,17 +955,14 @@ function dhtmlXCalendarObject(inps, skin) {
 			if (!this._dateFormatRE || !str.match(this._dateFormatRE)) return;
 		}
 		
-		var r = this._strToDate(str, true);
-		var newDate = new Date(this._activeMonth.getFullYear(), this._activeMonth.getMonth(), this._activeDate.getDate(), this._activeDate.getHours(), this._activeDate.getMinutes(), this._activeDate.getSeconds());
 		
-		if (r.Y !== false && r.Y != newDate.getFullYear()) this._activeDate.setFullYear(r.Y);
-		if (r.m !== false) {r.m--; if (r.m != newDate.getMonth()) this._activeDate.setMonth(r.m); }
-		if (r.d !== false && r.d != newDate.getDate()) this._activeDate.setDate(r.d);
-		if (r.H !== false && r.H != newDate.getHours()) this._activeDate.setHours(r.H);
-		if (r.i !== false && r.i != newDate.getMinutes()) this._activeDate.setMinutes(r.i);
-		if (r.s !== false && r.s != newDate.getSeconds()) this._activeDate.setSeconds(r.s);
+		var r = this._strToDate(str);
+		if (!(r instanceof Date)) return;
 		
-		this._drawMonth(this._activeDate);
+		this._nullDate = false;
+		this._activeDate = r;
+		
+		this._drawMonth(this._nullDate?new Date():this._activeDate);
 		
 		this._updateVisibleMinutes();
 		this._updateVisibleHours();
@@ -873,12 +973,13 @@ function dhtmlXCalendarObject(inps, skin) {
 	}
 	
 	this.setFormatedDate = function(format, str, a, return_only) {
-		var date = this._strToDate(str, false, format);
+		var date = this._strToDate(str, format);
 		if (return_only) return date;
 		this.setDate(date);
 	}
 
 	this.getFormatedDate = function(format, date) {
+		if (this._nullDate) return "";
 		if (!(date && date instanceof Date)) date = new Date(this._activeDate);
 		return this._dateToStr(date, format);
 	}
@@ -929,13 +1030,21 @@ function dhtmlXCalendarObject(inps, skin) {
 	
 	this.pos = "bottom";
 	this.setPosition = function(x, y) {
+		this._px = null;
+		this._py = null;
 		if (x == "right" || x == "bottom") {
 			this.pos = x;
-			return;
-		}
-		if (!this._hasParent) {
-			if (typeof(x) != "undefined" && !isNaN(x)) this.base.style.left = x+"px";
-			if (typeof(y) != "undefined" && !isNaN(y)) this.base.style.top = y+"px";
+		} else {
+			this.pos = "int";
+			if (typeof(x) != "undefined" && !isNaN(x)) {
+				this.base.style.left = x+"px";
+				this._px = x;
+			}
+			if (typeof(y) != "undefined" && !isNaN(y)) {
+				this.base.style.top = y+"px";
+				this._py = y;
+			}
+			this._ifrSize();
 		}
 	}
 	
@@ -945,26 +1054,37 @@ function dhtmlXCalendarObject(inps, skin) {
 			return;
 		}
 		if (!inpId) {
-			this.base.style.left = "0px";
-			this.base.style.top = "0px";
+			if (this._px && this._py) {
+				this.base.style.left = this._px+"px";
+				this.base.style.top = this._py+"px";
+			} else {
+				this.base.style.left = "0px";
+				this.base.style.top = "0px";
+			}
 		} else {
 			if (this.pos == "right") {
 				this.base.style.left = this._getLeft(this.i[inpId])+this.i[inpId].offsetWidth-1+"px";
 				this.base.style.top = this._getTop(this.i[inpId])+"px";
-			} else {
+			} else if (this.pos == "bottom") {
 				this.base.style.left = this._getLeft(this.i[inpId])+"px";
 				this.base.style.top = this._getTop(this.i[inpId])+this.i[inpId].offsetHeight-1+"px";
+			} else {
+				this.base.style.left = (this._px||0)+"px";
+				this.base.style.top = (this._py||0)+"px";
 			}
 			this._activeInp = inpId;
 		}
 		this._hideSelector();
 		this.base.style.display = "";
+		this._ifrSize();
+		if (this._ifr) this._ifr.style.display = "";
 	}
 	
 	this._hide = function() {
 		this._hideSelector();
 		this.base.style.display = "none";
 		this._activeInp = null;
+		if (this._ifr) this._ifr.style.display = "none";
 	}
 	
 	this._isVisible = function() {
@@ -1015,13 +1135,13 @@ function dhtmlXCalendarObject(inps, skin) {
 		var t = this._extractDates(d);
 		for (var q=0; q<t.length; q++) this._rangeSet[new Date(t[q].getFullYear(),t[q].getMonth(),t[q].getDate(),0,0,0,0).getTime()] = true;
 		
-		this._drawMonth(this._activeDate);
+		this._drawMonth(this._activeMonth);
 		
 	}
 	
 	this.clearInsensitiveDays = function() {
 		this._clearRangeSet();
-		this._drawMonth(this._activeDate);
+		this._drawMonth(this._activeMonth);
 	}
 	
 	this._holidays = {};
@@ -1032,7 +1152,7 @@ function dhtmlXCalendarObject(inps, skin) {
 			var t = this._extractDates(r);
 			for (var q=0; q<t.length; q++) this._holidays[new Date(t[q].getFullYear(),t[q].getMonth(),t[q].getDate(),0,0,0,0).getTime()] = true;
 		}
-		this._drawMonth(this._activeDate);
+		this._drawMonth(this._activeMonth);
 	}
 	
 	this._extractDates = function(r) {
@@ -1043,7 +1163,7 @@ function dhtmlXCalendarObject(inps, skin) {
 		for (var q=0; q<r.length; q++) {
 			if (typeof(r[q]) == "string") {
 				var e = r[q].split(",");
-				for (var w=0; w<e.length; w++) t.push(this._strToDate(e[w],false));
+				for (var w=0; w<e.length; w++) t.push(this._strToDate(e[w]));
 			} else if (r[q] instanceof Date) {
 				t.push(r[q]);
 			}
@@ -1084,13 +1204,27 @@ function dhtmlXCalendarObject(inps, skin) {
 			if (this._rangeType == "to" && time>this._rangeTo) return true;
 		}
 		
+		var t0 = new Date(time);
+		
+		if (this._rangeWeek) {
+			if (this._rangeWeekData[t0.getDay()] === true) return true;
+		}
+		
+		if (this._rangeMonth) {
+			if (this._rangeMonthData[t0.getDate()] === true) return true;
+		}
+		
+		if (this._rangeYear) {
+			if (this._rangeYearData[t0.getMonth()+"_"+t0.getDate()] === true) return true;
+		}
+		
 		return false;
 		
 	}
 	
 	this.clearSensitiveRange = function() {
 		this._clearRange();
-		this._drawMonth(this._activeDate);
+		this._drawMonth(this._activeMonth);
 	}
 	
 	this.setSensitiveRange = function(from, to, ins) {
@@ -1100,8 +1234,8 @@ function dhtmlXCalendarObject(inps, skin) {
 		// set range
 		if (from != null && to != null) {
 			
-			if (!(from instanceof Date)) from = this._strToDate(from,false);
-			if (!(to instanceof Date)) to = this._strToDate(to,false);
+			if (!(from instanceof Date)) from = this._strToDate(from);
+			if (!(to instanceof Date)) to = this._strToDate(to);
 			
 			if (from.getTime() > to.getTime()) return;
 			
@@ -1116,7 +1250,7 @@ function dhtmlXCalendarObject(inps, skin) {
 		// set range "from date"
 		if (!f && from != null && to == null) {
 			
-			if (!(from instanceof Date)) from = this._strToDate(from,false);
+			if (!(from instanceof Date)) from = this._strToDate(from);
 			this._rangeFrom = new Date(from.getFullYear(),from.getMonth(),from.getDate(),0,0,0,0).getTime();
 			this._rangeTo = null;
 			
@@ -1132,7 +1266,7 @@ function dhtmlXCalendarObject(inps, skin) {
 		// set range "to date"
 		if (!f && from == null && to != null) {
 			
-			if (!(to instanceof Date)) to = this._strToDate(to,false);
+			if (!(to instanceof Date)) to = this._strToDate(to);
 			this._rangeFrom = null;
 			this._rangeTo = new Date(to.getFullYear(),to.getMonth(),to.getDate(),0,0,0,0).getTime();
 			
@@ -1145,15 +1279,15 @@ function dhtmlXCalendarObject(inps, skin) {
 			
 		}
 		
-		if (f) this._drawMonth(this._activeDate);
+		if (f) this._drawMonth(this._activeMonth);
 	}
 	
 	this.setInsensitiveRange = function(from, to) {
 		
 		if (from != null && to != null) {
 			
-			if (!(from instanceof Date)) from = this._strToDate(from,false);
-			if (!(to instanceof Date)) to = this._strToDate(to,false);
+			if (!(from instanceof Date)) from = this._strToDate(from);
+			if (!(to instanceof Date)) to = this._strToDate(to);
 			
 			if (from.getTime() > to.getTime()) return;
 			
@@ -1162,7 +1296,7 @@ function dhtmlXCalendarObject(inps, skin) {
 			this._rangeActive = true;
 			this._rangeType = "out";
 			
-			this._drawMonth(this._activeDate);
+			this._drawMonth(this._activeMonth);
 			return;
 		}
 		
@@ -1178,13 +1312,96 @@ function dhtmlXCalendarObject(inps, skin) {
 		
 	}
 	
+	//
+	this.disableDays = function(mode, d) {
+		
+		if (mode == "week") {
+			
+			// !! works in replace mode
+			
+			if (typeof(d) != "object" && typeof(d.length) == "undefined") d = [d];
+			
+			if (!this._rangeWeekData) this._rangeWeekData = {};
+			for (var a in this._rangeWeekData) {
+				this._rangeWeekData[a] = false;
+				delete this._rangeWeekData[a];
+			}
+			
+			for (var q=0; q<d.length; q++) {
+				this._rangeWeekData[d[q]] = true;
+				if (d[q] == 7) this._rangeWeekData[0] = true;
+			}
+			this._rangeWeek = true;
+		}
+		
+		if (mode == "month") {
+			
+			// !! works in replace mode
+			
+			if (typeof(d) != "object" && typeof(d.length) == "undefined") d = [d];
+			
+			if (!this._rangeMonthData) this._rangeMonthData = {};
+			for (var a in this._rangeMonthData) {
+				this._rangeMonthData[a] = false;
+				delete this._rangeMonthData[a];
+			}
+			for (var q=0; q<d.length; q++) this._rangeMonthData[d[q]] = true;
+			
+			this._rangeMonth = true;
+		}
+		
+		if (mode == "year") {
+			
+			// !! works in replace mode
+			
+			var t = this._extractDates(d);
+			
+			if (!this._rangeYearData) this._rangeYearData = {};
+			for (var a in this._rangeYearData) {
+				this._rangeYearData[a] = false;
+				delete this._rangeYearData[a];
+			}
+			for (var q=0; q<t.length; q++) this._rangeYearData[t[q].getMonth()+"_"+t[q].getDate()] = true;
+			
+			this._rangeYear = true;
+		}
+		
+		this._drawMonth(this._activeMonth);
+	}
+	
+	this.enableDays = function(mode) {
+		
+		if (mode == "week") {
+			this._rangeWeek = false;
+		}
+		
+		if (mode == "month") {
+			this._rangeMonth = false;
+		}
+		
+		if (mode == "year") {
+			this._rangeYear = false;
+		}
+		
+		this._drawMonth(this._activeMonth);
+	}
+	
+	this._updateFromInput = function(t) {
+		if (this._nullInInput && ((t.value).replace(/\s/g,"")).length == 0) {
+			this.setDate(null);
+		} else {
+			this._updateDateStr(t.value);
+		}
+		t = null;
+	}
+	
 	// global events
 	this._doOnClick = function(e) {
 		e = e||event;
 		var t = (e.target||e.srcElement);
 		// completely close alien calendar (both selector and container) inly if any assigned input clicked
 		// otherwise hide selector and container separately
-		if (t._dhtmlxcalendar_uid && t._dhtmlxcalendar_uid != that._activeInp && that._isVisible()) {
+		if (t._dhtmlxcalendar_uid && t._dhtmlxcalendar_uid != that._activeInp && that._isVisible()&&that._activeInp) {
 			that._hide();
 			return;
 		}
@@ -1195,7 +1412,7 @@ function dhtmlXCalendarObject(inps, skin) {
 	
 	this._doOnKeyDown = function(e) {
 		e = e||event;
-		if (e.keyCode == 27) {
+		if (e.keyCode == 27 || e.keyCode == 13) {
 			if (that._isSelectorVisible()) that._hideSelector(); else if (that._isVisible() && !that._hasParent) that._hide();
 		}
 	}
@@ -1205,7 +1422,9 @@ function dhtmlXCalendarObject(inps, skin) {
 		e = e||event;
 		var t = (e.target||e.srcElement);
 		if (!t._dhtmlxcalendar_uid) return;
-		that._updateDateStr(t.value);
+		if (!that._listenerEnabled) {
+			that._updateFromInput(t);
+		}
 		that._show(t._dhtmlxcalendar_uid, true);
 	}
 	
@@ -1214,11 +1433,11 @@ function dhtmlXCalendarObject(inps, skin) {
 		var t = (e.target||e.srcElement);
 		if (e.keyCode == 13 || !t._dhtmlxcalendar_uid) return;  // do nothing on esc key
 		// otherwise try to update calendar's date
-		that._updateDateStr(t.value);
+		if (!that._listenerEnabled) that._updateFromInput(t);
 	}
 	
 	this._doOnUnload = function() {
-		that.unload();
+		if (that && that.unload) that.unload();
 	}
 	
 	if (window.addEventListener) {
@@ -1232,12 +1451,14 @@ function dhtmlXCalendarObject(inps, skin) {
 	}
 	
 	this.attachObj = function(obj) {
+		if (typeof(obj) == "string") obj = document.getElementById(obj);
 		var a = this.uid();
 		this.i[a] = obj;
 		this._attachEventsToObject(a);
 	}
 	
 	this.detachObj = function(obj) {
+		if (typeof(obj) == "string") obj = document.getElementById(obj);
 		var a = obj._dhtmlxcalendar_uid;
 		if (this.i[a] != null) {
 			this._detachEventsFromObject(a);
@@ -1256,6 +1477,27 @@ function dhtmlXCalendarObject(inps, skin) {
 			this.i[a].attachEvent("onclick", that._doOnInpClick);
 			this.i[a].attachEvent("onkeyup", that._doOnInpKeyUp);
 		}
+	}
+	
+	this.enableListener = function(t) {
+		this._listenerEnabled = true;
+		this._startListener(t);
+	}
+	
+	this.disableListener = function(t) {
+		this._listenerEnabled = false;
+		//this._stopListener(t);
+	}
+	
+	// form tracking
+	this._startListener = function(t) {
+		if (typeof(t._v1) == "undefined") t._v1 = t.value;
+		if (t._v1 != t.value) {
+			this._updateFromInput(t);
+			t._v1 = t.value;
+		}
+		if (this._tmListener) window.clearTimeout(this._tmListener);
+		this._tmListener = window.setTimeout(function(){that._startListener(t);},10);
 	}
 	
 	this._detachEventsFromObject = function(a) {
@@ -1320,6 +1562,9 @@ function dhtmlXCalendarObject(inps, skin) {
 		this.uid = null;
 		this.uidd = null;
 		
+		if (this._tmListener) window.clearTimeout(this._tmListener);
+		this._tmListener = null;
+		
 		/* main events */
 		
 		if (window.addEventListener) {
@@ -1341,7 +1586,6 @@ function dhtmlXCalendarObject(inps, skin) {
 		for (var a in this.i) {
 			// marker
 			this.i[a]._dhtmlxcalendar_uid = null;
-			delete this.i[a]._dhtmlxcalendar_uid;
 			
 			// events
 			if (window.addEventListener) {
@@ -1659,6 +1903,39 @@ dhtmlXCalendarObject.prototype.langData = {
 		daysFNames: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
 		daysSNames: ["Su","Mo","Tu","We","Th","Fr","Sa"],
 		weekstart: 1
+	}
+};
+
+dhtmlXCalendarObject.prototype.enableIframe = function(mode) {
+	if (mode == true) {
+		if (!this._ifr) {
+			this._ifr = document.createElement("IFRAME");
+			this._ifr.frameBorder = 0;
+			this._ifr.border = 0;
+			this._ifr.setAttribute("src","javascript:false;");
+			this._ifr.className = "dhtmlxcalendar_ifr";
+			this._ifr.onload = function(){
+				this.onload = null;
+				this.contentWindow.document.open("text/html", "replace");
+				this.contentWindow.document.write("<html><head><style>html,body{width:100%;height:100%;overflow:hidden;margin:0px;}</style></head><body</body></html>");
+			}
+			this.base.parentNode.insertBefore(this._ifr, this.base);
+			this._ifrSize();
+		}
+	} else {
+		if (this._ifr) {
+			this._ifr.parentNode.removeChild(this._ifr);
+			this._ifr = null;
+		}
+	}
+};
+
+dhtmlXCalendarObject.prototype._ifrSize = function() {
+	if (this._ifr) {
+		this._ifr.style.left = this.base.style.left;
+		this._ifr.style.top = this.base.style.top;
+		this._ifr.style.width = this.base.offsetWidth+"px";
+		this._ifr.style.height = this.base.offsetHeight+"px";
 	}
 };
 

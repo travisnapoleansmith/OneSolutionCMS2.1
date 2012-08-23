@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -216,6 +216,12 @@ dragContext.prototype.data=function(){
     else
         return this.tobj.gridToGrid(this.sid,this.sobj,this.tobj);
 }
+dragContext.prototype.attrs=function(){
+    if (this.source=="tree")
+        return {};
+    else
+        return this.sobj.rowsAr[this.sid]._attrs;
+}
 dragContext.prototype.childs=function(){
     if (this.source=="treeGrid")
 		return this.sobj._h2.get[this.sid]._xml_await?this.sobj._h2.get[this.sid].has_kids:null;
@@ -250,7 +256,7 @@ dragContext.prototype.pid=function(){
 *   @type:  private
 */
 dragContext.prototype.ind=function(){ 
-    if (this.tid==window.unknown) return 0;
+    if (this.tid==window.unknown) return this.tobj.rowsBuffer.length;
     if (this.target=="treeGrid"){
       if (this.dropmode=="child")
             this.tobj.openItem(this.tid);
@@ -405,6 +411,8 @@ dhtmlXGridObject.prototype._dragRoutine=function(c){
 			}
 		else
         	new_row=c.uid().tobj.addRow(c.nid,c.data(),c.ind(),c.pid(),c.img(),c.childs());
+
+          new_row._attrs = c.attrs();
 		
 		
         if (c.source=="tree"){

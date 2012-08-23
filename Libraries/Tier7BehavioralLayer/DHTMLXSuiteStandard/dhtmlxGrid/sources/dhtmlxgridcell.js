@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -404,14 +404,6 @@ function eXcell_ed(cell){
 		this.cell.innerHTML="";
 		this.cell.appendChild(this.obj);
 
-		if (_isFF && !window._KHTMLrv){
-			this.obj.style.overflow="visible";
-
-			if ((this.grid.multiLine)&&(this.obj.offsetHeight >= 18)&&(this.obj.offsetHeight < 40)){
-				this.obj.style.height="36px";
-				this.obj.style.overflow="scroll";
-			}
-		}
 		this.obj.onselectstart=function(e){
 			if (!e)
 				e=event;
@@ -890,6 +882,9 @@ function eXcell_co(cell){
 		this.obj.onclick=function(e){
 			(e||event).cancelBubble=true
 		}
+		this.obj.onmousedown=function(e){
+			(e||event).cancelBubble=true
+		}
 		this.obj.value=this.text
 		this.obj.onselectstart=function(e){
 			if (!e)
@@ -1124,7 +1119,7 @@ function eXcell_cp(cell){
 		this.colorPanel(4, this.obj)
 		document.body.appendChild(this.obj);          //this.grid.objBox.appendChild(this.obj);
 		this.obj.style.left=arPos[0]+"px";
-		this.obj.style.zIndex=1;
+		this.obj.style.zIndex=1000;
 		this.obj.style.top=arPos[1]+this.cell.offsetHeight+"px";
 	}
 	this.toolDNum=function(value){

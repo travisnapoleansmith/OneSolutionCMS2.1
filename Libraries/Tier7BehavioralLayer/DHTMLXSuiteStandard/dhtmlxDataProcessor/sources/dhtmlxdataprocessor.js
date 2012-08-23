@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -225,6 +225,8 @@ dataProcessor.prototype={
     				keys.push(key);
 				}
     		stack.push("ids="+this.escape(keys.join(",")));
+    		if (dhtmlx.security_key)
+				stack.push("dhx_security="+dhtmlx.security_key);
     		return stack.join("&");
     	}
     },

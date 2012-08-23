@@ -78,7 +78,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlx
 	vertical-align: middle;
 	cursor: default;
 	position: absolute;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedVer div.dhtmlxInfoBarLabel {
 	display: none;
@@ -272,7 +276,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutPolySplitterHor {
 	height: 5px;
 	line-height: 5px;
 	cursor: n-resize;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-image: url("../imgs/dhxlayout_dhx_skyblue/dhxlayout_drag_hor.gif") !important;
 	background-repeat: no-repeat !important;
 	background-position: center center !important;
@@ -285,7 +293,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutPolySplitterHorInacti
 	height: 5px;
 	line-height: 5px;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	vertical-align: top;
 	background-color: #ebebeb;
 }
@@ -299,7 +311,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutPolySplitterVer {
 	background-position: 50% center !important;
 	background-color: #ebebeb;
 	vertical-align: top;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* ver-based splitter inactive */
 table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutPolySplitterVerInactive {
@@ -308,7 +324,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutPolySplitterVerInacti
 	cursor: default;
 	background-color: #ebebeb;
 	vertical-align: top;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* DEFAULT SINGLE POLYGON WITH ATTACHED TABBAR */
 /* polygon */
@@ -418,6 +438,7 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue div.dhtmlxLayoutPolyProgress {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #93C0E7;
+	z-index: 1;
 }
 table.dhtmlxLayoutPolyContainer_dhx_skyblue div.dhtmlxLayoutPolyProgressBGIMG {
 	position: absolute;
@@ -428,6 +449,7 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue div.dhtmlxLayoutPolyProgressBGIMG {
 	background-image: url("../imgs/dhxlayout_dhx_skyblue/dhxlayout_progress.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
+	z-index: 1;
 }
 /* progres cover global */
 div.dhtmlxLayoutPolyProgressGlobal_dhx_skyblue {
@@ -440,6 +462,7 @@ div.dhtmlxLayoutPolyProgressGlobal_dhx_skyblue {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #93C0E7;
+	z-index: 1;
 }
 div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_skyblue {
 	position: absolute;
@@ -450,7 +473,7 @@ div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_skyblue {
 	background-image: url("../imgs/dhxlayout_dhx_skyblue/dhxlayout_progress_global.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
-	z-index:1;
+	z-index: 1;
 }
 /* status bar */
 div.dhxcont_global_layout_area div.dhxcont_sb_container {
@@ -516,7 +539,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue div.dhxcont_statusbar {
 	vertical-align: middle;
 	line-height: 20px;
 	height: 20px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	cursor: default;
 	padding-left: 4px;
 }
@@ -612,7 +639,11 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlx
 	color: #666666;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* vertical */
 table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBar div.dhtmlxInfoBarLabel_collapsed_hor {
@@ -620,14 +651,36 @@ table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlx
 }
 table.dhtmlxLayoutPolyContainer_dhx_skyblue td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedVer div.dhtmlxInfoBarLabel_collapsed_hor {
 	position: absolute;
+	/*
 	top: 28px;
 	left: 0px;
+	*/
 	font-family: Tahoma;
 	font-size: 11px;
 	font-weight: normal;
 	color: #666666;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	/* rotate */
+	bottom: -12px;
+	height: 18px;
+	line-height: 18px;
+	vertical-align: middle;
+	left: 0px;
+	overflow: hidden;
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-moz-transform-origin: left top;
+	
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	
+	@bottom=4px;
+	
+	
 }
 

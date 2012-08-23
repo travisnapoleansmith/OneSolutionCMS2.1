@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -46,19 +46,117 @@ function dhtmlXToolbarObject(baseId, skin) {
 		}
 	}
 	
+	this.iconSize = 18;
+	this.setIconSize = function(size) {
+		this.iconSize = ({18:true,24:true,32:true,48:true}[size]?size:18);
+		this.setSkin(this.skin, true);
+		this.callEvent("_onIconSizeChange",[this.iconSize]);
+	}
+	
 	this.selectPolygonOffsetTop = 0;
 	this.selectPolygonOffsetLeft = 0;
 	
-	this.setSkin = function(skin) {
-		this.skin = skin;
-		if (this.skin == "dhx_skyblue") {
-			this.selectPolygonOffsetTop = 2;
+	this._improveTerraceSkin = function(id) {
+		
+		var k = null;
+		if (id != null) { k={};k[id]=id; }
+		
+		var bn = {buttonInput: true, separator: true, text: true}; // border-less items
+		
+		for (var a in (k||this.objPull)) {
+			
+			if (this.objPull[a] != null && this.objPull[a].obj != null) {
+				
+				if (this.objPull[a].type == "buttonInput") {
+					this.objPull[a].obj.className = this.objPull[a].obj.className.replace(/dhx_toolbar_btn/,"dhx_toolbar_inp");
+				}
+				
+				// if item is buttonSelect - node should be an array (border-right only)
+				var node = this.objPull[a][this.objPull[a].type=="buttonSelect"?"arw":"obj"];
+				
+				// check if border-right/border-left needed
+				var br = false;
+				var bl = false;
+				if (!bn[this.objPull[a].type]) {
+					// right side
+					
+					// last-child
+					if (node == node.parentNode.lastChild) {
+						br = true;
+					}
+					// next-sibling is borderless item
+					if (node.nextSibling != null) {
+						var pType = null;
+						for (var b in this.objPull) {
+							if (this.objPull[b].obj == node.nextSibling) pType = this.objPull[b].type;
+						}
+						if (bn[pType]) br = true;
+					}
+					
+					// left side
+					
+					// first-child
+					if (this.objPull[a].obj == node.parentNode.firstChild) {
+						bl = true;
+					}
+					// prev-sibling is borderless item
+					if (this.objPull[a].obj.previousSibling != null) {
+						var pType = null;
+						for (var b in this.objPull) {
+							if (this.objPull[b].obj == this.objPull[a].obj.previousSibling) pType = this.objPull[b].type;
+						}
+						if (bn[pType]) bl = true;
+					}
+					
+				}
+				
+				node.style.borderRight = (br?"1px solid #cecece":"");
+				node.style.borderTopRightRadius = node.style.borderBottomRightRadius = (br?"5px":"0px");
+				
+				this.objPull[a].obj.style.borderTopLeftRadius = this.objPull[a].obj.style.borderBottomLeftRadius = (bl?"5px":"0px");
+				
+				this.objPull[a].obj._br = br;
+				this.objPull[a].obj._bl = bl;
+				
+				node = null;
+			}
+			
 		}
-		if (this.skin == "dhx_web") {
-			this.selectPolygonOffsetTop = 1;
-			this.selectPolygonOffsetLeft = 1;
+	}
+	
+	// enable/disable riunded corners when sublist opened
+	this._improveTerraceButtonSelect = function(id, state) {
+		var item = this.objPull[id];
+		if (state == true) {
+			item.obj.style.borderBottomLeftRadius = (item.obj._bl?"5px":"0px");
+			item.arw.style.borderBottomRightRadius = (item.obj._br?"5px":"0px");
+		} else {
+			item.obj.style.borderBottomLeftRadius = "0px";
+			item.arw.style.borderBottomRightRadius = "0px";
 		}
-		this.cont.className = "dhx_toolbar_base_"+this.skin+(this.rtl?" rtl":"");
+		item = null;
+	}
+	
+	this.setSkin = function(skin, onlyIcons) {
+		if (onlyIcons === true) {
+			// prevent of removing skin postfixes when attached to layout/acc/etc
+			this.cont.className = this.cont.className.replace(/dhx_toolbar_base_\d{1,}_/,"dhx_toolbar_base_"+this.iconSize+"_");
+		} else {
+			this.skin = skin;
+			if (this.skin == "dhx_skyblue") {
+				this.selectPolygonOffsetTop = 1;
+			}
+			if (this.skin == "dhx_web") {
+				this.selectPolygonOffsetTop = 1;
+				this.selectPolygonOffsetLeft = 1;
+			}
+			if (this.skin == "dhx_terrace") {
+				this.selectPolygonOffsetTop = -1;
+				this.selectPolygonOffsetLeft = 0;
+			}
+			this.cont.className = "dhx_toolbar_base_"+this.iconSize+"_"+this.skin+(this.rtl?" rtl":"");
+		}
+		
 		for (var a in this.objPull) {
 			var item = this.objPull[a];
 			if (item["type"] == "slider") {
@@ -67,18 +165,19 @@ function dhtmlXToolbarObject(baseId, skin) {
 				item.label.className = "dhx_toolbar_slider_label_"+this.skin+(this.rtl?" rtl":"");
 			}
 			if (item["type"] == "buttonSelect") {
-				item.polygon.className = "dhx_toolbar_poly_"+this.skin+(this.rtl?" rtl":"");
+				item.polygon.className = "dhx_toolbar_poly_"+this.iconSize+"_"+this.skin+(this.rtl?" rtl":"");
 			}
 		}
+		if (skin == "dhx_terrace") this._improveTerraceSkin();
 	}
-	this.setSkin(skin==null?"dhx_skyblue":skin);
+	this.setSkin(skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue"));
 	
 	this.objPull = {};
 	this.anyUsed = "none";
 	
 	/* images */
 	this.imagePath = "";
-		/**
+	/**
 	*   @desc: set path to used images
 	*   @param: path - path to images on harddisk
 	*   @type: public
@@ -130,7 +229,7 @@ function dhtmlXToolbarObject(baseId, skin) {
 			buttonSelect nested item: enabled, disabled, action, selected, img, text, itemText(nested), userdata(nested)
 			
 		*/
-		var t = ["id", "type", "hidden", "title", "text", "enabled", "img", "imgdis", "action", "openAll", "renderSelect", "maxOpen", "width", "value", "selected", "length", "textMin", "textMax", "toolTip", "valueMin", "valueMax", "valueNow"];
+		var t = ["id", "type", "hidden", "title", "text", "enabled", "img", "imgdis", "action", "openAll", "renderSelect", "mode", "maxOpen", "width", "value", "selected", "length", "textMin", "textMax", "toolTip", "valueMin", "valueMax", "valueNow"];
 		var p = ["id", "type", "enabled", "disabled", "action", "selected", "img", "text"];
 		//
 		for (var q=0; q<root.childNodes.length; q++) {
@@ -169,6 +268,7 @@ function dhtmlXToolbarObject(baseId, skin) {
 				main_self._addItemToStorage(itemData);
 			}
 		}
+		if (main_self.skin == "dhx_terrace") main_self._improveTerraceSkin();
 		main_self.callEvent("onXLE", []);
 		main_self._doOnLoad();
 		this.destructor();
@@ -178,6 +278,7 @@ function dhtmlXToolbarObject(baseId, skin) {
 		var type = (itemData.type||"");
 		if (type != "") {
 			if (this["_"+type+"Object"] != null) {
+				if ((typeof(itemData.openAll) == "undefined" || itemData.openAll == null) && this.skin == "dhx_terrace") itemData.openAll = true;
 				this.objPull[this.idPrefix+id] = new this["_"+type+"Object"](this, id, itemData);
 				this.objPull[this.idPrefix+id]["type"] = type;
 				this.setPosition(id, pos);
@@ -266,7 +367,7 @@ function dhtmlXToolbarObject(baseId, skin) {
 	this._disableItem = function(item) {
 		if (!item.state) return;
 		item.state = false;
-		item.obj.className = "dhx_toolbar_btn dis";
+		item.obj.className = "dhx_toolbar_btn "+(this.objPull[item.id]["type"]=="buttonTwoState"&&item.obj.pressed?"pres_":"")+"dis";
 		item.obj.renderAs = "dhx_toolbar_btn def";
 		if (item.arw) item.arw.className = String(item.obj.className).replace("btn","arw");
 		var imgObj = this._getObj(item.obj, "img");
@@ -282,6 +383,8 @@ function dhtmlXToolbarObject(baseId, skin) {
 			if (item.polygon.style.display != "none") {
 				item.polygon.style.display = "none";
 				if (item.polygon._ie6cover) item.polygon._ie6cover.style.display = "none";
+				// fix border
+				if (this.skin == "dhx_terrace") this._improveTerraceButtonSelect(item.id, true);
 			}
 		}
 		this.anyUsed = "none";
@@ -311,6 +414,8 @@ function dhtmlXToolbarObject(baseId, skin) {
 					main_self.anyUsed = "none";
 					item.polygon.style.display = "none";
 					if (item.polygon._ie6cover) item.polygon._ie6cover.style.display = "none";
+					// fix border
+					if (main_self.skin == "dhx_terrace") main_self._improveTerraceButtonSelect(item.id, true);
 				}
 			}
 		});
@@ -342,6 +447,7 @@ dhtmlXToolbarObject.prototype.addSpacer = function(nextToId) {
 				}
 			}
 			this._spacer.idd = nextToId;
+			this._fixSpacer();
 			return;
 		}
 		// if this.base contain nextToId item, move (insertBefore[0])
@@ -355,6 +461,7 @@ dhtmlXToolbarObject.prototype.addSpacer = function(nextToId) {
 				if (doMove) { if (this._spacer.childNodes.length > 0) this._spacer.insertBefore(this.base.childNodes[q], this._spacer.childNodes[0]); else this._spacer.appendChild(this.base.childNodes[q]); }
 			}
 			this._spacer.idd = nextToId;
+			this._fixSpacer();
 			return;
 		}
 		
@@ -373,14 +480,25 @@ dhtmlXToolbarObject.prototype.addSpacer = function(nextToId) {
 			this._spacer.idd = nextToId;
 			while (this.base.childNodes.length > np+1) this._spacer.appendChild(this.base.childNodes[np+1]);
 			this.cont.appendChild(this._spacer);
+			this._fixSpacer();
 		}
 	}
+	if (this.skin == "dhx_terrace") this._improveTerraceSkin();
 }
 dhtmlXToolbarObject.prototype.removeSpacer = function() {
 	if (!this._spacer) return;
 	while (this._spacer.childNodes.length > 0) this.base.appendChild(this._spacer.childNodes[0]);
 	this._spacer.parentNode.removeChild(this._spacer);
 	this._spacer = null;
+	if (this.skin == "dhx_terrace") this._improveTerraceSkin();
+}
+dhtmlXToolbarObject.prototype._fixSpacer = function() {
+	// IE icons mixing fix
+	if (_isIE && this._spacer != null) {
+		this._spacer.style.borderLeft = "1px solid #a4bed4";
+		var k = this._spacer;
+		window.setTimeout(function(){k.style.borderLeft="0px solid #a4bed4";k=null;},1);
+	}
 }
 
 /**
@@ -425,6 +543,7 @@ dhtmlXToolbarObject.prototype.getParentId = function(listId) {
 /* adding items */
 dhtmlXToolbarObject.prototype._addItem = function(itemData, pos) {
 	this._addItemToStorage(itemData, pos);
+	if (this.skin == "dhx_terrace") this._improveTerraceSkin();
 }
 /**
 *   @desc: adds a button to webbar
@@ -533,6 +652,7 @@ dhtmlXToolbarObject.prototype.addSlider = function(id, pos, len, valueMin, value
 */
 dhtmlXToolbarObject.prototype.addInput = function(id, pos, value, width) {
 	this._addItem({id:id,type:"buttonInput",value:value,width:width}, pos);
+	// if (this.skin == "dhx_terrace") this._improveTerraceSkin(id);
 }
 /**
 *   @desc: iterator, calls user handler for each item
@@ -547,7 +667,7 @@ dhtmlXToolbarObject.prototype.forEachItem = function(handler) {
 	}
 };
 (function(){
-	var list="showItem,hideItem,isVisible,enableItem,disableItem,isEnabled,setItemText,getItemText,setItemToolTip,getItemToolTip,setItemImage,setItemImageDis,clearItemImage,clearItemImageDis,setItemState,getItemState,setItemToolTipTemplate,getItemToolTipTemplate,setValue,getValue,setMinValue,getMinValue,setMaxValue,getMaxValue,setWidth,getWidth,setMaxOpen".split(",")
+	var list="showItem,hideItem,isVisible,enableItem,disableItem,isEnabled,setItemText,getItemText,setItemToolTip,getItemToolTip,getInput,setItemImage,setItemImageDis,clearItemImage,clearItemImageDis,setItemState,getItemState,setItemToolTipTemplate,getItemToolTipTemplate,setValue,getValue,setMinValue,getMinValue,setMaxValue,getMaxValue,setWidth,getWidth,setMaxOpen".split(",")
 	var ret=["","",false,"","",false,"","","","","","","","","",false,"","","",null,"",[null,null],"",[null,null],"",null]
 	var functor=function(name,res){
 			return function(itemId,a,b){
@@ -824,8 +944,8 @@ dhtmlXToolbarObject.prototype._getIdByPosition = function(pos, retRealPos) {
 *   @type: public
 */
 dhtmlXToolbarObject.prototype.removeItem = function(itemId) {
-	
 	this._removeItem(itemId);
+	if (this.skin == "dhx_terrace") this._improveTerraceSkin();
 };
 
 dhtmlXToolbarObject.prototype._removeItem = function(itemId) {
@@ -1553,8 +1673,19 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 	this.imgEn = (data.img||"");
 	this.imgDis = (data.imgdis||"");
 	this.img = (this.state?(this.imgEn!=""?this.imgEn:""):(this.imgDis!=""?this.imgDis:""));
-	this.openAll = (data.openAll!=null);
+	
+	this.mode = (data.mode||"button"); // button, select
+	if (this.mode == "select") {
+		this.openAll = true;
+		this.renderSelect = false;
+		if (!data.text||data.text.length==0) data.text = "&nbsp;"
+	} else {
+		this.openAll = (data.openAll!=null);
+		this.renderSelect = (data.renderSelect!=null?(data.renderSelect=="false"||data.renderSelect=="disabled"?false:true):true);
+	}
 	this.maxOpen = (!isNaN(data.maxOpen?data.maxOpen:"")?data.maxOpen:null);
+	
+	
 	
 	this._maxOpenTest = function() {
 		if (!isNaN(this.maxOpen)) {
@@ -1579,7 +1710,7 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 	this.obj = document.createElement("DIV");
 	this.obj.allowClick = false;
 	this.obj.extAction = (data.action||null);
-	this.obj.className = "dhx_toolbar_btn def";
+	this.obj.className = "dhx_toolbar_btn "+(this.state?"def":"dis");
 	this.obj.style.display = (data.hidden!=null?"none":"");
 	this.obj.renderAs = this.obj.className;
 	this.obj.onselectstart = function(e) { e = e||event; e.returnValue = false; }
@@ -1589,7 +1720,7 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 	
 	this.callEvent = false;
 	
-	this.renderSelect = (data.renderSelect!=null?(data.renderSelect=="false"||data.renderSelect=="disabled"?false:true):true);
+	
 	
 	this.obj.innerHTML = that._rtlParseBtn((this.img!=""?"<img src='"+that.imagePath+this.img+"'>":""),(data.text!=null?"<div>"+data.text+"</div>":""));
 	
@@ -1597,7 +1728,7 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 	that.base.appendChild(this.obj);
 	
 	this.arw = document.createElement("DIV");
-	this.arw.className = "dhx_toolbar_arw def";
+	this.arw.className = "dhx_toolbar_arw "+(this.state?"def":"dis");;
 	this.arw.style.display = this.obj.style.display;
 	this.arw.innerHTML = "<div class='arwimg'>&nbsp;</div>";
 	
@@ -1679,6 +1810,8 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 			that.anyUsed = "none";
 			self.polygon.style.display = "none";
 			if (self.polygon._ie6cover) self.polygon._ie6cover.style.display = "none";
+			// fix border
+			if (that.skin == "dhx_terrace") that._improveTerraceButtonSelect(self.id, true);
 		} else { 
 			if (that.anyUsed != "none") {
 				if (that.objPull[that.idPrefix+that.anyUsed]["type"] == "buttonSelect") {
@@ -1689,6 +1822,8 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 						item.arw.className = String(self.obj.renderAs).replace("btn","arw");
 						item.polygon.style.display = "none";
 						if (item.polygon._ie6cover) item.polygon._ie6cover.style.display = "none";
+						// fix border
+						if (that.skin == "dhx_terrace") that._improveTerraceButtonSelect(item.id, true);
 					}
 				}
 			}
@@ -1699,6 +1834,8 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 			self.polygon.style.top = "0px";
 			self.polygon.style.visibility = "hidden";
 			self.polygon.style.display = "";
+			// fix border
+			if (that.skin == "dhx_terrace") that._improveTerraceButtonSelect(self.id, false);
 			// check maxOpen
 			self._fixMaxOpenHeight(self.maxOpen||null);
 			// detect overlay by Y axis
@@ -1707,8 +1844,11 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 			var newTop = getAbsoluteTop(self.obj)+self.obj.offsetHeight+that.selectPolygonOffsetTop;
 			var newH = self.polygon.offsetHeight;
 			if (newTop + newH > that.tY2) {
-				if (true) {
-					self._fixMaxOpenHeight(Math.floor((that.tY2-newTop)/22));
+				// if maxOpen mode enabled, check if at bottom at least one item can be shown
+				// and show it, if no space - show on top. in maxOpen mode not enabled, show at top
+				var k0 = (self.maxOpen!=null?Math.floor((that.tY2-newTop)/22):0); // k0 = count of items that can be visible
+				if (k0 >= 1) {
+					self._fixMaxOpenHeight(k0);
 				} else {
 					newTop = getAbsoluteTop(self.obj)-newH-that.selectPolygonOffsetTop;
 					if (newTop < 0) newTop = 0;
@@ -1835,8 +1975,10 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 		}
 		
 		// image
-		if (data.img != null)
+		if (data.img != null) {
 			this.obj.td_a.innerHTML = "<img class='btn_sel_img' src='"+that.imagePath+data.img+"' border='0'>";
+			this.obj.tr._img = data.img;
+		}
 		
 		// text
 		var itemText = (data.text!=null?data.text:(data.itemText||""));
@@ -1875,6 +2017,8 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 			self.arw.className = String(self.obj.renderAs).replace("btn","arw");
 			self.polygon.style.display = "none";
 			if (self.polygon._ie6cover) self.polygon._ie6cover.style.display = "none";
+			// fix border
+			if (that.skin == "dhx_terrace") that._improveTerraceButtonSelect(self.id, true);			
 			that.anyUsed = "none";
 			// event
 			var id = this.idd.replace(that.idPrefix,"");
@@ -1892,7 +2036,7 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 	this.polygon.dir = "ltr";
 	this.polygon.style.display = "none";
 	this.polygon.style.zIndex = 101;
-	this.polygon.className = "dhx_toolbar_poly_"+that.skin+(that.rtl?" rtl":"");
+	this.polygon.className = "dhx_toolbar_poly_"+that.iconSize+"_"+that.skin+(that.rtl?" rtl":"");
 	this.polygon.onselectstart = function(e) { e = e||event; e.returnValue = false; }
 	this.polygon.style.overflowY = "auto";
 	
@@ -2150,6 +2294,11 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 				if (a == id) {
 					item.tr._selected = true;
 					item.tr.className = "tr_btn"+(this.renderSelect?" tr_btn_selected":"");
+					//
+					if (this.mode == "select") {
+						if (item.tr._img) this.setItemImage(item.tr._img); else this.clearItemImage();
+						this.setItemText(this.getListOptionText(id));
+					}
 				} else {
 					item.tr._selected = false;
 					item.tr.className = "tr_btn";
@@ -2180,6 +2329,11 @@ dhtmlXToolbarObject.prototype._buttonSelectObject = function(that, id, data) {
 		}
 		this.maxOpen = null;
 	}
+	
+	if (data.width) this.setWidth(data.width);
+	
+	if (this.mode == "select" && typeof(data.selected) != "undefined") this.setListOptionSelected(data.selected);
+	
 	//
 	return this;
 }
@@ -2199,7 +2353,7 @@ dhtmlXToolbarObject.prototype._buttonInputObject = function(that, id, data) {
 	this.obj.w = (data.width!=null?data.width:100);
 	this.obj.title = (data.title!=null?data.title:"");
 	//
-	this.obj.innerHTML = "<input class='inp' type='text' style='-moz-user-select:text;width:"+this.obj.w+"px;'"+(data.value!=null?"' value='"+data.value+"'":"")+">";
+	this.obj.innerHTML = "<input class='inp' type='text' style='-moz-user-select:text;width:"+this.obj.w+"px;'"+(data.value!=null?" value='"+data.value+"'":"")+">";
 	
 	var th = that;
 	var self = this;
@@ -2247,6 +2401,9 @@ dhtmlXToolbarObject.prototype._buttonInputObject = function(that, id, data) {
 	this.getItemToolTip = function() {
 		return this.obj.title;
 	}
+	this.getInput = function() {
+		return this.obj.firstChild;
+	}
 	//
 	return this;
 }
@@ -2265,7 +2422,7 @@ dhtmlXToolbarObject.prototype._buttonTwoStateObject = function(that, id, data) {
 	this.obj = document.createElement("DIV");
 	this.obj.pressed = (data.selected!=null);
 	this.obj.extAction = (data.action||null);
-	this.obj.className = "dhx_toolbar_btn "+(this.obj.pressed?(this.state?"pres":"dis"):(this.state?"def":"dis"));
+	this.obj.className = "dhx_toolbar_btn "+(this.obj.pressed?"pres"+(this.state?"":"_dis"):(this.state?"def":"dis"));
 	this.obj.style.display = (data.hidden!=null?"none":"");
 	this.obj.renderAs = this.obj.className;
 	this.obj.idd = String(id);
@@ -2285,29 +2442,37 @@ dhtmlXToolbarObject.prototype._buttonTwoStateObject = function(that, id, data) {
 	this.obj._doOnMouseOver = function() {
 		if (obj.state == false) return;
 		if (that.anyUsed != "none") return;
-		if (this.pressed) return;
+		if (this.pressed) {
+			this.renderAs = "dhx_toolbar_btn over";
+			return;
+		}
 		this.className = "dhx_toolbar_btn over";
 		this.renderAs = this.className;
 	}
 	this.obj._doOnMouseOut = function() {
 		if (obj.state == false) return;
 		if (that.anyUsed != "none") return;
-		if (this.pressed) return;
+		if (this.pressed) {
+			this.renderAs = "dhx_toolbar_btn def";
+			return;
+		}
 		this.className = "dhx_toolbar_btn def";
 		this.renderAs = this.className;
 	}
 	this.obj[that._isIPad?"ontouchstart":"onmousedown"] = function(e) {
+		
 		if (that.checkEvent("onBeforeStateChange")) if (!that.callEvent("onBeforeStateChange", [this.idd.replace(that.idPrefix, ""), this.pressed])) return;
 		//
 		if (obj.state == false) return;
 		if (that.anyUsed != "none") return;
 		this.pressed = !this.pressed;
 		this.className = (this.pressed?"dhx_toolbar_btn pres":this.renderAs);
+		
 		// event
 		var id = this.idd.replace(that.idPrefix, "");
 		if (this.extAction) try {window[this.extAction](id, this.pressed);} catch(e){};
 		that.callEvent("onStateChange", [id, this.pressed]);
-		this._doOnMouseOut();
+		//this._doOnMouseOut();
 		return false;
 	}
 	
@@ -2316,11 +2481,11 @@ dhtmlXToolbarObject.prototype._buttonTwoStateObject = function(that, id, data) {
 		if (this.obj.pressed != state) {
 			if (state == true) {
 				this.obj.pressed = true;
-				this.obj.className = "dhx_toolbar_btn pres";
+				this.obj.className = "dhx_toolbar_btn pres"+(this.state?"":"_dis");
 				this.obj.renderAs = "dhx_toolbar_btn over";
 			} else {
 				this.obj.pressed = false;
-				this.obj.className = "dhx_toolbar_btn def";
+				this.obj.className = "dhx_toolbar_btn "+(this.state?"def":"dis");
 				this.obj.renderAs = this.obj.className;
 			}
 			if (callEvent == true) {
@@ -2810,7 +2975,7 @@ dhtmlXToolbarObject.prototype.getListOptionUserData = function(listId, optionId,
 				if (item.type == "button") this.addButton(item.id, null, item.text, item.img, item.img_disabled);
 				if (item.type == "separator") this.addSeparator(item.id, null);
 				if (item.type == "text") this.addText(item.id, null, item.text);
-				if (item.type == "buttonSelect") this.addButtonSelect(item.id, null, item.text, item.options, item.img, item.img_disabled);
+				if (item.type == "buttonSelect") this.addButtonSelect(item.id, null, item.text, item.options, item.img, item.img_disabled, item.renderSelect, item.openAll, item.maxOpen);
 				if (item.type == "buttonTwoState") this.addButtonTwoState(item.id, null, item.text, item.img, item.img_disabled);
 				if (item.type == "buttonInput") this.addInput(item.id, null, item.text);
 				if (item.type == "slider") this.addSlider(item.id, null, item.length, item.value_min, item.value_max, item.value_now, item.text_min, item.text_max, item.tip_template);

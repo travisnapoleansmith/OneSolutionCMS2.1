@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -37,16 +37,19 @@ dhtmlXGridObject.prototype.enablePreRendering=function(buffer){
 *   @param: buffer - how much rows grid can request from server side in one operation
 *   @topic: 0
 */
-dhtmlXGridObject.prototype.forceFullLoading=function(buffer){
-	buffer=buffer||50;
+dhtmlXGridObject.prototype.forceFullLoading=function(buffer, callback){
 	for (var i=0; i<this.rowsBuffer.length; i++)
 		if (!this.rowsBuffer[i]){
-			if (this.callEvent("onDynXLS",[i,buffer])){
+			var usedbuffer = buffer || (this.rowsBuffer.length-i);
+			if (this.callEvent("onDynXLS",[i,usedbuffer])){
 				var self=this;
-				this.load(this.xmlFileUrl+getUrlSymbol(this.xmlFileUrl)+"posStart="+i+"&count="+buffer, function(){ window.setTimeout(function(){self.forceFullLoading(buffer); },100); }, this._data_type);
+				this.load(this.xmlFileUrl+getUrlSymbol(this.xmlFileUrl)+"posStart="+i+"&count="+usedbuffer, function(){
+					window.setTimeout(function(){	self.forceFullLoading(buffer, callback); },100); 
+				}, this._data_type);
 			}
 			return;
 		}
+	if (callback) callback.call(this);
 };
 
 /**
@@ -106,9 +109,15 @@ dhtmlXGridObject.prototype._update_srnd_view=function(){
 				var res=this._add_from_buffer(j);
 				if (res==-1){
 					if (this.xmlFileUrl){
-					this._current_load=[j,(this._dpref?this._dpref:(max-j))]; //TODO - more intelectual prefetching
-						if (this.callEvent("onDynXLS",[j,this._current_load[1]]))
-					this.load(this.xmlFileUrl+getUrlSymbol(this.xmlFileUrl)+"posStart="+j+"&count="+this._current_load[1], this._data_type);
+						if (this._dpref && this.rowsBuffer[max-1]){
+							//we have last row in sett, assuming that we in scrolling up process
+							var rows_count = this._dpref?this._dpref:(max-j)
+							var start_pos = Math.max(0, max - this._dpref);
+							this._current_load=[start_pos, max-start_pos];
+						} else 
+							this._current_load=[j,(this._dpref?this._dpref:(max-j))];
+						if (this.callEvent("onDynXLS",this._current_load))
+							this.load(this.xmlFileUrl+getUrlSymbol(this.xmlFileUrl)+"posStart="+this._current_load[0]+"&count="+this._current_load[1], this._data_type);
 					}
 					return;
 				} else {

@@ -1,10 +1,9 @@
 /*
-Copyright DHTMLX LTD. http://www.dhtmlx.com
-You allowed to use this component or parts of it under GPL terms
-To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
+This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
+to use it in non-GPL project. Please contact sales@dhtmlx.com for details
 */
 /*
-2011 July 12
+2012 June 19
 */
 /*DHX:Depend core/dhx.js*/
 /*DHX:Depend core/assert.js*/
@@ -13,248 +12,24 @@ if (!window.dhx)
 
 //check some rule, show message as error if rule is not correct
 dhx.assert = function(test, message){
-	if (!test)	dhx.error(message);
+	if (!test){
+		dhx.assert_error(message);
+	}
 };
+
+dhx.assert_error = function(message){
+	dhx.log("error",message);
+	if (dhx.message && typeof message == "string")
+		dhx.message({ type:"error", text:message, expire:-1 });
+	if (dhx.debug !== false)
+		debugger;
+}
+
 //entry point for analitic scripts
 dhx.assert_core_ready = function(){
 	if (window.dhx_on_core_ready)	
 		dhx_on_core_ready();
 };
-
-//code below this point need to be reconsidered
-
-dhx.assert_enabled=function(){ return false; };
-
-//register names of event, which can be triggered by the object
-dhx.assert_event = function(obj, evs){
-	if (!obj._event_check){
-		obj._event_check = {};
-		obj._event_check_size = {};
-	}
-		
-	for (var a in evs){
-		obj._event_check[a.toLowerCase()]=evs[a];
-		var count=-1; for (var t in evs[a]) count++;
-		obj._event_check_size[a.toLowerCase()]=count;
-	}
-};
-dhx.assert_method_info=function(obj, name, descr, rules){
-	var args = [];
-	for (var i=0; i < rules.length; i++) {
-		args.push(rules[i][0]+" : "+rules[i][1]+"\n   "+rules[i][2].describe()+(rules[i][3]?"; optional":""));
-	}
-	return obj.name+"."+name+"\n"+descr+"\n Arguments:\n - "+args.join("\n - ");
-};
-dhx.assert_method = function(obj, config){
-	for (var key in config)
-		dhx.assert_method_process(obj, key, config[key].descr, config[key].args, (config[key].min||99), config[key].skip);
-};
-dhx.assert_method_process = function (obj, name, descr, rules, min, skip){
-	var old = obj[name];
-	if (!skip)
-		obj[name] = function(){
-			if (arguments.length !=	rules.length && arguments.length < min) 
-				dhx.log("warn","Incorrect count of parameters\n"+obj[name].describe()+"\n\nExpecting "+rules.length+" but have only "+arguments.length);
-			else
-				for (var i=0; i<rules.length; i++)
-					if (!rules[i][3] && !rules[i][2](arguments[i]))
-						dhx.log("warn","Incorrect method call\n"+obj[name].describe()+"\n\nActual value of "+(i+1)+" parameter: {"+(typeof arguments[i])+"} "+arguments[i]);
-			
-			return old.apply(this, arguments);
-		};
-	obj[name].describe = function(){	return dhx.assert_method_info(obj, name, descr, rules);	};
-};
-dhx.assert_event_call = function(obj, name, args){
-	if (obj._event_check){
-		if (!obj._event_check[name])
-			dhx.log("warn","Not expected event call :"+name);
-		else if (dhx.isNotDefined(args))
-			dhx.log("warn","Event without parameters :"+name);
-		else if (obj._event_check_size[name] != args.length)
-			dhx.log("warn","Incorrect event call, expected "+obj._event_check_size[name]+" parameter(s), but have "+args.length +" parameter(s), for "+name+" event");
-	}		
-};
-dhx.assert_event_attach = function(obj, name){
-	if (obj._event_check && !obj._event_check[name]) 
-			dhx.log("warn","Unknown event name: "+name);
-};
-//register names of properties, which can be used in object's configuration
-dhx.assert_property = function(obj, evs){
-	if (!obj._settings_check)
-		obj._settings_check={};
-	dhx.extend(obj._settings_check, evs);		
-};
-//check all options in collection, against list of allowed properties
-dhx.assert_check = function(data,coll){
-	if (typeof data == "object"){
-		for (var key in data){
-			dhx.assert_settings(key,data[key],coll);
-		}
-	}
-};
-//check if type and value of property is the same as in scheme
-dhx.assert_settings = function(mode,value,coll){
-	coll = coll || this._settings_check;
-
-	//if value is not in collection of defined ones
-	if (coll){
-		if (!coll[mode])	//not registered property
-			return dhx.log("warn","Unknown propery: "+mode);
-			
-		var descr = "";
-		var error = "";
-		var check = false;
-		for (var i=0; i<coll[mode].length; i++){
-			var rule = coll[mode][i];
-			if (typeof rule == "string")
-				continue;
-			if (typeof rule == "function")
-				check = check || rule(value);
-			else if (typeof rule == "object" && typeof rule[1] == "function"){
-				check = check || rule[1](value);
-				if (check && rule[2])
-					dhx["assert_check"](value, rule[2]); //temporary fix , for sources generator
-			}
-			if (check) break;
-		}
-		if (!check )
-			dhx.log("warn","Invalid configuration\n"+dhx.assert_info(mode,coll)+"\nActual value: {"+(typeof value)+"} "+value);
-	}
-};
-
-dhx.assert_info=function(name, set){ 
-	var ruleset = set[name];
-	var descr = "";
-	var expected = [];
-	for (var i=0; i<ruleset.length; i++){
-		if (typeof ruleset[i] == "string")
-			descr = ruleset[i];
-		else if (ruleset[i].describe)
-			expected.push(ruleset[i].describe());
-		else if (ruleset[i][1] && ruleset[i][1].describe)
-			expected.push(ruleset[i][1].describe());
-	}
-	return "Property: "+name+", "+descr+" \nExpected value: \n - "+expected.join("\n - ");
-};
-
-
-if (dhx.assert_enabled()){
-	
-	dhx.assert_rule_color=function(check){
-		if (typeof check != "string") return false;
-		if (check.indexOf("#")!==0) return false;
-		if (check.substr(1).replace(/[0-9A-F]/gi,"")!=="") return false;
-		return true;
-	};
-	dhx.assert_rule_color.describe = function(){
-		return "{String} Value must start from # and contain hexadecimal code of color";
-	};
-	
-	dhx.assert_rule_template=function(check){
-		if (typeof check == "function") return true;
-		if (typeof check == "string") return true;
-		return false;
-	};
-	dhx.assert_rule_template.describe = function(){
-		return "{Function},{String} Value must be a function which accepts data object and return text string, or a sting with optional template markers";
-	};
-	
-	dhx.assert_rule_boolean=function(check){
-		if (typeof check == "boolean") return true;
-		return false;
-	};
-	dhx.assert_rule_boolean.describe = function(){
-		return "{Boolean} true or false";
-	};
-	
-	dhx.assert_rule_object=function(check, sub){
-		if (typeof check == "object") return true;
-		return false;
-	};
-	dhx.assert_rule_object.describe = function(){
-		return "{Object} Configuration object";
-	};
-	
-	
-	dhx.assert_rule_string=function(check){
-		if (typeof check == "string") return true;
-		return false;
-	};
-	dhx.assert_rule_string.describe = function(){
-		return "{String} Plain string";
-	};
-	
-	
-	dhx.assert_rule_htmlpt=function(check){
-		return !!dhx.toNode(check);
-	};
-	dhx.assert_rule_htmlpt.describe = function(){
-		return "{Object},{String} HTML node or ID of HTML Node";
-	};
-	
-	dhx.assert_rule_notdocumented=function(check){
-		return false;
-	};
-	dhx.assert_rule_notdocumented.describe = function(){
-		return "This options wasn't documented";
-	};
-	
-	dhx.assert_rule_key=function(obj){
-		var t = function (check){
-			return obj[check];
-		};
-		t.describe=function(){
-			var opts = [];
-			for(var key in obj)
-				opts.push(key);
-			return  "{String} can take one of next values: "+opts.join(", ");
-		};
-		return t;
-	};
-	
-	dhx.assert_rule_dimension=function(check){
-		if (check*1 == check && !isNaN(check) && check >= 0) return true;
-		return false;
-	};
-	dhx.assert_rule_dimension.describe=function(){
-		return "{Integer} value must be a positive number";
-	};
-	
-	dhx.assert_rule_number=function(check){
-		if (typeof check == "number") return true;
-		return false;
-	};
-	dhx.assert_rule_number.describe=function(){
-		return "{Integer} value must be a number";
-	};
-	
-	dhx.assert_rule_function=function(check){
-		if (typeof check == "function") return true;
-		return false;
-	};
-	dhx.assert_rule_function.describe=function(){
-		return "{Function} value must be a custom function";
-	};
-	
-	dhx.assert_rule_any=function(check){
-		return true;
-	};
-	dhx.assert_rule_any.describe=function(){
-		return "Any value";
-	};
-	
-	dhx.assert_rule_mix=function(a,b){
-		var t = function(check){
-			if (a(check)||b(check)) return true;
-			return false;
-		};
-		t.describe = function(){
-			return a.describe();
-		};
-		return t;
-	};
-
-}
 
 /*
 	Common helpers
@@ -264,38 +39,41 @@ dhx.codebase="./";
 dhx.name = "Core";
 
 //coding helpers
-dhx.copy = function(source){
-	var f = dhx.copy._function;
+dhx.clone = function(source){
+	var f = dhx.clone._function;
 	f.prototype = source;
 	return new f();
 };
-dhx.copy._function = function(){};
+dhx.clone._function = function(){};
 
 //copies methods and properties from source to the target
-dhx.extend = function(target, source, force){
-	dhx.assert(target,"Invalid mixing target");
+dhx.extend = function(base, source, force){
+	dhx.assert(base,"Invalid mixing target");
 	dhx.assert(source,"Invalid mixing source");
-	if (target._dhx_proto_wait)
-		target = target._dhx_proto_wait[0];
+
+	if (base._dhx_proto_wait){
+		dhx.PowerArray.insertAt.call(base._dhx_proto_wait, source,1);
+		return base;
+	}
 	
 	//copy methods, overwrite existing ones in case of conflict
 	for (var method in source)
-		if (!target[method] || force)
-			target[method] = source[method];
+		if (!base[method] || force)
+			base[method] = source[method];
 		
 	//in case of defaults - preffer top one
 	if (source.defaults)
-		dhx.extend(target.defaults, source.defaults);
+		dhx.extend(base.defaults, source.defaults);
 	
 	//if source object has init code - call init against target
 	if (source.$init)	
-		source.$init.call(target);
+		source.$init.call(base);
 				
-	return target;	
+	return base;	
 };
 
 //copies methods and properties from source to the target from all levels
-dhx.fullCopy = function(source){
+dhx.copy = function(source){
 	dhx.assert(source,"Invalid mixing target");
 	var target =  (source.length?[]:{});
 	if(arguments.length>1){
@@ -303,9 +81,9 @@ dhx.fullCopy = function(source){
 		source = arguments[1];
 	}
 	for (var method in source){
-		if(source[method] && typeof source[method] == "object"){
+		if(source[method] && typeof source[method] == "object" && !dhx.isDate(source[method])){
 			target[method] = (source[method].length?[]:{});
-			dhx.fullCopy(target[method],source[method]);
+			dhx.copy(target[method],source[method]);
 		}else{
 			target[method] = source[method];
 		}
@@ -336,6 +114,10 @@ dhx.protoUI = function(){
 	var selfname = origins[0].name;
 	
 	var t = function(data){
+		if (!t)
+			return dhx.ui[selfname].prototype;
+
+		var origins = t._dhx_proto_wait;
 		if (origins){
 			var params = [origins[0]];
 			
@@ -343,12 +125,11 @@ dhx.protoUI = function(){
 				params[i] = origins[i];
 				
 				if (params[i]._dhx_proto_wait)
-					params[i] = params[i].call(dhx);
+					params[i] = params[i].call(dhx, params[i].name);
 
 				if (params[i].prototype && params[i].prototype.name)
 					dhx.ui[params[i].prototype.name] = params[i];
 			}
-		
 			dhx.ui[selfname] = dhx.proto.apply(dhx, params);
 			if (t._dhx_type_wait)	
 				for (var i=0; i < t._dhx_type_wait.length; i++)
@@ -362,15 +143,15 @@ dhx.protoUI = function(){
 		else 
 			return dhx.ui[selfname];
 	};
-	t._dhx_proto_wait = arguments;
+	t._dhx_proto_wait = Array.prototype.slice.call(arguments, 0);
 	return dhx.ui[selfname]=t;
 };
 
 dhx.proto = function(){
-	
+	 
 	if (dhx.debug_proto)
 		dhx.log("Proto chain:"+arguments[0].name+"["+arguments.length+"]");
-		
+
 	var origins = arguments;
 	var compilation = origins[0];
 	var has_constructor = !!compilation.$init;
@@ -389,7 +170,7 @@ dhx.proto = function(){
 			if (!compilation.defaults)
 				compilation.defaults = {};
 			for (var def in defaults)
-				if (dhx.isNotDefined(compilation.defaults[def]))
+				if (dhx.isUndefined(compilation.defaults[def]))
 					compilation.defaults[def] = defaults[def];
 		}
 		if (origins[i].type && compilation.type){
@@ -459,22 +240,8 @@ dhx.wrap = function(code, wrap){
 	};
 };
 
-/*
-	creates method in the target object which will transfer call to the source object
-	if event parameter was provided , each call of method will generate onBefore and onAfter events
-*/
-dhx.methodPush=function(object,method,event){
-	return function(){
-		var res = false;
-		//if (!event || this.callEvent("onBefore"+event,arguments)){ //not used anymore, probably can be removed
-			res=object[method].apply(object,arguments);
-		//	if (event) this.callEvent("onAfter"+event,arguments);
-		//}
-		return res;	//result of wrapped method
-	};
-};
 //check === undefined
-dhx.isNotDefined=function(a){
+dhx.isUndefined=function(a){
 	return typeof a == "undefined";
 };
 //delay call to after-render time
@@ -508,8 +275,11 @@ dhx.toFunctor=function(str){
 	return (typeof(str)=="string") ? eval(str) : str; 
 };
 /*checks where an object is instance of Array*/
-dhx.isArray = function(o) {
-  return Object.prototype.toString.call(o) === '[object Array]';
+dhx.isArray = function(obj) {
+  return Object.prototype.toString.call(obj) === '[object Array]';
+};
+dhx.isDate = function(obj){
+	return obj instanceof Date;
 };
 
 //dom helpers
@@ -568,6 +338,7 @@ dhx.log = function(type,message,details){
 			window.console[type](message||"unknown error");
 		else
 			window.console.log(type +": "+message);
+
 		if (details) 
 			window.console.log(details);
 	}	
@@ -576,10 +347,10 @@ dhx.log = function(type,message,details){
 //register rendering time from call point 
 dhx.log_full_time = function(name){
 	dhx._start_time_log = new Date();
-	dhx.log("Info","Timing start ["+name+"]");
+	dhx.log("Timing start ["+name+"]");
 	window.setTimeout(function(){
 		var time = new Date();
-		dhx.log("Info","Timing end ["+name+"]:"+(time.valueOf()-dhx._start_time_log.valueOf())/1000+"s");
+		dhx.log("Timing end ["+name+"]:"+(time.valueOf()-dhx._start_time_log.valueOf())/1000+"s");
 	},1);
 };
 //register execution time from call point
@@ -594,29 +365,28 @@ dhx.log_time = function(name){
 		dhx[fname] = null;
 	}
 };
-//log message with type=error
-dhx.error = function(message,details){
-	dhx.log("error",message,details);
-	if (dhx.debug !== false)
-		debugger;
+dhx.debug_code = function(code){
+	code.call(dhx);
 };
 //event system
 dhx.EventSystem={
 	$init:function(){
-		this._events = {};		//hash of event handlers, name => handler
-		this._handlers = {};	//hash of event handlers, ID => handler
-		this._map = {};
+		if (!this._evs_events){
+			this._evs_events = {};		//hash of event handlers, name => handler
+			this._evs_handlers = {};	//hash of event handlers, ID => handler
+			this._evs_map = {};
+		}
 	},
 	//temporary block event triggering
 	blockEvent : function(){
-		this._events._block = true;
+		this._evs_events._block = true;
 	},
 	//re-enable event triggering
 	unblockEvent : function(){
-		this._events._block = false;
+		this._evs_events._block = false;
 	},
 	mapEvent:function(map){
-		dhx.extend(this._map, map, true);
+		dhx.extend(this._evs_map, map, true);
 	},
 	on_setter:function(config){
 		if(config){
@@ -628,63 +398,62 @@ dhx.EventSystem={
 	},
 	//trigger event
 	callEvent:function(type,params){
-		if (this._events._block) return true;
+		if (this._evs_events._block) return true;
 		
 		type = type.toLowerCase();
-		dhx.assert_event_call(this, type, params);
-		
-		var event_stack =this._events[type.toLowerCase()];	//all events for provided name
+		var event_stack =this._evs_events[type.toLowerCase()];	//all events for provided name
 		var return_value = true;
 
 		if (dhx.debug)	//can slowdown a lot
 			dhx.log("info","["+this.name+"] event:"+type,params);
 		
 		if (event_stack)
-			for(var i=0; i<event_stack.length; i++)
+			for(var i=0; i<event_stack.length; i++){
 				/*
 					Call events one by one
 					If any event return false - result of whole event will be false
 					Handlers which are not returning anything - counted as positive
 				*/
 				if (event_stack[i].apply(this,(params||[]))===false) return_value=false;
-				
-		if (this._map[type] && !this._map[type].callEvent(type,params))
+			}
+		if (this._evs_map[type] && !this._evs_map[type].callEvent(type,params))
 			return_value =	false;
 			
 		return return_value;
 	},
 	//assign handler for some named event
 	attachEvent:function(type,functor,id){
+		dhx.assert(functor, "Invalid event handler for "+type);
+
 		type=type.toLowerCase();
-		dhx.assert_event_attach(this, type);
 		
 		id=id||dhx.uid(); //ID can be used for detachEvent
 		functor = dhx.toFunctor(functor);	//functor can be a name of method
 
-		var event_stack=this._events[type]||dhx.toArray();
+		var event_stack=this._evs_events[type]||dhx.toArray();
 		//save new event handler
 		event_stack.push(functor);
-		this._events[type]=event_stack;
-		this._handlers[id]={ f:functor,t:type };
+		this._evs_events[type]=event_stack;
+		this._evs_handlers[id]={ f:functor,t:type };
 		
 		return id;
 	},
 	//remove event handler
 	detachEvent:function(id){
-		if(!this._handlers[id]){
+		if(!this._evs_handlers[id]){
 			return;
 		}
-		var type=this._handlers[id].t;
-		var functor=this._handlers[id].f;
+		var type=this._evs_handlers[id].t;
+		var functor=this._evs_handlers[id].f;
 		
 		//remove from all collections
-		var event_stack=this._events[type];
+		var event_stack=this._evs_events[type];
 		event_stack.remove(functor);
-		delete this._handlers[id];
+		delete this._evs_handlers[id];
 	},
 	hasEvent:function(type){
 		type=type.toLowerCase();
-		return this._events[type]?true:false;
+		return this._evs_events[type]?true:false;
 	}
 };
 
@@ -754,8 +523,8 @@ dhx.env = {};
 	dhx.env.transition = false;
 	var options = {};
 	options.names = ['transform', 'transition'];
-	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'oTransform', 'msTransform'];
-	options.transition = ['transition', 'WebkitTransition', 'MozTransition', 'oTransition', 'msTransition'];
+	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'];
+	options.transition = ['transition', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
 	
 	var d = document.createElement("DIV");
 	for(var i=0; i<options.names.length; i++) {
@@ -771,23 +540,23 @@ dhx.env = {};
     d.style[dhx.env.transform] = "translate3d(0,0,0)";
     dhx.env.translate = (d.style[dhx.env.transform])?"translate3d":"translate";
 
-    dhx.env.transformCSSPrefix = (function(){
-        var prefix;
-        if(dhx.env.isOpera)
-            prefix = '-o-';
-        else {
-            prefix = ''; // default option
-            if(dhx.env.isFF)
-                prefix = '-Moz-';
-            if(dhx.env.isWebKit)
-               prefix = '-webkit-';
-            if(dhx.env.isIE)
-               prefix = '-ms-';
-        }
-        return prefix;
-    })();
-    dhx.env.transformPrefix = dhx.env.transformCSSPrefix.replace(/-/gi, "");
-    dhx.env.transitionEnd = ((dhx.env.transformCSSPrefix == '-Moz-')?"transitionend":(dhx.env.transformPrefix+"TransitionEnd"));
+	var prefix = ''; // default option
+	var cssprefix = false;
+	if(dhx.env.isOpera){
+		prefix = '-o-';
+		cssprefix = "O";
+	}
+	if(dhx.env.isFF)
+		prefix = '-Moz-';
+	if(dhx.env.isWebKit)
+		prefix = '-webkit-';
+	if(dhx.env.isIE)
+		prefix = '-ms-';
+
+    dhx.env.transformCSSPrefix = prefix;
+
+	dhx.env.transformPrefix = cssprefix||(dhx.env.transformCSSPrefix.replace(/-/gi, ""));
+	dhx.env.transitionEnd = ((dhx.env.transformCSSPrefix == '-Moz-')?"transitionend":(dhx.env.transformPrefix+"TransitionEnd"));
 })();
 
 
@@ -798,6 +567,51 @@ dhx.env.svg = (function(){
 
 //html helpers
 dhx.html={
+	_native_on_selectstart:0,
+	denySelect:function(){
+		if (!dhx._native_on_selectstart)
+			dhx._native_on_selectstart = document.onselectstart;
+		document.onselectstart = dhx.html.stopEvent;
+	},
+	allowSelect:function(){
+		if (dhx._native_on_selectstart !== 0){
+			document.onselectstart = dhx._native_on_selectstart||null;
+		}
+		dhx._native_on_selectstart = 0;
+
+	},
+	index:function(node){
+		var k=0;
+		//must be =, it is not a comparation!
+		/*jsl:ignore*/
+		while (node = node.previousSibling) k++;
+		/*jsl:end*/
+		return k;
+	},
+	_style_cache:{},
+	createCss:function(rule){
+		var text = "";
+		for (var key in rule)
+			text+= key+":"+rule[key]+";";
+		var name = this._style_cache[text];
+		if (!name){
+			name = "s"+dhx.uid();
+			this.addStyle("."+name+"{"+text+"}");
+			this._style_cache[text] = name;
+		}
+		return name;
+	},
+	addStyle:function(rule){
+		var style = document.createElement("style");
+		style.setAttribute("type", "text/css");
+		style.setAttribute("media", "screen"); 
+		/*IE8*/
+		if (style.styleSheet)
+			style.styleSheet.cssText = rule;
+		else
+			style.appendChild(document.createTextNode(rule));
+		document.getElementsByTagName("head")[0].appendChild(style);
+	},
 	create:function(name,attrs,html){
 		attrs = attrs || {};
 		var node = document.createElement(name);
@@ -815,7 +629,7 @@ dhx.html={
 	getValue:function(node){
 		node = dhx.toNode(node);
 		if (!node) return "";
-		return dhx.isNotDefined(node.value)?node.innerHTML:node.value;
+		return dhx.isUndefined(node.value)?node.innerHTML:node.value;
 	},
 	//remove html node, can process an array of nodes at once
 	remove:function(node){
@@ -875,6 +689,14 @@ dhx.html={
 			}
 			return {y: top, x: left};
 		}
+	},
+	//returns relative position of event
+	posRelative:function(ev){
+		ev = ev || event;
+		if (!dhx.isUndefined(ev.offsetX))
+			return { x:ev.offsetX, y:ev.offsetY };	//ie, webkit
+		else
+			return { x:ev.layerX, y:ev.layerY };	//firefox
 	},
 	//returns position of event
 	pos:function(ev){
@@ -937,11 +759,8 @@ dhx._ready_code = [];
 	
 })();
 
-dhx.ui={};
-dhx.ui.zIndex = function(){
-	return dhx.ui._zIndex++;
-};
-dhx.ui._zIndex = 1;
+dhx.locale=dhx.locale||{};
+
 
 dhx.assert_core_ready();
 
@@ -964,7 +783,7 @@ dhx.ready(function(){
 		config
 */
 
-/*DHX:Depend core/render/template.js*/
+/*DHX:Depend core/template.js*/
 /*
 	Template - handles html templates
 */
@@ -974,6 +793,9 @@ dhx.ready(function(){
 (function(){
 
 var _cache = {};
+var newlines = new RegExp("(\\r\\n|\\n)","g");
+var quotes = new RegExp("(\\\")","g");
+
 dhx.Template = function(str){
 	if (typeof str == "function") return str;
 	if (_cache[str])
@@ -996,28 +818,25 @@ dhx.Template = function(str){
 	}
 		
 	//supported idioms
-	// {obj} => value
 	// {obj.attr} => named attribute or value of sub-tag in case of xml
-	// {obj.attr?some:other} conditional output
-	// {-obj => sub-template
 	str=(str||"").toString();		
-	str=str.replace(/(\r\n|\n)/g,"\\n");
-	str=str.replace(/(\")/g,"\\\"");
+	str=str.replace(newlines,"\\n");
+	str=str.replace(quotes,"\\\"");
+
 	str=str.replace(/\{obj\.([^}?]+)\?([^:]*):([^}]*)\}/g,"\"+(obj.$1?\"$2\":\"$3\")+\"");
 	str=str.replace(/\{common\.([^}\(]*)\}/g,"\"+(common.$1||'')+\"");
 	str=str.replace(/\{common\.([^\}\(]*)\(\)\}/g,"\"+(common.$1?common.$1(obj,common):\"\")+\"");
-	str=str.replace(/\{obj\.([^}]*)\}/g,"\"+(obj.$1||'')+\"");
-	str=str.replace(/#([$a-z0-9_\[\]]+)#/gi,"\"+(obj.$1||'')+\"");
-	str=str.replace(/\{obj\}/g,"\"+obj+\"");
-	str=str.replace(/\{-obj/g,"{obj");
-	str=str.replace(/\{-common/g,"{common");
-	str="return \""+str+"\";";
+	str=str.replace(/\{obj\.([^}]*)\}/g,"\"+(obj.$1)+\"");
+	str=str.replace("{obj}","\"+obj+\"");
+	str=str.replace(/#([^#'";, ]+)#/gi,"\"+(obj.$1)+\"");
+
 	try {
-		Function("obj","common",str);
+		_cache[str] = Function("obj","common","return \""+str+"\";");
 	} catch(e){
-		dhx.error("Invalid template:"+str);
+		dhx.assert_error("Invalid template:"+str);
 	}
-	return _cache[str]= Function("obj","common",str);
+
+	return _cache[str];
 };
 
 
@@ -1049,7 +868,7 @@ dhx.Type=function(obj, data){
 	var name = data.name;
 	var type = obj.type;
 	if (name)
-		type = obj.types[name] = dhx.copy(obj.type);
+		type = obj.types[name] = dhx.clone(data.baseType?obj.types[data.baseType]:obj.type);
 	
 	for(var key in data){
 		if (key.indexOf("template")===0)
@@ -1079,8 +898,6 @@ dhx.Settings={
 		return this._define(property, value);
 	},
 	_define:function(property,value){
-		dhx.assert_settings.call(this,property,value);
-		
 		//method with name {prop}_setter will be used as property setter
 		//setter is optional
 		var setter = this[property+"_setter"];
@@ -1119,7 +936,10 @@ dhx.Settings={
 					break;
 			}
 		return config;
-	}
+	},
+
+	debug_freid_c_id:true,
+	debug_freid_a_name:true
 };
 /*DHX:Depend core/datastore.js*/
 /*DHX:Depend core/load.js*/
@@ -1141,13 +961,15 @@ dhx.ajax = function(url,call,master){
 	if (arguments.length!==0){
 		var http_request = new dhx.ajax();
 		if (master) http_request.master=master;
-		http_request.get(url,null,call);
+		return http_request.get(url,null,call);
 	}
 	if (!this.getXHR) return new dhx.ajax(); //allow to create new instance without direct new declaration
 	
 	return this;
 };
+dhx.ajax.count = 0;
 dhx.ajax.prototype={
+	master:null,
 	//creates xmlHTTP object
 	getXHR:function(){
 		if (dhx.env.isIE)
@@ -1162,8 +984,8 @@ dhx.ajax.prototype={
 	*/
 	send:function(url,params,call){
 		var x=this.getXHR();
-		if (typeof call == "function")
-		 call = [call];
+		if (!dhx.isArray(call))
+			call = [call];
 		//add extra params to the url
 		if (typeof params == "object"){
 			var t=[];
@@ -1175,48 +997,79 @@ dhx.ajax.prototype={
 		 	}
 			params=t.join("&");
 		}
-		if (params && !this.post){
+		if (params && this.request==='GET'){
 			url=url+(url.indexOf("?")!=-1 ? "&" : "?")+params;
 			params=null;
 		}
 		
-		x.open(this.post?"POST":"GET",url,!this._sync);
-		if (this.post)
-		 x.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+		x.open(this.request,url,!this._sync);
+		if (this.request === 'POST')
+			x.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 		 
 		//async mode, define loading callback
-		//if (!this._sync){
 		 var self=this;
 		 x.onreadystatechange= function(){
 			if (!x.readyState || x.readyState == 4){
-				dhx.log_full_time("data_loading");	//log rendering time
-				if (call && self) 
+				if (dhx.debug_time) dhx.log_full_time("data_loading");	//log rendering time
+				dhx.ajax.count++;
+				if (call && self){
 					for (var i=0; i < call.length; i++)	//there can be multiple callbacks
-					 if (call[i])
-						call[i].call((self.master||self),x.responseText,x.responseXML,x);
+						if (call[i]){
+							var method = (call[i].success||call[i]);
+							if (x.status >= 400 || (!x.status && !x.responseText))
+								method = call[i].error;
+							if (method)
+								method.call((self.master||self),x.responseText,x.responseXML,x);
+						}
+				}
 				self.master=null;
 				call=self=null;	//anti-leak
 			}
 		 };
-		//}
 		
 		x.send(params||null);
 		return x; //return XHR, which can be used in case of sync. mode
 	},
 	//GET request
 	get:function(url,params,call){
-		this.post=false;
+		this.request='GET';
 		return this.send(url,params,call);
 	},
 	//POST request
 	post:function(url,params,call){
-		this.post=true;
+		this.request='POST';
+		return this.send(url,params,call);
+	},
+	//PUT request
+	put:function(url,params,call){
+		this.request='PUT';
+		return this.send(url,params,call);
+	},
+	//POST request
+	del:function(url,params,call){
+		this.request='DELETE';
 		return this.send(url,params,call);
 	}, 
 	sync:function(){
 		this._sync = true;
 		return this;
+	},
+	bind:function(master){
+		this.master = master;
+		return this;
 	}
+};
+/*submits values*/
+dhx.send = function(url, values, method){
+	var form = dhx.html.create("FORM",{"action":url, "method":(method||"POST")},"");
+	for (var k in values) {
+		var field = dhx.html.create("INPUT",{"type":"hidden","name": k,"value": values[k]},"");
+		form.appendChild(field);
+	}
+	form.style.display = "none";
+	document.body.appendChild(form);
+	form.submit();
+	document.body.removeChild(form);
 };
 
 
@@ -1247,17 +1100,40 @@ dhx.AtomDataLoader={
 		this.parse(value, this._settings.datatype);
 		return true;
 	},
+	debug_freid_c_datatype:true,
+	debug_freid_c_dataFeed:true,
+
 	//loads data from external URL
 	load:function(url,call){
+		if (url.$proxy) {
+			url.load(this, typeof call == "string" ? call : "json");
+			return;
+		}
+
 		this.callEvent("onXLS",[]);
 		if (typeof call == "string"){	//second parameter can be a loading type or callback
+			//we are not using setDriver as data may be a non-datastore here
 			this.data.driver = dhx.DataDriver[call];
 			call = arguments[2];
-		}
-		else
-			this.data.driver = dhx.DataDriver["json"];
+		} else if (!this.data.driver)
+			this.data.driver = dhx.DataDriver.json;
+
 		//load data by async ajax call
-		dhx.ajax(url,[this._onLoad,call],this);
+		//loading_key - can be set by component, to ignore data from old async requests
+		var callback = [{
+			success: this._onLoad,
+			error: this._onLoadError
+		}];
+		
+		if (call){
+			if (dhx.isArray(call))
+				callback.push.apply(callback,call);
+			else
+				callback.push(call);
+		}
+			
+
+		return dhx.ajax(url,callback,this);
 	},
 	//loads data from object
 	parse:function(data,type){
@@ -1266,20 +1142,36 @@ dhx.AtomDataLoader={
 		this._onLoad(data,null);
 	},
 	//default after loading callback
-	_onLoad:function(text,xml,loader){
+	_onLoad:function(text,xml,loader,key){
 		var driver = this.data.driver;
-		var top = driver.getRecords(driver.toObject(text,xml))[0];
-		this.data=(driver?driver.getDetails(top):text);
+		var data = driver.toObject(text,xml);
+		if (data){
+			var top = driver.getRecords(data)[0];
+			this.data=(driver?driver.getDetails(top):text);
+		} else 
+			this._onLoadError(text,xml,loader);
+
 		this.callEvent("onXLE",[]);
+	},
+	_onLoadError:function(text, xml, xhttp){
+		this.callEvent("onXLE",[]);
+		this.callEvent("onLoadError",arguments);
+		dhx.callEvent("onLoadError", [text, xml, xhttp, this]);
 	},
 	_check_data_feed:function(data){
 		if (!this._settings.dataFeed || this._ignore_feed || !data) return true;
 		var url = this._settings.dataFeed;
+		if (typeof url == "function")
+			return url.call(this, (data.id||data), data);
 		url = url+(url.indexOf("?")==-1?"?":"&")+"action=get&id="+encodeURIComponent(data.id||data);
 		this.callEvent("onXLS",[]);
-		dhx.ajax(url, function(text,xml){
+		dhx.ajax(url, function(text,xml,loader){
 			this._ignore_feed=true;
-			this.setValues(dhx.DataDriver.json.toObject(text)[0]);
+			var data = dhx.DataDriver.toObject(text, xml);
+			if (data)
+				this.setValues(data.getDetails(data.getRecords()[0]));
+			else
+				this._onLoadError(text,xml,loader);
 			this._ignore_feed=false;
 			this.callEvent("onXLE",[]);
 		}, this);
@@ -1297,16 +1189,22 @@ dhx.DataDriver.json={
 	toObject:function(data){
 		if (!data) data="[]";
 		if (typeof data == "string"){
-			eval ("dhx.temp="+data);
+			try{
+				eval ("dhx.temp="+data);
+			} catch(e){
+				dhx.assert_error(e);
+				return null;
+			}
 			data = dhx.temp;
 		}
-		if (data.data){
-			var t = data.data;
-			t.pos = data.pos;
-			t.total_count = data.total_count;
-			data = t;
-		}
 
+		if (data.data){ 
+			var t = data.data.config = {};
+			for (var key in data)
+				if (key!="data")
+					t[key] = data[key];
+			data = data.data;
+		}
 			
 		return data;
 	},
@@ -1318,55 +1216,24 @@ dhx.DataDriver.json={
 	},
 	//get hash of properties for single record
 	getDetails:function(data){
+		if (typeof data == "string")
+			return { id:dhx.uid(), value:data };
 		return data;
 	},
 	//get count of data and position at which new data need to be inserted
 	getInfo:function(data){
-		return { 
-		 _size:(data.total_count||0),
-		 _from:(data.pos||0)
-		};
-	}
-};
+		var cfg = data.config;
+		if (!cfg) return {};
 
-dhx.DataDriver.json_ext={
-	//convert json string to json object if necessary
-	toObject:function(data){
-		if (!data) data="[]";
-		if (typeof data == "string"){
-			var temp;
-			eval ("temp="+data);
-			dhx.temp = [];
-			var header  = temp.header;
-			for (var i = 0; i < temp.data.length; i++) {
-				var item = {};
-				for (var j = 0; j < header.length; j++) {
-					if (typeof(temp.data[i][j]) != "undefined")
-						item[header[j]] = temp.data[i][j];
-				}
-				dhx.temp.push(item);
-			}
-			return dhx.temp;
-		}
-		return data;
-	},
-	//get array of records
-	getRecords:function(data){
-		if (data && !dhx.isArray(data))
-		 return [data];
-		return data;
-	},
-	//get hash of properties for single record
-	getDetails:function(data){
-		return data;
-	},
-	//get count of data and position at which new data need to be inserted
-	getInfo:function(data){
-		return {
-		 _size:(data.total_count||0),
-		 _from:(data.pos||0)
+		return { 
+		 _size:(cfg.total_count||0),
+		 _from:(cfg.pos||0),
+		 _parent:(cfg.parent||0),
+		 _config:(cfg.config),
+		 _key:(cfg.dhx_security)
 		};
-	}
+	},
+	child:"data"
 };
 
 dhx.DataDriver.html={
@@ -1391,9 +1258,13 @@ dhx.DataDriver.html={
 		return data;
 	},
 	//get array of records
-	getRecords:function(data){
-		if (data.tagName)
-		 return data.childNodes;
+	getRecords:function(node){
+		var data = [];
+		for (var i=0; i<node.childNodes.length; i++){
+			var child = node.childNodes[i];
+			if (child.nodeType == 1)
+				data.push(child);
+		}
 		return data;
 	},
 	//get hash of properties for single record
@@ -1477,29 +1348,52 @@ dhx.DataDriver.csv={
 };
 
 dhx.DataDriver.xml={
+	_isValidXML:function(data){
+		if (!data || !data.documentElement)
+			return null;
+		if (data.getElementsByTagName("parsererror").length)
+			return null;
+		return data;
+	},
 	//convert xml string to xml object if necessary
 	toObject:function(text,xml){
-		if (xml && (xml=this.checkResponse(text,xml)))	//checkResponse - fix incorrect content type and extra whitespaces errors
-		 return xml;
-		if (typeof text == "string"){
-		 return this.fromString(text);
-		}
-		return text;
+		if (this._isValidXML(data))
+			return data;
+		if (typeof text == "string")
+			var data = this.fromString(text.replace(/^[\s]+/,""));
+		else
+			data = text;
+
+		if (this._isValidXML(data))
+			return data;
+		return null;
 	},
 	//get array of records
 	getRecords:function(data){
 		return this.xpath(data,this.records);
 	},
 	records:"/*/item",
+	child:"item",
+	config:"/*/config",
 	//get hash of properties for single record
 	getDetails:function(data){
 		return this.tagToObject(data,{});
 	},
 	//get count of data and position at which new data_loading need to be inserted
 	getInfo:function(data){
+		
+		var config = this.xpath(data, this.config);
+		if (config.length)
+			config = this.assignTypes(this.tagToObject(config[0],{}));
+		else 
+			config = null;
+
 		return { 
 		 _size:(data.documentElement.getAttribute("total_count")||0),
-		 _from:(data.documentElement.getAttribute("pos")||0)
+		 _from:(data.documentElement.getAttribute("pos")||0),
+		 _parent:(data.documentElement.getAttribute("parent")||0),
+		 _config:config,
+		 _key:(data.documentElement.getAttribute("dhx_security")||null)
 		};
 	},
 	//xpath helper
@@ -1534,11 +1428,29 @@ dhx.DataDriver.xml={
 			}
 		}
 	},
+	assignTypes:function(obj){
+		for (var k in obj){
+			var test = obj[k];
+			if (typeof test == "object")
+				this.assignTypes(test);
+			else if (typeof test == "string"){
+				if (test === "") 
+					continue;
+				if (test == "true")
+					obj[k] = true;
+				else if (test == "false")
+					obj[k] = false;
+				else if (test == test*1)
+					obj[k] = obj[k]*1;
+			}
+		}
+		return obj;
+	},
 	//convert xml tag to js object, all subtags and attributes are mapped to the properties of result object
 	tagToObject:function(tag,z){
 		z=z||{};
 		var flag=false;
-		
+				
 		//map attributes
 		var a=tag.attributes;
 		if(a && a.length){
@@ -1567,7 +1479,7 @@ dhx.DataDriver.xml={
 		if (!flag)
 			return this.nodeValue(tag);
 		//each object will have its text content as "value" property
-		z.value = this.nodeValue(tag);
+		z.value = z.value||this.nodeValue(tag);
 		return z;
 	},
 	//get value of xml node 
@@ -1578,29 +1490,62 @@ dhx.DataDriver.xml={
 	},
 	//convert XML string to XML object
 	fromString:function(xmlString){
-		if (window.DOMParser)		// FF, KHTML, Opera
-		 return (new DOMParser()).parseFromString(xmlString,"text/xml");
-		if (window.ActiveXObject){	// IE, utf-8 only 
-		 var temp=new ActiveXObject("Microsoft.xmlDOM");
-		 temp.loadXML(xmlString);
-		 return temp;
+		try{
+			if (window.DOMParser)		// FF, KHTML, Opera
+				return (new DOMParser()).parseFromString(xmlString,"text/xml");
+			if (window.ActiveXObject){	// IE, utf-8 only 
+				var temp=new ActiveXObject("Microsoft.xmlDOM");
+				temp.loadXML(xmlString);
+				return temp;
+			}
+		} catch(e){
+			dhx.assert_error(e);
+			return null;
 		}
-		dhx.error("Load from xml string is not supported");
-	},
-	//check is XML correct and try to reparse it if its invalid
-	checkResponse:function(text,xml){ 
-		if (xml && ( xml.firstChild && xml.firstChild.tagName != "parsererror") )
-			return xml;
-		//parsing as string resolves incorrect content type
-		//regexp removes whitespaces before xml declaration, which is vital for FF
-		var a=this.fromString(text.replace(/^[\s]+/,""));
-		if (a) return a;
-		
-		dhx.error("xml can't be parsed",text);
+		dhx.assert_error("Load from xml string is not supported");
 	}
 };
 
 
+dhx.debug_code(function(){
+	dhx.debug_load_event = dhx.attachEvent("onLoadError", function(text, xml, xhttp, owner){
+		var error_text = "Data loading error, check console for details";
+		if (text.indexOf("<?php") === 0)
+			error_text = "PHP support missed";
+		else if (text.indexOf("DHX_ERROR:") === 0)
+			error_text = text.replace("DHX_ERROR:","");
+
+		if (dhx.message)
+			dhx.message({
+				type:"error",
+				text:error_text,
+				expire:-1
+			});
+		/*jsl:ignore*/
+		if (window.console){
+			console.log("Data loading error");
+			console.log("Object:", owner);
+			console.log("Response:", text);
+			console.log("XHTTP:", xhttp);
+		}
+		/*jsl:end*/
+	});
+
+	dhx.ready(function(){
+		var path = document.location.href;
+		if (path.indexOf("file:")===0){
+			if (dhx.message)
+				dhx.message({
+					type:"error", 
+					text:"Please open sample by http,<br>not as file://",
+					expire:-1
+				});
+			else 
+				alert("Please open sample by http, not as file://");
+		}
+	});
+	
+});
 /*DHX:Depend core/dhx.js*/
 
 /*
@@ -1614,48 +1559,93 @@ dhx.DataLoader=dhx.proto({
 	$init:function(config){
 		//prepare data store
 		config = config || "";
-		name = "DataStore";
-		this.data = (config.datastore)||(new dhx.DataStore());
-		this._readyHandler = this.data.attachEvent("onStoreLoad",dhx.bind(this._call_onready,this));
+		
+		//list of all active ajax requests
+		this._ajax_queue = dhx.toArray();
+
+		this.data = new dhx.DataStore();
+		this.data.attachEvent("onClearAll",dhx.bind(this._call_onclearall,this));
+		this.data.attachEvent("onServerConfig", dhx.bind(this._call_on_config, this));
+		this.data.feed = this._feed;
+
+	},
+
+	_feed:function(from,count,callback){
+				//allow only single request at same time
+				if (this._load_count)
+					return this._load_count=[from,count,callback];	//save last ignored request
+				else
+					this._load_count=true;
+				this._feed_last = [from, count];
+				this._feed_common.call(this, from, count, callback);
+	},
+	_feed_common:function(from, count, callback){
+		var url = this.data.url;
+		if (from<0) from = 0;
+		this.load(url+((url.indexOf("?")==-1)?"?":"&")+(this.dataCount()?("continue=true&"):"")+"start="+from+"&count="+count,[
+			this._feed_callback,
+			callback
+		]);
+	},
+	_feed_callback:function(){
+		//after loading check if we have some ignored requests
+		var temp = this._load_count;
+		var last = this._feed_last;
+		this._load_count = false;
+		if (typeof temp =="object" && (temp[0]!=last[0] || temp[1]!=last[1]))
+			this.data.feed.apply(this, temp);	//load last ignored request
 	},
 	//loads data from external URL
 	load:function(url,call){
-		dhx.AtomDataLoader.load.apply(this, arguments);
+		var ajax = dhx.AtomDataLoader.load.apply(this, arguments);
+		this._ajax_queue.push(ajax);
+
 		//prepare data feed for dyn. loading
-		if (!this.data.feed){
+		if (!this.data.url)
 			this.data.url = url;
-			this.data.feed = function(from,count){
-				//allow only single request at same time
-				if (this._load_count)
-					return this._load_count=[from,count];	//save last ignored request
-				else
-					this._load_count=true;
-					
-				this.load(url+((url.indexOf("?")==-1)?"?":"&")+"start="+from+"&count="+count,function(){
-					//after loading check if we have some ignored requests
-					var temp = this._load_count;
-					this._load_count = false;
-					if (typeof temp =="object")
-						this.data.feed.apply(this, temp);	//load last ignored request
-					else if (this.showItem && this.dataCount()>(from+1))
-						this.showItem(this.idByIndex(from+1));
-				});
-			};
-		}
 	},
 	//load next set of data rows
-	loadNext:function(count, start){
-		if (this.data.feed)
-			this.data.feed.call(this, (start||this.dataCount()), count);
+	loadNext:function(count, start, callback, url, now){
+		if (this._settings.datathrottle && !now){
+			if (this._throttle_request)
+				window.clearTimeout(this._throttle_request);
+			this._throttle_request = dhx.delay(function(){
+				this.loadNext(count, start, callback, url, true);
+			},this, 0, this._settings.datathrottle);
+			return;
+		}
+
+		if (!start && start !== 0) start = this.dataCount();
+		this.data.url = this.data.url || url;
+
+		if (this.callEvent("onDataRequest", [start,count,callback,url]) && this.data.url)
+			this.data.feed.call(this, start, count, callback);
+	},
+	_maybe_loading_already:function(count, from){
+		var last = this._feed_last;
+		if(this._load_count && last){
+			if (last[0]<=from && (last[1]+last[0] >= count + from )) return true;
+		}
+		return false;
 	},
 	//default after loading callback
 	_onLoad:function(text,xml,loader){
-		this.data._parse(this.data.driver.toObject(text,xml));
+		//ignore data loading command if data was reloaded 
+		this._ajax_queue.remove(loader);
+
+		var data = this.data.driver.toObject(text,xml);
+		if (data) 
+			this.data._parse(data);
+		else
+			return this._onLoadError(text, xml, loader);
+		
+		//data loaded, view rendered, call onready handler
+		this._call_onready();
+
 		this.callEvent("onXLE",[]);
-		if(this._readyHandler){
-			this.data.detachEvent(this._readyHandler);
-			this._readyHandler = null;
-		}
+	},
+	removeMissed_setter:function(value){
+		return this.data._removeMissed = value;
 	},
 	scheme_setter:function(value){
 		this.data.scheme(value);
@@ -1663,9 +1653,9 @@ dhx.DataLoader=dhx.proto({
 	dataFeed_setter:function(value){
 		this.data.attachEvent("onBeforeFilter", dhx.bind(function(text, value){
 			if (this._settings.dataFeed){
-				
-				var filter = {};
-				if (!text && !filter) return;
+
+				var filter = {};				
+				if (!text && !value) return;
 				if (typeof text == "function"){
 					if (!value) return;
 					text(value, filter);
@@ -1675,6 +1665,8 @@ dhx.DataLoader=dhx.proto({
 				this.clearAll();
 				var url = this._settings.dataFeed;
 				var urldata = [];
+				if (typeof url == "function")
+					return url.call(this, value, filter);
 				for (var key in filter)
 					urldata.push("dhx_filter["+key+"]="+encodeURIComponent(filter[key]));
 				this.load(url+(url.indexOf("?")<0?"?":"&")+urldata.join("&"), this._settings.datatype);
@@ -1683,13 +1675,28 @@ dhx.DataLoader=dhx.proto({
 		},this));
 		return value;
 	},
+
+	debug_freid_c_ready:true,
+	debug_freid_c_datathrottle:true,
+	
 	_call_onready:function(){
-		if (this._settings.ready){
+		if (this._settings.ready && !this._ready_was_used){
 			var code = dhx.toFunctor(this._settings.ready);
-			if (code && code.call) code.apply(this, arguments);
+			if (code)
+				dhx.delay(code, this, arguments);
+			this._ready_was_used = true;
 		}
+	},
+	_call_onclearall:function(){
+		for (var i = 0; i < this._ajax_queue.length; i++)
+			this._ajax_queue[i].abort();
+
+		this._ajax_queue = dhx.toArray();
+	},
+	_call_on_config:function(config){
+		this._parseSeetingColl(config);
 	}
-},dhx.AtomDataLoader).prototype;
+},dhx.AtomDataLoader);
 
 
 /*
@@ -1716,8 +1723,8 @@ dhx.DataStore = function(){
 	this.name = "DataStore";
 	
 	dhx.extend(this, dhx.EventSystem);
-	
-	this.setDriver("xml");	//default data source is an XML
+
+	this.setDriver("json");	//default data source is an XML
 	this.pull = {};						//hash of IDs
 	this.order = dhx.toArray();		//order of IDs
 };
@@ -1730,66 +1737,100 @@ dhx.DataStore.prototype={
 		this.driver = dhx.DataDriver[type];
 	},
 	//process incoming raw data
-	_parse:function(data){
+	_parse:function(data,master){
 		this.callEvent("onParse", [this.driver, data]);
 		if (this._filter_order)
 			this.filter();
 			
 		//get size and position of data
 		var info = this.driver.getInfo(data);
-		//get array of records
+		if (info._key)
+			dhx.securityKey = info._key;
+		if (info._config)
+			this.callEvent("onServerConfig",[info._config]);
 
+		//get array of records
 		var recs = this.driver.getRecords(data);
+
+		this._inner_parse(info, recs);
+
+		//in case of tree store we may want to group data
+		if (this._scheme_group && this._group_processing)
+			this._group_processing(this._scheme_group);
+
+		//optional data sorting
+		if (this._scheme_sort){
+			this.blockEvent();
+			this.sort(this._scheme_sort);
+			this.unblockEvent();
+		}
+
+		this.callEvent("onStoreLoad",[this.driver, data]);
+		//repaint self after data loading
+		this.refresh();
+	},
+	_inner_parse:function(info, recs){
 		var from = (info._from||0)*1;
-		
-		if (from === 0 && this.order[0]) //update mode
+		var subload = true;
+		var marks = false;
+
+		if (from === 0 && this.order[0]){ //update mode
+			if (this._removeMissed){
+				//update mode, create kill list
+				marks = {};
+				for (var i=0; i<this.order.length; i++)
+					marks[this.order[i]]=true;
+			}
+			
+			subload = false;
 			from = this.order.length;
-		
+		}
+
 		var j=0;
 		for (var i=0; i<recs.length; i++){
-			//get has of details for each record
+			//get hash of details for each record
 			var temp = this.driver.getDetails(recs[i]);
 			var id = this.id(temp); 	//generate ID for the record
 			if (!this.pull[id]){		//if such ID already exists - update instead of insert
 				this.order[j+from]=id;	
 				j++;
-			}
-			this.pull[id]=temp;
-			//if (this._format)	this._format(temp);
-			
-			if (this.extraParser)
-				this.extraParser(temp);
-			if (this._scheme){ 
+			} else if (subload && this.order[j+from])
+				j++;
+
+			if(this.pull[id]){
+				dhx.extend(this.pull[id],temp,true);//add only new properties
+				if (this._scheme_update)
+					this._scheme_update(this.pull[id]);
+				//update mode, remove item from kill list
+				if (marks)
+					delete marks[id];
+			} else{
+				this.pull[id] = temp;
 				if (this._scheme_init)
 					this._scheme_init(temp);
-				else if (this._scheme_update)
-					this._scheme_update(temp);
-			}				
+			}
+			
 		}
 
-		//for all not loaded data
-		/*
-		for (var i=0; i < info._size; i++)
-			if (!this.order[i]){
-				var id = dhx.uid();
-				var temp = null; //{id:id, $template:"loading"};	//create fake records
-				//this.pull[id]=temp;
-				//this.order[i]=id;
-			}*/
+		//update mode, delete items which are not existing in the new xml
+		if (marks){
+			this.blockEvent();
+			for (var delid in marks)
+				this.remove(delid);
+			this.unblockEvent();
+		}
+
 		if (!this.order[info._size-1])
 			this.order[info._size-1] = dhx.undefined;
-
-		this.callEvent("onStoreLoad",[this.driver, data]);
-		//repaint self after data loading
-		this.refresh();
 	},
 	//generate id for data object
 	id:function(data){
 		return data.id||(data.id=dhx.uid());
 	},
 	changeId:function(old, newid){
-		dhx.assert(this.pull[old],"Can't change id, for non existing item: "+old);
-		this.pull[newid] = this.pull[old];
+		//dhx.assert(this.pull[old],"Can't change id, for non existing item: "+old);
+		if(this.pull[old])
+			this.pull[newid] = this.pull[old];
 		this.pull[newid].id = newid;
 		this.order[this.order.find(old)]=newid;
 		if (this._filter_order)
@@ -1806,18 +1847,19 @@ dhx.DataStore.prototype={
 	},
 	//assigns data by id
 	update:function(id,data){
+		if (dhx.isUndefined(data)) data = this.item(id);
 		if (this._scheme_update)
 			this._scheme_update(data);
 		if (this.callEvent("onBeforeUpdate", [id, data]) === false) return false;
 		this.pull[id]=data;
-		this.refresh(id);
+		this.callEvent("onStoreUpdated",[id, data, "update"]);
 	},
 	//sends repainting signal
 	refresh:function(id){
 		if (this._skip_refresh) return; 
 		
 		if (id)
-			this.callEvent("onStoreUpdated",[id, this.pull[id], "update"]);
+			this.callEvent("onStoreUpdated",[id, this.pull[id], "paint"]);
 		else
 			this.callEvent("onStoreUpdated",[null,null,null]);
 	},
@@ -1833,18 +1875,18 @@ dhx.DataStore.prototype={
 		if (from)
 			from = this.indexById(from);
 		else 
-			from = this.startOffset||0;
+			from = (this.$min||this.startOffset)||0;
 		if (to)
 			to = this.indexById(to);
 		else {
-			to = Math.min((this.endOffset||Infinity),(this.dataCount()-1));
+			to = Math.min(((this.$max||this.endOffset)||Infinity),(this.dataCount()-1));
 			if (to<0) to = 0; //we have not data in the store
 		}
 
 		if (from>to){ //can be in case of backward shift-selection
 			var a=to; to=from; from=a;
 		}
-				
+
 		return this.getIndexRange(from,to);
 	},
 	//converts range of indexes to array of all IDs between them
@@ -1867,11 +1909,8 @@ dhx.DataStore.prototype={
 	//nextmethod is not visible on component level, check DataMove.move
 	//moves item from source index to the target index
 	move:function(sindex,tindex){
-		if (sindex<0 || tindex<0){
-			dhx.error("DataStore::move","Incorrect indexes");
-			return;
-		}
-		
+		dhx.assert(sindex>=0 && tindex>=0, "DataStore::move","Incorrect indexes");
+
 		var id = this.idByIndex(sindex);
 		var obj = this.item(id);
 		
@@ -1894,9 +1933,17 @@ dhx.DataStore.prototype={
 		this._scheme_init = config.$init;
 		this._scheme_update = config.$update;
 		this._scheme_serialize = config.$serialize;
+		
+		if (config.$group)
+			this._scheme_group = config.$group;
+		this._scheme_sort = config.$sort;
+
+
 		delete config.$init;
 		delete config.$update;
 		delete config.$serialize;
+		delete config.$group;
+		delete config.$sort;		
 	},
 	sync:function(source, filter, silent){
 		if (typeof filter != "function"){
@@ -1930,29 +1977,22 @@ dhx.DataStore.prototype={
 				silent = false;
 		}, this);
 		
-		source.attachEvent("onStoreUpdated", sync_logic);
+		this._sync_events = [source.attachEvent("onStoreUpdated", sync_logic)];
 		sync_logic();
 	},
 	//adds item to the store
 	add:function(obj,index){
 		
-		if (this._scheme){
-			obj = obj||{};
-			for (var key in this._scheme)
-				obj[key] = obj[key]||this._scheme[key];
-			if (this._scheme_init)
-				this._scheme_init(obj);
-			else if (this._scheme_update)
-				this._scheme_update(obj);
-		}
+		if (this._scheme_init)
+			this._scheme_init(obj);
 		
 		//generate id for the item
 		var id = this.id(obj);
 		
 		//by default item is added to the end of the list
-		var data_size = this.dataCount();
+		var data_size = this.order.length;
 		
-		if (dhx.isNotDefined(index) || index < 0)
+		if (dhx.isUndefined(index) || index < 0)
 			index = data_size; 
 		//check to prevent too big indexes			
 		if (index > data_size){
@@ -1961,7 +2001,7 @@ dhx.DataStore.prototype={
 		}
 		if (this.callEvent("onBeforeAdd", [id, obj, index]) === false) return false;
 
-		if (this.exists(id)) return dhx.error("Not unique ID");
+		dhx.assert(!this.exists(id), "Not unique ID");
 		
 		this.pull[id]=obj;
 		this.order.insertAt(id,index);
@@ -1975,7 +2015,7 @@ dhx.DataStore.prototype={
 			
 			this._filter_order.insertAt(id,original_index);
 		}
-		this.callEvent("onafterAdd",[id,index]);
+		this.callEvent("onAfterAdd",[id,index]);
 		//repaint signal
 		this.callEvent("onStoreUpdated",[id,obj,"add"]);
 		return id;
@@ -1990,7 +2030,9 @@ dhx.DataStore.prototype={
 			return;
 		}
 		if (this.callEvent("onBeforeDelete",[id]) === false) return false;
-		if (!this.exists(id)) return dhx.error("Not existing ID",id);
+		
+		dhx.assert(this.exists(id), "Not existing ID in remove command"+id);
+
 		var obj = this.item(id);	//save for later event
 		//clear from collections
 		this.order.remove(id);
@@ -1998,7 +2040,7 @@ dhx.DataStore.prototype={
 			this._filter_order.remove(id);
 			
 		delete this.pull[id];
-		this.callEvent("onafterdelete",[id]);
+		this.callEvent("onAfterDelete",[id]);
 		//repaint signal
 		this.callEvent("onStoreUpdated",[id,obj,"delete"]);
 	},
@@ -2066,24 +2108,30 @@ dhx.DataStore.prototype={
 		if (typeof by == "function")
 			sort = {as:by, dir:dir};
 		else if (typeof by == "string")
-			sort = {by:by, dir:dir, as:as};		
-		
+			sort = {by:by.replace(/#/g,""), dir:dir, as:as};
+
 		
 		var parameters = [sort.by, sort.dir, sort.as];
-		if (!this.callEvent("onbeforesort",parameters)) return;	
+		if (!this.callEvent("onBeforeSort",parameters)) return;	
 		
-		if (this.order.length){
-			var sorter = dhx.sort.create(sort);
-			//get array of IDs
-			var neworder = this.getRange(this.first(), this.last());
-			neworder.sort(sorter);
-			this.order = neworder.map(function(obj){ return this.id(obj); },this);
-		}
+		this._sort_core(sort);
 		
 		//repaint self
 		this.refresh();
 		
-		this.callEvent("onaftersort",parameters);
+		this.callEvent("onAfterSort",parameters);
+	},
+	_sort_core:function(sort){
+		if (this.order.length){
+			var sorter = this._sort._create(sort);
+			//get array of IDs
+			var neworder = this.getRange(this.first(), this.last());
+			neworder.sort(sorter);
+			this.order = neworder.map(function(obj){ 
+				dhx.assert(obj, "Client sorting can't be used with dynamic loading")
+				return this.id(obj); 
+			},this);
+		}
 	},
 	/*
 		Filter datasource
@@ -2097,40 +2145,45 @@ dhx.DataStore.prototype={
 		
 		Filter method will receive data object and must return true or false
 	*/
-	filter:function(text,value,preserve){
-		if (!this.callEvent("onBeforeFilter", [text, value])) return;
-		
+	_filter_reset:function(preserve){
 		//remove previous filtering , if any
 		if (this._filter_order && !preserve){
 			this.order = this._filter_order;
 			delete this._filter_order;
 		}
+		return this.order.length;
+	},
+	_filter_core:function(filter, value, preserve){
+		var neworder = dhx.toArray();
+		for (var i=0; i < this.order.length; i++){
+			var id = this.order[i];
+			if (filter(this.item(id),value))
+				neworder.push(id);
+		}
+		//set new order of items, store original
+		if (!preserve ||  !this._filter_order)
+			this._filter_order = this.order;
+		this.order = neworder;
+	},
+	filter:function(text,value,preserve){
+		if (!this.callEvent("onBeforeFilter", [text, value])) return;
 		
-		if (!this.order.length) return;
+		if (!this._filter_reset(preserve)) return;
 		
 		//if text not define -just unfilter previous state and exit
 		if (text){
 			var filter = text;
 			value = value||"";
 			if (typeof text == "string"){
-				text = dhx.Template(text);
+				text = text.replace(/#/g,"");
 				value = value.toString().toLowerCase();
 				filter = function(obj,value){	//default filter - string start from, case in-sensitive
-					return text(obj).toLowerCase().indexOf(value)!=-1;
+					dhx.assert(obj, "Client side filtering can't be used with dynamic loading");
+					return (obj[text]||"").toString().toLowerCase().indexOf(value)!=-1;
 				};
 			}
 			
-					
-			var neworder = dhx.toArray();
-			for (var i=0; i < this.order.length; i++){
-				var id = this.order[i];
-				if (filter(this.item(id),value))
-					neworder.push(id);
-			}
-			//set new order of items, store original
-			if (!preserve)
-				this._filter_order = this.order;
-			this.order = neworder;
+			this._filter_core(filter, value, preserve);
 		}
 		//repaint self
 		this.refresh();
@@ -2143,6 +2196,9 @@ dhx.DataStore.prototype={
 	each:function(method,master){
 		for (var i=0; i<this.order.length; i++)
 			method.call((master||this), this.item(this.order[i]));
+	},
+	_methodPush:function(object,method){
+		return function(){ return object[method].apply(object,arguments); };
 	},
 	/*
 		map inner methods to some distant object
@@ -2166,10 +2222,8 @@ dhx.DataStore.prototype={
 			
 		var list = ["sort","add","remove","exists","idByIndex","indexById","item","update","refresh","dataCount","filter","next","previous","clearAll","first","last","serialize","sync"];
 		for (var i=0; i < list.length; i++)
-			target[list[i]]=dhx.methodPush(this,list[i]);
+			target[list[i]] = this._methodPush(this,list[i]);
 			
-		if (dhx.assert_enabled())		
-			this.assert_event(target);
 	},
 	/*
 		serializes data to a json object
@@ -2186,53 +2240,60 @@ dhx.DataStore.prototype={
 			result.push(el);
 		}
 		return result;
-	}
-};
-
-dhx.sort = {
-	create:function(config){
-		return dhx.sort.dir(config.dir, dhx.sort.by(config.by, config.as));
 	},
-	as:{
-		"int":function(a,b){
-			a = a*1; b=b*1;
-			return a>b?1:(a<b?-1:0);
+
+	_sort:{
+		_create:function(config){
+			return this._dir(config.dir, this._by(config.by, config.as));
 		},
-		"string_strict":function(a,b){
-			a = a.toString(); b=b.toString();
-			return a>b?1:(a<b?-1:0);
+		_as:{
+			"date":function(a,b){
+				a=a-0; b=b-0;
+				return a>b?1:(a<b?-1:0);
+			},
+			"int":function(a,b){
+				a = a*1; b=b*1;
+				return a>b?1:(a<b?-1:0);
+			},
+			"string_strict":function(a,b){
+				a = a.toString(); b=b.toString();
+				return a>b?1:(a<b?-1:0);
+			},
+			"string":function(a,b){
+				if (!b) return 1;
+				if (!a) return -1;
+				
+				a = a.toString().toLowerCase(); b=b.toString().toLowerCase();
+				return a>b?1:(a<b?-1:0);
+			}
 		},
-		"string":function(a,b){
-			a = a.toString().toLowerCase(); b=b.toString().toLowerCase();
-			return a>b?1:(a<b?-1:0);
+		_by:function(prop, method){
+			if (!prop)
+				return method;
+			if (typeof method != "function")
+				method = this._as[method||"string"];
+			return function(a,b){
+				return method(a[prop],b[prop]);
+			};
+		},
+		_dir:function(prop, method){
+			if (prop == "asc" || !prop)
+				return method;
+			return function(a,b){
+				return method(a,b)*-1;
+			};
 		}
-	},
-	by:function(prop, method){
-		if (!prop)
-			return method;
-		if (typeof method != "function")
-			method = dhx.sort.as[method||"string"];
-		prop = dhx.Template(prop);
-		return function(a,b){
-			return method(prop(a),prop(b));
-		};
-	},
-	dir:function(prop, method){
-		if (prop == "asc")
-			return method;
-		return function(a,b){
-			return method(a,b)*-1;
-		};
 	}
 };
-
-
-
 
 
 
 //UI interface
 dhx.BaseBind = {
+	debug_freid_ignore:{
+		"id":true
+	},
+	
 	bind:function(target, rule, format){
 		if (typeof target == 'string')
 			target = dhx.ui.get(target);
@@ -2256,10 +2317,10 @@ dhx.BaseBind = {
 				if (this._in_bind_processing) return;
 				
 				this._in_bind_processing = true;
-				this.callEvent("onBindRequest");
+				var result = this.callEvent("onBindRequest");
 				this._in_bind_processing = false;
 				
-				return old_render.call(this);
+				return old_render.apply(this, ((result === false)?arguments:[]));
 			};
 			if (this.getValue||this.getValues)
 				this.save = function(){
@@ -2274,10 +2335,17 @@ dhx.BaseBind = {
 			dhx.log("[bind] "+this.name+"@"+this._settings.id+" <= "+target.name+"@"+target._settings.id);
 		//FIXME - check for touchable is not the best solution, to detect necessary event
 		this.attachEvent(this.touchable?"onAfterRender":"onBindRequest", function(){
-			target.getBindData(this._settings.id);
+			return target.getBindData(this._settings.id);
 		});
 		if (this.isVisible(this._settings.id))
 			this.refresh();
+	},
+	_unbind:function(target){
+		target.removeBind(this._settings.id);
+		var events = (this._sync_events||(this.data?this.data._sync_events:0));
+		if (events && target.data)
+			for (var i=0; i<events.length; i++)
+				target.data.detachEvent(events[i]);
 	}
 };
 
@@ -2290,6 +2358,12 @@ dhx.BindSource = {
 		
 		//apply specific bind extension
 		this._bind_specific_rules(this);
+	},
+	saveBatch:function(code){
+		this._do_not_update_binds = true;
+		code.call(this);
+		this._do_not_update_binds = false;
+		this._update_binds();
 	},
 	setBindData:function(data, key){
 		if (key)
@@ -2318,7 +2392,7 @@ dhx.BindSource = {
 	//fill target with data
 	getBindData:function(key, update){
 		//fire only if we have data updates from the last time
-		if (this._bind_updated[key]) return;
+		if (this._bind_updated[key]) return false;
 		var target = dhx.ui.get(key);
 		//fill target only when it visible
 		if (target.isVisible(target._settings.id)){
@@ -2328,12 +2402,16 @@ dhx.BindSource = {
 			this._bind_update(target, this._bind_hash[key][0], this._bind_hash[key][1]); //trigger component specific updating logic
 			if (update && target.filter)
 				target.refresh();
-			
 		}
 	},
 	//add one more bind target
 	addBind:function(source, rule, format){
 		this._bind_hash[source] = [rule, format];
+	},
+	removeBind:function(source){
+		delete this._bind_hash[source];
+		delete this._bind_updated[source];
+		delete this._ignore_binds[source];
 	},
 	//returns true if object belong to "collection" type
 	_bind_specific_rules:function(obj){
@@ -2346,11 +2424,12 @@ dhx.BindSource = {
 	},
 	//inform all binded objects, that source data was updated
 	_update_binds:function(){
-		for (var key in this._bind_hash){
-			if (this._ignore_binds[key]) continue;
-			this._bind_updated[key] = false;
-			this.getBindData(key, true);
-		}
+		if (!this._do_not_update_binds)
+			for (var key in this._bind_hash){
+				if (this._ignore_binds[key]) continue;
+				this._bind_updated[key] = false;
+				this.getBindData(key, true);
+			}
 	},
 	//copy data from source to the target
 	_bind_update_common:function(target, rule, data){
@@ -2361,13 +2440,14 @@ dhx.BindSource = {
 				target.clear();
 			else {
 				if (target._check_data_feed(data))
-					target.setValues(dhx.copy(data));
+					target.setValues(dhx.clone(data));
 			}
 		} else {
 			target.data.silent(function(){
 				this.filter(rule,data);
 			});
 		}
+		target.callEvent("onBindApply", [data,rule,this]);
 	}
 };
 
@@ -2409,7 +2489,7 @@ dhx.DataRecord = dhx.proto({
 		this.callEvent("onChange", [data]);
 	},
 	refresh:function(){ this.callEvent("onBindRequest"); }
-}, dhx.EventSystem, dhx.BaseBind);
+}, dhx.EventSystem, dhx.BaseBind, dhx.AtomDataLoader, dhx.Settings);
 
 
 dhx.DataCollection = dhx.proto({
@@ -2428,7 +2508,7 @@ dhx.DataCollection = dhx.proto({
 		}, this));
 	},
 	refresh:function(){ this.callEvent("onBindRequest",[]); }
-}, dhx.EventSystem, dhx.DataLoader, dhx.BaseBind, dhx.Settings);
+}, dhx.DataLoader, dhx.EventSystem, dhx.BaseBind, dhx.Settings);
 
 
 
@@ -2452,6 +2532,7 @@ dhx.ValueBind={
 				this.filter(rule,data);
 			});
 		}
+		target.callEvent("onBindApply", [data,rule,this]);
 	}
 };
 
@@ -2469,7 +2550,8 @@ dhx.CollectionBind={
 	$init:function(){
 		this._cursor = null;
 		this.attachEvent("onSelectChange", function(data){
-			this.setCursor(this.getSelected());
+			var sel = this.getSelected();
+			this.setCursor(sel?(sel.id||sel):"");
 		});
 		this.attachEvent("onAfterCursorChange", this._update_binds);		
 		this.data.attachEvent("onStoreUpdated", dhx.bind(function(id){
@@ -2485,8 +2567,8 @@ dhx.CollectionBind={
 		},this));
 	},
 	setCursor:function(id){
-		if (id == this._cursor || !this.item(id)) return;
-
+		if (id == this._cursor || (id !== null && !this.item(id))) return;
+		
 		this.callEvent("onBeforeCursorChange", [this._cursor]);
 		this._cursor = id;
 		this.callEvent("onAfterCursorChange",[id]);
@@ -2499,12 +2581,14 @@ dhx.CollectionBind={
 		this._bind_update_common(target, rule, data);
 	}
 };	
-/*DHX:Depend core/datastore.js*/
-/*DHX:Depend libs/legacy_bind.js*/
+/*DHX:Depend core/legacy_bind.js*/
 /*DHX:Depend core/dhx.js*/
 /*DHX:Depend core/bind.js*/
 
 /*jsl:ignore*/
+
+if (!dhx.ui)
+	dhx.ui = {};
 
 if (!dhx.ui.views){
 	dhx.ui.views = {};
@@ -2566,7 +2650,10 @@ dhtmlXDataStore = function(config){
 	obj.getUserData=function(id,name){
 		return this._userdata[id];
 	};
-
+	obj.dataFeed=function(obj){
+		this.define("dataFeed", obj);
+	};
+	dhx.extend(obj, dhx.BindSource);
 	return obj;
 };
 
@@ -2576,8 +2663,12 @@ if (window.dhtmlXDataView)
 			if (!this.data.order.length && !this.data._filter_order && !this._settings.dataFeed) return false;
 			return true;
 		};
+		var settings = "_settings";
+		this._settings = this._settings || this[settings];
 		if (!this._settings.id)
 			this._settings.id = dhx.uid();
+		this.unbind = dhx.BaseBind.unbind;
+		this.unsync = dhx.BaseBind.unsync;
 		dhx.ui.views[this._settings.id] = this;
 	};
 
@@ -2587,11 +2678,22 @@ if (window.dhtmlXChart)
 			if (!this.data.order.length && !this.data._filtered_state && !this._settings.dataFeed) return false;
 			return true;
 		};
+		var settings = "_settings";
+		this._settings = this._settings || this[settings];
 		if (!this._settings.id)
 			this._settings.id = dhx.uid();
+		this.unbind = dhx.BaseBind.unbind;
+		this.unsync = dhx.BaseBind.unsync;
 		dhx.ui.views[this._settings.id] = this;
 	};
 	
+
+dhx.BaseBind.unsync = function(target){
+	return dhx.BaseBind._unbind.call(this, target);
+}
+dhx.BaseBind.unbind = function(target){
+	return dhx.BaseBind._unbind.call(this, target);
+}
 dhx.BaseBind.legacyBind = function(){
 	return dhx.BaseBind.bind.apply(this, arguments);
 };
@@ -2612,17 +2714,25 @@ dhx.BaseBind.legacySync = function(source, rule){
 				tobj[key] = sobj[key];
 		source.refresh(id);
 	};
-	return this.data.sync.apply(this.data, arguments);
+
+	if (source && source.name == "DataCollection")
+		return source.data.sync.apply(this.data, arguments);
+	else
+		return this.data.sync.apply(this.data, arguments);
 };
 
 if (window.dhtmlXForm){
 	
-	dhtmlXForm.prototype.bind = function(){
+	dhtmlXForm.prototype.bind = function(target){
 		dhx.BaseBind.bind.apply(this, arguments);
+		target.getBindData(this._settings.id);
+	};
+	dhtmlXForm.prototype.unbind = function(target){
+		dhx.BaseBind._unbind.call(this,target);
 	};
 
 	dhtmlXForm.prototype._initBindSource = function(){
-		if (dhx.isNotDefined(this._settings)){
+		if (dhx.isUndefined(this._settings)){
 			this._settings = {
 				id: dhx.uid(),
 				dataFeed:this._server_feed
@@ -2633,6 +2743,8 @@ if (window.dhtmlXForm){
 	dhtmlXForm.prototype._check_data_feed = function(data){
 		if (!this._settings.dataFeed || this._ignore_feed || !data) return true;
 		var url = this._settings.dataFeed;
+		if (typeof url == "function")
+			return url.call(this, (data.id||data), data);
 		url = url+(url.indexOf("?")==-1?"?":"&")+"action=get&id="+encodeURIComponent(data.id||data);
 		this.load(url);
 		return false;
@@ -2654,10 +2766,78 @@ if (window.dhtmlXForm){
 	};
 }
  
+if (window.scheduler){
+	if (!window.Scheduler)
+		window.Scheduler = {};
+	Scheduler.$syncFactory=function(scheduler){
+		scheduler.sync = function(source, rule){
+			if (this._initBindSource) this._initBindSource();
+			if (source._initBindSource) source._initBindSource();
+
+			var process = "_process_loading";
+			var insync = function(ignore){
+					scheduler.clearAll();
+					var order = source.data.order;
+					var pull = source.data.pull;
+					var evs = [];
+					for (var i=0; i<order.length; i++){
+						if (rule && rule.copy)
+							evs[i]=dhx.clone(pull[order[i]]);
+						else
+							evs[i]=pull[order[i]];
+					}
+					scheduler[process](evs);
+			};
+			this.save = function(id){
+				if (!id) id = this.getCursor();
+				var data = this.item(id);
+				var olddat = source.item(id);
+
+				if (this.callEvent("onStoreSave", [id, data, olddat])){
+					dhx.extend(source.item(id),data, true);
+					source.update(id);
+				}
+			};
+			this.item = function(id){
+				return this.getEvent(id);
+			};
+			this._sync_events=[
+				source.data.attachEvent("onStoreUpdated", function(id, data, mode){ 
+					insync.call(this);
+				}),
+				source.data.attachEvent("onIdChange", function(oldid, newid){
+					combo.changeOptionId(oldid, newid);
+				})
+			];
+			this.attachEvent("onEventChanged", function(id){
+				this.save(id);
+			});
+			this.attachEvent("onEventAdded", function(id, data){
+				if (!source.data.pull[id])
+				source.add(data);
+			});
+			insync();
+		};
+		scheduler.unsync = function(target){
+			dhx.BaseBind._unbind.call(this,target);
+		}
+		scheduler._initBindSource = function(){
+			if (!this._settings)
+				this._settings = { id:dhx.uid() };
+		}
+	}
+	Scheduler.$syncFactory(window.scheduler);
+}
 if (window.dhtmlXCombo){
 	dhtmlXCombo.prototype.bind = function(){
 		dhx.BaseBind.bind.apply(this, arguments);
 	};
+	dhtmlXCombo.unbind = function(target){
+		dhx.BaseBind._unbind.call(this,target);
+	}
+	dhtmlXCombo.unsync = function(target){
+		dhx.BaseBind._unbind.call(this,target);
+	}
 
 	dhtmlXCombo.prototype.dataFeed = function(value){
 		if (this._settings)
@@ -2679,19 +2859,21 @@ if (window.dhtmlXCombo){
 		};
 
 		//source.data.attachEvent("onStoreLoad", insync);
-		source.data.attachEvent("onStoreUpdated", function(id, data, mode){ 
-			insync.call(this);
-		});
-		source.data.attachEvent("onIdChange", function(oldid, newid){
-			combo.changeOptionId(oldid, newid);
-		});
+		this._sync_events=[
+			source.data.attachEvent("onStoreUpdated", function(id, data, mode){ 
+				insync.call(this);
+			}),
+			source.data.attachEvent("onIdChange", function(oldid, newid){
+				combo.changeOptionId(oldid, newid);
+			})
+		];
 
 
 		insync.call(source);
 	};
 
 	dhtmlXCombo.prototype._initBindSource = function() { 
-		if (dhx.isNotDefined(this._settings)){
+		if (dhx.isUndefined(this._settings)){
 			this._settings = {
 				id: dhx.uid(),
 				dataFeed:this._server_feed
@@ -2737,7 +2919,12 @@ if (window.dhtmlXGridObject){
 	dhtmlXGridObject.prototype.bind = function(source, rule, format) {
 		dhx.BaseBind.bind.apply(this, arguments);
 	};
-
+	dhtmlXGridObject.prototype.unbind = function(target){
+		dhx.BaseBind._unbind.call(this,target);
+	}
+	dhtmlXGridObject.prototype.unsync = function(target){
+		dhx.BaseBind._unbind.call(this,target);
+	}
 	
 	dhtmlXGridObject.prototype.dataFeed = function(value){
 		if (this._settings)
@@ -2750,7 +2937,6 @@ if (window.dhtmlXGridObject){
 		if (this._initBindSource) this._initBindSource();
 		if (source._initBindSource) source._initBindSource();
 
-
 		var grid = this;
 		var parsing = "_parsing";
 		var parser = "_parser";
@@ -2761,7 +2947,7 @@ if (window.dhtmlXGridObject){
 		this.save = function(id){
 			if (!id) id = this.getCursor();
 			dhx.extend(source.item(id),this.item(id), true);
-			source.refresh(id);
+			source.update(id);
 		};
 		var insync = function(ignore){
 			var from = 0; 
@@ -2771,8 +2957,6 @@ if (window.dhtmlXGridObject){
 			} else {
 				grid.clearAll();
 			}
-
-			if (ignore === -1) return;
 
 			var count = this.dataCount();
 			if (count){
@@ -2809,37 +2993,31 @@ if (window.dhtmlXGridObject){
 		};
 
 		//source.data.attachEvent("onStoreLoad", insync);
-		source.data.attachEvent("onStoreUpdated", function(id, data, mode){ 
-			if (mode == "delete"){
-				grid.deleteRow(id);
-				grid.data.callEvent("onStoreUpdated",[id, data, mode]);
-			} else if (mode == "update"){
-				grid.callEvent("onSyncUpdate", [data, mode]);
-				grid.update(id, data);
-				grid.data.callEvent("onStoreUpdated",[id, data, mode]);
-			} else if (mode == "add"){
-				grid.callEvent("onSyncUpdate", [data, mode]);
-				grid.add(id, data);
-				grid.data.callEvent("onStoreUpdated",[id,data,mode]);
-			} else insync.call(this);
+		this._sync_events=[
+			source.data.attachEvent("onStoreUpdated", function(id, data, mode){ 
+				if (mode == "delete"){
+					grid.deleteRow(id);
+					grid.data.callEvent("onStoreUpdated",[id, data, mode]);
+				} else if (mode == "update"){
+					grid.callEvent("onSyncUpdate", [data, mode]);
+					grid.update(id, data);
+					grid.data.callEvent("onStoreUpdated",[id, data, mode]);
+				} else if (mode == "add"){
+					grid.callEvent("onSyncUpdate", [data, mode]);
+					grid.add(id, data, this.indexById(id));
+					grid.data.callEvent("onStoreUpdated",[id,data,mode]);
+				} else insync.call(this);
 
-		});
-
-		source.data.attachEvent("onStoreLoad", function(driver, data){
-			grid.xmlFileUrl = source.data.url;
-			grid._legacy_ignore_next = driver.getInfo(data)._from;
-		});
-
-		source.data.attachEvent("onIdChange", function(oldid, newid){
-			grid.changeRowId(oldid, newid);
-		});
+			}),
+			source.data.attachEvent("onStoreLoad", function(driver, data){
+				grid.xmlFileUrl = source.data.url;
+				grid._legacy_ignore_next = driver.getInfo(data)._from;
+			}),
+			source.data.attachEvent("onIdChange", function(oldid, newid){
+				grid.changeRowId(oldid, newid);
+			})
+		];
 		
-		insync(-1);
-		grid.attachEvent("onEditCell", function(stage, id, ind, value, oldvalue){
-			if (stage==2)
-				this.save(id);
-			return true;
-		});
 		grid.attachEvent("onDynXLS", function(start, count){
 			for (var i=start; i<start+count; i++)
 				if (!source.data.order[i]){
@@ -2847,7 +3025,14 @@ if (window.dhtmlXGridObject){
 					return false;
 				}
 			grid._legacy_ignore_next = start;
-			insync();
+			insync.call(source.data);
+		});
+
+		insync.call(source.data);
+		grid.attachEvent("onEditCell", function(stage, id, ind, value, oldvalue){
+			if (stage==2)
+				this.save(id);
+			return true;
 		});
 		grid.attachEvent("onClearAll",function(){
 			var name = "_f_rowsBuffer";
@@ -2882,6 +3067,11 @@ if (window.dhtmlXGridObject){
 				return false;
 			});
 
+		if (rule && rule.select)
+			grid.attachEvent("onRowSelect", function(id){
+				source.setCursor(id);
+			});
+
 		grid.clearAndLoad = function(url){
 			source.clearAll();
 			source.load(url);
@@ -2892,7 +3082,7 @@ if (window.dhtmlXGridObject){
 	};
 
 	dhtmlXGridObject.prototype._initBindSource = function() { 
-		if (dhx.isNotDefined(this._settings)){
+		if (dhx.isUndefined(this._settings)){
 			this._settings = {
 				id: dhx.uid(),
 				dataFeed:this._server_feed
@@ -2934,7 +3124,7 @@ if (window.dhtmlXGridObject){
 		if (!source) return null;
 		
 		var name = "_attrs";
-		var data = dhx.fullCopy(source[name]);
+		var data = dhx.copy(source[name]);
 			data.id = id;
 		var length = this.getColumnsNum();
 		for (var i = 0; i < length; i++) {
@@ -2946,24 +3136,25 @@ if (window.dhtmlXGridObject){
 	dhtmlXGridObject.prototype.update = function(id,data){
 		for (var i=0; i<this.columnIds.length; i++){
 			var key = this.columnIds[i];
-			if (!dhx.isNotDefined(data[key]))
+			if (!dhx.isUndefined(data[key]))
 				this.cells(id, i).setValue(data[key]);
 		}
 		var name = "_attrs";
 		var attrs = this.getRowById(id)[name];
 		for (var key in data)
 			attrs[key] = data[key];
+		this.callEvent("onBindUpdate",[id]);
 	};
 
-	dhtmlXGridObject.prototype.add = function(id,data){ 
+	dhtmlXGridObject.prototype.add = function(id,data,index){
 		var ar_data = [];
 		for (var i=0; i<this.columnIds.length; i++){
 			var key = this.columnIds[i];
-			ar_data[i] = dhx.isNotDefined(data[key])?"":data[key];
+			ar_data[i] = dhx.isUndefined(data[key])?"":data[key];
 		}
-		this.addRow(id, ar_data,0);
+		this.addRow(id, ar_data, index);
 		var name = "_attrs";
-		this.getRowById(id)[name] = dhx.fullCopy(data);
+		this.getRowById(id)[name] = dhx.copy(data);
 	};
 
 	dhtmlXGridObject.prototype.getSelected = function() {
@@ -2986,13 +3177,16 @@ if (window.dhtmlXGridObject){
 			if (typeof callback == "function"){
 				if (!master) return;
 				callback(master, filter);
-			} else  if (dhx.isNotDefined(callback))
+			} else  if (dhx.isUndefined(callback))
 				filter = master;
 			else
 				filter[callback] = master;
 
 			this.clearAll(); 
 			var url = this._settings.dataFeed;
+			if (typeof url == "function")
+				return url.call(this, master, filter);
+
 			var urldata = [];
 			for (var key in filter)
 				urldata.push("dhx_filter["+key+"]="+encodeURIComponent(filter[key]));
@@ -3016,6 +3210,11 @@ if (window.dhtmlXTreeObject){
 	dhtmlXTreeObject.prototype.bind = function() {
 		dhx.BaseBind.bind.apply(this, arguments);
 	};
+	dhtmlXTreeObject.prototype.unbind = function(target){
+		dhx.BaseBind._unbind.call(this,target);
+	}
+
+	
 
 	dhtmlXTreeObject.prototype.dataFeed = function(value){
 		if (this._settings)
@@ -3025,7 +3224,7 @@ if (window.dhtmlXTreeObject){
 	};
 
 	dhtmlXTreeObject.prototype._initBindSource = function() {
-		if (dhx.isNotDefined(this._settings)){
+		if (dhx.isUndefined(this._settings)){
 			this._settings = {
 				id: dhx.uid(),
 				dataFeed:this._server_feed
@@ -3074,13 +3273,15 @@ if (window.dhtmlXTreeObject){
 			if (typeof callback == "function"){
 				if (!master) return;
 				callback(master, filter);
-			} else  if (dhx.isNotDefined(callback))
+			} else  if (dhx.isUndefined(callback))
 				filter = master;
 			else
 				filter[callback] = master;
 
 			this.deleteChildItems(0); 
 			var url = this._settings.dataFeed;
+			if (typeof url == "function")
+				return url.call(this, [(data.id||data), data]);
 			var urldata = [];
 			for (var key in filter)
 				urldata.push("dhx_filter["+key+"]="+encodeURIComponent(filter[key]));
@@ -3091,9 +3292,10 @@ if (window.dhtmlXTreeObject){
 	};
 
 	dhtmlXTreeObject.prototype.update = function(id,data){
-		if (!dhx.isNotDefined(data.text))
+		if (!dhx.isUndefined(data.text))
 			this.setItemText(id, data.text);
 	};
 }
 
 /*jsl:end*/
+

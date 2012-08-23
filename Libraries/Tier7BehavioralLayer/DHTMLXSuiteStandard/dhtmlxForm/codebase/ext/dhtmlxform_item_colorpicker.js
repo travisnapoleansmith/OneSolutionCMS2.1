@@ -20,10 +20,10 @@ dhtmlXForm.prototype.items.colorpicker = {
 		item._enabled = true;
 		
 		this.doAddLabel(item, data);
-		this.doAddInput(item, data, "INPUT", "TEXT", true, true, "dhxlist_txt_textarea");
+		this.doAddInput(item, data, "INPUT", "TEXT", true, true, "dhxform_textarea");
 		
 		item._value = (data.value||"");
-		item.childNodes[1].childNodes[0].value = item._value;
+		item.childNodes[item._ll?1:0].childNodes[0].value = item._value;
 		
 		this.cz[item._idd] = document.createElement("DIV");
 		this.cz[item._idd].style.position = "absolute";
@@ -57,8 +57,8 @@ dhtmlXForm.prototype.items.colorpicker = {
 		});
 	
 		
-		item.childNodes[1].childNodes[0]._idd = item._idd;
-		item.childNodes[1].childNodes[0].onclick = function(){
+		item.childNodes[item._ll?1:0].childNodes[0]._idd = item._idd;
+		item.childNodes[item._ll?1:0].childNodes[0].onclick = function(){
 			if (t.colorpicker[this._idd].isVisible()) {
 				t.colorpicker[this._idd].hide();
 				t.inp = null;
@@ -113,7 +113,7 @@ dhtmlXForm.prototype.items.colorpicker = {
 		}
 		
 		// remove custom events/objects
-		item.childNodes[1].childNodes[0]._idd = null;
+		item.childNodes[item._ll?1:0].childNodes[0]._idd = null;
 		
 		// unload item
 		this.d2(item);
@@ -123,7 +123,7 @@ dhtmlXForm.prototype.items.colorpicker = {
 
 
 (function(){
-	for (var a in {doAddLabel:1,doAddInput:1,doUnloadNestedLists:1,setText:1,getText:1,enable:1,disable:1,setWidth:1,setReadonly:1,isReadonly:1,setValue:1,getValue:1,setFocus:1,getInput:1})
+	for (var a in {doAddLabel:1,doAddInput:1,doUnloadNestedLists:1,setText:1,getText:1,enable:1,disable:1,isEnabled:1,setWidth:1,setReadonly:1,isReadonly:1,setValue:1,getValue:1,setFocus:1,getInput:1})
 		dhtmlXForm.prototype.items.colorpicker[a] = dhtmlXForm.prototype.items.input[a];
 })();
 

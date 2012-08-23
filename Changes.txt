@@ -1,3 +1,19 @@
+Changes For One Solution CMS 2.1.134 - Thursday, August 23, 2012
+Added:
+	Nothing Added.
+	
+Updated (Fixed):
+	1). Updated DHTMLX Suite Standard - Updated from version 3.0 to 3.5.
+	2). Updated Photos Page - Order feature has been re-enabled. Photos Sets can be put in a different order again.
+	3). Updated SimpleViewer - Upgraded to Version 2.3.0.
+	4). Updated Table Content - Fixed the loading problems with some tables.
+	5). Updated Table Content - Added a new feature that allows the user to select where to put a new row.
+	
+Removed:
+	1). Removed DHTMLX Suite Standard - All documentation and samples have been removed from the library.
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.133 - Tuesday, August 7, 2012
 Added:
 	1). Added an Installer folder to the Administrators folder for a future installer.

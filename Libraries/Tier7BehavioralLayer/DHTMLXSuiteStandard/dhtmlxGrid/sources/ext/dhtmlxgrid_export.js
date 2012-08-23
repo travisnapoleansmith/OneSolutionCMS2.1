@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -6,6 +6,18 @@ You allowed to use this component or parts of it under GPL terms
 To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
 */
 dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
+	var save_sel = {
+		row: this.getSelectedRowId(),
+		col: this.getSelectedCellIndex()
+	};
+	if (save_sel.row === null || save_sel.col === -1)
+		save_sel = false;
+	else {
+		var el = this.cells(save_sel.row, save_sel.col).cell;
+		el.parentNode.className = el.parentNode.className.replace(' rowselected', '');
+		el.className = el.className.replace(' cellselected', '');
+		save_sel.el = el;
+	}
 	mode = mode || "color";	
 	var full_color = mode == "full_color";
 	var grid = this;
@@ -45,7 +57,7 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
                 var row = grid.hdr.rows[i];
     	        var cxml="";
 	    	for (var j=0; j < grid._cCount; j++) {
-	    		if ((grid._srClmn && !grid._srClmn[j]) || (grid._hrrar[j])) {
+	    		if ((grid._srClmn && !grid._srClmn[j]) || (grid._hrrar[j] && ( !grid._fake || j >= grid._fake.hdrLabels.length))) {
 	    			empty_cols++;
 	    			continue;
     			}
@@ -97,7 +109,7 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
 			var row = grid.ftr.rows[i];
 			for (var j=0; j < grid._cCount; j++){
 				if (grid._srClmn && !grid._srClmn[j]) continue;
-				if (grid._hrrar[j]) continue;
+				if (grid._hrrar[j] && ( !grid._fake || j >= grid._fake.hdrLabels.length)) continue;
 				for (var k=0; k<row.cells.length; k++){
 				 	var val = "";
 				 	var span = "";
@@ -107,6 +119,9 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
 						
 						if (row.cells[k].colSpan && row.cells[k].colSpan!=1)
 							span = " colspan='"+row.cells[k].colSpan+"' ";
+						
+						if (row.cells[k].rowSpan && row.cells[k].rowSpan!=1)
+							span = " rowspan='"+row.cells[k].rowSpan+"' ";
 						break;
 					}
 				}
@@ -125,9 +140,10 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
 		if (!grid.rowsBuffer[ind]) return "";
 		var r = grid.render_row(ind);
 		if (r.style.display=="none") return "";
-		var xml = "<row>";
+		var level = grid.isTreeGrid() ? ' level="' + grid.getLevel(r.idd) + '"' : '';
+		var xml = "<row" + level + ">";
 		for (var i=0; i < grid._cCount; i++) {
-			if (((!grid._srClmn)||(grid._srClmn[i]))&&(!grid._hrrar[i])){
+			if (((!grid._srClmn)||(grid._srClmn[i]))&&(!grid._hrrar[i] || ( grid._fake && i < grid._fake.hdrLabels.length))){
 				var cell = grid.cells(r.idd, i);
 				if (full_color){
 					var text_color	= get_style(cell.cell,"color");
@@ -151,11 +167,7 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
 	    return xml;
 	}
 
-	if (grid._fake){
-	  	var st_hr = [].concat(grid._hrrar);
-		for (var i=0; i < grid._fake._cCount; i++)
-			grid._hrrar[i]=null;
-	}
+
 			
 	var d=document.createElement("div");
 	d.style.display="none";
@@ -168,18 +180,30 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,target){
 	d.parentNode.removeChild(d);
 
 
-	
-	if (grid._fake)
-		grid._hrrar = st_hr;
-			
 	grid = null;
+	
+	if (save_sel) {
+		save_sel.el.parentNode.className += ' rowselected';
+		save_sel.el.className += ' cellselected';
+	};
+	save_sel = null;
 };
 dhtmlXGridObject.prototype._serialiseExportConfig=function(spans){
+	function xmlentities(str) {
+		if (typeof(str)!=='string') return str;
+		str = str.replace(/&/g, "&amp;");
+		str = str.replace(/"/g, "&quot;");
+		str = str.replace(/'/g, "&apos;");
+		str = str.replace(/</g, "&lt;");
+		str = str.replace(/>/g, "&gt;");
+		return str;
+	}
+	
 	var out = "<head>";
 
 	for (var i = 0; i < this.hdr.rows[0].cells.length; i++){
 		if (this._srClmn && !this._srClmn[i]) continue;
-		if (this._hrrar[i]) continue;
+		if (this._hrrar[i] && ( !this._fake || i >= this._fake.hdrLabels.length)) continue;
 		var sort = this.fldSort[i];
 		if (sort == "cus"){
 			sort = this._customSorts[i].toString();
@@ -199,7 +223,7 @@ dhtmlXGridObject.prototype._serialiseExportConfig=function(spans){
 		var z = this.getCombo(i);
 
 		if (z)
-			for (var j = 0; j < z.keys.length; j++)out+="<option value='"+z.keys[j]+"'>"+z.values[j]+"</option>";
+			for (var j = 0; j < z.keys.length; j++)out+="<option value='"+xmlentities(z.keys[j])+"'><![CDATA["+z.values[j]+"]]></option>";
 		out+="</column>";
 	}
 	return out+="</head>";

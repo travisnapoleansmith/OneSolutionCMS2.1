@@ -11,6 +11,11 @@
 	font-family: Tahoma;
 	/*background-image*/
 }
+.dhtmlxcalendar_ifr {
+	position: absolute;
+	overflow: hidden;
+	background-color: white;
+}
 div.dhtmlxcalendar_skin_cont {
 	position: relative;
 	width: 100%;
@@ -523,6 +528,7 @@ div.dhtmlxcalendar_skin_cont {
 	background-position: -78px -48px;
 	-moz-user-select: none;
 	cursor: default;
+	color: black;
 	/*background-image*/
 }
 .dhtmlxcalendar_container div.dhtmlxcalendar_selector_obj table.dhtmlxcalendar_selector_table td.dhtmlxcalendar_selector_cell_middle ul.dhtmlxcalendar_selector_line li.dhtmlxcalendar_selector_cell.dhtmlxcalendar_selector_cell_active {

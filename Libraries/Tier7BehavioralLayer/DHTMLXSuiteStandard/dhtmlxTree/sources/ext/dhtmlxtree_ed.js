@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -75,15 +75,21 @@ dhtmlXTreeObject.prototype.setEditStartAction=function(click_IE, dblclick){
         this._edn_dblclick=convertStringToBoolean(dblclick);
         };
 
-dhtmlXTreeObject.prototype._stopEdit=function(a){
+dhtmlXTreeObject.prototype._stopEdit=function(a,mode){
     if  (this._editCell){
         this.dADTempOff=this.dADTempOffEd;
         if (this._editCell.id!=a){
-
-	        var editText=true;
+			
+			var editText=true;
+			if(!mode){
 	            editText=this.callEvent("onEdit",[2,this._editCell.id,this,this._editCell.span.childNodes[0].value]);
+			}
+			else{
+				editText = false;
+				this.callEvent("onEditCancel",[this._editCell.id,this._editCell._oldValue]);
+			}
 	        if (editText===true)
-	            editText=this._editCell.span.childNodes[0].value;
+	           	editText=this._editCell.span.childNodes[0].value;
 	        else if (editText===false) editText=this._editCell._oldValue;
 	        
 			var changed = (editText!=this._editCell._oldValue);
@@ -99,7 +105,8 @@ dhtmlXTreeObject.prototype._stopEdit=function(a){
 	        if (this.childCalc)  this._fixChildCountLabel(this._editCell);
 	        this._editCell=null;
 	        
-	        this.callEvent("onEdit",[3,id,this,changed]);
+			if(!mode)
+	        	this.callEvent("onEdit",[3,id,this,changed]);
 	        
 			if (this._enblkbrd){
 				this.parentObject.lastChild.focus();
@@ -119,9 +126,9 @@ dhtmlXTreeObject.prototype._stopEditItem=function(id,tree){
 *     @topic: 0
 */
 
-dhtmlXTreeObject.prototype.stopEdit=function(){
+dhtmlXTreeObject.prototype.stopEdit=function(mode){
     if (this._editCell)
-        this._stopEdit(this._editCell.id+"_non");
+        this._stopEdit(this._editCell.id+"_non",mode);
 }
 
 /**

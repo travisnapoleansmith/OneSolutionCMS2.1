@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -85,12 +85,21 @@ dhtmlXGridObject.prototype.collectValues=function(column){
 		var val=this._get_cell_value(col[i],column);
 		if (val && (!col[i]._childIndexes || col[i]._childIndexes[column]!=col[i]._childIndexes[column-1])) c[val]=true;
 	}
-
-	this.dma(false)
-	
-	var vals=this.combos[column];
+	this.dma(false);
+	var vals= (this.combos[column]||(this._col_combos?this._col_combos[column]:false));
 	for (var d in c) 
-		if (c[d]===true) f.push(vals?(vals.get(d)||d):d);
+		if (c[d]===true){
+           if(vals){
+               if(vals.get&&vals.get(d)){
+                   d = vals.get(d);
+               }
+               else if(vals.getOption&&vals.getOption(d)){
+                   d = vals.getOption(d).text;
+               }
+
+           }
+           f.push(d);
+        }
 	
 	return f.sort();			
 }
@@ -118,13 +127,16 @@ dhtmlXGridObject.prototype.filterByAll=function(){
 		if (ind >= this._cCount) continue;
 		var ind=this._m_order?this._m_order[this.filters[i][1]]:this.filters[i][1];
 		b.push(ind);
-		
-		
 		var val=this.filters[i][0]._filter?this.filters[i][0]._filter():this.filters[i][0].value;
 		var vals;
-		if (typeof val != "function" && (vals=this.combos[ind])){
-			ind=vals.values._dhx_find(val);
-			val=(ind==-1)?val:vals.keys[ind];
+		if (typeof val != "function" && (vals=(this.combos[ind]||(this._col_combos?this._col_combos[ind]:false)))){
+            if(vals.values){
+                ind=vals.values._dhx_find(val);
+			    val=(ind==-1)?val:vals.keys[ind];
+            }
+			else if(vals.getOptionByLabel){
+                val=(vals.getOptionByLabel(val)?vals.getOptionByLabel(val).value:val);
+            }
 		}
 		a.push(val);
 		
@@ -174,7 +186,7 @@ dhtmlXGridObject.prototype.makeFilter=function(id,column,preserve){
 	} 
 	else if (id.tagName=='INPUT'){
 		this.filters.push([id,column]);
-		id.value='';
+		id.old_value = id.value='';
 		id.onkeydown=function(){
 			if (this._timer) window.clearTimeout(this._timer);
 			this._timer=window.setTimeout(function(){
@@ -223,7 +235,13 @@ dhtmlXGridObject.prototype.makeFilter=function(id,column,preserve){
 	*   @returns: array each member of which contains array with row ID  and cell index
 	*   @type:  public
 	*/
-	dhtmlXGridObject.prototype.findCell=function(value, c_ind, count){ 
+	dhtmlXGridObject.prototype.findCell=function(value, c_ind, count, compare){ 
+		var compare = compare || (function(master, check){
+			return check.toString().toLowerCase().indexOf(master) != -1;
+		});
+		if (compare === true)
+			compare = function(master, check){ return check.toString().toLowerCase() == master; };
+
 		var res = new Array();
 		value=value.toString().toLowerCase();
 		if (typeof count != "number") count = count?1:0;
@@ -235,13 +253,13 @@ dhtmlXGridObject.prototype.makeFilter=function(id,column,preserve){
 			if (this._h2)
 				this._h2.forEachChild(0,function(el){
 					if (count && res.length==count) return res;
-					if (this._get_cell_value(el.buff,i).toString().toLowerCase().indexOf(value) != -1){
+					if (compare(value, this._get_cell_value(el.buff,i))){
 						res.push([el.id,i]);
 					}
 				},this)
 			else
 				for (var j=0; j < this.rowsBuffer.length; j++) 
-					if (this._get_cell_value(this.rowsBuffer[j],i).toString().toLowerCase().indexOf(value) != -1){
+					if (compare(value, this._get_cell_value(this.rowsBuffer[j],i))){
 						res.push([this.rowsBuffer[j].idd,i]);
 						if (count && res.length==count) return res;
 					}
@@ -263,7 +281,7 @@ dhtmlXGridObject.prototype.makeFilter=function(id,column,preserve){
 *	@edition: Professional
 *   @topic: 0
 */
-dhtmlXGridObject.prototype.makeSearch=function(id,column){
+dhtmlXGridObject.prototype.makeSearch=function(id,column,strict){
 	if (typeof(id)!="object")
 		id=document.getElementById(id);
 	if(!id) return;
@@ -274,7 +292,7 @@ dhtmlXGridObject.prototype.makeSearch=function(id,column){
 			if (this._timer) window.clearTimeout(this._timer);
 			this._timer=window.setTimeout(function(){
 				if (id.value=="") return;
-				var z=self.findCell(id.value,column,true);
+				var z=self.findCell(id.value,column,true,strict);
 				if (z.length){
 					if (self._h2)
 						self.openItem(z[0][0]);
@@ -302,15 +320,15 @@ dhtmlXGridObject.prototype.setSelectFilterLabel=function(ind,fun){
 		this._filter_tr[ind]=fun;
 }
 
-dhtmlXGridObject.prototype._loadComboOptins=function(t,c){ 
+dhtmlXGridObject.prototype._loadComboOptins=function(t,c){
+	if (!t.combo) return; // prevent calls from refreshFilters
 	var l=this.collectValues(c);
-		t.combo.clearAll();
-		t.combo.render(false);
-		var opts = [["","&nbsp;"]];
-		for (var i=0; i<l.length; i++)
-			opts.push([l[i],l[i]]);
-		t.combo.addOption(opts);
-		t.combo.render(true);
+	t.combo.clearAll();
+	t.combo.render(false);
+	var opts = [["","&nbsp;"]];
+	for (var i=0; i<l.length; i++) opts.push([l[i],l[i]]);
+	t.combo.addOption(opts);
+	t.combo.render(true);
 }
 
 /**
@@ -355,14 +373,14 @@ dhtmlXGridObject.prototype._filters_ready=function(fl,code){
 }
 
 dhtmlXGridObject.prototype._in_header_text_filter=function(t,i){
-	t.innerHTML="<input type='text' style='width:90%; font-size:8pt; font-family:Tahoma; -moz-user-select:text; '>";
+	t.innerHTML="<input type='text'>";
 	t.onclick=t.onmousedown = function(e){ (e||event).cancelBubble=true; return true; }
 	t.onselectstart=function(){ return (event.cancelBubble=true); }
 	this.makeFilter(t.firstChild,i);
 }
 
 dhtmlXGridObject.prototype._in_header_text_filter_inc=function(t,i){
-	t.innerHTML="<input type='text' style='width:90%; font-size:8pt; font-family:Tahoma; -moz-user-select:text; '>";
+	t.innerHTML="<input type='text'>";
 	t.onclick=t.onmousedown = function(e){ (e||event).cancelBubble=true; return true; }
 	t.onselectstart=function(){ return (event.cancelBubble=true); }
 	this.makeFilter(t.firstChild,i);
@@ -376,7 +394,7 @@ dhtmlXGridObject.prototype._in_header_text_filter_inc=function(t,i){
 }
 
 dhtmlXGridObject.prototype._in_header_select_filter=function(t,i){
-	t.innerHTML="<select style='width:90%; font-size:8pt; font-family:Tahoma;'></select>";
+	t.innerHTML="<select></select>";
 	t.onclick=function(e){ (e||event).cancelBubble=true; return false; }
 	this.makeFilter(t.firstChild,i);
 }
@@ -385,28 +403,40 @@ dhtmlXGridObject.prototype._in_header_select_filter_strict=function(t,i){
 	t.innerHTML="<select style='width:90%; font-size:8pt; font-family:Tahoma;'></select>";
 	t.onclick=function(e){ (e||event).cancelBubble=true; return false; }
 	this.makeFilter(t.firstChild,i);
+	var combos = this.combos;
 	t.firstChild._filter=function(){ 
-		if (!t.firstChild.value) return "";
+		var value = t.firstChild.value;
+		if (!value) return "";
+		if (combos[i])
+            value = combos[i].keys[combos[i].values._dhx_find(value)];
+       	value = value.toLowerCase();
+            
 		return function(val){
-			if (t.firstChild.value.toLowerCase() == "") return true;
-			return (val.toString().toLowerCase()==t.firstChild.value.toLowerCase()); 
+			return (val.toString().toLowerCase()==value); 
 		};
 	};
 	this._filters_ready();
 }
 
 dhtmlXGridObject.prototype._in_header_combo_filter=function(t,i){
-	t.innerHTML="<div style='width:100%; padding-left:2px; overflow:hidden; font-size:8pt; font-family:Tahoma; -moz-user-select:text;' class='combo'></div>";
+	t.innerHTML="<div style='width:100%; padding-left:2px; overflow:hidden; ' class='combo'></div>";
 	t.onselectstart=function(){ return (event.cancelBubble=true); }
 	t.onclick=t.onmousedown=function(e){ (e||event).cancelBubble=true; return true; }
 	this.makeFilter(t.firstChild,i);
 }
 
-dhtmlXGridObject.prototype._in_header_text_search=function(t,i){
-	t.innerHTML="<input type='text' style='width:90%; font-size:8pt; font-family:Tahoma; -moz-user-select:text;'>";
+dhtmlXGridObject.prototype._search_common=function(t, i){
+	t.innerHTML="<input type='text' style='width:90%; '>";
 	t.onclick= t.onmousedown = function(e){ (e||event).cancelBubble=true; return true; }
 	t.onselectstart=function(){ return (event.cancelBubble=true); }
+}
+dhtmlXGridObject.prototype._in_header_text_search=function(t,i, strict){
+	this._search_common(t, i);
 	this.makeSearch(t.firstChild,i);
+}
+dhtmlXGridObject.prototype._in_header_text_search_strict=function(t,i){
+	this._search_common(t, i);
+	this.makeSearch(t.firstChild,i, true);
 }
 
 dhtmlXGridObject.prototype._in_header_numeric_filter=function(t,i){
@@ -451,6 +481,7 @@ dhtmlXGridObject.prototype._in_header_master_checkbox=function(t,i,c){
 				c.cell.wasChanged = true;
 			}
 			this.callEvent("onEditCell",[1,id,j,val]);
+			this.callEvent("onCheckbox", [id, j, val]);
 		});
 		(e||event).cancelBubble=true;
 	}

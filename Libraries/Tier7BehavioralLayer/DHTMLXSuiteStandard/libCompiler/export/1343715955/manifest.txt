@@ -1,0 +1,12 @@
+Skin: dhx_skyblue
+
+======== JS CODE =========
+./dhtmlxcommon.js
+./message/message.js
+../dhtmlxColorPicker/codebase/dhtmlxcolorpicker.js
+../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js
+../dhtmlxDataStore/codebase/datastore.js
+
+======== CSS CODE ========
+./message/message.css
+../dhtmlxColorPicker/codebase/dhtmlxcolorpicker.css

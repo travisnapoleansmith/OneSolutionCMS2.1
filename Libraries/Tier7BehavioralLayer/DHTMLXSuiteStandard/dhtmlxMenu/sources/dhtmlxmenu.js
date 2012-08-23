@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -18,7 +18,7 @@ function dhtmlXMenuObject(baseId, skin) {
 	this.isDhtmlxMenuObject = true;
 	
 	// skin settings
-	this.skin = (skin!=null?skin:"dhx_skyblue");
+	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue"));
 	this.imagePath = "";
 	
 	// iframe
@@ -31,8 +31,7 @@ function dhtmlXMenuObject(baseId, skin) {
 		var baseObj = (typeof(baseId)=="string"?document.getElementById(baseId):baseId);
 		if (baseObj != null) {
 			this.base = baseObj;
-			if(!this.base.id)
-				this.base.id = (new Date()).valueOf();
+			if (!this.base.id) this.base.id = (new Date()).valueOf();
 			while (this.base.childNodes.length > 0) { this.base.removeChild(this.base.childNodes[0]); }
 			this.base.className += " dhtmlxMenu_"+this.skin+"_Middle dir_left";
 			this.base._autoSkinUpdate = true;
@@ -41,7 +40,7 @@ function dhtmlXMenuObject(baseId, skin) {
 			//
 			this.addBaseIdAsContextZone = this.base.id;
 			this.base.onselectstart = function(e) { e = e || event; e.returnValue = false; return false; }
-			this.base.oncontextmenu = function(e) { e = e || event;e.returnValue = false; return false; }
+			this.base.oncontextmenu = function(e) { e = e || event; e.returnValue = false; return false; }
 		} else {
 			this.base = document.body;
 		}
@@ -88,6 +87,7 @@ function dhtmlXMenuObject(baseId, skin) {
 	this.menuMode = "web";
 	this.menuTimeoutMsec = 400;
 	this.menuTimeoutHandler = null;
+	this.autoOverflow = false;
 	this.idPull = {};
 	this.itemPull = {};
 	this.userData = {};
@@ -135,6 +135,12 @@ function dhtmlXMenuObject(baseId, skin) {
 			case "dhx_web":
 				this._arrowFFFix = 0;
 				break;
+			case "dhx_terrace":
+				this._topLevelBottomMargin = 0;
+				this._topLevelRightMargin = 0;
+				this._topLevelOffsetLeft = 0;
+				this._arrowFFFix = (_isIE?(document.compatMode=="BackCompat"?0:-4):-4);
+				break;
 		}
 		if (this.base._autoSkinUpdate) {
 			this.base.className = this.base.className.replace("dhtmlxMenu_"+oldSkin+"_Middle", "")+" dhtmlxMenu_"+this.skin+"_Middle";
@@ -166,25 +172,7 @@ function dhtmlXMenuObject(baseId, skin) {
 	this.contextAutoShow = true;	/* default open action */
 	this.contextAutoHide = true;	/* default close action */
 	this.contextHideAllMode = true; /* true will hide all opened contextual menu polygons on mouseout, false - all except topleft */
-	/* dac params */
-	this.sxDacProc = null;
-	this.dacSpeed = 10;
-	this.dacCycles = [];
-	for (var q=0; q<10; q++) { this.dacCycles[q] = q; }
-	/*
-	this.dacSpeedIE = 60;
-	this.dacCyclesIE = [];
-	for (var q=0; q<3; q++) { this.dacCyclesIE[q] = q*2+1; }
-	*/
-	this.dacSpeedIE = 10;
-	this.dacCyclesIE = [];
-	for (var q=0; q<10; q++) { this.dacCyclesIE[q] = q; }
 	
-	/* version 0.2 features: selected items and polygond for quick deselect */
-	/* sxDac feature, implemented in version 0.4 */
-	this._enableDacSupport = function(dac) {
-		this.sxDacProc = dac;
-	}
 	this._selectedSubItems = new Array();
 	this._openedPolygons = new Array();
 	this._addSubItemToSelected = function(item, polygon) {
@@ -219,8 +207,8 @@ function dhtmlXMenuObject(baseId, skin) {
 	/* define polygon's position for dinamic content rendering and shows it, added in version 0.3 */
 	this._hidePolygon = function(id) {
 		if (this.idPull["polygon_" + id] != null) {
-			if ((this.sxDacProc != null) && (this.idPull["sxDac_" + id] != null)) {
-				this.idPull["sxDac_"+id]._hide();
+			if (typeof(this._menuEffect) != "undefined" && this._menuEffect !== false) {
+				this._hidePolygonEffect("polygon_"+id);
 			} else {
 				// already hidden
 				if (this.idPull["polygon_"+id].style.display == "none") return;
@@ -231,18 +219,27 @@ function dhtmlXMenuObject(baseId, skin) {
 				this._updateItemComplexState(id, true, false);
 				// hide ie6 cover
 				if (this._isIE6) { if (this.idPull["polygon_"+id+"_ie6cover"] != null) { this.idPull["polygon_"+id+"_ie6cover"].style.display = "none"; } }
-				// call event
-				id = String(id).replace(this.idPrefix, "");
-				if (id == this.topId) id = null;
-				this.callEvent("onHide", [id]);
 			}
+			// call event
+			id = String(id).replace(this.idPrefix, "");
+			if (id == this.topId) id = null;
+			this.callEvent("onHide", [id]);
+			
+			// corners
+			if (this.skin == "dhx_terrace" && this.itemPull[this.idPrefix+id].parent == this.idPrefix+this.topId) {
+				this._improveTerraceButton(this.idPrefix+id, true);
+			}
+			
+			
 		}
 	}
 	this._showPolygon = function(id, openType) {
+		
 		var itemCount = this._countVisiblePolygonItems(id);
 		if (itemCount == 0) return;
 		var pId = "polygon_"+id;
 		if ((this.idPull[pId] != null) && (this.idPull[id] != null)) {
+		
 			if (this.menuModeTopLevelTimeout && this.menuMode == "web" && !this.context) {
 				if (!this.idPull[id]._mouseOver && openType == this.dirTopLevel) return;
 			}
@@ -256,10 +253,29 @@ function dhtmlXMenuObject(baseId, skin) {
 			//
 			var arrowUp = null;
 			var arrowDown = null;
+			
+			// show polygon
+			this.idPull[pId].style.visibility = "hidden";
+			this.idPull[pId].style.left = "0px";
+			this.idPull[pId].style.top = "0px";
+			this.idPull[pId].style.display = "";
+			this.idPull[pId].style.zIndex = this.zInd;
+			
+			//
+			if (this.autoOverflow) {
+				if (this.idPull[pId].firstChild.offsetHeight > this.menuY1+this.menuY2) {
+					var t0 = Math.floor((this.menuY2-this.menuY1-35)/24);
+					this.limit = t0;
+				} else {
+					this.limit = 0;
+					
+					if (this.idPull["arrowup_"+id] != null) this._removeUpArrow(String(id).replace(this.idPrefix,""));
+					if (this.idPull["arrowdown_"+id] != null) this._removeDownArrow(String(id).replace(this.idPrefix,""));
+				}
+			}
+			
 			//#menu_overflow:06062008#{
 			if (this.limit > 0 && this.limit < itemCount)  {
-				var auId = "arrowup_"+id;
-				var adId = "arrowdown_"+id;
 				
 				// add overflow arrows if they not exists
 				if (this.idPull["arrowup_"+id] == null) this._addUpArrow(String(id).replace(this.idPrefix,""));
@@ -280,13 +296,7 @@ function dhtmlXMenuObject(baseId, skin) {
 				arrDownH = arrowDown.offsetHeight;
 			}
 			//#}
-			// show polygon
-			this.idPull[pId].style.visibility = "hidden";
-			this.idPull[pId].style.left = "0px";
-			this.idPull[pId].style.top = "0px";
-			this.idPull[pId].style.display = "";
-			this.idPull[pId].style.zIndex = this.zInd;
-			//
+			
 			if (this.limit > 0) {
 				if (this.limit < itemCount)  {
 					// set fixed size
@@ -319,12 +329,12 @@ function dhtmlXMenuObject(baseId, skin) {
 			var srcX = (this.idPull[id].tagName != null ? getAbsoluteLeft(this.idPull[id]) : this.idPull[id][0]);
 			var srcY = (this.idPull[id].tagName != null ? getAbsoluteTop(this.idPull[id]) : this.idPull[id][1]);
 			var srcW = (this.idPull[id].tagName != null ? this.idPull[id].offsetWidth : 0);
-			var srcH = (this.idPull[id].tagName != null ? this.idPull[id].offsetHeight + arrUpH + arrDownH : 0);
+			var srcH = (this.idPull[id].tagName != null ? this.idPull[id].offsetHeight : 0);
 			
 			var x = 0;
 			var y = 0;
 			var w = this.idPull[pId].offsetWidth;
-			var h = this.idPull[pId].offsetHeight;
+			var h = this.idPull[pId].offsetHeight + arrUpH + arrDownH;
 			
 			//console.log(srcY,h,window.innerHeight,document.body.scrollTop)
 			/*
@@ -347,7 +357,7 @@ function dhtmlXMenuObject(baseId, skin) {
 						x = srcX - 1 + (openType==this.dirTopLevel?this._topLevelRightMargin:0);
 					}
 				}
-				y = srcY - 1 + srcH - arrUpH - arrDownH + this._topLevelBottomMargin;
+				y = srcY - 1 + srcH + this._topLevelBottomMargin;
 			}
 			if (openType == "right") { x = srcX + srcW - 1; y = srcY + 2; }
 			if (openType == "left") { x = srcX - this.idPull[pId].offsetWidth + 2; y = srcY + 2; }
@@ -385,8 +395,12 @@ function dhtmlXMenuObject(baseId, skin) {
 				x = 0;
 			}
 			if (y+h > my && this.menuY2 != null) {
-				y = Math.max(srcY + srcH - h + 2, 2);
+				y = Math.max(srcY + srcH - h + 2, (this._isVisibleArea?this.menuY1+2:2));
 				// open from top level
+				if (this.context && this.idPrefix+this.topId == id && arrowDown != null) {
+					// autoscroll prevent because menu mouse pointer will right over downarrow
+					y = y-2;
+				}
 				if (this.itemPull[id] != null && !this.context) {
 					if (this.itemPull[id]["parent"] == this.idPrefix+this.topId) y = y - this.base.offsetHeight;
 				}
@@ -395,8 +409,8 @@ function dhtmlXMenuObject(baseId, skin) {
 			this.idPull[pId].style.left = x+"px";
 			this.idPull[pId].style.top = y+arrUpH+"px";
 			//
-			if ((this.sxDacProc != null) && (this.idPull["sxDac_" + id] != null)) {
-				this.idPull["sxDac_"+id]._show();
+			if (typeof(this._menuEffect) != "undefined" && this._menuEffect !== false) {
+				this._showPolygonEffect(pId);
 			} else {
 				this.idPull[pId].style.visibility = "";
 				//#menu_overflow:06062008#{
@@ -408,7 +422,7 @@ function dhtmlXMenuObject(baseId, skin) {
 					arrowUp.style.visibility = "";
 					//
 					arrowDown.style.left = x+"px";
-					arrowDown.style.top = y+arrUpH+h+"px";
+					arrowDown.style.top = y+h-arrDownH+"px";
 					arrowDown.style.width = w+this._arrowFFFix+"px";
 					arrowDown.style.visibility = "";
 					//
@@ -426,18 +440,25 @@ function dhtmlXMenuObject(baseId, skin) {
 						document.body.insertBefore(ifr, document.body.firstChild);
 						this.idPull[pIdIE6] = ifr;
 					}
-					this.idPull[pIdIE6].style.left = this.idPull[pId].style.left;
-					this.idPull[pIdIE6].style.top = this.idPull[pId].style.top;
-					this.idPull[pIdIE6].style.width = this.idPull[pId].offsetWidth+"px";
-					this.idPull[pIdIE6].style.height = this.idPull[pId].offsetHeight+"px";
+					this.idPull[pIdIE6].style.left = x+"px";
+					this.idPull[pIdIE6].style.top = y+"px";
+					this.idPull[pIdIE6].style.width = w+"px";
+					this.idPull[pIdIE6].style.height = h+"px";
 					this.idPull[pIdIE6].style.zIndex = this.idPull[pId].style.zIndex-1;
 					this.idPull[pIdIE6].style.display = "";
 				}
-				id = String(id).replace(this.idPrefix, "");
-				if (id == this.topId) id = null;
-				this.callEvent("onShow", [id]);
-				// this.callEvent("_onPolyShow",[id.replace(this.idPrefix,"")]);
 			}
+			
+			id = String(id).replace(this.idPrefix, "");
+			if (id == this.topId) id = null;
+			this.callEvent("onShow", [id]);
+			
+			// corners
+			if (this.skin == "dhx_terrace" && this.itemPull[this.idPrefix+id].parent == this.idPrefix+this.topId) {
+				this._improveTerraceButton(this.idPrefix+id, false);
+			}
+			// this.callEvent("_onPolyShow",[id.replace(this.idPrefix,"")]);
+			
 		}
 	}
 	/* redistrib sublevel selection: select id and deselect other, added in version 0.3 */
@@ -511,13 +532,15 @@ function dhtmlXMenuObject(baseId, skin) {
 		//
 		if (this.checkEvent("onClick")) {
 			// this.callEvent("onClick", [id, type, this.contextMenuZoneId]);
-			this._clearAndHide();
-			if (this._isContextMenuVisible() && this.contextAutoHide) this._hideContextMenu();
 			this.callEvent("onClick", [id, this.contextMenuZoneId, casState]);
 		} else {
 			if ((type.charAt(1) == "d") || (this.menuMode == "win" && type.charAt(2) == "t")) return;
-			this._clearAndHide();
-			if (this._isContextMenuVisible() && this.contextAutoHide) this._hideContextMenu();
+		}
+		if (this.context && this._isContextMenuVisible() && this.contextAutoHide) {
+			this._hideContextMenu();
+		} else {
+			// if menu unloaded from click event
+			if (this._clearAndHide) this._clearAndHide();
 		}
 	}
 	/* onTouchMenu action (select topLevel item), attachEvent added in 0.4 */
@@ -690,7 +713,7 @@ function dhtmlXMenuObject(baseId, skin) {
 					//
 					if (tagNm == this.userDataTagName) {
 						var d = r.childNodes[w];
-						if (d.getAttribute("name")!=null) { this.userData[item["id"]+"_"+d.getAttribute("name")] = (d.firstChild.nodeValue!=null?d.firstChild.nodeValue:""); }
+						if (d.getAttribute("name")!=null) { this.userData[item["id"]+"_"+d.getAttribute("name")] = (d.firstChild!=null&&d.firstChild.nodeValue!=null?d.firstChild.nodeValue:""); }
 					}
 					// extended text, added in 0.4
 					if (tagNm == this.itemTextTagName) { item["title"] = r.childNodes[w].firstChild.nodeValue; }
@@ -776,7 +799,7 @@ function dhtmlXMenuObject(baseId, skin) {
 		if (main_self.context) {
 			if (main_self.contextAutoHide && (!_isOpera || (main_self._isContextMenuVisible() && _isOpera))) main_self._hideContextMenu();
 		} else {
-			main_self._clearAndHide();
+			if (main_self._clearAndHide) main_self._clearAndHide();
 		}
 	}
 	this._bodyContext = function(e) {
@@ -785,8 +808,11 @@ function dhtmlXMenuObject(baseId, skin) {
 		if (t.search("dhtmlxMenu") != -1 && t.search("SubLevelArea") != -1) return;
 		var toHide = true;
 		var testZone = e.target || e.srcElement;
-		if (testZone.id != null) if (main_self.isContextZone(testZone.id)) toHide = false;
-		if (testZone == document.body) toHide = false;
+		while (testZone != null) {
+			if (testZone.id != null) if (main_self.isContextZone(testZone.id)) toHide = false;
+			if (testZone == document.body) toHide = false;
+			testZone = testZone.parentNode;
+		}
 		if (toHide) main_self.hideContextMenu();
 	}
 	
@@ -1088,6 +1114,10 @@ dhtmlXMenuObject.prototype._renderToplevelItem = function(id, pos) {
 		main_self._doOnClick(this.id.replace(main_self.idPrefix, ""), tc+td+"t", cas);
 		return false;
 	}
+	
+	if (this.skin == "dhx_terrace") {
+		this._improveTerraceSkin();
+	}
 }
 /****************************************************************************************************************************************************/
 /**
@@ -1172,6 +1202,9 @@ dhtmlXMenuObject.prototype.removeItem = function(id, _isTId, _recCall) {
 	if (id != this.idPrefix+this.topId) {
 		
 		if (this.itemPull[id] == null) return;
+		
+		// effects
+		if (this.idPull["polygon_"+id] && this.idPull["polygon_"+id]._tmShow) window.clearTimeout(this.idPull["polygon_"+id]._tmShow);
 		
 		// separator top
 		var t = this.itemPull[id]["type"];
@@ -1258,77 +1291,9 @@ dhtmlXMenuObject.prototype.removeItem = function(id, _isTId, _recCall) {
 	}
 	p2 = null;
 	
+	// update corners
+	if (this.skin == "dhx_terrace" && arguments.length == 1) this._improveTerraceSkin();
 	
-	/*
-	// get parent
-	var parentId = this.itemPull[id]["parent"];
-	// separator
-	if (this.itemPull[id]["type"] == "separator") {
-		this.idPull["separator_"+id].parentNode.removeChild(this.idPull["separator_"+id]);
-		this.idPull["separator_"+id] = null;
-		this.itemPull[id] = null;
-		delete this.idPull["separator_"+id];
-		delete this.itemPull[id];
-		// return;
-	} else {
-		// complex/single item
-		if (this.itemPull[id]["complex"]) {
-			var items = this._getAllParents(id);
-			items[items.length] = id;
-			var polygons = new Array();
-			for (var q=0; q<items.length; q++) {
-				if (this.itemPull[items[q]]["type"] == "separator") {
-					this.removeItem(items[q].replace(this.idPrefix,""));
-				} else {
-					if (this.itemPull[items[q]]["complex"]) { polygons[polygons.length] = items[q]; }
-					this.idPull[items[q]].parentNode.removeChild(this.idPull[items[q]]);
-					this.idPull[items[q]] = null;
-					this.itemPull[items[q]] = null;
-					delete this.idPull[items[q]];
-					delete this.itemPull[items[q]];
-				}
-			}
-			for (var q=0; q<polygons.length; q++) {
-				this.idPull["polygon_"+polygons[q]].parentNode.removeChild(this.idPull["polygon_"+polygons[q]]);
-				if (this._isIE6) {
-					var pId = "polygon_"+polygons[q]+"_ie6cover";
-					if (this.idPull[pId] != null) { document.body.removeChild(this.idPull[pId]); delete this.idPull[pId]; }
-				}
-				this.idPull["polygon_"+polygons[q]] = null;
-				this.itemPull[polygons[q]] = null;
-				delete this.idPull["polygon_"+polygons[q]];
-				delete this.itemPull[polygons[q]];
-			}
-		} else {
-			this.idPull[id].parentNode.removeChild(this.idPull[id]);
-			this.idPull[id] = null;
-			this.itemPull[id] = null;
-			delete this.idPull[id];
-			delete this.itemPull[id];
-		}
-	}
-	// checking existing empty polygon
-	if (this.idPull["polygon_"+parentId] != null) {
-		var p = this.idPull["polygon_"+parentId];
-		if (p.tbd.childNodes.length == 0) {
-			p.tbd.parentNode.removeChild(p.tbd);
-			p.tbl.parentNode.removeChild(p.tbl);
-			document.body.removeChild(p);
-			p = null;
-			if (this._isIE6) {
-				var pId = "polygon_"+parentId+"_ie6cover";
-				if (this.idPull[pId] != null) {
-					document.body.removeChild(this.idPull[pId]);
-					this.idPull[pId] = null;
-					delete this.idPull[pId];
-				}
-			}
-			this.idPull["polygon_"+parentId] = null;
-			delete this.idPull["polygon_"+parentId];
-			this._updateItemComplexState(parentId, false, false);
-		}
-	}
-	*/
 }
 /* collect parents for remove complex item */
 dhtmlXMenuObject.prototype._getAllParents = function(id) {
@@ -1770,15 +1735,25 @@ dhtmlXMenuObject.prototype._renderSublevelItem = function(id, pos) {
 	// tooltip, added in 0.4
 	if (this.itemPull[id]["tip"].length > 0) tr.title = this.itemPull[id]["tip"];
 	//
+	if (!this._hideTMData) this._hideTMData = {};
+	
 	tr.onselectstart = function(e) { e = e || event; e.returnValue = false; return false; }
-	tr.onmouseover = function() {
-		if (main_self.menuMode == "web") window.clearTimeout(main_self.menuTimeoutHandler);
-		main_self._redistribSubLevelSelection(this.id, this.parent);
+	tr.onmouseover = function(e) {
+		if (main_self.menuMode == "web") {
+			if (main_self._hideTMData[this.id]) window.clearTimeout(main_self._hideTMData[this.id]);
+			window.clearTimeout(main_self.menuTimeoutHandler);
+		}
+		if (!this._visible) main_self._redistribSubLevelSelection(this.id, this.parent); // if not visible
+		this._visible = true;
 	}
 	if (main_self.menuMode == "web") {
 		tr.onmouseout = function() {
-			window.clearTimeout(main_self.menuTimeoutHandler);
+			if (main_self.menuTimeoutHandler) window.clearTimeout(main_self.menuTimeoutHandler);
 			main_self.menuTimeoutHandler = window.setTimeout(function(){main_self._clearAndHide();}, main_self.menuTimeoutMsec, "JavaScript");
+			var k = this;
+			if (main_self._hideTMData[this.id]) window.clearTimeout(main_self._hideTMData[this.id]);
+			main_self._hideTMData[this.id] = window.setTimeout(function(){k._visible=false;}, 50);
+			
 		}
 	}
 	tr.onclick = function(e) {
@@ -2191,3 +2166,58 @@ dhtmlXMenuObject.prototype.i18n = {
 		}
 	});
 })();
+
+// terrace
+dhtmlXMenuObject.prototype._improveTerraceSkin = function() {
+	
+	for (var a in this.itemPull) {
+		
+		if (this.itemPull[a].parent == this.idPrefix+this.topId && this.idPull[a] != null) { // this.idPull[a] will null for separator
+			
+			var bl = false;
+			var br = false;
+			
+			// left side, first item, not sep
+			if (this.idPull[a].parentNode.firstChild == this.idPull[a]) {
+				bl = true;
+			}
+			
+			// right side, last item, not sep
+			if (this.idPull[a].parentNode.lastChild == this.idPull[a]) {
+				br = true;
+			}
+			
+			// check siblings
+			for (var b in this.itemPull) {
+				if (this.itemPull[b].type == "separator" && this.itemPull[b].parent == this.idPrefix+this.topId) {
+					if (this.idPull[a].nextSibling == this.idPull["separator_"+b]) {
+						br = true;
+					}
+					if (this.idPull[a].previousSibling == this.idPull["separator_"+b]) {
+						bl = true;
+					}
+				}
+			}
+			
+			this.idPull[a].style.borderLeft = (bl?"1px solid #cecece":"0px solid white");
+			this.idPull[a].style.borderTopLeftRadius = this.idPull[a].style.borderBottomLeftRadius = (bl?"5px":"0px");
+			
+			this.idPull[a].style.borderTopRightRadius = this.idPull[a].style.borderBottomRightRadius = (br?"5px":"0px");
+			
+			this.idPull[a]._bl = bl;
+			this.idPull[a]._br = br;
+			
+		}
+	}
+	
+};
+
+dhtmlXMenuObject.prototype._improveTerraceButton = function(id, state) {
+	if (state) {
+		this.idPull[id].style.borderBottomLeftRadius = (this.idPull[id]._bl ? "5px" : "0px");
+		this.idPull[id].style.borderBottomRightRadius = (this.idPull[id]._br ? "5px" : "0px");
+	} else {
+		this.idPull[id].style.borderBottomLeftRadius = "0px";
+		this.idPull[id].style.borderBottomRightRadius = "0px";
+	}
+};

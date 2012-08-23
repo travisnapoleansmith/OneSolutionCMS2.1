@@ -80,7 +80,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	vertical-align: middle;
 	cursor: default;
 	position: absolute;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedVer div.dhtmlxInfoBarLabel {
 	display: none;
@@ -266,7 +270,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutPolySplitterHor {
 	height: 5px;
 	line-height: 5px;
 	cursor: n-resize;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-color: #000000;
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_drag_hor.gif") !important;
 	background-repeat: no-repeat !important;
@@ -279,7 +287,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutPolySplitterHorInactive
 	height: 5px;
 	line-height: 5px;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-color: #000000;
 	vertical-align: top;
 }
@@ -288,7 +300,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutPolySplitterVer {
 	font-size: 2px;
 	width: 5px;
 	cursor: w-resize;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-color: #000000;
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_drag_ver.gif") !important;
 	background-repeat: no-repeat !important;
@@ -300,7 +316,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutPolySplitterVerInactive
 	font-size: 2px;
 	width: 5px;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-color: #000000;
 	vertical-align: top;
 }
@@ -415,6 +435,7 @@ table.dhtmlxLayoutPolyContainer_dhx_black div.dhtmlxLayoutPolyProgress {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #141A1F;
+	z-index: 1;
 }
 table.dhtmlxLayoutPolyContainer_dhx_black div.dhtmlxLayoutPolyProgressBGIMG {
 	position: absolute;
@@ -425,6 +446,7 @@ table.dhtmlxLayoutPolyContainer_dhx_black div.dhtmlxLayoutPolyProgressBGIMG {
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_progress.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
+	z-index: 1;
 }
 /* progres cover global */
 div.dhtmlxLayoutPolyProgressGlobal_dhx_black {
@@ -437,6 +459,7 @@ div.dhtmlxLayoutPolyProgressGlobal_dhx_black {
 	-moz-opacity: 0.15;
 	opacity: 0.15;
 	background-color: #141A1F;
+	z-index: 1;
 }
 div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_black {
 	position: absolute;
@@ -447,6 +470,7 @@ div.dhtmlxLayoutPolyProgressBGIMGGlobal_dhx_black {
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_progress_global.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
+	z-indeX: 1;
 }
 /* status bar */
 table.dhtmlxLayoutPolyContainer_dhx_black div.dhxcont_global_layout_area div.dhxcont_sb_container_layoutcell {
@@ -467,7 +491,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black div.dhxcont_global_layout_area div.dhx
 	color: #ffffff;
 	vertical-align: middle;
 	line-height: 17px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	cursor: default;
 	padding-left: 4px;
 }
@@ -501,7 +529,11 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	color: #FFFFFF;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* vertical */
 table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBar div.dhtmlxInfoBarLabel_collapsed_hor {
@@ -517,6 +549,10 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	color: #FFFFFF;
 	white-space: nowrap;
 	cursor: default;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 

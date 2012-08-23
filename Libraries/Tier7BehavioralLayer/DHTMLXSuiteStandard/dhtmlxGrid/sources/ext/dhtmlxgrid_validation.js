@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -54,7 +54,7 @@ dhtmlxValidation.prototype={
 		return !!value.toString().match(/^(0|1|true|false)$/);
 	},
 	isValidEmail: function(value) {
-		return !!value.toString().match(/(^[a-z]([a-z_\.]*)@([a-z_\.]*)([.][a-z]{3})$)|(^[a-z]([a-z_\.]*)@([a-z_\-\.]*)(\.[a-z]{2,4})$)/i); 
+		return !!value.toString().match(/(^[a-z0-9]([0-9a-z\-_\.]*)@([0-9a-z_\-\.]*)([.][a-z]{3})$)|(^[a-z]([0-9a-z_\.\-]*)@([0-9a-z_\-\.]*)(\.[a-z]{2,4})$)/i); 
 	},
 	isValidInteger: function(value) {
 		return !!value.toString().match(/(^-?\d+$)/);

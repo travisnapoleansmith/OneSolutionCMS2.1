@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -22,6 +22,7 @@ function eXcell_cntr(cell){
 		this.grid.attachEvent("onBeforeSorting",function(){ 
 			var that=this;
 			window.setTimeout(function(){ 
+				if (!that.resetCounter) return;
 				if (that._fake && !that._realfake && cell._cellIndex<that._fake._cCount) 
 					that._fake.resetCounter(cell._cellIndex); 
 				else

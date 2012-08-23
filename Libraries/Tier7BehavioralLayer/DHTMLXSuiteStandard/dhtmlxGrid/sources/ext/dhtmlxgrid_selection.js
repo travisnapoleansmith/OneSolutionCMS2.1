@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -57,8 +57,8 @@ dhtmlXGridObject.prototype._OnSelectionStart = function(event, obj)
 	
 	if (!self.isActive) self.setActive(true);
 	var pos = this.getPosition(this.obj);
-	var x = event.clientX - pos[0] +document.body.scrollLeft;
-	var y = event.clientY - pos[1] +document.body.scrollTop;
+	var x = event.clientX - pos[0] + (document.body.scrollLeft||(document.documentElement?document.documentElement.scrollLeft:0));
+	var y = event.clientY - pos[1] + (document.body.scrollTop||(document.documentElement?document.documentElement.scrollTop:0));
 	this._CreateSelection(x-4, y-4);
 
 	if (src == this._selectionObj) {

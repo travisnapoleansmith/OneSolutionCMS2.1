@@ -1,4 +1,4 @@
-//v.3.0 build 110713
+//v.3.5 build 120731
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -281,6 +281,9 @@ dhtmlXGridObject.prototype.csvParser={
 		var data = (str||"").split(row);	
 		for (var i=0; i < data.length; i++)
 			data[i]=(data[i]||"").split(cell);
+    var last = data.length-1;
+    if (data[last].length == 1 && data[last][0]=="")
+      data.splice(last,1);
 		return data;
 	},
 	str:function(data,cell,row){
@@ -312,16 +315,21 @@ dhtmlXGridObject.prototype.csvExtParser={
 				}
 				out[ind].push(buff.replace(quote_end, "").replace(this._quote_esc,'"'));
 			} else if (data[i].match(row_exp)){
-				var parts = data[i].split(row,2);
-				out[ind].push(parts[0]);
+        var row_pos = data[i].indexOf(row);
+				out[ind].push(data[i].substr(0, row_pos));
 				ind++;
 				out[ind] = [];
-				data[i]=parts[1]; i--;
+				data[i]=data[i].substr(row_pos+1); i--;
 			} else {
 				if (data[i] || i!=data.length-1)
 					out[ind].push(data[i]);
 			}
 		}
+
+    var last = out.length-1;
+    if (last>0 && !out[last].length)
+      out.splice(last,1);
+    
 		return out;	
 	},
 	str:function(data,cell,row){

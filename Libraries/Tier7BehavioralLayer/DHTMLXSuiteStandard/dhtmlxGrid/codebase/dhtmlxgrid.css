@@ -57,7 +57,8 @@ div.gridbox table.row20px tr  td{
 div.gridbox .objbox {
 	background-color:white;
 	position:relative;
-	}
+    -webkit-overflow-scrolling: touch;
+}
 div.gridbox table.obj td span.space, div.gridbox table.obj td img.space{
 	width:18px;
 	}
@@ -679,4 +680,8 @@ div.gridbox_dhx_skyblue div.ftr td{
 	text-align:right;
 	background-image:url(./imgs/sky_blue_grid.gif);
 	border-color:#A4BED4;
+}
+
+div.gridbox td.filter input, div.gridbox td.filter select{
+	width:90%; font-size:8pt; font-family:Tahoma; -moz-user-select:text;
 }

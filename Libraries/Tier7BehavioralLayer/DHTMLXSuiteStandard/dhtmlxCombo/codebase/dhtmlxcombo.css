@@ -24,6 +24,7 @@
 	padding:2px 2px 2px 2px;
 	position:absolute;
 	top:0px;
+    outline: none 0;
 }
 .dhx_combo_box{
 	position:relative;
@@ -40,6 +41,7 @@
    position:absolute;
    z-index:230;
    overflow-y:auto;
+   -webkit-overflow-scrolling: touch;
    overflow-x:hidden;
    border:1px solid black;
    height:100px;
@@ -79,6 +81,7 @@
    position:absolute;
    z-index:230;
    overflow-y:auto;
+   -webkit-overflow-scrolling: touch;
    overflow-x:hidden;
    border:1px solid black;
    height:100px;
@@ -103,13 +106,68 @@
 	float :right !important;
 }
 
+.dhx_combo_input{
+    box-sizing:  border-box;
+}
+
+.dhx_combo_box.dhx_terrace .dhx_combo_img{
+	height:30px;
+}
+.dhx_combo_box.dhx_terrace{
+	height:30px;
+	line-height:28px;
+	_height:32px;
+	padding:0px;
+}
+.dhx_combo_box.dhx_terrace .dhx_combo_img_rtl{
+	height:30px;
+}
+.dhx_combo_box.dhx_terrace{
+	border:1px solid #CECECE;
+}
+.combo_dhx_terrace_sel{
+   background:#FFF3A1;
+   color:black;
+}
+.dhx_combo_list.dhx_terrace_list div{
+	cursor:default;
+	padding:8px 8px;
+}
+.dhx_combo_list.dhx_terrace_list{
+	background-color: white;
+	border:1px solid #CECECE;
+	font-family:Arial;
+	font-size: 13px;
+}
+.dhx_combo_list_rtl.dhx_terrace_list{
+   background-color: white;
+	border:1px solid #CECECE;
+	font-family:Arial;
+	font-size: 13px;
+}
+.dhx_combo_box.dhx_terrace .dhx_combo_input {
+    height:30px;
+    line-height:30px;
+	font-family:Arial;
+	font-size: 13px;
+	padding:0px 0px 0px 8px;
+	
+}
+
+
+
+
+
 .dhx_combo_box.dhx_skyblue{
 	border:1px solid #a4bed4;
 }
 .dhx_combo_box.dhx_skyblue .dhx_combo_input {
 	font-family:Tahoma;
 	font-size: 11px;
-	padding:3px;	
+	/*padding:3px;*/
+	height:20px;
+	line-height:20px;
+	padding:0 0 0 2px;
 }
 .dhx_combo_list.dhx_skyblue_list{
 	background-color: #eaf2fb;
@@ -133,4 +191,17 @@
    background-position: bottom;
    background-repeat: repeat-x;
    color:black;
+}
+/*dhx_web skin*/
+.combo_dhx_web_sel{
+   background-color: #ACDAF0;
+    color:black;  
+}
+.dhx_combo_box.dhx_web .dhx_combo_input {
+    height:20px;
+	line-height:20px;
+	padding:0 0 0 2px;
+}
+.dhx_combo_box.dhx_web,.dhx_combo_list.dhx_web_list,.dhx_combo_list_rtl.dhx_web_list {
+    border: 1px solid #8B8B8B;
 }

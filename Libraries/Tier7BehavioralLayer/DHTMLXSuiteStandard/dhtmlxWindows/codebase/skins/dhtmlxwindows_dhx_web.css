@@ -44,7 +44,11 @@
 	cursor: default;
 	white-space: nowrap;
 	overflow: hidden;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* active progress */
 .dhtmlx_skin_dhx_web div.dhtmlx_window_active div.dhtmlx_wins_progress {
@@ -190,7 +194,11 @@
 	cursor: default;
 	white-space: nowrap;
 	overflow: hidden;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* inactive progress */
 .dhtmlx_skin_dhx_web div.dhtmlx_window_inactive div.dhtmlx_wins_progress {
@@ -316,7 +324,11 @@
 	opacity: 0;
 	background: #FFFFFF;
 	z-index: 1;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 */
 /* window icon */
@@ -328,7 +340,11 @@
 	height: 16px;
 	border: none;
 	z-index: 1;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	background-repeat: no-repeat;
 	font-size: 1px;
 }
@@ -367,7 +383,11 @@
 	filter: alpha(opacity=0);
 	-moz-opacity: 0;
 	opacity: 0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 .dhtmlx_skin_dhx_web div.dhtmlx_wins_resizer_l {
 	position: absolute;
@@ -381,7 +401,11 @@
 	filter: alpha(opacity=0);
 	-moz-opacity: 0;
 	opacity: 0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 .dhtmlx_skin_dhx_web div.dhtmlx_wins_resizer_r {
 	position: absolute;
@@ -395,7 +419,11 @@
 	filter: alpha(opacity=0);
 	-moz-opacity: 0;
 	opacity: 0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 .dhtmlx_skin_dhx_web div.dhtmlx_wins_resizer_b {
 	position: absolute;
@@ -409,7 +437,11 @@
 	filter: alpha(opacity=0);
 	-moz-opacity: 0;
 	opacity: 0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
 /* progress */
 .dhtmlx_skin_dhx_web div.dhtmlx_wins_progress {
@@ -455,7 +487,11 @@
 	font-size: 11px;
 	vertical-align: middle;
 	line-height: 17px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
 	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 	cursor: default;
 	padding-left: 4px;
 	color: #7393ae;

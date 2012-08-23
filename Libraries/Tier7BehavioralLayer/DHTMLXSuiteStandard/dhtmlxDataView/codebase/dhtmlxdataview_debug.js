@@ -4,7 +4,7 @@ You allowed to use this component or parts of it under GPL terms
 To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
 */
 /*
-2011 July 13
+2012 July 31
 */
 
 
@@ -265,6 +265,13 @@ dhtmlx.version="3.0";
 dhtmlx.codebase="./";
 
 //coding helpers
+
+dhtmlx.copy = function(source){
+	var f = dhtmlx.copy._function;
+	f.prototype = source;
+	return new f();
+};
+dhtmlx.copy._function = function(){};
 
 //copies methods and properties from source to the target
 dhtmlx.extend = function(target, source){
@@ -600,7 +607,7 @@ else{
 	if (navigator.appVersion.indexOf("MSIE 8.0")!= -1 && document.compatMode != "BackCompat") 
 		dhtmlx._isIE=8;
 	if (navigator.appVersion.indexOf("MSIE 9.0")!= -1 && document.compatMode != "BackCompat") 
-		dhtmlx._isIE=8;
+		dhtmlx._isIE=9;
 }
 
 dhtmlx.env = {};
@@ -612,7 +619,7 @@ dhtmlx.env = {};
 	dhtmlx.env.transition = false;
 	var options = {};
 	options.names = ['transform', 'transition'];
-	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'oTransform'];
+	options.transform = ['transform', 'WebkitTransform', 'MozTransform', 'oTransform','msTransform'];
 	options.transition = ['transition', 'WebkitTransition', 'MozTransition', 'oTransition'];
 	
 	var d = document.createElement("DIV");
@@ -763,7 +770,9 @@ dhtmlx.html={
 		dhtmlx.codebase = temp.slice(0, temp.length).join("/")+"/";
 	}
 })();
-if(dhtmlx.ui)dhtmlx.ui={};
+
+if (!dhtmlx.ui)
+	dhtmlx.ui={};
 
 
 /* DHX DEPEND FROM FILE 'template.js'*/
@@ -1555,7 +1564,8 @@ dhtmlx.compat.dnd = function(){
 			old_ocl.apply(this,arguments);
 			if (!skip){ 
 				var c = dhtmlx.DragControl._drag_context = dhtmlx.DragControl._drag_context||{};
-				c.from = this.dragStartObject;
+				if (!c.from)
+					c.from = this.dragStartObject;
 				dhtmlx.DragControl._checkLand(node,e,true);
 			}
 		};
@@ -2044,6 +2054,8 @@ dhtmlx.DragItem={
 	//called when drag moved out from possible target
 	onDragOut:function(s,t,n,e){ 
 		var id = this.locate(e) || null;
+        if (n != this._dataobj)
+            id = null;
 		//previous target
 		var html = (this._locateHTML(id)||(n?dhtmlx.DragControl.getMaster(n)._obj:window.undefined));
 		if (html == dhtmlx.DragControl._landing) return null;
@@ -2159,7 +2171,12 @@ dhtmlx.EditAbility={
 	stopEdit:function(mode, if_not_id){
 		if (!this._edit_id) return true;
 		if (this._edit_id == if_not_id) return false;
-		if (!this.callEvent("onBeforeEditStop",[this._edit_id]))
+
+		var values = {};
+		if (!mode) this._edit_bind(false,values);
+		else values = null;
+
+		if (!this.callEvent("onBeforeEditStop",[this._edit_id, values]))
 			return false;
 			
 		var data=this.data.get(this._edit_id);
@@ -2173,7 +2190,7 @@ dhtmlx.EditAbility={
 		
 		this.data.refresh(id);
 		
-		this.callEvent("onAfterEditStop",[id]);
+		this.callEvent("onAfterEditStop",[id, values]);
 		return true;
 	},
 	//parse template and save inputs which need to be mapped to the properties
@@ -2748,11 +2765,8 @@ dhtmlx.VirtualRenderStack={
         dhtmlx.event(window,"resize",dhtmlx.bind(function(){ this.render(); },this));
 
 		//here we store IDs of elemenst which doesn't loadede yet, but need to be rendered
-		this._unrendered_area=[];
-        this.attachEvent("onItemRender",function(obj){ 			//each time, during item rendering
-        	if (obj.$template == "loading")						//if real data is not loaded yet
-        		this._unrendered_area.push(this.data.id(obj));	//store item ID for later loading
-	    });
+		this.data._unrendered_area=[];
+		this.data.getIndexRange=this._getIndexRange;
 	},
 	//return html object by item's ID. Can return null for not-rendering element
 	_locateHTML:function(search_id){
@@ -2767,9 +2781,29 @@ dhtmlx.VirtualRenderStack={
 		var dy = Math.floor(ind/range._dx)*range._y;
 		this._dataobj.scrollTop = dy;
 	},	
+	_getIndexRange:function(from,to){
+		if (to !== 0)
+			to=Math.min((to||Infinity),this.dataCount()-1);
+		
+		var ret=dhtmlx.toArray(); //result of method is rich-array
+		for (var i=(from||0); i <= to; i++){
+			var item = this.item(this.order[i]);
+			if(this.order.length>i){
+                if (!item){
+                    this.order[i]=dhtmlx.uid();
+                    item = { id:this.order[i], $template:"loading" };
+                    this._unrendered_area.push(this.order[i]);	//store item ID for later loading
+                } else if (item.$template == "loading")
+                    this._unrendered_area.push(this.order[i]);
+                ret.push(item);
+            }
+
+		}
+		return ret;
+	},	
 	//repain self after changes in DOM
 	//for add, delete, move operations - render is delayed, to minify performance impact
-	render:function(id,data,type,after){
+	render:function(id,data,type,after){ 
 		if (id){
 			var cont = this._locateHTML(id);	//old html element
 			switch(type){
@@ -2822,7 +2856,7 @@ dhtmlx.VirtualRenderStack={
 		reset - flag, which forces clearing of previously rendered elements
 	*/
 	_render_visible_rows:function(e,reset){
-		this._unrendered_area=[]; //clear results of previous calls
+		this.data._unrendered_area=[]; //clear results of previous calls
 		
 		var viewport = this._getVisibleRange();	//details of visible view
 		if (!this._dataobj.firstChild || reset){	//create initial placeholder - for all view space
@@ -2909,19 +2943,23 @@ dhtmlx.VirtualRenderStack={
 			
 			t++;
 		}
-		
 		//when all done, check for non-loaded items
-		if (this._unrendered_area.length){
+		if (this.data._unrendered_area.length){
 			//we have some data to load
 			//detect borders
-			var from = this.indexById(this._unrendered_area[0]);
-			var to = this.indexById(this._unrendered_area.pop())+1;
+			var from = this.indexById(this.data._unrendered_area[0]);
+			var to = this.indexById(this.data._unrendered_area.pop())+1;
 			if (to>from){
 				//initiate data loading
 				if (!this.callEvent("onDataRequest",[from, to-from])) return false;
 				dhtmlx.assert(this.data.feed,"Data feed is missed");
 				this.data.feed.call(this,from,to-from);
 			}
+		}
+		if (dhtmlx._isIE){
+				var viewport2 = this._getVisibleRange();
+				if (viewport2._from != viewport._from)
+					this._render_visible_rows();
 		}
 	},
 	//calculates visible view
@@ -2976,7 +3014,7 @@ dhtmlx.ajax = function(url,call,master){
 dhtmlx.ajax.prototype={
 	//creates xmlHTTP object
 	getXHR:function(){
-		if (dhtmlx.env.isIE)
+		if (dhtmlx._isIE)
 		 return new ActiveXObject("Microsoft.xmlHTTP");
 		else 
 		 return new XMLHttpRequest();
@@ -3101,6 +3139,8 @@ dhtmlx.AtomDataLoader={
 	_check_data_feed:function(data){
 		if (!this._settings.dataFeed || this._ignore_feed || !data) return true;
 		var url = this._settings.dataFeed;
+		if (typeof url == "function")
+			return url.call(this, (data.id||data), data);
 		url = url+(url.indexOf("?")==-1?"?":"&")+"action=get&id="+encodeURIComponent(data.id||data);
 		this.callEvent("onXLS",[]);
 		dhtmlx.ajax(url, function(text,xml){
@@ -3142,7 +3182,8 @@ dhtmlx.DataDriver.json={
 	getInfo:function(data){
 		return { 
 		 _size:(data.total_count||0),
-		 _from:(data.pos||0)
+		 _from:(data.pos||0),
+		 _key:(data.dhx_security)
 		};
 	}
 };
@@ -3317,7 +3358,8 @@ dhtmlx.DataDriver.xml={
 	getInfo:function(data){
 		return { 
 		 _size:(data.documentElement.getAttribute("total_count")||0),
-		 _from:(data.documentElement.getAttribute("pos")||0)
+		 _from:(data.documentElement.getAttribute("pos")||0),
+		 _key:(data.documentElement.getAttribute("dhx_security"))
 		};
 	},
 	//xpath helper
@@ -3438,7 +3480,7 @@ dhtmlx.DataLoader={
 	_init:function(config){
 		//prepare data store
 		config = config || "";
-		name = "DataStore";
+		this.name = "DataStore";
 		this.data = (config.datastore)||(new dhtmlx.DataStore());
 		this._readyHandler = this.data.attachEvent("onStoreLoad",dhtmlx.bind(this._call_onready,this));
 	},
@@ -3485,6 +3527,8 @@ dhtmlx.DataLoader={
 
 				this.clearAll();
 				var url = this._settings.dataFeed;
+				if (typeof url == "function")
+					return url.call(this, value, filter);
 				var urldata = [];
 				for (var key in filter)
 					urldata.push("dhx_filter["+key+"]="+encodeURIComponent(filter[key]));
@@ -3548,6 +3592,8 @@ dhtmlx.DataStore.prototype={
 			
 		//get size and position of data
 		var info = this.driver.getInfo(data);
+		if (info._key)
+			dhtmlx.security_key = info._key;
 		//get array of records
 
 		var recs = this.driver.getRecords(data);
@@ -3715,16 +3761,17 @@ dhtmlx.DataStore.prototype={
 			this.debug_sync_master = source; 
 			dhtmlx.log("[sync] "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id+" <= "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id);
 		}
-
+		
+		var topsource = source;
 		if (source.name != "DataStore")
 			source = source.data;
 
-		var sync_logic = dhx.bind(function(id, data, mode){
+		var sync_logic = dhtmlx.bind(function(id, data, mode){
 			if (mode != "update" || filter) 
 				id = null;
 
 			if (!id){
-				this.order = dhx.toArray([].concat(source.order));
+				this.order = dhtmlx.toArray([].concat(source.order));
 				this._filter_order = null;
 				this.pull = source.pull;
 				
@@ -3735,8 +3782,8 @@ dhtmlx.DataStore.prototype={
 					this._on_sync();
 			}
 
-			if (dhx.debug_bind)
-				dhx.log("[sync:request] "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id + " <= "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id);
+			if (dhtmlx.debug_bind)
+				dhtmlx.log("[sync:request] "+this.debug_sync_master.name+"@"+this.debug_sync_master._settings.id + " <= "+this.debug_bind_master.name+"@"+this.debug_bind_master._settings.id);
 			if (!silent) 
 				this.refresh(id);
 			else
@@ -3744,6 +3791,9 @@ dhtmlx.DataStore.prototype={
 		}, this);
 		
 		source.attachEvent("onStoreUpdated", sync_logic);
+		this.feed = function(from, count){
+			topsource.loadNext(count, from);
+		};
 		sync_logic();
 	},
 	//adds item to the store
@@ -3838,8 +3888,8 @@ dhtmlx.DataStore.prototype={
 	indexById:function(id){
 		var res = this.order.find(id);	//slower than idByIndex
 		
-		if (!this.pull[id])
-			dhtmlx.log("Warning","DataStore::indexById Non-existing ID: "+ id);
+		//if (!this.pull[id])
+		//	dhtmlx.log("Warning","DataStore::indexById Non-existing ID: "+ id);
 			
 		return res;
 	},
@@ -4152,7 +4202,7 @@ dhtmlXDataView = function(container){
 	});
 	
 	//in case of auto-height we use plain rendering
-	if (this._settings.height!="auto")
+	if (this._settings.height!="auto"&&!this._settings.renderAll)
 		dhtmlx.extend(this, dhtmlx.VirtualRenderStack);	//extends RenderStack behavior
 	
 	//map API of DataStore on self

@@ -74,6 +74,9 @@ function dtmlXMLLoaderObject(funcObject, dhtmlObject, async, rSeed){
 	this.rSeed=rSeed||false;
 	return this;
 };
+
+dtmlXMLLoaderObject.count = 0;
+
 /**
   *     @desc: xml loading handler
   *     @type: private
@@ -89,6 +92,7 @@ dtmlXMLLoaderObject.prototype.waitLoadFunction=function(dhtmlObject){
 					return;
 
 				once=false; //IE 5 fix
+				dtmlXMLLoaderObject.count++;
 				if (typeof dhtmlObject.onloadAction == "function")
 					dhtmlObject.onloadAction(dhtmlObject.mainObject, null, null, null, dhtmlObject);
 
@@ -123,17 +127,13 @@ dtmlXMLLoaderObject.prototype.getXMLTopNode=function(tagName, oldObj){
 		return z;
 	}
 
-	if ((_isIE)&&(!this._retry)){
-		//fall back to MS.XMLDOM
-		var xmlString = this.xmlDoc.responseText;
-		var oldObj = this.xmlDoc;
+	if (!this._retry){
 		this._retry=true;
-		this.xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-		this.xmlDoc.async=false;
-		this.xmlDoc["loadXM"+"L"](xmlString);
-
+		var oldObj = this.xmlDoc;
+		this.loadXMLString(this.xmlDoc.responseText.replace(/^[\s]+/,""), true);
 		return this.getXMLTopNode(tagName, oldObj);
 	}
+
 	dhtmlxError.throwError("LoadXML", "Incorrect XML", [
 		(oldObj||this.xmlDoc),
 		this.mainObject
@@ -148,18 +148,20 @@ dtmlXMLLoaderObject.prototype.getXMLTopNode=function(tagName, oldObj){
   *     @param: xmlString - xml string
   *     @topic: 0  
   */
-dtmlXMLLoaderObject.prototype.loadXMLString=function(xmlString){
-	{
-		if (!_isIE){
-			var parser = new DOMParser();
-			this.xmlDoc=parser.parseFromString(xmlString, "text/xml");
-		} else {
-			this.xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-			this.xmlDoc.async=this.async;
-			this.xmlDoc.onreadystatechange = function(){};
-			this.xmlDoc["loadXM"+"L"](xmlString);
-		}
+dtmlXMLLoaderObject.prototype.loadXMLString=function(xmlString, silent){
+
+	if (!_isIE){
+		var parser = new DOMParser();
+		this.xmlDoc=parser.parseFromString(xmlString, "text/xml");
+	} else {
+		this.xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+		this.xmlDoc.async=this.async;
+		this.xmlDoc.onreadystatechange = function(){};
+		this.xmlDoc["loadXM"+"L"](xmlString);
 	}
+	
+	if (silent)
+		return;
 
 	if (this.onloadAction)
 		this.onloadAction(this.mainObject, null, null, null, this);
@@ -637,8 +639,9 @@ if ((navigator.userAgent.indexOf('Safari') != -1)||(navigator.userAgent.indexOf(
 
 else if (navigator.appName.indexOf("Microsoft") != -1){
 	_isIE=true;
-	if (navigator.appVersion.indexOf("MSIE 8.0")!= -1 && document.compatMode != "BackCompat") _isIE=8;
-	if (navigator.appVersion.indexOf("MSIE 9.0")!= -1 && document.compatMode != "BackCompat") _isIE=8;
+	if ((navigator.appVersion.indexOf("MSIE 8.0")!= -1 || navigator.appVersion.indexOf("MSIE 9.0")!= -1 || navigator.appVersion.indexOf("MSIE 10.0")!= -1 ) && document.compatMode != "BackCompat"){
+		_isIE=8;
+	}
 } else {
 	_isFF=true;
 	 _FFrv = parseFloat(navigator.userAgent.split("rv:")[1])
@@ -935,63 +938,5 @@ dhtmlxEventable=function(obj){
 					delete this[name];
 			}
 		}
+		obj = null;
 };
-
-(function(){
-
-var t = dhtmlx.message = function(text, type, lifetime, id){
-	if (!t.area){
-		t.area = document.createElement("DIV");
-		t.area.style.cssText = "position:absolute;right:5px;width:250px;z-index:100;";
-		t.area.className = "dhtmlx_message_area";
-		t.area.style[t.defPosition]="5px";
-		document.body.appendChild(t.area);
-	}
-	if (typeof text != "object")
-		text = { text:text, type:type, lifetime:lifetime, id:id };
-
-	text.type = text.type||"info";
-	text.id = text.id||t.uid();
-	text.lifetime = text.lifetime||t.defTimeout;
-
-
-	t.hide(text.id);
-	var message = document.createElement("DIV");
-	message.style.cssText = "border-radius:4px; padding:4px 4px 4px 20px;background-color:#FFFFCC;font-size:12px;font-family:Tahoma;color:navy;z-index: 10000;margin:5px;border:1px solid lightgrey;";
-	message.innerHTML = text.text;
-	message.className = text.type;
-	
-	if (t.defPosition == "bottom" && t.area.firstChild)
-		t.area.insertBefore(message,t.area.firstChild);
-	else
-		t.area.appendChild(message);
-
-	t.timers[text.id]=window.setTimeout(function(){
-		t.hide(text.id);
-	}, text.lifetime);
-
-	t.pull[text.id] = message;
-	return text.id;
-};
-
-t.defTimeout = 4000;
-t.defPosition = "top";
-t.pull = {};
-t.timers = {};
-t.seed = (new Date()).valueOf();
-t.uid = function(){ return t.seed++; };
-t.hideAll = function(){
-	for (var key in t.pull)
-		t.hide(key);
-		
-};
-t.hide = function(id){
-	var obj = t.pull[id];
-	if (obj && obj.parentNode){
-		obj.parentNode.removeChild(obj);
-		window.clearTimeout(t.timers[id]);
-		delete t.pull[id];
-	}
-};
-
-})();
