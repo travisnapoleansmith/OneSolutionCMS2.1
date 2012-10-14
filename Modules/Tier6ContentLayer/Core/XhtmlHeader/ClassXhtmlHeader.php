@@ -125,19 +125,9 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->LayerModule->Connect(current($this->TableNames));
 		$passarray = array();
 		$passarray = $PageID;
-		//$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect(current($this->TableNames));
-		
-		$this->PageID = $PageID['PageID'];
-		$this->RevisionID = $PageID['RevisionID'];
-		$this->CurrentVersion = $PageID['CurrentVersion'];
-		$this->PageTitle = $this->LayerModule->pass (current($this->TableNames), 'getRowField',  array('rowfield' => 'PageTitle'));
-		$this->PageIcon = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'PageIcon'));
-		$this->Rss2_0 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss2.0'));
-		$this->Rss0_92 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss0.92'));
-		$this->Atom0_3 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Atom0.3'));
-		$this->BaseHref = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'BaseHref'));
 		
 		$this->FillArray('MetaName', 'MetaName');
 		$this->FillArray('MetaNameContent', 'MetaNameContent');
@@ -152,6 +142,16 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('LinkRev', 'LinkRev');
 		$this->FillArray('LinkType', 'LinkType');
 		
+		$this->PageID = $PageID['PageID'];
+		$this->RevisionID = $PageID['RevisionID'];
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		$this->PageTitle = $this->LayerModule->pass (current($this->TableNames), 'getRowField',  array('rowfield' => 'PageTitle'));
+		$this->PageIcon = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'PageIcon'));
+		$this->Rss2_0 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss2.0'));
+		$this->Rss0_92 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Rss0.92'));
+		$this->Atom0_3 = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Atom0.3'));
+		$this->BaseHref = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'BaseHref'));
+		
 		$this->EnableDisable = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => 'Status'));
 		
@@ -163,6 +163,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		} else {
 			$passarray['Enable/Disable'] = 'Enable';
 		}
+
 		$this->LayerModule->Connect(current($this->TableNames));
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
@@ -211,7 +212,6 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$temp = $arrayvalue;
 		$temp .= $i;
 		$j = 0;
-
 		$this->$arrayname = Array();
 		while ($this->LayerModule->pass (current($this->TableNames), 'searchFieldNames', array('temp' => $temp))) {
 			if ($this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp))) {
@@ -586,7 +586,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			}
 			
 			if (!empty($this->MetaName) && !empty($this->MetaNameContent)) {
-				$this->Writer->writeRaw("\n");
+				//$this->Writer->writeRaw("\n");
 				$metaarray[0] = 'MetaName';
 				$metaarray[1] = 'MetaNameContent';
 				$metanamesarray[0] = 'name';

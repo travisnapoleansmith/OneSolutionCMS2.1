@@ -1,3 +1,17 @@
+Changes For One Solution CMS 2.1.135 - Sunday October 14, 2012
+Added:
+	Nothing Added.
+
+Updated (Fixed):
+	1). Updated XhtmlMainMenu - Fixed a form issue where in the database, table AdministratorFormSelect for PageID = 20, the field FormSelectName was getting set to MenuItem1 instead of MenuItem. This has been corrected.
+	2). Updated PhotoPage - Reworked the Add and Update Photo Pages to remove a bug with updating some of the photo page content. The bug was with database table ContentLayerVersion. ContentPageMenuObjectID was getting set to NULL and the information was not being submitted to the database. This has been corrected.
+	3). Updated XhtmlHeader - Fixed an issue with Meta Tags not being displayed with the header. This has been corrected.
+
+Removed:
+	Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.134 - Thursday, August 23, 2012
 Added:
 	Nothing Added.

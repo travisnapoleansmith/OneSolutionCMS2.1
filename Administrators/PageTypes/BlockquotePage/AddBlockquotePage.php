@@ -321,7 +321,7 @@
 		$FormSelect['PageID'] = $MainMenuSelectPage;
 		$FormSelect['ObjectID'] = $NewPageID;
 		$FormSelect['ContainerObjectID'] = $NewPageID;
-		$FormSelect['FormSelectName'] = 'MenuItem1';
+		$FormSelect['FormSelectName'] = 'MenuItem';
 		$FormSelect['StopObjectID'] = NULL;
 		$FormSelect['FormSelectStyle'] = NULL;
 		$FormOption['PageID'] = $MainMenuSelectPage;
