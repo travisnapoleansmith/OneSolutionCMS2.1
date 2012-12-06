@@ -1,3 +1,15 @@
+Changes For One Solution CMS 2.1.137 - Thursday, December 6, 2012
+Added:
+	1). Added new entries into the database for Add Tables Content form.
+
+Updated (Fixed):
+	1). Fixed file name problem with System Updater.
+
+Removed:
+	1). Removed the all undercase System Updater files and replaced them with the camal cased ones.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.136 - Wednesday, December 5, 2012
 Added: 
 	1). Added Documentation to Tier2DataAccessLayerModulesInterfaces.php.
