@@ -1,4 +1,22 @@
-Changes For One Solution CMS 2.1.135 - Sunday October 14, 2012
+Changes For One Solution CMS 2.1.136 - Wednesday, December 5, 2012
+Added: 
+	1). Added Documentation to Tier2DataAccessLayerModulesInterfaces.php.
+	2). Added Documentation to ClassMySqlConnect.php.
+	3). Added Readme.txt, Install.txt and License.txt files.
+	4). Added Empty Captcha Image Directory Utility to the Admin Panel.
+	5). Added Empty Table Upload Directory Utility to the Admin Panel.
+	6). Added Import feature to the Add Table Content form. It will take a CSV or XLS document.
+
+Updated (Fixed):
+	1). Updated PhotoPage - Added ImageContentLog.txt and enabled logging for Image Content Array so we can figure out why sometimes the image order doesn't work properly.
+	2). Update XhtmlNewsStories - Added 'BodyText' to the NewsStories table's field 'ContentPTagClass' for muli-paragraph news stories.
+	
+Removed:
+	1). Nothing Removed
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.135 - Sunday, October 14, 2012
 Added:
 	Nothing Added.
 

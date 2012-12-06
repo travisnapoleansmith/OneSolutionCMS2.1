@@ -1,6 +1,24 @@
 <?php
+/** 
+ * Class MySql Connect
+ * 
+ * Class MySqlConnect is designed as the MySql database engine for One Solution CMS. It is used to do all MySql queries on the database.
+ *
+ * @author Travis Napolean Smith
+ * @copyright Copyright (c) 1999 - 2012 One Solution CMS
+ * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
+ * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
+ * @version PHP - 2.1.130
+ * @version C++ - Unknown
+ */ 
+
 class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2DataAccessLayerModules
 {
+	/**
+	 * Create an instance of MySqlConnect
+	 *
+	 * @access public
+	*/
 	public function MySqlConnect () {
 		$this->idsearch = Array();
 		
@@ -12,6 +30,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['MySqlConnect'][key($GLOBALS['ErrorMessage']['MySqlConnect'])];
 	}
 	
+	/**
+	 * Connect
+	 * Connects to current database.
+	 *
+	 * @access public
+	*/
 	public function Connect () {
 		if ($this->hostname == NULL | $this->user == NULL | $this->password == NULL | $this->databasename == NULL) {
 			$this->hostname = $GLOBALS['credentaillogonarray'][0];
@@ -30,7 +54,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			}
 		}
 	}
-		
+	
+	/**
+	 * Disconnect
+	 * Disconnects from current database.
+	 *
+	 * @access public
+	*/
 	public function Disconnect () {
 		if ($this->link) {
 			mysql_close($this->link);
@@ -114,6 +144,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * createDatabase
+	 * Creates current database.
+	 *
+	 * @access public
+	*/
 	public function createDatabase () {
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
@@ -130,6 +166,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * deleteDatabase
+	 * Deletes current database.
+	 *
+	 * @access public
+	*/
 	public function deleteDatabase (){
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions('DROP');
@@ -146,6 +188,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * createTable
+	 *
+	 * Create a table using TableString.
+	 *
+	 * @param string $TableString SQL Query to create table minus the 'CREATE TABLE'. Must be a string.
+	 * @access public
+	*/
 	public function createTable ($TableString) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -175,6 +225,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * updateTable
+	 *
+	 * Updates a table using TableString.
+	 *
+	 * @param string $TableString SQL query to update the table. Tablestring comes after 'SET'. Must be a string.
+	 * @access public
+	*/
 	public function updateTable ($TableString) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -207,6 +265,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * deleteTable
+	 * Deletes the current table.
+	 *
+	 * @access public
+	*/
 	public function deleteTable () {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -228,6 +292,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * createRow
+	 *
+	 * Creates a new row from RowName and RowValue. Rowname and rowvalue can be a string or an array but must be the same type for each!
+	 *
+	 * @param string $RowName Name of the row to create. Must be a string or an array of strings.
+	 * @param string $RowValue Value of the row to create. Must be a string or an array of strings.
+	 * @access public
+	*/
 	public function createRow ($RowName, $RowValue) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -342,7 +415,20 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
-	public function updateRow ($rowname, $rowvalue, $rownumbername, $rownumber) {
+	/**
+	 * updateRow
+	 *
+	 * Updates a row from RowName and RowValue with RowNumberName and RowNumber. Rowname and rowvalue can be a string or an array but 
+	 * must be the same type for each! RowNumberName and RowNumber can be a string or an array but must be the same type for each. Mixing 
+	 * arrays and strings for all past values are not permitted!
+	 *
+	 * @param string $RowName Name of the row to update. Must be a string or an array of strings.
+	 * @param string $RowValue Value of the row to update. Must be a string or an array of strings.
+	 * @param string $RowNumberName Name of the row to update with. Must be a string or an array of strings.
+	 * @param string $RowNumber Value of the row to update with. Must be a string or an array of strings.
+	 * @access public
+	*/
+	public function updateRow ($RowName, $RowValue, $RowNumberName, $RowNumber) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('UPDATE');
@@ -350,16 +436,16 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
-					if (!is_array($rowname)) {
-						if (!is_array($rowvalue)) {
-							if (!is_array($rownumbername)) {
-								if (!is_array($rownumber)) {
-									if ($rowname != NULL) {
-										if ($rowvalue != NULL) {
-											if ($rownumbername != NULL) {
-												if ($rownumber != NULL) {
-													$rownumber = mysql_real_escape_string($rownumber);
-													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rowname . '` = \'' . $rowvalue . '\' WHERE `' . $rownumbername .'` = "' . $rownumber . '" ';
+					if (!is_array($RowName)) {
+						if (!is_array($RowValue)) {
+							if (!is_array($RowNumberName)) {
+								if (!is_array($RowNumber)) {
+									if ($RowName != NULL) {
+										if ($RowValue != NULL) {
+											if ($RowNumberName != NULL) {
+												if ($RowNumber != NULL) {
+													$RowNumber = mysql_real_escape_string($RowNumber);
+													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowName . '` = \'' . $RowValue . '\' WHERE `' . $RowNumberName .'` = "' . $RowNumber . '" ';
 													$result = mysql_query($query);
 												} else {
 													array_push($this->ErrorMessage,'updateRow: Row Number cannot be NULL!');
@@ -383,13 +469,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage, 'updateRow: Row Name is not an Array so Row Value cannot be an Array!');
 						}
 					} else {
-						if (is_array($rowvalue)){
-							if (is_array($rownumbername)) {
-								if (is_array($rownumber)) {
-									while (isset($rowname[key($rowname)])) {
-										if (is_array($rownumbername[key($rownumbername)]) || is_array($rownumber[key($rownumber)])) {
-											$namearray = $rownumbername[key($rownumbername)];
-											$valuearray = $rownumber[key($rownumber)];
+						if (is_array($RowValue)){
+							if (is_array($RowNumberName)) {
+								if (is_array($RowNumber)) {
+									while (isset($RowName[key($RowName)])) {
+										if (is_array($RowNumberName[key($RowNumberName)]) || is_array($RowNumber[key($RowNumber)])) {
+											$namearray = $RowNumberName[key($RowNumberName)];
+											$valuearray = $RowNumber[key($RowNumber)];
 											reset($namearray);
 											reset($valuearray);
 											$string = NULL;
@@ -405,39 +491,39 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													$string .= ' AND ';
 												}
 											}
-											$rowvaluestring = NULL;
-											$rowvaluestring = current($rowvalue);
-											$rowvaluestring = mysql_real_escape_string($rowvaluestring);
-											if ($rowvaluestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = \'' . $rowvaluestring . '\' WHERE ' . $string . ' ';
+											$RowValuestring = NULL;
+											$RowValuestring = current($RowValue);
+											$RowValuestring = mysql_real_escape_string($RowValuestring);
+											if ($RowValuestring) {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($RowName) . '` = \'' . $RowValuestring . '\' WHERE ' . $string . ' ';
 											} else {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($rowname) . '` = NULL WHERE ' . $string . ' ';
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($RowName) . '` = NULL WHERE ' . $string . ' ';
 											}
 											
 											$result = mysql_query($query);
 										} else {
-											$rownumberstring = NULL;
-											$rownumberstring = mysql_real_escape_string(current($rownumber));
-											$rownumbernamestring = NULL;
-											$rownumbernamestring = mysql_real_escape_string(current($rownumbername));
-											$rownamestring = NULL;
-											$rownamestring = mysql_real_escape_string(current($rowname));
-											$rowvaluestring = NULL;
-											$rowvaluestring = mysql_real_escape_string(current($rowvalue));
-											if ($rowvaluestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = \'' . $rowvaluestring . '\' WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+											$RowNumberstring = NULL;
+											$RowNumberstring = mysql_real_escape_string(current($RowNumber));
+											$RowNumberNamestring = NULL;
+											$RowNumberNamestring = mysql_real_escape_string(current($RowNumberName));
+											$RowNamestring = NULL;
+											$RowNamestring = mysql_real_escape_string(current($RowName));
+											$RowValuestring = NULL;
+											$RowValuestring = mysql_real_escape_string(current($RowValue));
+											if ($RowValuestring) {
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowNamestring . '` = \'' . $RowValuestring . '\' WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
 											} else {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $rownamestring . '` = NULL WHERE `' . $rownumbernamestring .'` = "' . $rownumberstring . '" ';
+												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowNamestring . '` = NULL WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
 											}
 											$result = mysql_query($query);
 										}
-										next($rowname);
-										next($rowvalue);
-										if (!next($rownumbername)) {
-											reset($rownumbername);
+										next($RowName);
+										next($RowValue);
+										if (!next($RowNumberName)) {
+											reset($RowNumberName);
 										}
-										if (!next($rownumber)) {
-											reset($rownumber);
+										if (!next($RowNumber)) {
+											reset($RowNumber);
 										}
 									}
 									
@@ -462,7 +548,16 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
-	public function deleteRow ($rowname, $rowvalue) {
+	/**
+	 * deleteRow
+	 *
+	 * Deletes a row from RowName and RowValue. RowName and RowValue can be a string or an array but must be the same type for each!
+	 *
+	 * @param string $RowName Name of the row to delete. Must be a string or an array of strings.
+	 * @param string $RowValue Value of the row to delete. Must be a string or an array of strings.
+	 * @access public
+	*/
+	public function deleteRow ($RowName, $RowValue) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('DELETE');
@@ -470,17 +565,17 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
-					if (!is_array($rowname)) {
-						if (!is_array($rowvalue)) {
-							if ($rowname != NULL) {
-								if ($rowvalue != NULL) {
-									$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . $rowname . ' = ' . $rowvalue . '';
+					if (!is_array($RowName)) {
+						if (!is_array($RowValue)) {
+							if ($RowName != NULL) {
+								if ($RowValue != NULL) {
+									$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . $RowName . ' = ' . $RowValue . '';
 									$result = mysql_query($query);
 								} else {
 									array_push($this->ErrorMessage,'deleteRow: Row Name has a value but Row Value cannot be NULL!');
 								}
 							} else {
-								if ($rowvalue == NULL) {
+								if ($RowValue == NULL) {
 									$query = 'DELETE FROM ' . $this->databasetable . ' ';
 									$result = mysql_query($query);
 								} else {
@@ -491,20 +586,20 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage,'deleteRow: Row Value cannot be an Array!');
 						}
 					} else {
-						if (is_array($rowvalue)) {
-							if ($rowname != NULL) {
-								if ($rowvalue != NULL) {
-									while (isset($rowname[key($rowname)])) {
-										$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . current($rowname) . ' = ' . current($rowvalue) . '';
+						if (is_array($RowValue)) {
+							if ($RowName != NULL) {
+								if ($RowValue != NULL) {
+									while (isset($RowName[key($RowName)])) {
+										$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . current($RowName) . ' = ' . current($RowValue) . '';
 										$result = mysql_query($query);
-										next($rowname);
-										next($rowvalue);
+										next($RowName);
+										next($RowValue);
 									}
 								} else {
 									array_push($this->ErrorMessage,'deleteRow: Row Name is an array and has a value. Row Value is an array but cannot be NULL!');
 								}
 							} else {
-								if ($rowvalue == NULL) {
+								if ($RowValue == NULL) {
 									$query = 'DELETE FROM ' . $this->databasetable . ' ';
 									$result = mysql_query($query);
 								} else {
@@ -524,6 +619,19 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * createField
+	 *
+	 * Creates a new field from fieldstring. Fieldstring can be a string or an array. Fieldflag and fieldflagcolumn can be null. They 
+	 * are used to set attributes for a new field.
+	 *
+	 * @param string $fieldstring Name of the field to create. Must be a string or an array of strings.
+	 * @param string $fieldflag Specify which field flag to be used. Must be any one of these values:
+	 *		- FIRST - Specifies if the field is to be the first column of the table.
+	 *		- AFTER - Specifies that the field is to be after fieldflagcolumn.
+	 * @param string $fieldflagcolumn Used only when fieldflag is set to AFTER. Specify which field fieldstring is after.
+	 * @access public
+	*/
 	public function createField ($fieldstring, $fieldflag, $fieldflagcolumn) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -641,6 +749,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * updateField
+	 *
+	 * Updates a field from field and fieldchange. Field and fieldchange can be a string or an array but must be the same type for each!
+	 *
+	 * @param string $field Name of the field to change. Must be a string or an array of strings.
+	 * @param string $fieldchange Value of the field to change. Must be a string or an array of strings.
+	 * @access public
+	*/
 	public function updateField ($field, $fieldchange) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -805,6 +922,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * deleteField
+	 *
+	 * Deletes a field from field. Field can be a string or an array.
+	 *
+	 * @param string $field Name of the field to delete. Must be a string or an array of strings.
+	 * @access public
+	*/
 	public function deleteField ($field) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -924,6 +1049,17 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * setDatabaseRow
+	 *
+	 * Executes a SQL query to retrieve the database rows creating a numerical array based on idnumber. Idnumber must be an array! 
+	 * To get the results, use getRowField(String $rowfield) for a single field in a row and getMultiRowField() for the entire row 
+	 * or multiple rows depending on the idnumber passed!
+	 *
+	 * @param array $idnumber Idnumber for the database query. Must be an array of strings with the key being the name of the field 
+	 * and the value being value of the field.
+	 * @access public
+	*/
 	public function setDatabaseRow ($idnumber) {
 		$this->idnumber = $idnumber;
 		if ($this->multirowfield) {
@@ -972,6 +1108,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * setEntireTable
+	 * Performs a SQL query to get the entire database table. Use getEntireTable() to get the entire table results!
+	 *
+	 * @access public
+	*/
 	public function setEntireTable () {
 		if ($this->orderbyname && $this->orderbytype) {
 			$this->tablequery = 'SELECT * FROM ' . $this->databasetable . ' ' . 'ORDER BY `' . $this->orderbyname . '` ' . $this->orderbytype;
@@ -1007,6 +1149,17 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 	}
 	
+	/**
+	 * BuildDatabaseRows
+	 * Executes a SQL query to retrieve the database rows creating an associative array based on idnumber set from 
+	 * setIdNumber($idnumber). Idnumber must be an array. To retrieve the results use getDatabase($rownumber) using 
+	 * row value as rownumber.
+	 *
+	 * OPTIONAL - limit:
+	 * If limit is set from setLimit, BuildDatabaseRows will impose that limit on the query.
+	 *
+	 * @access public
+	*/
 	public function BuildDatabaseRows (){
 		if (is_array($this->idnumber)) {
 			while (isset($this->idnumber[key($this->idnumber)])) {

@@ -18,6 +18,13 @@ abstract class LayerModulesAbstract
 	protected $LayerTable;
 	protected $LayerTableName;
 	
+	protected $LayerModuleOn = TRUE;
+	
+	protected $TokenKey = NULL;
+	protected $Uri = NULL;
+	protected $Location = NULL;
+	protected $Client = NULL;
+	
 	protected $PageID;
 	protected $ObjectID;
 	
@@ -162,15 +169,29 @@ abstract class LayerModulesAbstract
 				//$this->Layers[key($this->Layers)]->createDatabaseTable('Sessions');
 				//next($this->Layers);
 			//}
-			$this->LayerModule->createDatabaseTable('Sessions');
 			
-			$this->LayerModule->Connect('Sessions');
-			$this->LayerModule->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->LayerModule->Disconnect('Sessions');
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->createDatabaseTable('Sessions');
+				
+				$this->LayerModule->Connect('Sessions');
+				$this->LayerModule->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect('Sessions');
+				
+				$this->SessionTypeName = $this->LayerModule->pass ('Sessions', 'getMultiRowField', array());
+				$this->SessionTypeName = $this->SessionTypeName[0];
+			} else {
+				$this->Client->createDatabaseTable('Sessions');
+				
+				$this->Client->Connect('Sessions');
+				$this->Client->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->Client->Disconnect('Sessions');
+				
+				$this->SessionTypeName = $this->Client->pass ('Sessions', 'getMultiRowField', array());
+				$this->SessionTypeName = $this->SessionTypeName[0];
+			}
 			
-			$this->SessionTypeName = $this->LayerModule->pass ('Sessions', 'getMultiRowField', array());
-			$this->SessionTypeName = $this->SessionTypeName[0];
 		}
+		
 		$this->LayerModuleTableNameSetting = $LayerModuleTableNameSetting;
 		$this->LayerModuleTableName = $LayerModuleTableName;
 		$this->LayerTableName = $LayerTableName;
@@ -179,30 +200,62 @@ abstract class LayerModulesAbstract
 		$this->createDatabaseTable($this->LayerModuleTableName);
 		$this->createDatabaseTable($this->LayerTableName);
 		
-		$this->LayerModule->createDatabaseTable($this->LayerModuleTableNameSetting);
-		$this->LayerModule->createDatabaseTable($this->LayerModuleTableName);
-		$this->LayerModule->createDatabaseTable($this->LayerTableName);
+		if ($this->LayerModuleOn === TRUE) {
+			$this->LayerModule->createDatabaseTable($this->LayerModuleTableNameSetting);
+			$this->LayerModule->createDatabaseTable($this->LayerModuleTableName);
+			$this->LayerModule->createDatabaseTable($this->LayerTableName);
+		} else {
+			$this->Client->createDatabaseTable($this->LayerModuleTableNameSetting);
+			$this->Client->createDatabaseTable($this->LayerModuleTableName);
+			$this->Client->createDatabaseTable($this->LayerTableName);
+		}
 		
 		$passarray = array();
 		$passarray['Enable/Disable'] = 'Enable';
 		
-		$this->LayerModule->Connect($this->LayerModuleTableName);
-		$this->LayerModule->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-		$this->LayerModule->Disconnect($this->LayerModuleTableName);
+		if ($this->LayerModuleOn === TRUE) {
+			$this->LayerModule->Connect($this->LayerModuleTableName);
+			$this->LayerModule->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->LayerModule->Disconnect($this->LayerModuleTableName);
+			
+			$LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
+		} else {
+			$this->Client->Connect($this->LayerModuleTableName);
+			$this->Client->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			$this->Client->Disconnect($this->LayerModuleTableName);
+			
+			$LayerModuleTable = $this->Client->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
+		}
 		
-		$LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
-
-		$this->LayerModule->Connect($this->LayerTableName);
-		$this->LayerModule->pass ($this->LayerTableName, 'setEntireTable', array());
-		$this->LayerModule->Disconnect($this->LayerTableName);
 		
-		$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
-				
-		$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
-		$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
-		$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+		if ($this->LayerModuleOn === TRUE) {
+			$this->LayerModule->Connect($this->LayerTableName);
+			$this->LayerModule->pass ($this->LayerTableName, 'setEntireTable', array());
+			$this->LayerModule->Disconnect($this->LayerTableName);
+			
+			$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
+		} else {
+			$this->Client->Connect($this->LayerTableName);
+			$this->Client->pass ($this->LayerTableName, 'setEntireTable', array());
+			$this->Client->Disconnect($this->LayerTableName);
+			
+			$this->LayerTable = $this->Client->pass ($this->LayerTableName, 'getEntireTable', array());
+		}
 		
-		$LayerModuleSetting = $this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
+		if ($this->LayerModuleOn === TRUE) {
+			$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
+			$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
+			$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+			
+			$LayerModuleSetting = $this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
+		} else {
+			$this->Client->Connect($this->LayerModuleTableNameSetting);
+			$this->Client->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
+			$this->Client->Disconnect($this->LayerModuleTableNameSetting);
+			
+			$LayerModuleSetting = $this->Client->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
+		}
+		
 		$ModuleSetting = array();
 		$InnerKey = array();
 		$InnerKey['ObjectTypeName'] = 'ObjectTypeName';
@@ -403,9 +456,15 @@ abstract class LayerModulesAbstract
 				$passarray['rowname'] = $passarray1;
 				$passarray['rowvalue'] = $passarray2;
 				
-				//$this->LayerModule->Connect($DatabaseTableName);
-				$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
-				//$this->LayerModule->Disconnect($DatabaseTableName);
+				if ($this->LayerModuleOn === TRUE) {
+					//$this->LayerModule->Connect($DatabaseTableName);
+					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
+					//$this->LayerModule->Disconnect($DatabaseTableName);
+				} else {
+					//$this->Client->Connect($DatabaseTableName);
+					$this->Client->pass ($DatabaseTableName, 'createRow', $passarray);
+					//$this->Client->Disconnect($DatabaseTableName);
+				}
 			} else {
 				$i = 0;
 				reset($Content);
@@ -422,16 +481,26 @@ abstract class LayerModulesAbstract
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
 					
-					//$this->LayerModule->Connect($DatabaseTableName);
-					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
-					//$this->LayerModule->Disconnect($DatabaseTableName);
+					if ($this->LayerModuleOn === TRUE) {
+						//$this->LayerModule->Connect($DatabaseTableName);
+						$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
+						//$this->LayerModule->Disconnect($DatabaseTableName);
+					} else {
+						//$this->Client->Connect($DatabaseTableName);
+						$this->Client->pass ($DatabaseTableName, 'createRow', $passarray);
+						//$this->Client->Disconnect($DatabaseTableName);
+					}
 					
 					$i++;
 					next($Content);
 				}
 				
 			}
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 			
 			if (in_array('ObjectID', $Keys)) {
 				$SortOrder = array();
@@ -570,9 +639,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 			
 		} else {
 			array_push($this->ErrorMessage,'updateModuleContent: PageID and DatabaseTableName cannot be NULL!');
@@ -623,9 +698,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'deleteModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -672,9 +753,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'enableModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -724,9 +811,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'disableModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -776,9 +869,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'approvedModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -827,10 +926,15 @@ abstract class LayerModulesAbstract
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'notApprovedModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -880,9 +984,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'spamModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -932,9 +1042,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'pendingModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
@@ -974,7 +1090,11 @@ abstract class LayerModulesAbstract
 					$ReturnFileContents = $this->processSqlFile($FileContent);
 					if (is_array($ReturnFileContents)) {
 						foreach ($ReturnFileContents as $Value) {
-							$this->LayerModule->pass ($this->LayerModuleTableName, 'executeSQlCommand', array('SQLCommand' => $Value));
+							if ($this->LayerModuleOn === TRUE) {
+								$this->LayerModule->pass ($this->LayerModuleTableName, 'executeSQlCommand', array('SQLCommand' => $Value));
+							} else {
+								$this->Client->pass ($this->LayerModuleTableName, 'executeSQlCommand', array('SQLCommand' => $Value));
+							}
 						}
 					}
 				}
@@ -1046,13 +1166,21 @@ abstract class LayerModulesAbstract
 	
 	public function getTable($TableName) {
 		if (is_string($TableName)) {
-			$this->LayerModule->createDatabaseTable($TableName);
-			$this->LayerModule->Connect($TableName);
-			$this->LayerModule->pass ($TableName, 'setEntireTable', array());
-			$this->LayerModule->Disconnect($TableName);
-			
-			$hold = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
-			
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->createDatabaseTable($TableName);
+				$this->LayerModule->Connect($TableName);
+				$this->LayerModule->pass ($TableName, 'setEntireTable', array());
+				$this->LayerModule->Disconnect($TableName);
+				
+				$hold = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
+			} else {
+				$this->Client->createDatabaseTable($TableName);
+				$this->Client->Connect($TableName);
+				$this->Client->pass ($TableName, 'setEntireTable', array());
+				$this->Client->Disconnect($TableName);
+				
+				$hold = $this->Client->pass ($TableName, 'getEntireTable', array());
+			}
 			return $hold;
 		}
 	}
@@ -1064,11 +1192,19 @@ abstract class LayerModulesAbstract
 		$args = func_get_args();
 		if ($args[1]) {
 			$DatabaseName = $args[1];
-			$this->LayerModule->createDatabaseTable($DatabaseName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->createDatabaseTable($DatabaseName);
+			} else {
+				$this->Client->createDatabaseTable($DatabaseName);
+			}
 			if (is_array($PageID)) {
 				$passarray = $PageID;
 			}
-			$this->LayerModule->Connect($DatabaseName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($DatabaseName);
+			} else {
+				$this->Client->Connect($DatabaseName);
+			}
 			if ($args[2]) {
 				$hold = NULL;
 				$trip = FALSE;
@@ -1085,40 +1221,74 @@ abstract class LayerModulesAbstract
 				}
 				
 				if ($hold) {
-					$this->LayerModule->pass ($DatabaseName, 'setOrderbyname', array('orderbyname' => $hold));
+					if ($this->LayerModuleOn === TRUE) {
+						$this->LayerModule->pass ($DatabaseName, 'setOrderbyname', array('orderbyname' => $hold));
+					} else {
+						$this->Client->pass ($DatabaseName, 'setOrderbyname', array('orderbyname' => $hold));
+					}
 				}
 
 				if ($args[4] == 'ASC' | $args[4] == 'DESC') {
-					$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => $args[4]));
+					if ($this->LayerModuleOn !== TRUE) {
+						$this->Client->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => $args[4]));
+					} else {
+						$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => $args[4]));
+					}
 				} else if ($args[3]){
-					$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => 'ASC'));
+					if ($this->LayerModuleOn === TRUE) {
+						$this->LayerModule->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => 'ASC'));
+					} else {
+						$this->Client->pass ($DatabaseName, 'setOrderbytype', array('orderbytype' => 'ASC'));
+					}
 				}
 			}
-			$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->LayerModule->Disconnect($DatabaseName);
-			
-			$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($DatabaseName);
+				
+				$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
+			} else {
+				$this->Client->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->Client->Disconnect($DatabaseName);
+				
+				$hold = $this->Client->pass ($DatabaseName, 'getMultiRowField', array());
+			}
 		} else {
 			if (isset($PageID['DatabaseVariableName'])) {
 				$DatabaseVariableName = $PageID['DatabaseVariableName'];
 				
-				$this->LayerModule->Connect($this->$DatabaseVariableName);
-				$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
-				$this->LayerModule->Disconnect($this->$DatabaseVariableName);
-	
-				$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+				if ($this->LayerModuleOn === TRUE) {
+					$this->LayerModule->Connect($this->$DatabaseVariableName);
+					$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
+					$this->LayerModule->Disconnect($this->$DatabaseVariableName);
+		
+					$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+				} else {
+					$this->Client->Connect($this->$DatabaseVariableName);
+					$this->Client->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
+					$this->Client->Disconnect($this->$DatabaseVariableName);
+		
+					$hold = $this->Client->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
+				}
 			} else if (isset($PageID['DatabaseTableName'])) {
 				$DatabaseTableName = $PageID['DatabaseTableName'];
 				
-				$this->LayerModule->Connect($DatabaseTableName);
-				$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-				$this->LayerModule->Disconnect($DatabaseTableName);
-	
-				$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
+				if ($this->LayerModuleOn === TRUE) {
+					$this->LayerModule->Connect($DatabaseTableName);
+					$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+					$this->LayerModule->Disconnect($DatabaseTableName);
+		
+					$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
+				} else {
+					$this->Client->Connect($DatabaseTableName);
+					$this->Client->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+					$this->Client->Disconnect($DatabaseTableName);
+		
+					$hold = $this->Client->pass ($DatabaseTableName, 'getMultiRowField', array());
+				}
 			}
 		}
 		
-
 		return $hold;
 	}
 	
@@ -1158,9 +1328,15 @@ abstract class LayerModulesAbstract
 					$passarray['rownumbername'] = $passarray3;
 					$passarray['rownumber'] = $passarray4;
 					
-					$this->LayerModule->Connect($DatabaseTableName);
-					$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-					$this->LayerModule->Disconnect($DatabaseTableName);
+					if ($this->LayerModuleOn === TRUE) {
+						$this->LayerModule->Connect($DatabaseTableName);
+						$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+						$this->LayerModule->Disconnect($DatabaseTableName);
+					} else {
+						$this->Client->Connect($DatabaseTableName);
+						$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+						$this->Client->Disconnect($DatabaseTableName);
+					}
 					
 				} else {
 					$passarray1[$i] = key($Content);
@@ -1178,9 +1354,15 @@ abstract class LayerModulesAbstract
 				$passarray['rownumbername'] = $passarray3;
 				$passarray['rownumber'] = $passarray4;
 				
-				$this->LayerModule->Connect($DatabaseTableName);
-				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
-				$this->LayerModule->Disconnect($DatabaseTableName);
+				if ($this->LayerModuleOn === TRUE) {
+					$this->LayerModule->Connect($DatabaseTableName);
+					$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
+					$this->LayerModule->Disconnect($DatabaseTableName);
+				} else {
+					$this->Client->Connect($DatabaseTableName);
+					$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
+					$this->Client->Disconnect($DatabaseTableName);
+				}
 			}
 		} else {
 			array_push($this->ErrorMessage,'updateRecord: PageID, Content and DatabaseTableName cannot be NULL!');
@@ -1213,9 +1395,15 @@ abstract class LayerModulesAbstract
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
 			
-			$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
-			$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'updateRow', $passarray);
-			$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
+				$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'updateRow', $passarray);
+				$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
+			} else {
+				$this->Client->Connect($this->LayerModuleTableNameSetting);
+				$this->Client->pass ($this->LayerModuleTableNameSetting, 'updateRow', $passarray);
+				$this->Client->Disconnect($this->LayerModuleTableNameSetting);
+			}
 		} else {
 			array_push($this->ErrorMessage,'updateModuleSetting: ObjectType, ObjectTypeName, ModuleSetting and ModuleSettingAttribute cannot be NULL!');
 		}
@@ -1223,10 +1411,17 @@ abstract class LayerModulesAbstract
 	
 	public function sortTable(array $SortOrder, $DatabaseTableName) {
 		if ($DatabaseTableName != NULL) {
-			$this->LayerModule->createDatabaseTable($DatabaseTableName);
-			$this->LayerModule->Connect($DatabaseTableName);
-			$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('SortOrder'=> $SortOrder));
-			$this->LayerModule->Disconnect($DatabaseTableName);
+			if ($this->LayerModuleOn === TRUE) {
+				$this->LayerModule->createDatabaseTable($DatabaseTableName);
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'sortTable', array('SortOrder'=> $SortOrder));
+				$this->LayerModule->Disconnect($DatabaseTableName);
+			} else {
+				$this->Client->createDatabaseTable($DatabaseTableName);
+				$this->Client->Connect($DatabaseTableName);
+				$this->Client->pass ($DatabaseTableName, 'sortTable', array('SortOrder'=> $SortOrder));
+				$this->Client->Disconnect($DatabaseTableName);
+			}
 		} else {
 			array_push($this->ErrorMessage,'sortTable: SortOrder cannot be NULL!');
 		}

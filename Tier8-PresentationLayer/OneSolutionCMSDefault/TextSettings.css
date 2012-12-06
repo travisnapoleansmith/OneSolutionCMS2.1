@@ -38,21 +38,31 @@
 }
 
 .BodyHeading{
-	color: #FFCC00;
+	position: relative;
+	/*color: #FFCC00;*/
+	/*color: #190742;
+	text-shadow: 1px 1px 1px #FFFFFF;
+	*/
+	color: #FFD653;
 	font-size: 18px;
 	font-weight: bold;
 	padding-left: 20px;
 	padding-right: 30px;
 	text-align: center;
+	width: 650px;
+	left: 50px;
 }
 
 .BodyText{
+	position: relative;
 	color: #FFFFFF;
 	font-size: 16px;
 	padding-left: 20px;
 	padding-right: 15px;
 	padding-bottom: 10px;
 	text-indent: 10px;
+	width: 650px;
+	left: 50px;
 }
 
 .BodyTextButton{
@@ -65,7 +75,8 @@
 }
 
 .MenuText{
-	color: #FFCC00;
+	/*color: #FFCC00;*/
+	color: #FFD653;
 	/*font-size: 18px;*/
 	font-size: 16px;
 	font-weight: bold;

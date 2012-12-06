@@ -136,7 +136,7 @@
 			$NewsStory[2]['ContentStartTagClass'] = 'BodyText';
 			$NewsStory[2]['ContentPTagID'] = NULL;
 			$NewsStory[2]['ContentPTagStyle'] = NULL;
-			$NewsStory[2]['ContentPTagClass'] = NULL;
+			$NewsStory[2]['ContentPTagClass'] = 'BodyText';
 			$NewsStory[2]['Enable/Disable'] = $_POST['EnableDisable'];
 			$NewsStory[2]['Status'] = $_POST['Status'];
 		} else {
@@ -168,7 +168,7 @@
 			$NewsStory[1]['ContentStartTagClass'] = 'BodyText';
 			$NewsStory[1]['ContentPTagID'] = NULL;
 			$NewsStory[1]['ContentPTagStyle'] = NULL;
-			$NewsStory[1]['ContentPTagClass'] = NULL;
+			$NewsStory[1]['ContentPTagClass'] = 'BodyText';
 			$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
 			$NewsStory[1]['Status'] = $_POST['Status'];
 		}

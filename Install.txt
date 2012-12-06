@@ -1,0 +1,43 @@
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+* 
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2012 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.136, 2012-10-14
+**************************************************************************************
+
+Requirements
+------------
+
+The following requirements should be met prior to using One Solution CMS:
+* PHP version 5.2 - Does not function properly in version 5.3 or 5.4. Will be corrected in the near future.
+* PHP XMLReader and XMLWriter must be turned on.
+
+Installation instructions
+-------------------------
+
+Installation of One Solution CMS is rather simple but someday it will include a 5 minute installation tool.
+
+Open the Configuration/defaultsettings.ini and fill in the DATABASE CONNECTION, SITE SETTINGS and TIER CONFIGURATION and save it inside of the Configuration folder with the new name of settings.ini.
+
+Copy the entire contents of the One Solution CMS zip file that you downloaded and extracted to the folder that you wish to put your website in.
+
+Go to the SQLTables/Install folder: their is a file called InstallTables.sql you will need to move the contents of the file into your database by ether the command line or a tool like phpMyAdmin tool. I recommend setting up phpMyAdmin, it is far easier and pretty straight forward. *In the near future you will not need to do this step because their will be coming an install tool that will automate this.
+
+FINISH UP THIS FILE.

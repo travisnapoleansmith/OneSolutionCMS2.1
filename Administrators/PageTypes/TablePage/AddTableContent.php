@@ -96,7 +96,11 @@
 
 	$PageName = "../../index.php?PageID=";
 	$PageName .= $_POST['AddTableContent'];
-
+	
+	if ($_POST['File']) {
+		$PageName .= '&File=' . $_POST['File'];
+	}
+	
 	$hold = $Tier6Databases->FormSubmitValidate('AddTableContent', $PageName);
 
 	

@@ -1,4 +1,5 @@
 <?php
+	ini_set('upload_max_filesize', '64M');
 	$SETTINGS = parse_ini_file('settings.ini', true);
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 
@@ -16,7 +17,7 @@
 	$author = $SETTINGS['SITE SETTINGS']['AUTHOR'];
 	$copyright = $SETTINGS['SITE SETTINGS']['COPYRIGHT'];
 
-	$cmsversion = '2.1.135';
+	$cmsversion = '2.1.136';
 
 	$Writer = new XMLWriter();
 	$Writer->openMemory();

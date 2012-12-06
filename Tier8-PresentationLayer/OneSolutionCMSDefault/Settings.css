@@ -215,7 +215,7 @@ input.BodyText {
 	position: relative;
 	background: url(TemplateImages/Main-Header.png);
 	background-repeat: no-repeat;
-	height: 98px;
+	height: 104px;
 	width: 950px;
 	left: 5px;
 }
@@ -225,7 +225,7 @@ input.BodyText {
 	width: auto;
 	height: 10px;
 	text-align: center;
-	top: 20px;
+	top: 25px;
 	left: 0px;
 	
 }
@@ -243,8 +243,9 @@ input.BodyText {
 #main-content-top {
 	position: relative;
 	background: url(TemplateImages/Main-Content-Top.png);
+	background-repeat: no-repeat;
 	width: 775px;
-	height: 40px;
+	height: 170px;
 	top: 10px;
 	z-index: -1;
 }
@@ -263,10 +264,13 @@ input.BodyText {
 #main-content-middle li {
 	position: relative;
 	top: -10px;
-	left: -15px;
+	left: 60px;
+	width: 600px;
+	/*left: -15px;
 	padding-bottom: -10px;
 	list-style-type: none;
 	font-weight: bold;
+	*/
 }
 
 #main-content-middle li ul li{
@@ -292,8 +296,9 @@ input.BodyText {
 #main-content-bottom {
 	position: relative;
 	background: url(TemplateImages/Main-Content-Bottom.png);
+	background-repeat: no-repeat;
 	width: 775px;
-	height: 107px;
+	height: 170px;
 	top: -5px;
 	z-index: -1;
 }
@@ -318,7 +323,7 @@ input.BodyText {
 #footer {
 	position: relative;
 	background: url(TemplateImages/Main-Footer.png);
-	height: 91px;
+	height: 104px;
 	width: 950px;
 	left: 50px;
 	float: left;

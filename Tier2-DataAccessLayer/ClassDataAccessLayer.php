@@ -7,7 +7,7 @@ class DataAccessLayer extends LayerModulesAbstract
 	protected $DatabaseAllow;
 	protected $DatabaseDeny;
 	
-	public function __construct () {
+	public function DataAccessLayer () {
 		
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();

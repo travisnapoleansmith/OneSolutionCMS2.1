@@ -223,7 +223,7 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * Setter for DatabaseTableName
 	 *
-	 * @param string $DatabaeTableName the name of the database table to use.
+	 * @param string $DatabaseTableName the name of the database table to use.
 	 * @access public
 	*/
 	
@@ -441,7 +441,8 @@ class ContentLayer extends LayerModulesAbstract
 		$this->PageID = $PageID;
 		$passarray = array();
 		$passarray = $PageID;
-
+		
+		$this->LayerModule->createDatabaseTable($this->DatabaseTableName);
 		$this->LayerModule->Connect($this->DatabaseTableName);
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbyname', array('OrderName' => 'ObjectID'));
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbytype', array('OrderType' => 'ASC'));
@@ -457,6 +458,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		$passarray['CurrentVersion'] = $this->PageID['CurrentVersion'];
 		
+		$this->LayerModule->createDatabaseTable($this->ContentLayerVersionTableName);
 		$this->LayerModule->Connect($this->ContentLayerVersionTableName);
 		$this->LayerModule->pass ($this->ContentLayerVersionTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect($this->ContentLayerVersionTableName);

@@ -1,3 +1,8 @@
+var Temp = document.getElementById("Import");
+if (typeof(Temp) != 'undefined' && Temp != null) {
+	document.getElementById("Import").setAttribute('onclick', 'ImportData();');
+}
+
 document.getElementById("AddRow").setAttribute('onclick', 'AddOneRow();');
 document.getElementById("AddColumn").setAttribute('onclick', 'AddOneColumn();');
 document.getElementById("RemoveColumn").setAttribute('onclick', 'RemoveOneColumn();');
@@ -10,6 +15,7 @@ var GET = GetUrlVars();
 var COOKIE = document.cookie.split(';');
 var PageLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php?TableID=";
 var PageID = 0;
+var FileName = null;
 
 var TableContentTemp = COOKIE;
 var TableContent = new Array();
@@ -39,6 +45,10 @@ if (GET['TableID'] != null) {
 	PageID = GET['TableID'];
 }
 
+if (GET['File'] != null) {
+	FileName = GET['File'];
+}
+
 PageLocation = PageLocation + PageID;
 
 var ColumnHeader = new Array();
@@ -48,24 +58,49 @@ mygrid = new dhtmlXGridObject('Grid');
 
 $(document).ready(function()
 {
+	CheckFile();
 	$.ajax({
 		url: PageLocation,
 		type: "GET", 
 		dataType: "xml",
 		success: LoadHeaderData
 	});
+	
 	LoadGrid();
 });
 
 //window.onload=setTimeout("LoadRowColumnCount()", 60);
 window.onload=setTimeout("LoadCookieData()", 90);
 
+function CheckFile() {
+	if (FileName != null) {
+		//var File = '../Administrators/PageTypes/TablePage/UPLOAD/';
+		//File += FileName;
+		var FileLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridImport.php?File=";
+		FileLocation += FileName;
+		PageLocation = FileLocation;
+		
+		var FileDiv = document.createElement('div');
+		var FileInput = document.createElement('input');
+		FileInput.setAttribute('type', 'hidden');
+		FileInput.setAttribute('name', "File");
+		FileInput.setAttribute('value', FileName);
+		
+		FileDiv.appendChild(FileInput);
+		var FormElement = document.getElementsByTagName('form');
+		//alert(FormElement.length);
+		FormElement[0].appendChild(FileDiv);
+	}
+}
+
 function LoadGrid() {
 	mygrid.setImagePath("../../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/imgs/");
 	mygrid.init();
 	mygrid.setSkin("dhx_skyblue");
 	mygrid.setStyle("", "color: black;");
-	mygrid.loadXML(PageLocation);
+	
+	mygrid.load(PageLocation);
+	////mygrid.loadXML(PageLocation);
 	//mygrid.enableDragAndDrop(true);
 	
 	mygrid.submitOnlyChanged(false);
@@ -238,6 +273,32 @@ function ShiftColumns(Header, Name, ColumnName, LabelColumnName, Count) {
 	}
 }
 
+function ImportData() {
+	Vault = new dhtmlXVaultObject();
+	Vault.setImagePath("../../Libraries/Tier7BehavioralLayer/DHTMLXVault/codebase/imgs/");
+	Vault.setServerHandlers("PageTypes/TablePage/UploadHandler.php", "PageTypes/TablePage/GetInfoHandler.php", "PageTypes/TablePage/GetIdHandler.php");
+	Vault.setFilesLimit(1);
+	
+	Vault.onAddFile = function(FileName) {
+			var Ext = this.getFileExtension(FileName);
+			if (Ext != "csv" && Ext != "xls") {
+				alert ("You may only upload CSV or Excel documents. Please retry.");
+				return false;
+			} else {
+				return true;
+			}
+		};
+	
+	Vault.onUploadComplete = function (Files) {
+			var File = Files[0];
+			
+			var Url = document.URL + "&File=" + File.name;
+			alert ("You are being redirect to a new Add Table Content form with your file");
+			window.location = Url;
+		};
+	Vault.create("Vault");
+}
+
 function AddOneRow() {
 	RowCount = +RowCount + 100;
 	var Id = mygrid.getSelectedId();
@@ -304,7 +365,6 @@ function RemoveOneColumn() {
 }
 
 function LoadHeaderData(XML) {
-	//alert("I LOADED DATA");
 	var $Head = $(XML).find("head");
 	$Head.find("column").each(function(){
 		ColumnHeader.push($(this).text());
@@ -320,14 +380,13 @@ function LoadFooterData(XML) {
 	var $Foot = $(XML).find("tfoot");
 	var $Foot = $Foot.find("tr");
 	$Content = $Foot.find("cell");
-	if ($Content !== null) {
-		$Foot = $(XML).find("head");
-		$Foot.find("column").each(function(){
+	if ($Content === null) {
+		//$Foot = $(XML).find("head");
+		$Foot.find("cell").each(function(){
 			ColumnFooter.push("NULL");
 		});
 	} else {
 		$Foot.find("cell").each(function() {
-			alert ("TEST");
 			ColumnFooter.push($(this).text()); 
 		});
 	}

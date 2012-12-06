@@ -12,7 +12,8 @@
 	session_start();
 
 	$LogContentLayerVersion = TRUE;
-
+	$LogImageContent = TRUE;
+	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdatePhotosPage = $Options['XhtmlPicture']['picture']['UpdatePhotosPage']['SettingAttribute'];
 	$NewUpdatePhotosPage = explode('=', $UpdatePhotosPage);
@@ -292,9 +293,29 @@
 				array_push($ImageContent, $Content);
 			}
 			unset($ImageContentNoOrder);
-
+			
+			if ($LogImageContent === TRUE) {
+				$LogFile = "ImageContentLog.txt";
+				$LogFileHandle = fopen($LogFile, 'a');
+				$FileInformation = 'Logging - Image Content Unchanged - ' . $PageID . ' - ' . date("F j, Y, g:i a") . "\n";
+				fwrite($LogFileHandle, $FileInformation);
+				fwrite($LogFileHandle, print_r($ImageContent, TRUE));
+				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+				fclose($LogFileHandle);
+			}
+			
 			ksort($ImageContent);
-
+			
+			if ($LogImageContent === TRUE) {
+				$LogFile = "ImageContentLog.txt";
+				$LogFileHandle = fopen($LogFile, 'a');
+				$FileInformation = 'Logging - Image Content Changed - ' . $PageID . ' - ' . date("F j, Y, g:i a") . "\n";
+				fwrite($LogFileHandle, $FileInformation);
+				fwrite($LogFileHandle, print_r($ImageContent, TRUE));
+				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+				fclose($LogFileHandle);
+			}
+			
 			$Content = array();
 
 			$PageID = array();
@@ -809,7 +830,7 @@
 			$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[$i]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
-
+			
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/UpdateXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 
@@ -930,7 +951,6 @@
 			$CreatedUpdatePhotosPage = $Options['XhtmlPicture']['picture']['CreatedUpdatePhotosPage']['SettingAttribute'];
 			header("Location: $CreatedUpdatePhotosPage&SessionID=$sessionname");
 			exit;
-
 		}
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);

@@ -2,14 +2,14 @@
 var PageLocation = "../Modules/Tier6ContentLayer/Core/XhtmlTable/XmlTableListing.php";
 var TableListings = null;
 
+var TableSelectionOutput = document.createDocumentFragment();
+
 var TableSelectionLabel = document.createElement('label');
 var TableSelectionLabelDiv = document.createElement('div');
-//var TableSelectionContentDiv = document.createElement('div');
-var TableSelectionContentDiv = document.createElement('select');
 
 $(document).ready(function()
 {
-	CreateTableListing();
+	CreateTableSelectionLabel();
 	
 	$.ajax({
 		url: PageLocation,
@@ -17,42 +17,33 @@ $(document).ready(function()
 		dataType: "xml",
 		success: LoadTableListings
 	});
-	//LoadGrid();
+	
 });
 
-function CreateTableListing() {
-	////////////////TableListings = document.createElement('div');
-	
-	// TABLE SELECTION
-	//var TableSelectionLabel = document.createElement('label');
-	
+function CreateTableSelectionLabel() {
 	TableSelectionLabel.setAttribute('class', 'BodyText ShortForm');
 	TableSelectionLabel.setAttribute('dir', "ltr");
 	TableSelectionLabel.setAttribute('lang', "en-us");
 	TableSelectionLabel.setAttribute('xml:lang', "en-us");
 	TableSelectionLabel.innerHTML = "Table";
 	
-	//var TableSelectionLabelDiv = document.createElement('div');
-	//var TableSelectionContentDiv = document.createElement('div');
-	//var TableSelectionContentDiv = document.createElement('select');
+	TableSelectionLabelDiv.appendChild(TableSelectionLabel);
+}
+
+function CreateTableListing() {
+	var TableSelectionContentDiv = document.createElement('select');
+	
 	TableSelectionContentDiv.setAttribute('class', "ShortForm");
 	TableSelectionContentDiv.setAttribute('dir', "ltr");
-	//TableSelectionContentDiv.setAttribute('id', TableSelectionContentID);
 	TableSelectionContentDiv.setAttribute('lang', "en-us");
 	TableSelectionContentDiv.setAttribute('xml:lang', "en-us");
-	//TableSelectionContentDiv.setAttribute('name', TableSelectionContentName);
 	
-	TableSelectionLabelDiv.appendChild(TableSelectionLabel);
-	//TableSelectionContentDiv.appendChild(TableSelectionContent);
-	//TableSelectionContentDiv.appendChild(TableSelectionSelect);
+	TableSelectionContentDiv.appendChild(TableSelectionOutput.cloneNode(true));
 	
+	return (TableSelectionContentDiv);
 }
-//function LoadGrid() {
-	//alert("TESTING");
-//}
 
 function AddTable(TableNumber) {
-	//alert("Add Table " + AddTablePage);
 	var AppendID = null;
 	if (TableNumber === 1) {
 		AppendID = "Heading"
@@ -69,13 +60,19 @@ function AddTable(TableNumber) {
 	var RemoveTableName = "RemoveTable" + NextAddTablePage;
 	var AddTableOnClick = "AddTable(" + NextAddTablePage + ");";
 	var RemoveTableOnClick = "RemoveTable(" + NextAddTablePage + ");";
-	var HeadingContentID = "Table" + TableNumber + "Heading";
-	var TopTextContentID = "Table" + TableNumber + "TopText";
-	var BottomTextContentID = "Table" + TableNumber + "BottomText";
-	var TableSelectionContentID = "Table" + TableNumber + "Selection";
-	var TableSelectionContentName = "Table" + TableNumber + "Name";
 	
-	//alert (AppendID);
+	var HeadingContentID = "Table" + TableNumber + "Heading";
+	var HeadingContentName = "Table" + TableNumber + "_Heading";
+	
+	var TopTextContentID = "Table" + TableNumber + "TopText";
+	var TopTextContentName = "Table" + TableNumber + "_TopText";
+	
+	var BottomTextContentID = "Table" + TableNumber + "BottomText";
+	var BottomTextContentName = "Table" + TableNumber + "_BottomText";
+	
+	var TableSelectionContentID = "Table" + TableNumber + "Selection";
+	var TableSelectionContentName = "Table" + TableNumber + "_Name";
+	
 	var FieldSet = document.createElement('fieldset');
 	FieldSet.setAttribute('class', "ShortForm");
 	FieldSet.setAttribute('dir', "ltr");
@@ -109,6 +106,7 @@ function AddTable(TableNumber) {
 	HeadingContent.setAttribute('xml:lang', "en-us");
 	HeadingContent.setAttribute('rows', "4");
 	HeadingContent.setAttribute('cols', "30");
+	HeadingContent.setAttribute('name', HeadingContentName);
 	
 	var HeadingLabelDiv = document.createElement('div');
 	var HeadingContentDiv = document.createElement('div');
@@ -135,6 +133,7 @@ function AddTable(TableNumber) {
 	TopTextContent.setAttribute('xml:lang', "en-us");
 	TopTextContent.setAttribute('rows', "30");
 	TopTextContent.setAttribute('cols', "3");
+	TopTextContent.setAttribute('name', TopTextContentName);
 	
 	var TopTextLabelDiv = document.createElement('div');
 	var TopTextContentDiv = document.createElement('div');
@@ -144,46 +143,13 @@ function AddTable(TableNumber) {
 	FieldSet.appendChild(TopTextLabelDiv);
 	FieldSet.appendChild(TopTextContentDiv);
 	
-	// TABLE SELECTION
-	/*var TableSelectionLabel = document.createElement('label');
-	var TableSelectionContent = document.createElement('option');
+	var TableSelectionContentDiv = CreateTableListing();
 	
-	TableSelectionLabel.setAttribute('class', 'BodyText ShortForm');
-	TableSelectionLabel.setAttribute('dir', "ltr");
-	TableSelectionLabel.setAttribute('lang', "en-us");
-	TableSelectionLabel.setAttribute('xml:lang', "en-us");
-	TableSelectionLabel.innerHTML = "Table";
-	
-	TableSelectionContent.setAttribute('class', "ShortForm");
-	TableSelectionContent.setAttribute('dir', "ltr");
-	TableSelectionContent.setAttribute('lang', "en-us");
-	TableSelectionContent.setAttribute('xml:lang', "en-us");
-	TableSelectionContent.innerHTML = "Table 1";
-	
-	var TableSelectionLabelDiv = document.createElement('div');
-	//var TableSelectionContentDiv = document.createElement('div');
-	var TableSelectionContentDiv = document.createElement('select');
-	TableSelectionContentDiv.setAttribute('class', "ShortForm");
-	TableSelectionContentDiv.setAttribute('dir', "ltr");
-	TableSelectionContentDiv.setAttribute('id', TableSelectionContentID);
-	TableSelectionContentDiv.setAttribute('lang', "en-us");
-	TableSelectionContentDiv.setAttribute('xml:lang', "en-us");
-	TableSelectionContentDiv.setAttribute('name', TableSelectionContentName);
-	
-	TableSelectionLabelDiv.appendChild(TableSelectionLabel);
-	TableSelectionContentDiv.appendChild(TableSelectionContent);
-	//TableSelectionContentDiv.appendChild(TableSelectionSelect);
-	*/
 	TableSelectionContentDiv.setAttribute('id', TableSelectionContentID);
 	TableSelectionContentDiv.setAttribute('name', TableSelectionContentName);
 	
-	FieldSet.appendChild(TableSelectionLabelDiv);
+	FieldSet.appendChild(TableSelectionLabelDiv.cloneNode(true));
 	FieldSet.appendChild(TableSelectionContentDiv);
-	
-	TableSelectionContentDiv.removeAttribute('id');
-	TableSelectionContentDiv.removeAttribute('name');
-	
-	//alert(TableSelectionContentDiv);
 	
 	// BOTTOM TEXT
 	var BottomTextLabel = document.createElement('label');
@@ -202,6 +168,7 @@ function AddTable(TableNumber) {
 	BottomTextContent.setAttribute('xml:lang', "en-us");
 	BottomTextContent.setAttribute('rows', "30");
 	BottomTextContent.setAttribute('cols', "3");
+	BottomTextContent.setAttribute('name', BottomTextContentName);
 	
 	var BottomTextLabelDiv = document.createElement('div');
 	var BottomTextContentDiv = document.createElement('div');
@@ -244,7 +211,13 @@ function AddTable(TableNumber) {
 }
 
 function RemoveTable(TableNumber) {
-	alert("Remove Table " + TableNumber);
+	var DivID = 'Table' + TableNumber;
+	if (document.getElementById(DivID)) {
+		$("#"+DivID).remove();
+		EnablePriorAddTableButton(TableNumber);
+	} else {
+		alert("Table " + TableNumber + " Does Not Exist!");
+	}
 }
 
 function DisablePriorAddTableButtons(TableNumber) {
@@ -275,7 +248,7 @@ function LoadTableListings(XML) {
 		TableSelectionContent.setAttribute('xml:lang', "en-us");
 		TableSelectionContent.innerHTML = TableContentArray['TableID'] + " - " + TableContentArray['TableName'];
 		
-		TableSelectionContentDiv.appendChild(TableSelectionContent);
+		TableSelectionOutput.appendChild(TableSelectionContent);
 		
 	});
 }

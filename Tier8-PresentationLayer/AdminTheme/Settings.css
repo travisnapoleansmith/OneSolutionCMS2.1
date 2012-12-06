@@ -157,7 +157,7 @@ select.ShortForm {
 }
 
 button.ShortFormButton {
-	left: 10%;
+	left: 5%;
 	right: auto;
 	top: auto;
 }
@@ -389,4 +389,8 @@ a:active {
 .Calendar a:hover {
 	text-decoration: none;
 	color: #33CC00;
+}
+
+#Vault td, #Vault {
+	color: black;
 }
