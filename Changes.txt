@@ -1,3 +1,16 @@
+Changes For One Solution CMS 2.1.138 - Sunday, December 16, 2012
+Added:
+	1). Nothing Added.
+
+Updated (Fixed):
+	1). Updated PhotoPage - Fixed a bug with a user sets no order to a photo set.
+	2). Updated OneSolutionCMSDefault Theme - Now works with IE 6 and up.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.137 - Thursday, December 6, 2012
 Added:
 	1). Added new entries into the database for Add Tables Content form.
@@ -6,7 +19,7 @@ Updated (Fixed):
 	1). Fixed file name problem with System Updater.
 
 Removed:
-	1). Removed the all undercase System Updater files and replaced them with the camal cased ones.
+	1). Removed all undercase System Updater files and replaced them with the camal cased ones.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

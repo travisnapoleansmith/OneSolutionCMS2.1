@@ -39,10 +39,6 @@
 
 .BodyHeading{
 	position: relative;
-	/*color: #FFCC00;*/
-	/*color: #190742;
-	text-shadow: 1px 1px 1px #FFFFFF;
-	*/
 	color: #FFD653;
 	font-size: 18px;
 	font-weight: bold;
@@ -51,6 +47,7 @@
 	text-align: center;
 	width: 650px;
 	left: 50px;
+	top: -100px;
 }
 
 .BodyText{
@@ -63,6 +60,7 @@
 	text-indent: 10px;
 	width: 650px;
 	left: 50px;
+	top: -100px;
 }
 
 .BodyTextButton{

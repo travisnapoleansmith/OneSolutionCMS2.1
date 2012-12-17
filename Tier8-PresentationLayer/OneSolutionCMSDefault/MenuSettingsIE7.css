@@ -7,37 +7,14 @@
 }
 
 .MenuLi {
-	left: 20px;
+	left: 30px;
 }
 
 .MenuLiSub {
-	background: none;
-	background-color: #330000;
-	background-repeat: no-repeat;
 	margin-top: 0px;
-	margin-bottom: 0px;
-	border-top-width: 0px;
-	border-bottom-width: 0px;
+	margin-bottom: -4px;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	vertical-align: bottom;
-	border: 1px groove #FFCC00;
-}
- 
-.MenuLiSubFinal {
-	background: none;
-	background-color: #330000;
-	min-height: 0px;
-	
-}
-
-.MenuLiSubRoot {
-	margin-bottom: -6px;
-	postion: relative;
-}
-
-.mainmenuul {
-	background: none;
 }
 
 #MenuItem1-1, #MenuItem2-1, #MenuItem3-1, #MenuItem4-1, #MenuItem5-1, 

@@ -232,6 +232,8 @@
 			unset($ImageContent[$Value]);
 			}
 		
+		ksort($ImageContent);
+		
 		$Content = array();
 		
 		$PageID = array();

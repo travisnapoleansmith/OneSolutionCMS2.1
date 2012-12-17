@@ -1,4 +1,5 @@
 #main-menu {
+	left: 20px;
 	top: -20px;
 }
 
@@ -11,7 +12,7 @@
 }
 
 .MenuLi {
-	left: 20px;
+	left: 30px;
 	margin-top: 0px;
 	margin-bottom: -20px;
 	border-top-width: 0px;
@@ -31,6 +32,7 @@
 	padding-bottom: 0px;
 	border: 1px groove #FFCC00;
 }
+*/
 
 .MenuLiSubFinal {
 	background: none;
@@ -51,6 +53,7 @@
 	background: none;
 	padding-right: 0px;
 }
+
 
 #MenuItem1-1, #MenuItem2-1, #MenuItem3-1, #MenuItem4-1, #MenuItem5-1, 
 #MenuItem6-1, #MenuItem7-1, #MenuItem8-1, #MenuItem9-1, #MenuItem10-1, 

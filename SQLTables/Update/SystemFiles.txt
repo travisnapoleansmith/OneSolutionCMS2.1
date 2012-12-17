@@ -605,7 +605,11 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Cleanup.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Memory.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Template.php.in
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/HTML/
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/URI/
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/README
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/HTML/4.4.0,08521cd887da171eb9ade54ba11f9d56,1.ser
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/URI/4.4.0,fdfc1465c1553db684e2f90f64511cd4,1.ser
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/EntityLookup/entities.ser
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Filter/ExtractStyleBlocks.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Filter/YouTube.php
@@ -6047,6 +6051,8 @@
 ../../SQLTables/Update/UpdateTables-2.1.133.sql
 ../../SQLTables/Update/UpdateTables-2.1.134.sql
 ../../SQLTables/Update/UpdateTables-2.1.135.sql
+../../SQLTables/Update/UpdateTables-2.1.136.sql
+../../SQLTables/Update/UpdateTables-2.1.137.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/

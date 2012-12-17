@@ -363,4 +363,3 @@ REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 100, 199, 'Legend', 'Admini
 REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 199, 199, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
 REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 200, 299, 'Legend', 'AdministratorFormLegend', 3, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, 'ShortForm', 'ltr', 'ColumnFooters', 'en-us', 'left: 5px;', NULL, 'en-us', 'Enable', 'Approved');
 REPLACE INTO `AdministratorFormFieldSet` VALUES(200, 299, 299, NULL, NULL, NULL, NULL, NULL, NULL, 'false', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
-

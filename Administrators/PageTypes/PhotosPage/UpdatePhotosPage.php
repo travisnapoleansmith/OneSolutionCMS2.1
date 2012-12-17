@@ -248,11 +248,15 @@
 					array_push($RemoveKeys, $Key);
 				}
 			}
-
+			
+			//print_r($ImageContent);
+			
 			foreach ($RemoveKeys as $Key => $Value) {
 				unset($ImageContent[$Value]);
 			}
-
+			
+			ksort($ImageContent);
+			
 			$ImageContentNew = array();
 			$ImageContentNoOrder = array();
 			$ImageContentMove = array();
@@ -383,7 +387,7 @@
 			$k = $i;
 			$k++;
 			$PictureID = 1;
-
+			
 			foreach($ImageContent as $Key => $Value) {
 				foreach ($Value as $SubKey => $SubValue) {
 					if ($SubValue != NULL) {
@@ -894,7 +898,8 @@
 			//$FormOption['FormOptionXMLLang'] = 'en-us';
 			//$FormOption['Enable/Disable'] = 'Enable';
 			//$FormOption['Status'] = 'Approved';
-
+			
+			
 			$FormOptionID = $Options['XhtmlPicture']['picture']['UpdatePhotosPageSelect']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlPicture']['picture']['DeletePhotosPage']['SettingAttribute'];
@@ -951,6 +956,7 @@
 			$CreatedUpdatePhotosPage = $Options['XhtmlPicture']['picture']['CreatedUpdatePhotosPage']['SettingAttribute'];
 			header("Location: $CreatedUpdatePhotosPage&SessionID=$sessionname");
 			exit;
+			
 		}
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);

@@ -257,20 +257,20 @@ input.BodyText {
 	height: auto;
 	min-height: 400px;
 	top: -5px;
-	padding-bottom: 10px;
+	padding-bottom: 5px;
+	/*margin-bottom: -20px;*/
 	z-index: 0;
 }
 
 #main-content-middle li {
 	position: relative;
-	top: -10px;
+	margin-bottom: 10px;
+}
+#main-content-middle ul {
+	position: relative;
+	top: -110px;
+	width: 615px;
 	left: 60px;
-	width: 600px;
-	/*left: -15px;
-	padding-bottom: -10px;
-	list-style-type: none;
-	font-weight: bold;
-	*/
 }
 
 #main-content-middle li ul li{
