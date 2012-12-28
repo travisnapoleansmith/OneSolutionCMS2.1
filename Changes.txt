@@ -1,3 +1,22 @@
+Changes For One Solution CMS 2.1.139 - Thursday, December 27, 2012
+Added:
+	1). Added PHPInfo to the Admin Panel.
+	2). Added System Update File Remover to the Admin Panel.
+	3). Added System Update Upgrade Folder Removal Tool to the Admin Panel.
+	4). Added Site Stats as XML or CSV Utility to the Admin Panel.
+
+Updated (Fixed):
+	1). Updated all the modules so they will work with PHP 5.3, the system should work just fine with PHP 5.3. Any newer versions we don't know yet.
+	2). Updated Libary jQuery to version 1.8.3 all older version will still be included for now.
+	3). Updated Library SimpleViewer to 2.3.1.
+	4). Updated Library TiltViewer to 1.3.2.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 Changes For One Solution CMS 2.1.138 - Sunday, December 16, 2012
 Added:
 	1). Nothing Added.

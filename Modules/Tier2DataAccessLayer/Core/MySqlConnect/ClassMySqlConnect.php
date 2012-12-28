@@ -83,30 +83,28 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	}
 	
 	protected function checkTableName () {
-		if ($this->tablenames) {
-			$results = $this->tablenamequery;
-		} else {
+		$TableName = $this->databasetable;
+		if ($this->tablenames === NULL) {
 			$this->Connect();
-			$results = mysql_list_tables($this->databasename, $this->link);
-			$this->tablenamequery = $results;
+			
+			$query = 'SHOW TABLES FROM `' . $this->databasename . '`';
+			$result = mysql_query($query);
+			
 			$this->tablenames = Array();
-			$rows = mysql_num_rows($results);
-			$i = 0;
-			while ($i < $rows) {
-				array_push($this->tablenames, mysql_tablename($results, $i));
-				$i++;
+			
+			while ($CurrentTableName = mysql_fetch_array($result, MYSQL_NUM)) {
+				array_push($this->tablenames, $CurrentTableName[0]);
+			}
+			
+			$this->Disconnect();
+			
+		}
+		
+		foreach ($this->tablenames as $Key => $Value) {
+			if ($Value === $TableName) {
+				return $TableName;
 			}
 		}
-		$rows = mysql_num_rows($results);
-		$i = 0;
-		while ($i < $rows) {
-			$temp = mysql_tablename($results, $i);
-			if ($temp == $this->databasetable) {
-				return $temp;
-			}
-			$i++;
-		}
-		array_push($this->ErrorMessage,'checkTableName: Table Name does not exist');
 		return FALSE;
 	}
 	

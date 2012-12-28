@@ -1,5 +1,5 @@
 /**
- * SimpleViewer v2.3.0
+ * SimpleViewer v2.3.1
  * http://simpleviewer.net/simpleviewer/
  *
  * © 2012 SimpleViewer Inc. All rights reserved.

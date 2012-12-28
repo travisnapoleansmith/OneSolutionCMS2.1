@@ -1,0 +1,51 @@
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+* 
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+
+Upcoming Releases
+-----------------
+
+	One Solution CMS 2.1
+	--------------------
+	One Solution CMS 2.1 will end it release cycle once all current clients sites have been fully running.  Remaining sites are
+		ATPA
+		KCPhotoVideo
+	
+	One Solution CMS 2.2
+	--------------------
+	One Solution CMS 2.2 will begin once 2.1 has stopped.
+	This version of One Solution CMS will have the following new features:
+		System Installer
+	This version will be a go between the Version 2 and Version 3 of the system.
+	
+	One Solution CMS 3.0
+	--------------------
+	One Solution CMS 3.0 will have the following new features:
+		Asset Pages
+		Assets Forms:
+			Table Content
+			Images
+			Videos
+			ETC.
+		New AJAX Administrators Panel
+		Each Tier will be using SOAP and OAuth - This feature will be able to be turned on or off.

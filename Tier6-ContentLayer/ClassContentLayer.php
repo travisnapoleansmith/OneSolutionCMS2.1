@@ -115,7 +115,7 @@ class ContentLayer extends LayerModulesAbstract
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
 		
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
-		$this->LayerModule = &new ValidationLayer();
+		$this->LayerModule = new ValidationLayer();
 		$this->LayerModule->setPriorLayerModule($this);
 		$this->LayerModule->createDatabaseTable('ContentLayer');
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
@@ -1477,7 +1477,28 @@ class ContentLayer extends LayerModulesAbstract
 	}
 	
 	public function FormSubmitValidate($SessionName, $PageName) {
+		$FileLocation = NULL;
+		$FileName = NULL;
+		$FileDataForm = NULL;
+		$ElementName = NULL;
+		$arguments = func_get_args();
+		if ($arguments[2] != NULL) {
+			$FileLocation = $arguments[2];
+		}
+		
+		if ($arguments[3] != NULL) {
+			$FileDataForm = $arguments[3];
+		}
+		
+		if ($arguments[4] != NULL) {
+			$ElementName = $arguments[4];
+		}
+		
 		$sessionname = $this->SessionStart($SessionName);
+		if ($FileLocation != NULL) {
+			$FileName = $FileLocation . $sessionname . '.xml';
+		}
+		
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST[$SessionName];
 		if ($_GET['PageID']){
@@ -1497,6 +1518,9 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		
 		if ($hold['Error']) {
+			if ($FileName != NULL & $FileDataForm != NULL) {
+				$this->ProcessFormXMLFile($FileName, $hold, $FileDataForm, $ElementName);
+			}
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
 			exit;
@@ -1507,6 +1531,34 @@ class ContentLayer extends LayerModulesAbstract
 				return FALSE;
 			}
 		}
+	}
+	
+	protected function ProcessFormXMLFile($FileName, $FileData, $FileDataForm, $ElementName) {
+		$XMLFile = new XmlWriter();
+		$XMLFile->openURI($FileName);
+		$XMLFile->setIndent(4);
+		$XMLFile->startDocument('1.0', 'utf-8');
+		$XMLFile->startElement('Content');
+		foreach ($FileDataForm as $Key => $Value) {
+			if ($ElementName != NULL) {
+				$XMLFile->startElement($ElementName);
+			} else {
+				$XMLFile->startElement($Key);
+			}
+			$XMLFile->writeAttribute('name', $Key);
+			if (is_array($Value)) {
+				foreach ($Value as $SubElement => $SubValue) {
+					$XMLFile->startElement($SubElement);
+					$XMLFile->text($SubValue);
+					$XMLFile->endElement(); // ENDS SUBELEMENT
+				}
+			} else {
+				$XMLFile->text($Value);
+			}
+			$XMLFile->endElement(); // ENDS KEY OR ELEMENTNAME
+		}
+		$XMLFile->endElement(); // ENDS Content;
+		$XMLFile->endDocument();
 	}
 	
 	public function FormSubmit($SessionName, $PageName, $ObjectType, $Function, array $Arguments) {

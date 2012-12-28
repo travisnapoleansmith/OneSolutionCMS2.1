@@ -185,6 +185,24 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	}
 	
 	/** 
+	 * FetchDatabaseAll
+	 * 
+	 * Retrieved the entire database table.
+	 *
+	 * @return array Entire Database Table
+	 */
+	public function FetchDatabaseAll () {
+		$this->LayerModule->Connect($this->DatabaseTable);
+		
+		$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
+		$EntireDatabaseTable = $this->LayerModule->pass ($this->DatabaseTable, 'getEntireTable', array());
+		
+		$this->LayerModule->Disconnect($this->DatabaseTable);
+		
+		return $EntireDatabaseTable;
+	}
+	
+	/** 
 	 * CreateOutput
 	 * 
 	 * Creates Output based on what the database entried have in them with space being the indentation of each line.

@@ -4,13 +4,13 @@
 			<title>Image 1</title>
 			<description>This is a regular text description.</description>
 		</photo>
-		<photo imageurl="imgs/PSTVSpring2007.jpg" linkurl="http://www.ebay.com">
+		<photo imageurl="imgs/img.jpg" linkurl="http://www.google.com">
 			<title>Image 2</title>
-			<description>THIS IS MY DESCRIPTION OF PSTV SPRING 2007</description>
+			<description><![CDATA[This is a HTML text description. Supported tags are <b>bold</b>, <u>underline</u>, <i>italics</i>, linebreaks<br>and <font color="#ff0000" size="60">font tags</font>. Hyperlinks are not supported.]]></description>
 		</photo>
 		<photo imageurl="imgs/img.jpg" >
 			<title>Image 3</title>
-		<description>This image has no link button becasue the 'linkurl' property was removed from the photo tag</description>			
+		<description>This image has no link button because the 'linkurl' property was removed from the photo tag</description>			
 		</photo>
 		<photo imageurl="imgs/img.jpg" linkurl="http://www.google.com" showFlipButton="false">
 			<title>Image 4</title>

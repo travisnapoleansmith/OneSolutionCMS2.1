@@ -17,16 +17,16 @@
 * License along with this library; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 *
-* @copyright  Copyright (c) 1999 - 2012 One Solution CMS (http://www.onesolutioncms.com/)
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
 * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-* @version    2.1.136, 2012-10-14
+* @version    2.1.139, 2012-12-27
 **************************************************************************************
 
 Requirements
 ------------
 
 The following requirements should be met prior to using One Solution CMS:
-* PHP version 5.2 - Does not function properly in version 5.3 or 5.4. Will be corrected in the near future.
+* PHP version 5.2 or 5.3 - Does not function properly in version 5.4. Will be corrected in the near future.
 * PHP XMLReader and XMLWriter must be turned on.
 
 Installation instructions
@@ -40,4 +40,16 @@ Copy the entire contents of the One Solution CMS zip file that you downloaded an
 
 Go to the SQLTables/Install folder: their is a file called InstallTables.sql you will need to move the contents of the file into your database by ether the command line or a tool like phpMyAdmin tool. I recommend setting up phpMyAdmin, it is far easier and pretty straight forward. *In the near future you will not need to do this step because their will be coming an install tool that will automate this.
 
-FINISH UP THIS FILE.
+Once the InstallTables.sql file has been moved into your database you will need to open up the UpdateInstallation.sql file that is inside of the SQLTables/Install folder.
+
+You will need to edit the on the first line, the second 'http://images.NEWSITE.com/' and change the NEWSITE to whatever your current site location is.
+
+Next you will need to edit the second line, the second 'NEW SITE META KEY WORDS' and change NEW SITE META KEY WORDS to what you would like to have for meta key words for your site.
+
+Next you will need to edit the third line, the second 'NEW SITE META DESCRIPTION' and change NEW SITE META DESCRIPTION to what you would like to have for a meta description for your site.
+
+Next you will need to edit the fourth line, the "http://$SITEADDRESS/Administrators/" and change $SITEADDRESS to your sites web address.
+
+Once these are done and the file has been saved as something other than UpdateInstallation.sql. You will need to move the contents of the file into your database by ether the command line or a tool like phpMyAdmin tool. I recommend setting up phpMyAdmin. In the near future their will be an installer build into the system but for now this method does work.
+
+Once all these steps are done, the site can be setup with the url of your site/Administrators.  The log on information is User Name is Administrator and the Password is abc123. Make sure to change this password before pushing this site up live.

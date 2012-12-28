@@ -1,6 +1,6 @@
 <?php
 	// MySql Database Tables
-	$Tier6Databases = &new ContentLayer();
+	$Tier6Databases = new ContentLayer();
 	
 	$Tier6Databases->createDatabaseTable('ContentLayer');
 	$Tier6Databases->createDatabaseTable('ContentLayerVersion');

@@ -21,7 +21,7 @@ class ProtectionLayer extends LayerModulesAbstract
 		$this->LayerModuleOn = TRUE;
 		
 		if ($this->LayerModuleOn === TRUE) {
-			$this->LayerModule = &new DataAccessLayer();
+			$this->LayerModule = new DataAccessLayer();
 			$this->LayerModule->setPriorLayerModule($this);
 			//$this->LayerModule->createDatabaseTable('ContentLayer');
 			$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);

@@ -103,8 +103,6 @@
 	
 	$hold = $Tier6Databases->FormSubmitValidate('AddTableContent', $PageName);
 
-	
-
 	if ($hold) {
 		foreach ($_POST as $Key => $Value) {
 			if (strstr($Key, "Header") || strstr($Key, "Footer")) {
