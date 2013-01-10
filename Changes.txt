@@ -1,4 +1,24 @@
-Changes For One Solution CMS 2.1.139 - Thursday, December 27, 2012
+Changes For One Solution CMS 2.1.140 - Wednesday, January 9, 2013
+Added:
+	1). Added Documentation to Class ValidationLayer.
+	2). Added Documentation to Class ProtectionLayer.
+	3). Added Documentation to Class AuthenticationLayer.
+	4). Added Documentation to Class DataAccessLayer.
+	5). Added DatabaseBackup Utility to the Admin Panel.
+	6). Added rss.php - For some reason this file has been missing for a few months now. It is now back!
+
+Updated (Fixed):
+	1). Updated Documentation to Class ContentLayer.
+	2). Updated Documentation to Class XhtmlSiteStats.
+	3). Updated Documenation to Class XhtmlTable.
+	4). Updated XmlFeed = Corrected an issue that didn't print out the doc type.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.139 - Thursday, December 27, 2012 07:59:29 PM
 Added:
 	1). Added PHPInfo to the Admin Panel.
 	2). Added System Update File Remover to the Admin Panel.
@@ -17,7 +37,7 @@ Removed:
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-Changes For One Solution CMS 2.1.138 - Sunday, December 16, 2012
+Changes For One Solution CMS 2.1.138 - Sunday, December 16, 2012 08:00:38 PM
 Added:
 	1). Nothing Added.
 
@@ -30,7 +50,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.137 - Thursday, December 6, 2012
+Changes For One Solution CMS 2.1.137 - Thursday, December 6, 2012 01:14:45 PM
 Added:
 	1). Added new entries into the database for Add Tables Content form.
 
@@ -42,7 +62,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.136 - Wednesday, December 5, 2012
+Changes For One Solution CMS 2.1.136 - Thursday, December 6, 2012 12:39:52 AM
 Added: 
 	1). Added Documentation to Tier2DataAccessLayerModulesInterfaces.php.
 	2). Added Documentation to ClassMySqlConnect.php.
@@ -60,7 +80,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.135 - Sunday, October 14, 2012
+Changes For One Solution CMS 2.1.135 - Sunday, October 14, 2012 05:21:22 PM
 Added:
 	Nothing Added.
 
@@ -74,7 +94,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.134 - Thursday, August 23, 2012
+Changes For One Solution CMS 2.1.134 - Thursday, August 23, 2012 06:45:17 PM
 Added:
 	Nothing Added.
 	
@@ -90,7 +110,7 @@ Removed:
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.133 - Tuesday, August 7, 2012
+Changes For One Solution CMS 2.1.133 - Tuesday, August 7, 2012 07:45:12 PM
 Added:
 	1). Added an Installer folder to the Administrators folder for a future installer.
 	2). Added a System folder to the Administrators folder for all system pages.
@@ -110,7 +130,7 @@ Removed:
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.132 - Saturday, July 28, 2012
+Changes For One Solution CMS 2.1.132 - Saturday, July 28, 2012 06:26:31 PM
 Added:
 	Nothing has been added.
 	
@@ -126,7 +146,7 @@ Removed:
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.131 - Thursday, July 26, 2012
+Changes For One Solution CMS 2.1.131 - Thursday, July 26, 2012 7:11:25 PM
 Added:
 	1). Added XhtmlTables Content form.
 	2). Added A Wider Administrators Panel.
@@ -140,7 +160,7 @@ Removed:
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.130 - Wednesday, April 25, 2012
+Changes For One Solution CMS 2.1.130 - Wednesday, April 25, 2012 10:15:41 PM
 Added:
 	1). Added a Global Theme Content Layer.
 	2). Added XmlTable for XhtmlTable module it is inside of the XhtmlTable's folder.
@@ -159,7 +179,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.129 - Sunday, April 14, 2012
+Changes For One Solution CMS 2.1.129 - Sunday, April 14, 2012 08:08:36 PM
 Added:
 	1). Added TestCases Folder for all Unit Testing to be done.
 	2). Added SimpleTest inside of TestCases Folder.
@@ -179,7 +199,7 @@ Removed:
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.128 - Saturday, March 10, 2012
+Changes For One Solution CMS 2.1.128 - Saturday, March 10, 2012 11:43:21 PM
 Added:
 	1). Added DHTMLX Suite Standard to Libraries/Tier7BehavioralLayer. This is version 3.0
 	2). Added AdminTheme to Tier7BehavioralLayer and Tier8BehavioralLayer. This is the official Administrator's Theme for the system.
@@ -845,4 +865,94 @@ Changes For One Solution CMS 2.1.40 - Saturday, March 13, 2010 10:11:02 PM
 	Updated XhtmlList to be XhtmlUnorderedList and added XhtmlOrderedList
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.39 - Wednesday, March 10, 2010 08:31:43 PM
+	Fixed XhtmlContent bugs: P inside of a P bug, Print Preview and added Revision ID as a flag.  
+	Fixed XhtmlCalendarTable to handle the start and end of month bug, fix the current month being displayed bug, fixed the Status and EnableDisable bug for appointments and fixed individual day display for a full calendar. 
+	Fixed XhtmlList Print Preview bug, Added EnableDisable for each LI item. 
+	Added a theme override parameter for XhtmlHeader.
+
+	Started XhtmlForm module!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.38 - Tuesday, March 09, 2010 02:52:34 AM
+	Updated XhtmlHeader to support accented characters in Title Tag!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.37 - Tuesday, March 08, 2010 11:21:27 PM
+	XhtmlCalendarTable has been updated to fix a bug with style.  Still needs to fix print preview!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.36 - Tuesday, March 08, 2010 06:51:11 PM
+	Updated Layer Module Abstract to include getting database tables from LayerDatabaseTable.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.35 - Tuesday, March 08, 2010 05:16:48 PM
+	Updated Layers to dynamically include files based on database settings!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.34 - Saturday, March 06, 2010 07:46:01 PM
+	Updated XhtmlContent module.  Still needs to be worked on!!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.33 - Saturday, March 06, 2010 06:07:03 PM
+	Updated XhtmlPicture Module and XhtmlContent Module to use XMLWriter.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.32 - Saturday, March 06, 2010 01:12:49 PM
+	Removed unneeded files!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.31 - Saturday, March 06, 2010 01:00:42 PM
+	Updated Tier 7 and Tier 8 to handle Themes and Updated XhtmlHeader to handle Themes.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.30 - Saturday, March 06, 2010 12:13:47 PM
+	Updated XhtmlFlash to use XMLWriter.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.29 - Wednesday, March 03, 2010 08:09:41 PM
+	Updated XhtmlCalendarTable.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.28 - Wednesday, March 03, 2010 06:15:17 PM
+	XhtmlCalendar is done!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.27 - Wednesday, March 03, 2010 03:19:00 PM
+	All tiers are included!  
+	Created Tier 6 and Tier 5. 
+	Made XMLWriter modules take file name and output as file. 
+	Made XMLWriter modules inherit Global Writer object.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.26 - Wednesday, February 24, 2010 09:22:57 PM
+	Updated XhtmlMainMenu.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.25 - Wednesday, February 24, 2010 07:32:31 PM
+	Finished XhtmlMainMenu.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.24 - Tuesday, February 23, 2010 10:51:50 PM
+	Updated XhtmlList to use XmlWriter.  
+	Added XhtmlMainMenu using XhtmlList.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 MORE TO COME!

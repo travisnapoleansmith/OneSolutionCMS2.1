@@ -1,144 +1,169 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
-abstract class LayerModulesAbstract 
+abstract class LayerModulesAbstract
 {
 	protected $Writer;
-	
+
 	protected $Layers = array();
-	
+
 	protected $LayerModule;
 	protected $PriorLayerModule;
-	
+
 	protected $LayerModuleTable;
 	protected $LayerModuleTableName;
 	protected $LayerModuleTableNameSetting;
-	
+
 	protected $LayerModuleSetting = array();
-	
+
 	protected $LayerTable;
 	protected $LayerTableName;
-	
+
 	protected $LayerModuleOn = TRUE;
-	
+
 	protected $TokenKey = NULL;
 	protected $Uri = NULL;
 	protected $Location = NULL;
 	protected $Client = NULL;
-	
+
 	protected $PageID;
 	protected $ObjectID;
-	
+
 	protected $SessionName = array();
 	protected $SessionTypeName;
-	
+
 	protected $Hostname;
 	protected $User;
 	protected $Password;
 	protected $DatabaseName;
 	protected $DatabaseTable;
-	
+
 	protected static $OneSolutionCMSVersion;
-	
+
 	protected $ModulesLocation;
-	
+
 	protected $Modules = array();
-	
+
 	protected $Space;
-	
+
 	protected $ErrorMessage = array();
-	
+
 	public function setPriorLayerModule(self &$PriorLayerModule) {
 		$this->PriorLayerModule = &$PriorLayerModule;
 	}
-	
+
 	public function setPageID($PageID) {
 		$this->PageID = $PageID;
 	}
-	
+
 	public function getPageID() {
 		return $this->PageID;
 	}
-	
+
 	public function setObjectID($ObjectID) {
 		$this->ObjectID = $ObjectID;
 	}
-	
+
 	public function getObjectID() {
 		return $this->ObjectID;
 	}
-	
+
 	public function setHostname ($hostname){
 		$this->Hostname = $hostname;
 	}
-	
+
 	public function getHostname () {
 		return $this->Hostname;
 	}
-	
+
 	public function setUser ($user){
 		$this->User = $user;
 	}
-	
+
 	public function getUser () {
 		return $this->User;
 	}
-	
+
 	public function setPassword ($password){
 		$this->Password = $password;
 	}
-	
+
 	public function getPassword () {
 		return $this->Password;
 	}
-	
+
 	public function setDatabaseName ($databasename){
 		$this->DatabaseName = $databasename;
 	}
-	
+
 	public function getDatabaseName () {
 		return $this->DatabaseName;
 	}
-	
+
 	final public function getOneSolutionCMSVersion() {
 		return $this->OneSolutionCMSVersion;
 	}
-	
+
 	public function setDatabasetable ($databasetable){
 		$this->DatabaseTable[$databasetable] =  new MySqlConnect();
 	}
-	
+
 	public function getDatabaseTable() {
 		return $this->DatabaseTable;
 	}
-	
+
 	public function getSpace() {
 		return $this->Space;
-	}	
-	
+	}
+
 	public function getError ($idnumber) {
 		return $this->ErrorMessage[$idnumber];
 	}
-	
+
 	public function getErrorArray() {
 		return $this->ErrorMessage;
 	}
-	
+
 	public function setModulesLocation ($moduleslocation){
 		$this->ModulesLocation = $moduleslocation;
 	}
-	
+
 	public function getModulesLocation () {
 		return $this->ModulesLocation;
 	}
-	
+
 	public function getLayerModuleTable (){
 		return $this->LayerModuleTable;
 	}
-	
+
 	public function getLayerModuleSetting () {
 		return $this->LayerModuleSetting;
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		/*
 		$this->Hostname = $hostname;
@@ -148,58 +173,58 @@ abstract class LayerModulesAbstract
 	}
 
 	public function FetchDatabase ($idnumber) {
-	
+
 	}
 	public function CreateOutput($space) {
-	
+
 	}
 	public function getOutput() {
-	
+
 	}
-	
+
 	public function buildModules($LayerModuleTableName, $LayerTableName, $LayerModuleTableNameSetting) {
 		if ($this->SessionName) {
 			reset($this->SessionName);
 			$passarray = array();
 			$passarray['SessionName'] = key($this->SessionName);
 			$this->createDatabaseTable('Sessions');
-		
+
 			//reset($this->Layers);
 			//while (current($this->Layers)) {
 				//$this->Layers[key($this->Layers)]->createDatabaseTable('Sessions');
 				//next($this->Layers);
 			//}
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->createDatabaseTable('Sessions');
-				
+
 				$this->LayerModule->Connect('Sessions');
 				$this->LayerModule->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
 				$this->LayerModule->Disconnect('Sessions');
-				
+
 				$this->SessionTypeName = $this->LayerModule->pass ('Sessions', 'getMultiRowField', array());
 				$this->SessionTypeName = $this->SessionTypeName[0];
 			} else {
 				$this->Client->createDatabaseTable('Sessions');
-				
+
 				$this->Client->Connect('Sessions');
 				$this->Client->pass ('Sessions', 'setDatabaseRow', array('idnumber' => $passarray));
 				$this->Client->Disconnect('Sessions');
-				
+
 				$this->SessionTypeName = $this->Client->pass ('Sessions', 'getMultiRowField', array());
 				$this->SessionTypeName = $this->SessionTypeName[0];
 			}
-			
+
 		}
-		
+
 		$this->LayerModuleTableNameSetting = $LayerModuleTableNameSetting;
 		$this->LayerModuleTableName = $LayerModuleTableName;
 		$this->LayerTableName = $LayerTableName;
-		
+
 		$this->createDatabaseTable($this->LayerModuleTableNameSetting);
 		$this->createDatabaseTable($this->LayerModuleTableName);
 		$this->createDatabaseTable($this->LayerTableName);
-		
+
 		if ($this->LayerModuleOn === TRUE) {
 			$this->LayerModule->createDatabaseTable($this->LayerModuleTableNameSetting);
 			$this->LayerModule->createDatabaseTable($this->LayerModuleTableName);
@@ -209,59 +234,59 @@ abstract class LayerModulesAbstract
 			$this->Client->createDatabaseTable($this->LayerModuleTableName);
 			$this->Client->createDatabaseTable($this->LayerTableName);
 		}
-		
+
 		$passarray = array();
 		$passarray['Enable/Disable'] = 'Enable';
-		
+
 		if ($this->LayerModuleOn === TRUE) {
 			$this->LayerModule->Connect($this->LayerModuleTableName);
 			$this->LayerModule->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($this->LayerModuleTableName);
-			
+
 			$LayerModuleTable = $this->LayerModule->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
 		} else {
 			$this->Client->Connect($this->LayerModuleTableName);
 			$this->Client->pass ($this->LayerModuleTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->Client->Disconnect($this->LayerModuleTableName);
-			
+
 			$LayerModuleTable = $this->Client->pass ($this->LayerModuleTableName, 'getMultiRowField', array());
 		}
-		
-		
+
+
 		if ($this->LayerModuleOn === TRUE) {
 			$this->LayerModule->Connect($this->LayerTableName);
 			$this->LayerModule->pass ($this->LayerTableName, 'setEntireTable', array());
 			$this->LayerModule->Disconnect($this->LayerTableName);
-			
+
 			$this->LayerTable = $this->LayerModule->pass ($this->LayerTableName, 'getEntireTable', array());
 		} else {
 			$this->Client->Connect($this->LayerTableName);
 			$this->Client->pass ($this->LayerTableName, 'setEntireTable', array());
 			$this->Client->Disconnect($this->LayerTableName);
-			
+
 			$this->LayerTable = $this->Client->pass ($this->LayerTableName, 'getEntireTable', array());
 		}
-		
+
 		if ($this->LayerModuleOn === TRUE) {
 			$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
 			$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
 			$this->LayerModule->Disconnect($this->LayerModuleTableNameSetting);
-			
+
 			$LayerModuleSetting = $this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
 		} else {
 			$this->Client->Connect($this->LayerModuleTableNameSetting);
 			$this->Client->pass ($this->LayerModuleTableNameSetting, 'setEntireTable', array());
 			$this->Client->Disconnect($this->LayerModuleTableNameSetting);
-			
+
 			$LayerModuleSetting = $this->Client->pass ($this->LayerModuleTableNameSetting, 'getEntireTable', array());
 		}
-		
+
 		$ModuleSetting = array();
 		$InnerKey = array();
 		$InnerKey['ObjectTypeName'] = 'ObjectTypeName';
 		$InnerKey['Setting'] = 'Setting';
 		$this->LayerModuleSetting = $this->buildArray($ModuleSetting, $InnerKey, 'ObjectType', $LayerModuleSetting);
-				
+
 		if ($LayerModuleTableName && $LayerModuleTable && $LayerTableName && $this->LayerTable) {
 			$moduletable = current($LayerModuleTable);
 			$keymoduletable = key($LayerModuleTable);
@@ -280,7 +305,7 @@ abstract class LayerModulesAbstract
 				while ($layertable) {
 					$NewObjectType = $this->LayerTable[$keylayertable]['ObjectType'];
 					$NewObjectTypeName = $this->LayerTable[$keylayertable]['ObjectTypeName'];
-					
+
 					if ($NewObjectType == $ObjectType && $NewObjectTypeName == $ObjectTypeName) {
 						break;
 					}
@@ -288,7 +313,7 @@ abstract class LayerModulesAbstract
 					$layertable = current($this->LayerTable);
 					$keylayertable = key($this->LayerTable);
 				}
-				
+
 				if ($EnableDisable == 'Enable') {
 					reset ($ModuleFileName);
 					foreach ($ModuleFileName as $FileName) {
@@ -298,21 +323,21 @@ abstract class LayerModulesAbstract
 						$ModulesFile .= '/';
 						$ModulesFile .= $FileName;
 						$ModulesFile .= '.php';
-						
+
 						if (is_file($ModulesFile)) {
 							require_once($ModulesFile);
 						} else {
 							array_push($this->ErrorMessage,"buildModules: Module filename - $modulesfile does not exist!");
 						}
 					}
-					
+
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeLocation'] = $ObjectTypeLocation;
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypeConfiguration'] = $ObjectTypeConfiguration;
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'] = $ObjectTypePrintPreview;
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName] += $ModuleFileName;
 					$this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'] = $EnableDisable;
 				}
-				
+
 				if (is_array($layertable)) {
 					if (in_array($this->LayerTable[$keylayertable]['ObjectType'], $layertable) && in_array($this->LayerTable[$keylayertable]['ObjectTypeName'], $layertable)) {
 						$DatabaseTables = array();
@@ -326,10 +351,10 @@ abstract class LayerModulesAbstract
 						if ($this->SessionTypeName['SessionTypeName'] == $ObjectTypeName) {
 							$DatabaseOptionsName = $ObjectType;
 							$DatabaseOptionsName .= 'Session';
-							
+
 							$DatabaseOptions[$DatabaseOptionsName] = $_SESSION['POST'][$this->SessionTypeName['SessionValue']];
 						}
-						
+
 						if ($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]) {
 							reset($this->LayerModuleSetting[$ObjectType][$ObjectTypeName]);
 							while (current($this->LayerModuleSetting[$ObjectType][$ObjectTypeName])) {
@@ -343,7 +368,7 @@ abstract class LayerModulesAbstract
 						$this->createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions);
 					}
 				}
-				
+
 				next($LayerModuleTable);
 				$moduletable = current($LayerModuleTable);
 				$keymoduletable = key($LayerModuleTable);
@@ -352,15 +377,15 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');
 		}
 	}
-	
+
 	protected function createModules($ObjectType, $ObjectTypeName, $DatabaseTables, $DatabaseOptions) {
 		$this->Modules[$ObjectType][$ObjectTypeName] = new $ObjectType ($DatabaseTables, $DatabaseOptions, $this->LayerModule);
-		
+
 		reset($DatabaseTables);
 		$this->Modules[$ObjectType][$ObjectTypeName]->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, current($DatabaseTables));
-		
+
 	}
-	
+
 	protected function buildArray($array, $innerkey, $outerkey, $databasetable) {
 		if (is_array($array)) {
 			$numargs = func_num_args();
@@ -383,7 +408,7 @@ abstract class LayerModulesAbstract
 					$hold = $databasetable[$outerkey][$name];
 				}
 				reset ($array);
-			
+
 				$temp2 = NULL;
 				while (array_key_exists(key($array), $array)) {
 					if (!current($array)) {
@@ -400,17 +425,17 @@ abstract class LayerModulesAbstract
 					if (is_array($innerkey)) {
 						while (current($databasetable)) {
 							$key1 = $databasetable[key($databasetable)][$outerkey];
-							
+
 							reset($innerkey);
 							$key2 = $databasetable[key($databasetable)][current($innerkey)];
 							next($innerkey);
-							
+
 							while (current($innerkey)) {
 								$key3 = $databasetable[key($databasetable)][current($innerkey)];
 								$array[$key1][$key2][$key3] = $databasetable[key($databasetable)];
 								next($innerkey);
 							}
-							
+
 							next($databasetable);
 						}
 					} else {
@@ -423,13 +448,13 @@ abstract class LayerModulesAbstract
 					}
 				}
 			}
-			
+
 			return $array;
 		} else {
 			return NULL;
 		}
 	}
-	
+
 	protected function addModuleContent(array $Keys, array $Content, $DatabaseTableName) {
 		if ($Keys != NULL && $Content != NULL && $DatabaseTableName) {
 			$passarray = array();
@@ -443,7 +468,7 @@ abstract class LayerModulesAbstract
 				next($Keys);
 			}
 			$this->LayerModule->Connect($DatabaseTableName);
-			
+
 			if (count($Content) == count($Content, COUNT_RECURSIVE)) {
 				$i = 0;
 				reset($Content);
@@ -452,10 +477,10 @@ abstract class LayerModulesAbstract
 					$i++;
 					next($Content);
 				}
-				
+
 				$passarray['rowname'] = $passarray1;
 				$passarray['rowvalue'] = $passarray2;
-				
+
 				if ($this->LayerModuleOn === TRUE) {
 					//$this->LayerModule->Connect($DatabaseTableName);
 					$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
@@ -468,7 +493,7 @@ abstract class LayerModulesAbstract
 			} else {
 				$i = 0;
 				reset($Content);
-				
+
 				while ($Content[key($Content)]) {
 					$j = 0;
 					$hold = $Content[key($Content)];
@@ -480,7 +505,7 @@ abstract class LayerModulesAbstract
 					}
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
-					
+
 					if ($this->LayerModuleOn === TRUE) {
 						//$this->LayerModule->Connect($DatabaseTableName);
 						$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
@@ -490,59 +515,59 @@ abstract class LayerModulesAbstract
 						$this->Client->pass ($DatabaseTableName, 'createRow', $passarray);
 						//$this->Client->Disconnect($DatabaseTableName);
 					}
-					
+
 					$i++;
 					next($Content);
 				}
-				
+
 			}
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Disconnect($DatabaseTableName);
 			} else {
 				$this->Client->Disconnect($DatabaseTableName);
 			}
-			
+
 			if (in_array('ObjectID', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['ObjectID'] = 'ObjectID';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 			if (in_array('RevisionID', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['RevisionID'] = 'RevisionID';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 			if (in_array('PageID', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['PageID'] = 'PageID';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 			if (in_array('XMLFeedName', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['XMLFeedName'] = 'XMLFeedName';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 			if (in_array('XMLItem', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['XMLItem'] = 'XMLItem';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 			if (in_array('TableID', $Keys)) {
 				$SortOrder = array();
 				$SortOrder['TableID'] = 'TableID';
 				$this->sortTable($SortOrder, $DatabaseTableName);
 			}
-			
+
 		} else {
 			array_push($this->ErrorMessage,'addModuleContent: Keys, Content or Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	protected function updateModuleContent(array $PageID, $DatabaseTableName) {
 		$arguments = func_get_args();
 		$Data = $arguments[2];
@@ -555,90 +580,90 @@ abstract class LayerModulesAbstract
 			if ($Data != NULL) {
 				$passarray1 = array_keys($Data);
 				$passarray2 = array_values($Data);
-				
+
 				$i = 0;
 				foreach ($Data as $Key => $Value) {
 					$passarray3[$i] = array_keys($PageID);
 					$passarray4[$i] = array_values($PageID);
-					
+
 					$i++;
 				}
 			} else {
 				if ($PageID['PageID']) {
 					$passarray1[0] = 'CurrentVersion';
 					$passarray2[0] = 'false';
-				} 
-				
+				}
+
 				if ($PageID['XMLItem']) {
 					$passarray1[0][0] = 'XMLItem';
 					$passarray2[0][0] = $PageID['XMLItem'];
-					
+
 					if ($PageID['FeedItemTitle']) {
 						$passarray1[0] = 'FeedItemTitle';
 						$passarray2[0] = $PageID['FeedItemTitle'];
 					}
-					
+
 					if ($PageID['FeedItemDescription']) {
 						$passarray1[1] = 'FeedItemDescription';
 						$passarray2[1] = $PageID['FeedItemDescription'];
 					}
-					
+
 					if ($PageID['FeedItemAuthor']) {
 						$passarray1[2] = 'FeedItemAuthor';
 						$passarray2[2] = $PageID['FeedItemAuthor'];
 					}
-					
+
 					if ($PageID['FeedItemCategory']) {
 						$passarray1[3] = 'FeedItemCategory';
 						$passarray2[3] = $PageID['FeedItemCategory'];
 					}
-					
+
 					if ($PageID['FeedItemGuid']) {
 						$passarray1[4] = 'FeedItemGuid';
 						$passarray2[4] = $PageID['FeedItemGuid'];
 					}
-					
+
 					if ($PageID['FeedItemPubDate']) {
 						$passarray1[5] = 'FeedItemPubDate';
 						$passarray2[5] = $PageID['FeedItemPubDate'];
 					}
 				}
-				
+
 				if ($PageID['PageID']) {
 					$passarray3[0][0] = 'PageID';
 					$passarray4[0][0] = $PageID['PageID'];
-					
+
 					$passarray3[0][1] = 'CurrentVersion';
 					$passarray4[0][1] = 'true';
-					
-				} 
-				
+
+				}
+
 				if ($PageID['XMLItem']) {
 					$passarray3[0] = 'XMLItem';
 					$passarray4[0] = $PageID['XMLItem'];
-					
+
 					$passarray3[1] = 'XMLItem';
 					$passarray4[1] = $PageID['XMLItem'];
-					
+
 					$passarray3[2] = 'XMLItem';
 					$passarray4[2] = $PageID['XMLItem'];
-					
+
 					$passarray3[3] = 'XMLItem';
 					$passarray4[3] = $PageID['XMLItem'];
-					
+
 					$passarray3[4] = 'XMLItem';
 					$passarray4[4] = $PageID['XMLItem'];
-					
+
 					$passarray3[5] = 'XMLItem';
 					$passarray4[5] = $PageID['XMLItem'];
 				}
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -648,12 +673,12 @@ abstract class LayerModulesAbstract
 				$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
 				$this->Client->Disconnect($DatabaseTableName);
 			}
-			
+
 		} else {
 			array_push($this->ErrorMessage,'updateModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function deleteModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -661,43 +686,43 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Enable/Disable';
-			
+
 			$passarray2[0] = 'Disable';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -711,7 +736,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'deleteModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function enableModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -719,7 +744,7 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Enable/Disable';
 			$passarray2[0] = 'Enable';
 			if ($PageID['PageID']) {
@@ -727,32 +752,32 @@ abstract class LayerModulesAbstract
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -766,7 +791,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'enableModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function disableModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -774,43 +799,43 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Enable/Disable';
-			
+
 			$passarray2[0] = 'Disable';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -824,7 +849,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'disableModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function approvedModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -832,43 +857,43 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Status';
-			
+
 			$passarray2[0] = 'Approved';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -882,7 +907,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'approvedModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function notApprovedModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -890,38 +915,38 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Status';
-			
+
 			$passarray2[0] = 'Not-Approved';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
@@ -939,7 +964,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'notApprovedModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function spamModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -947,43 +972,43 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Status';
-			
+
 			$passarray2[0] = 'Spam';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -997,7 +1022,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'spamModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function pendingModuleContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -1005,43 +1030,43 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'Status';
-			
+
 			$passarray2[0] = 'Pending';
-			
+
 			if ($PageID['PageID']) {
 				$passarray3[0][0] = 'PageID';
-				
+
 				$passarray4[0][0] = $PageID['PageID'];
 			} else if ($PageID['XMLItem']) {
 				$passarray3[0][0] = 'XMLItem';
-				
+
 				$passarray4[0][0] = $PageID['XMLItem'];
 			}
-			
+
 			if ($PageID['ObjectID']) {
 				$passarray3[0][1] = 'ObjectID';
 				$passarray4[0][1] = $PageID['ObjectID'];
 			}
-			
+
 			if ($PageID['XhtmlTableName']) {
 				$passarray3[0][0] = 'XhtmlTableName';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableName'];
 			}
-			
+
 			if ($PageID['XhtmlTableID']) {
 				$passarray3[0][0] = 'XhtmlTableID';
-				
+
 				$passarray4[0][0] = $PageID['XhtmlTableID'];
 			}
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($DatabaseTableName);
 				$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -1055,36 +1080,36 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'pendingModuleContent: PageID and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	protected function installModule($ModuleType, $ModuleName, $ModuleInstallFile) {
-		
+
 	}
-	
+
 	protected function upgradeModule($ModuleType, $ModuleName, $ModuleUpgradeFile) {
-		
+
 	}
-	
+
 	protected function deleteModule($ModuleType, $ModuleName, $ModuleDeleteFile) {
-		
+
 	}
-	
+
 	protected function enableModule($ModuleType, $ModuleName) {
-		
+
 	}
-	
+
 	protected function disableModule($ModuleType, $ModuleName) {
-		
+
 	}
-	
+
 	public function installSystem() {
-	
+
 	}
-	
+
 	public function upgradeDatabase($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
 				$File = file($Filename);
-				
+
 				foreach ($File as $FileContent) {
 					$FileContent = str_replace("\n", '', $FileContent);
 					$ReturnFileContents = $this->processSqlFile($FileContent);
@@ -1105,20 +1130,28 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'upgradeDatabase: Filename CANNOT BE EMPTY!');
 		}
 	}
-	
-	public function backupDatabase($Filename) {
+
+	public function backupDatabase($DirectoryName, $Filename) {
 		if (!empty($Filename)) {
-			if (file_exists($Filename)) {
-				//$SqlFileCommand = 'mysql -h ' . $this->Hostname . ' -u ' . $this->UserName . ' -p  > ' . $FileName;
-				//exec ($SqlFileCommand);
+			if (!empty($DirectoryName)) {
+				if (is_dir($DirectoryName)) {
+					if (!file_exists($Filename)) {
+						$SqlFileCommand = 'mysqldump --extended-insert=FALSE --complete-insert=FALSE -h' . $this->Hostname . ' -u' . $this->User . ' -p' . $this->Password . ' ' . $this->DatabaseName . ' > ' . $DirectoryName . $Filename;
+						system ($SqlFileCommand);
+					} else {
+						array_push($this->ErrorMessage,'backupDatabase: Filename EXISTS!');
+					}
+				} else {
+					array_push($this->ErrorMessage,'backupDatabase: DirectoryName DOES NOT EXIST!');
+				}
 			} else {
-				array_push($this->ErrorMessage,'backupDatabase: Filename DOES NOT EXIST!');
+				array_push($this->ErrorMessage,'backupDatabase: DirectoryName CANNOT BE EMPTY!');
 			}
 		} else {
 			array_push($this->ErrorMessage,'backupDatabase: Filename CANNOT BE EMPTY!');
 		}
 	}
-	
+
 	public function restoreDatabase($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
@@ -1131,7 +1164,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'restoreDatabase: Filename CANNOT BE EMPTY!');
 		}
 	}
-	
+
 	public function processSqlFile($Filename) {
 		if (!empty($Filename)) {
 			if (file_exists($Filename)) {
@@ -1142,10 +1175,10 @@ abstract class LayerModulesAbstract
 					if (substr($Line, 0, 2) == '--' || $Line == '' || strstr($Line, '/*') || strstr($Line, '/*') || empty($Line)) {
 						continue;
 					}
-					
+
 					// Add this line to the current segment
 					$Content .= $Line;
-					
+
 					// If it has a semicolon at the end, it's the end of the query
 					if (substr(trim($Line), -1, 1) == ';') {
 						$Content = trim($Content);
@@ -1161,9 +1194,9 @@ abstract class LayerModulesAbstract
 				//print "$this->Hostname\n";
 				//exec ($SqlFileCommand);
 			}
-		} 
+		}
 	}
-	
+
 	public function getTable($TableName) {
 		if (is_string($TableName)) {
 			if ($this->LayerModuleOn === TRUE) {
@@ -1171,24 +1204,24 @@ abstract class LayerModulesAbstract
 				$this->LayerModule->Connect($TableName);
 				$this->LayerModule->pass ($TableName, 'setEntireTable', array());
 				$this->LayerModule->Disconnect($TableName);
-				
+
 				$hold = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
 			} else {
 				$this->Client->createDatabaseTable($TableName);
 				$this->Client->Connect($TableName);
 				$this->Client->pass ($TableName, 'setEntireTable', array());
 				$this->Client->Disconnect($TableName);
-				
+
 				$hold = $this->Client->pass ($TableName, 'getEntireTable', array());
 			}
 			return $hold;
 		}
 	}
-	
+
 	public function getRecord($PageID) {
 		$passarray = array();
 		$passarray = $PageID['PageID'];
-		
+
 		$args = func_get_args();
 		if ($args[1]) {
 			$DatabaseName = $args[1];
@@ -1219,7 +1252,7 @@ abstract class LayerModulesAbstract
 						}
 					}
 				}
-				
+
 				if ($hold) {
 					if ($this->LayerModuleOn === TRUE) {
 						$this->LayerModule->pass ($DatabaseName, 'setOrderbyname', array('orderbyname' => $hold));
@@ -1245,53 +1278,53 @@ abstract class LayerModulesAbstract
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
 				$this->LayerModule->Disconnect($DatabaseName);
-				
+
 				$hold = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
 			} else {
 				$this->Client->pass ($DatabaseName, 'setDatabaseRow', array('idnumber' => $passarray));
 				$this->Client->Disconnect($DatabaseName);
-				
+
 				$hold = $this->Client->pass ($DatabaseName, 'getMultiRowField', array());
 			}
 		} else {
 			if (isset($PageID['DatabaseVariableName'])) {
 				$DatabaseVariableName = $PageID['DatabaseVariableName'];
-				
+
 				if ($this->LayerModuleOn === TRUE) {
 					$this->LayerModule->Connect($this->$DatabaseVariableName);
 					$this->LayerModule->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
 					$this->LayerModule->Disconnect($this->$DatabaseVariableName);
-		
+
 					$hold = $this->LayerModule->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
 				} else {
 					$this->Client->Connect($this->$DatabaseVariableName);
 					$this->Client->pass ($this->$DatabaseVariableName, 'setDatabaseRow', array('idnumber' => $passarray));
 					$this->Client->Disconnect($this->$DatabaseVariableName);
-		
+
 					$hold = $this->Client->pass ($this->$DatabaseVariableName, 'getMultiRowField', array());
 				}
 			} else if (isset($PageID['DatabaseTableName'])) {
 				$DatabaseTableName = $PageID['DatabaseTableName'];
-				
+
 				if ($this->LayerModuleOn === TRUE) {
 					$this->LayerModule->Connect($DatabaseTableName);
 					$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 					$this->LayerModule->Disconnect($DatabaseTableName);
-		
+
 					$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
 				} else {
 					$this->Client->Connect($DatabaseTableName);
 					$this->Client->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 					$this->Client->Disconnect($DatabaseTableName);
-		
+
 					$hold = $this->Client->pass ($DatabaseTableName, 'getMultiRowField', array());
 				}
 			}
 		}
-		
+
 		return $hold;
 	}
-	
+
 	protected function updateRecord(array $PageID, array $Content, $DatabaseTableName) {
 		if ($PageID != NULL && $Content != NULL && $DatabaseTableName != NULL) {
 			$passarray = array();
@@ -1299,7 +1332,7 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$j = 0;
 			while (key($PageID)) {
 				$passarray3[0][$j] = key($PageID);
@@ -1307,7 +1340,7 @@ abstract class LayerModulesAbstract
 				$j++;
 				next ($PageID);
 			}
-			
+
 			$flag = FALSE;
 			reset ($Content);
 			$i = 0;
@@ -1322,12 +1355,12 @@ abstract class LayerModulesAbstract
 						next($hold);
 						$j++;
 					}
-					
+
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
 					$passarray['rownumbername'] = $passarray3;
 					$passarray['rownumber'] = $passarray4;
-					
+
 					if ($this->LayerModuleOn === TRUE) {
 						$this->LayerModule->Connect($DatabaseTableName);
 						$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -1337,14 +1370,14 @@ abstract class LayerModulesAbstract
 						$this->Client->pass ($DatabaseTableName, 'updateRow', $passarray);
 						$this->Client->Disconnect($DatabaseTableName);
 					}
-					
+
 				} else {
 					$passarray1[$i] = key($Content);
 					$passarray2[$i] = current($Content);
 					$flag = TRUE;
 				}
 				reset ($PageID);
-				
+
 				$i++;
 				next ($Content);
 			}
@@ -1353,7 +1386,7 @@ abstract class LayerModulesAbstract
 				$passarray['rowvalue'] = $passarray2;
 				$passarray['rownumbername'] = $passarray3;
 				$passarray['rownumber'] = $passarray4;
-				
+
 				if ($this->LayerModuleOn === TRUE) {
 					$this->LayerModule->Connect($DatabaseTableName);
 					$this->LayerModule->pass ($DatabaseTableName, 'updateRow', $passarray);
@@ -1368,7 +1401,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateRecord: PageID, Content and DatabaseTableName cannot be NULL!');
 		}
 	}
-	
+
 	public function updateModuleSetting($ObjectType, $ObjectTypeName, $ModuleSetting, $ModuleSettingAttribute) {
 		if ($ModuleSetting != NULL && $ModuleSettingAttribute != NULL && $ObjectType != NULL && $ObjectTypeName != NULL) {
 			$passarray = array();
@@ -1376,25 +1409,25 @@ abstract class LayerModulesAbstract
 			$passarray2 = array();
 			$passarray3 = array();
 			$passarray4 = array();
-			
+
 			$passarray1[0] = 'SettingAttribute';
-			
+
 			$passarray2[0] = $ModuleSettingAttribute;
-			
-			
+
+
 			$passarray3[0][0] = 'ObjectType';
 			$passarray3[0][1] = 'ObjectTypeName';
 			$passarray3[0][2] = 'Setting';
-				
+
 			$passarray4[0][0] = $ObjectType;
 			$passarray4[0][1] = $ObjectTypeName;
 			$passarray4[0][2] = $ModuleSetting;
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
 			$passarray['rownumbername'] = $passarray3;
 			$passarray['rownumber'] = $passarray4;
-			
+
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Connect($this->LayerModuleTableNameSetting);
 				$this->LayerModule->pass ($this->LayerModuleTableNameSetting, 'updateRow', $passarray);
@@ -1408,7 +1441,7 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateModuleSetting: ObjectType, ObjectTypeName, ModuleSetting and ModuleSettingAttribute cannot be NULL!');
 		}
 	}
-	
+
 	public function sortTable(array $SortOrder, $DatabaseTableName) {
 		if ($DatabaseTableName != NULL) {
 			if ($this->LayerModuleOn === TRUE) {
@@ -1426,27 +1459,27 @@ abstract class LayerModulesAbstract
 			array_push($this->ErrorMessage,'sortTable: SortOrder cannot be NULL!');
 		}
 	}
-	
+
 	public function MultiArrayBuild(array $Start, $StartKey, $ConditionalKey, $StartNumber, array $Source) {
 		$functionarguments = func_get_args();
-		
+
 		$Sort = NULL;
 		if ($functionarguments[5]) {
 			$Sort = $functionarguments[5];
 		}
-		
+
 		$EndKey = NULL;
 		if ($functionarguments[6]) {
 			$EndKey = $functionarguments[6];
 		}
-		
+
 		if (is_null($StartKey)) {
 			array_push($this->ErrorMessage,'MultiArrayBuild: RemoveKey cannot be NULL!');
 		} else if (is_null($ConditionalKey)) {
 			array_push($this->ErrorMessage,'MultiArrayBuild: Key cannot be NULL!');
 		} else if (is_null($StartNumber)) {
 			array_push($this->ErrorMessage,'MultiArrayBuild: StartNumber cannot be NULL!');
-		} else {  
+		} else {
 			$temp = array();
 			$i = $StartNumber;
 			if ($EndKey) {
@@ -1471,7 +1504,7 @@ abstract class LayerModulesAbstract
 							$SourceKey .= $i;
 							$SourceKey .= $StartValue;
 						}
-						
+
 						if (is_null($Source[$SourceKey])) {
 							unset($Source[$SourceKey]);
 						} else {
@@ -1494,7 +1527,7 @@ abstract class LayerModulesAbstract
 							$SourceKey .= $i;
 							$SourceKey .= $StartValue;
 						}
-						
+
 						unset($Source[$SourceKey]);
 					}
 				}
@@ -1516,7 +1549,7 @@ abstract class LayerModulesAbstract
 					$temp = $Source;
 					$newtemp = array();
 					$holdarray = array();
-					
+
 					for ($i = $StartNumber; $temp[$i]; $i++) {
 						if ($EndKey) {
 							$SetOrder = $StartKey;
@@ -1532,7 +1565,7 @@ abstract class LayerModulesAbstract
 							try {
 								if (is_numeric($temp[$i][$SetOrder])) {
 									$index = $temp[$i][$SetOrder];
-									
+
 									if ($newtemp[$index]) {
 										if ($newtemp[$i] == NULL) {
 											$newtemp[$i] = $newtemp[$index];
@@ -1546,7 +1579,7 @@ abstract class LayerModulesAbstract
 											unset($newtemp[$index]);
 										}
 									}
-									
+
 									foreach ($temp[$i] as $key => $value) {
 										$key = explode($StartKey, $key, 2);
 										$hold = $key[0];
@@ -1574,7 +1607,7 @@ abstract class LayerModulesAbstract
 								print "\n";
 								return NULL;
 							}
-							
+
 						} else if ($temp[$i]) {
 							$temp[$i][$SetOrder] = NULL;
 							array_push($holdarray, $temp[$i]);
@@ -1582,19 +1615,19 @@ abstract class LayerModulesAbstract
 							unset($Source[$i]);
 						}
 					}
-					
+
 					if ($holdarray) {
 						foreach ($holdarray as $key => $values) {
 							array_push($newtemp, $values);
 						}
 						unset($holdarray);
 					}
-					
+
 					$holdarray = array();
-					
+
 					ksort($newtemp);
 					$newtemp = array_merge($newtemp);
-					
+
 					//$newtemp = array_combine(range($StartNumber, count($newtemp)), array_values($newtemp));
 					foreach ($newtemp as $key => $value) {
 						if ($EndKey) {
@@ -1610,9 +1643,9 @@ abstract class LayerModulesAbstract
 							$newkey = $key;
 							$newkey++;
 							$holdarray[$newkey] = $value;
-							
+
 							unset($newtemp[$key]);
-							
+
 						}
 					}
 					$newtemp = $newtemp + $holdarray;
@@ -1626,7 +1659,7 @@ abstract class LayerModulesAbstract
 							$SetOrder .= $key;
 							$SetOrder .= $Sort;
 						}
-						
+
 						if ($key != $value[$SetOrder]) {
 							foreach($value as $key2 => $value2) {
 								preg_match('([0-9]+)', $key2, $oldcount);
@@ -1636,7 +1669,7 @@ abstract class LayerModulesAbstract
 								$replace .= $oldcount;
 								$replacement = $StartKey;
 								$replacement .= $key;
-								
+
 								$key3 = str_replace($replace, $replacement, $key2);
 								if ($key2 != $key3) {
 									$newtemp[$key][$key3] = $newtemp[$key][$key2];
@@ -1645,7 +1678,7 @@ abstract class LayerModulesAbstract
 							}
 						}
 					}
-					
+
 					foreach ($newtemp as $key => $value) {
 						if ($EndKey) {
 							$SetOrder = $StartKey;
@@ -1660,21 +1693,21 @@ abstract class LayerModulesAbstract
 							$newtemp[$key][$SetOrder] = NULL;
 						}
 					}
-					
+
 					$Source = $Source + $newtemp;
 					unset($newtemp);
 					unset($temp);
-					
+
 				} else {
 					array_push($this->ErrorMessage,'MultiArrayBuild: Sort cannot be an ARRAY!');
 				}
 			}
-			
+
 			return $Source;
 		}
-		
+
 	}
-	
+
 	public function MultiArrayCombine($StartNumber, array $Source) {
 		if ($StartNumber != NULL) {
 			try {
@@ -1694,7 +1727,7 @@ abstract class LayerModulesAbstract
 						unset($Source[$i]);
 					}
 					return $Source;
-					
+
 				} else {
 					array_push($this->ErrorMessage,"MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
 					throw new Exception("FATAL ERROR: MultiArrayCombine: StartNumber MUST BE AN INTEGER!");
@@ -1703,11 +1736,11 @@ abstract class LayerModulesAbstract
 				print $e->getMessage();
 				print "\n";
 				return NULL;
-			} 
+			}
 		} else {
 			array_push($this->ErrorMessage,'MultiArrayCombine: StartNumber MUST be set!');
 		}
 	}
-	
+
 }
 ?>

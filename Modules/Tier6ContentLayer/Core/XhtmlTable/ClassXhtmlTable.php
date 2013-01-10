@@ -1,187 +1,212 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 /**
  * Class XhtmlTable
- * 
+ *
  * Class XhtmlTable is designed to allow a user to interact with Xhtml Tables inside of the Content Layer class.
  *
  * @author Travis Napolean Smith
- * @copyright Copyright (c) 1999 - 2012 One Solution CMS
- * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
+ * @copyright Copyright (c) 1999 - 2013 One Solution CMS
+ * @copyright PHP - Copyright (c) 2005 - 2013 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.1.130
+ * @version PHP - 2.1.140
  * @version C++ - Unknown
- */ 
+ */
 
 class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	/**
 	 * DHtmlXGridTable Output, if true display for DHtmlX Grid Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $DHtmlXGridTable = FALSE;
-	
+
 	/**
 	 * Table Names passed to contructor
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesNames = array();
-	
+
 	/**
 	 * Table Listing Table Name.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesListingTableName;
-	
+
 	/**
 	 * Content from database table listing table.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $TablesListingContent = array();
-	
+
 	/**
 	 * Content from database tables retrieved from TablesNames.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesLookup = array();
-	
+
 	/**
 	 * Content from database table retrieved from $TablesLookup[CURRENTROW][0]['XhtmlTableName'];
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesContent = array();
-	
+
 	/**
-	 * Content from TableCaption Table 
-	 * 
+	 * Content from TableCaption Table
+	 *
 	 * @var array
 	 */
 	protected $TablesCaptionContent = array();
-	
+
 	/**
 	 * Content from TableCol Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesColContent = array();
-	
+
 	/**
 	 * Content from TableColgroup Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesColgroupContent = array();
-	
+
 	/**
 	 * Content from TableColgroupCol Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesColgroupColContent = array();
-	
+
 	/**
 	 * Content from TableTHead Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTHeadContent = array();
-	
+
 	/**
 	 * Content from TableTHeadContent Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTHeadContentContent = array();
-	
+
 	/**
 	 * Content from TableTHeadHeader Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTHeadHeaderContent = array();
-	
+
 	/**
 	 * Content from TableTFoot Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTFootContent = array();
-	
+
 	/**
 	 * Content from TableTFootContent Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTFootContentContent = array();
-	
+
 	/**
 	 * Content from TableTFooter Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTFooterContent = array();
 
 	/**
 	 * Content from TableTBody Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTBodyContent = array();
-	
+
 	/**
 	 * Content from TableTBodyContent Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTBodyContentContent = array();
-	
+
 	/**
 	 * Content from TableTBodyCell Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTBodyCellContent = array();
 
 	/**
 	 * Content from TableRow Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTableRowContent = array();
-	
+
 	/**
 	 * Content from TableRowHeader Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTableRowHeaderContent = array();
-	
+
 	/**
 	 * Content from TableRowCell Table
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $TablesTableRowCellContent = array();
-	
+
 	/**
 	 * Enable/Disable for Table Content
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $EnableDisable = array();
-	
+
 	/**
 	 * Status for Table Content
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $Status = array();
-	
+
 	/**
 	 * Create an instance of XtmlTable
 	 *
@@ -192,46 +217,46 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
 		$this->LayerModule = &$LayerModule;
-		
+
 		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlTable'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlTable'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
-		
+
 		if ($DatabaseOptions['DHtmlXGrid']) {
 			$this->DHtmlXGridTable = $DatabaseOptions['DHtmlXGrid'];
 			unset($DatabaseOptions['DHtmlXGrid']);
-			$this->Writer->startDocument('1.0', 'utf-8'); 
+			$this->Writer->startDocument('1.0', 'utf-8');
 		}
-		
+
 		if (isset($TableNames['DatabaseTable2'])) {
 			$this->TablesListingTableName = $TableNames['DatabaseTable2'];
 			$TableNames['DatabaseTable2'] = NULL;
-		} 
-		
+		}
+
 		while (current($TableNames)) {
 			$this->TableNames[key($TableNames)] = current($TableNames);
 			next($TableNames);
 		}
 	}
-	
+
 	/**
 	 * setDatabaseAll
-	 * 
+	 *
 	 * Sets the Hostname, User, Password, Databasename and DatabaseTable.
-	 * 
+	 *
 	 * @param string $HostName = Database Host Name
 	 * @param string $User = Database User
 	 * @param string $Password = Database User's Password
@@ -246,24 +271,24 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->Password = $Password;
 		$this->DatabaseName = $DatabaseName;
 		$this->DatabaseTable = $DatabaseTable;
-		
+
 		$this->LayerModule->setDatabaseAll ($Hostname, $User, $Password, $DatabaseName);
-		
+
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
 			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}
 	}
-	
+
 	/**
 	 * FetchDatabase
-	 * 
+	 *
 	 * Retrieved the database based on the PageID.
-	 * 
+	 *
 	 * @param array $PageID = A Database lookup or key array for the database
 	 * @access public
-	 * 
+	 *
 	 */
 	public function FetchDatabase ($PageID) {
 		unset ($PageID['PrintPreview']);
@@ -276,7 +301,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->LayerModule->pass ($TableContent, 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect($TableContent);
 			$this->TablesLookup[$TableContent] = $this->LayerModule->pass ($TableContent, 'getMultiRowField', array());
-			
+
 			$ContentXhtmlTableName = $this->TablesLookup[$TableContent][0]['XhtmlTableName'];
 			$ContentXhtmlTableID = $this->TablesLookup[$TableContent][0]['TableID'];
 			$passarray = array('TableID' => $ContentXhtmlTableID);
@@ -285,7 +310,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->LayerModule->pass ($ContentXhtmlTableName, 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect($ContentXhtmlTableName);
 			$this->TablesContent[$ContentXhtmlTableName][$ContentXhtmlTableID] = $this->LayerModule->pass ($ContentXhtmlTableName, 'getMultiRowField', array());
-			
+
 			$newpassarray = array();
 			$newpassarray['XhtmlTableName'] = $ContentXhtmlTableName;
 			$newpassarray['XhtmlTableID'] = $ContentXhtmlTableID;
@@ -294,7 +319,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->LayerModule->pass ($this->TablesListingTableName, 'setDatabaseRow', array('PageID' => $newpassarray));
 			$this->LayerModule->Disconnect($this->TablesListingTableName);
 			$this->TablesListingContent[$ContentXhtmlTableName][$ContentXhtmlTableID] = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
-			
+
 			$DatabaseTables = array();
 			foreach ($this->TablesContent[$ContentXhtmlTableName][$ContentXhtmlTableID] as $CurrentRowName => $CurrentRow) {
 				$ObjectType = $CurrentRow['ContainerObjectType'];
@@ -304,9 +329,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						$DatabaseTables[$ObjectType][$ObjectTypeName] = $ObjectTypeName;
 					}
 				}
-				
+
 			}
-			
+
 			foreach ($DatabaseTables as $Key => $Content) {
 				foreach($Content as $TableContentKey => $TableContentName) {
 					$this->LayerModule->createDatabaseTable($TableContentName);
@@ -331,7 +356,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								$this->LayerModule->Connect($ContainerObjectTypeName);
 								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
 								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-								
+
 								if ($ContainerObjectType == 'Col') {
 									$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
 									$this->TablesColgroupColContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesColgroupColContent[$ContentXhtmlTableID], 'ObjectID');
@@ -350,7 +375,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								$this->LayerModule->Connect($ContainerObjectTypeName);
 								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
 								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-								
+
 								if ($ContainerObjectType == 'Header') {
 									$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
 									$this->TablesTHeadContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContentContent[$ContentXhtmlTableID], 'ObjectID');
@@ -371,7 +396,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 									}
 								}
 							}
-						}					
+						}
 					} else if ($Key == 'TFoot') {
 						$this->TablesTFootContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
 						$this->TablesTFootContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContent[$ContentXhtmlTableID], 'ObjectID');
@@ -384,7 +409,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								$this->LayerModule->Connect($ContainerObjectTypeName);
 								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
 								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-								
+
 								if ($ContainerObjectType == 'Cell') {
 									$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
 									$this->TablesTFootContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTFootContentContent[$ContentXhtmlTableID], 'ObjectID');
@@ -418,7 +443,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								$this->LayerModule->Connect($ContainerObjectTypeName);
 								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
 								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-								
+
 								if ($ContainerObjectType == 'Cell') {
 									$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
 									$this->TablesTBodyContentContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTBodyContentContent[$ContentXhtmlTableID], 'ObjectID');
@@ -440,7 +465,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								}
 							}
 						}
-						
+
 					} else if ($Key == 'TableRow') {
 						$TableRowTableName = $CurrentRow['ContainerObjectTypeName'];
 						$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
@@ -454,7 +479,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 								$this->LayerModule->Connect($ContainerObjectTypeName);
 								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
 								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-								
+
 								if ($ContainerObjectType == 'Header') {
 									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
 									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentXhtmlTableID], 'ObjectID');
@@ -469,22 +494,22 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	}
-	
+
 	/**
 	 * CreateOutput
-	 * 
+	 *
 	 * Creates Output based on what the database entried have in them with space being the indentation of each line.
-	 * 
+	 *
 	 * @param string $space = Indentation for each new line
 	 * @access public
-	 * 
+	 *
 	 */
 	public function CreateOutput($space) {
 		foreach ($this->TablesLookup as $TablesLookupKey => $TablesLookupValue) {
 			if ($TablesLookupValue[0]['Enable/Disable'] == 'Enable' & $TablesLookupValue[0]['Status'] == 'Approved') {
 				$XhtmlTableName = $TablesLookupValue[0]['XhtmlTableName'];
 				$TableID = $TablesLookupValue[0]['TableID'];
-				
+
 				if ($this->TablesListingContent[$XhtmlTableName][$TableID][0]['Enable/Disable'] == 'Enable' & $this->TablesListingContent[$XhtmlTableName][$TableID][0]['Status'] == 'Approved') {
 					$XhtmlTableName = $TablesLookupValue[0]['XhtmlTableName'];
 					$TableID = $TablesLookupValue[0]['TableID'];
@@ -529,14 +554,14 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	}
-	
+
 	/**
 	 * FetchTableListingContent
-	 * 
+	 *
 	 * Retrieves data from the database the entire contents of XhtmlTableListing
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 */
 	public function FetchTableListingContent() {
 		$ContentXhtmlTableName = $this->TablesLookup[$this->TableNames['DatabaseTable1']][0]['XhtmlTableName'];
@@ -548,27 +573,27 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->LayerModule->Disconnect($this->TablesListingTableName);
 		$this->TablesListingContent = $this->LayerModule->pass ($this->TablesListingTableName, 'getMultiRowField', array());
 	}
-	
+
 	/**
 	 * getTablesListingContent
-	 * 
+	 *
 	 * Returns the TablesListingContent member. This contains the entire contents of the database table XhtmlTableListing
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 */
 	public function getTablesListingContent(){
 		return $this->TablesListingContent;
 	}
-	
+
 	/**
 	 * TableElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableElement (array $TableContent) {
 	 	// TABLE TAG ATTRIBUTES
@@ -594,7 +619,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableWidth'] != NULL) {
 			$this->Writer->writeAttribute('width', $TableContent['TableWidth']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableClass']);
@@ -618,15 +643,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableRowElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table row tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableRowElement (array $TableContent) {
 	 	// TABLE ROW TAG ATTRIBUTES
@@ -643,7 +668,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableRowVAlign'] != NULL) {
 			$this->Writer->writeAttribute('valign', $TableContent['TableRowVAlign']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableRowClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableRowClass']);
@@ -667,15 +692,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableRowXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableCellElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table cell tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableCellElement (array $TableContent) {
 	 	// TABLE CELL TAG ATTRIBUTES
@@ -710,7 +735,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableCellVAlign'] != NULL) {
 			$this->Writer->writeAttribute('valign', $TableContent['TableCellVAlign']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableCellClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableCellClass']);
@@ -734,15 +759,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableCellXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableHeaderElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table header tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableHeaderElement (array $TableContent) {
 	 	// TABLE HEADER TAG ATTRIBUTES
@@ -774,7 +799,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableHeaderVAlign'] != NULL) {
 			$this->Writer->writeAttribute('valign', $TableContent['TableHeaderVAlign']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableHeaderClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableHeaderClass']);
@@ -798,15 +823,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableHeaderXMLLang']);
 		}
 	 }
-	 
+
 	  /**
 	 * TableTHeaderElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table header tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTHeaderElement (array $TableContent) {
 		// TABLE THEAD TAG ATTRIBUTES
@@ -823,7 +848,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableHeaderVAlign'] != NULL) {
 			$this->Writer->writeAttribute('valign', $TableContent['TableHeaderVAlign']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableHeaderClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableHeaderClass']);
@@ -847,15 +872,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableHeaderXMLLang']);
 		}
 	 }
-	 
+
 	  /**
 	 * TableTFooterElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table footer tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTFooterElement (array $TableContent) {
 		// TABLE THEAD TAG ATTRIBUTES
@@ -872,7 +897,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableCellVAlign'] != NULL) {
 			$this->Writer->writeAttribute('valign', $TableContent['TableCellVAlign']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableCellClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableCellClass']);
@@ -896,20 +921,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableCellXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableCaptionElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table caption tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableCaptionElement (array $TableContent) {
 	 	// TABLE CAPTION TAG ATTRIBUTES
 		// Optional Attributes
-		
+
 		// Standard Attributes
 		if ($TableContent['TableCaptionClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableCaptionClass']);
@@ -933,16 +958,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableCaptionXMLLang']);
 		}
 	 }
-	 
-	 
+
+
 	  /**
 	 * TableColElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table column tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableColElement (array $TableContent) {
 		// TABLE THEAD TAG ATTRIBUTES
@@ -965,7 +990,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableColWidth'] != NULL) {
 			$this->Writer->writeAttribute('width', $TableContent['TableColWidth']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableColClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableColClass']);
@@ -989,15 +1014,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableColXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableColgroupElement
-	 * 
+	 *
 	 * Creates optional and standard attributes of the table column group tag.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content to set attributes with
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableColgroupElement (array $TableContent) {
 		// TABLE THEAD TAG ATTRIBUTES
@@ -1020,7 +1045,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		if ($TableContent['TableColGroupWidth'] != NULL) {
 			$this->Writer->writeAttribute('width', $TableContent['TableColGroupWidth']);
 		}
-		
+
 		// Standard Attributes
 		if ($TableContent['TableColGroupClass'] != NULL) {
 			$this->Writer->writeAttribute('class', $TableContent['TableColGroupClass']);
@@ -1044,16 +1069,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->writeAttribute('xml:lang', $TableContent['TableColGroupXMLLang']);
 		}
 	 }
-	 
+
 	 /**
 	 * TableCaption
-	 * 
+	 *
 	 * Creates a table caption.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table caption
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableCaption (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1062,7 +1087,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					if ($Content['ObjectID'] == $ObjectID) {
 						$CurrentRecord = $Content;
 						break;
-						
+
 					}
 				}
 				if ($CurrentRecord != NULL) {
@@ -1077,16 +1102,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableCol
-	 * 
+	 *
 	 * Creates a table column.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table column
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableCol (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1095,7 +1120,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					if ($Content['ObjectID'] == $ObjectID) {
 						$CurrentRecord = $Content;
 						break;
-						
+
 					}
 				}
 				if ($CurrentRecord != NULL) {
@@ -1106,16 +1131,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableColgroup
-	 * 
+	 *
 	 * Creates a table column group.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table column group
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableColgroup (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1147,21 +1172,21 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				$this->Writer->endElement(); // ENDS TR
 			}
 		}
 	 }
-	 
+
 	/**
 	 * TableTHeadContent
-	 * 
+	 *
 	 * Creates a table header content.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table header
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTHeadContent (array $TableContent, $ObjectID) {
 	 	if ($ObjectID != NULL) {
@@ -1195,25 +1220,25 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				if ($this->DHtmlXGridTable == FALSE) {
 					$this->Writer->endElement(); // ENDS TR OR HEAD
-				} 
-				
+				}
+
 			}
-			
+
 		}
 	 }
-	 
+
 	 /**
 	 * TableTHead
-	 * 
+	 *
 	 * Creates a table header.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table header
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTHead (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1249,21 +1274,21 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				$this->Writer->endElement(); // ENDS THEAD
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableTFootContent
-	 * 
+	 *
 	 * Creates a table footer content.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table footer
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTFootContent (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1295,21 +1320,21 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				$this->Writer->endElement(); // ENDS TR
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableTFoot
-	 * 
+	 *
 	 * Creates a table footer.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table footer
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTFoot (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1341,21 +1366,21 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				$this->Writer->endElement(); // ENDS TFOOT
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableTBodyContent
-	 * 
+	 *
 	 * Creates a table body content.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table body
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTBodyContent (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1390,16 +1415,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableTBody
-	 * 
+	 *
 	 * Creates a table body.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table body
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableTBody (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1412,7 +1437,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						break;
 					}
 				}
-				
+
 				foreach ($TableContent as $Key => $Content) {
 					if ($Content['Enable/Disable'] == 'Enable' & $Content['Status'] == 'Approved') {
 						$ContainerObjectType = $Content['ContainerObjectType'];
@@ -1431,21 +1456,21 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 					}
 				}
-				
+
 				$this->Writer->endElement(); // ENDS TBODY
 			}
 		}
 	 }
-	
+
 	 /**
 	 * TableRow
-	 * 
+	 *
 	 * Creates a table row.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table row
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableRow (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1470,7 +1495,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						$ContainerObjectID = $Content['ContainerObjectID'];
 						$ObjectID = $Content['ObjectID'];
 						$StopObjectID = $Content['StopObjectID'];
-						
+
 						if ($ObjectID < $StopObjectID | is_null($StopObjectID)) {
 								$this->TableRowElement($Content);
 								if ($ContainerObjectType == 'Header') {
@@ -1489,16 +1514,16 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableRowHeader
-	 * 
+	 *
 	 * Creates a table row header.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table row
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableRowHeader (array $TableContent, $ObjectID) {
 	 	if ($ObjectID != NULL) {
@@ -1506,7 +1531,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				if ($Content['ObjectID'] == $ObjectID) {
 					$CurrentRecord = $Content;
 					break;
-					
+
 				}
 			}
 			if ($CurrentRecord != NULL) {
@@ -1522,23 +1547,23 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					if ($Text != NULL) {
 						if ($this->DHtmlXGridTable == FALSE) {
 							$this->TableHeaderElement ($CurrentRecord);
-						} 
+						}
 						$this->Writer->text($Text);
 					}
 				$this->Writer->endElement(); // END TD OR COLUMN TAG
 			}
 		}
 	 }
-	 
+
 	 /**
 	 * TableRowCell
-	 * 
+	 *
 	 * Creates a table row cell.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table row
 	 * @param string $ObjectId = Lookup Object ID
 	 * @access protected
-	 * 
+	 *
 	 */
 	 protected function TableRowCell (array $TableContent, $ObjectID) {
 		if ($ObjectID != NULL) {
@@ -1546,7 +1571,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				if ($Content['ObjectID'] == $ObjectID) {
 					$CurrentRecord = $Content;
 					break;
-					
+
 				}
 			}
 			if ($CurrentRecord != NULL) {
@@ -1568,14 +1593,14 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	 }
 	  /**
 	 * SortTableContent
-	 * 
+	 *
 	 * Sorts TableContent by table key.
-	 * 
+	 *
 	 * @param array $TableContent = Table Content for table row
 	 * @param string $SortKey = Key to sort table content by.
 	 * @access protected
 	 * @return array TableContent
-	 * 
+	 *
 	 */
 	 protected function SortTableContent (array $TableContent, $SortKey) {
 	 	if ($SortKey != NULL) {
@@ -1591,18 +1616,18 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 		}
 	 }
-	
+
 	 /**
 	 * getLastTableID
-	 * 
+	 *
 	 * Returns the last TableID for XhtmlTableName.
-	 * 
+	 *
 	 * @param array $XhtmlTableNames = an array of XhtmlTableNames to get the Last Table ID for.
 	 * @access public
 	 * @return array LastTableID
-	 * 
+	 *
 	 */
-	 
+
 	 public function getLastTableID($XhtmlTableNames) {
 		$LastTableID = array();
 		if (is_array($XhtmlTableNames)) {
@@ -1622,43 +1647,43 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			return $LastTableID;
 		}
 	 }
-	 
+
 	 /**
 	 * createTable
-	 * 
+	 *
 	 * Creates A Table.
-	 * 
+	 *
 	 * @param array $Table = Table content to create, must have three fields: Content - Table Content To Add, TableName - Database Table Name, TableType - Type Of Table Added.
 	 * @access public
-	 * 
+	 *
 	 */
 	public function createTable(array $Table) {
 		if ($Table != NULL) {
 			$TableContent = $Table['Content'];
 			$DatabaseTableName = $Table['TableName'];
-			
+
 			$this->LayerModule->createDatabaseTable($DatabaseTableName);
 			$this->LayerModule->Connect($DatabaseTableName);
 			$this->LayerModule->pass ($DatabaseTableName, 'BuildFieldNames', array('TableName' => $DatabaseTableName));
 			$this->LayerModule->Disconnect($DatabaseTableName);
-			
+
 			$Keys = $this->LayerModule->pass ($DatabaseTableName, 'getRowFieldNames', array());
 
 			$this->addModuleContent($Keys, $TableContent, $DatabaseTableName);
-			
+
 		} else {
 			array_push($this->ErrorMessage,'createTable: Table cannot be NULL!');
 		}
 	}
-	
+
 	 /**
 	 * updateTable
-	 * 
+	 *
 	 * Updates A Table.
-	 * 
+	 *
 	 * @param array $TableID = Table ID to update.
 	 * @access public
-	 * 
+	 *
 	 */
 	public function updateTable(array $TableID) {
 		if ($TableID != NULL) {
@@ -1671,34 +1696,34 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				$this->LayerModule->Connect($TableName);
 				$this->LayerModule->pass ($TableName, 'deleteRow', array('rowname' => $RowName, 'rowvalue' => $RowValue));
 				$this->LayerModule->Disconnect($TableName);
-				
+
 				$this->createTable($TableID);
 			} else if ($TableType == 'XhtmlTableLookup') {
-				
+
 			} else if ($TableType == 'XhtmlTableListing') {
 				$RowName = 'XhtmlTableID';
 				$RowValue = $TableID['Content'][0]['XhtmlTableID'];
-				
+
 				$this->LayerModule->createDatabaseTable($TableName);
 				$this->LayerModule->Connect($TableName);
 				$this->LayerModule->pass ($TableName, 'deleteRow', array('rowname' => $RowName, 'rowvalue' => $RowValue));
 				$this->LayerModule->Disconnect($TableName);
-				
+
 				$this->createTable($TableID);
 			}
 		} else {
 			array_push($this->ErrorMessage,'updateTable: TableID cannot be NULL!');
 		}
 	}
-	
+
 	 /**
 	 * deleteTable
-	 * 
+	 *
 	 * Deletes A Table.
-	 * 
+	 *
 	 * @param array $TableID = Table ID to delete.
 	 * @access public
-	 * 
+	 *
 	 */
 	public function deleteTable(array $TableID) {
 		if ($TableID != NULL) {
@@ -1707,15 +1732,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			array_push($this->ErrorMessage,'deleteTable: TableID cannot be NULL!');
 		}
 	}
-	
+
 	 /**
 	 * updateTableStatus
-	 * 
+	 *
 	 * Updates Status Of Table.
-	 * 
+	 *
 	 * @param array $TableID = Table ID to update status.
 	 * @access public
-	 * 
+	 *
 	 */
 	public function updateTableStatus(array $TableID) {
 		if ($TableID != NULL) {
@@ -1724,7 +1749,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			} else if ($TableID['Enable/Disable'] == 'Disable') {
 				$this->disableModuleContent($TableID, $this->TablesListingTableName);
 			}
-			
+
 			if ($TableID['Status'] == 'Approved') {
 				$this->approvedModuleContent($TableID, $this->TablesListingTableName);
 			} else if ($TableID['Status'] == 'Not-Approved') {

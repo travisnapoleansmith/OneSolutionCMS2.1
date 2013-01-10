@@ -1,4 +1,29 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 {
@@ -27,85 +52,85 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	protected $database;
 	protected $i;
 	protected $idsearch;
-	
+
 	abstract protected function checkDatabaseName ();
 	abstract protected function checkTableName ();
 	abstract protected function checkPermissions ($permission);
 	abstract protected function checkField ($field);
 	abstract protected function BuildingEntireTable();
-	
+
 	public function setIdnumber ($IdNumber) {
 		$this->idnumber = $IdNumber;
 	}
-	
+
 	public function getIdnumber () {
 		return $this->idnumber;
 	}
-	
+
 	public function setOrderbyname ($OrderByName) {
 		$this->orderbyname = $OrderByName;
 	}
-	
+
 	public function getOrderbyname () {
 		return $this->orderbyname;
 	}
-	
+
 	public function setOrderbytype ($OrderByType) {
 		$this->orderbytype = $OrderByType;
 	}
-	
+
 	public function getOrderbytype () {
 		return $this->orderbytype;
 	}
-	
+
 	public function setLimit ($Limit) {
 		$this->limit = $Limit;
 	}
-	
+
 	public function getLimit () {
 		return $this->limit;
 	}
-	
+
 	public function setDatabasename ($DatabaseName){
 		$this->databasename = $DatabaseName;
 	}
-	
+
 	public function getDatabasename () {
 		return $this->databasename;
 	}
-	
+
 	public function setUser ($User){
 		$this->user = $User;
 	}
-	
+
 	public function getUser () {
 		return $this->user;
 	}
-	
+
 	public function setPassword ($Password){
 		$this->password = $Password;
 	}
-	
+
 	public function getPassword () {
 		return $this->password;
 	}
-	
+
 	public function setDatabasetable ($DatabaseTable){
 		$this->databasetable = $DatabaseTable;
 	}
-	
+
 	public function getDatabasetable () {
 		return $this->databasetable;
 	}
-	
+
 	public function setHostname ($HostName){
 		$this->hostname = $HostName;
 	}
-	
+
 	public function getHostname () {
 		return $this->hostname;
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->hostname = $hostname;
 		$this->user = $user;
@@ -113,12 +138,12 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 		$this->databasename = $databasename;
 		$this->databasetable = $databasetable;
 	}
-	
+
 	public function setOrderByAll ($orderbyname, $orderbytype) {
 		$this->orderbyname = $orderbyname;
 		$this->orderbytype = $orderbytype;
 	}
-	
+
 	public function setDatabaseField ($IdNumber) {
 		$this->idnumber = $IdNumber;
 		$this->BuildDatabaseRows();
@@ -127,7 +152,7 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 			$this->rowfieldnames = array_keys($this->database);
 		}
 	}
-	
+
 	public function searchFieldNames($Search) {
 		if (is_array($this->rowfieldnames)) {
 			if (array_search($Search, $this->rowfieldnames)) {
@@ -137,15 +162,15 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	public function searchEntireTable($Search){
 		$arguments = func_get_args();
 		$search2 = $arguments[1];
-		
+
 		if ($this->idsearch) {
 			unset ($this->idsearch);
 		}
-		
+
 		if ($search2) {
 			$this->i = 0;
 			$j = 0;
@@ -172,86 +197,86 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	public function removeEntryEntireTable($rownumber, $rowcolumn){
 		unset($this->entiretable[$rownumber][$rowcolumn]);
 	}
-	
+
 	public function removeEntireEntireTable($rownumber) {
 		unset($this->entiretable[$rownumber]);
 	}
-	
+
 	public function reindexEntireTable(){
 		$this->entiretable = array_merge($this->entiretable);
 	}
-	
+
 	public function updateEntireTableEntry ($rownumber, $rowcolumn, $information) {
 		$this->entiretable[$rownumber][$rowcolumn] = $information;
 	}
-	
+
 	public function getRowCount (){
 		return $this->rownumber;
 	}
-	
+
 	public function getRowFieldName ($rownumber) {
 		return $this->rowfieldnames[$rownumber];
 	}
-	
+
 	public function getRowFieldNames() {
 		return $this->rowfieldnames;
 	}
-	
+
 	public function getDatabase ($rownumber) {
 		return $this->database[$rownumber];
 	}
-	
+
 	public function getRowField ($rownumber) {
 		return $this->rowfield[$rownumber];
 	}
-	
+
 	public function getEntireRow(){
 		return $this->rowfield;
 	}
-	
+
 	public function getMultiRowField() {
 		return $this->multirowfield;
 	}
-	
+
 	public function getTable ($rownumber, $rowcolumn) {
 		return $this->entiretable[$rownumber][$rowcolumn];
 	}
-	
+
 	public function getEntireTable () {
 		return $this->entiretable;
 	}
-	
+
 	public function getSearchResults($idnumber, $key) {
 		return $this->idsearch[$idnumber][$key];
 	}
-	
+
 	public function getSearchResultsArray() {
 		return $this->idsearch;
 	}
-	
+
 	public function getTableNames() {
 		return $this->tablenames;
 	}
-	
+
 	public function walkarray () {
 		print_r($this->database);
 	}
-	
+
 	public function walkfieldname () {
 		print_r($this->rowfieldnames);
 	}
-	
+
 	public function walktable () {
 		print_r($this->entiretable);
 	}
-	
+
 	public function walkidsearch () {
 		print_r($this->idsearch);
 	}
-	
+
 }
 ?>

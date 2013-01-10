@@ -1,4 +1,29 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;
@@ -15,8 +40,8 @@
 	$TempTable = array();
 	$Header = array();
 	$Footer = array();
-	
-	
+
+
 	foreach ($_COOKIE as $Key => $Value) {
 		if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 			setcookie($Key, '', time()-4800, '/');
@@ -35,7 +60,7 @@
 			}
 		}
 	}
-	
+
 	foreach ($_POST as $Key => $Value) {
 		if (strstr($Key, 'Grid_')) {
 			if ($Key == 'Grid_rowsadded' || $Key == 'Grid_rowsdeleted') {
@@ -66,7 +91,7 @@
 		}
 
 	}
-		
+
 	foreach($TempTable as $Key => $Value) {
 		$NewKey = str_replace('Grid_', '', $Key);
 		$NewKey = explode('_', $NewKey);
@@ -78,7 +103,7 @@
 			//setcookie($CookieKey, "NULL", time()+4800, '/');
 		}
 	}
-	
+
 	foreach ($TableContent as $Key => $Value) {
 		$EMPTY = FALSE;
 		if ($Value != NULL) {
@@ -100,7 +125,7 @@
 	$PageName .= $_POST['UpdateTableContent'];
 	$PageName .= "&TableID=";
 	$PageName .= $TableID;
-	
+
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateTableContent', $PageName);
 
 	if ($hold) {
@@ -119,7 +144,7 @@
 			}
 		}
 		*/
-		
+
 		$XhtmlTableIDArray = $Tier6Databases->ModulePass('XhtmlTable', 'table', 'getLastTableID', array('XhtmlTableName' => 'XhtmlTable'));
 		//$TableID = $XhtmlTableIDArray['XhtmlTable'];
 		//$TableID++;
@@ -157,7 +182,7 @@
 		$FormSelect['Status'] = 'Approved';
 		*/
 		$FormOptionText = $TableID . ' - ' . $TableName;
-		
+
 		$FormOption = array();
 		//$FormOption['PageID'] = $TableContentUpdateSelectPage;
 		//$FormOption['ObjectID'] = $TableID;
@@ -253,7 +278,7 @@
 
 		$ObjectID++;
 		$TableI++;
-		
+
 		// Table Header
 		$TableTHead = array();
 		$TableTHeadContent = array();
@@ -340,7 +365,7 @@
 			$i++;
 			$HeaderObjectID++;
 		}
-		
+
 		// Table Body
 		$TableRow = array();
 		$TableRowCell = array();
@@ -445,7 +470,7 @@
 				$StopObjectID = $StopObjectID + 100;
 			}
 		}
-		
+
 		// Table Footer
 		$TableTFoot = array();
 		$TableTFootContent = array();
@@ -547,7 +572,7 @@
 				$FooterObjectID++;
 			}
 		}
-		
+
 		// SUBMIT FORM DATA
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $TableContentUpdateSelectPage, 'ObjectID' => $TableID), 'Content' => $FormOption));
 

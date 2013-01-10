@@ -1,38 +1,64 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
+
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;
 	$GLOBALS['ADMINHOME'] = $ADMINHOME;
-	
+
 	require_once ("$ADMINHOME/Configuration/includes.php");
-	
+
 	$sessionname = NULL;
 	$sessionname = $_COOKIE['SessionID'];
 	session_name($sessionname);
 	session_start();
-	
+
 	$PageID = $_SESSION['POST']['FilteredInput']['PageID'];
 	$RevisionID = $_SESSION['POST']['FilteredInput']['RevisionID'];
 	$CreationDateTime = $_SESSION['POST']['FilteredInput']['CreationDateTime'];
 	$Owner = $_SESSION['POST']['FilteredInput']['Owner'];
 	$UserAccessGroup = $_SESSION['POST']['FilteredInput']['UserAccessGroup'];
-	
+
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$NewRevisionID = $RevisionID + 1;
-	
+
 	$_POST['PageID'] = $PageID;
 	$_POST['RevisionID'] = $RevisionID;
 	$_POST['CreationDateTime'] = $CreationDateTime;
 	$_POST['Owner'] = $Owner;
 	$_POST['UserAccessGroup'] = $UserAccessGroup;
-	
+
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
 		$PageName = '../../index.php?PageID=';
 		$PageName .= $_POST['UpdateNewsStory'];
 		$hold = $Tier6Databases->FormSubmitValidate('UpdateNewsStory', $PageName);
-		
+
 		if ($hold) {
-			
+
 			$DateTime = date('Y-m-d H:i:s');
 			$FeedDateTime = date('D, d m Y H:i:s T');
 			$EmbeddedLink = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getTag', array('Tag' => 'a', 'Content' => $hold['FilteredInput']['Content']));
@@ -41,23 +67,23 @@
 			$StrippedHeading = $StrippedHeading['Content'];
 			$StrippedContent = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getStripTagsContent', array('Content' => $hold['FilteredInput']['Content']));
 			$StrippedContent = $StrippedContent['Content'];
-			
+
 			//$LastNewsFeedItem = $Tier6Databases->ModulePass('XmlFeed', 'feed', 'getLastStoryFeedItem', array());
-			
+
 			if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
 				$_POST['MenuName'] = NULL;
 				$hold['FilteredInput']['MenuName'] = NULL;
 			}
-			
+
 			if ($_POST['ImageSrc'] == 'Null' | $_POST['ImageSrc'] == 'NULL') {
 				$_POST['ImageSrc'] = NULL;
 				$hold['FilteredInput']['ImageSrc'] = NULL;
 				$_POST['ImageAlt'] = NULL;
 				$hold['FilteredInput']['ImageAlt'] = NULL;
 			}
-			
+
 			$NewsStory = array();
-			
+
 			$NewsStory[0]['PageID'] = $PageID;
 			$NewsStory[0]['ObjectID'] = 1;
 			$NewsStory[0]['ContainerObjectType'] = 'XhtmlNewsStories';
@@ -89,7 +115,7 @@
 			$NewsStory[0]['ContentPTagClass'] = NULL;
 			$NewsStory[0]['Enable/Disable'] = $_POST['EnableDisable'];
 			$NewsStory[0]['Status'] = $_POST['Status'];
-			
+
 			if ($hold['FilteredInput']['ImageSrc'] != NULL) {
 				$NewsStory[1]['PageID'] = $PageID;
 				$NewsStory[1]['ObjectID'] = 2;
@@ -122,7 +148,7 @@
 				$NewsStory[1]['ContentPTagClass'] = NULL;
 				$NewsStory[1]['Enable/Disable'] = $_POST['EnableDisable'];
 				$NewsStory[1]['Status'] = $_POST['Status'];
-				
+
 				$NewsStory[2]['PageID'] = $PageID;
 				$NewsStory[2]['ObjectID'] = 3;
 				$NewsStory[2]['ContainerObjectType'] = 'XhtmlNewsStories';
@@ -188,7 +214,7 @@
 				$NewsStory[1]['Status'] = $_POST['Status'];
 			}
 			//$NewsStory = array_reverse($NewsStory);
-			
+
 			$NewsDate = array();
 			$NewsDate['PageID'] = $PageID;
 			$NewsDate['ObjectID'] = 1;
@@ -199,8 +225,8 @@
 			$NewsDate['NewsStoryYear'] = $_POST['NewsYear'];
 			$NewsDate['Enable/Disable'] = $_POST['EnableDisable'];
 			$NewsDate['Status'] = $_POST['Status'];
-			
-			if ($hold['FilteredInput']['ImageSrc'] != NULL) { 
+
+			if ($hold['FilteredInput']['ImageSrc'] != NULL) {
 				$NewsImage = array();
 				$NewsImage['PageID'] = $PageID;
 				$NewsImage['ObjectID'] = 1;
@@ -235,7 +261,7 @@
 			$NewsVersion['LastChangeDateTime'] = $DateTime;
 			$NewsVersion['PublishDate'] = NULL;
 			$NewsVersion['UnpublishDate'] = NULL;
-			
+
 			$NewsFeed = array();
 			$NewsFeed['XMLItem'] = $PageID;
 			$NewsFeed['FeedItemTitle'] = $StrippedHeading;
@@ -253,16 +279,16 @@
 			//$NewsFeed['FeedItemSource'] = NULL;
 			//$NewsFeed['Enable/Disable'] = $_POST['EnableDisable'];
 			//$NewsFeed['Status'] = $_POST['Status'];
-			
+
 			$FormOptionID = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
-			
+
 			$FormOptionText = $_POST['NewsMonth'];
 			$FormOptionText .= ' ';
 			$FormOptionText .= $_POST['NewsDay'];
 			$FormOptionText .= ', ';
 			$FormOptionText .= $_POST['NewsYear'];
 			$FormOptionText .= ' - ';
-			
+
 			$temp = $hold['FilteredInput']['Heading'];
 			$temp = explode(' ', $temp);
 			if ($temp[0] == 'Men\'s' | $temp[0] == 'Women\'s') {
@@ -277,7 +303,7 @@
 				}
 			}
 			unset($temp);
-			
+
 			$FormOption = array();
 			//$FormOption['PageID'] = $NewsArticleUpdateSelectPage;
 			//$FormOption['ObjectID'] = $NewPageID;
@@ -313,26 +339,26 @@
 			//$FormOption['FormOptionXMLLang'] = 'en-us';
 			//$FormOption['Enable/Disable'] = 'Enable';
 			//$FormOption['Status'] = 'Approved';
-			
+
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlNewsStories']['news']['NewsArticleDeleteSelectPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlNewsStories']['news']['NewsArticleEnableDisableSelectPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
-			
+
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStory', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryVersion', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryDate', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'updatePicture', array('PageID' => $PageID));
-			
+
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStory', $NewsStory);
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
-			
-			if ($hold['FilteredInput']['ImageSrc'] != NULL) { 
+
+			if ($hold['FilteredInput']['ImageSrc'] != NULL) {
 				$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
 			}
-			
+
 			$Tier6Databases->ModulePass('XmlFeed', 'feed', 'updateStoryFeed', $NewsFeed);
 
 			$Tier6Databases->SessionDestroy($sessionname);
@@ -341,12 +367,12 @@
 			header("Location: $NewsArticleCreatedUpdatePage&NewsPageID=$PageID");
 
 		}
-		
+
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		$NewsArticleUpdateSelectPage = $Options['XhtmlNewsStories']['news']['NewsArticleUpdateSelectPage']['SettingAttribute'];
 		header("Location: ../../index.php?PageID=$NewsArticleUpdateSelectPage");
 	}
-	
+
 ?>

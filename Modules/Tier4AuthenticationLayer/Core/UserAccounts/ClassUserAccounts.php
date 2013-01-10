@@ -1,4 +1,29 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Tier4AuthenticationLayerModules
 {
@@ -6,35 +31,35 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 	protected $LookupTable = array();
 	protected $Attempts;
 	protected $MaxAttempts;
-	
+
 	protected $NewUserSalt;
 	protected $ResetSalt;
 	protected $Salt;
-	
+
 	public function __construct($tablenames, $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
-		
+
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['UserAccounts'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['UserAccounts'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($databaseoptions['MaxAttempts']) {
 			$this->MaxAttempts = $databaseoptions['MaxAttempts'];
 		} else {
 			$this->MaxAttempts = 5;
 		}
-		
+
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
 	}
-	
+
 	public function getUserInfo() {
 		return $this->LookupTable;
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;
@@ -44,9 +69,9 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		//print get_class($this->LayerModule);
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
-		
+
 	}
-	
+
 	public function FetchDatabase ($PageID) {
 		$passarray = array();
 		if ($PageID['UserName'] && $PageID['Password']) {
@@ -54,28 +79,28 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 			$salt = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
 			$this->Attempts = $salt[0]['Attempts'];
 			$salt = $salt[0]['Salt'];
 			$passarray['Password'] = $this->processEncryption ($PageID['Password'], $salt);
-			
+
 			$Attempts = $this->Attempts;
 			$Attempts++;
 			$UserName = $passarray['UserName'];
-			
+
 			$pass = NULL;
 			$pass = "`Attempts` = \"$Attempts\" WHERE `UserName` = \"$UserName\"";
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'updateTable', array('PageID' => $pass));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 		} else {
 			$passarray['PageID'] = $PageID;
 		}
 		$passarray['Reset'] = 'No';
 		$passarray['Enable/Disable'] = 'Enable';
-		
+
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
 			$this->LayerModule->Connect(current($this->TableNames));
@@ -86,9 +111,9 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$this->LayerModule->Disconnect(current($this->TableNames));
 			next ($this->TableNames);
 		}
-				
+
 	}
-	
+
 	public function Verify($function, $functionarguments){
 		if ($function == 'AUTHENTICATE') {
 			$args = func_num_args();
@@ -97,7 +122,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 				$hold['FilteredInput'] = $functionarguments;
 				$hookargumentsarray = func_get_args();
 				$hookarguments = $hookargumentsarray[2];
-				
+
 				if (is_array($hookarguments)) {
 					reset($hookarguments);
 					while (current($hookarguments)) {
@@ -107,10 +132,10 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 							$temp = call_user_func_array(array($this, $functionname), $hooks);
 							if ($temp['Error']) {
 								$hold['Error'] = $temp['Error'];
-							} 
-							
+							}
+
 							$hold[$functionname] = $temp;
-						
+
 						} else {
 							$functionparameters = current($hookarguments);
 							$hold[$functionname] = $this->$functionname($functionparameters);
@@ -158,7 +183,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			return TRUE;
 		}
 	}
-	
+
 	protected function processEncryption ($string, $salt) {
 		if ($salt) {
 			$string .= $salt;
@@ -169,13 +194,13 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			return $hold;
 		}
 	}
-	
+
 	protected function createSalt ($string) {
 		$string .= time();
 		$temp = hash('SHA256', $string);
 
 		$i = 0;
-		$max = strlen($temp);		
+		$max = strlen($temp);
 		while ($i < $max) {
 			$rand = rand($i, $max);
 			$salt[$i] = $temp[$rand];
@@ -183,25 +208,25 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		}
 		$salt = implode($salt);
 		return $salt;
-		
+
 	}
-	
+
 	protected function createPassword ($password) {
 		$this->Salt = $this->createSalt($password);
 		$salt = $this->Salt;
-		
+
 		$password .= $salt;
 		$hold = hash('SHA256', $password);
 		return $hold;
 	}
-	
+
 	protected function checkUserName($username) {
 		$passarray = array();
 		$passarray['UserName'] = $username;
 		$this->LayerModule->Connect('UserAccounts');
 		$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 		$this->LayerModule->Disconnect('UserAccounts');
-		
+
 		$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
 		if ($results[0]) {
 			return TRUE;
@@ -209,7 +234,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			return FALSE;
 		}
 	}
-	
+
 	protected function createUserAccount($username, $emailaddress) {
 		$this->NewUserSalt = $this->createSalt(' ');
 		$hold = array();
@@ -230,7 +255,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$passarray1[10] = 'User';
 			$passarray1[11] = 'Guest';
 			$passarray1[12] = 'Enable/Disable';
-			
+
 			$passarray2[0] = $username;
 			$passarray2[1] = NULL;
 			$passarray2[2] = $this->NewUserSalt;
@@ -244,10 +269,10 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$passarray2[10] = 'Yes';
 			$passarray2[11] = 'No';
 			$passarray2[12] = 'Enable';
-			
+
 			$passarray['rowname'] = $passarray1;
 			$passarray['rowvalue'] = $passarray2;
-			
+
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'createRow', $passarray);
 			$this->LayerModule->Disconnect('UserAccounts');
@@ -256,28 +281,28 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			return $hold;
 		}
 	}
-	
+
 	protected function generateNewUserEmail($emailaccount, $location) {
 		$sitename = $GLOBALS['sitename'];
 		$UserCode = $this->NewUserSalt;
-		
+
 		$message = "Welcome to $sitename! To activate your account you have to click the link ";
 		$message .= 'below and enter your user account, user code, and a new password.';
 		$message .= "\n User Code is $UserCode";
 		$message .= "\n $location";
-		
+
 		mail($emailaccount, "New User Registration - $sitename", $message);
 	}
-	
+
 	protected function generateChangedPasswordEmail($emailaccount) {
 		$sitename = $GLOBALS['sitename'];
-		
+
 		$message = "$sitename has received a request to change your password.  The password has been changed, ";
 		$message .= 'if you did not make this request, please contact our support team for more information!';
-		
+
 		mail($emailaccount, "Password Changed - $sitename", $message);
 	}
-	
+
 	protected function generateResetPasswordEmail($emailaccount, $location) {
 		$sitename = $GLOBALS['sitename'];
 		$UserCode = $this->ResetSalt;
@@ -286,10 +311,10 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 		$message .= "\n User Code is $UserCode";
 		$message .= "\n $location\n";
 		$message .= 'If you did not make this request, please contact our support team for more information!';
-		
+
 		mail($emailaccount, "Password Reset - $sitename", $message);
 	}
-	
+
 	protected function createNewUserPassword($username, $password, $usercode) {
 		$hold = array();
 		if ($username && $password && $usercode) {
@@ -297,11 +322,11 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$passarray['UserName'] = $username;
 			$passarray['NewUser'] = 'Yes';
 			$passarray['Salt'] = $usercode;
-			
+
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 			$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
 			if ($results[0]) {
 				if (!is_null($results[0]['Password'])) {
@@ -311,42 +336,42 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 					$PasswordEncrypt = $this->createPassword($password);
 					$Salt = $this->Salt;
 					$EmailAccount = $results[0]['EmailAccount'];
-					
+
 					$passarray = array();
 					$passarray1 = array();
 					$passarray2 = array();
 					$passarray3 = array();
 					$passarray4 = array();
-					
+
 					$passarray1[0] = 'Password';
 					$passarray1[1] = 'Salt';
 					$passarray1[2] = 'Attempts';
 					$passarray1[3] = 'NewUser';
-					
+
 					$passarray2[0] = $PasswordEncrypt;
 					$passarray2[1] = $Salt;
 					$passarray2[2] = 0;
 					$passarray2[3] = 'No';
-					
+
 					$passarray3[0] = 'UserName';
 					$passarray3[1] = 'UserName';
 					$passarray3[2] = 'UserName';
 					$passarray3[3] = 'UserName';
-					
+
 					$passarray4[0] = $username;
 					$passarray4[1] = $username;
 					$passarray4[2] = $username;
 					$passarray4[3] = $username;
-					
+
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
 					$passarray['rownumbername'] = $passarray3;
 					$passarray['rownumber'] = $passarray4;
-					
+
 					$this->LayerModule->Connect('UserAccounts');
 					$this->LayerModule->pass ('UserAccounts', 'updateRow', $passarray);
 					$this->LayerModule->Disconnect('UserAccounts');
-					
+
 					$this->generateChangedPasswordEmail($EmailAccount);
 				}
 			} else {
@@ -355,18 +380,18 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			}
 		}
 	}
-	
+
 	public function resetUserPassword($username, $emailaccount, $location) {
 		$hold = array();
 		if ($username && $emailaccount) {
 			$passarray = array();
 			$passarray['UserName'] = $username;
 			$passarray['EmailAccount'] = $emailaccount;
-			
+
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 			$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
 			if ($results[0]) {
 				if ($results[0]['NewUser'] == 'Yes') {
@@ -374,42 +399,42 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 					return $hold;
 				} else {
 					$this->ResetSalt = $this->createSalt(' ');
-					
+
 					$passarray = array();
 					$passarray1 = array();
 					$passarray2 = array();
 					$passarray3 = array();
 					$passarray4 = array();
-					
+
 					$passarray1[0] = 'Password';
 					$passarray1[1] = 'Salt';
 					$passarray1[2] = 'Attempts';
 					$passarray1[3] = 'Reset';
-					
+
 					$passarray2[0] = NULL;
 					$passarray2[1] = $this->ResetSalt;
 					$passarray2[2] = 0;
 					$passarray2[3] = 'Yes';
-					
+
 					$passarray3[0] = 'UserName';
 					$passarray3[1] = 'UserName';
 					$passarray3[2] = 'UserName';
 					$passarray3[3] = 'UserName';
-					
+
 					$passarray4[0] = $username;
 					$passarray4[1] = $username;
 					$passarray4[2] = $username;
 					$passarray4[3] = $username;
-					
+
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
 					$passarray['rownumbername'] = $passarray3;
 					$passarray['rownumber'] = $passarray4;
-					
+
 					$this->LayerModule->Connect('UserAccounts');
 					$this->LayerModule->pass ('UserAccounts', 'updateRow', $passarray);
 					$this->LayerModule->Disconnect('UserAccounts');
-					
+
 					$this->generateResetPasswordEmail($emailaccount, $location);
 				}
 			} else {
@@ -421,7 +446,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			return $hold;
 		}
 	}
-	
+
 	public function changeUserPassword($username, $password, $usercode) {
 		$hold = array();
 		if ($username && $password && $usercode) {
@@ -430,11 +455,11 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			$passarray['NewUser'] = 'No';
 			$passarray['Reset'] = 'Yes';
 			$passarray['Salt'] = $usercode;
-			
+
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 			$results = $this->LayerModule->pass ('UserAccounts', 'getMultiRowField', array());
 
 			if ($results[0]) {
@@ -445,46 +470,46 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 					$PasswordEncrypt = $this->createPassword($password);
 					$Salt = $this->Salt;
 					$EmailAccount = $results[0]['EmailAccount'];
-					
+
 					$passarray = array();
 					$passarray1 = array();
 					$passarray2 = array();
 					$passarray3 = array();
 					$passarray4 = array();
-					
+
 					$passarray1[0] = 'Password';
 					$passarray1[1] = 'Salt';
 					$passarray1[2] = 'Attempts';
 					$passarray1[3] = 'NewUser';
 					$passarray1[4] = 'Reset';
-					
+
 					$passarray2[0] = $PasswordEncrypt;
 					$passarray2[1] = $Salt;
 					$passarray2[2] = 0;
 					$passarray2[3] = 'No';
 					$passarray2[4] = 'No';
-					
+
 					$passarray3[0] = 'UserName';
 					$passarray3[1] = 'UserName';
 					$passarray3[2] = 'UserName';
 					$passarray3[3] = 'UserName';
 					$passarray3[4] = 'UserName';
-					
+
 					$passarray4[0] = $username;
 					$passarray4[1] = $username;
 					$passarray4[2] = $username;
 					$passarray4[3] = $username;
 					$passarray4[4] = $username;
-					
+
 					$passarray['rowname'] = $passarray1;
 					$passarray['rowvalue'] = $passarray2;
 					$passarray['rownumbername'] = $passarray3;
 					$passarray['rownumber'] = $passarray4;
-					
+
 					$this->LayerModule->Connect('UserAccounts');
 					$this->LayerModule->pass ('UserAccounts', 'updateRow', $passarray);
 					$this->LayerModule->Disconnect('UserAccounts');
-					
+
 					$this->generateChangedPasswordEmail($EmailAccount);
 				}
 			} else {
@@ -493,7 +518,7 @@ class UserAccounts extends Tier4AuthenticationLayerModulesAbstract implements Ti
 			}
 		}
 	}
-	
+
 	public function getTableNames() {
 		return $this->TableNames;
 	}

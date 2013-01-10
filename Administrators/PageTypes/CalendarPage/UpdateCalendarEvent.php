@@ -1,42 +1,67 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;
 	$GLOBALS['ADMINHOME'] = $ADMINHOME;
-	
+
 	require_once ("$ADMINHOME/Configuration/includes.php");
 	$PageName = "../../index.php?PageID=";
 	$PageName .= $_POST['UpdateCalendarEvent'];
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateCalendarEvent', $PageName);
-	
-	
+
+
 	if ($hold) {
 		$Options = $Tier6Databases->getLayerModuleSetting();
 		$PageID = $_POST['FormOptionSelectedID'];
-		
+
 		$CalendarEventUpdateSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdateSelectPage']['SettingAttribute'];
 		$passarray = array();
 		$passarray['PageID'] = $CalendarEventUpdateSelectPage;
 		$passarray['ObjectID'] = $PageID;
-		
+
 		$FormOptionSelected = $Tier6Databases->getRecord($passarray, 'AdministratorFormOption', TRUE, array('1' => 'PageID'), 'ASC');
-		
+
 		$StartTime = NULL;
 		$EndTime = NULL;
-		
+
 		if ($hold['FilteredInput']['StartHour'] < 10) {
 			$temp = $hold['FilteredInput']['StartHour'];
 			$hold['FilteredInput']['StartHour'] = 0 . $temp;
 		}
-		
+
 		if ($hold['FilteredInput']['EndHour'] < 10) {
 			$temp = $hold['FilteredInput']['EndHour'];
 			$hold['FilteredInput']['EndHour'] = 0 . $temp;
 		}
-		
+
 		$StartTime = $hold['FilteredInput']['StartHour'] . ':' . $hold['FilteredInput']['StartMinute'] . ':' . $hold['FilteredInput']['StartSecond'];
 		$EndTime = $hold['FilteredInput']['EndHour'] . ':' . $hold['FilteredInput']['EndMinute'] . ':' . $hold['FilteredInput']['EndSecond'];
-		
+
 		$CalendarAppointment = array();
 		$CalendarAppointment['CalendarID'] = $PageID;
 		$CalendarAppointment['TableName'] = 'CalendarAppointments';
@@ -69,7 +94,7 @@
 		$CalendarAppointment['AppointmentXMLLang'] = 'en-us';
 		$CalendarAppointment['Enable/Disable'] = $hold['FilteredInput']['EnableDisable'];
 		$CalendarAppointment['Status'] = $hold['FilteredInput']['Status'];
-		
+
 		$Date = date_parse($_POST['EventMonth']);
 		if ($Date['month'] < 10) {
 			$FormOptionText .= 0 . $Date['month'];
@@ -93,17 +118,17 @@
 		$FormOptionText .= ' ';
 		$FormOptionText .= $_POST['EndAMPM'];
 		$FormOptionText .= ' - ';
-		
+
 		$temp = $hold['FilteredInput']['Event'];
 		$temp = explode(' ', $temp);
-		
+
 		for ($i = 0; $i < 2; $i++) {
 			$FormOptionText .= $temp[$i];
 			$FormOptionText .= ' ';
 		}
-		
+
 		unset($temp);
-		
+
 		$FormOption = array();
 		//$FormOption['PageID'] = $CalendarEventUpdateSelectPage;
 		//$FormOption['ObjectID'] = $NewPageID;
@@ -139,22 +164,22 @@
 		//$FormOption['FormOptionXMLLang'] = 'en-us';
 		//$FormOption['Enable/Disable'] = 'Enable';
 		//$FormOption['Status'] = 'Approved';
-				
+
 		$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'updateCalendarAppointment', $CalendarAppointment);
-		
+
 		$CalendarEventUpdateSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdateSelectPage']['SettingAttribute'];
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $CalendarEventUpdateSelectPage, 'ObjectID' => $PageID), 'Content' => $FormOption));
-		
+
 		$CalendarEventDeleteSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventDeleteSelectPage']['SettingAttribute'];
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $CalendarEventDeleteSelectPage, 'ObjectID' => $PageID), 'Content' => $FormOption));
-		
+
 		$CalendarEventEnableDisableSelectPage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventEnableDisableSelectPage']['SettingAttribute'];
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $CalendarEventEnableDisableSelectPage, 'ObjectID' => $PageID), 'Content' => $FormOption));
-		
+
 		$CalendarEventCreatedUpdatePage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventCreatedUpdatePage']['SettingAttribute'];
-		
+
 		header("Location: $CalendarEventCreatedUpdatePage");
-		
+
 	}
-	
+
 ?>

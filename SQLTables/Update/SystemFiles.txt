@@ -21,12 +21,14 @@
 ../../Tier8-PresentationLayer/
 ../../UserData/
 ../../Changes.txt
+../../Copyright.txt
 ../../index.php
 ../../Install.txt
 ../../License.txt
 ../../login.php
 ../../logoff.php
 ../../Readme.txt
+../../rss.php
 ../../sitemap.php
 ../../UpcomingReleases.txt
 ../../Administrators/CAPTCHAIMAGE/
@@ -35,6 +37,7 @@
 ../../Administrators/ModuleSettings/
 ../../Administrators/PageTypes/
 ../../Administrators/System/
+../../Administrators/SystemUpdater/
 ../../Administrators/index.php
 ../../Administrators/login.php
 ../../Administrators/logoff.php
@@ -177,15 +180,7 @@
 ../../Administrators/PageTypes/TablePage/UploadHandler.php
 ../../Administrators/PageTypes/TablePage/XmlDHtmlXGridImport.php
 ../../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643181.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643264.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643272.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643555.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643827.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643932.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356643953.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356644031.xml
-../../Administrators/PageTypes/TablePage/TEMPFILES/AddTablePage1356644326.xml
+../../Administrators/System/DatabaseBackup/
 ../../Administrators/System/EmptyCaptchaImageDirectory/
 ../../Administrators/System/LoginOff/
 ../../Administrators/System/Menu/
@@ -194,6 +189,7 @@
 ../../Administrators/System/Register/
 ../../Administrators/System/SystemUpdateFileRemover/
 ../../Administrators/System/SystemUpdateUpgradeFolderRemover/
+../../Administrators/System/DatabaseBackup/DatabaseBackup.php
 ../../Administrators/System/EmptyCaptchaImageDirectory/EmptyCaptchaImageDirectory.php
 ../../Administrators/System/PHPInfo/PHPInfo.php
 ../../Administrators/System/SystemUpdateFileRemover/SystemUpdateFileRemover.php
@@ -584,7 +580,6 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.Strict.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TargetBlank.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyAdd.txt
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyLevel.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyRemove.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.Trusted.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.XHTML.txt
@@ -6073,6 +6068,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.136.sql
 ../../SQLTables/Update/UpdateTables-2.1.137.sql
 ../../SQLTables/Update/UpdateTables-2.1.138.sql
+../../SQLTables/Update/UpdateTables-2.1.139.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -6094,7 +6090,6 @@
 ../../Testcases/SimpleTest/simpletest/encoding.php
 ../../Testcases/SimpleTest/simpletest/errors.php
 ../../Testcases/SimpleTest/simpletest/exceptions.php
-../../Testcases/SimpleTest/simpletest/expectation.php
 ../../Testcases/SimpleTest/simpletest/form.php
 ../../Testcases/SimpleTest/simpletest/frames.php
 ../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
@@ -6495,6 +6490,7 @@
 ../../UserData/Administrators/
 ../../UserData/Configuration/
 ../../UserData/ContentFiles/
+../../UserData/DatabaseBackup/
 ../../UserData/Images/
 ../../UserData/Libraries/
 ../../UserData/Modules/

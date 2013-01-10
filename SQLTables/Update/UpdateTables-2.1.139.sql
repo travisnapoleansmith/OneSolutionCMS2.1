@@ -1,0 +1,5 @@
+UPDATE `AdministratorList` SET `Li3` = '<a href=''System/PHPInfo/PHPInfo.php''>PHP Configuration Information</a>' WHERE `AdministratorList`.`PageID` = 15 AND `AdministratorList`.`ObjectID` = 4 LIMIT 1;
+UPDATE `AdministratorList` SET `Li4` = '<a href=''System/SystemUpdateFileRemover/SystemUpdateFileRemover.php''>System Update File Remover Tool</a>' WHERE `AdministratorList`.`PageID` = 15 AND `AdministratorList`.`ObjectID` = 4 LIMIT 1;
+UPDATE `AdministratorList` SET `Li5` = '<a href=''System/SystemUpdateUpgradeFolderRemover/SystemUpdateUpgradeFolderRemover.php''>System Update Upgrade Folder Remover Tool</a>' WHERE `AdministratorList`.`PageID` = 15 AND `AdministratorList`.`ObjectID` = 4 LIMIT 1;
+UPDATE `AdministratorList` SET `Li6` = '<a href=''../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLSiteStatsListing.php?Format=XML''>Site Stats as XML Format</a>', `Li7` = '<a href=''../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLSiteStatsListing.php?Format=CSV''>Site Stats as CSV Format</a>' WHERE `AdministratorList`.`PageID` = 15 AND `AdministratorList`.`ObjectID` = 4 LIMIT 1;
+

@@ -1,4 +1,30 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
+
 class MenuItem
 {
 	private $idnumber;
@@ -13,100 +39,100 @@ class MenuItem
 	private $LiClass;
 	private $AStyle;
 	private $AClass;
-	
-	
+
+
 	public function __construct() {
-		
+
 	}
-	
+
 	public function setIdNumber($idnumber){
 		$this->idnumber = $idnumber;
 	}
-	
+
 	public function getIdNumber(){
 		return $this->idnumber;
 	}
-	
+
 	public function setMenuItemName($name){
 		$this->MenuItemName = $name;
 	}
-	
+
 	public function getIMenuItemName(){
 		return $this->MenuItemName;
 	}
-	
+
 	public function setMenuItemLink($link){
 		$this->MenuItemLink = $link;
 	}
-	
+
 	public function getMenuItemLink(){
 		return $this->MenuItemLink;
 	}
-	
+
 	public function setMenuItemTitle($title){
 		$this->MenuItemTitle = $title;
 	}
-	
+
 	public function getMenuItemTitle(){
 		return $this->MenuItemTitle;
 	}
-	
+
 	public function setMenuItemEnableDisable($enable){
 		$this->MenuItemEnableDisable = $enable;
 	}
-	
+
 	public function getMenuItemEnableDisable(){
 		return $this->MenuItemEnableDisable;
 	}
-	
+
 	public function setMenuItemStatus($status){
 		$this->MenuItemStatus = $status;
 	}
-	
+
 	public function getMenuItemStatus(){
 		return $this->MenuItemStatus;
 	}
-	
+
 	public function setLiIdClass($LiIdClass){
 		$this->LiIdClass = $LiIdClass;
 	}
-	
+
 	public function getLiIdClass(){
 		return $this->LiIdClass;
 	}
-	
+
 	public function setLiStyle($LiStyle){
 		$this->LiStyle = $LiStyle;
 	}
-	
+
 	public function getLiStyle(){
 		return $this->LiStyle;
 	}
-	
+
 	public function setLiClass($LiClass){
 		$this->idnumber = $LiClass;
 	}
-	
+
 	public function getLiClass(){
 		return $this->LiClass;
 	}
-	
+
 	public function setAStyle($AStyle){
 		$this->AStyle = $AStyle;
 	}
-	
+
 	public function getAStyle(){
 		return $this->AStyle;
 	}
-	
+
 	public function setAClass($AClass){
 		$this->AClass = $AClass;
 	}
-	
+
 	public function getAClass(){
 		return $this->AClass;
 	}
-	
+
 	public function setAllBase ($idnumber, $name, $link, $title, $enable, $status) {
 		$this->idnumber = $idnumber;
 		$this->MenuItemName = $name;
@@ -115,7 +141,7 @@ class MenuItem
 		$this->MenuItemEnableDisable = $enable;
 		$this->MenuItemStatus = $status;
 	}
-	
+
 	public function setAllClassStyle ($LiIdClass, $LiStyle, $LiClass, $AStyle, $AClass) {
 		$this->LiIdClass = $LiIdClass;
 		$this->LiStyle = $LiStyle;
@@ -123,7 +149,7 @@ class MenuItem
 		$this->AStyle = $AStyle;
 		$this->AClass = $AClass;
 	}
-	
+
 	private function processInformation ($Name, $Title) {
 		$this->MenuItemOutput .= ' ';
 		$this->MenuItemOutput .= $Name;
@@ -131,31 +157,31 @@ class MenuItem
 		$this->MenuItemOutput .= $Title;
 		$this->MenuItemOutput .= "'";
 	}
-	
+
 	public function processLi($space, $data) {
 		if ($this->AStyle) {
 			$this->MenuItemOutput .= $space;
 			$this->MenuItemOutput .= '   ';
 			$this->MenuItemOutput .= '<a';
 			$this->processInformation('style', $this->AStyle);
-			
+
 			$this->processA($space);
 			if ($data) {
 				$this->processInsertInformation($space, $data);
 			}
-			
-		} else if ($this->AClass){ 
-			
+
+		} else if ($this->AClass){
+
 			$this->MenuItemOutput .= $space;
 			$this->MenuItemOutput .= '   ';
 			$this->MenuItemOutput .= '<a';
 			$this->processInformation('class', $this->AClass);
-			
+
 			$this->processA($space);
 			if ($data) {
 				$this->processInsertInformation($space, $data);
 			}
-		
+
 		} else {
 			$this->MenuItemOutput .= $space;
 			$this->MenuItemOutput .= '   ';
@@ -166,12 +192,12 @@ class MenuItem
 			}
 		}
 	}
-	
+
 	private function processA($space) {
 		if ($this->MenuItemTitle) {
 			$this->processInformation('title', $this->MenuItemTitle);
 		}
-		
+
 		if ($this->MenuItemLink) {
 			$this->processInformation('href', $this->MenuItemLink);
 		}
@@ -182,36 +208,36 @@ class MenuItem
 		$this->MenuItemOutput .= "\n";
 		$this->MenuItemOutput .= $space;
 		$this->MenuItemOutput .= "   </a>\n";
-		
+
 	}
-	
+
 	private function processInsertInformation($space, $data) {
 		$this->MenuItemOutput .= $space;
 		$this->MenuItemOutput .= '   ';
 		$this->MenuItemOutput .= $data;
 		$this->MenuItemOutput .= "\n";
 	}
-	
+
 	public function buildMenuItemOutput($space, $data) {
 		if ($this->MenuItemEnableDisable == 'Enable' && $this->MenuItemStatus == 'Approved') {
 			$this->MenuItemOutput .= $space;
 			$this->MenuItemOutput .= '<li';
-			
+
 			if ($this->LiIdClass) {
 				$this->processInformation('id', $this->LiIdClass);
 			}
-			
+
 			if ($this->LiStyle) {
 				$this->processInformation('style', $this->LiStyle);
 			}
-			
+
 			if ($this->LiClass) {
 				$this->processInformation('class', $this->LiClass);
 				$this->MenuItemOutput .= ">\n";
 			} else {
 				$this->MenuItemOutput .= ">\n";
 			}
-			
+
 			$this->processLi($space, $data);
 			$this->MenuItemOutput .= $space;
 			$this->MenuItemOutput .= "</li>\n";
@@ -219,12 +245,12 @@ class MenuItem
 			$this->MenuItemOutput = NULL;
 		}
 	}
-	
+
 	public function getMenuItemOutput() {
 		return $this->MenuItemOutput;
 	}
-	
-	
+
+
 }
 
 ?>

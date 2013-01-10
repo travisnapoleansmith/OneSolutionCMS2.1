@@ -1,4 +1,29 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $FlashPath;
@@ -8,21 +33,21 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	protected $AllowFullScreen;
 	protected $AllowScriptAccess;
 	protected $Quality;
-	
+
 	protected $FlashVars = array();
-	
+
 	protected $FlashVarsText;
-	
+
 	protected $AltText;
-	
+
 	protected $FlashID;
 	protected $FlashStyle;
 	protected $FlashClass;
-	
+
 	//protected $FlashRecord;
-	
+
 	protected $IsIE;
-	
+
 	/**
 	 * Create an instance of XtmlFlash
 	 *
@@ -33,21 +58,21 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
 		$this->LayerModule = &$LayerModule;
-		
+
 		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlFlash'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlFlash'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($DatabaseOptions['FlashVars']) {
 			$this->FlashVars = $DatabaseOptions['FlashVars'];
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
@@ -55,35 +80,35 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer = &$GLOBALS['Writer'];
 		}
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 	}
-	
+
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
-		
+
 		//unset($PageID['RevisionID']);
 		//unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
-		
+
 		$this->LayerModule->createDatabaseTable($this->DatabaseTable);
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
 		//////$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('PageID' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('PageID' => $passarray));
-		
+
 		$this->FlashPath = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashPath'));
 		$this->Width = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Width'));
 		$this->Height = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Height'));
@@ -92,24 +117,24 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->AllowScriptAccess = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AllowScriptAccess'));
 		$this->Quality = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Quality'));
 		//$this->FlashRecord = $this->LayerModule->pass($this->DatabaseTable, 'getEntireRow', array());
-		
+
 		$this->AltText = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'AltText'));
-		
+
 		$this->FlashID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashID'));
 		$this->FlashStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashStyle'));
 		$this->FlashClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'FlashClass'));
-		
+
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
 		$this->StartTagId = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagId'));
 		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
-		
+
 		$this->IsIE = $this->CheckUserString();
-		
+
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
-	
+
 	protected function BuildFlashVars() {
 		foreach ($this->FlashVars as $FlashVarsName => $FlashVars) {
 			if (is_array($FlashVars)) {
@@ -133,15 +158,15 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		}
 		$this->FlashVarsText = trim($this->FlashVarsText, '&');
 	}
-	
+
 	public function CreateOutput($space) {
 		$this->Space = $space;
-		
+
 		if ($this->StartTag){
 			$this->StartTag = str_replace('<','', $this->StartTag);
 			$this->StartTag = str_replace('>','', $this->StartTag);
 			$this->Writer->startElement($this->StartTag);
-			
+
 				if ($this->StartTagID) {
 					$this->Writer->writeAttribute('id', $this->StartTagID);
 				}
@@ -152,25 +177,25 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					$this->Writer->writeAttribute('class', $this->StartTagClass);
 				}
 		}
-		
+
 		$this->Writer->startElement('object');
-		
+
 		if ($this->IsIE) {
 			$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
 		}
-		
+
 		if ($this->Width) {
 			$this->Writer->writeAttribute('width', $this->Width);
 		}
-		
+
 		if ($this->Height) {
 			$this->Writer->writeAttribute('height', $this->Height);
 		}
-		
+
 		if ($this->IsIE) {
 			$this->Writer->writeAttribute('id', 'player');
 			$this->Writer->writeAttribute('name', 'player');
-			
+
 			if ($this->FlashStyle) {
 				$this->Writer->writeAttribute('style', $this->FlashStyle);
 			}
@@ -189,66 +214,66 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 			$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
 		}
-		
+
 		if (!$this->IsIE) {
 			if ($this->FlashPath) {
 				$this->Writer->writeAttribute('data', $this->FlashPath);
 			}
 		}
-	  	
+
 		if ($this->FlashPath) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'movie');
 			$this->Writer->writeAttribute('value', $this->FlashPath);
 			$this->Writer->endElement();
 		}
-		
+
 		if ($this->Wmode) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'wmode');
 			$this->Writer->writeAttribute('value', $this->Wmode);
 			$this->Writer->endElement();
 		}
-		
+
 		if ($this->AllowFullScreen) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'allowfullscreen');
 			$this->Writer->writeAttribute('value', $this->AllowFullScreen);
 			$this->Writer->endElement();
 		}
-		
+
 		if ($this->AllowScriptAccess) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'allowscriptaccess');
 			$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
 			$this->Writer->endElement();
 		}
-		
+
 		if ($this->Quality) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'quality');
 			$this->Writer->writeAttribute('value', $this->Quality);
 			$this->Writer->endElement();
 		}
-		
+
 		if ($this->FlashVars) {
 			$this->BuildFlashVars();
 		}
-		
+
 		if ($this->FlashVarsText) {
 			$this->Writer->startElement('param');
 			$this->Writer->writeAttribute('name', 'flashvars');
 			$this->Writer->writeAttribute('value', $this->FlashVarsText);
 			$this->Writer->endElement();
 		}
-		
-		
+
+
 		if ($this->AltText) {
 			$this->Writer->writeRaw("\t");
 			$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
 			$this->Writer->writeRaw("\n");
 	  	}
-		
+
 		$this->Writer->writeRaw($this->Space);
 		$this->Writer->writeRaw('  ');
 		$this->Writer->endElement(); // END OBJECT TAG
@@ -257,11 +282,11 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->Writer->fullEndElement(); // ENDS END TAG
 			$this->Writer->writeRaw("\n");
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}
 	}
-	
+
 }
 ?>

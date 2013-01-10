@@ -1,11 +1,37 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
+
 	// MySql Connect Allow and Deny Member Functions For Tier 3 Protection Layer
 	$Tier3DatabaseAllow = Array();
 	$Tier3DatabaseDeny = Array();
-	
+
 	// Must be allowed!
 	$Tier3DatabaseAllow['MySqlConnect'] = 'MySqlConnect';
-	
+
 	// Setters and Getters
 	$Tier3DatabaseAllow['setIdnumber'] = 'setIdnumber';
 	$Tier3DatabaseAllow['getIdnumber'] = 'getIdnumber';
@@ -29,70 +55,70 @@
 	$Tier3DatabaseAllow['getErrorArray'] = 'getErrorArray';
 	$Tier3DatabaseAllow['setDatabaseAll'] = 'setDatabaseAll';
 	$Tier3DatabaseAllow['setOrderByAll'] = 'setOrderByAll';
-	
+
 	// Connecting to database
 	$Tier3DatabaseAllow['Connect'] = 'Connect';
 	$Tier3DatabaseAllow['Disconnect'] = 'Disconnect';
-	
+
 	// Basic checks and verifies
 	$Tier3DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
 	$Tier3DatabaseAllow['checkTableName'] = 'checkTableName';
 	$Tier3DatabaseAllow['checkPermissions'] = 'checkPermissions';
 	$Tier3DatabaseAllow['checkField'] = 'checkField';
-	
+
 	// Basic Setup of Database
 	$Tier3DatabaseDeny['createDatabase'] = 'createDatabase';
 	$Tier3DatabaseDeny['deleteDatabase'] = 'deleteDatabase';
-	
+
 	// Table Methods
 	$Tier3DatabaseDeny['createTable'] = 'createTable';
 	$Tier3DatabaseDeny['updateTable'] = 'updateTable';
 	$Tier3DatabaseDeny['deleteTable'] = 'deleteTable';
-	
+
 	// Row Methods
 	$Tier3DatabaseDeny['createRow'] = 'createRow';
 	$Tier3DatabaseDeny['updateRow'] = 'updateRow';
 	$Tier3DatabaseDeny['deleteRow'] = 'deleteRow';
-	
+
 	// Field Methods
 	$Tier3DatabaseDeny['createField'] = 'createField';
 	$Tier3DatabaseDeny['updateField'] = 'updateField';
 	$Tier3DatabaseDeny['deleteField'] = 'deleteField';
-	
+
 	// General SQL Command
 	$Tier3DatabaseAllow['executeSQlCommand'] = 'executeSQlCommand';
-	
+
 	// Empty Table Methods
 	$Tier3DatabaseAllow['emptyTable'] = 'emptyTable';
-	
+
 	// Maintenance Methods
 	$Tier3DatabaseDeny['sortTable'] = 'sortTable';
-	
+
 	// Setting Database Row
 	$Tier3DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
-	
+
 	// Setting Database Fields
 	$Tier3DatabaseAllow['setDatabaseField'] = 'setDatabaseField';
-	
+
 	// Entire Table Methods
 	$Tier3DatabaseAllow['setEntireTable'] = 'setEntireTable';
 	$Tier3DatabaseAllow['BuildingEntireTable'] = 'BuildingEntireTable';
-	
+
 	// Field Methods
 	$Tier3DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
 	$Tier3DatabaseAllow['BuildFieldNames'] = 'BuildFieldNames';
-	
+
 	// Entire Table Methods
 	$Tier3DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
 	$Tier3DatabaseAllow['removeEntryEntireTable'] = 'removeEntryEntireTable';
 	$Tier3DatabaseAllow['removeEntireEntireTable'] = 'RemoveEntireEntireTable';
 	$Tier3DatabaseAllow['reindexEntireTable'] = 'ReindexEntireTable';
 	$Tier3DatabaseAllow['updateEntireTableEntry'] = 'updateEntireTableEntry';
-	
+
 	// Row Methods
 	$Tier3DatabaseAllow['BuildDatabaseRows'] = 'BuildDatabaseRows';
-	
-	// Getters 
+
+	// Getters
 	$Tier3DatabaseAllow['getRowCount'] = 'getRowCount';
 	$Tier3DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
 	$Tier3DatabaseAllow['getRowFieldNames'] = 'getRowFieldNames';
@@ -103,7 +129,7 @@
 	$Tier3DatabaseAllow['getEntireTable'] = 'getEntireTable';
 	$Tier3DatabaseAllow['getSearchResults'] = 'getSearchResults';
 	$Tier3DatabaseAllow['getTableNames'] = 'getTableNames';
-	
+
 	// Basic Developer Diagnostics
 	$Tier3DatabaseAllow['walkarray'] = 'walkarray';
 	$Tier3DatabaseAllow['walkfieldname'] = 'walkfieldname';

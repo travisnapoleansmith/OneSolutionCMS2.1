@@ -1,7 +1,33 @@
 <?php
-/** 
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
+
+/**
  * Class MySql Connect
- * 
+ *
  * Class MySqlConnect is designed as the MySql database engine for One Solution CMS. It is used to do all MySql queries on the database.
  *
  * @author Travis Napolean Smith
@@ -10,7 +36,7 @@
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
  * @version PHP - 2.1.130
  * @version C++ - Unknown
- */ 
+ */
 
 class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2DataAccessLayerModules
 {
@@ -21,7 +47,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	*/
 	public function MySqlConnect () {
 		$this->idsearch = Array();
-		
+
 		$hold = array();
 		if (!is_array($GLOBALS['ErrorMessage']['MySqlConnect'])) {
 			$GLOBALS['ErrorMessage']['MySqlConnect'] = array();
@@ -29,7 +55,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		array_push($GLOBALS['ErrorMessage']['MySqlConnect'], $hold);
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['MySqlConnect'][key($GLOBALS['ErrorMessage']['MySqlConnect'])];
 	}
-	
+
 	/**
 	 * Connect
 	 * Connects to current database.
@@ -43,18 +69,18 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$this->password = $GLOBALS['credentaillogonarray'][2];
 			$this->databasename = $GLOBALS['credentaillogonarray'][3];
 		}
-		
+
 		if (!($this->link = mysql_connect($this->hostname, $this->user, $this->password))) {
 			array_push($this->ErrorMessage,'Connect: Could not connect to server');
 		}
-		
+
 		if ($this->link) {
 			if (!mysql_select_db($this->databasename, $this->link)) {
 				array_push($this->ErrorMessage,'Connect: Could not select database');
 			}
 		}
 	}
-	
+
 	/**
 	 * Disconnect
 	 * Disconnects from current database.
@@ -66,7 +92,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			mysql_close($this->link);
 		}
 	}
-	
+
 	protected function checkDatabaseName (){
 		$this->Connect();
 		$results = mysql_list_dbs($this->link);
@@ -78,28 +104,28 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			}
 			$i++;
 		}
-		array_push($this->ErrorMessage,'checkDatabaseName: Database Name does not exist'); 
+		array_push($this->ErrorMessage,'checkDatabaseName: Database Name does not exist');
 		return FALSE;
 	}
-	
+
 	protected function checkTableName () {
 		$TableName = $this->databasetable;
 		if ($this->tablenames === NULL) {
 			$this->Connect();
-			
+
 			$query = 'SHOW TABLES FROM `' . $this->databasename . '`';
 			$result = mysql_query($query);
-			
+
 			$this->tablenames = Array();
-			
+
 			while ($CurrentTableName = mysql_fetch_array($result, MYSQL_NUM)) {
 				array_push($this->tablenames, $CurrentTableName[0]);
 			}
-			
+
 			$this->Disconnect();
-			
+
 		}
-		
+
 		foreach ($this->tablenames as $Key => $Value) {
 			if ($Value === $TableName) {
 				return $TableName;
@@ -107,7 +133,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 		return FALSE;
 	}
-	
+
 	protected function checkPermissions ($Permission) {
 		$this->Connect();
 		$query = 'SHOW GRANTS';
@@ -124,7 +150,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			return FALSE;
 		}
 	}
-	
+
 	protected function checkField ($Field) {
 		$this->Connect();
 		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` LIKE "' . $Field . '" ';
@@ -141,7 +167,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			}
 		}
 	}
-	
+
 	/**
 	 * createDatabase
 	 * Creates current database.
@@ -151,7 +177,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	public function createDatabase () {
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
-		
+
 		if (!$databasenamecheck) {
 			if ($permissionscheck) {
 				$query = 'CREATE DATABASE ' . $this->databasename .'';
@@ -163,7 +189,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'createDatabase: Database name exists!');
 		}
 	}
-	
+
 	/**
 	 * deleteDatabase
 	 * Deletes current database.
@@ -173,7 +199,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	public function deleteDatabase (){
 		$databasenamecheck = $this->checkDatabaseName();
 		$permissionscheck = $this->checkPermissions('DROP');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				$query = 'DROP DATABASE ' . $this->databasename .'';
@@ -185,7 +211,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'deleteDatabase: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * createTable
 	 *
@@ -198,7 +224,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if (!$tablenamecheck) {
@@ -222,7 +248,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'createTable: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * updateTable
 	 *
@@ -262,7 +288,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'updateTable: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * deleteTable
 	 * Deletes the current table.
@@ -273,7 +299,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('CREATE');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -289,7 +315,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'deleteTable: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * createRow
 	 *
@@ -303,7 +329,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('INSERT');
-		
+
 		$insertrow = NULL;
 		$insertrowvalue = NULL;
 		if ($databasenamecheck) {
@@ -318,7 +344,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$insertrow .= "`";
 											$insertrow .= mysql_real_escape_string(current($RowName[key($RowName)]));
 											$insertrow .= "`";
-											
+
 											if (is_null(current($RowValue[key($RowValue)]))) {
 												$insertrowvalue .= 'NULL';
 											} else {
@@ -326,7 +352,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												$insertrowvalue .= mysql_real_escape_string(current($RowValue[key($RowValue)]));
 												$insertrowvalue .= "'";
 											}
-											
+
 											next($RowName[key($RowName)]);
 											next($RowValue[key($RowValue)]);
 											if (current($RowName[key($RowName)])) {
@@ -340,10 +366,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$temp = key($RowValue);
 											array_push($this->ErrorMessage,"createRow: Row Value [$temp] exists in the Database!");
 										}
-										
+
 										next($RowName);
 										next($RowValue);
-										
+
 										$insertrowvalue = NULL;
 										$insertrow = NULL;
 									}
@@ -368,7 +394,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										$insertrow .= "`";
 										$insertrow .= mysql_real_escape_string(current($RowName));
 										$insertrow .= "`";
-										
+
 										if (is_null(current($RowValue))) {
 											$insertrowvalue .= 'NULL';
 										} else {
@@ -376,7 +402,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$insertrowvalue .= mysql_real_escape_string(current($RowValue));
 											$insertrowvalue .= "'";
 										}
-										
+
 										next($RowName);
 										next($RowValue);
 										if (current($RowName)) {
@@ -384,7 +410,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$insertrowvalue .= ' , ';
 										}
 									}
-									
+
 									$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
 									$result = mysql_query($query);
 									if (!$result) {
@@ -412,12 +438,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'createRow: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * updateRow
 	 *
-	 * Updates a row from RowName and RowValue with RowNumberName and RowNumber. Rowname and rowvalue can be a string or an array but 
-	 * must be the same type for each! RowNumberName and RowNumber can be a string or an array but must be the same type for each. Mixing 
+	 * Updates a row from RowName and RowValue with RowNumberName and RowNumber. Rowname and rowvalue can be a string or an array but
+	 * must be the same type for each! RowNumberName and RowNumber can be a string or an array but must be the same type for each. Mixing
 	 * arrays and strings for all past values are not permitted!
 	 *
 	 * @param string $RowName Name of the row to update. Must be a string or an array of strings.
@@ -430,7 +456,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('UPDATE');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -497,7 +523,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											} else {
 												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($RowName) . '` = NULL WHERE ' . $string . ' ';
 											}
-											
+
 											$result = mysql_query($query);
 										} else {
 											$RowNumberstring = NULL;
@@ -524,7 +550,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											reset($RowNumber);
 										}
 									}
-									
+
 								} else {
 									array_push($this->ErrorMessage,'updateRow: Row Name is an Array, Row Value is an Array, Row Number Name is an Array and Row Number must be an Array!');
 								}
@@ -545,7 +571,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'updateRow: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * deleteRow
 	 *
@@ -559,7 +585,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('DELETE');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -616,11 +642,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'deleteRow: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * createField
 	 *
-	 * Creates a new field from fieldstring. Fieldstring can be a string or an array. Fieldflag and fieldflagcolumn can be null. They 
+	 * Creates a new field from fieldstring. Fieldstring can be a string or an array. Fieldflag and fieldflagcolumn can be null. They
 	 * are used to set attributes for a new field.
 	 *
 	 * @param string $fieldstring Name of the field to create. Must be a string or an array of strings.
@@ -634,12 +660,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('ALTER');
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
 					if (!is_array($fieldstring)) {
-						if (!is_array($fieldflag)) { 
+						if (!is_array($fieldflag)) {
 							if (!is_array($fieldflagcolumn)) {
 								if ($fieldstring != NULL) {
 									if ($fieldflag != NULL) {
@@ -663,7 +689,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											} else {
 												array_push($this->ErrorMessage,'createField: Field Flag has been set to AFTER and Field Flag Column cannot be NULL!');
 											}
-										} else { 
+										} else {
 											array_push($this->ErrorMessage,'createField: Field Flag can only be FIRST or AFTER');
 										}
 									} else {
@@ -677,7 +703,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									array_push($this->ErrorMessage,'createField: Field String cannot be NULL!');
 								}
 							} else {
-								
+
 								array_push($this->ErrorMessage,'createField: Field Flag Column cannot be an Array!');
 							}
 						} else {
@@ -711,7 +737,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												} else {
 													array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] has been set to AFTER and Field Flag Column [current($fieldflagcolumn)] cannot be NULL!');
 												}
-											} else { 
+											} else {
 												array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] can only be FIRST or AFTER');
 											}
 										} else {
@@ -741,12 +767,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 				}
 			} else {
 				array_push($this->ErrorMessage,'createField: Permission has been denied!');
-			} 
+			}
 		} else {
 			array_push($this->ErrorMessage,'createField: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * updateField
 	 *
@@ -762,7 +788,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$permissionscheck = $this->checkPermissions ('ALTER');
 		$fieldcheck = $this->checkField($field);
 		$fieldcheck2 = $this->checkField($fieldchange);
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -773,25 +799,25 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 									if ($fieldchange != NULL) {
 										if (!$fieldcheck2) {
 											$type = NULL;
-											
+
 											$query = "SHOW COLUMNS FROM `$this->databasetable` LIKE '$field';";
 											$result = mysql_query($query);
 											$fieldvalue = mysql_fetch_array($result, MYSQL_ASSOC);
 											unset($fieldvalue['Field']);
-											
+
 											if ($fieldvalue['Type']) {
 												$type = $fieldvalue['Type'];
 												unset($fieldvalue['Type']);
 											}
-											
+
 											if ($fieldvalue['Key'] == NULL) {
 												unset($fieldvalue['Key']);
 											}
-												
+
 											if ($fieldvalue['Extra'] == NULL) {
 												unset($fieldvalue['Extra']);
 											}
-											
+
 											if ($type){
 												$type = strtoupper($type);
 												$changestring .= $type;
@@ -824,10 +850,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										array_push($this->ErrorMessage,'updateField: Field Change cannot be NULL!');
 									}
 								} else {
-									
+
 									array_push($this->ErrorMessage,'updateField: Field Change cannot be an Array!');
 								}
-								
+
 							} else {
 								array_push($this->ErrorMessage,'updateField: Field name does not exist!');
 							}
@@ -849,20 +875,20 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 												$result = mysql_query($query);
 												$fieldvalue = mysql_fetch_array($result, MYSQL_ASSOC);
 												unset($fieldvalue['Field']);
-												
+
 												if ($fieldvalue['Type']) {
 													$type = $fieldvalue['Type'];
 													unset($fieldvalue['Type']);
 												}
-												
+
 												if ($fieldvalue['Key'] == NULL) {
 													unset($fieldvalue['Key']);
 												}
-													
+
 												if ($fieldvalue['Extra'] == NULL) {
 													unset($fieldvalue['Extra']);
 												}
-												
+
 												if ($type){
 													$type = strtoupper($type);
 													$changestring .= $type;
@@ -887,7 +913,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 													next($fieldvalue);
 												}
 												$query2 = 'ALTER TABLE `' . $this->databasetable . '` CHANGE `' . current($field) .'` `' . current($fieldchange) . '` ' . $changestring . ' ;';
-												$result2 = mysql_query($query2);												
+												$result2 = mysql_query($query2);
 											} else {
 												$temp = key($fieldchange);
 												array_push($this->ErrorMessage,"updateField: Field is an Array and Field Change [$temp] - Field name exists!");
@@ -919,7 +945,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'updateField: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * deleteField
 	 *
@@ -933,7 +959,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		$tablenamecheck = $this->checkTableName();
 		$permissionscheck = $this->checkPermissions ('ALTER');
 		$fieldcheck = $this->checkField($field);
-		
+
 		if ($databasenamecheck) {
 			if ($permissionscheck) {
 				if ($tablenamecheck) {
@@ -973,14 +999,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		} else {
 			array_push($this->ErrorMessage,'deleteField: Database name does not exist!');
 		}
-		
+
 	}
-	
+
 	public function emptyTable() {
 		$query = 'TRUNCATE TABLE `' . $this->databasetable . '` ; ';
 		$result = mysql_query($query);
 	}
-	
+
 	public function executeSQlCommand ($SQLCommand) {
 		if (!is_null($SQLCommand)) {
 			$this->Connect();
@@ -988,7 +1014,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$this->Disconnect();
 		}
 	}
-	
+
 	public function sortTable($sortorder) {
 		$databasenamecheck = $this->checkDatabaseName();
 		$tablenamecheck = $this->checkTableName();
@@ -1046,15 +1072,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'sortTable: Database name does not exist!');
 		}
 	}
-	
+
 	/**
 	 * setDatabaseRow
 	 *
-	 * Executes a SQL query to retrieve the database rows creating a numerical array based on idnumber. Idnumber must be an array! 
-	 * To get the results, use getRowField(String $rowfield) for a single field in a row and getMultiRowField() for the entire row 
+	 * Executes a SQL query to retrieve the database rows creating a numerical array based on idnumber. Idnumber must be an array!
+	 * To get the results, use getRowField(String $rowfield) for a single field in a row and getMultiRowField() for the entire row
 	 * or multiple rows depending on the idnumber passed!
 	 *
-	 * @param array $idnumber Idnumber for the database query. Must be an array of strings with the key being the name of the field 
+	 * @param array $idnumber Idnumber for the database query. Must be an array of strings with the key being the name of the field
 	 * and the value being value of the field.
 	 * @access public
 	*/
@@ -1063,7 +1089,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		if ($this->multirowfield) {
 			$this->multirowfield = array();
 		}
-		
+
 		if (is_array($idnumber)) {
 			while (isset($this->idnumber[key($this->idnumber)])) {
 				$temp .= '`';
@@ -1082,17 +1108,17 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			} else {
 				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
 			}
-			
+
 			if ($this->limit) {
 				$this->rowquery .= ' LIMIT ';
 				$this->rowquery .= $this->limit;
 			}
-			
+
 			$this->rowresult = mysql_query($this->rowquery);
-			
+
 			if ($this->rowresult) {
 				$this->rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
-			
+
 				array_push($this->multirowfield, $this->rowfield);
 				$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
 				while ($rowfield) {
@@ -1100,12 +1126,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 					$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
 				}
 			}
-			
+
 		} else {
 			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
-	
+
 	/**
 	 * setEntireTable
 	 * Performs a SQL query to get the entire database table. Use getEntireTable() to get the entire table results!
@@ -1122,19 +1148,19 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$this->tablequery .= ' LIMIT ';
 			$this->tablequery .= $this->limit;
 		}
-		
+
 		$this->tableresult = mysql_query($this->tablequery);
-		
+
 		if ($this->tableresult) {
 			$this->rownumber = mysql_num_rows($this->tableresult);
 			//mysql_data_seek($this->tableresult, 0);
 		}
-				
+
 		$this->rownumber = $this->rownumber + 0;
 		$this->i = 1;
 		$this->BuildingEntireTable();
 	}
-	
+
 	protected function BuildingEntireTable(){
 		$i = 1;
 		if ($this->entiretable) {
@@ -1146,11 +1172,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$i++;
 		}
 	}
-	
+
 	/**
 	 * BuildDatabaseRows
-	 * Executes a SQL query to retrieve the database rows creating an associative array based on idnumber set from 
-	 * setIdNumber($idnumber). Idnumber must be an array. To retrieve the results use getDatabase($rownumber) using 
+	 * Executes a SQL query to retrieve the database rows creating an associative array based on idnumber set from
+	 * setIdNumber($idnumber). Idnumber must be an array. To retrieve the results use getDatabase($rownumber) using
 	 * row value as rownumber.
 	 *
 	 * OPTIONAL - limit:
@@ -1177,7 +1203,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			} else {
 				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
 			}
-			
+
 			if ($this->limit) {
 				$this->rowquery .= ' LIMIT ';
 				$this->rowquery .= $this->limit;
@@ -1190,12 +1216,12 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
-	
+
 	public function BuildFieldNames($TableName) {
 		if ($TableName) {
 			$this->databasetable = $TableName;
 		}
-		
+
 		$this->Connect();
 		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` ';
 		$result = mysql_query($query);
@@ -1206,6 +1232,6 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			$row = NULL;
 		}
 	}
-	
+
 }
 ?>

@@ -1,27 +1,53 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
+
 	require_once ("../../../Libraries/GlobalLayer/GooglePHPExcelReader/excel_reader2.php");
-	
+
 	$File = NULL;
 	if ($_GET['File']) {
 		$File = $_GET['File'];
 	}
-	
+
 	$Location = NULL;
 	$Location = 'UPLOAD/';
-	
+
 	$FileName = $Location . $File;
-	
+
 	if (file_exists($FileName)) {
 		$Page = new XMLWriter();
 		$Page->openMemory();
-		
+
 		$Page->setIndent(4);
 		$Page->startDocument('1.0', 'utf-8');
 			$Page->startElement('rows');
 			$Page->startElement('caption');
 			$Page->text('Table Caption');
 			$Page->endElement(); // ENDS CAPTION
-			
+
 			if (strstr($File, '.csv')) {
 				if (($Handle = fopen($FileName, "r")) !== FALSE) {
 					$i = 1;
@@ -41,16 +67,16 @@
 								}
 							$Page->endElement(); // ENDS HEAD
 						}
-						
+
 						$Page->startElement('row');
 						if ($i == '1') {
 							$Page->writeAttribute('id', $i);
-							
+
 						} else {
 							$ID = ($i * 100) - 100;
 							$Page->writeAttribute('id', $ID);
 						}
-						
+
 						foreach ($Data as $Key => $Cell) {
 							$Page->startElement('cell');
 								$Page->text($Cell);
@@ -59,7 +85,7 @@
 						$Page->endElement();// ENDS ROW
 						$i++;
 					}
-					
+
 					$Page->startElement('tfoot');
 						$Page->startElement('tr');
 						for ($j = 1; $j <= $HeaderSize; $j++) {
@@ -69,11 +95,11 @@
 						}
 						$Page->endElement(); // ENDS TR
 					$Page->endElement(); // ENDS TFOOT
-					
+
 				}
 			} else if (strstr($File, '.xls')) {
 				$Data = new Spreadsheet_Excel_Reader($FileName);
-				
+
 				$RowCount = $Data->rowcount();
 				$ColumnCount = $Data->colcount();
 				$Column1 = $Data->colindexes[1];
@@ -85,10 +111,10 @@
 				for ($i = 1; $i <= $ColumnCount; $i++) {
 					$ColumnNames[$i] = $Data->colindexes[$i];
 				}
-				
+
 				$Page->startElement('head');
 					$Page->writeAttribute('align', 'center');
-					
+
 					foreach ($ColumnNames as $Key => $Data) {
 						$Page->startElement('column');
 							$Page->writeAttribute('type', 'ed');
@@ -97,9 +123,9 @@
 							$Page->text('Column ' . $Key);
 						$Page->endElement(); // ENDS COLUMN
 					}
-					
+
 				$Page->endElement(); // ENDS HEAD
-				
+
 				foreach ($Cells as $Key => $Value) {
 					$Page->startElement('row');
 					if ($Key == '1') {
@@ -113,12 +139,12 @@
 							$Page->text($ColumnValue);
 						$Page->endElement(); // ENDS CELL
 					}
-					$Page->endElement(); // ENDS ROW					
+					$Page->endElement(); // ENDS ROW
 				}
-				
+
 				$Page->startElement('tfoot');
 					$Page->startElement('tr');
-					
+
 					foreach ($ColumnNames as $Key => $Data) {
 						$Page->startElement('cell');
 							$Page->text('Footer Column ' . $Key);

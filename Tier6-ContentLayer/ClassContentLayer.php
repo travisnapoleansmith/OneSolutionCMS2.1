@@ -1,133 +1,159 @@
 <?php
-/** 
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
+
+/**
  * Class Content Layer
- * 
+ *
  * Class ContentLayer is designed as the main content container for all One Solution CMS websites. This is where
  * all modules, services and add ons are used to be displayed to the end user.
  *
  * @author Travis Napolean Smith
- * @copyright Copyright (c) 1999 - 2012 One Solution CMS
- * @copyright PHP - Copyright (c) 2005 - 2012 One Solution CMS
+ * @copyright Copyright (c) 1999 - 2013 One Solution CMS
+ * @copyright PHP - Copyright (c) 2005 - 2013 One Solution CMS
  * @copyright C++ - Copyright (c) 1999 - 2005 One Solution CMS
- * @version PHP - 2.1.130
+ * @version PHP - 2.1.140
  * @version C++ - Unknown
- */ 
+ */
 class ContentLayer extends LayerModulesAbstract
 {
 	/**
 	 * Content Layer Modules
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $Modules;
-	
+
 	/**
 	 * User settings for what is allowed to be done with the database -  set with Tier6ContentLayerSetting.php
 	 * in /Configuration folder
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $DatabaseAllow;
-	
+
 	/**
 	 * User setting for what is cannot be done with the database - set with Tier6ContentLayerSetting.php
 	 * in /Configuration folder
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $DatabaseDeny;
-	
+
 	/**
 	 * Print Preview array for the current page being displayed
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $PrintPreview;
-	
+
 	/**
 	 * Current Database Table Name for Content Layer
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $DatabaseTableName;
-	
+
 	/**
 	 * Current Database Table - Contains all the information retrieved from FetchDatabase
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $ContentLayerDatabase;
-	
+
 	/**
 	 * Content Layer Version Table Name
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $ContentLayerVersionTableName;
-	
+
 	/**
 	 * Content Layer Version Table - Contains all the information retrieved from FetchDatabase
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $ContentLayerVersionDatabase;
-	
+
 	/**
 	 * Content Layer Theme Table Name
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $ContentLayerThemeTableName;
-	
+
 	/**
 	 * Content Layer Theme Global Layer Table Name
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $ContentLayerThemeGlobalLayerTableName;
-	
+
 	/**
 	 * Content Layer Theme Name
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $ContentLayerThemeName;
-	
+
 	/**
 	 * Content Layer Theme Global Layer Table Content
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $ContentLayerThemeGlobalLayerContent = array();
-	
+
 	/**
 	 * Create an instance of ContentLayer
 	 *
 	 * @access public
-	*/
+	 */
 	public function __construct () {
 		$this->Modules = Array();
 		$this->DatabaseTable = Array();
 		$GLOBALS['ErrorMessage']['ContentLayer'] = array();
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['ContentLayer'];
-		
+
 		$this->DatabaseAllow = &$GLOBALS['Tier6DatabaseAllow'];
 		$this->DatabaseDeny = &$GLOBALS['Tier6DatabaseDeny'];
-		
+
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		$this->LayerModule = new ValidationLayer();
 		$this->LayerModule->setPriorLayerModule($this);
 		$this->LayerModule->createDatabaseTable('ContentLayer');
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 		$this->LayerModule->buildModules('ValidationLayerModules', 'ValidationLayerTables', 'ValidationLayerModulesSettings');
-		
+
 		$this->PageID = $_GET['PageID'];
-		
+
 		$this->SessionName['SessionID'] = $_GET['SessionID'];
-		
+
 		$this->Writer = &$GLOBALS['Writer'];
 	}
-	
+
 	/**
 	 * setVersionTable
 	 *
@@ -136,11 +162,10 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $VersionTableName the name of the content layer's version table.
 	 * @access public
 	*/
-	
 	public function setVersionTable($VersionTableName) {
 		$this->ContentLayerVersionTableName = $VersionTableName;
 	}
-	
+
 	/**
 	 * setThemeTableName
 	 *
@@ -149,24 +174,22 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $TableName the name of the content layer's theme table.
 	 * @access public
 	*/
-	
 	public function setThemeTableName($TableName) {
 		$this->ContentLayerThemeTableName = $TableName;
 	}
-	
+
 	/**
-	 * setVersionTable
+	 * setThemeGlobalLayerTable
 	 *
 	 * Setter for ContentLayerThemeGlobalLayerTableName
 	 *
 	 * @param string $TableName the name of the content layer's theme global layer table.
 	 * @access public
 	*/
-	
 	public function setThemeGlobalLayerTable($TableName) {
 		$this->ContentLayerThemeGlobalLayerTableName = $TableName;
 	}
-	
+
 	/**
 	 * setPrintPreview
 	 *
@@ -175,11 +198,10 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param bool $PrintPreview set to TRUE or 1 for a page displayed as a printer preview; set to FALSE or 0 for a non printer view page.
 	 * @access public
 	*/
-	
 	public function setPrintPreview($PrintPreview) {
 		$this->PrintPreview = $PrintPreview;
 	}
-	
+
 	/**
 	 * setModules
 	 *
@@ -187,15 +209,14 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
 	public function setModules() {
-		
+
 	}
-	
+
 	public function getModules($key, $key1) {
 		return $this->Modules[$key][$key1];
 	}
-	
+
 	/**
 	 * setDatabaseAll
 	 *
@@ -207,17 +228,16 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseName the name of the database needed to connect to database.
 	 * @access public
 	*/
-	
 	public function setDatabaseAll ($Hostname, $User, $Password, $DatabaseName) {
 		$this->Hostname = $Hostname;
 		$this->User = $User;
 		$this->Password = $Password;
 		$this->DatabaseName = $DatabaseName;
-		
+
 		$this->LayerModule->setDatabaseAll ($Hostname, $User, $Password, $DatabaseName);
-		
+
 	}
-	
+
 	/**
 	 * setDatabaseTableName
 	 *
@@ -226,7 +246,6 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTableName the name of the database table to use.
 	 * @access public
 	*/
-	
 	public function setDatabaseTableName ($DatabaseTableName) {
 		$this->DatabaseTableName = $DatabaseTableName;
 	}
@@ -238,29 +257,28 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
 	public function buildThemeGlobalLayerTable() {
 		if ($this->ContentLayerThemeTableName != NULL) {
 			$passarray = array();
 			$passarray['Enable/Disable'] = 'Enable';
-			
+
 			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeTableName);
 			$this->LayerModule->Connect($this->ContentLayerThemeTableName);
 			$this->LayerModule->pass ($this->ContentLayerThemeTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($this->ContentLayerThemeTableName);
-			
+
 			$Theme = $this->LayerModule->pass ($this->ContentLayerThemeTableName, 'getMultiRowField', array());
 			$this->ContentLayerThemeName = $Theme[0]['ThemeName'];
-			
+
 			$passarray = array();
 			$passarray['ThemeName'] = $this->ContentLayerThemeName;
-			
+
 			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeGlobalLayerTableName);
 			$this->LayerModule->Connect($this->ContentLayerThemeGlobalLayerTableName);
 			$this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 			$this->LayerModule->Disconnect($this->ContentLayerThemeGlobalLayerTableName);
 			$this->ContentLayerThemeGlobalLayerContent = $this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'getMultiRowField', array());
-			
+
 		}
 	}
 
@@ -271,11 +289,10 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
 	public function ConnectAll () {
 		$this->LayerModule->ConnectAll();
 	}
-	
+
 	/**
 	 * Connect
 	 *
@@ -284,11 +301,10 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to connect to
 	 * @access public
 	*/
-	
 	public function Connect ($DatabaseTable) {
 		$this->LayerModule->Connect($DatabaseTable);
 	}
-	
+
 	/**
 	 * DiscconnectAll
 	 *
@@ -296,11 +312,10 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
 	public function DisconnectAll () {
 		$this->LayerModule->DisconnectAll();
 	}
-	
+
 	/**
 	 * Disconnect
 	 *
@@ -309,11 +324,10 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to disconnect from
 	 * @access public
 	*/
-	
 	public function Disconnect ($DatabaseTable) {
 		$this->LayerModule->Disconnect($DatabaseTable);
 	}
-	
+
 	/**
 	 * buildDatabase
 	 *
@@ -321,11 +335,10 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
 	public function buildDatabase() {
 
 	}
-	
+
 	/**
 	 * createDatabaseTable
 	 *
@@ -334,17 +347,16 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to create a connection to
 	 * @access public
 	*/
-	
 	public function createDatabaseTable($DatabaseTable) {
 		$this->LayerModule->createDatabaseTable($DatabaseTable);
 	}
-	
+
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
 		reset($this->Modules);
 		$hold = NULL;
-		
+
 		/*while (current($this->Modules)) {
-			
+
 			$tempobject = current($this->Modules[key($this->Modules)]);
 			//$databasetables = $tempobject->getTableNames();
 			//$tempobject->FetchDatabase ($this->PageID);
@@ -353,7 +365,7 @@ class ContentLayer extends LayerModulesAbstract
 			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}*/
-		
+
 		$hold2 = $this->LayerModule->pass($DatabaseTable, $function, $functionarguments);
 		if ($hold2) {
 			return $hold2;
@@ -361,7 +373,7 @@ class ContentLayer extends LayerModulesAbstract
 			return FALSE;
 		}
 	}
-	
+
 	public function pass($databasetable, $function, $functionarguments) {
 		if (!is_null($functionarguments)) {
 			if (is_array($functionarguments)) {
@@ -379,7 +391,7 @@ class ContentLayer extends LayerModulesAbstract
 							} else {
 								$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
 							}
-							
+
 							if ($hold) {
 								return $hold;
 							}
@@ -395,7 +407,7 @@ class ContentLayer extends LayerModulesAbstract
 							} else {
 								$hold = $this->checkPass($databasetable, $function, $functionarguments);
 							}
-							
+
 							if ($hold) {
 								return $hold;
 							} else {
@@ -417,7 +429,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'pass: Function Arguments Cannot Be Null!');
 		}
 	}
-	
+
 	/**
 	 * FetchDatabase
 	 *
@@ -427,7 +439,7 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param array $PageID the lookupkey for the database table
 	 * @access public
 	*/
-	
+
 	public function FetchDatabase($PageID) {
 		if (!$PageID['PageID']) {
 			if ($_GET['PageID']) {
@@ -437,41 +449,41 @@ class ContentLayer extends LayerModulesAbstract
 				$PageID['PageID'] = $StartID;
 			}
 		}
-		
+
 		$this->PageID = $PageID;
 		$passarray = array();
 		$passarray = $PageID;
-		
+
 		$this->LayerModule->createDatabaseTable($this->DatabaseTableName);
 		$this->LayerModule->Connect($this->DatabaseTableName);
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbyname', array('OrderName' => 'ObjectID'));
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbytype', array('OrderType' => 'ASC'));
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect($this->DatabaseTableName);
-		
+
 		$this->ContentLayerDatabase = $this->LayerModule->pass ($this->DatabaseTableName, 'getMultiRowField', array());
-		
+
 		$passarray = array();
 		$passarray['PageID'] = $this->PageID['PageID'];
 		if ($this->PageID['RevisionID']) {
 			$passarray['RevisionID'] = $this->PageID['RevisionID'];
 		}
 		$passarray['CurrentVersion'] = $this->PageID['CurrentVersion'];
-		
+
 		$this->LayerModule->createDatabaseTable($this->ContentLayerVersionTableName);
 		$this->LayerModule->Connect($this->ContentLayerVersionTableName);
 		$this->LayerModule->pass ($this->ContentLayerVersionTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect($this->ContentLayerVersionTableName);
-		
+
 		$this->ContentLayerVersionDatabase = $this->LayerModule->pass ($this->ContentLayerVersionTableName, 'getMultiRowField', array());
-		
+
 		if (!isset($this->PageID['RevisionID'])) {
 			$this->RevisionID = $this->ContentLayerVersionDatabase[0]['RevisionID'];
 			$_GET['RevisionID'] = $this->RevisionID;
 		}
-		
+
 	}
-	
+
 	/**
 	 * CreateOutput
 	 *
@@ -487,7 +499,7 @@ class ContentLayer extends LayerModulesAbstract
 			} else {
 				$ContentLayer = &$this->ContentLayerThemeGlobalLayerContent;
 			}
-			
+
 			foreach ($ContentLayer as $Key => $ContentLayerDatabase) {
 				$PrintPreviewFlag = $ContentLayerDatabase['PrintPreview'];
 				if ($this->PrintPreview == FALSE || $PrintPreviewFlag == 'true') {
@@ -501,24 +513,24 @@ class ContentLayer extends LayerModulesAbstract
 					}
 					$ObjectTypePrintPreview = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['ObjectTypePrintPreview'];
 					$Authenticate = $ContentLayerDatabase['Authenticate'];
-					
+
 					$StartTag = $ContentLayerDatabase['StartTag'];
 					$EndTag = $ContentLayerDatabase['EndTag'];
 					$StartTagID = $ContentLayerDatabase['StartTagID'];
 					$StartTagStyle = $ContentLayerDatabase['StartTagStyle'];
 					$StartTagClass = $ContentLayerDatabase['StartTagClass'];
-					
+
 					$ImportFileName = $ContentLayerDatabase['ImportFileName'];
 					$ImportFileType = $ContentLayerDatabase['ImportFileType'];
-					
+
 					$ObjectEnableDisable = $this->LayerModuleTable[$ObjectType][$ObjectTypeName]['Enable/Disable'];
 					$EnableDisable = $ContentLayerDatabase['Enable/Disable'];
-					
+
 					if ($EnableDisable == 'Enable') {
 						if ($Authenticate == 'true') {
 							if (!$_COOKIE['LoggedIn']) {
 								$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-								
+
 								if ($_GET['DestinationPageID']) {
 									$DestinationPageID = $_GET['DestinationPageID'];
 									setcookie('DestinationPageID', $DestinationPageID, NULL, '/');
@@ -529,34 +541,34 @@ class ContentLayer extends LayerModulesAbstract
 								header("Location: $AuthenticationPage");
 							} else {
 								$this->KeepLoggedIn();
-								
+
 							}
 						}
-						
+
 						$UserAccessGroup = $this->ContentLayerVersionDatabase[0]['UserAccessGroup'];
 						$CurrentAccessGroup = $_COOKIE[$UserAccessGroup];
 						if ($UserAccessGroup == 'Guest' || $UserAccessGroup == ($CurrentAccessGroup == 'Yes')) {
 							if ($StartTag) {
 								$StartTag = str_replace('<','', $StartTag);
 								$StartTag = str_replace('>','', $StartTag);
-								
+
 								$this->Writer->startElement($StartTag);
-								
+
 								if ($StartTagID) {
 									$this->Writer->writeAttribute('id', $StartTagID);
 								}
-								
+
 								if ($StartTagStyle) {
 									$this->Writer->writeAttribute('style', $StartTagStyle);
 								}
-								
+
 								if ($StartTagClass) {
 									$this->Writer->writeAttribute('class', $StartTagClass);
 								}
 								$this->Writer->writeRaw("\n");
-								
+
 							}
-							
+
 							if ($ObjectEnableDisable == 'Enable') {
 								if ($ObjectTypeConfiguration != NULL) {
 									if (strstr($ObjectTypeConfiguration, '.html') || strstr($ObjectTypeConfiguration, '.htm')) {
@@ -574,23 +586,23 @@ class ContentLayer extends LayerModulesAbstract
 									$this->Modules[$ObjectType][$ObjectTypeName]->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 									$this->Modules[$ObjectType][$ObjectTypeName]->FetchDatabase ($idnumber);
 									$this->Modules[$ObjectType][$ObjectTypeName]->CreateOutput('    ');
-									
+
 								}
 							}
 							if ($ImportFileName != NULL) {
 								if ($ImportFileType == 'xml') {
 									$this->processXMLFile($ImportFileName);
 								}
-								
+
 								if ($ImportFileType == 'html') {
 									$this->processHTMLFile($ImportFileName);
 								}
 							}
-							
+
 							if ($EndTag) {
 								$this->Writer->endElement(); // ENDS END TAG
 							}
-														
+
 							if ($ObjectType == 'XhtmlHeader') {
 								$this->Writer->startElement('body');
 							}
@@ -606,14 +618,14 @@ class ContentLayer extends LayerModulesAbstract
 					}
 				}
 			}
-			
+
 			$this->Writer->endElement(); // ENDS BODY
 			$this->Writer->endElement(); // ENDS HTML
 		} else {
 			array_push($this->ErrorMessage,'CreateOutput: Content Layer Version Table Name Cannot Be Null!');
 		}
 	}
-	
+
 	/**
 	 * transverseSimpleXMLAttribute
 	 *
@@ -627,7 +639,7 @@ class ContentLayer extends LayerModulesAbstract
 			$this->Writer->writeAttribute($key, $attributes);
 		}
 	}
-	
+
 	/**
 	 * transverseChildSimpleXMLToOutput
 	 *
@@ -645,7 +657,7 @@ class ContentLayer extends LayerModulesAbstract
 		$RawText .= "\n";
 		$this->Writer->writeRaw($RawText);
 	}
-	
+
 	/**
 	 * processXMLFile
 	 *
@@ -672,7 +684,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'processXMLFile: XMLFile cannot be NULL!');
 		}
 	}
-	
+
 	/**
 	 * processHTMLFile
 	 *
@@ -703,7 +715,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'processHTMLFile: HTMLFile cannot be NULL!');
 		}
 	}
-	
+
 	/**
 	 * SessionStart
 	 *
@@ -722,10 +734,10 @@ class ContentLayer extends LayerModulesAbstract
 		setcookie('SessionID', $sessionname, NULL, '/');
 		session_name($sessionname);
 		session_start();
-		
+
 		return $sessionname;
 	}
-	
+
 	/**
 	 * SessionDestroy
 	 *
@@ -747,10 +759,10 @@ class ContentLayer extends LayerModulesAbstract
 				);
 			}
 			session_destroy();
-			
+
 		}
 	}
-	
+
 	public function PostCheck ($PostName, $FilteredInputName, array $Input) {
 		if (!is_null($PostName)) {
 			if (!is_null($Input)) {
@@ -761,7 +773,7 @@ class ContentLayer extends LayerModulesAbstract
 						$_POST[$PostName] = NULL;
 						$Input[$FilteredInputName][$PostName] = NULL;
 					}
-					
+
 					return $Input;
 				}
 			} else {
@@ -771,7 +783,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'PostCheck: PostName cannot be NULL!');
 		}
 	}
-	
+
 	public function MultiPostCheck ($PostName, $StartNumber, $Input) {
 		$functionarguments = func_get_args();
 		$Seperator = NULL;
@@ -780,7 +792,7 @@ class ContentLayer extends LayerModulesAbstract
 		$StartNumber2 = NULL;
 		$Seperator2 = NULL;
 		$SecondStartNumber2 = NULL;
-		
+
 		if ($functionarguments[3]) {
 			$Seperator = $functionarguments[3];
 		}
@@ -790,7 +802,7 @@ class ContentLayer extends LayerModulesAbstract
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber must be an integer!');
 			}
 		}
-		
+
 		if ($functionarguments[5]) {
 			$PostName2 = $functionarguments[5];
 			if (is_null($PostName2)) {
@@ -802,7 +814,7 @@ class ContentLayer extends LayerModulesAbstract
 			if (!is_int($StartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 must be an integer!');
 			}
-			
+
 			if (is_null($StartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 cannot be NULL!');
 			}
@@ -818,22 +830,22 @@ class ContentLayer extends LayerModulesAbstract
 			if (is_int($SecondStartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 must be an integer!');
 			}
-			
+
 			if (is_null($SecondStartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 cannot be NULL!');
 			}
 		}
-		
+
 		if (is_int($StartNumber)) {
 			if (!is_null($StartNumber)) {
 				if (!is_null($PostName)) {
-					if (!is_null($Input)) {	
+					if (!is_null($Input)) {
 						if ($PostName2 == NULL & $StartNumber2 == NULL) {
 							if (is_null($Seperator) & is_null($SecondStartNumber)) {
 								$i = $StartNumber;
 								$temp = $PostName;
 								$temp .= $i;
-								
+
 								while (($_POST[$temp])) {
 									$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
 									if (!is_null($hold)) {
@@ -843,7 +855,7 @@ class ContentLayer extends LayerModulesAbstract
 									$temp = $PostName;
 									$temp .= $i;
 								}
-								
+
 								return $Input;
 							} else {
 								if (is_null($Seperator)) {
@@ -877,7 +889,7 @@ class ContentLayer extends LayerModulesAbstract
 											$temp .= $Seperator;
 											$temp .= $j;
 										}
-										
+
 										return $Input;
 									}
 								}
@@ -914,7 +926,7 @@ class ContentLayer extends LayerModulesAbstract
 										$temp .= $PostName2;
 									}
 									return $Input;
-								} 
+								}
 							} else {
 								if ($PostName2 != NULL & $StartNumber2 != NULL) {
 									if ($Seperator != NULL & $SecondStartNumber != NULL & $Seperator2 != NULL & $SecondStartNumber2 != NULL) {
@@ -930,7 +942,7 @@ class ContentLayer extends LayerModulesAbstract
 										$temp .= $k;
 										$temp .= $Seperator2;
 										$temp .= $l;
-										
+
 										while (($_POST[$temp])) {
 											while (($_POST[$temp])) {
 												while (($_POST[$temp])) {
@@ -972,7 +984,7 @@ class ContentLayer extends LayerModulesAbstract
 												$temp .= $Seperator2;
 												$temp .= $l;
 											}
-											
+
 											$i++;
 											$j = $SecondStartNumber;
 											$k = $StartNumber2;
@@ -1007,7 +1019,7 @@ class ContentLayer extends LayerModulesAbstract
 												$temp .= $j;
 												$temp .= $PostName2;
 												$temp .= $k;
-												
+
 												while (($_POST[$temp])) {
 													while (($_POST[$temp])) {
 														while (($_POST[$temp])) {
@@ -1043,7 +1055,7 @@ class ContentLayer extends LayerModulesAbstract
 													$temp .= $k;
 												}
 												return $Input;
-												
+
 											} else if (!is_null($Seperator2) & !is_null($SecondStartNumber2)){
 												$i = $StartNumber;
 												$j = $StartNumber2;
@@ -1115,8 +1127,8 @@ class ContentLayer extends LayerModulesAbstract
 													$temp .= $PostName2;
 													$temp .= $j;
 												}
-												
-												return $Input;		
+
+												return $Input;
 											}
 										}
 									}
@@ -1138,7 +1150,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'MultiPostCheck: StartNumber must be an integer!');
 		}
 	}
-	
+
 	/**
 	 * EmptyStringToNullArray
 	 *
@@ -1162,7 +1174,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		return $Array;
 	}
-	
+
 	/**
 	 * Login
 	 *
@@ -1172,20 +1184,20 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function Login() {
 		$sessionname = $this->SessionStart('UserAuthentication');
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['Login'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$DestinationPageID = NULL;
 		if ($_GET['DestinationPageID']) {
 			$DestinationPageID = $_GET['DestinationPageID'];
 		}
-		
+
 		$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-		
+
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
 		if ($hold['Error']) {
@@ -1223,7 +1235,7 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	/**
 	 * KeepLoggedIn
 	 *
@@ -1231,13 +1243,13 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
-	
+
 	public function KeepLoggedIn() {
 		if ($_COOKIE['LoggedIn']) {
 			setcookie("LoggedIn", TRUE, time()+3600, '/');
-		}	
+		}
 	}
-	
+
 	/**
 	 * LogOff
 	 *
@@ -1253,12 +1265,12 @@ class ContentLayer extends LayerModulesAbstract
 		setcookie('Editor', '', time()-1000, '/');
 		setcookie('User', '', time()-1000, '/');
 		setcookie('Guest', '', time()-1000, '/');
-		
+
 		$DestinationPageID = NULL;
 		if ($_GET['DestinationPageID']) {
 			$DestinationPageID = $_GET['DestinationPageID'];
 		}
-		
+
 		if ($DestinationPageID) {
 			header("Location: index.php?PageID=$DestinationPageID");
 			exit;
@@ -1268,7 +1280,7 @@ class ContentLayer extends LayerModulesAbstract
 			exit;
 		}
 	}
-	
+
 	/**
 	 * Register
 	 *
@@ -1278,18 +1290,18 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function Register() {
 		$sessionname = $this->SessionStart('UserRegistration');
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['Register'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$RegisterPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Register']['SettingAttribute'];
-		
+
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		
+
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $RegisterPage&SessionID=$sessionname");
@@ -1307,10 +1319,10 @@ class ContentLayer extends LayerModulesAbstract
 				$hold = array();
 				$PasswordCreationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordCreation']['SettingAttribute'];
 				$EmailVerificationLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['EmailVerificationLocation']['SettingAttribute'];
-				
+
 				$location = $EmailVerificationLocation;
 				$location .= $PasswordCreationPage;
-				
+
 				$passarray = array();
 				$passarray['createUserAccount'] = array('UserName' => $_POST['UserName'], 'EmailAddress' => $_POST['Email']);
 				$passarray['generateNewUserEmail'] = array('EmailAddress' => $_POST['Email'], 'Location' => $location);
@@ -1326,10 +1338,10 @@ class ContentLayer extends LayerModulesAbstract
 					exit;
 				}
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * NewUserChangePassword
 	 *
@@ -1339,18 +1351,18 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function NewUserChangePassword() {
 		$sessionname = $this->SessionStart('PasswordCreation');
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['PasswordCreation'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$PasswordCreationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordCreation']['SettingAttribute'];
 		$PasswordChangedPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordChanged']['SettingAttribute'];
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		
+
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PasswordCreationPage&SessionID=$sessionname");
@@ -1369,58 +1381,58 @@ class ContentLayer extends LayerModulesAbstract
 				header("Location: $PasswordChangedPage");
 				exit;
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * ChangePassword
-	 * 
+	 *
 	 * Changes a users password
 	 *
 	 * @access public
 	*/
 	public function ChangePassword() {
-		
+
 	}
-	
+
 	/**
 	 * ResetPassword
-	 * 
+	 *
 	 * Resets a users password
 	 *
 	 * @access public
 	*/
 	public function ResetPassword() {
 		$sessionname = $this->SessionStart('PasswordReset');
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['PasswordReset'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$EmailVerificationLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['EmailVerificationLocation']['SettingAttribute'];
 		$PasswordResetPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordReset']['SettingAttribute'];
 		$PasswordResetChangePage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetChange']['SettingAttribute'];
 		$PasswordResetLocationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetLocation']['SettingAttribute'];
-		
+
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		
+
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PasswordResetPage&SessionID=$sessionname");
 			exit;
 		} else {
 			$hold = array();
-			
+
 			$location = $EmailVerificationLocation;
 			$location .= $PasswordResetLocationPage;
-				
+
 			$passarray = array();
 			$passarray['resetUserPassword'] = array('UserName' => $_POST['UserName'], 'Email' => $_POST['Email'], 'Location' => $location);
 			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
-			
+
 			if ($hold['Error']) {
 				$_SESSION['POST'] = $hold;
 				header("Location: $PasswordResetPage&SessionID=$sessionname");
@@ -1432,7 +1444,7 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	/**
 	 * ChangeResetPassword
 	 *
@@ -1442,18 +1454,18 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function ChangeResetPassword() {
 		$sessionname = $this->SessionStart('PasswordResetChange');
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['PasswordResetChange'];
 		if ($_GET['PageID']){
 			$loginidnumber['PageID'] = $_GET['PageID'];
 		}
-		
+
 		$PasswordResetChangePage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetChangePage']['SettingAttribute'];
 		$PasswordResetLocation = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['PasswordResetLocation']['SettingAttribute'];
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		
+
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
 			header("Location: $PasswordResetLocation&SessionID=$sessionname");
@@ -1472,33 +1484,38 @@ class ContentLayer extends LayerModulesAbstract
 				header("Location: $PasswordResetChangePage");
 				exit;
 			}
-		}		
-		
+		}
+
 	}
-	
+
 	public function FormSubmitValidate($SessionName, $PageName) {
 		$FileLocation = NULL;
 		$FileName = NULL;
 		$FileDataForm = NULL;
 		$ElementName = NULL;
+		$AddLookupData = NULL;
 		$arguments = func_get_args();
 		if ($arguments[2] != NULL) {
 			$FileLocation = $arguments[2];
 		}
-		
+
 		if ($arguments[3] != NULL) {
 			$FileDataForm = $arguments[3];
 		}
-		
+
 		if ($arguments[4] != NULL) {
 			$ElementName = $arguments[4];
+		}
+		
+		if ($arguments[5] != NULL) {
+			$AddLookupData = $arguments[5];
 		}
 		
 		$sessionname = $this->SessionStart($SessionName);
 		if ($FileLocation != NULL) {
 			$FileName = $FileLocation . $sessionname . '.xml';
 		}
-		
+
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST[$SessionName];
 		if ($_GET['PageID']){
@@ -1506,17 +1523,38 @@ class ContentLayer extends LayerModulesAbstract
 		}
 
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
-		
-		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		if ($AddLookupData !== NULL) {
+			print "I AM\n";
+			print "POST\n";
+			print_r($_POST);
+			print "END POST\n";
+			
+			//print_r($ElementName);
+			//print_r($FileDataForm);
+			$PassArguments = array();
+			$PassArguments[0]['Module'] = 'FormValidation';
+			$PassArguments[0]['Name'] = 'formvalidation';
+			//$PassArguments[0]['ElementName'] = $ElementName;
+			//$PassArguments[0]['FileLocation'] = $FileLocation;
+			//$PassArguments[0]['FileDataForm'] = $FileDataForm;
+			//$PassArguments[0]['POST'] = $_POST;
+			$PassArguments[0]['AddLookupData'] = $AddLookupData;
+			$this->LayerModule->pass('FormValidation', 'FORMBYPASS', $PassArguments);
+			
+			//$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+			//print_r($hold);
+		} else {
+			$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+		}
 		
 		if ($hold['FilteredInput']['Priority']) {
 			$hold['FilteredInput']['Priority'] *= 10;
 		}
-		
+
 		if ($hold['FilteredInput']['Frequency']) {
 			$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
 		}
-		
+
 		if ($hold['Error']) {
 			if ($FileName != NULL & $FileDataForm != NULL) {
 				$this->ProcessFormXMLFile($FileName, $hold, $FileDataForm, $ElementName);
@@ -1532,7 +1570,7 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	protected function ProcessFormXMLFile($FileName, $FileData, $FileDataForm, $ElementName) {
 		$XMLFile = new XmlWriter();
 		$XMLFile->openURI($FileName);
@@ -1560,11 +1598,11 @@ class ContentLayer extends LayerModulesAbstract
 		$XMLFile->endElement(); // ENDS Content;
 		$XMLFile->endDocument();
 	}
-	
+
 	public function FormSubmit($SessionName, $PageName, $ObjectType, $Function, array $Arguments) {
-		
+
 	}
-	
+
 	public function ModulePass($ModuleType, $ModuleName, $Function, array $Arguments) {
 		if ($ModuleType != NULL && $ModuleName != NULL && $Function != NULL) {
 			$PassArguments = array();
@@ -1575,7 +1613,7 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	public function LayerModulePass($Function, array $Arguments) {
 		if ($Function != NULL) {
 			$PassArguments = array();
@@ -1586,21 +1624,21 @@ class ContentLayer extends LayerModulesAbstract
 			}
 		}
 	}
-	
+
 	public function getContentVersionRow(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
 			$this->LayerModule->Connect($DatabaseTableName);
 			$this->LayerModule->pass ($DatabaseTableName, 'setDatabaseRow', array('idnumber' => $PageID));
 			$this->LayerModule->Disconnect($DatabaseTableName);
-			
+
 			$hold = $this->LayerModule->pass ($DatabaseTableName, 'getMultiRowField', array());
 			return $hold;
 		} else {
 			array_push($this->ErrorMessage,'getContentVersionRow: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function createContentVersion(array $Content, $DatabaseTableName) {
 		if ($Content != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
@@ -1620,13 +1658,13 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[12] = 'LastChangeDateTime';
 			$Keys[13] = 'PublishDate';
 			$Keys[14] = 'UnpublishDate';
-			
+
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {
 			array_push($this->ErrorMessage,'createContentVersion: Content Version and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function updateContentVersion(array $PageID, $DatabaseTableName) {
 		$arguments = func_get_args();
 		$Data = $arguments[2];
@@ -1641,19 +1679,19 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateContentVersion: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function updateContentVersionStatus(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
-			
+
 			if ($PageID['EnableDisable'] == 'Enable') {
 				$this->enableModuleContent($PassID, $DatabaseTableName);
 			} else if ($PageID['EnableDisable'] == 'Disable') {
 				$this->disableModuleContent($PassID, $DatabaseTableName);
 			}
-			
+
 			if ($PageID['Status'] == 'Approved') {
 				$this->approvedModuleContent($PassID, $DatabaseTableName);
 			} else if ($PageID['Status'] == 'Not-Approved') {
@@ -1667,7 +1705,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateContentVersionStatus: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function deleteContentVersion(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
@@ -1676,7 +1714,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'deleteContentVersion: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function createContent(array $Content, $DatabaseTableName) {
 		if ($Content != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
@@ -1699,13 +1737,13 @@ class ContentLayer extends LayerModulesAbstract
 			$Keys[15] = 'ImportFileType';
 			$Keys[16] = 'Enable/Disable';
 			$Keys[17] = 'Status';
-			
+
 			$this->addModuleContent($Keys, $Content, $DatabaseTableName);
 		} else {
 			array_push($this->ErrorMessage,'createContent: Content Version and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function updateContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
@@ -1714,19 +1752,19 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateContent: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function updateContentStatus(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
-			
+
 			if ($PageID['EnableDisable'] == 'Enable') {
 				$this->enableModuleContent($PassID, $DatabaseTableName);
 			} else if ($PageID['EnableDisable'] == 'Disable') {
 				$this->disableModuleContent($PassID, $DatabaseTableName);
 			}
-			
+
 			if ($PageID['Status'] == 'Approved') {
 				$this->approvedModuleContent($PassID, $DatabaseTableName);
 			} else if ($PageID['Status'] == 'Not-Approved') {
@@ -1740,7 +1778,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'updateContentStatus: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-	
+
 	public function deleteContent(array $PageID, $DatabaseTableName) {
 		if ($PageID != NULL & $DatabaseTableName != NULL) {
 			$this->createDatabaseTable($DatabaseTableName);
@@ -1749,7 +1787,7 @@ class ContentLayer extends LayerModulesAbstract
 			array_push($this->ErrorMessage,'deleteContent: PageID and Database Table Name cannot be NULL!');
 		}
 	}
-		
+
 }
 
 ?>

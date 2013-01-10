@@ -1,11 +1,37 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
+
 	// MySql Connect Allow and Deny Member Functions For Tier 4 Authentication Layer
 	$Tier4DatabaseAllow = Array();
 	$Tier4DatabaseDeny = Array();
-	
+
 	// Must be allowed!
 	$Tier4DatabaseAllow['MySqlConnect'] = 'MySqlConnect';
-	
+
 	// Setters and Getters
 	$Tier4DatabaseAllow['setIdnumber'] = 'setIdnumber';
 	$Tier4DatabaseAllow['getIdnumber'] = 'getIdnumber';
@@ -29,70 +55,70 @@
 	$Tier4DatabaseAllow['getErrorArray'] = 'getErrorArray';
 	$Tier4DatabaseAllow['setDatabaseAll'] = 'setDatabaseAll';
 	$Tier4DatabaseAllow['setOrderByAll'] = 'setOrderByAll';
-	
+
 	// Connecting to database
 	$Tier4DatabaseAllow['Connect'] = 'Connect';
 	$Tier4DatabaseAllow['Disconnect'] = 'Disconnect';
-	
+
 	// Basic checks and verifies
 	$Tier4DatabaseAllow['checkDatabaseName'] = 'checkDatabaseName';
 	$Tier4DatabaseAllow['checkTableName'] = 'checkTableName';
 	$Tier4DatabaseAllow['checkPermissions'] = 'checkPermissions';
 	$Tier4DatabaseAllow['checkField'] = 'checkField';
-	
+
 	// Basic Setup of Database
 	$Tier4DatabaseDeny['createDatabase'] = 'createDatabase';
 	$Tier4DatabaseDeny['deleteDatabase'] = 'deleteDatabase';
-	
+
 	// Table Methods
 	$Tier4DatabaseDeny['createTable'] = 'createTable';
 	$Tier4DatabaseDeny['updateTable'] = 'updateTable';
 	$Tier4DatabaseDeny['deleteTable'] = 'deleteTable';
-	
+
 	// Row Methods
 	$Tier4DatabaseDeny['createRow'] = 'createRow';
 	$Tier4DatabaseDeny['updateRow'] = 'updateRow';
 	$Tier4DatabaseDeny['deleteRow'] = 'deleteRow';
-	
+
 	// Field Methods
 	$Tier4DatabaseDeny['createField'] = 'createField';
 	$Tier4DatabaseDeny['updateField'] = 'updateField';
 	$Tier4DatabaseDeny['deleteField'] = 'deleteField';
-	
+
 	// General SQL Command
 	$Tier4DatabaseAllow['executeSQlCommand'] = 'executeSQlCommand';
-	
+
 	// Empty Table Methods
 	$Tier4DatabaseAllow['emptyTable'] = 'emptyTable';
-	
+
 	// Maintenance Methods
 	$Tier4DatabaseDeny['sortTable'] = 'sortTable';
-	
+
 	// Setting Database Row
 	$Tier4DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
-	
+
 	// Setting Database Fields
 	$Tier4DatabaseAllow['setDatabaseField'] = 'setDatabaseField';
-	
+
 	// Entire Table Methods
 	$Tier4DatabaseAllow['setEntireTable'] = 'setEntireTable';
 	$Tier4DatabaseAllow['BuildingEntireTable'] = 'BuildingEntireTable';
-	
+
 	// Field Methods
 	$Tier4DatabaseAllow['searchFieldNames'] = 'searchFieldNames';
 	$Tier4DatabaseAllow['BuildFieldNames'] = 'BuildFieldNames';
-	
+
 	// Entire Table Methods
 	$Tier4DatabaseAllow['searchEntireTable'] = 'searchEntireTable';
 	$Tier4DatabaseAllow['removeEntryEntireTable'] = 'removeEntryEntireTable';
 	$Tier4DatabaseAllow['removeEntireEntireTable'] = 'RemoveEntireEntireTable';
 	$Tier4DatabaseAllow['reindexEntireTable'] = 'ReindexEntireTable';
 	$Tier4DatabaseAllow['updateEntireTableEntry'] = 'updateEntireTableEntry';
-	
+
 	// Row Methods
 	$Tier4DatabaseAllow['BuildDatabaseRows'] = 'BuildDatabaseRows';
-	
-	// Getters 
+
+	// Getters
 	$Tier4DatabaseAllow['getRowCount'] = 'getRowCount';
 	$Tier4DatabaseAllow['getRowFieldName'] = 'getRowFieldName';
 	$Tier4DatabaseAllow['getRowFieldNames'] = 'getRowFieldNames';
@@ -103,7 +129,7 @@
 	$Tier4DatabaseAllow['getEntireTable'] = 'getEntireTable';
 	$Tier4DatabaseAllow['getSearchResults'] = 'getSearchResults';
 	$Tier4DatabaseAllow['getTableNames'] = 'getTableNames';
-	
+
 	// Basic Developer Diagnostics
 	$Tier4DatabaseAllow['walkarray'] = 'walkarray';
 	$Tier4DatabaseAllow['walkfieldname'] = 'walkfieldname';

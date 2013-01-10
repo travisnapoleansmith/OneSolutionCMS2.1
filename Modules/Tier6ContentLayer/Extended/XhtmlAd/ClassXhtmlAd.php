@@ -1,4 +1,29 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $AdStatsTableName;
@@ -9,36 +34,36 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	protected $AdSponsorsOutputAdLookup = array();
 	protected $AdSponsorsOutputAdsOrder = array();
 	protected $AdSponsorsRemoveArray = array();
-	
+
 	protected $LastAccess;
-	
+
 	protected $Class;
 	protected $ID;
 	protected $Style;
-	
+
 	protected $AdvertisingClass;
 	protected $AdvertisingID;
 	protected $AdvertisingStyle;
-	
+
 	protected $AdvertisingContentClass;
 	protected $AdvertisingContentID;
 	protected $AdvertisingContentStyle;
-	
+
 	protected $AdvertisingImageClass;
 	protected $AdvertisingImageID;
 	protected $AdvertisingImageStyle;
-	
+
 	protected $SeparatorImageClass;
 	protected $SeparatorImageID;
 	protected $SeparatorImageStyle;
-	
+
 	protected $StartTag;
 	protected $AdvertisingStartTag;
 	protected $AdvertisingContentStartTag;
 	protected $SeparatorStartTag;
-	
+
 	protected $AdMax;
-	
+
 	/**
 	 * Create an instance of XtmlAd
 	 *
@@ -49,115 +74,115 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
 		$this->LayerModule = &$LayerModule;
-		
+
 		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlAd'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlAd'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
-		
+
 		if ($DatabaseOptions['Class']) {
 			$this->Class = $DatabaseOptions['Class'];
 		}
-		
+
 		if ($DatabaseOptions['ID']) {
 			$this->ID = $DatabaseOptions['ID'];
 		}
-		
+
 		if ($DatabaseOptions['Style']) {
 			$this->Style = $DatabaseOptions['Style'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingClass']) {
 			$this->AdvertisingClass = $DatabaseOptions['AdvertisingClass'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingID']) {
 			$this->AdvertisingID = $DatabaseOptions['AdvertisingID'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingStyle']) {
 			$this->AdvertisingStyle = $DatabaseOptions['AdvertisingStyle'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingImageClass']) {
 			$this->AdvertisingImageClass = $DatabaseOptions['AdvertisingImageClass'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingImageID']) {
 			$this->AdvertisingImageID = $DatabaseOptions['AdvertisingImageID'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingImageStyle']) {
 			$this->AdvertisingImageStyle = $DatabaseOptions['AdvertisingImageStyle'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingContentClass']) {
 			$this->AdvertisingContentClass = $DatabaseOptions['AdvertisingContentClass'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingContentID']) {
 			$this->AdvertisingContentID = $DatabaseOptions['AdvertisingContentID'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingContentStyle']) {
 			$this->AdvertisingContentStyle = $DatabaseOptions['AdvertisingContentStyle'];
 		}
-		
+
 		if ($DatabaseOptions['SeparatorClass']) {
 			$this->SeparatorClass = $DatabaseOptions['SeparatorClass'];
 		}
-		
+
 		if ($DatabaseOptions['SeparatorID']) {
 			$this->SeparatorID = $DatabaseOptions['SeparatorID'];
 		}
-		
+
 		if ($DatabaseOptions['SeparatorStyle']) {
 			$this->SeparatorStyle = $DatabaseOptions['SeparatorStyle'];
 		}
-		
+
 		if ($DatabaseOptions['StartTag']) {
 			$this->StartTag = $DatabaseOptions['StartTag'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingStartTag']) {
 			$this->AdvertisingStartTag = $DatabaseOptions['AdvertisingStartTag'];
 		}
-		
+
 		if ($DatabaseOptions['AdvertisingContentStartTag']) {
 			$this->AdvertisingContentStartTag = $DatabaseOptions['AdvertisingContentStartTag'];
 		}
-		
+
 		if ($DatabaseOptions['SeparatorStartTag']) {
 			$this->SeparatorStartTag = $DatabaseOptions['SeparatorStartTag'];
 		}
-		
+
 		if ($DatabaseOptions['AdMax']) {
 			$this->AdMax = $DatabaseOptions['AdMax'];
 		} else {
 			$this->AdMax = 0;
 		}
-		
+
 		$this->LastAccess = date('Y-m-d H:i:s');
-		
+
 		$this->AdStatsTableName = $tablenames['DatabaseTable1'];
 		foreach($TableNames as $key => $databasename) {
 			if ($key != 'DatabaseTable1') {
 				$this->AdSponsorsTableName[$key] = $databasename;
 			}
 		}
-		
+
 		foreach($this->AdSponsorsTableName as $TableName) {
 			$this->AdSponsorsDatabaseOptions[$TableName] = array();
 			$ShowNumber = $TableName . 'ShowNumber';
@@ -166,121 +191,121 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$Style = $TableName . 'Style';
 			$StartTag = $TableName . 'StartTag';
 			$Text = $TableName . 'Text';
-			
+
 			$SeparatorClass = $TableName . 'SeparatorClass';
 			$SeparatorID = $TableName . 'SeparatorID';
 			$SeparatorStyle = $TableName . 'SeparatorStyle';
 			$SeparatorStartTag = $TableName . 'SeparatorStartTag';
-			
+
 			$AdvertisingImageClass = $TableName . 'ImageClass';
 			$AdvertisingImageID = $TableName . 'ImageID';
 			$AdvertisingImageStyle = $TableName . 'ImageStyle';
 			$AdvertisingImageStartTag = $TableName . 'ImageStartTag';
-			
+
 			if ($DatabaseOptions[$ShowNumber]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber] = $DatabaseOptions[$ShowNumber];
 			}
-			
+
 			if ($DatabaseOptions[$Class]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$Class] = $DatabaseOptions[$Class];
 			}
-			
+
 			if ($DatabaseOptions[$ID]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$ID] = $DatabaseOptions[$ID];
 			}
-			
+
 			if ($DatabaseOptions[$Style]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$Style] = $DatabaseOptions[$Style];
 			}
-			
+
 			if ($DatabaseOptions[$StartTag]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$StartTag] = $DatabaseOptions[$StartTag];
 			}
-			
+
 			if ($DatabaseOptions[$Text]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$Text] = $DatabaseOptions[$Text];
 			}
-			
+
 			if ($DatabaseOptions[$SeparatorClass]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorClass] = $DatabaseOptions[$SeparatorClass];
 			}
-			
+
 			if ($DatabaseOptions[$SeparatorID]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorID] = $DatabaseOptions[$SeparatorID];
 			}
-			
+
 			if ($DatabaseOptions[$SeparatorStyle]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStyle] = $DatabaseOptions[$SeparatorStyle];
 			}
-			
+
 			if ($DatabaseOptions[$SeparatorStartTag]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$SeparatorStartTag] = $DatabaseOptions[$SeparatorStartTag];
 			}
-			
+
 			if ($DatabaseOptions[$AdvertisingImageClass]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageClass] = $DatabaseOptions[$AdvertisingImageClass];
 			}
-			
+
 			if ($DatabaseOptions[$AdvertisingImageID]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageID] = $DatabaseOptions[$AdvertisingImageID];
 			}
-			
+
 			if ($DatabaseOptions[$AdvertisingImageStyle]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStyle] = $DatabaseOptions[$AdvertisingImageStyle];
 			}
-			
+
 			if ($DatabaseOptions[$AdvertisingImageStartTag]) {
 				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStartTag] = $DatabaseOptions[$AdvertisingImageStartTag];
 			}
 		}
-		
+
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 	}
-	
+
 	// FIX SORT ORDER OF ADS!
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		unset ($PageID['PrintPreview']);
-		
+
 		foreach ($this->AdSponsorsTableName as $TableName) {
 			$this->LayerModule->createDatabaseTable($TableName);
 			$TableNamePageID = $TableName . 'PageID';
 			$this->LayerModule->createDatabaseTable($TableNamePageID);
-			
+
 			$this->LayerModule->Connect($TableName);
 			$this->LayerModule->pass ($TableName, 'setEntireTable', array());
 			$this->AdSponsorsDatabaseTable[$TableName] = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
 			$this->LayerModule->Disconnect($TableName);
-			
+
 			$this->LayerModule->Connect($TableNamePageID);
 			$this->LayerModule->pass ($TableNamePageID, 'setEntireTable', array());
 			$this->AdSponsorsDatabaseTable[$TableNamePageID] = $this->LayerModule->pass ($TableNamePageID, 'getEntireTable', array());
 			$this->LayerModule->Disconnect($TableNamePageID);
-			
+
 			$AdCount = count($this->AdSponsorsDatabaseTable[$TableName]);
-			
+
 			$ShowNumber = $TableName . 'ShowNumber';
 			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
-			
+
 			if ($ShowNumber > $AdCount) {
 				$ShowNumber = $AdCount;
 			}
-			
+
 			$PrintOrder = $this->AdSponsorsDatabaseTable[$TableNamePageID];
-			
+
 			$this->AdSponsorsOutputAdsOrder[$TableNamePageID] = array();
 			$j = 1;
-			
+
 			foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
 				if ($DatabaseTable['Enable/Disable'] == 'Disable') {
 					unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
@@ -291,10 +316,10 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						}
 					}
 				}
-				
+
 				if (isset($DatabaseTable['AdStartDateTime']) | isset($DatabaseTable['AdEndDateTime'])) {
 					$CurrentTime = time();
-					
+
 					$AdStartTimeStamp = strtotime($DatabaseTable['AdStartDateTime']);
 					$AdEndTimeStamp = strtotime($DatabaseTable['AdEndDateTime']);
 
@@ -317,7 +342,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					}
 				}
 			}
-			
+
 			foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
 				$RemoveFlag = FALSE;
 				foreach ($AdSponsorsDatabaseTable as $SponsorsKey => $SponsorsItem) {
@@ -337,7 +362,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						}
 					}
 				}
-				
+
 				if ($RemoveFlag === TRUE) {
 					unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
 					$AdvertisingKey = $AdSponsorsDatabaseTable['AdvertisingID'];
@@ -348,7 +373,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					}
 				}
 			}
-			
+
 			// PUT IN AD HOC SENSE IN HERE - ALL MODULES ARE IN /AdHocSense FOLDER.
 			$AdHocSensePath = dirname(__FILE__) . '/AdHocSense';
 			if (is_dir($AdHocSensePath)) {
@@ -356,12 +381,12 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					//print "OPENED AD HOC SENSE PATH\n";
 				}
 			}
-			
+
 			foreach ($PrintOrder as $CurrentData) {
 				$i = 1;
 				$PageIDKey = 'PageID' . $i;
 				$OrderKey = 'PageID' .$i . 'Order';
-				
+
 				if ($CurrentData[$PageIDKey] != 0) {
 					foreach ($CurrentData as $LookupKey => $LookupData) {
 						if (!strstr($LookupKey,'Order')) {
@@ -384,44 +409,44 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 							$NewKey = str_replace('Order', '', $LookupKey);
 							if ($CurrentData[$NewKey] == $this->PageID) {
 								if ($LookupData != 'NA') {
-									$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData; 
+									$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData;
 								}
 							}
 						}
 					}
 				}
 			}
-			
+
 			for ($i = 0; $i < $ShowNumber; $i++) {
 				$this->selectRandomSponsor ($TableNamePageID, $this->AdSponsorsDatabaseTable[$TableNamePageID]);
 			}
-			
+
 			$i = 0;
-			
+
 			foreach($this->AdSponsorsDatabaseTable[$TableNamePageID] as $key => $value) {
 				$i++;
 			}
-			
+
 			$ShowNumber = $TableName . 'ShowNumber';
 			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
-			
+
 			if ($ShowNumber > $AdCount) {
 				$ShowNumber = $AdCount;
 			}
-			
+
 			$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
 		}
-		
+
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		
+
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
+
 		$this->AdStatsTable = $this->LayerModule->pass ($this->DatabaseTable, 'getMultiRowField', array());
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
-	
+
 	public function CreateOutput($space) {
 		// Figuring Out The Last Index Name For An Array Of Arrays
 		$LastIndex = NULL;
@@ -429,58 +454,58 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$LastIndex = $key;
 		}
 		$LastIndex = str_replace('PageID', '', $LastIndex);
-		
+
 		if ($this->StartTag != NULL) {
 			$this->Writer->startElement($this->StartTag);
 		} else {
 			$this->Writer->startElement('div');
 		}
-		
+
 		$this->ProcessStandardAttribute('');
-		
+
 		foreach ($this->AdSponsorsOutputAdLookup as $AdSponsorsTableName => $AdSponsorsLookupValues) {
 			$AdvertisingTableName = str_replace('PageID', '', $AdSponsorsTableName);
-			
+
 			$Class = $AdvertisingTableName . 'Class';
 			$ID = $AdvertisingTableName . 'ID';
 			$Style = $AdvertisingTableName . 'Style';
 			$StartTag = $AdvertisingTableName . 'StartTag';
 			$Text = $AdvertisingTableName . 'Text';
-				
+
 			$SeparatorClass = $AdvertisingTableName . 'SeparatorClass';
 			$SeparatorID = $AdvertisingTableName . 'SeparatorID';
 			$SeparatorStyle = $AdvertisingTableName . 'SeparatorStyle';
 			$SeparatorStartTag = $AdvertisingTableName . 'SeparatorStartTag';
-			
+
 			$AdvertisingImageClass = $AdvertisingTableName . 'ImageClass';
 			$AdvertisingImageID = $AdvertisingTableName . 'ImageID';
 			$AdvertisingImageStyle = $AdvertisingTableName . 'ImageStyle';
 			$AdvertisingImageStartTag = $AdvertisingTableName . 'ImageStartTag';
-			
+
 			if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$StartTag]) {
 				$this->Writer->startElement($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$StartTag]);
 				if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Class]) {
-					$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Class]); 
+					$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Class]);
 				}
-				
+
 				if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$ID]) {
-					$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$ID]); 
+					$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$ID]);
 				}
-				
+
 				if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Style]) {
-					$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Style]); 
+					$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Style]);
 				}
-				
+
 				if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Text]) {
-					$this->Writer->text($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Text]); 
+					$this->Writer->text($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$Text]);
 				}
-				
+
 			}
-			
+
 			if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$StartTag]) {
 				$this->Writer->endElement(); // ENDS START TAG
 			}
-			
+
 			foreach ($AdSponsorsLookupValues as $LookupKey => $LookupValue) {
 				$LastAdValue = end($AdSponsorsLookupValues);
 				$ReturnPage = $this->checkAdPage ($AdSponsorsTableName, $LookupValue);
@@ -488,7 +513,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$PageID['PageID'] = $this->PageID;
 				$PageID['AdvertisingID'] = $LookupValue;
 				$PageID['AdvertisingTableName'] = $AdvertisingTableName;
-				
+
 				if ($ReturnPage !== 'FALSE') {
 					$this->updateAdStatPage($PageID, $ReturnPage);
 				} else {
@@ -496,92 +521,92 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					$AdStatPage['PageID'] = $this->PageID;
 					$AdStatPage['AdvertisingID'] = $LookupValue;
 					$AdStatPage['AdvertisingTableName'] = $AdvertisingTableName;
-					
+
 					$this->createAdStatPage($AdStatPage);
 					$this->updateAdStatPage($PageID, $ReturnPage);
 					$this->sortAdStatPage();
 				}
-				
+
 				// OUTPUT ADS
 				$AdSponsorsData = $this->AdSponsorsDatabaseTable[$AdvertisingTableName][$LookupValue];
-				
+
 				if ($this->AdvertisingStartTag) {
 					$this->Writer->startElement($this->AdvertisingStartTag);
 					if ($this->AdvertisingClass) {
-						$this->Writer->writeAttribute('class', $this->AdvertisingClass); 
+						$this->Writer->writeAttribute('class', $this->AdvertisingClass);
 					}
-					
+
 					if ($this->AdvertisingID) {
-						$this->Writer->writeAttribute('id', $this->AdvertisingID); 
+						$this->Writer->writeAttribute('id', $this->AdvertisingID);
 					}
-					
+
 					if ($this->AdvertisingStyle) {
-						$this->Writer->writeAttribute('style', $this->AdvertisingStyle); 
+						$this->Writer->writeAttribute('style', $this->AdvertisingStyle);
 					}
-					
+
 				}
-				
+
 				if ($AdSponsorsData['ImageLocation'] != NULL) {
 					if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStartTag]) {
 						$this->Writer->startElement($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStartTag]);
-						
+
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageClass]) {
-							$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageClass]); 
+							$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageClass]);
 						}
-						
+
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageID]) {
-							$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageID]); 
+							$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageID]);
 						}
-						
+
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStyle]) {
-							$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStyle]); 
+							$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStyle]);
 						}
 					}
-					
+
 					$this->Writer->startElement('img');
 					if ($this->AdvertisingImageClass) {
-						$this->Writer->writeAttribute('class', $this->AdvertisingImageClass); 
+						$this->Writer->writeAttribute('class', $this->AdvertisingImageClass);
 					}
-					
+
 					if ($this->AdvertisingImageID) {
-						$this->Writer->writeAttribute('id', $this->AdvertisingImageID); 
+						$this->Writer->writeAttribute('id', $this->AdvertisingImageID);
 					}
-					
+
 					if ($this->AdvertisingImageStyle) {
-						$this->Writer->writeAttribute('style', $this->AdvertisingImageStyle); 
+						$this->Writer->writeAttribute('style', $this->AdvertisingImageStyle);
 					}
-					
+
 					$this->Writer->writeAttribute('src', $AdSponsorsData['ImageLocation']);
-					
+
 					if ($AdSponsorsData['ImageCaption']) {
 						$this->Writer->writeAttribute('alt', $AdSponsorsData['ImageCaption']);
 					}
-					
+
 					$this->Writer->endElement(); // ENDS IMG TAG
-					
+
 					if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$AdvertisingImageStartTag]) {
 						$this->Writer->endElement(); // ENDS IMAGE START TAG
 					}
 				}
-				
+
 				if ($this->AdvertisingContentStartTag) {
 					$this->Writer->startElement($this->AdvertisingContentStartTag);
 				} else {
 					$this->Writer->startElement('p');
 				}
-				
+
 				if ($this->AdvertisingContentClass) {
-					$this->Writer->writeAttribute('class', $this->AdvertisingContentClass); 
+					$this->Writer->writeAttribute('class', $this->AdvertisingContentClass);
 				}
-				
+
 				if ($this->AdvertisingContentID) {
-					$this->Writer->writeAttribute('id', $this->AdvertisingContentID); 
+					$this->Writer->writeAttribute('id', $this->AdvertisingContentID);
 				}
-				
+
 				if ($this->AdvertisingContentStyle) {
-					$this->Writer->writeAttribute('style', $this->AdvertisingContentStyle); 
+					$this->Writer->writeAttribute('style', $this->AdvertisingContentStyle);
 				}
-				
+
 				if ($AdSponsorsData['Link']) {
 					$this->Writer->startElement('a');
 					$this->Writer->writeAttribute('href', $AdSponsorsData['Link']);
@@ -591,94 +616,94 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				} else{
 					$this->Writer->text($AdSponsorsData['Name']);
 				}
-				
+
 				if ($this->AdvertisingStartTag) {
 					$this->Writer->endElement(); // ENDS START TAG OR P TAG
 				}
-				
+
 				if ($AdSponsorsData['Location']) {
 					if ($this->AdvertisingContentStartTag) {
 						$this->Writer->startElement($this->AdvertisingContentStartTag);
 					} else {
 						$this->Writer->startElement('p');
 					}
-					
+
 					if ($this->AdvertisingContentClass) {
-						$this->Writer->writeAttribute('class', $this->AdvertisingContentClass); 
+						$this->Writer->writeAttribute('class', $this->AdvertisingContentClass);
 					}
-					
+
 					if ($this->AdvertisingContentID) {
-						$this->Writer->writeAttribute('id', $this->AdvertisingContentID); 
+						$this->Writer->writeAttribute('id', $this->AdvertisingContentID);
 					}
-					
+
 					if ($this->AdvertisingContentStyle) {
-						$this->Writer->writeAttribute('style', $this->AdvertisingContentStyle); 
+						$this->Writer->writeAttribute('style', $this->AdvertisingContentStyle);
 					}
-					
+
 					$this->Writer->writeRaw($AdSponsorsData['Location']);
-					
+
 					$this->Writer->endElement(); // ENDS START TAG OR P TAG
 				}
 				if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$StartTag]) {
 					$this->Writer->endElement(); // ENDS START TAG
 				}
-				
+
 				if ($LastAdValue != $LookupValue) {
 					if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStartTag]) {
 						$this->Writer->startElement($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStartTag]);
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorClass]) {
-							$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorClass]); 
+							$this->Writer->writeAttribute('class', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorClass]);
 						}
-						
+
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorID]) {
-							$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorID]); 
+							$this->Writer->writeAttribute('id', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorID]);
 						}
-						
+
 						if ($this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStyle]) {
-							$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStyle]); 
+							$this->Writer->writeAttribute('style', $this->AdSponsorsDatabaseOptions[$AdvertisingTableName][$SeparatorStyle]);
 						}
 						$this->Writer->endElement();
-						
+
 					}
 				}
 				// ENDS OUTPUT ADS
 			}
-			
-			
-			
-			if ($AdvertisingTableName != $LastIndex) { 
+
+
+
+			if ($AdvertisingTableName != $LastIndex) {
 				if ($this->SeparatorStartTag) {
 					$this->Writer->startElement($this->SeparatorStartTag);
 					if ($this->SeparatorClass) {
-						$this->Writer->writeAttribute('class', $this->SeparatorClass); 
+						$this->Writer->writeAttribute('class', $this->SeparatorClass);
 					}
-					
+
 					if ($this->SeparatorID) {
-						$this->Writer->writeAttribute('id', $this->SeparatorID); 
+						$this->Writer->writeAttribute('id', $this->SeparatorID);
 					}
-					
+
 					if ($this->SeparatorStyle) {
-						$this->Writer->writeAttribute('style', $this->SeparatorStyle); 
+						$this->Writer->writeAttribute('style', $this->SeparatorStyle);
 					}
-					
+
 					$this->Writer->endElement();
-					
+
 				}
 			}
 		}
-		
+
 		$this->Writer->endElement(); // ENDS START TAG
-		
+
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}
 	}
-	
+
 	protected function selectRandomSponsor ($AdSponsorsTableName, Array $DatabaseTable) {
 		if ($AdSponsorsTableName != NULL) {
 			$Index = array_rand($DatabaseTable);
 			$TRIP = NULL;
-			
+
 			if (!isset($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName])) {
 				$this->AdSponsorsOutputAdLookup[$AdSponsorsTableName] = array();
 				$Index = array_rand($DatabaseTable);
@@ -692,10 +717,10 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 						}
 					}
 				}
-				
+
 				array_push($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName], $Index);
 			}
-			
+
 			if (isset($this->AdSponsorsRemoveArray[$AdSponsorsTableName])) {
 				foreach($this->AdSponsorsRemoveArray[$AdSponsorsTableName] as $value) {
 					$ReplaceKey = array_search($value, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName]);
@@ -710,34 +735,34 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					}
 				}
 			}
-			
+
 		}
 	}
-	
+
 	protected function recurssiveRand (Array $DatabaseTable, $Index, $Value) {
 		$Index = array_rand($DatabaseTable);
 		if ($Index == $Value) {
 			$Index = $this->recurssiveRand($DatabaseTable, $Index, $Value);
 		}
-		
+
 		return $Index;
 	}
-	
+
 	protected function sortArray (Array $SourceArray, Array $LookupArray, $Limit) {
 		if ($LookupArray == NULL) {
 			return $SourceArray;
 		}
-		
+
 		if (count($SourceArray) == 1) {
 			return $SourceArray;
 		}
-		
+
 		$Hold = array();
 		asort($LookupArray);
 		foreach ($LookupArray as $Key => $Value) {
 			array_push($Hold, $Key);
 		}
-		
+
 		if ($Limit > 0) {
 			if ($Limit < $End = count($Hold)) {
 				$End = $End - $Limit;
@@ -748,7 +773,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 		return $Hold;
 	}
-	
+
 	protected function checkAdPage ($AdSponsorsTableName, $AdvertisingID) {
 		if ($this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'PageID'))) {
 			$AdSponsorsTableName = str_replace('PageID', '', $AdSponsorsTableName);
@@ -764,13 +789,13 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			return 'FALSE';
 		}
 	}
-	
+
 	public function sortAdStatPage() {
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('AdvertisingTableName' => 'AdvertisingTableName'));
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('AdvertisingID' => 'AdvertisingID'));
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('PageID' => 'PageID'));
 	}
-	
+
 	public function createAdStatPage(array $AdPage) {
 		if ($AdPage != NULL) {
 			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
@@ -780,7 +805,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			array_push($this->ErrorMessage,'createAdStatPage: AdPage cannot be NULL!');
 		}
 	}
-	
+
 	public function updateAdStatPage(array $PageID, $StatsPageLookup) {
 		if ($PageID != NULL) {
 			if ($StatsPageLookup !== NULL) {
@@ -791,7 +816,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$CurrentMonthYear = date('FY');
 				$Content['LastAccess'] = $this->LastAccess;
 				$passarray = array('TableName' => $this->DatabaseTable);
-				
+
 				$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', $passarray);
 				$RowFieldName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
 				$Key = array_search($CurrentMonthYear, $RowFieldName);

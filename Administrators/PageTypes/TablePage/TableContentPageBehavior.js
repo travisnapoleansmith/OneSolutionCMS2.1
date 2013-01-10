@@ -76,6 +76,24 @@ function AddTable(TableNumber) {
 	var TableSelectionContentID = "Table" + TableNumber + "Selection";
 	var TableSelectionContentName = "Table" + TableNumber + "_Name";
 	
+	var Image1SrcID = "Table" + TableNumber + "Image1Src";
+	var Image1SrcName = "Table" + TableNumber + "_Image1Src";
+	
+	var Image1TextID = "Table" + TableNumber + "Image1Text";
+	var Image1TextName = "Table" + TableNumber + "_Image1Text";
+	
+	var Image1AltID = "Table" + TableNumber + "Image2Alt";
+	var Image1AltName = "Table" + TableNumber + "_Image2Alt";
+	
+	var Image2SrcID = "Table" + TableNumber + "Image2Src";
+	var Image2SrcName = "Table" + TableNumber + "_Image2Src";
+	
+	var Image2TextID = "Table" + TableNumber + "Image2Text";
+	var Image2TextName = "Table" + TableNumber + "_Image2Text";
+	
+	var Image2AltID = "Table" + TableNumber + "Image2Alt";
+	var Image2AltName = "Table" + TableNumber + "_Image2Alt";
+	
 	var FieldSet = document.createElement('fieldset');
 	FieldSet.setAttribute('class', "ShortForm");
 	FieldSet.setAttribute('dir', "ltr");
@@ -134,7 +152,7 @@ function AddTable(TableNumber) {
 	TopTextContent.setAttribute('id', TopTextContentID);
 	TopTextContent.setAttribute('lang', "en-us");
 	TopTextContent.setAttribute('xml:lang', "en-us");
-	TopTextContent.setAttribute('rows', "30");
+	TopTextContent.setAttribute('rows', "15");
 	TopTextContent.setAttribute('cols', "3");
 	TopTextContent.setAttribute('name', TopTextContentName);
 	
@@ -146,6 +164,167 @@ function AddTable(TableNumber) {
 	FieldSet.appendChild(TopTextLabelDiv);
 	FieldSet.appendChild(TopTextContentDiv);
 	
+	// Image 1
+	Image1SrcLabel = document.createElement('label');
+	Image1SrcContent = document.createElement('input');
+	
+	Image1SrcLabel.setAttribute('class', 'BodyText ShortForm');
+	Image1SrcLabel.setAttribute('dir', "ltr");
+	Image1SrcLabel.setAttribute('lang', "en-us");
+	Image1SrcLabel.setAttribute('xml:lang', "en-us");
+	Image1SrcLabel.innerHTML = "Image 1 Src";
+	
+	Image1SrcContent.setAttribute('class', "ShortForm");
+	Image1SrcContent.setAttribute('dir', "ltr");
+	Image1SrcContent.setAttribute('id', Image1SrcID);
+	Image1SrcContent.setAttribute('lang', "en-us");
+	Image1SrcContent.setAttribute('xml:lang', "en-us");
+	Image1SrcContent.setAttribute('type', "text");
+	Image1SrcContent.setAttribute('value', "NULL");
+	Image1SrcContent.setAttribute('name', Image1SrcName);
+	
+	var Image1SrcLabelDiv = document.createElement('div');
+	var Image1SrcContentDiv = document.createElement('div');
+	Image1SrcLabelDiv.appendChild(Image1SrcLabel);
+	Image1SrcContentDiv.appendChild(Image1SrcContent);
+	
+	FieldSet.appendChild(Image1SrcLabelDiv);
+	FieldSet.appendChild(Image1SrcContentDiv);
+	
+	var Image1TextLabel = document.createElement('label');
+	var Image1TextContent = document.createElement('textarea');
+	
+	Image1TextLabel.setAttribute('class', 'BodyText ShortForm');
+	Image1TextLabel.setAttribute('dir', "ltr");
+	Image1TextLabel.setAttribute('lang', "en-us");
+	Image1TextLabel.setAttribute('xml:lang', "en-us");
+	Image1TextLabel.innerHTML = "Image 1 Text";
+	
+	Image1TextContent.setAttribute('class', "ShortForm");
+	Image1TextContent.setAttribute('dir', "ltr");
+	Image1TextContent.setAttribute('id', Image1TextID);
+	Image1TextContent.setAttribute('lang', "en-us");
+	Image1TextContent.setAttribute('xml:lang', "en-us");
+	Image1TextContent.setAttribute('rows', "15");
+	Image1TextContent.setAttribute('cols', "3");
+	Image1TextContent.setAttribute('name', Image1TextName);
+	Image1TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	
+	var Image1TextLabelDiv = document.createElement('div');
+	var Image1TextContentDiv = document.createElement('div');
+	Image1TextLabelDiv.appendChild(Image1TextLabel);
+	Image1TextContentDiv.appendChild(Image1TextContent);
+	
+	FieldSet.appendChild(Image1TextLabelDiv);
+	FieldSet.appendChild(Image1TextContentDiv);
+	
+	Image1AltLabel = document.createElement('label');
+	Image1AltContent = document.createElement('input');
+	
+	Image1AltLabel.setAttribute('class', 'BodyText ShortForm');
+	Image1AltLabel.setAttribute('dir', "ltr");
+	Image1AltLabel.setAttribute('lang', "en-us");
+	Image1AltLabel.setAttribute('xml:lang', "en-us");
+	Image1AltLabel.innerHTML = "Image 1 Alt";
+	
+	Image1AltContent.setAttribute('class', "ShortForm");
+	Image1AltContent.setAttribute('dir', "ltr");
+	Image1AltContent.setAttribute('id', Image1AltID);
+	Image1AltContent.setAttribute('lang', "en-us");
+	Image1AltContent.setAttribute('xml:lang', "en-us");
+	Image1AltContent.setAttribute('type', "text");
+	Image1AltContent.setAttribute('value', "NULL");
+	Image1AltContent.setAttribute('name', Image1AltName);
+	
+	var Image1AltLabelDiv = document.createElement('div');
+	var Image1AltContentDiv = document.createElement('div');
+	Image1AltLabelDiv.appendChild(Image1AltLabel);
+	Image1AltContentDiv.appendChild(Image1AltContent);
+	
+	FieldSet.appendChild(Image1AltLabelDiv);
+	FieldSet.appendChild(Image1AltContentDiv);
+	
+	// Image 2
+	Image2SrcLabel = document.createElement('label');
+	Image2SrcContent = document.createElement('input');
+	
+	Image2SrcLabel.setAttribute('class', 'BodyText ShortForm');
+	Image2SrcLabel.setAttribute('dir', "ltr");
+	Image2SrcLabel.setAttribute('lang', "en-us");
+	Image2SrcLabel.setAttribute('xml:lang', "en-us");
+	Image2SrcLabel.innerHTML = "Image 2 Src";
+	
+	Image2SrcContent.setAttribute('class', "ShortForm");
+	Image2SrcContent.setAttribute('dir', "ltr");
+	Image2SrcContent.setAttribute('id', Image2SrcID);
+	Image2SrcContent.setAttribute('lang', "en-us");
+	Image2SrcContent.setAttribute('xml:lang', "en-us");
+	Image2SrcContent.setAttribute('type', "text");
+	Image2SrcContent.setAttribute('value', "NULL");
+	Image2SrcContent.setAttribute('name', Image2SrcName);
+	
+	var Image2SrcLabelDiv = document.createElement('div');
+	var Image2SrcContentDiv = document.createElement('div');
+	Image2SrcLabelDiv.appendChild(Image2SrcLabel);
+	Image2SrcContentDiv.appendChild(Image2SrcContent);
+	
+	FieldSet.appendChild(Image2SrcLabelDiv);
+	FieldSet.appendChild(Image2SrcContentDiv);
+	
+	var Image2TextLabel = document.createElement('label');
+	var Image2TextContent = document.createElement('textarea');
+	
+	Image2TextLabel.setAttribute('class', 'BodyText ShortForm');
+	Image2TextLabel.setAttribute('dir', "ltr");
+	Image2TextLabel.setAttribute('lang', "en-us");
+	Image2TextLabel.setAttribute('xml:lang', "en-us");
+	Image2TextLabel.innerHTML = "Image 2 Text";
+	
+	Image2TextContent.setAttribute('class', "ShortForm");
+	Image2TextContent.setAttribute('dir', "ltr");
+	Image2TextContent.setAttribute('id', Image2TextID);
+	Image2TextContent.setAttribute('lang', "en-us");
+	Image2TextContent.setAttribute('xml:lang', "en-us");
+	Image2TextContent.setAttribute('rows', "15");
+	Image2TextContent.setAttribute('cols', "3");
+	Image2TextContent.setAttribute('name', Image2TextName);
+	Image2TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	
+	var Image2TextLabelDiv = document.createElement('div');
+	var Image2TextContentDiv = document.createElement('div');
+	Image2TextLabelDiv.appendChild(Image2TextLabel);
+	Image2TextContentDiv.appendChild(Image2TextContent);
+	
+	FieldSet.appendChild(Image2TextLabelDiv);
+	FieldSet.appendChild(Image2TextContentDiv);
+	
+	Image2AltLabel = document.createElement('label');
+	Image2AltContent = document.createElement('input');
+	
+	Image2AltLabel.setAttribute('class', 'BodyText ShortForm');
+	Image2AltLabel.setAttribute('dir', "ltr");
+	Image2AltLabel.setAttribute('lang', "en-us");
+	Image2AltLabel.setAttribute('xml:lang', "en-us");
+	Image2AltLabel.innerHTML = "Image 2 Alt";
+	
+	Image2AltContent.setAttribute('class', "ShortForm");
+	Image2AltContent.setAttribute('dir', "ltr");
+	Image2AltContent.setAttribute('id', Image2AltID);
+	Image2AltContent.setAttribute('lang', "en-us");
+	Image2AltContent.setAttribute('xml:lang', "en-us");
+	Image2AltContent.setAttribute('type', "text");
+	Image2AltContent.setAttribute('value', "NULL");
+	Image2AltContent.setAttribute('name', Image2AltName);
+	
+	var Image2AltLabelDiv = document.createElement('div');
+	var Image2AltContentDiv = document.createElement('div');
+	Image2AltLabelDiv.appendChild(Image2AltLabel);
+	Image2AltContentDiv.appendChild(Image2AltContent);
+	
+	FieldSet.appendChild(Image2AltLabelDiv);
+	FieldSet.appendChild(Image2AltContentDiv);
+	
+	// Table Listing
 	var TableSelectionContentDiv = CreateTableListing();
 	
 	TableSelectionContentDiv.setAttribute('id', TableSelectionContentID);
@@ -169,7 +348,7 @@ function AddTable(TableNumber) {
 	BottomTextContent.setAttribute('id', BottomTextContentID);
 	BottomTextContent.setAttribute('lang', "en-us");
 	BottomTextContent.setAttribute('xml:lang', "en-us");
-	BottomTextContent.setAttribute('rows', "30");
+	BottomTextContent.setAttribute('rows', "15");
 	BottomTextContent.setAttribute('cols', "3");
 	BottomTextContent.setAttribute('name', BottomTextContentName);
 	

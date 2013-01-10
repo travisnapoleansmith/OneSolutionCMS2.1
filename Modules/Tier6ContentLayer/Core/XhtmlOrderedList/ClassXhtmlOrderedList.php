@@ -1,12 +1,37 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $DatabaseTableName;
-	
+
 	protected $Insert;
-	
+
 	protected $Ol;
-	
+
 	// Ol Standard Attributes
 	protected $OlClass;
 	protected $OlDir;
@@ -15,10 +40,10 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $OlStyle;
 	protected $OlTitle;
 	protected $OlXMLLang;
-	
+
 	protected $Li = array();
 	protected $LiChildID = array();
-	
+
 	// Li Standard Attributes
 	protected $LiClass = array();
 	protected $LiDir = array();
@@ -27,11 +52,11 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	protected $LiStyle = array();
 	protected $LiTitle = array();
 	protected $LiXMLLang = array();
-	
+
 	protected $LiEnableDisable = array();
-	
+
 	//protected $List;
-	
+
 	/**
 	 * Create an instance of XtmlOrderedList
 	 *
@@ -42,87 +67,87 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
 		$this->LayerModule = &$LayerModule;
-		
+
 		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlOrderedList'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
-		
+
 		if ($DatabaseOptions['Insert']) {
 			$this->Insert = $DatabaseOptions['Insert'];
 			unset($DatabaseOptions['Insert']);
 		}
-		
+
 		if ($DatabaseOptions['NoAttributes']) {
 			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
 			unset($DatabaseOptions['NoAttributes']);
 		}
-		
+
 		if ($DatabaseOptions['NoGlobal']) {
 			$this->NoGlobal = $DatabaseOptions['NoGlobal'];
 			unset($DatabaseOptions['NoGlobal']);
 		}
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($DatabaseOptions['Indent']) {
 			$this->Indent = $DatabaseOptions['Indent'];
 			unset($DatabaseOptions['Indent']);
 		}
-		
+
 		$this->DatabaseTableName = current($TableNames);
-		
+
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
-		$this->User = $user; 
-		$this->Password = $password; 
+		$this->User = $user;
+		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 	}
-	
+
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['PrintPreview'];
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
-		
+
 		unset($PageID['RevisionID']);
 		unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
-		
+
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
 		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
+
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
 		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
 		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
-		
+
 		$this->Ol = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ol'));
 		$this->OlClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlClass'));
 		$this->OlDir = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'OlDir'));
@@ -134,7 +159,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 
 		$this->BuildLiList('Li', 'Li');
 		$this->BuildLiList('LiChildID', 'LiChildID');
-		
+
 		$this->BuildLiList('LiClass', 'LiClass');
 		$this->BuildLiList('LiDir', 'LiDir');
 		$this->BuildLiList('LiID', 'LiID');
@@ -142,21 +167,21 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->BuildLiList('LiStyle', 'LiStyle');
 		$this->BuildLiList('LiTitle', 'LiTitle');
 		$this->BuildLiList('LiXMLLang', 'LiXMLLang');
-		
+
 		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
-	
+
 		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
-		
+
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
-	
+
 	protected function BuildLiList($LiList, $LiListField) {
 		if ($this->$LiList) {
 			$this->$LiList = NOlL;
 			$this->$LiList = array();
 		}
-		
+
 		if (is_array($this->$LiList)) {
 			$i = 1;
 			$Field = 'Li';
@@ -172,7 +197,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 			}
 		}
 	}
-	
+
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
@@ -189,7 +214,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
 				$this->Writer->writeRaw("\n");
 			}
-			
+
 			$this->Writer->startElement('ol');
 				if (!$this->NoAttributes) {
 					$this->ProcessStandardAttribute('OL');
@@ -231,7 +256,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 												if ($this->NoAttributes) {
 													$databaseoptions['NoAttributes'] = $this->NoAttributes;
 												}
-												
+
 												$databaseoptions['NoGlobal'] = FALSE;
 												if ($this->Indent) {
 													$databaseoptions['Indent'] = $this->Indent;
@@ -240,11 +265,11 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 													$databaseoptions['Indent'] = "  ";
 												}
 												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions, $this->LayerModule);
-												
+
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 												$list->FetchDatabase ($listidnumber);
-												
+
 												$tempspace = $this->Space;
 												$tempspace .= '    ';
 												$list->CreateOutput($tempspace);
@@ -253,7 +278,7 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 											} else {
 												$this->Writer->writeRaw("   ");
 											}
-											
+
 											if ($this->Indent) {
 												$this->Writer->writeRaw($this->Indent);
 											}
@@ -290,23 +315,23 @@ class XhtmlOrderedList extends Tier6ContentLayerModulesAbstract implements Tier6
 			} else {
 				array_push($this->ErrorMessage,'CreateOutput: Li must be an Array!');
 			}
-			
+
 			$this->Writer->endElement(); // ENDS OL
-			
+
 			if ($this->Insert) {
 				$this->Writer->writeRaw(' ');
 				$this->Writer->writeRaw($this->Insert); // WRITES INSERT
 				$this->Writer->writeRaw("\n ");
 			}
-			
+
 			if ($this->EndTag && !$this->NoAttributes) {
 				$this->Writer->endElement(); // ENDS END TAG
 			} else {
 				$this->Writer->endElement(); // ENDS END TAG
 			}
-			
+
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}

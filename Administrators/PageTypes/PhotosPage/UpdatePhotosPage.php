@@ -1,4 +1,30 @@
 <?php
+	/*
+	**************************************************************************************
+	* One Solution CMS
+	*
+	* Copyright (c) 1999 - 2012 One Solution CMS
+	*
+	* This content management system is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2.1 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	*
+	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+	* @version    2.1.139, 2012-12-27
+	*************************************************************************************
+	*/
+
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;
@@ -13,7 +39,7 @@
 
 	$LogContentLayerVersion = TRUE;
 	$LogImageContent = TRUE;
-	
+
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdatePhotosPage = $Options['XhtmlPicture']['picture']['UpdatePhotosPage']['SettingAttribute'];
 	$NewUpdatePhotosPage = explode('=', $UpdatePhotosPage);
@@ -248,15 +274,15 @@
 					array_push($RemoveKeys, $Key);
 				}
 			}
-			
+
 			//print_r($ImageContent);
-			
+
 			foreach ($RemoveKeys as $Key => $Value) {
 				unset($ImageContent[$Value]);
 			}
-			
+
 			ksort($ImageContent);
-			
+
 			$ImageContentNew = array();
 			$ImageContentNoOrder = array();
 			$ImageContentMove = array();
@@ -297,7 +323,7 @@
 				array_push($ImageContent, $Content);
 			}
 			unset($ImageContentNoOrder);
-			
+
 			if ($LogImageContent === TRUE) {
 				$LogFile = "ImageContentLog.txt";
 				$LogFileHandle = fopen($LogFile, 'a');
@@ -307,9 +333,9 @@
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
-			
+
 			ksort($ImageContent);
-			
+
 			if ($LogImageContent === TRUE) {
 				$LogFile = "ImageContentLog.txt";
 				$LogFileHandle = fopen($LogFile, 'a');
@@ -319,7 +345,7 @@
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
-			
+
 			$Content = array();
 
 			$PageID = array();
@@ -387,7 +413,7 @@
 			$k = $i;
 			$k++;
 			$PictureID = 1;
-			
+
 			foreach($ImageContent as $Key => $Value) {
 				foreach ($Value as $SubKey => $SubValue) {
 					if ($SubValue != NULL) {
@@ -834,7 +860,7 @@
 			$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[$i]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
-			
+
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/UpdateXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 
@@ -898,8 +924,8 @@
 			//$FormOption['FormOptionXMLLang'] = 'en-us';
 			//$FormOption['Enable/Disable'] = 'Enable';
 			//$FormOption['Status'] = 'Approved';
-			
-			
+
+
 			$FormOptionID = $Options['XhtmlPicture']['picture']['UpdatePhotosPageSelect']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlPicture']['picture']['DeletePhotosPage']['SettingAttribute'];
@@ -956,7 +982,7 @@
 			$CreatedUpdatePhotosPage = $Options['XhtmlPicture']['picture']['CreatedUpdatePhotosPage']['SettingAttribute'];
 			header("Location: $CreatedUpdatePhotosPage&SessionID=$sessionname");
 			exit;
-			
+
 		}
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);

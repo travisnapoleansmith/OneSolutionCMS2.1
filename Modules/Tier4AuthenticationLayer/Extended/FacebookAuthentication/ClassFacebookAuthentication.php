@@ -1,4 +1,29 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract implements Tier4AuthenticationLayerModules
 {
@@ -7,30 +32,30 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 	protected $FacebookSettings;
 	protected $FacebookAuthenticationArray = array();
 	//protected $LookupTable = array();
-	
+
 	public function __construct($tablenames, $databaseoptions, $layermodule) {
 		require_once('Libraries/GlobalLayer/FacebookPHP-SDK/src/facebook.php');
-		
+
 		$this->LayerModule = &$layermodule;
-		
+
 		$hold = current($tablenames);
 		$GLOBALS['ErrorMessage']['FacebookAuthentication'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['FacebookAuthentication'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if (isset($GLOBALS['FACEBOOKSETTINGS'])) {
 			$this->FacebookSettings = &$GLOBALS['FACEBOOKSETTINGS'];
 		} else {
 			$GLOBALS['FACEBOOKSETTINGS'] = parse_ini_file('Configuration/facebook.ini',FALSE);
 			$this->FacebookSettings = &$GLOBALS['FACEBOOKSETTINGS'];
 		}
-		
+
 		$this->FacebookAuthenticationArray['apiId'] = $this->FacebookSettings['AUTHENTICATION']['APIID'];
 		$this->FacebookAuthenticationArray['secret'] = $this->FacebookSettings['AUTHENTICATION']['SECRET'];
 		$this->FacebookAuthenticationArray['cookie'] = $this->FacebookSettings['AUTHENTICATION']['COOKIE'];
 		$this->FacebookAuthenticationArray['domain'] = $this->FacebookSettings['AUTHENTICATION']['DOMAIN'];
 		$this->FacebookAuthenticationArray['fileupload'] = $this->FacebookSettings['AUTHENTICATION']['FILEUPLOAD'];
-		
+
 		if (isset($GLOBALS['FACEBOOK'])) {
 			$this->Facebook = &$GLOBALS['FACEBOOK'];
 		} else {
@@ -42,18 +67,18 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 		} else {
 			$this->MaxAttempts = 5;
 		}*/
-		
+
 		while (current($tablenames)) {
 			$this->TableNames[key($tablenames)] = current($tablenames);
 			next($tablenames);
 		}
-		
+
 	}
-	
+
 	public function getUserInfo() {
 		return $this->LookupTable;
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		/*$this->Hostname = $hostname;
 		$this->User = $user;
@@ -65,7 +90,7 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 		$this->LayerModule->setDatabasetable ($databasetable);
 		*/
 	}
-	
+
 	public function FetchDatabase ($PageID) {
 		/*$passarray = array();
 		if ($PageID['UserName'] && $PageID['Password']) {
@@ -73,28 +98,28 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'setDatabaseRow', array('PageID' => $passarray));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 			$salt = $this->LayerModule->pass (current($this->TableNames), 'getMultiRowField', array());
 			$this->Attempts = $salt[0]['Attempts'];
 			$salt = $salt[0]['Salt'];
 			$passarray['Password'] = $this->processEncryption ($PageID['Password'], $salt);
-			
+
 			$Attempts = $this->Attempts;
 			$Attempts++;
 			$UserName = $passarray['UserName'];
-			
+
 			$pass = NULL;
 			$pass = "`Attempts` = \"$Attempts\" WHERE `UserName` = \"$UserName\"";
 			$this->LayerModule->Connect('UserAccounts');
 			$this->LayerModule->pass ('UserAccounts', 'updateTable', array('PageID' => $pass));
 			$this->LayerModule->Disconnect('UserAccounts');
-			
+
 		} else {
 			$passarray['PageID'] = $PageID;
 		}
 		$passarray['Reset'] = 'No';
 		$passarray['Enable/Disable'] = 'Enable';
-		
+
 		reset($this->TableNames);
 		while (current($this->TableNames)) {
 			$this->LayerModule->Connect(current($this->TableNames));
@@ -107,7 +132,7 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 		}
 		*/
 	}
-	
+
 	public function Verify($function, $functionarguments){
 		//if ($function == 'FACEBOOKAUTHENTICATE') {
 			/*$args = func_num_args();
@@ -116,7 +141,7 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 				$hold['FilteredInput'] = $functionarguments;
 				$hookargumentsarray = func_get_args();
 				$hookarguments = $hookargumentsarray[2];
-				
+
 				if (is_array($hookarguments)) {
 					reset($hookarguments);
 					while (current($hookarguments)) {
@@ -126,10 +151,10 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 							$temp = call_user_func_array(array($this, $functionname), $hooks);
 							if ($temp['Error']) {
 								$hold['Error'] = $temp['Error'];
-							} 
-							
+							}
+
 							$hold[$functionname] = $temp;
-						
+
 						} else {
 							$functionparameters = current($hookarguments);
 							$hold[$functionname] = $this->$functionname($functionparameters);
@@ -177,7 +202,7 @@ class FacebookAuthentication extends Tier4AuthenticationLayerModulesAbstract imp
 			//return TRUE;
 		//}
 	}
-	
+
 	public function getTableNames() {
 		return $this->TableNames;
 	}

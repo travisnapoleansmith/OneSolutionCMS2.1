@@ -1,14 +1,39 @@
 <?php
+/*
+**************************************************************************************
+* One Solution CMS
+*
+* Copyright (c) 1999 - 2012 One Solution CMS
+*
+* This content management system is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
+* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+* @version    2.1.139, 2012-12-27
+*************************************************************************************
+*/
 
 class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	protected $DatabaseTableName;
-	
+
 	protected $Insert;
 	protected $NoGlobal;
 	protected $Indent;
-	
+
 	protected $Ul;
-	
+
 	// UL Standard Attributes
 	protected $UlClass;
 	protected $UlDir;
@@ -17,10 +42,10 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	protected $UlStyle;
 	protected $UlTitle;
 	protected $UlXMLLang;
-	
+
 	protected $Li = array();
 	protected $LiChildID = array();
-	
+
 	// Li Standard Attributes
 	protected $LiClass = array();
 	protected $LiDir = array();
@@ -29,11 +54,11 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	protected $LiStyle = array();
 	protected $LiTitle = array();
 	protected $LiXMLLang = array();
-	
+
 	protected $LiEnableDisable = array();
-	
+
 	protected $List;
-	
+
 	/**
 	 * Create an instance of XtmlUnorderedList
 	 *
@@ -44,37 +69,37 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
 		$this->LayerModule = &$LayerModule;
-		
+
 		$hold = current($TableNames);
 		$GLOBALS['ErrorMessage']['XhtmlUnorderedList'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlUnorderedList'][$hold];
 		$this->ErrorMessage = array();
-		
+
 		if ($DatabaseOptions['Insert']) {
 			$this->Insert = $DatabaseOptions['Insert'];
 			unset($DatabaseOptions['Insert']);
 		}
-		
+
 		if ($DatabaseOptions['NoAttributes']) {
 			$this->NoAttributes = $DatabaseOptions['NoAttributes'];
 			unset($DatabaseOptions['NoAttributes']);
 		}
-		
+
 		if ($DatabaseOptions['NoGlobal']) {
 			$this->NoGlobal = $DatabaseOptions['NoGlobal'];
 			unset($DatabaseOptions['NoGlobal']);
 		}
-		
+
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-		
+
 		if ($DatabaseOptions['Indent']) {
 			$this->Indent = $DatabaseOptions['Indent'];
 			unset($DatabaseOptions['Indent']);
 		}
-		
+
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
@@ -84,46 +109,46 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 		} else {
 			$this->Writer = &$GLOBALS['Writer'];
 		}
-		
-		
+
+
 		$this->DatabaseTableName = current($TableNames);
 	}
-	
+
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
-		$this->User = $user; 
-		$this->Password = $password; 
+		$this->User = $user;
+		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-		
+
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 	}
-	
+
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
 		$this->PrintPreview = $PageID['PrintPreview'];
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
-		
+
 		unset($PageID['RevisionID']);
 		unset($PageID['CurrentVersion']);
 		unset ($PageID['PrintPreview']);
-		
+
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
-		
+
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-		
+
 		$this->StartTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTag'));
 		$this->EndTag = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'EndTag'));
 		$this->StartTagID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagID'));
 		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
-		
+
 		$this->Ul = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Ul'));
 		$this->UlClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlClass'));
 		$this->UlDir = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'UlDir'));
@@ -135,7 +160,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 
 		$this->BuildLiList('Li', 'Li');
 		$this->BuildLiList('LiChildID', 'LiChildID');
-		
+
 		$this->BuildLiList('LiClass', 'LiClass');
 		$this->BuildLiList('LiDir', 'LiDir');
 		$this->BuildLiList('LiID', 'LiID');
@@ -143,21 +168,21 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->BuildLiList('LiStyle', 'LiStyle');
 		$this->BuildLiList('LiTitle', 'LiTitle');
 		$this->BuildLiList('LiXMLLang', 'LiXMLLang');
-		
+
 		$this->BuildLiList('LiEnableDisable', 'LiEnable/Disable');
-	
+
 		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
 		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
-		
+
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
-	
+
 	protected function BuildLiList($LiList, $LiListField) {
 		if ($this->$LiList) {
 			$this->$LiList = NULL;
 			$this->$LiList = array();
 		}
-		
+
 		if (is_array($this->$LiList)) {
 			$i = 1;
 			$Field = 'Li';
@@ -173,7 +198,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			}
 		}
 	}
-	
+
 	public function CreateOutput($space) {
 		$this->Space = $space;
 		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
@@ -184,7 +209,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 					if (!$this->NoAttributes) {
 						$this->ProcessStandardAttribute('StartTag');
 					}
-				
+
 			}
 			if ($this->Ul){
 				//$this->Writer->writeRaw("\n");
@@ -192,7 +217,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 				$this->Writer->writeRaw($this->CreateWordWrap($this->Ul));
 				$this->Writer->writeRaw("\n");
 			}
-			
+
 			$this->Writer->startElement('ul');
 				if (!$this->NoAttributes) {
 					$this->ProcessStandardAttribute('Ul');
@@ -234,7 +259,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 												if ($this->NoAttributes) {
 													$databaseoptions['NoAttributes'] = $this->NoAttributes;
 												}
-												
+
 												$databaseoptions['NoGlobal'] = FALSE;
 												if ($this->Indent) {
 													$databaseoptions['Indent'] = $this->Indent;
@@ -243,11 +268,11 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 													$databaseoptions['Indent'] = "  ";
 												}
 												$list = new XhtmlUnorderedList($listdatabase, $databaseoptions, $this->LayerModule);
-												
+
 												$list->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $this->DatabaseTableName);
 												$list->setHttpUserAgent($_SERVER['HTTP_USER_AGENT']);
 												$list->FetchDatabase ($listidnumber);
-												
+
 												$tempspace = $this->Space;
 												$tempspace .= '    ';
 												$list->CreateOutput($tempspace);
@@ -256,7 +281,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 											} else {
 												$this->Writer->writeRaw("   ");
 											}
-											
+
 											if ($this->Indent) {
 												$this->Writer->writeRaw($this->Indent);
 											}
@@ -293,34 +318,34 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			} else {
 				array_push($this->ErrorMessage,'CreateOutput: Li must be an Array!');
 			}
-			
+
 			$this->Writer->endElement(); // ENDS UL
-			
+
 			if ($this->Insert) {
 				$this->Writer->writeRaw(' ');
 				$this->Writer->writeRaw($this->Insert); // WRITES INSERT
 				$this->Writer->writeRaw("\n ");
 			}
-			
+
 			if ($this->EndTag && !$this->NoAttributes) {
 				$this->Writer->endElement(); // ENDS END TAG
 			}
-			
+
 		}
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}
-		
+
 		if ($this->NoAttributes || $this->NoGlobal) {
 			$this->List = $this->Writer->flush();
 		}
-		
+
 	}
-	
+
 	public function getOutput() {
 		return $this->List;
 	}
-	
+
 	public function createUnorderedList(array $UnorderedList) {
 		if ($UnorderedList != NULL) {
 			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
@@ -330,7 +355,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			array_push($this->ErrorMessage,'createUnorderedList: UnorderedList cannot be NULL!');
 		}
 	}
-	
+
 	public function updateUnorderedList(array $PageID) {
 		if ($PageID != NULL) {
 			$Data = $PageID;
@@ -344,7 +369,7 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			array_push($this->ErrorMessage,'updateUnorderedList: PageID cannot be NULL!');
 		}
 	}
-	
+
 	public function deleteUnorderedList(array $PageID) {
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->DatabaseTable);
@@ -352,18 +377,18 @@ class XhtmlUnorderedList extends Tier6ContentLayerModulesAbstract implements Tie
 			array_push($this->ErrorMessage,'deleteUnorderedList: PageID cannot be NULL!');
 		}
 	}
-	
+
 	public function updateUnorderedListStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
-			
+
 			if ($PageID['EnableDisable'] == 'Enable') {
 				$this->enableModuleContent($PassID, $this->DatabaseTable);
 			} else if ($PageID['EnableDisable'] == 'Disable') {
 				$this->disableModuleContent($PassID, $this->DatabaseTable);
 			}
-			
+
 			if ($PageID['Status'] == 'Approved') {
 				$this->approvedModuleContent($PassID, $this->DatabaseTable);
 			} else if ($PageID['Status'] == 'Not-Approved') {
