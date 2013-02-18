@@ -3,25 +3,23 @@
 **************************************************************************************
 * One Solution CMS
 *
-* Copyright (c) 1999 - 2012 One Solution CMS
+* Copyright (c) 1999 - 2013 One Solution CMS
+* This content management system is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
 *
-* This content management system is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-*
-* This library is distributed in the hope that it will be useful,
+* This content management system is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* Lesser General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 * @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
-* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-* @version    2.1.139, 2012-12-27
+* @license    http://www.gnu.org/licenses/gpl-2.0.txt
+* @version    2.1.141, 2013-01-14
 *************************************************************************************
 */
 
@@ -276,14 +274,38 @@ class ValidationLayer extends LayerModulesAbstract
 						} else if ($function == 'FORMBYPASS') {
 							$args = func_num_args();
 							if ($args == 3) {
+								$Hold = array();
 								$HookArguments = func_get_args();
 								$PassArguments = $HookArguments[2];
 								foreach ($PassArguments as $Key => $Value) {
 									$Module = $Value['Module'];
 									$Name = $Value['Name'];
 									$AddLookupData = $Value['AddLookupData'];
+									$Post = $Value['POST'];
+									$this->Modules[$Module][$Name]->FetchDatabase ($this->PageID);
 									$this->Modules[$Module][$Name]->AddLookupTableElement($AddLookupData);
+									$ReturnData = $this->Modules[$Module][$Name]->Verify('FORM', $Post);
+									
+									if ($ReturnData) {
+										$Hold[$Key] = $ReturnData;
+									} else {
+										$Hold[$Key] = FALSE;
+									}
 								}
+								
+								if ($Hold) {
+									if (is_array($Hold)) {
+										$Count = count($Hold);
+										if ($Count == 1) {
+											return $Hold[0];
+										} else {
+											return $Hold;
+										}
+									}
+								} else {
+									return FALSE;
+								}
+								
 							}
 						} else {
 							array_push($this->ErrorMessage,'pass: MySqlConnect Member Does Not Exist!');

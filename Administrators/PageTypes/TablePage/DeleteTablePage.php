@@ -3,46 +3,79 @@
 	**************************************************************************************
 	* One Solution CMS
 	*
-	* Copyright (c) 1999 - 2012 One Solution CMS
+	* Copyright (c) 1999 - 2013 One Solution CMS
+	* This content management system is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation, either version 2 of the License, or
+	* (at your option) any later version.
 	*
-	* This content management system is free software; you can redistribute it and/or
-	* modify it under the terms of the GNU Lesser General Public
-	* License as published by the Free Software Foundation; either
-	* version 2.1 of the License, or (at your option) any later version.
-	*
-	* This library is distributed in the hope that it will be useful,
+	* This content management system is distributed in the hope that it will be useful,
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
-	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	* Lesser General Public License for more details.
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	* GNU General Public License for more details.
 	*
-	* You should have received a copy of the GNU Lesser General Public
-	* License along with this library; if not, write to the Free Software
-	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	* You should have received a copy of the GNU General Public License
+	* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	*
 	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
-	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-	* @version    2.1.139, 2012-12-27
+	* @license    http://www.gnu.org/licenses/gpl-2.0.txt
+	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
+	
+	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	$ADMINHOME = $HOME . '/Administrators/';
+	$GLOBALS['HOME'] = $HOME;
+	$GLOBALS['ADMINHOME'] = $ADMINHOME;
 
-	print_r($_POST);
-	$TempTable = array();
-	$Table = array();
-	foreach ($_POST as $Key => $Value) {
-		if ($Key !== 'AddTablePage') {
-			if (strstr($Key, "Table")) {
-				$TempTable[$Key] = $Value;
-			}
-		}
+	require_once ("$ADMINHOME/Configuration/includes.php");
+	
+	$hold = $_POST['TablePage'];
+	$hold = explode(' ', $hold);
+	$PageID = $hold[2];
+	$TableID = $hold[0];
+	$DeleteTablePage = $_POST['DeleteTablePage'];
+	
+	$passarray = array();
+	$passarray['PageID'] = $PageID;
+	
+	$FormOptionObjectID = $TableID;
+	
+	$Options = $Tier6Databases->getLayerModuleSetting();
+	
+	$XhtmlTableName = $Options['XhtmlTable']['table']['XhtmlTableName']['SettingAttribute'];
+	
+	if (!is_null($PageID)) {
+		$TableContentPageID = array();
+		$TableContentPageID['TableName'] = 'XhtmlTableLookup';
+		$TableContentPageID['PageID'] = $PageID;
+		$TableContentPageID['XhtmlTableName'] = $XhtmlTableName;
+		$TableContentPageID['Enable/Disable'] = 'Disable';
+
+		$Tier6Databases->ModulePass('XhtmlTable', 'table', 'deleteTableLookup', $TableContentPageID);
+		
+		$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'deletePicture', array('PageID' => $PageID));
+		
+		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'deleteHeader', array('PageID' => $PageID));
+		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'deleteMenu', array('PageID' => $PageID));
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'deleteContent', array('PageID' => $PageID));
+		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'deleteSitemapItem', array('PageID' => $PageID));
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'deleteContentPrintPreview', array('PageID' => $PageID));
+		$Tier6Databases->deleteContent(array('PageID' => $PageID), 'ContentLayer');
+		
+		$FormOptionID = $Options['XhtmlTable']['table']['TablePageUpdateSelectPage']['SettingAttribute'];
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
+
+		$FormOptionID = $Options['XhtmlTable']['table']['TablePageDeleteSelectPage']['SettingAttribute'];
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
+
+		$DeletedTablesPage = $Options['XhtmlTable']['table']['TablePageDeletePage']['SettingAttribute'];
+		header("Location: $DeletedTablesPage");
+		
+	} else {
+		$DeleteTablesPage = $Options['XhtmlTable']['table']['TablePageDeleteSelectPage']['SettingAttribute'];
+		header("Location: ../../index.php?PageID=$DeleteTablesPage");
 	}
-	print_r($TempTable);
-
-	foreach ($TempTable as $Key => $Value) {
-		$NewKey = explode('_', $Key);
-		$TableName = $NewKey[0];
-		$SubKey = $NewKey[1];
-		$Table[$TableName][$SubKey] = $Value;
-	}
-
-	print_r($Table);
 ?>

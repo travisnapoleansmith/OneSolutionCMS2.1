@@ -3,25 +3,23 @@
 **************************************************************************************
 * One Solution CMS
 *
-* Copyright (c) 1999 - 2012 One Solution CMS
+* Copyright (c) 1999 - 2013 One Solution CMS
+* This content management system is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
 *
-* This content management system is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-*
-* This library is distributed in the hope that it will be useful,
+* This content management system is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* Lesser General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 * @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
-* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-* @version    2.1.139, 2012-12-27
+* @license    http://www.gnu.org/licenses/gpl-2.0.txt
+* @version    2.1.141, 2013-01-14
 *************************************************************************************
 */
 
@@ -271,7 +269,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 		$this->NewsStoriesLookupStatus = $this->LayerModule->pass ($this->NewsStoriesLookupTableName, 'getRowField', array('rowfield' => 'Status'));
 
 		$this->LayerModule->Disconnect($this->NewsStoriesLookupTableName);
-
+		
 		if ($this->NewsStoriesLookupNewsStoryPageID || $this->NewsStoriesLookupNewsStoryDay == 'LastStory') {
 			$passarray = array();
 			if ($_GET['NewsRevisionID']) {
@@ -305,7 +303,7 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			} else {
 				$newpassarray['CurrentVersion'] = $this->CurrentVersion;
 			}
-			if ($this->NewsStoriesLookupNewsStoryDay) {
+			if ($this->NewsStoriesLookupNewsStoryDay != NULL) {
 				if ($this->NewsStoriesLookupNewsStoryDay == 'Current') {
 					$newpassarray['NewsStoryDay'] = date('d');
 				} else if ($this->NewsStoriesLookupNewsStoryDay != 'LastStory'){
@@ -313,14 +311,14 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 				}
 			}
 
-			if ($this->NewsStoriesLookupNewsStoryYear) {
+			if ($this->NewsStoriesLookupNewsStoryYear != NULL) {
 				if ($this->NewsStoriesLookupNewsStoryYear == 'Current') {
 					$newpassarray['NewsStoryYear'] = date('Y');
 				} else {
 					$newpassarray['NewsStoryYear'] = $this->NewsStoriesLookupNewsStoryYear;
 				}
 			}
-			if ($this->NewsStoriesLookupNewsStoryMonth) {
+			if ($this->NewsStoriesLookupNewsStoryMonth != NULL) {
 				if ($this->NewsStoriesLookupNewsStoryMonth == 'Current') {
 					$newpassarray['NewsStoryMonth'] = date('F');
 
@@ -385,20 +383,20 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 					$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
 
 				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last30Days') {
-					$newpassarray['NewsStoryMonth'] = date('F');
-					$newpassarray['NewsStoryYear'] = date('Y');
+					//$newpassarray['NewsStoryMonth'] = date('F');
+					//$newpassarray['NewsStoryYear'] = date('Y');
 
 				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last60Days') {
-					$newpassarray['NewsStoryMonth'] = date('F');
-					$newpassarray['NewsStoryYear'] = date('Y');
+					//$newpassarray['NewsStoryMonth'] = date('F');
+					//$newpassarray['NewsStoryYear'] = date('Y');
 
 				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last90Days') {
-					$newpassarray['NewsStoryMonth'] = date('F');
-					$newpassarray['NewsStoryYear'] = date('Y');
+					//$newpassarray['NewsStoryMonth'] = date('F');
+					//$newpassarray['NewsStoryYear'] = date('Y');
 
 				} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last120Days') {
-					$newpassarray['NewsStoryMonth'] = date('F');
-					$newpassarray['NewsStoryYear'] = date('Y');
+					//$newpassarray['NewsStoryMonth'] = date('F');
+					//$newpassarray['NewsStoryYear'] = date('Y');
 
 				} else {
 					$newpassarray['NewsStoryMonth'] = $this->NewsStoriesLookupNewsStoryMonth;
@@ -407,27 +405,31 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 
 			$newpassarray['Enable/Disable'] = 'Enable';
 			$newpassarray['Status'] = 'Approved';
-
+			
 			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setOrderbyname', array('orderbyname' => 'PageID`, `NewsStoryDay`, `NewsStoryMonth`, `NewsStoryYear'));
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setOrderbytype', array('orderbytype' => 'ASC'));
 			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
 			$this->NewsStoriesDatesTable = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
-
+			
+			//print_r($this->NewsStoriesDatesTable);
+			
 			$this->NewsStoriesDatesTable = array_reverse($this->NewsStoriesDatesTable);
 			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
 			if ($this->NewsStoriesLookupNewsStoryMonth == 'Last30Days') {
-				$this->buildLastDays(2, 30);
+				$this->buildLastDays(30);
 			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last60Days') {
-				$this->buildLastDays(3, 60);
+				$this->buildLastDays(60);
 			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last90Days') {
-				$this->buildLastDays(4, 90);
+				$this->buildLastDays(90);
 			} else if ($this->NewsStoriesLookupNewsStoryMonth == 'Last120Days') {
-				$this->buildLastDays(5, 120);
+				$this->buildLastDays(120);
 			}
 
 			$this->sortNewsStories('DSC');
-
+			
+			//print "$this->NewsStoriesLookupNewsStoryMonth\n";
+			
 			reset($this->NewsStoriesDatesTable);
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();
@@ -452,61 +454,49 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 	}
 
 	protected function sortNewsStories($ASCDSC) {
-		foreach ($this->NewsStoriesDatesTable as $Key => $Value) {
-			$DateString = $Value['NewsStoryMonth'] . ' ';
-			$DateString .= $Value['NewsStoryDay'] . ', ';
-			$DateString .= $Value['NewsStoryYear'];
-			$Date = strtotime($DateString);
-			$SortArray[$Key] = $Date;
-		}
-		if (!is_null($SortArray)) {
-			if ($ASCDSC == 'DSC') {
-				array_multisort($SortArray, SORT_DESC, $this->NewsStoriesDatesTable);
-			} else if ($ASCDSC == 'ASC') {
-				array_multisort($SortArray, SORT_ASC, $this->NewsStoriesDatesTable);
+		if ($this->NewsStoriesDatesTable != NULL) {
+			foreach ($this->NewsStoriesDatesTable as $Key => $Value) {
+				$DateString = $Value['NewsStoryMonth'] . ' ';
+				$DateString .= $Value['NewsStoryDay'] . ', ';
+				$DateString .= $Value['NewsStoryYear'];
+				$Date = strtotime($DateString);
+				$SortArray[$Key] = $Date;
 			}
-		}
-		unset($SortArray);
-	}
-
-	protected function buildLastDays($MonthNumber, $Days) {
-		$i = 1;
-		while ($i < $MonthNumber) {
-			$lastmonthtime = mktime(0, 0, 0, date('m')-$i, date('d'), date('Y'));
-			$newpassarray['NewsStoryMonth'] = date('F', $lastmonthtime);
-			$newpassarray['NewsStoryYear'] = date('Y', $lastmonthtime);
-			$newpassarray['CurrentVersion'] = $this->CurrentVersion;
-			$this->LayerModule->Connect($this->NewsStoriesDatesTableName);
-			$this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'setDatabaseRow', array('idnumber' => $newpassarray));
-			$this->LayerModule->Disconnect($this->NewsStoriesDatesTableName);
-
-			$hold = $this->LayerModule->pass ($this->NewsStoriesDatesTableName, 'getMultiRowField', array());
-			$hold = array_reverse($hold);
-			if ($this->NewsStoriesDatesTable[0] == NULL) {
-				$this->NewsStoriesDatesTable = $hold;
-			} else {
-				$this->NewsStoriesDatesTable = array_merge($this->NewsStoriesDatesTable, $hold);
-			}
-			$i++;
-		}
-		$lastmonthtime = mktime(0, 0, 0, date('m'), date('d')-$Days, date('Y'));
-		$earlydate = date('j', $lastmonthtime);
-		$earlymonth = date('F', $lastmonthtime);
-		$earlyyear = date('Y', $lastmonthtime);
-
-		$i = 0;
-		while ($this->NewsStoriesDatesTable[$i]) {
-			if ($this->NewsStoriesDatesTable[$i]['NewsStoryYear'] == $earlyyear) {
-				if ($this->NewsStoriesDatesTable[$i]['NewsStoryMonth'] == $earlymonth) {
-					if ($this->NewsStoriesDatesTable[$i]['NewsStoryDay'] <= $earlydate) {
-						unset($this->NewsStoriesDatesTable[$i]);
-					}
+			if (!is_null($SortArray)) {
+				if ($ASCDSC == 'DSC') {
+					array_multisort($SortArray, SORT_DESC, $this->NewsStoriesDatesTable);
+				} else if ($ASCDSC == 'ASC') {
+					array_multisort($SortArray, SORT_ASC, $this->NewsStoriesDatesTable);
 				}
 			}
-			$i++;
+			unset($SortArray);
 		}
-		$this->NewsStoriesDatesTable = array_merge($this->NewsStoriesDatesTable);
-		reset($this->NewsStoriesDatesTable);
+	}
+
+	protected function buildLastDays($Days) {
+		$DateStamp = array();
+		$NewsStories = array();
+		if ($Days != NULL) {
+			if ($this->NewsStoriesDatesTable != NULL ) {
+				$StartDate = strtotime('-' . $Days . ' days');
+				$EndDate = strtotime('NOW');
+				foreach ($this->NewsStoriesDatesTable as $Key => $Value) {
+					$Date = NULL;
+					$Date = $Value['NewsStoryMonth'] . ' ' . $Value['NewsStoryDay'] . ', ' . $Value['NewsStoryYear'];
+					$Date = strtotime($Date);
+					if (($Date >= $StartDate) && ($Date <= $EndDate) === TRUE) {
+						$NewsStories[] = $Value;
+					}
+				}
+				if ($NewsStories != NULL) {
+					$this->NewsStoriesDatesTable = $NewsStories;
+					unset ($NewsStories);
+				} else {
+					$this->NewsStoriesDatesTable = NULL;
+					$this->NewsStoriesDatesTable[] = NULL;
+				}
+			}
+		}
 	}
 
 	public function getLastNewsPageID() {

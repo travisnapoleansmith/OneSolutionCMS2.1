@@ -3,25 +3,23 @@
 	**************************************************************************************
 	* One Solution CMS
 	*
-	* Copyright (c) 1999 - 2012 One Solution CMS
+	* Copyright (c) 1999 - 2013 One Solution CMS
+	* This content management system is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation, either version 2 of the License, or
+	* (at your option) any later version.
 	*
-	* This content management system is free software; you can redistribute it and/or
-	* modify it under the terms of the GNU Lesser General Public
-	* License as published by the Free Software Foundation; either
-	* version 2.1 of the License, or (at your option) any later version.
-	*
-	* This library is distributed in the hope that it will be useful,
+	* This content management system is distributed in the hope that it will be useful,
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
-	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	* Lesser General Public License for more details.
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	* GNU General Public License for more details.
 	*
-	* You should have received a copy of the GNU Lesser General Public
-	* License along with this library; if not, write to the Free Software
-	* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+	* You should have received a copy of the GNU General Public License
+	* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	*
 	* @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
-	* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-	* @version    2.1.139, 2012-12-27
+	* @license    http://www.gnu.org/licenses/gpl-2.0.txt
+	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
 
@@ -31,7 +29,11 @@
 	$GLOBALS['ADMINHOME'] = $ADMINHOME;
 
 	require_once ("$ADMINHOME/Configuration/includes.php");
-
+	
+	$Options = $Tier6Databases->getLayerModuleSetting();
+	
+	$XhtmlTableName = $Options['XhtmlTable']['table']['XhtmlTableName']['SettingAttribute'];
+	
 	$PageTitle = $_POST['PageTitle'];
 	$Keywords = $_POST['Keywords'];
 	$Description = $_POST['Description'];
@@ -50,42 +52,30 @@
 
 	$FileLocation = 'TEMPFILES/';
 
-	foreach ($_COOKIE as $Key => $Value) {
-		//print $Key . "\n";
-		//print $Value . "\n";
-		//print "-----------------\n";
-		if (strstr($Key, "Table")) {
-			setcookie($Key, $Value, time()-4800, '/');
-		}
-	}
-
 	$TempTable = array();
 	$Table = array();
-
+	$AddLookupData = array();
+	
 	foreach ($_POST as $Key => $Value) {
 		if ($Key !== 'AddTablePage') {
 			if (strstr($Key, "Table")) {
 				$TempTable[$Key] = $Value;
+				$AddLookupData[$Key] = $Value;
 			}
 		}
 	}
 
 	foreach ($TempTable as $Key => $Value) {
-		setcookie($Key, $Value, time()+4800, '/');
 		$NewKey = explode('_', $Key);
 		$TableName = $NewKey[0];
 		$SubKey = $NewKey[1];
 		$Table[$TableName][$SubKey] = $Value;
 	}
-	
-	$AddLookupData = array('TEST' => 1);
-	
-	print "TEST\n";
-	
+
 	$hold = $Tier6Databases->FormSubmitValidate('AddTablePage', $PageName, $FileLocation, $Table, 'Table', $AddLookupData);
 
-	//if ($hold) {
-		$sessionname = $Tier6Databases->SessionStart('CreatePhotosPage');
+	if ($hold) {
+		$sessionname = $Tier6Databases->SessionStart('CreateTablesPage');
 		$_SESSION['POST'] = $_POST;
 		$DateTime = date('Y-m-d H:i:s');
 		$Date = date('Y-m-d');
@@ -98,15 +88,10 @@
 			$NewPageID = 1;
 		}
 
-		print "$NewPageID\n";
-
 		$LastTablesPage = $Options['XhtmlTable']['table']['LastTablesPage']['SettingAttribute'];
-		$NewTablesPage = ++$LastPhotosPage;
-		/////$Tier6Databases->updateModuleSetting('XhtmlTable', 'table', 'LastTablesPage', $NewTablesPage);
-
-		print "$LastTablesPage\n";
-		print "$NewTablesPage\n";
-
+		$NewTablesPage = ++$LastTablesPage;
+		$Tier6Databases->updateModuleSetting('XhtmlTable', 'table', 'LastTablesPage', $NewTablesPage);
+		
 		$NewPage = '../../../index.php?PageID=';
 		$NewPage .= $NewPageID;
 
@@ -114,21 +99,18 @@
 		$Location .= $NewPageID;
 
 		$NewRevisionID = 0;
-		
-		///var_dump($hold);
-		
-		/*
-		// PUT POST CHECK IN HERE
+
+		// POST Check For NULL Elements
 		$temp = $Tier6Databases->PostCheck ('Heading', 'FilteredInput', $hold);
 		if (!is_null($temp)) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->PostCheck ('Keywords', 'FilteredInput', $hold);
 		if (!is_null($temp)) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->PostCheck ('Description', 'FilteredInput', $hold);
 		if (!is_null($temp)) {
 			$hold = $temp;
@@ -138,42 +120,43 @@
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'TopText');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image1Src');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image1Text');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image1Alt');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image2Src');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image2Text');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'Image2Alt');
 		if ($temp != NULL) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->MultiPostCheck('Table', 1, $hold, '_', NULL, 'BottomText');
 		if ($temp != NULL) {
 			$hold = $temp;
@@ -183,20 +166,35 @@
 		if (!is_null($temp)) {
 			$hold = $temp;
 		}
-
+		
 		$temp = $Tier6Databases->PostCheck ('MenuTitle', 'FilteredInput', $hold);
 		if (!is_null($temp)) {
 			$hold = $temp;
 		}
-		print "-----------------------\n";
-		print_r($hold);
-		print "=========================\n";
-		*/
 		
+		// Table Data
+		$Table = array();
+		$TempTable = array();
+		
+		foreach ($_POST as $Key => $Value) {
+			if ($Key !== 'AddTablePage') {
+				if (strstr($Key, "Table")) {
+					$TempTable[$Key] = $Value;
+				}
+			}
+		}
+	
+		foreach ($TempTable as $Key => $Value) {
+			$NewKey = explode('_', $Key);
+			$TableName = $NewKey[0];
+			$SubKey = $NewKey[1];
+			$Table[$TableName][$SubKey] = $Value;
+		}
+
 		// General Defines
 		define(NewPageID, $NewPageID);
 		define(CurrentVersionTrueFalse, 'true');
-		define(ContentPageType, 'TablePage');
+		define(ContentPageType, 'TablesPage');
 
 		define(ContentPageMenuName, $hold['FilteredInput']['MenuName']);
 		define(ContentPageMenuTitle, $hold['FilteredInput']['MenuTitle']);
@@ -250,8 +248,8 @@
 		$Content[$i]['StartTagID'] = 'main-content-middle';
 		$Content[$i]['StartTagStyle'] = NULL;
 		$Content[$i]['StartTagClass'] = NULL;
-		if ($hold['FilteredInput']['Heading'] != NULL) {
-			$Content[$i]['Heading'] = $hold['FilteredInput']['Heading'];
+		if ($hold['FilteredInput']['Header'] != NULL) {
+			$Content[$i]['Heading'] = $hold['FilteredInput']['Header'];
 			$Content[$i]['HeadingStartTag'] = '<h2>';
 			$Content[$i]['HeadingEndTag'] = '</h2>';
 			$Content[$i]['HeadingStartTagID'] = NULL;
@@ -295,14 +293,11 @@
 
 		$k = $i;
 		$k++;
-		
+
 		$PictureID = 1;
-		
+		$TableID = 1;
 		$Image = array();
-		
-		//print_r($Table);
-		
-		//print "----------------\n";
+		$TableLookup = array();
 		
 		if ($Table !== NULL) {
 			foreach($Table as $Key => $Value) {
@@ -363,14 +358,14 @@
 
 						$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 						$Content[$i]['Status'] = $_POST['Status'];
-					}
-
-					// Image 1 and 2
-					if ($Value['Image1Src'] != NULL | $Value['Image1Alt'] | $Value['Image1Text']) {
 						$i++;
 						$k++;
+					}
+					
+					// Image 1 and 2
+					if ($Value['Image1Src'] != NULL | $Value['Image1Alt'] | $Value['Image1Text']) {
 						$NewObjectID = 1;
-						
+
 						$Content[$i]['PageID'] = $NewPageID;
 						$Content[$i]['ObjectID'] = $i;
 						$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
@@ -402,8 +397,9 @@
 						$Content[$i]['ContentPTagClass'] = NULL;
 						$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 						$Content[$i]['Status'] = $_POST['Status'];
-						
+
 						$i++;
+						
 						if ($Value['Image1Src'] != NULL) {
 							$Image[$PictureID]['PageID'] = $NewPageID;
 							$Image[$PictureID]['ObjectID'] = $PictureID;
@@ -413,12 +409,13 @@
 							$Image[$PictureID]['EndTag'] = NULL;
 							$Image[$PictureID]['StartTagID'] = NULL;
 							$Image[$PictureID]['StartTagStyle'] = NULL;
-							if ($Value['Image2']['Image2Src'] != NULL) {
+							
+							if ($Value['Image2Src'] != NULL) {
 								$Image[$PictureID]['StartTagClass'] = 'PictureLeft';
 							} else {
 								$Image[$PictureID]['StartTagClass'] = 'PictureCenter';
 							}
-								
+
 							$Image[$PictureID]['PictureID'] = NULL;
 							$Image[$PictureID]['PictureClass'] = NULL;
 							$Image[$PictureID]['PictureStyle'] = NULL;
@@ -428,7 +425,7 @@
 							$Image[$PictureID]['Height'] = NULL;
 							$Image[$PictureID]['Enable/Disable'] = $_POST['EnableDisable'];
 							$Image[$PictureID]['Status'] = $_POST['Status'];
-							
+
 							$Content[$i]['PageID'] = $NewPageID;
 							$Content[$i]['ObjectID'] = $i;
 							$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
@@ -460,7 +457,7 @@
 							$Content[$i]['ContentPTagClass'] = NULL;
 							$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 							$Content[$i]['Status'] = $_POST['Status'];
-							
+
 							$PictureID++;
 							$i++;
 						}
@@ -522,7 +519,7 @@
 
 						$i++;
 					}
-					
+
 					if ($Value['Image2Src'] != NULL | $Value['Image2Alt'] | $Value['Image2Text']) {
 						if ($Value['Image2Src'] != NULL) {
 							$Image[$PictureID]['PageID'] = $NewPageID;
@@ -629,11 +626,11 @@
 							$i++;
 						}
 					}
-					
+
 					if ($Value['Image1Src'] != NULL | $Value['Image1Alt'] | $Value['Image1Text']) {
 						$k = $i;
 						$k++;
-		
+
 						$Content[$i]['PageID'] = $NewPageID;
 						$Content[$i]['ObjectID'] = $i;
 						$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
@@ -654,67 +651,6 @@
 						$Content[$i]['HeadingStartTagID'] = NULL;
 						$Content[$i]['HeadingStartTagStyle'] = NULL;
 						$Content[$i]['HeadingStartTagClass'] = NULL;
-		
-						if ($Value['BottomText'] != NULL) {
-							$Content[$i]['Content'] = $Value['BottomText'];
-							$Content[$i]['ContentStartTag'] = '<p>';
-							$Content[$i]['ContentEndTag'] = '</p>';
-							$Content[$i]['ContentStartTagID'] = NULL;
-							$Content[$i]['ContentStartTagStyle'] = NULL;
-							$Content[$i]['ContentStartTagClass'] = 'BodyText';
-							$Content[$i]['ContentPTagID'] = NULL;
-							$Content[$i]['ContentPTagStyle'] = NULL;
-							$Content[$i]['ContentPTagClass'] = 'BodyText';
-						} else {
-							$Content[$i]['Content'] = NULL;
-							$Content[$i]['ContentStartTag'] = NULL;
-							$Content[$i]['ContentEndTag'] = NULL;
-							$Content[$i]['ContentStartTagID'] = NULL;
-							$Content[$i]['ContentStartTagStyle'] = NULL;
-							$Content[$i]['ContentStartTagClass'] = NULL;
-							$Content[$i]['ContentPTagID'] = NULL;
-							$Content[$i]['ContentPTagStyle'] = NULL;
-							$Content[$i]['ContentPTagClass'] = NULL;
-						}
-		
-						$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
-						$Content[$i]['Status'] = $_POST['Status'];
-		
-						$i++;
-						$k++;
-					}
-					
-
-					// XhtmlTable
-					if ($Value['Name'] !== NULL) {
-						//$i++;
-						//$k++;
-						$hold = $Value['Name'];
-						$hold = explode(' ', $hold);
-						$NewObjectID = $hold[0];
-
-						$Content[$i]['PageID'] = $NewPageID;
-						$Content[$i]['ObjectID'] = $i;
-						$Content[$i]['ContainerObjectType'] = 'XhtmlTable';
-						$Content[$i]['ContainerObjectName'] = 'table';
-						$Content[$i]['ContainerObjectID'] = $NewObjectID;
-						$Content[$i]['ContainerObjectPrintPreview'] = 'true';
-						$Content[$i]['RevisionID'] = $NewRevisionID;
-						$Content[$i]['CurrentVersion'] = 'true';
-						$Content[$i]['Empty'] = 'false';
-						$Content[$i]['StartTag'] = NULL;
-						$Content[$i]['EndTag'] = NULL;
-						$Content[$i]['StartTagID'] = NULL;
-						$Content[$i]['StartTagStyle'] = NULL;
-						$Content[$i]['StartTagClass'] = NULL;
-
-						$Content[$i]['Heading'] = NULL;
-						$Content[$i]['HeadingStartTag'] = NULL;
-						$Content[$i]['HeadingEndTag'] = NULL;
-						$Content[$i]['HeadingStartTagID'] = NULL;
-						$Content[$i]['HeadingStartTagStyle'] = NULL;
-						$Content[$i]['HeadingStartTagClass'] = NULL;
-
 						$Content[$i]['Content'] = NULL;
 						$Content[$i]['ContentStartTag'] = NULL;
 						$Content[$i]['ContentEndTag'] = NULL;
@@ -727,15 +663,109 @@
 
 						$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 						$Content[$i]['Status'] = $_POST['Status'];
-						
-						$i++;
-						//$k++;
-					}
 
-					// BottomText
-					if ($Value['BottomText'] !== NULL) {
-						//$i++;
+						$i++;
 						$k++;
+					}
+					
+					
+					// XhtmlTable
+						if ($Value['Name'] !== NULL) {
+							$LookupID = $Value['Name'];
+							$LookupID = explode('-', $LookupID);
+							$TableRecordID = $LookupID[0];
+							
+							$NewObjectID = $TableID;
+	
+							$Content[$i]['PageID'] = $NewPageID;
+							$Content[$i]['ObjectID'] = $i;
+							$Content[$i]['ContainerObjectType'] = 'XhtmlTable';
+							$Content[$i]['ContainerObjectName'] = 'table';
+							$Content[$i]['ContainerObjectID'] = $NewObjectID;
+							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['RevisionID'] = $NewRevisionID;
+							$Content[$i]['CurrentVersion'] = 'true';
+							$Content[$i]['Empty'] = 'false';
+							$Content[$i]['StartTag'] = NULL;
+							$Content[$i]['EndTag'] = NULL;
+							$Content[$i]['StartTagID'] = NULL;
+							$Content[$i]['StartTagStyle'] = NULL;
+							$Content[$i]['StartTagClass'] = NULL;
+	
+							$Content[$i]['Heading'] = NULL;
+							$Content[$i]['HeadingStartTag'] = NULL;
+							$Content[$i]['HeadingEndTag'] = NULL;
+							$Content[$i]['HeadingStartTagID'] = NULL;
+							$Content[$i]['HeadingStartTagStyle'] = NULL;
+							$Content[$i]['HeadingStartTagClass'] = NULL;
+	
+							$Content[$i]['Content'] = NULL;
+							$Content[$i]['ContentStartTag'] = NULL;
+							$Content[$i]['ContentEndTag'] = NULL;
+							$Content[$i]['ContentStartTagID'] = NULL;
+							$Content[$i]['ContentStartTagStyle'] = NULL;
+							$Content[$i]['ContentStartTagClass'] = NULL;
+							$Content[$i]['ContentPTagID'] = NULL;
+							$Content[$i]['ContentPTagStyle'] = NULL;
+							$Content[$i]['ContentPTagClass'] = NULL;
+	
+							$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
+							$Content[$i]['Status'] = $_POST['Status'];
+							
+							$TableLookup[$TableID]['PageID'] = $NewPageID;
+							$TableLookup[$TableID]['ObjectID'] = $TableID;
+							$TableLookup[$TableID]['RevisionID'] = $NewRevisionID;
+							$TableLookup[$TableID]['CurrentVersion'] = 'true';
+							$TableLookup[$TableID]['XhtmlTableName'] = $XhtmlTableName;
+							$TableLookup[$TableID]['TableID'] = $TableRecordID;
+							$TableLookup[$TableID]['Enable/Disable'] = 'Enable';
+							$TableLookup[$TableID]['Status'] = 'Approved';	
+							
+							$TableID++;
+							$i++;
+							$k++;
+						}
+							
+						// BottomText
+						if ($Value['BottomText'] !== NULL) {
+							$Content[$i]['PageID'] = $NewPageID;
+							$Content[$i]['ObjectID'] = $i;
+							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
+							$Content[$i]['ContainerObjectName'] = 'content';
+							$Content[$i]['ContainerObjectID'] = $k;
+							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['RevisionID'] = $NewRevisionID;
+							$Content[$i]['CurrentVersion'] = 'true';
+							$Content[$i]['Empty'] = 'false';
+							$Content[$i]['StartTag'] = NULL;
+							$Content[$i]['EndTag'] = NULL;
+							$Content[$i]['StartTagID'] = NULL;
+							$Content[$i]['StartTagStyle'] = NULL;
+							$Content[$i]['StartTagClass'] = NULL;
+	
+							$Content[$i]['Heading'] = NULL;
+							$Content[$i]['HeadingStartTag'] = NULL;
+							$Content[$i]['HeadingEndTag'] = NULL;
+							$Content[$i]['HeadingStartTagID'] = NULL;
+							$Content[$i]['HeadingStartTagStyle'] = NULL;
+							$Content[$i]['HeadingStartTagClass'] = NULL;
+	
+							$Content[$i]['Content'] = $Value['BottomText'];
+							$Content[$i]['ContentStartTag'] = '<p>';
+							$Content[$i]['ContentEndTag'] = '</p>';
+							$Content[$i]['ContentStartTagID'] = NULL;
+							$Content[$i]['ContentStartTagStyle'] = NULL;
+							$Content[$i]['ContentStartTagClass'] = 'BodyText';
+							$Content[$i]['ContentPTagID'] = NULL;
+							$Content[$i]['ContentPTagStyle'] = NULL;
+							$Content[$i]['ContentPTagClass'] = 'BodyText';
+	
+							$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
+							$Content[$i]['Status'] = $_POST['Status'];
+							$i++;
+							$k++;
+						}
+						
 						$Content[$i]['PageID'] = $NewPageID;
 						$Content[$i]['ObjectID'] = $i;
 						$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
@@ -750,44 +780,41 @@
 						$Content[$i]['StartTagID'] = NULL;
 						$Content[$i]['StartTagStyle'] = NULL;
 						$Content[$i]['StartTagClass'] = NULL;
-
 						$Content[$i]['Heading'] = NULL;
 						$Content[$i]['HeadingStartTag'] = NULL;
 						$Content[$i]['HeadingEndTag'] = NULL;
 						$Content[$i]['HeadingStartTagID'] = NULL;
 						$Content[$i]['HeadingStartTagStyle'] = NULL;
 						$Content[$i]['HeadingStartTagClass'] = NULL;
-
-						$Content[$i]['Content'] = $Value['BottomText'];
-						$Content[$i]['ContentStartTag'] = '<p>';
-						$Content[$i]['ContentEndTag'] = '</p>';
+						$Content[$i]['Content'] = "<br />/n<hr />/n<br />";
+						$Content[$i]['ContentStartTag'] = NULL;
+						$Content[$i]['ContentEndTag'] = NULL;
 						$Content[$i]['ContentStartTagID'] = NULL;
 						$Content[$i]['ContentStartTagStyle'] = NULL;
-						$Content[$i]['ContentStartTagClass'] = 'BodyText';
+						$Content[$i]['ContentStartTagClass'] = NULL;
 						$Content[$i]['ContentPTagID'] = NULL;
 						$Content[$i]['ContentPTagStyle'] = NULL;
-						$Content[$i]['ContentPTagClass'] = 'BodyText';
-
+						$Content[$i]['ContentPTagClass'] = NULL;
+	
 						$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 						$Content[$i]['Status'] = $_POST['Status'];
-					}
-					$i++;
-					$k++;
+						$i++;
+						$k++;
 				}
 			}
 		}
-		//$i++;
-
-		//$k = $i;
-		//$k++;
-
+		
+		$i--;
+		$k--;
+		unset($Content[$i]);
+		
 		$Content[$i]['PageID'] = $NewPageID;
 		$Content[$i]['ObjectID'] = $i;
 		$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 		$Content[$i]['ContainerObjectName'] = 'content';
 		$Content[$i]['ContainerObjectID'] = $k;
 		$Content[$i]['ContainerObjectPrintPreview'] = 'true';
-		$Content[$i]['RevisionID'] = 0;
+		$Content[$i]['RevisionID'] = $NewRevisionID;
 		$Content[$i]['CurrentVersion'] = 'true';
 		$Content[$i]['Empty'] = 'false';
 		$Content[$i]['StartTag'] = NULL;
@@ -802,14 +829,14 @@
 		$Content[$i]['HeadingStartTagStyle'] = NULL;
 		$Content[$i]['HeadingStartTagClass'] = NULL;
 		$Content[$i]['Content'] = NULL;
-		$Content[$i]['ContentStartTag'] = '<p>';
-		$Content[$i]['ContentEndTag'] = '</p>';
+		$Content[$i]['ContentStartTag'] = NULL;
+		$Content[$i]['ContentEndTag'] = NULL;
 		$Content[$i]['ContentStartTagID'] = NULL;
 		$Content[$i]['ContentStartTagStyle'] = NULL;
-		$Content[$i]['ContentStartTagClass'] = 'BodyText';
+		$Content[$i]['ContentStartTagClass'] = NULL;
 		$Content[$i]['ContentPTagID'] = NULL;
 		$Content[$i]['ContentPTagStyle'] = NULL;
-		$Content[$i]['ContentPTagClass'] = 'BodyText';
+		$Content[$i]['ContentPTagClass'] = NULL;
 		$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 		$Content[$i]['Status'] = $_POST['Status'];
 
@@ -836,8 +863,7 @@
 		$MainMenuItemLookup = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
 		$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
 
-
-		$UpdateTablesPageSelect = $Options['XhtmlTables']['table']['UpdateTablesPageSelect']['SettingAttribute'];
+		$UpdateTablesPageSelect = $Options['XhtmlTable']['table']['TablePageUpdateSelectPage']['SettingAttribute'];
 		$FormSelect = array();
 		$FormSelect['PageID'] = $UpdateTablesPageSelect;
 		$FormSelect['ObjectID'] = $NewTablesPage;
@@ -845,7 +871,7 @@
 		$FormSelect['ContinueObjectID'] = NULL;
 		$FormSelect['ContainerObjectType'] = 'Option';
 		$FormSelect['ContainerObjectTypeName'] = 'AdministratorFormOption';
-		$FormSelect['ContainerObjectID'] = $NewPhotosPage;
+		$FormSelect['ContainerObjectID'] = $NewTablesPage;
 		$FormSelect['FormSelectDisabled'] = NULL;
 		$FormSelect['FormSelectMultiple'] = NULL;
 		$FormSelect['FormSelectName'] = 'TablesPage';
@@ -871,7 +897,7 @@
 		$FormOptionValue = $NewTablesPage;
 		$FormOptionValue .= ' - ';
 		$FormOptionValue .= $NewPageID;
-
+		
 		$FormOption = array();
 		$FormOption['PageID'] = $UpdateTablesPageSelect;
 		$FormOption['ObjectID'] = $NewTablesPage;
@@ -907,26 +933,99 @@
 		$FormOption['FormOptionXMLLang'] = 'en-us';
 		$FormOption['Enable/Disable'] = 'Enable';
 		$FormOption['Status'] = 'Approved';
-
-		//print_r($Header);
-		//print_r($HeaderPanel1);
-		//print_r($ContentLayerVersion);
-		//print_r($Sitemap);
-		//print_r($ContentPrintPreview);
-		//print_r($MainMenuItemLookup);
-		//print_r($FormSelect);
-		//print_r($FormOption);
 		
-		//print_r($Image);
-		///print_r($Content);
-		////print_r($_POST);
+		if ($Image != NULL) {
+			foreach ($Image as $Key => $Value) {
+				$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'createPicture', $Image[$Key]);
+			}
+		}
+		
+		if ($TableLookup != NULL) {
+			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableLookup, 'TableName' => 'XhtmlTableLookup'));
+		}
+		
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
+		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
+		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
+		$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContentPrintPreview', $ContentPrintPreview);
+		////////$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 
-		////print_r($TempTable);
+		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
 
-		////print_r($Table);
+		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
+		
+		$UpdateTablesPageSelect = $Options['XhtmlTable']['table']['TablePageUpdateSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $UpdateTablesPageSelect;
+		$FormOption['PageID'] = $UpdateTablesPageSelect;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$DeleteTablesPage = $Options['XhtmlTable']['table']['TablePageDeleteSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $DeleteTablesPage;
+		$FormOption['PageID'] = $DeleteTablesPage;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$EnableDisableStatusChangeTablesPage = $Options['XhtmlTable']['table']['TablePageEnableDisableSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $EnableDisableStatusChangeTablesPage;
+		$FormOption['PageID'] = $EnableDisableStatusChangeTablesPage;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$FormOptionValue = $NewPageID;
+		$FormOptionValue .= ' - ';
+		$FormOptionValue .= 'NULL';
 
-		////print "I MADE IT\n";
-	//} else {
+		$MainMenuSelectPage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $MainMenuSelectPage;
+		$FormSelect['ObjectID'] = $NewPageID;
+		$FormSelect['ContainerObjectID'] = $NewPageID;
+		$FormSelect['FormSelectName'] = 'MenuItem';
+		$FormSelect['StopObjectID'] = NULL;
+		$FormSelect['FormSelectStyle'] = NULL;
+		$FormOption['PageID'] = $MainMenuSelectPage;
+		$FormOption['ObjectID'] = $NewPageID;
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+
+		$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+		$FormSelect['PageID'] = $MainMenuUpdatePage;
+		$FormOption['PageID'] = $MainMenuUpdatePage;
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$j = $NewPageID;
+		for ($i = 2; $i < 16; $i++) {
+			$j += 10000;
+			$FormSelect['ObjectID'] = $j;
+			$FormSelect['FormSelectName'] = 'MenuItem';
+			$FormSelect['FormSelectName'] .= $i;
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		}
+
+		$j += 10000;
+		$FormSelect['ObjectID'] = $j;
+		$FormSelect['FormSelectName'] = 'TopMenu';
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		
+		$sessionname = $Tier6Databases->SessionStart('AddedTablesPage');
+
+		$Page = '../../../index.php?PageID=';
+		$Page .= $NewPageID;
+		
+		$_SESSION['POST']['Error']['Link'] = '<a href=\'';
+		$_SESSION['POST']['Error']['Link'] .= $Page;
+		$_SESSION['POST']['Error']['Link'] .= '\'>Added Tables Page</a>';
+		
+		$TablesPageCreatedPage = $Options['XhtmlTable']['table']['TablePageCreatedPage']['SettingAttribute'];
+		
+		header("Location: $TablesPageCreatedPage&SessionID=$sessionname");
+		exit;
+	} else {
 		//print "I DID NOT MAKE IT\n";
-	//}
+	}
 ?>

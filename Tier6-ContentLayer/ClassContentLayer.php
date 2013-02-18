@@ -3,25 +3,23 @@
 **************************************************************************************
 * One Solution CMS
 *
-* Copyright (c) 1999 - 2012 One Solution CMS
+* Copyright (c) 1999 - 2013 One Solution CMS
+* This content management system is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
 *
-* This content management system is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-*
-* This library is distributed in the hope that it will be useful,
+* This content management system is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* Lesser General Public License for more details.
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 * @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
-* @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
-* @version    2.1.139, 2012-12-27
+* @license    http://www.gnu.org/licenses/gpl-2.0.txt
+* @version    2.1.141, 2013-01-14
 *************************************************************************************
 */
 
@@ -1506,11 +1504,11 @@ class ContentLayer extends LayerModulesAbstract
 		if ($arguments[4] != NULL) {
 			$ElementName = $arguments[4];
 		}
-		
+
 		if ($arguments[5] != NULL) {
 			$AddLookupData = $arguments[5];
 		}
-		
+
 		$sessionname = $this->SessionStart($SessionName);
 		if ($FileLocation != NULL) {
 			$FileName = $FileLocation . $sessionname . '.xml';
@@ -1524,29 +1522,16 @@ class ContentLayer extends LayerModulesAbstract
 
 		$this->LayerModule->setPageID($loginidnumber['PageID']);
 		if ($AddLookupData !== NULL) {
-			print "I AM\n";
-			print "POST\n";
-			print_r($_POST);
-			print "END POST\n";
-			
-			//print_r($ElementName);
-			//print_r($FileDataForm);
 			$PassArguments = array();
 			$PassArguments[0]['Module'] = 'FormValidation';
 			$PassArguments[0]['Name'] = 'formvalidation';
-			//$PassArguments[0]['ElementName'] = $ElementName;
-			//$PassArguments[0]['FileLocation'] = $FileLocation;
-			//$PassArguments[0]['FileDataForm'] = $FileDataForm;
-			//$PassArguments[0]['POST'] = $_POST;
+			$PassArguments[0]['POST'] = $_POST;
 			$PassArguments[0]['AddLookupData'] = $AddLookupData;
-			$this->LayerModule->pass('FormValidation', 'FORMBYPASS', $PassArguments);
-			
-			//$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-			//print_r($hold);
+			$hold = $this->LayerModule->pass('FormValidation', 'FORMBYPASS', $PassArguments);
 		} else {
 			$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
 		}
-		
+
 		if ($hold['FilteredInput']['Priority']) {
 			$hold['FilteredInput']['Priority'] *= 10;
 		}
@@ -1557,7 +1542,7 @@ class ContentLayer extends LayerModulesAbstract
 
 		if ($hold['Error']) {
 			if ($FileName != NULL & $FileDataForm != NULL) {
-				$this->ProcessFormXMLFile($FileName, $hold, $FileDataForm, $ElementName);
+				$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
 			}
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
@@ -1571,7 +1556,7 @@ class ContentLayer extends LayerModulesAbstract
 		}
 	}
 
-	protected function ProcessFormXMLFile($FileName, $FileData, $FileDataForm, $ElementName) {
+	public function ProcessFormXMLFile($FileName, $FileDataForm, $ElementName) {
 		$XMLFile = new XmlWriter();
 		$XMLFile->openURI($FileName);
 		$XMLFile->setIndent(4);

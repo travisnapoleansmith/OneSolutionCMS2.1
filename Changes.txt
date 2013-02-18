@@ -1,4 +1,18 @@
-Changes For One Solution CMS 2.1.140 - Wednesday, January 9, 2013
+Changes For One Solution CMS 2.1.141 - Sunday, February 17, 2013
+Added:
+	1). Administrators Panel - The Logon form now shows a warning about unauthorized users.
+
+Updated (Fixed):
+	1). Change license from LGPL to GPL V2.
+	2). Fixed XhtmlNewsStories Bug #0000019 - Any story past 30 days will be show.
+	3). XhtmlTable Pages are fully working. They will show up now in the Administrators Panel.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.140 - Wednesday, January 9, 2013 08:42:23 PM
 Added:
 	1). Added Documentation to Class ValidationLayer.
 	2). Added Documentation to Class ProtectionLayer.

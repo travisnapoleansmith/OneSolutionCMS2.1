@@ -1,4 +1,5 @@
 // JavaScript Document
+var GET = GetUrlVars();
 var PageLocation = "../Modules/Tier6ContentLayer/Core/XhtmlTable/XmlTableListing.php";
 var TableListings = null;
 
@@ -8,10 +9,10 @@ var TableSelectionLabel = document.createElement('label');
 var TableSelectionLabelDiv = document.createElement('div');
 
 var COOKIE = document.cookie.split(';');
+var SessionID = null;
 
 $(document).ready(function()
 {
-	//alert(COOKIE);
 	CreateTableSelectionLabel();
 	
 	$.ajax({
@@ -19,8 +20,22 @@ $(document).ready(function()
 		type: "GET", 
 		dataType: "xml",
 		success: LoadTableListings
+	}).done(function (data){
+		if (GET['SessionID'] != null) {
+			SessionID = GET['SessionID'];
+		}
+		
+		if (SessionID != null) {
+			var File = '../Administrators/PageTypes/TablePage/TEMPFILES/' + SessionID + '.xml';
+			
+			$.ajax({
+				url: File,
+				type: "GET", 
+				dataType: "xml",
+				success: LoadTables
+			});
+		}
 	});
-	
 });
 
 function CreateTableSelectionLabel() {
@@ -40,13 +55,18 @@ function CreateTableListing() {
 	TableSelectionContentDiv.setAttribute('dir', "ltr");
 	TableSelectionContentDiv.setAttribute('lang', "en-us");
 	TableSelectionContentDiv.setAttribute('xml:lang', "en-us");
-	
 	TableSelectionContentDiv.appendChild(TableSelectionOutput.cloneNode(true));
 	
 	return (TableSelectionContentDiv);
 }
 
 function AddTable(TableNumber) {
+	var Data = null;
+	
+	if (arguments[1] != null) {
+		Data = arguments[1];
+	}
+	
 	var AppendID = null;
 	if (TableNumber === 1) {
 		AppendID = "Heading"
@@ -57,12 +77,13 @@ function AddTable(TableNumber) {
 	}
 	
 	var NextAddTablePage = TableNumber + 1;
-	var TableName = "Table " + TableNumber;
-	var TableID = "Table" + TableNumber;
 	var AddTableName = "AddTable" + NextAddTablePage;
 	var RemoveTableName = "RemoveTable" + NextAddTablePage;
 	var AddTableOnClick = "AddTable(" + NextAddTablePage + ");";
 	var RemoveTableOnClick = "RemoveTable(" + NextAddTablePage + ");";
+	
+	var TableName = "Table " + TableNumber;
+	var TableID = "Table" + TableNumber;
 	
 	var HeadingContentID = "Table" + TableNumber + "Heading";
 	var HeadingContentName = "Table" + TableNumber + "_Heading";
@@ -82,8 +103,8 @@ function AddTable(TableNumber) {
 	var Image1TextID = "Table" + TableNumber + "Image1Text";
 	var Image1TextName = "Table" + TableNumber + "_Image1Text";
 	
-	var Image1AltID = "Table" + TableNumber + "Image2Alt";
-	var Image1AltName = "Table" + TableNumber + "_Image2Alt";
+	var Image1AltID = "Table" + TableNumber + "Image1Alt";
+	var Image1AltName = "Table" + TableNumber + "_Image1Alt";
 	
 	var Image2SrcID = "Table" + TableNumber + "Image2Src";
 	var Image2SrcName = "Table" + TableNumber + "_Image2Src";
@@ -129,6 +150,16 @@ function AddTable(TableNumber) {
 	HeadingContent.setAttribute('cols', "30");
 	HeadingContent.setAttribute('name', HeadingContentName);
 	
+	if (Data != null) {
+		if (Data['Heading'] != null) {
+			HeadingContent.innerHTML = Data['Heading'];
+		} else {
+			HeadingContent.innerHTML = 'NULL';
+		}
+	} else {
+		HeadingContent.innerHTML = 'NULL';
+	}
+	
 	var HeadingLabelDiv = document.createElement('div');
 	var HeadingContentDiv = document.createElement('div');
 	HeadingLabelDiv.appendChild(HeadingLabel);
@@ -156,6 +187,16 @@ function AddTable(TableNumber) {
 	TopTextContent.setAttribute('cols', "3");
 	TopTextContent.setAttribute('name', TopTextContentName);
 	
+	if (Data != null) {
+		if (Data['TopText'] != null) {
+			TopTextContent.innerHTML = Data['TopText'];
+		} else {
+			TopTextContent.innerHTML = 'NULL';
+		}
+	} else {
+		TopTextContent.innerHTML = 'NULL';
+	}
+	
 	var TopTextLabelDiv = document.createElement('div');
 	var TopTextContentDiv = document.createElement('div');
 	TopTextLabelDiv.appendChild(TopTextLabel);
@@ -180,7 +221,17 @@ function AddTable(TableNumber) {
 	Image1SrcContent.setAttribute('lang', "en-us");
 	Image1SrcContent.setAttribute('xml:lang', "en-us");
 	Image1SrcContent.setAttribute('type', "text");
-	Image1SrcContent.setAttribute('value', "NULL");
+	
+	if (Data != null) {
+		if (Data['Image1Src'] != null & Data['Image1Src'].length != 0) {
+			Image1SrcContent.setAttribute('value', Data['Image1Src']);
+		} else {
+			Image1SrcContent.setAttribute('value', "NULL");
+		}
+	} else {
+		Image1SrcContent.setAttribute('value', "NULL");
+	}
+	
 	Image1SrcContent.setAttribute('name', Image1SrcName);
 	
 	var Image1SrcLabelDiv = document.createElement('div');
@@ -208,7 +259,16 @@ function AddTable(TableNumber) {
 	Image1TextContent.setAttribute('rows', "15");
 	Image1TextContent.setAttribute('cols', "3");
 	Image1TextContent.setAttribute('name', Image1TextName);
-	Image1TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	
+	if (Data != null) {
+		if (Data['Image1Text'] != null & Data['Image1Text'].length != 0) {
+			Image1TextContent.innerHTML = Data['Image1Text'];
+		} else {
+			Image1TextContent.innerHTML = "NULL";
+		}
+	} else {
+		Image1TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	}
 	
 	var Image1TextLabelDiv = document.createElement('div');
 	var Image1TextContentDiv = document.createElement('div');
@@ -233,7 +293,17 @@ function AddTable(TableNumber) {
 	Image1AltContent.setAttribute('lang', "en-us");
 	Image1AltContent.setAttribute('xml:lang', "en-us");
 	Image1AltContent.setAttribute('type', "text");
-	Image1AltContent.setAttribute('value', "NULL");
+	
+	if (Data != null) {
+		if (Data['Image1Alt'] != null & Data['Image1Alt'].length != 0) {
+			Image1AltContent.setAttribute('value', Data['Image1Alt']);
+		} else {
+			Image1AltContent.setAttribute('value', "NULL");
+		}
+	} else {
+		Image1AltContent.setAttribute('value', "NULL");
+	}
+	
 	Image1AltContent.setAttribute('name', Image1AltName);
 	
 	var Image1AltLabelDiv = document.createElement('div');
@@ -260,7 +330,17 @@ function AddTable(TableNumber) {
 	Image2SrcContent.setAttribute('lang', "en-us");
 	Image2SrcContent.setAttribute('xml:lang', "en-us");
 	Image2SrcContent.setAttribute('type', "text");
-	Image2SrcContent.setAttribute('value', "NULL");
+	
+	if (Data != null) {
+		if (Data['Image2Src'] != null & Data['Image2Src'].length != 0) {
+			Image2SrcContent.setAttribute('value', Data['Image2Src']);
+		} else {
+			Image2SrcContent.setAttribute('value', "NULL");
+		}
+	} else {
+		Image2SrcContent.setAttribute('value', "NULL");
+	}
+	
 	Image2SrcContent.setAttribute('name', Image2SrcName);
 	
 	var Image2SrcLabelDiv = document.createElement('div');
@@ -288,7 +368,16 @@ function AddTable(TableNumber) {
 	Image2TextContent.setAttribute('rows', "15");
 	Image2TextContent.setAttribute('cols', "3");
 	Image2TextContent.setAttribute('name', Image2TextName);
-	Image2TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	
+	if (Data != null) {
+		if (Data['Image2Text'] != null & Data['Image2Text'].length != 0) {
+			Image2TextContent.innerHTML = Data['Image2Text'];
+		} else {
+			Image2TextContent.innerHTML = "NULL";
+		}
+	} else {
+		Image2TextContent.innerHTML = "PHOTO IMAGE TEXT GOES HERE - IF YOU NEED A LINK HERE IS THE TAG FOR THAT! <a href='LINK GOES HERE'>Gallery</a>";
+	}
 	
 	var Image2TextLabelDiv = document.createElement('div');
 	var Image2TextContentDiv = document.createElement('div');
@@ -313,7 +402,17 @@ function AddTable(TableNumber) {
 	Image2AltContent.setAttribute('lang', "en-us");
 	Image2AltContent.setAttribute('xml:lang', "en-us");
 	Image2AltContent.setAttribute('type', "text");
-	Image2AltContent.setAttribute('value', "NULL");
+	
+	if (Data != null) {
+		if (Data['Image2Alt'] != null & Data['Image2Alt'].length != 0) {
+			Image2AltContent.setAttribute('value', Data['Image2Alt']);
+		} else {
+			Image2AltContent.setAttribute('value', "NULL");
+		}
+	} else {
+		Image2AltContent.setAttribute('value', "NULL");
+	}
+	
 	Image2AltContent.setAttribute('name', Image2AltName);
 	
 	var Image2AltLabelDiv = document.createElement('div');
@@ -326,12 +425,25 @@ function AddTable(TableNumber) {
 	
 	// Table Listing
 	var TableSelectionContentDiv = CreateTableListing();
-	
 	TableSelectionContentDiv.setAttribute('id', TableSelectionContentID);
 	TableSelectionContentDiv.setAttribute('name', TableSelectionContentName);
 	
+	if (Data != null) {
+		if (Data['Name'] != null) {
+			$(TableSelectionContentDiv).each(function () {
+				$(this).children("option").each(function() {
+					if ($(this).text() == Data['Name']) {
+						$(this).attr("selected", "selected");
+					}
+				});
+			});
+		}
+	}
+	
 	FieldSet.appendChild(TableSelectionLabelDiv.cloneNode(true));
 	FieldSet.appendChild(TableSelectionContentDiv);
+	
+	
 	
 	// BOTTOM TEXT
 	var BottomTextLabel = document.createElement('label');
@@ -351,6 +463,17 @@ function AddTable(TableNumber) {
 	BottomTextContent.setAttribute('rows', "15");
 	BottomTextContent.setAttribute('cols', "3");
 	BottomTextContent.setAttribute('name', BottomTextContentName);
+	
+	if (Data != null) {
+		if (Data['BottomText'] != null & Data['BottomText'].length != 0) {
+			BottomTextContent.innerHTML = Data['BottomText'];
+		} else {
+			BottomTextContent.innerHTML = 'NULL';
+		}
+	} else {
+		BottomTextContent.innerHTML = 'NULL';
+	}
+	
 	
 	var BottomTextLabelDiv = document.createElement('div');
 	var BottomTextContentDiv = document.createElement('div');
@@ -435,6 +558,49 @@ function LoadTableListings(XML) {
 	});
 }
 
+function LoadTables(XML) {
+	var Tables = $(XML).find("Content");
+	var TableContent = new Array();
+	Tables.find("Table").each(function() {
+		var TableName = $(this).attr("name");
+		var Heading = $(this).find("Heading").text();
+		var TopText = $(this).find("TopText").text();
+		var Image1Alt = $(this).find("Image1Alt").text();
+		var Image1Src = $(this).find("Image1Src").text();
+		var Image1Text = $(this).find("Image1Text").text();
+		var Image2Alt = $(this).find("Image2Alt").text();
+		var Image2Src = $(this).find("Image2Src").text();
+		var Image2Text = $(this).find("Image2Text").text();
+		var Name = $(this).find("Name").text();
+		var BottomText = $(this).find("BottomText").text();
+		
+		var Data = new Array();
+		Data['TableName'] = TableName;
+		Data['Heading'] = Heading;
+		Data['TopText'] = stripSlashes(TopText);
+		Data['Image1Alt'] = Image1Alt;
+		Data['Image1Src'] = Image1Src;
+		Data['Image1Text'] = stripSlashes(Image1Text);
+		Data['Image2Alt'] = Image2Alt;
+		Data['Image2Src'] = Image2Src;
+		Data['Image2Text'] = stripSlashes(Image2Text);
+		Data['Name'] = Name;
+		Data['BottomText'] = BottomText;
+		
+		var TableNumber = TableName.replace("Table", '');
+		TableNumber = parseInt(TableNumber);
+		AddTable(TableNumber, Data);		
+	});
+}
+
+function stripSlashes(str) {
+	str = str.replace(/\\'/g, '\'');
+    str = str.replace(/\\"/g, '"');
+    str = str.replace(/\\0/g, '\0');
+    str = str.replace(/\\\\/g, '\\');
+    return str;
+}
+
 // QUIRKSMODE.ORG COOKIE FUNCTIONS
 function createCookie(name,value,days) {
 	if (days) {
@@ -465,4 +631,12 @@ function readCookie(name) {
 
 function eraseCookie(name) {
 	createCookie(name,"",-1);
+}
+
+function GetUrlVars() {
+	var Get = new Array();
+	window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(M,Key,Value) {
+		Get[Key] = Value;
+	});
+	return Get;
 }
