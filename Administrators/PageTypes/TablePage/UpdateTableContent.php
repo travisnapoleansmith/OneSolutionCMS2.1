@@ -124,7 +124,11 @@
 	$PageName .= $_POST['UpdateTableContent'];
 	$PageName .= "&TableID=";
 	$PageName .= $TableID;
-
+	
+	if ($_POST['File']) {
+		$PageName .= '&File=' . $_POST['File'];
+	}
+	
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateTableContent', $PageName);
 
 	if ($hold) {

@@ -180,7 +180,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$this->AdSponsorsTableName[$key] = $databasename;
 			}
 		}
-
+		
 		foreach($this->AdSponsorsTableName as $TableName) {
 			$this->AdSponsorsDatabaseOptions[$TableName] = array();
 			$ShowNumber = $TableName . 'ShowNumber';
@@ -256,9 +256,20 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$this->AdSponsorsDatabaseOptions[$TableName][$AdvertisingImageStartTag] = $DatabaseOptions[$AdvertisingImageStartTag];
 			}
 		}
-
 	}
-
+	
+	/**
+	 * setDatabaseAll
+	 *
+	 * Sets the hostname, user, password, databasename and databasetable.
+	 *
+	 * @param string $hostname = Database Host Name
+	 * @param string $user = Database User
+	 * @param string $password = Database User's Password
+	 * @param string $databasename = Database Name
+	 * @param string $databasetable = Database Table
+	 *
+	 */
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
 		$this->Hostname = $hostname;
 		$this->User = $user;
@@ -444,7 +455,57 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		$this->AdStatsTable = $this->LayerModule->pass ($this->DatabaseTable, 'getMultiRowField', array());
 		$this->LayerModule->Disconnect($this->DatabaseTable);
 	}
-
+	
+	/**
+	 * FetchDatabaseAll
+	 *
+	 * Retrieved the entire database table.
+	 *
+	 * @param string $DatabaseTable = A Database Table to get. OPTIONAL
+	 * @return array Entire Database Table
+	 */
+	public function FetchDatabaseAll () {
+		$Arguments = func_get_args();
+		$DatabaseTable = $Arguments[0];
+		
+		if ($DatabaseTable === NULL) {
+			$this->LayerModule->Connect($this->DatabaseTable);
+			
+			$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
+			$EntireDatabaseTable = $this->LayerModule->pass ($this->DatabaseTable, 'getEntireTable', array());
+	
+			$this->LayerModule->Disconnect($this->DatabaseTable);
+		} else {
+			$this->LayerModule->Connect($DatabaseTable);
+			
+			$this->LayerModule->pass ($DatabaseTable, 'setEntireTable', array());
+			$EntireDatabaseTable = $this->LayerModule->pass ($DatabaseTable, 'getEntireTable', array());
+	
+			$this->LayerModule->Disconnect($DatabaseTable);
+		}
+		
+		return $EntireDatabaseTable;
+	}
+	
+	/**
+	 * getAdTablesName
+	 *
+	 * Retrieved the entire database table.
+	 *
+	 * @return array Entire Database Table
+	 */
+	public function getAdTablesName() {
+		return $this->AdSponsorsTableName;
+	}
+	
+	/**
+	 * CreateOutput
+	 *
+	 * Creates Output based on what the database entried have in them with space being the indentation of each line.
+	 *
+	 * @param string $space = Indentation for each new line
+	 *
+	 */
 	public function CreateOutput($space) {
 		// Figuring Out The Last Index Name For An Array Of Arrays
 		$LastIndex = NULL;
@@ -696,7 +757,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			$this->Writer->flush();
 		}
 	}
-
+	
 	protected function selectRandomSponsor ($AdSponsorsTableName, Array $DatabaseTable) {
 		if ($AdSponsorsTableName != NULL) {
 			$Index = array_rand($DatabaseTable);

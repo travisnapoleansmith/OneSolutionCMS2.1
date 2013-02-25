@@ -129,10 +129,15 @@
 ../../Administrators/PageTypes/BlockquotePage/SelectBlockquotePage.php
 ../../Administrators/PageTypes/BlockquotePage/UpdateBlockquotePage.php
 ../../Administrators/PageTypes/CalendarPage/AddCalendarEvent.php
+../../Administrators/PageTypes/CalendarPage/AddCalendarPage.php
 ../../Administrators/PageTypes/CalendarPage/DeleteCalendarEvent.php
+../../Administrators/PageTypes/CalendarPage/DeleteCalendarPage.php
 ../../Administrators/PageTypes/CalendarPage/EnableDisableStatusChangeCalendarEvent.php
+../../Administrators/PageTypes/CalendarPage/EnableDisableStatusChangeCalendarPage.php
 ../../Administrators/PageTypes/CalendarPage/SelectCalendarEvent.php
+../../Administrators/PageTypes/CalendarPage/SelectCalendarPage.php
 ../../Administrators/PageTypes/CalendarPage/UpdateCalendarEvent.php
+../../Administrators/PageTypes/CalendarPage/UpdateCalendarPage.php
 ../../Administrators/PageTypes/ContentPage/AddContentPage.php
 ../../Administrators/PageTypes/ContentPage/DeleteContentPage.php
 ../../Administrators/PageTypes/ContentPage/EnableDisableStatusChangeContentPage.php
@@ -165,6 +170,7 @@
 ../../Administrators/PageTypes/TablePage/AddTablePage.php
 ../../Administrators/PageTypes/TablePage/DeleteTableContent.php
 ../../Administrators/PageTypes/TablePage/DeleteTablePage.php
+../../Administrators/PageTypes/TablePage/EmptyTempFilesDirectory.php
 ../../Administrators/PageTypes/TablePage/EmptyUploadDirectory.php
 ../../Administrators/PageTypes/TablePage/EnableDisableStatusChangeTableContent.php
 ../../Administrators/PageTypes/TablePage/EnableDisableStatusChangeTablePage.php
@@ -209,7 +215,6 @@
 ../../Configuration/Tier5ValidationLayerSettings.php
 ../../Configuration/Tier6ContentLayerDatabaseSettings.php
 ../../Configuration/Tier6ContentLayerSettings.php
-../../Configuration/updatesettings.php
 ../../Configuration/Tier6-ContentLayer/ad.php
 ../../Configuration/Tier6-ContentLayer/authenticate.php
 ../../Configuration/Tier6-ContentLayer/background.php
@@ -5938,6 +5943,7 @@
 ../../Modules/Tier6ContentLayer/Extended/XhtmlNewsStories/
 ../../Modules/Tier6ContentLayer/Extended/XhtmlAd/AdHocSense/
 ../../Modules/Tier6ContentLayer/Extended/XhtmlAd/ClassXhtmlAd.php
+../../Modules/Tier6ContentLayer/Extended/XhtmlAd/XMLAdStatsListing.php
 ../../Modules/Tier6ContentLayer/Extended/XhtmlCalendarTable/ClassXhtmlCalendarTable.php
 ../../Modules/Tier6ContentLayer/Extended/XhtmlMainMenu/ClassXhtmlMainMenu.php
 ../../Modules/Tier6ContentLayer/Extended/XhtmlMenu/ClassXhtmlMenu.php
@@ -6069,12 +6075,13 @@
 ../../SQLTables/Update/UpdateTables-2.1.137.sql
 ../../SQLTables/Update/UpdateTables-2.1.138.sql
 ../../SQLTables/Update/UpdateTables-2.1.139.sql
+../../SQLTables/Update/UpdateTables-2.1.140.sql
+../../SQLTables/Update/UpdateTables-2.1.141.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
 ../../Testcases/SimpleTest/simpletest/
 ../../Testcases/SimpleTest/simpletest/docs/
-../../Testcases/SimpleTest/simpletest/extensions/
 ../../Testcases/SimpleTest/simpletest/test/
 ../../Testcases/SimpleTest/simpletest/arguments.php
 ../../Testcases/SimpleTest/simpletest/authentication.php
@@ -6147,10 +6154,6 @@
 ../../Testcases/SimpleTest/simpletest/docs/fr/reporter_documentation.html
 ../../Testcases/SimpleTest/simpletest/docs/fr/unit_test_documentation.html
 ../../Testcases/SimpleTest/simpletest/docs/fr/web_tester_documentation.html
-../../Testcases/SimpleTest/simpletest/extensions/testdox/
-../../Testcases/SimpleTest/simpletest/extensions/pear_test_case.php
-../../Testcases/SimpleTest/simpletest/extensions/testdox.php
-../../Testcases/SimpleTest/simpletest/extensions/testdox/test.php
 ../../Testcases/SimpleTest/simpletest/test/site/
 ../../Testcases/SimpleTest/simpletest/test/support/
 ../../Testcases/SimpleTest/simpletest/test/acceptance_test.php

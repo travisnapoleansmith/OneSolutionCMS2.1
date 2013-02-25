@@ -293,7 +293,7 @@ function ImportData() {
 			var File = Files[0];
 			
 			var Url = document.URL + "&File=" + File.name;
-			alert ("You are being redirect to a new Add Table Content form with your file");
+			alert ("You are being redirect to a new Table Content form with your file");
 			window.location = Url;
 		};
 	Vault.create("Vault");

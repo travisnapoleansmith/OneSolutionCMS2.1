@@ -1,4 +1,19 @@
-Changes For One Solution CMS 2.1.141 - Sunday, February 17, 2013
+Changes For One Solution CMS 2.1.142 - Sunday, February 24, 2013
+Added:
+	1). Administrators Panel - Tables Pages - Added Tables Empty Temp Files Directory Utility to the Administrators Panel.
+	2). Administrators Panel - Schedule Pages - Added the forms for Schedule Pages to the Administrators Panel.
+	3). Administrators Panel - XhtmlAd - Added XML Ad Stats to the Administrators Panel.
+	4). Administrators Panel - Table Content - Added to Update Table Content to allow for CSV or Excel file import. This will overight the existing table.
+
+Updated (Fixed):
+	1). Administrators Panel - Fixed Update Database Tool from System Updater so it will update the database correctly.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.141 - Sunday, February 17, 2013 8:57:39 PM
 Added:
 	1). Administrators Panel - The Logon form now shows a warning about unauthorized users.
 
