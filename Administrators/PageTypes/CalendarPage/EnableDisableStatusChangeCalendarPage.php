@@ -30,7 +30,7 @@
 
 	require_once ("$ADMINHOME/Configuration/includes.php");
 
-	$hold = $_POST['NewsPage'];
+	$hold = $_POST['CalendarPage'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[2];
 	$_POST['PageID'] = $PageID;
@@ -45,8 +45,11 @@
 
 	$Options = $Tier6Databases->getLayerModuleSetting();
 
-	/*if (!is_null($PageID)) {
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryLookupStatus', $PageID);
+	if (!is_null($PageID)) {
+		$TablePageID = array();
+		$TablePageID = $PageID;
+		$TablePageID['TableName'] = 'CalendarTable';
+		$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'updateCalendarStatus', $TablePageID);
 
 		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeaderStatus', $PageID);
 		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'updateMenuStatus', $PageID);
@@ -54,21 +57,22 @@
 		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'updateSitemapItemStatus', $PageID);
 		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContentPrintPreviewStatus', $PageID);
 		$Tier6Databases->updateContentStatus($PageID, 'ContentLayer');
+		
+		$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
+		$CalendarPageID = array();
+		$CalendarPageID['PageID'] = &$FormOptionID;
+		$CalendarPageID['ObjectID'] = $FormOptionObjectID;
+		$CalendarPageID['EnableDisable'] = $_POST['EnableDisable'];
+		$CalendarPageID['Status'] = $_POST['Status'];
 
-		$FormOptionID = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
-		$NewsPageID = array();
-		$NewsPageID['PageID'] = &$FormOptionID;
-		$NewsPageID['ObjectID'] = $FormOptionObjectID;
-		$NewsPageID['EnableDisable'] = $_POST['EnableDisable'];
-		$NewsPageID['Status'] = $_POST['Status'];
-
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $NewsPageID);
-		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $NewsPageID);
-
-		$EnableDisableNewsPage = $Options['XhtmlNewsStories']['news']['EnableDisableNewsPage']['SettingAttribute'];
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOptionStatus', $CalendarPageID);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormSelectStatus', $CalendarPageID);
+		
+		$EnableDisableNewsPage = $Options['XhtmlCalendarTable']['calendar']['CalendarPageEnableDisablePage']['SettingAttribute'];
 		header("Location: $EnableDisableNewsPage");
+		
 	} else {
-		$EnableDisableStatusChangeNewsPage = $Options['XhtmlNewsStories']['news']['EnableDisableStatusChangeNewsPage']['SettingAttribute'];
-		header("Location: ../../index.php?PageID=$EnableDisableStatusChangeNewsPage");
-	}*/
+		$EnableDisableStatusChangeCalendarPage = $Options['XhtmlCalendarTable']['calendar']['EnableDisableStatusChangeCalendarPage']['SettingAttribute'];
+		header("Location: ../../index.php?PageID=$EnableDisableStatusChangeCalendarPage");
+	}
 ?>

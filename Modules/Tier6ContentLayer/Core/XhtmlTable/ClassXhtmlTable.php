@@ -1799,9 +1799,9 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$UpdateTable = $TableID['UpdateTable'];
 			unset($TableID['UpdateTable']);
 			
-			if ($TableID['Enable/Disable'] == 'Enable') {
+			if ($TableID['EnableDisable'] == 'Enable') {
 				$this->enableModuleContent($TableID, $DatabaseTableName);
-			} else if ($TableID['Enable/Disable'] == 'Disable') {
+			} else if ($TableID['EnableDisable'] == 'Disable') {
 				$this->disableModuleContent($TableID, $DatabaseTableName);
 			}
 

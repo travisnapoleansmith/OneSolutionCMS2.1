@@ -173,7 +173,7 @@
 		$FormSelect['FormSelectDir'] = 'ltr';
 		$FormSelect['FormSelectID'] = NULL;
 		$FormSelect['FormSelectLang'] = 'en-us';
-		$FormSelect['FormSelectStyle'] = NULL;
+		$FormSelect['FormSelectStyle'] = 'width: 550px;';
 		$FormSelect['FormSelectTabIndex'] = NULL;
 		$FormSelect['FormSelectTitle'] = NULL;
 		$FormSelect['FormSelectXMLLang'] = 'en-us';

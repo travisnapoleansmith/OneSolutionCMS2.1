@@ -242,46 +242,45 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
 
-		unset($PageID['RevisionID']);
-		unset($PageID['CurrentVersion']);
-
-		while (current($this->TableNames)) {
-			$this->LayerModule->Connect(current($this->TableNames));
-			$this->LayerModule->pass (current($this->TableNames), 'setEntireTable', array());
-			$this->LayerModule->Disconnect(current($this->TableNames));
-			$this->CalendarLookupTableName[current($this->TableNames)] = $this->LayerModule->pass (current($this->TableNames), 'getEntireTable', array());
-			$i = 1;
-
-			while ($this->CalendarLookupTableName[current($this->TableNames)][$i]) {
-				array_push($this->CalendarTableNames, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarTableName']);
-				array_push($this->CalendarTableBorder, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarBorder']);
-				array_push($this->CalendarTableCellPadding, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarCellPadding']);
-				array_push($this->CalendarTableCellSpacing, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarCellSpacing']);
-				array_push($this->CalendarTableFrame, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarFrame']);
-				array_push($this->CalendarTableRules, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarRules']);
-				array_push($this->CalendarTableSummary, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarSummary']);
-				array_push($this->CalendarTableWidth, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarWidth']);
-				array_push($this->CalendarTableClass, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarClass']);
-				array_push($this->CalendarTableDir, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarDir']);
-				array_push($this->CalendarTableID, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarID']);
-				array_push($this->CalendarTableLang, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarLang']);
-				array_push($this->CalendarTableStyle, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarStyle']);
-				array_push($this->CalendarTableTitle, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarTitle']);
-				array_push($this->CalendarTableXMLLang, $this->CalendarLookupTableName[current($this->TableNames)][$i]['CalendarXMLLang']);
-				array_push($this->CalendarTableEnableDisable, $this->CalendarLookupTableName[current($this->TableNames)][$i]['Enable/Disable']);
-				array_push($this->CalendarTableStatus, $this->CalendarLookupTableName[current($this->TableNames)][$i]['Status']);
-
-				$this->LayerModule->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
-				$j = $i-1;
-				$this->LayerModule->Connect($this->CalendarTableNames[$j]);
-				$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseField', array('idnumber' => $passarray));
-				$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseRow', array('idnumber' => $passarray));
-				$this->LayerModule->Disconnect($this->CalendarTableNames[$j]);
-				$this->processCalendars ($this->CalendarTableNames[$j]);
-				$i++;
+		//unset($PageID['RevisionID']);
+		//unset($PageID['CurrentVersion']);
+		if ($this->TableNames != NULL) {
+			foreach ($this->TableNames as $DatabaseTableKey => $DatabaseTableName) {
+				$this->LayerModule->Connect($DatabaseTableName);
+				$this->LayerModule->pass ($DatabaseTableName, 'setEntireTable', array());
+				$this->LayerModule->Disconnect($DatabaseTableName);
+				$this->CalendarLookupTableName[$DatabaseTableName] = $this->LayerModule->pass ($DatabaseTableName, 'getEntireTable', array());
+				$i = 1;
+				
+				foreach ($this->CalendarLookupTableName[$DatabaseTableName] as $CalendarTableKey => $CalendarTableName) {
+					array_push($this->CalendarTableNames, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarTableName']);
+					array_push($this->CalendarTableBorder, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarBorder']);
+					array_push($this->CalendarTableCellPadding, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarCellPadding']);
+					array_push($this->CalendarTableCellSpacing, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarCellSpacing']);
+					array_push($this->CalendarTableFrame, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarFrame']);
+					array_push($this->CalendarTableRules, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarRules']);
+					array_push($this->CalendarTableSummary, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarSummary']);
+					array_push($this->CalendarTableWidth, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarWidth']);
+					array_push($this->CalendarTableClass, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarClass']);
+					array_push($this->CalendarTableDir, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarDir']);
+					array_push($this->CalendarTableID, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarID']);
+					array_push($this->CalendarTableLang, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarLang']);
+					array_push($this->CalendarTableStyle, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarStyle']);
+					array_push($this->CalendarTableTitle, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarTitle']);
+					array_push($this->CalendarTableXMLLang, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['CalendarXMLLang']);
+					array_push($this->CalendarTableEnableDisable, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['Enable/Disable']);
+					array_push($this->CalendarTableStatus, $this->CalendarLookupTableName[$DatabaseTableName][$CalendarTableKey]['Status']);
+	
+					$this->LayerModule->setDatabaseAll ($this->Hostname, $this->User, $this->Password, $this->DatabaseName);
+					$j = $i-1;
+					$this->LayerModule->Connect($this->CalendarTableNames[$j]);
+					$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseField', array('idnumber' => $passarray));
+					$this->LayerModule->pass ($this->CalendarTableNames[$j], 'setDatabaseRow', array('idnumber' => $passarray));
+					$this->LayerModule->Disconnect($this->CalendarTableNames[$j]);
+					$this->processCalendars ($this->CalendarTableNames[$j]);
+					$i++;
+				}
 			}
-
-			next($this->TableNames);
 		}
 		$i = 0;
 		$pageid = NULL;
@@ -305,7 +304,6 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 		}
 
 		$passarray = $pageid;
-
 		while ($this->CalendarAppointmentNames[$i]) {
 			$this->LayerModule->Connect($this->CalendarAppointmentNames[$i]);
 			if (!$pageid['Day']) {
@@ -1039,6 +1037,71 @@ class XhtmlCalendarTable extends Tier6ContentLayerModulesAbstract implements Tie
 			}
 		} else {
 			array_push($this->ErrorMessage,'deleteCalendarAppointment: PageID cannot be NULL!');
+		}
+	}
+	
+	public function createCalendar(array $Calendar) {
+		$DatabaseTableName = $Calendar['TableName'];
+		unset($Calendar['TableName']);
+		if ($Calendar != NULL) {
+			if ($DatabaseTableName != NULL) {
+				$this->LayerModule->pass ($DatabaseTableName, 'BuildFieldNames', array('TableName' => $DatabaseTableName));
+				$Keys = $this->LayerModule->pass ($DatabaseTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $Calendar, $DatabaseTableName);
+			} else {
+				array_push($this->ErrorMessage,'createCalendar: Database Table Name cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createCalendar: Calendar Appointment cannot be NULL!');
+		}
+	}
+	
+	public function updateCalendar(array $Calendar) {
+		$DatabaseTableName = $Calendar['TableName'];
+		$PageID = array();
+		unset($CalendarAppointment['CalendarID']);
+		$PageID = $Calendar;
+		
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateCalendar: Calendar cannot be NULL!');
+		}
+	}
+	
+	public function deleteCalendar(array $PageID) {
+		if ($PageID != NULL) {
+			$DatabaseTableName = $PageID['TableName'];
+			unset($PageID['TableName']);
+			
+			$this->disableModuleContent($PageID, $DatabaseTableName);
+		} else {
+			array_push($this->ErrorMessage,'updateCalendarStatus: TableID cannot be NULL!');
+		}
+	}
+	
+	public function updateCalendarStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$DatabaseTableName = $PageID['TableName'];
+			unset($PageID['TableName']);
+			
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PageID, $DatabaseTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PageID, $DatabaseTableName);
+			}
+
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PageID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PageID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PageID, $DatabaseTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PageID, $DatabaseTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateCalendarStatus: TableID cannot be NULL!');
 		}
 	}
 }

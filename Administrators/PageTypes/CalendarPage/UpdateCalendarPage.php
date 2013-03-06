@@ -36,9 +36,9 @@
 	session_start();
 
 	$Options = $Tier6Databases->getLayerModuleSetting();
-	$UpdateNewsPage = $Options['XhtmlNewsStories']['news']['UpdateNewsPage']['SettingAttribute'];
-	$NewUpdateNewsPage = explode('=', $UpdateNewsPage);
-	$NewUpdateNewsPage = $NewUpdateNewsPage[1];
+	$UpdateCalendarPage = $Options['XhtmlCalendarTable']['calendar']['CalendarPageUpdatePage']['SettingAttribute'];
+	$NewUpdateCalendarPage = explode('=', $UpdateCalendarPage);
+	$NewUpdateCalendarPage = $NewUpdateCalendarPage[1];
 
 	$PageID = $_SESSION['POST']['FilteredInput']['PageID'];
 	$FormOptionObjectID = $_SESSION['POST']['FilteredInput']['FormOptionObjectID'];
@@ -49,21 +49,28 @@
 	$UserAccessGroup = $_SESSION['POST']['FilteredInput']['UserAccessGroup'];
 
 	$NewRevisionID = $RevisionID + 1;
-
+	$NewPageID = $PageID;
+	
 	$_POST['PageID'] = $PageID;
 	$_POST['FormOptionObjectID'] = $FormOptionObjectID;
 	$_POST['RevisionID'] = $RevisionID;
 	$_POST['CreationDateTime'] = $CreationDateTime;
 	$_POST['Owner'] = $Owner;
 	$_POST['UserAccessGroup'] = $UserAccessGroup;
-	$_POST['UpdateNewsPage'] = $NewUpdateNewsPage;
+	$_POST['UpdateCalendarPage'] = $NewUpdateCalendarPage;
 
-	/*
+	
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
-		$PageName = $UpdateNewsPage;
-		//print "$PageName\n";
-		$hold = $Tier6Databases->FormSubmitValidate('UpdateNewsPage', $PageName);
+		$PageName = $UpdateCalendarPage;
+		$hold = $Tier6Databases->FormSubmitValidate('UpdateCalendarPage', $PageName);
+		
 		if ($hold) {
+			$sessionname = $Tier6Databases->SessionStart('UpdateCalendarPage');
+
+			$DateTime = date('Y-m-d H:i:s');
+			$Date = date('Y-m-d');
+			$SiteName = $GLOBALS['sitename'];
+			
 			$DateTime = date('Y-m-d H:i:s');
 			$Date = date('Y-m-d');
 			$SiteName = $GLOBALS['sitename'];
@@ -76,104 +83,94 @@
 
 			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 			$_SESSION['POST']['Error']['Link'] .= $NewPage;
-			$_SESSION['POST']['Error']['Link'] .= '\'>Updated News Page</a>';
-
-
+			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Calendar Page</a>';
 
 			if ($_POST['Heading'] == 'Null' | $_POST['Heading'] == 'NULL') {
 				$_POST['Heading'] = NULL;
 				$hold['FilteredInput']['Heading'] = NULL;
 			}
-
-			if ($_POST['Keywords'] == 'Null' | $_POST['Keywords'] == 'NULL') {
-				$_POST['Keywords'] = NULL;
-				$hold['FilteredInput']['Keywords'] = NULL;
-			}
-
-			if ($_POST['Description'] == 'Null' | $_POST['Description'] == 'NULL') {
-				$_POST['Description'] = NULL;
-				$hold['FilteredInput']['Description'] = NULL;
-			}
-
+	
 			if ($_POST['TopText'] == 'Null' | $_POST['TopText'] == 'NULL') {
 				$_POST['TopText'] = NULL;
 				$hold['FilteredInput']['TopText'] = NULL;
 			}
-
-			if ($_POST['NewsDay'] == 'Null' | $_POST['NewsDay'] == 'NULL') {
-				$_POST['NewsDay'] = NULL;
-				$hold['FilteredInput']['NewsDay'] = NULL;
+	
+			if ($_POST['CalendarDay'] == 'Null' | $_POST['CalendarDay'] == 'NULL') {
+				$_POST['CalendarDay'] = NULL;
+				$hold['FilteredInput']['CalendarDay'] = NULL;
 			}
-
-			if ($_POST['NewsMonth'] == 'Null' | $_POST['NewsMonth'] == 'NULL') {
-				$_POST['NewsMonth'] = NULL;
-				$hold['FilteredInput']['NewsMonth'] = NULL;
+	
+			if ($_POST['CalendarMonth'] == 'Null' | $_POST['CalendarMonth'] == 'NULL') {
+				$_POST['CalendarMonth'] = NULL;
+				$hold['FilteredInput']['CalendarMonth'] = NULL;
 			}
-
-			if ($_POST['NewsYear'] == 'Null' | $_POST['NewsYear'] == 'NULL') {
-				$_POST['NewsYear'] = NULL;
-				$hold['FilteredInput']['NewsYear'] = NULL;
+	
+			if ($_POST['CalendarYear'] == 'Null' | $_POST['CalendarYear'] == 'NULL') {
+				$_POST['CalendarYear'] = NULL;
+				$hold['FilteredInput']['CalendarYear'] = NULL;
 			}
-
+	
 			if ($_POST['BottomText'] == 'Null' | $_POST['BottomText'] == 'NULL') {
 				$_POST['BottomText'] = NULL;
 				$hold['FilteredInput']['BottomText'] = NULL;
 			}
-
+	
 			if ($_POST['MenuName'] == 'Null' | $_POST['MenuName'] == 'NULL') {
 				$_POST['MenuName'] = NULL;
 				$hold['FilteredInput']['MenuName'] = NULL;
 			}
-
+	
 			if ($_POST['MenuTitle'] == 'Null' | $_POST['MenuTitle'] == 'NULL') {
 				$_POST['MenuTitle'] = NULL;
 				$hold['FilteredInput']['MenuTitle'] = NULL;
 			}
-
-
+			
 			// General Defines
-			define(NewPageID, $PageID);
+			define(NewPageID, $NewPageID);
 			define(NewRevisionID, $NewRevisionID);
 			define(CurrentVersionTrueFalse, 'true');
-			define(ContentPageType, 'NewsPage');
-
+			define(ContentPageType, 'CalendarPage');
+	
 			define(ContentPageMenuName, $hold['FilteredInput']['MenuName']);
 			define(ContentPageMenuTitle, $hold['FilteredInput']['MenuTitle']);
 			define(MenuObjectID, $MenuObjectID);
-
+			
 			define(UserAccessGroup, 'Guest');
-			define(Owner, $Owner);
+			define(Owner, $_COOKIE['UserName']);
 			define(Creator, $_COOKIE['UserName']);
 			define(LastChangeUser, $_COOKIE['UserName']);
-			define(CreationDateTime, $CreationDateTime);
+			define(CreationDateTime, $DateTime);
 			define(LastChangeDateTime, $DateTime);
-
+	
 			define(PublishDate, NULL);
 			define(UnpublishDate, NULL);
-
+	
 			define(EnableDisable, $_POST['EnableDisable']);
 			define(Status, $_POST['Status']);
-
+	
 			// XmlSitemap Defines
 			define(Loc, $Location);
 			define(Lastmod, $Date);
 			define(ChangeFreq, $_POST['Frequency']);
 			define(Priority, $_POST['Priority']);
-
+	
 			// XhtmlHeader Defines
 			define(PageTitle, $hold['FilteredInput']['PageTitle']);
 			define(PageIcon, 'favicon.ico');
 			define(RSS, 'rss.php');
 			define(Keywords, $hold['FilteredInput']['Keywords']);
 			define(Description, $hold['FilteredInput']['Description']);
-
+	
 			// HeaderPanel1 Defines
 			define (SiteName, $GLOBALS['sitename']);
 			define (Header, $hold['FilteredInput']['Header']);
-
+			
 			$Content = array();
-
-			$Content[0]['PageID'] = $PageID;
+	
+			$PageID = array();
+			$PageID['PageID'] = $NewPageID;
+	
+			$Content[0]['PageID'] = $NewPageID;
 			$Content[0]['ObjectID'] = 0;
 			$Content[0]['ContainerObjectType'] = 'XhtmlContent';
 			$Content[0]['ContainerObjectName'] = 'content';
@@ -194,7 +191,7 @@
 			$Content[0]['HeadingStartTagStyle'] = NULL;
 			$Content[0]['HeadingStartTagClass'] = 'BodyHeading';
 			$Content[0]['Content'] = $hold['FilteredInput']['TopText'];
-
+	
 			if ($hold['FilteredInput']['TopText'] != NULL) {
 				$Content[0]['ContentStartTag'] = '<p>';
 				$Content[0]['ContentEndTag'] = '</p>';
@@ -210,11 +207,11 @@
 			$Content[0]['ContentPTagClass'] = 'BodyText';
 			$Content[0]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[0]['Status'] = $_POST['Status'];
-
-			$Content[1]['PageID'] = $PageID;
+	
+			$Content[1]['PageID'] = $NewPageID;
 			$Content[1]['ObjectID'] = 1;
-			$Content[1]['ContainerObjectType'] = 'XhtmlNewsStories';
-			$Content[1]['ContainerObjectName'] = 'news';
+			$Content[1]['ContainerObjectType'] = 'XhtmlCalendarTable';
+			$Content[1]['ContainerObjectName'] = 'calendar';
 			$Content[1]['ContainerObjectID'] = 1;
 			$Content[1]['ContainerObjectPrintPreview'] = 'true';
 			$Content[1]['RevisionID'] = $NewRevisionID;
@@ -242,12 +239,12 @@
 			$Content[1]['ContentPTagClass'] = NULL;
 			$Content[1]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[1]['Status'] = $_POST['Status'];
-
-			$Content[2]['PageID'] = $PageID;
+	
+			$Content[2]['PageID'] = $NewPageID;
 			$Content[2]['ObjectID'] = 2;
 			$Content[2]['ContainerObjectType'] = 'XhtmlContent';
 			$Content[2]['ContainerObjectName'] = 'content';
-			$Content[2]['ContainerObjectID'] = 4;
+			$Content[2]['ContainerObjectID'] = 3;
 			$Content[2]['ContainerObjectPrintPreview'] = 'true';
 			$Content[2]['RevisionID'] = $NewRevisionID;
 			$Content[2]['CurrentVersion'] = 'true';
@@ -275,20 +272,39 @@
 			$Content[2]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[2]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
-
+			
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/UpdateXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
-
-			$NewsStoryLookup = array();
-			//$NewsStoryLookup['PageID'] = $PageID;
-			//$NewsStoryLookup['ObjectID'] = 1;
-			//$NewsStoryLookup['NewsStoryPageID'] = NULL;
-			$NewsStoryLookup['NewsStoryDay'] = $_POST['NewsDay'];
-			$NewsStoryLookup['NewsStoryMonth'] = str_replace(' ', '', $_POST['NewsMonth']);
-			$NewsStoryLookup['NewsStoryYear'] = $_POST['NewsYear'];
-			//$NewsStoryLookup['Enable/Disable'] = $_POST['EnableDisable'];
-			//$NewsStoryLookup['Status'] = $_POST['Status'];
-
+			
+			$CalendarTable = array();
+			$CalendarTable['PageID'] = $NewPageID;
+			$CalendarTable['ObjectID'] = 1;
+			$CalendarTable['RevisionID'] = $NewRevisionID;
+			$CalendarTable['CurrentVersion'] = 'true';
+			$CalendarTable['CalendarAppointmentName'] = 'CalendarAppointments';
+			$CalendarTable['Day'] = $_POST['CalendarDay'];
+			$CalendarTable['Month'] = $_POST['CalendarMonth'];
+			$CalendarTable['Year'] = $_POST['CalendarYear'];
+			$CalendarTable['HeadingStartTag'] = '<h1>';
+			$CalendarTable['HeadingEndTag'] = '</h1>';
+			$CalendarTable['HeadingStartTagID'] = NULL;
+			$CalendarTable['HeadingStartTagStyle'] = NULL;
+			$CalendarTable['HeadingStartTagClass'] = NULL;
+			$CalendarTable['CalendarAlign'] = 'left';
+			$CalendarTable['CalendarChar'] = NULL;
+			$CalendarTable['CalendarCharoff'] = NULL;
+			$CalendarTable['CalendarValign'] = NULL;
+			$CalendarTable['CalendarClass'] = NULL;
+			$CalendarTable['CalendarDir'] = NULL;
+			$CalendarTable['CalendarID'] = NULL;
+			$CalendarTable['CalendarLang'] = 'en-us';
+			$CalendarTable['CalendarStyle'] = NULL;
+			$CalendarTable['CalendarTitle'] = NULL;
+			$CalendarTable['CalendarXMLLang'] = 'en-us';
+			$CalendarTable['Enable/Disable'] = $_POST['EnableDisable'];
+			$CalendarTable['Status'] = $_POST['Status'];
+			$CalendarTable['TableName'] = 'CalendarTable';
+			
 			$HeaderPanel1 = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMenu/UpdateHeaderPanel1.ini',TRUE);
 			$HeaderPanel1 = $Tier6Databases->EmptyStringToNullArray($HeaderPanel1);
 
@@ -304,7 +320,7 @@
 			$ContentPrintPreview = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlContent/UpdatePrintPreview.ini',FALSE);
 			$ContentPrintPreview = $Tier6Databases->EmptyStringToNullArray($ContentPrintPreview);
 
-			$FormOptionID = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
 			$FormOptionText = $hold['FilteredInput']['PageTitle'];
 			//$FormOptionValue = $NewNewsPage;
 			//$FormOptionValue .= ' - ';
@@ -345,53 +361,59 @@
 			//$FormOption['FormOptionXMLLang'] = 'en-us';
 			//$FormOption['Enable/Disable'] = 'Enable';
 			//$FormOption['Status'] = 'Approved';
-
+			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
-			$FormOptionID = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
-			$FormOptionID = $Options['XhtmlNewsStories']['news']['EnableDisableStatusChangeNewsPage']['SettingAttribute'];
+			$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['EnableDisableStatusChangeCalendarPage']['SettingAttribute'];
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID), 'Content' => $FormOption));
-
+			
 			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $NewPageID), 'Content' => $FormOption));
 			$FormOptionID = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $PageID), 'Content' => $FormOption));
-
-			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryLookup', array('PageID' => array('PageID' => $PageID, 'ObjectID' => 1), 'Content' => $NewsStoryLookup));
-			$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'updateMenu', array('PageID' => array('PageID' => $PageID, 'ObjectID' => 2), 'Content' => $HeaderPanel1));
-			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContentPrintPreview', array('PageID' => array('PageID' => $PageID), 'Content' => $ContentPrintPreview));
-			$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'updateSitemapItem', array('PageID' => array('PageID' => $PageID), 'Content' => $Sitemap));
-
-			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeader', array('PageID' => $PageID));
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'updateFormOption', array('PageID' => array('PageID' => $FormOptionID, 'ObjectID' => $NewPageID), 'Content' => $FormOption));
+			
+			$CalendarTablePageID = array();
+			$CalendarTablePageID['PageID'] = $NewPageID;
+			$CalendarTablePageID['CalendarAppointmentName'] = 'CalendarAppointments';
+			$CalendarTablePageID['TableName'] = 'CalendarTable';
+			$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'updateCalendar', $CalendarTablePageID);
+			$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'createCalendar', $CalendarTable);
+			
+			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'updateHeader', $PageID);
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
-
-			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContent', array('PageID' => $PageID));
-			$Tier6Databases->updateContentVersion(array('PageID' => $PageID), 'ContentLayerVersion');
-			//$Tier6Databases->updateContent(array('PageID' => $PageID), 'ContentLayer');
-
+			
+			$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'updateMenu', array('PageID' => array('PageID' => $NewPageID, 'ObjectID' => 2), 'Content' => $HeaderPanel1));
+			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContentPrintPreview', array('PageID' => $PageID, 'Content' => $ContentPrintPreview));
+			$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'updateSitemapItem', array('PageID' => $PageID, 'Content' => $Sitemap));
+			
+			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContent', $PageID);
+			$Tier6Databases->updateContentVersion($PageID, 'ContentLayerVersion');
+			//$Tier6Databases->updateContent($PageID, 'ContentLayer');
+			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
+			
 			$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
 			//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
-
+			
 			$Tier6Databases->SessionDestroy($sessionname);
 			$sessionname = $Tier6Databases->SessionStart('UpdatedNewsPage');
 
 			$Page = '../../../index.php?PageID=';
-			$Page .= $PageID;
+			$Page .= $NewPageID;
 
 			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 			$_SESSION['POST']['Error']['Link'] .= $Page;
-			$_SESSION['POST']['Error']['Link'] .= '\'>Updated News Page</a>';
+			$_SESSION['POST']['Error']['Link'] .= '\'>Updated Calendar Page</a>';
 
-			$CreatedUpdateNewsPage = $Options['XhtmlNewsStories']['news']['CreatedUpdateNewsPage']['SettingAttribute'];
-			header("Location: $CreatedUpdateNewsPage&SessionID=$sessionname");
+			$CreatedUpdateCalendarPage = $Options['XhtmlCalendarTable']['calendar']['CalendarPageCreatedUpdatePage']['SettingAttribute'];
+			header("Location: $CreatedUpdateCalendarPage&SessionID=$sessionname");
 		}
-
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);
 		$Options = $Tier6Databases->getLayerModuleSetting();
-		$UpdateNewsPageSelect = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
-		header("Location: ../../index.php?PageID=$UpdateNewsPageSelect");
-	}*/
+		$UpdateCalendarPageSelect = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
+		header("Location: ../../index.php?PageID=$UpdateCalendarPageSelect");
+	}
 
 ?>

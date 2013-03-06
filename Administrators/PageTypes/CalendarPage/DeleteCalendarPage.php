@@ -30,20 +30,24 @@
 
 	require_once ("$ADMINHOME/Configuration/includes.php");
 
-	$hold = $_POST['NewsPage'];
+	$hold = $_POST['CalendarPage'];
 	$hold = explode(' ', $hold);
 	$PageID = $hold[2];
 	$_POST['PageID'] = $PageID;
 	$_POST['FormOptionObjectID'] = $hold[0];
 	unset($hold);
-
+	
+	//$PageID = array();
 	$PageID['PageID'] = $_POST['PageID'];
 	$FormOptionObjectID = $_POST['FormOptionObjectID'];
 
 	$Options = $Tier6Databases->getLayerModuleSetting();
 
-	/*if (!is_null($PageID)) {
-		$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'deleteNewsStoryLookup', array('PageID' => $PageID));
+	if (!is_null($PageID)) {
+		$TablePageID = array();
+		$TablePageID['PageID'] = $PageID;
+		$TablePageID['TableName'] = 'CalendarTable';
+		$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'deleteCalendar', $TablePageID);
 
 		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'deleteHeader', array('PageID' => $PageID));
 		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'deleteMenu', array('PageID' => $PageID));
@@ -52,19 +56,19 @@
 		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'deleteContentPrintPreview', array('PageID' => $PageID));
 		$Tier6Databases->deleteContent(array('PageID' => $PageID), 'ContentLayer');
 
-		$FormOptionID = $Options['XhtmlNewsStories']['news']['UpdateNewsPageSelect']['SettingAttribute'];
+		$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
 
-		$FormOptionID = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
+		$FormOptionID = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormOption', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'deleteFormSelect', array('PageID' => $FormOptionID, 'ObjectID' => $FormOptionObjectID));
 
-		$DeletedNewsPage = $Options['XhtmlNewsStories']['news']['DeletedNewsPage']['SettingAttribute'];
-		header("Location: $DeletedNewsPage");
+		$DeletedCalendarPage = $Options['XhtmlCalendarTable']['calendar']['CalendarPageDeletePage']['SettingAttribute'];
+		header("Location: $DeletedCalendarPage");
 
 	} else {
-		$DeleteNewsPage = $Options['XhtmlNewsStories']['news']['DeleteNewsPage']['SettingAttribute'];
-		header("Location: ../../index.php?PageID=$DeleteNewsPage");
-	}*/
+		$DeleteCalendarPage = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
+		header("Location: ../../index.php?PageID=$DeleteCalendarPage");
+	}
 ?>

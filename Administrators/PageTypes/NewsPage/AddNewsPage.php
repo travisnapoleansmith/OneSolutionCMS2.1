@@ -316,7 +316,7 @@
 		$FormSelect['FormSelectDir'] = 'ltr';
 		$FormSelect['FormSelectID'] = NULL;
 		$FormSelect['FormSelectLang'] = 'en-us';
-		$FormSelect['FormSelectStyle'] = 'width: 250px;';
+		$FormSelect['FormSelectStyle'] = 'width: 550px;';
 		$FormSelect['FormSelectTabIndex'] = NULL;
 		$FormSelect['FormSelectTitle'] = NULL;
 		$FormSelect['FormSelectXMLLang'] = 'en-us';

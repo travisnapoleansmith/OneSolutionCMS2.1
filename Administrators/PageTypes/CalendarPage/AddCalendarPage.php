@@ -60,10 +60,10 @@
 		} else {
 			$NewPageID = 1;
 		}
-		$LastCalendarPage = $Options['XhtmlCalendarTable']['calendar']['LastNewsPage']['SettingAttribute'];
+		$LastCalendarPage = $Options['XhtmlCalendarTable']['calendar']['LastCalendarPage']['SettingAttribute'];
 		$NewCalendarPage = ++$LastCalendarPage;
-		///$Tier6Databases->updateModuleSetting('XhtmlCalendarTable', 'calendar', 'LastCalendarPage', $NewCalendarPage);
-
+		$Tier6Databases->updateModuleSetting('XhtmlCalendarTable', 'calendar', 'LastCalendarPage', $NewCalendarPage);
+		
 		$NewPage = '../../index.php?PageID=';
 		$NewPage .= $NewPageID;
 
@@ -72,9 +72,7 @@
 
 		$_SESSION['POST']['Error']['Link'] = '<a href=\'';
 		$_SESSION['POST']['Error']['Link'] .= $NewPage;
-		$_SESSION['POST']['Error']['Link'] .= '\'>New News Page</a>';
-
-
+		$_SESSION['POST']['Error']['Link'] .= '\'>New Calendar Page</a>';
 
 		if ($_POST['Heading'] == 'Null' | $_POST['Heading'] == 'NULL') {
 			$_POST['Heading'] = NULL;
@@ -115,11 +113,11 @@
 			$_POST['MenuTitle'] = NULL;
 			$hold['FilteredInput']['MenuTitle'] = NULL;
 		}
-
+		
 		// General Defines
 		define(NewPageID, $NewPageID);
 		define(CurrentVersionTrueFalse, 'true');
-		define(ContentPageType, 'NewsPage');
+		define(ContentPageType, 'CalendarPage');
 
 		define(ContentPageMenuName, $hold['FilteredInput']['MenuName']);
 		define(ContentPageMenuTitle, $hold['FilteredInput']['MenuTitle']);
@@ -260,7 +258,7 @@
 		$Content[2]['ContentPTagClass'] = 'BodyText';
 		$Content[2]['Enable/Disable'] = $_POST['EnableDisable'];
 		$Content[2]['Status'] = $_POST['Status'];
-		//$NewsStory = array_reverse($NewsStory);
+		//$Content = array_reverse($Content);
 		
 		$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
 		$Header = $Tier6Databases->EmptyStringToNullArray($Header);
@@ -268,6 +266,8 @@
 		$CalendarTable = array();
 		$CalendarTable['PageID'] = $NewPageID;
 		$CalendarTable['ObjectID'] = 1;
+		$CalendarTable['RevisionID'] = 0;
+		$CalendarTable['CurrentVersion'] = 'true';
 		$CalendarTable['CalendarAppointmentName'] = 'CalendarAppointments';
 		$CalendarTable['Day'] = $_POST['CalendarDay'];
 		$CalendarTable['Month'] = $_POST['CalendarMonth'];
@@ -290,8 +290,8 @@
 		$CalendarTable['CalendarXMLLang'] = 'en-us';
 		$CalendarTable['Enable/Disable'] = $_POST['EnableDisable'];
 		$CalendarTable['Status'] = $_POST['Status'];
+		$CalendarTable['TableName'] = 'CalendarTable';
 		
-		print_r($CalendarTable);
 		$HeaderPanel1 = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMenu/AddHeaderPanel1.ini',TRUE);
 		$HeaderPanel1 = $Tier6Databases->EmptyStringToNullArray($HeaderPanel1);
 
@@ -306,7 +306,7 @@
 
 		$ContentPrintPreview = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlContent/AddPrintPreview.ini',FALSE);
 		$ContentPrintPreview = $Tier6Databases->EmptyStringToNullArray($ContentPrintPreview);
-
+		
 		$MainMenuItemLookup = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
 		$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
 
@@ -321,7 +321,7 @@
 		$FormSelect['ContainerObjectID'] = $NewCalendarPage;
 		$FormSelect['FormSelectDisabled'] = NULL;
 		$FormSelect['FormSelectMultiple'] = NULL;
-		$FormSelect['FormSelectName'] = 'NewsPage';
+		$FormSelect['FormSelectName'] = 'CalendarPage';
 		$FormSelect['FormSelectNameDynamic'] = NULL;
 		$FormSelect['FormSelectNameTableName'] = NULL;
 		$FormSelect['FormSelectNameField'] = NULL;
@@ -333,7 +333,7 @@
 		$FormSelect['FormSelectDir'] = 'ltr';
 		$FormSelect['FormSelectID'] = NULL;
 		$FormSelect['FormSelectLang'] = 'en-us';
-		$FormSelect['FormSelectStyle'] = 'width: 250px;';
+		$FormSelect['FormSelectStyle'] = 'width: 550px;';
 		$FormSelect['FormSelectTabIndex'] = NULL;
 		$FormSelect['FormSelectTitle'] = NULL;
 		$FormSelect['FormSelectXMLLang'] = 'en-us';
@@ -380,44 +380,44 @@
 		$FormOption['FormOptionXMLLang'] = 'en-us';
 		$FormOption['Enable/Disable'] = 'Enable';
 		$FormOption['Status'] = 'Approved';
-
-		///$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
-		///$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
-		///$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryLookup', $NewsStoryLookup);
-		///$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
-		///$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
-		///$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContentPrintPreview', $ContentPrintPreview);
+		
+		$Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'createCalendar', $CalendarTable);
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
+		$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
+		$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
+		$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
+		$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContentPrintPreview', $ContentPrintPreview);
 		//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
 
-		///$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
+		$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
 
-		///$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
+		$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
 
-		///$UpdateCalendarPageSelect = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
-		///$FormSelect['PageID'] = $UpdateCalendarPageSelect;
-		///$FormOption['PageID'] = $UpdateCalendarPageSelect;
+		$UpdateCalendarPageSelect = $Options['XhtmlCalendarTable']['calendar']['UpdateCalendarPageSelect']['SettingAttribute'];
+		$FormSelect['PageID'] = $UpdateCalendarPageSelect;
+		$FormOption['PageID'] = $UpdateCalendarPageSelect;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+		$DeleteCalendarPage = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $DeleteCalendarPage;
+		$FormOption['PageID'] = $DeleteCalendarPage;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 
-		///$DeleteCalendarPage = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
-		///$FormSelect['PageID'] = $DeleteCalendarPage;
-		///$FormOption['PageID'] = $DeleteCalendarPage;
+		$EnableDisableStatusChangeCalendarPage = $Options['XhtmlCalendarTable']['calendar']['EnableDisableStatusChangeCalendarPage']['SettingAttribute'];
+		$FormSelect['PageID'] = $EnableDisableStatusChangeCalendarPage;
+		$FormOption['PageID'] = $EnableDisableStatusChangeCalendarPage;
+		
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-
-		///$EnableDisableStatusChangeCalendarPage = $Options['XhtmlCalendarTable']['calendar']['EnableDisableStatusChangeCalendarPage']['SettingAttribute'];
-		///$FormSelect['PageID'] = $EnableDisableStatusChangeCalendarPage;
-		///$FormOption['PageID'] = $EnableDisableStatusChangeCalendarPage;
-
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-		///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-
-		///$FormOptionValue = $NewPageID;
-		///$FormOptionValue .= ' - ';
-		///$FormOptionValue .= 'NULL';
-		/*
+		$FormOptionValue = $NewPageID;
+		$FormOptionValue .= ' - ';
+		$FormOptionValue .= 'NULL';
+		
 		$MainMenuSelectPage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
 		$FormSelect['PageID'] = $MainMenuSelectPage;
 		$FormSelect['ObjectID'] = $NewPageID;
@@ -427,6 +427,7 @@
 		$FormSelect['FormSelectStyle'] = NULL;
 		$FormOption['PageID'] = $MainMenuSelectPage;
 		$FormOption['ObjectID'] = $NewPageID;
+		
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 
@@ -449,13 +450,11 @@
 		$FormSelect['ObjectID'] = $j;
 		$FormSelect['FormSelectName'] = 'TopMenu';
 		$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-
+		
 		$CalendarPageCreatedPage = $Options['XhtmlCalendarTable']['calendar']['CalendarPageCreatedPage']['SettingAttribute'];
-
+		
 		header("Location: $CalendarPageCreatedPage&SessionID=$sessionname");
 		exit;
-		*/
-
 	}
 
 ?>

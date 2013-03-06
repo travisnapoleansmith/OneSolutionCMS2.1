@@ -1,4 +1,19 @@
-Changes For One Solution CMS 2.1.142 - Sunday, February 24, 2013
+Changes For One Solution CMS 2.1.143 - Tuesday, March 5, 2013
+Added:
+	1). Added Calendar Pages to the Administrators Panel.
+	
+Updated (Fixed):
+	1). HTMLPurifier - Updated HTMLPurifier from version 4.4.0 to 4.5.0.
+	2). jQuery - Updated jQuery from version 1.8.3 to 1.9.1. All older version are available.
+	3). Administrators Panel - Database Updater - Fixed it so that it will update the database.
+	4). Administrators Panel - Ad Stats XML Format and CSV Format - Fixed it will output the page name for all ads that are ran.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.142 - Sunday, February 24, 2013 7:26:26 PM
 Added:
 	1). Administrators Panel - Tables Pages - Added Tables Empty Temp Files Directory Utility to the Administrators Panel.
 	2). Administrators Panel - Schedule Pages - Added the forms for Schedule Pages to the Administrators Panel.
@@ -984,4 +999,135 @@ Changes For One Solution CMS 2.1.24 - Tuesday, February 23, 2010 10:51:50 PM
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-MORE TO COME!
+Changes For One Solution CMS 2.1.23 - Saturday, February 20, 2010 10:09:53 PM
+	Added XMLFeed. 
+	XMLFeed is done!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.22 - Sunday, February 14, 2010 9:47:23 PM
+	Updated XhtmlCalendarTable. 
+	It can now print out a calendar based on any date.
+	I still have to get the appointments to work properly.
+	I have included Tier4AuthenticationLayer.
+	All tiers go to it until the next tier is built!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.21 - Sunday, February 14, 2010 3:00:28 AM
+	Have added Tier 2 Database Layer. 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.20 - Sunday, February 14, 2010 2:35:07 AM
+	Updated MySqlConnect to have an interface and an abstract class.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.19 - Sunday, February 14, 2010 1:31:37 AM
+	Have added a calendar object and have updated XhtmlHeader to use XMLWriter.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.18 - Wednesday, February 3, 2010 9:25:56 PM
+	Added XhtmlCalendarTable, XhtmlCalendarDiv and XhtmlTable.  
+	Worked on XhtmlCalendarTable.  
+	Have it so it will create this months calendar based on todays date.  
+	Needs to generate a calendar based on any day that is given!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.17 - Wednesday, February 3, 2010 5:23:25 PM
+	Updated XHTMLHeader to use XMLWriter!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.16 - Wednesday, February 3, 2010 2:00:22 PM
+	Updated ProtectionLayer to handle DatabaseDeny items and pass it off to each module to verify.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.15 - Wednesday, February 3, 2010 11:48:44 AM
+	No changes.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.14 - Tuesday, January 26, 2010 6:22:30 PM
+	Updated Protection Layer to add modules.  
+	Added interface and abstract parent to all modules!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.13 - Tuesday, January 19, 2010 3:37:01 PM
+	Updated News to handle print preview of more than 1 item!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.12 - Wednesday, January 13, 2010 4:36:16 PM
+	Updated all administrators pages!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.11 - Tuesday, January 12, 2010 4:38:27 PM
+	XMLSitemap is done! Only needs an XMLRSSFeed!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.10 - Saturday, January 09, 2010 2:57:01 PM
+	Updated News.php now is fully working!
+	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.9 - Wednesday, January 06, 2010 8:24:46 PM
+	Added Abstract Tier 6 - Content Layer; needs more work to be fully abstract! 
+	Created news.php - needs more work to be completed!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.8 - Wednesday, January 06, 2010 7:37:09 PM
+	Fixed bug with credentaillogonarray.  
+	I now have make the global variable local!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.7 - Wednesday, January 06, 2010 12:29:11 PM
+	Fixed the Administrators Page so that menu.html goes to the root folder and not /Administrators folder.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.6 - Wednesday, January 06, 2010 12:01:00 PM
+	Fixed the Administrators Pages and moved all includes into a general include file.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.5 - Sunday, January 03, 2010 6:51:18 PM
+	Fixed Menu to handle protection layer; fixed print preview so id's are not printed; fixed menu buttons; fixed menu alignment! 
+	Now releasing to TravisNapoleanSmith.org.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.4 - Saturday, January 02, 2010 7:02:01 PM
+	Print Preview now will handle multiple pages
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.3 - Thursday, December 24, 2009 6:30:11 PM
+	Updated all objects for full php 5 integration.  
+	Still need to fix the menu object and make print preview really work for more than one page!
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.2 - Thursday, December 17, 2009 10:00:05 PM
+	Implemented Tier6ContentLayerModule Interface, Public and Private Members and Methods for XhtmlContent, XhtmlHeader, XhtmlFlash, XhtmlMenu, XhtmlList, XhtmlNews and XhtmlPicture.  
+	I also added rss demo.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.1 - Tuesday, December 15, 2009 10:15:16 PM
+	Initial release of 2.1.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+One Solution CMS 2.0 Changes.
+
+More to come!

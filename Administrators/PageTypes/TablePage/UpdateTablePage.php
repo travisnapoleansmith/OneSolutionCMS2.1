@@ -109,7 +109,7 @@
 		$hold = $Tier6Databases->FormSubmitValidate('UpdateTablePage', $PageName, $FileLocation, $Table, 'Table', $AddLookupData);
 		
 		if ($hold) {
-			$sessionname = $Tier6Databases->SessionStart('CreateTablesPage');
+			$sessionname = $Tier6Databases->SessionStart('UpdateTablesPage');
 			$_SESSION['POST'] = $_POST;
 			$DateTime = date('Y-m-d H:i:s');
 			$Date = date('Y-m-d');

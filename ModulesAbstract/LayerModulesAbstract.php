@@ -1170,7 +1170,8 @@ abstract class LayerModulesAbstract
 				$ReturnFile = array();
 				foreach ($File as $Line) {
 					// Skip it if it is a comment or it is empty space
-					if (substr($Line, 0, 2) == '--' || $Line == '' || strstr($Line, '/*') || strstr($Line, '/*') || empty($Line)) {
+					if (substr($Line, 0, 2) == '--' || $Line == '' || strstr($Line, '/*') || strstr($Line, '/*') || empty($Line) || substr($Line, 0, 1) == "\r") {
+						//print "HERE\n";
 						continue;
 					}
 

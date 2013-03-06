@@ -49,10 +49,11 @@
 	$AdStats = $Tier6Databases->getModules('XhtmlAd', 'ad');
 	$EntireDatabaseTable = $AdStats->FetchDatabaseAll();
 
-	$Temp = $Tier6Databases->getContentVersionRow($PageID, 'ContentLayerVersion');
+	$ContentLayerVersion = $Tier6Databases->getContentVersionRow($PageID, 'ContentLayerVersion');
 	$EntireDatabaseTablePageNames = array();
 	$LeftOver = array();
 	
+	// Advertisters Names
 	$AdTablesName = $AdStats->getAdTablesName();
 	$AdvertistingTableName = array();
 	foreach ($AdTablesName as $Table) {
@@ -68,7 +69,8 @@
 		}
 	}
 	
-	foreach ($Temp as $Key => $Value) {
+	// Page Names
+	foreach ($ContentLayerVersion as $Key => $Value) {
 		if ($Value['PageID'] != NULL) {
 			if ($EntireDatabaseTablePageNames[$Value['PageID']] === NULL) {
 				$EntireDatabaseTablePageNames[$Value['PageID']] = $Value['ContentPageMenuTitle'];
@@ -90,6 +92,7 @@
 			$Writer->startElement('PageData');
 			$PageName = NULL;
 			$PageName = $EntireDatabaseTablePageNames[$Value['PageID']];
+
 			if ($PageName !== NULL) {
 				$Writer->startElement('PageName');
 				$Writer->text($PageName);
@@ -133,7 +136,7 @@
 		if ($pageoutput) {
 			print "$pageoutput\n";
 		} else {
-			//header("Location: XmlTable.xml");
+			header("Location: XmlTable.xml");
 		}
 	}
 	

@@ -118,7 +118,6 @@
 ../../Administrators/PageTypes/MultiHeaderContentPage/
 ../../Administrators/PageTypes/NewsPage/
 ../../Administrators/PageTypes/PhotosPage/
-../../Administrators/PageTypes/SchedulePage/
 ../../Administrators/PageTypes/SimpleViewerPage/
 ../../Administrators/PageTypes/TablePage/
 ../../Administrators/PageTypes/VideosPage/
@@ -333,6 +332,7 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.auto.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.autoload.php
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.composer.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.func.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.includes.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier.kses.php
@@ -531,6 +531,7 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.ColorKeywords.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.ConvertDocumentToFragment.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.DirectLexLineNumberSyncInterval.txt
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.DisableExcludes.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.EnableIDNA.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.Encoding.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/Core.EscapeInvalidChildren.txt
@@ -582,9 +583,11 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.SafeEmbed.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.SafeIframe.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.SafeObject.txt
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.SafeScripting.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.Strict.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TargetBlank.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyAdd.txt
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyLevel.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.TidyRemove.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.Trusted.txt
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/ConfigSchema/schema/HTML.XHTML.txt
@@ -621,11 +624,7 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Cleanup.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Memory.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Decorator/Template.php.in
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/HTML/
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/URI/
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/README
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/HTML/4.4.0,08521cd887da171eb9ade54ba11f9d56,1.ser
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/DefinitionCache/Serializer/URI/4.4.0,fdfc1465c1553db684e2f90f64511cd4,1.ser
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/EntityLookup/entities.ser
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Filter/ExtractStyleBlocks.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Filter/YouTube.php
@@ -648,6 +647,7 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/Ruby.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/SafeEmbed.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/SafeObject.php
+../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/SafeScripting.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/Scripting.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/StyleAttribute.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/HTMLModule/Tables.php
@@ -677,7 +677,6 @@
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Language/messages/en.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Lexer/DirectLex.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Lexer/DOMLex.php
-../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Lexer/PEARSax3.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Lexer/PH5P.php
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Printer/ConfigForm.css
 ../../Libraries/Tier5ValidationLayer/HtmlPurifier/library/HTMLPurifier/Printer/ConfigForm.js
@@ -5868,10 +5867,13 @@
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.3.2.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.4.3.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.5.1.min.js
+../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.5.2.min.js
+../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.6.1.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.6.2.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.6.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.7.1.min.js
 ../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.8.3.min.js
+../../Libraries/Tier7BehavioralLayer/jQuery/jquery-1.9.1.min.js
 ../../Modules/Tier2DataAccessLayer/
 ../../Modules/Tier3ProtectionLayer/
 ../../Modules/Tier4AuthenticationLayer/
@@ -6077,6 +6079,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.139.sql
 ../../SQLTables/Update/UpdateTables-2.1.140.sql
 ../../SQLTables/Update/UpdateTables-2.1.141.sql
+../../SQLTables/Update/UpdateTables-2.1.142.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -6097,7 +6100,6 @@
 ../../Testcases/SimpleTest/simpletest/encoding.php
 ../../Testcases/SimpleTest/simpletest/errors.php
 ../../Testcases/SimpleTest/simpletest/exceptions.php
-../../Testcases/SimpleTest/simpletest/form.php
 ../../Testcases/SimpleTest/simpletest/frames.php
 ../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
 ../../Testcases/SimpleTest/simpletest/http.php
