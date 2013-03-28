@@ -74,8 +74,6 @@ window.onload=setTimeout("LoadCookieData()", 90);
 
 function CheckFile() {
 	if (FileName != null) {
-		//var File = '../Administrators/PageTypes/TablePage/UPLOAD/';
-		//File += FileName;
 		var FileLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridImport.php?File=";
 		FileLocation += FileName;
 		PageLocation = FileLocation;
@@ -88,7 +86,6 @@ function CheckFile() {
 		
 		FileDiv.appendChild(FileInput);
 		var FormElement = document.getElementsByTagName('form');
-		//alert(FormElement.length);
 		FormElement[0].appendChild(FileDiv);
 	}
 }
@@ -100,8 +97,6 @@ function LoadGrid() {
 	mygrid.setStyle("", "color: black;");
 	
 	mygrid.load(PageLocation);
-	////mygrid.loadXML(PageLocation);
-	//mygrid.enableDragAndDrop(true);
 	
 	mygrid.submitOnlyChanged(false);
 	
@@ -122,7 +117,6 @@ function LoadRowColumnCount() {
 	} else {
 		RowCount = Number(RowCount) * 100;
 		RowCount = Number(RowCount) - 100;
-		//alert(RowCount);
 	}
 	
 }
@@ -144,7 +138,6 @@ function LoadCookieData() {
 					}
 				}
 			}
-			//alert ("Table Data Has Been Reloaded!");
 		}
 	}
 }
@@ -187,21 +180,17 @@ function LoadColumns(Page, Header, Name, IDName) {
 		}
 		ColumnID = Name + i;
 		var VALUE = readCookie(ColumnID);
-		//alert(COOKIE);
 		if (readCookie(ColumnID) != null) {
 			alert ("Loading More Header and Footer Columns!");
 		}
 		while (readCookie(ColumnID) != null) {
-			//alert (Name);
 			CreateColumn(Header, Name, IDName, i);
 			var ColumnNumber = mygrid.getColumnsNum();
-			//alert (i);
-			//alert(ColumnNumber);
+
 			if (ColumnNumber != i) {
 				ColumnCount = ColumnCount + 1;
 				mygrid.insertColumn(ColumnCount, "Column " + ColumnCount, 'ed', '110', 'str'); 
 			}
-			//AddOneColumn();
 			i++;
 			ColumnID = Name + i;
 		}
@@ -247,8 +236,7 @@ function CreateColumn(Header, Name, IDName, Count) {
 function RemoveColumn(Header, Name, IDName, Count) {
 	var ColumnName = Name + Count;
 	var LabelColumnName = Name + "Label" + Count;
-	//alert(ColumnName);
-	//alert(LastColumnName);
+	
 	$('#' + ColumnName).remove();
 	$('#' + LabelColumnName).remove();
 	
@@ -260,11 +248,9 @@ function ShiftColumns(Header, Name, ColumnName, LabelColumnName, Count) {
 	var NewColumnName = Name + Count;
 	var NewLabelName = Name + "Label" + Count;
 	while ($('#' + NewColumnName).length) {
-		//alert ("IN HERE");
-		//if ($('#' + NewColumnName).length) {
-			$('#' + ColumnName).attr('id', NewColumnName);
-			$('#' + LabelColumnName).attr('id', NewLabelName);
-		//}
+		$('#' + ColumnName).attr('id', NewColumnName);
+		$('#' + LabelColumnName).attr('id', NewLabelName);
+		
 		Count++;
 		ColumnName = NewColumnName;
 		LabelColumnName = NewLabelColumnName;
@@ -303,7 +289,6 @@ function AddOneRow() {
 	RowCount = +RowCount + 100;
 	var Id = mygrid.getSelectedId();
 	if (Id != null) {
-		//mygrid.moveRowDown(Id);
 		var NewRow;
 		var OldRow;
 		var LastRow;
@@ -324,10 +309,6 @@ function AddOneRow() {
 		mygrid.addRow(RowCount, "");
 	}
 	
-	
-	// THIS WORKS!
-	//mygrid.addRow("TEST", "10, Dog, Cat, Bird");
-	//mygrid.cells(100, 1).cell.innerHTML="Chicken";
 }
 
 function DeleteCurrentRows() {
@@ -348,18 +329,13 @@ function AddOneColumn() {
 function RemoveOneColumn() {
 	var Id = mygrid.getSelectedCellIndex();
 	var Index = mygrid.getColIndexById(Id);
-	//var ColumnID = mygrid.getColumnId(Id);
 	mygrid.deleteColumn(Id);
 	
 	var ElementRemove = Id + 1;
 	
-	//if (ColumnHeader[ID]) {
-		//alert ("HERE");
-		ColumnHeader.splice(Id, 1);
-		ColumnFooter.splice(Id, 1);
-	//}
-	//alert(ColumnHeader);
-	//alert(ElementRemove);
+	ColumnHeader.splice(Id, 1);
+	ColumnFooter.splice(Id, 1);
+	
 	RemoveColumn(ColumnHeader, "Header", "ColumnHeadings", ElementRemove);
 	RemoveColumn(ColumnFooter, "Footer", "ColumnFooters", ElementRemove);
 }
@@ -379,15 +355,19 @@ function LoadHeaderData(XML) {
 function LoadFooterData(XML) {
 	var $Foot = $(XML).find("tfoot");
 	var $Foot = $Foot.find("tr");
-	$Content = $Foot.find("cell");
-	if ($Content === null) {
-		//$Foot = $(XML).find("head");
-		$Foot.find("cell").each(function(){
+	
+	var temp = false;
+	
+	
+	$Foot.find("cell").each(function() {
+		temp = true;
+		ColumnFooter.push($(this).text()); 
+	});
+	
+	if (temp === false) {
+		var $Head = $(XML).find("head");
+		$Head.find("column").each(function(){
 			ColumnFooter.push("NULL");
-		});
-	} else {
-		$Foot.find("cell").each(function() {
-			ColumnFooter.push($(this).text()); 
 		});
 	}
 }

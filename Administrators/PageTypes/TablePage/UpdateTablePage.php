@@ -834,9 +834,11 @@
 				}
 			}
 			
-			$i--;
-			$k--;
-			unset($Content[$i]);
+			if ($i != 1) {
+				$i--;
+				$k--;
+				unset($Content[$i]);
+			}
 			
 			$Content[$i]['PageID'] = $NewPageID;
 			$Content[$i]['ObjectID'] = $i;

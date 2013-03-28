@@ -364,6 +364,7 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					} else if ($Key == 'THead') {
 						$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
 						$this->TablesTHeadContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTHeadContent[$ContentXhtmlTableID], 'ObjectID');
+						
 						foreach ($this->TablesTHeadContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
 							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
@@ -465,24 +466,49 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						}
 
 					} else if ($Key == 'TableRow') {
+						// USE THIS AS MODEL FOR ACCESSING THE DATABASE
 						$TableRowTableName = $CurrentRow['ContainerObjectTypeName'];
 						$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($TableContentName, 'getMultiRowField', array());
 						$this->TablesTableRowContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowContent[$ContentXhtmlTableID], 'ObjectID');
+						
+						$TableNameArray = array();
+						
 						foreach ($this->TablesTableRowContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
-							// DO SAME AS WITH TABLES USE THE TEMPORARY DATABASE TABLES VARIABLE
+							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
+							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
+							
+							if ($ContainerObjectTypeName != NULL) {
+								if ($TableNameArray == NULL) {
+									array_push($TableNameArray, $ContainerObjectTypeName);
+								} else {
+									if (in_array($ContainerObjectTypeName, $TableNameArray) == FALSE) {
+										array_push($TableNameArray, $ContainerObjectTypeName);
+									}
+								}
+							}
+						}
+						
+						$DatabaseResults = array();
+						foreach ($TableNameArray as $DatabaseName) {
+							if ($DatabaseName != NULL) {
+								$this->LayerModule->createDatabaseTable($DatabaseName);
+								$this->LayerModule->Connect($DatabaseName);
+								$this->LayerModule->pass ($DatabaseName, 'setDatabaseRow', array('PageID' => $passarray));
+								$this->LayerModule->Disconnect($DatabaseName);
+								
+								$DatabaseResults[$DatabaseName] = $this->LayerModule->pass ($DatabaseName, 'getMultiRowField', array());
+							}
+						}
+						
+						foreach ($this->TablesTableRowContent[$ContentXhtmlTableID] as $TableRowName => $TableRowContent) {
 							$ContainerObjectType = $TableRowContent['ContainerObjectType'];
 							$ContainerObjectTypeName = $TableRowContent['ContainerObjectTypeName'];
 							if ($ContainerObjectTypeName != NULL) {
-								$this->LayerModule->createDatabaseTable($ContainerObjectTypeName);
-								$this->LayerModule->Connect($ContainerObjectTypeName);
-								$this->LayerModule->pass ($ContainerObjectTypeName, 'setDatabaseRow', array('PageID' => $passarray));
-								$this->LayerModule->Disconnect($ContainerObjectTypeName);
-
 								if ($ContainerObjectType == 'Header') {
-									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $DatabaseResults[$ContainerObjectTypeName];
 									$this->TablesTableRowHeaderContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowHeaderContent[$ContentXhtmlTableID], 'ObjectID');
 								} else if ($ContainerObjectType == 'Cell') {
-									$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->LayerModule->pass ($ContainerObjectTypeName, 'getMultiRowField', array());
+									$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $DatabaseResults[$ContainerObjectTypeName];
 									$this->TablesTableRowCellContent[$ContentXhtmlTableID] = $this->SortTableContent ($this->TablesTableRowCellContent[$ContentXhtmlTableID], 'ObjectID');
 								}
 							}

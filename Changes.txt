@@ -1,3 +1,20 @@
+Changes For One Solution CMS 2.1.144 - Wednesday, March 27, 2013
+Added:
+	1). Added Videos Pages Forms to Administrators Panel.
+	2). Added ModuleFormsSubmissions folder to Administrators Panel. This will allow for common scripts to be created for forms.
+	
+Updated (Fixed):
+	1). Updated XhtmlTables so it will display larger tables.
+	2). Updated XhtmlTables Content so if will show footers as NULL when there are no footers set.
+	3). Updated All Content Types so that XhtmlMenu will now be done in a separate file.
+	4). Updated All Content Types to allow for file logging.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 Changes For One Solution CMS 2.1.143 - Tuesday, March 5, 2013
 Added:
 	1). Added Calendar Pages to the Administrators Panel.

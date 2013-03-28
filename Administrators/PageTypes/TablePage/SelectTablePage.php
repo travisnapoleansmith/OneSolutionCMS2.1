@@ -325,6 +325,7 @@
 	$Tier6Databases->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
 	
 	$UpdateTablesPage = $Options['XhtmlTable']['table']['TablePageUpdatePage']['SettingAttribute'];
+	
 	header("Location: $UpdateTablesPage&SessionID=$sessionname");
 	exit;
 ?>
