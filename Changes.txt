@@ -1,4 +1,16 @@
-Changes For One Solution CMS 2.1.144 - Wednesday, March 27, 2013
+Changes For One Solution CMS 2.1.145 - Thursday, March 28, 2013
+Added:
+	1). Nothing Added
+	
+Updated (Fixed):
+	1). Updated All Content Types so that any new pages that are created can be updated.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.144 - Wednesday, March 27, 2013 8:36:39 PM
 Added:
 	1). Added Videos Pages Forms to Administrators Panel.
 	2). Added ModuleFormsSubmissions folder to Administrators Panel. This will allow for common scripts to be created for forms.
@@ -14,8 +26,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-Changes For One Solution CMS 2.1.143 - Tuesday, March 5, 2013
+Changes For One Solution CMS 2.1.143 - Tuesday, March 5, 2013 9:28:03 PM
 Added:
 	1). Added Calendar Pages to the Administrators Panel.
 	

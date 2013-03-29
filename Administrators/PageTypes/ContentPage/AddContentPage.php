@@ -352,31 +352,31 @@
 			$FormSelect['PageID'] = $UpdateContentPageSelect;
 			$FormOption['PageID'] = $UpdateContentPageSelect;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$DeleteContentPage = $Options['XhtmlContent']['content']['DeleteContentPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $DeleteContentPage;
 			$FormOption['PageID'] = $DeleteContentPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$EnableDisableStatusChangeContentPage = $Options['XhtmlContent']['content']['EnableDisableStatusChangeContentPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $EnableDisableStatusChangeContentPage;
 			$FormOption['PageID'] = $EnableDisableStatusChangeContentPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 			
 			$FormOptionValue = $NewPageID;
 			$FormOptionValue .= ' - ';

@@ -925,21 +925,21 @@
 			$FormSelect['PageID'] = $UpdatePhotosPageSelect;
 			$FormOption['PageID'] = $UpdatePhotosPageSelect;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$DeletePhotosPage = $Options['XhtmlPicture']['picture']['DeletePhotosPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $DeletePhotosPage;
 			$FormOption['PageID'] = $DeletePhotosPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$EnableDisableStatusChangePhotosPage = $Options['XhtmlPicture']['picture']['EnableDisableStatusChangePhotosPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $EnableDisableStatusChangePhotosPage;
@@ -948,8 +948,8 @@
 			$FormOptionArray[] = $FormOption;
 			$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 			
 			$FormOptionValue = $NewPageID;
 			$FormOptionValue .= ' - ';

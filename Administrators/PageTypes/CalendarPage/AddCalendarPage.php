@@ -433,31 +433,31 @@
 			$FormSelect['PageID'] = $UpdateCalendarPageSelect;
 			$FormOption['PageID'] = $UpdateCalendarPageSelect;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$DeleteCalendarPage = $Options['XhtmlCalendarTable']['calendar']['DeleteCalendarPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $DeleteCalendarPage;
 			$FormOption['PageID'] = $DeleteCalendarPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 	
 			$EnableDisableStatusChangeCalendarPage = $Options['XhtmlCalendarTable']['calendar']['EnableDisableStatusChangeCalendarPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $EnableDisableStatusChangeCalendarPage;
 			$FormOption['PageID'] = $EnableDisableStatusChangeCalendarPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			//$FormOptionArray[] = $FormOption;
+			//$FormSelectionArray[] = $FormSelect;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 			
 			$FormOptionValue = $NewPageID;
 			$FormOptionValue .= ' - ';
