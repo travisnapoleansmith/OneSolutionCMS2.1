@@ -45,6 +45,14 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var string
 	 */
 	protected $Count;
+	
+	/**
+	 * Current Day Page Count - retrieved from the database table. The name of the database table is set
+	 * in ContentLayerModule Table under XhtmlSiteStats - DatabaseTable2.
+	 *
+	 * @var string
+	 */
+	protected $DayCount;
 
 	/**
 	 * Class Name - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats
@@ -102,6 +110,13 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var bool
 	 */
 	protected $NoOutput;
+	
+	/**
+	 * Database Table Name for Daily Site Stats.
+	 *
+	 * @var string
+	 */
+	protected $DailySiteStatsTableName;
 
 	/**
 	 * Create an instance of XtmlSiteStats
@@ -118,12 +133,16 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		$GLOBALS['ErrorMessage']['XhtmlSiteStats'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['XhtmlSiteStats'][$hold];
 		$this->ErrorMessage = array();
-
+		
+		if ($TableNames['DatabaseTable2']) {
+			$this->DailySiteStatsTableName = $TableNames['DatabaseTable2'];
+		}
+		
 		if ($DatabaseOptions['FileName']) {
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-
+		
 		if ($this->FileName) {
 			$this->Writer = new XMLWriter();
 			$this->Writer->openURI($this->FileName);
@@ -205,6 +224,14 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		$this->Count = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Count'));
 
 		$this->LayerModule->Disconnect($this->DatabaseTable);
+		
+		$this->LayerModule->Connect($this->DailySiteStatsTableName);
+		
+		$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+
+		$this->DayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+
+		$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
 	}
 
 	/**
@@ -215,13 +242,25 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @return array Entire Database Table
 	 */
 	public function FetchDatabaseAll () {
-		$this->LayerModule->Connect($this->DatabaseTable);
-
-		$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
-		$EntireDatabaseTable = $this->LayerModule->pass ($this->DatabaseTable, 'getEntireTable', array());
-
-		$this->LayerModule->Disconnect($this->DatabaseTable);
-
+		$Args = func_get_args();
+		$DatabaseTable2Use = $Args[0];
+		
+		if (isset($DatabaseTable2Use)) {
+			$this->LayerModule->Connect($this->DailySiteStatsTableName);
+	
+			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setEntireTable', array());
+			$EntireDatabaseTable = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getEntireTable', array());
+	
+			$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+		} else {
+			$this->LayerModule->Connect($this->DatabaseTable);
+	
+			$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());
+			$EntireDatabaseTable = $this->LayerModule->pass ($this->DatabaseTable, 'getEntireTable', array());
+	
+			$this->LayerModule->Disconnect($this->DatabaseTable);
+		}
+		
 		return $EntireDatabaseTable;
 	}
 
@@ -262,7 +301,24 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			$this->Writer->flush();
 		}
 	}
-
+	
+	/**
+	 * checkDailySiteStatsPage
+	 *
+	 * Checks to see if the page exists in the Daily Site Stat database table.
+	 *
+	 * @return bool TRUE if page exists
+	 * @return bool FALSE if page doesn't exists
+	 *
+	 */
+	public function checkDailySiteStatPage () {
+		if ($this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'PageID'))) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
 	/**
 	 * checkSiteStatPage
 	 *
@@ -283,7 +339,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	/**
 	 * createSiteStatPage
 	 *
-	 * Creates a site stat page in the database.
+	 * Creates a daily site stat page in the database.
 	 *
 	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
 	 *
@@ -293,6 +349,24 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
 			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $SiteStatPage, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'createSiteStatPage: SiteStatPage cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createDailySiteStatPage
+	 *
+	 * Creates a site stat page in the database.
+	 *
+	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createDailySiteStatPage(array $SiteStatPage) {
+		if ($SiteStatPage != NULL) {
+			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'BuildFieldNames', array('TableName' => $this->DailySiteStatsTableName));
+			$Keys = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $SiteStatPage, $this->DailySiteStatsTableName);
 		} else {
 			array_push($this->ErrorMessage,'createSiteStatPage: SiteStatPage cannot be NULL!');
 		}
@@ -330,6 +404,29 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			}
 
 			$this->updateModuleContent($PageID, $this->DatabaseTable, $Content);
+			
+			$NewCount = $this->DayCount;
+			$NewCount++;
+			$Content = array('Count' => $NewCount);
+			$CurrentDayMonthYear = date('F-d-Y');
+			$passarray = array('TableName' => $this->DailySiteStatsTableName);
+			
+			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'BuildFieldNames', $passarray);
+			$RowFieldName = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowFieldNames', array());
+			$Key = array_search($CurrentMonthYear, $RowFieldName);
+			if ($Key) {
+				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
+				$CurrentDayCount++;
+				$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+			} else {
+				$passarray = array('fieldstring' => "`$CurrentDayMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
+				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'createField', $passarray);
+				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentMonthYear));
+				$CurrentDayCount++;
+				$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+			}
+			
+			$this->updateModuleContent($PageID, $this->DailySiteStatsTableName, $Content);
 		} else {
 			array_push($this->ErrorMessage,'updateSiteStatPage: PageID cannot be NULL!');
 		}

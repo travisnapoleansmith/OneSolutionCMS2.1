@@ -84,7 +84,7 @@
 						$i++;
 					}
 
-					$Page->startElement('tfoot');
+					/*$Page->startElement('tfoot');
 						$Page->startElement('tr');
 						for ($j = 1; $j <= $HeaderSize; $j++) {
 							$Page->startElement('cell');
@@ -93,6 +93,7 @@
 						}
 						$Page->endElement(); // ENDS TR
 					$Page->endElement(); // ENDS TFOOT
+					*/
 
 				}
 			} else if (strstr($File, '.xls')) {
@@ -139,7 +140,7 @@
 					}
 					$Page->endElement(); // ENDS ROW
 				}
-
+				/*
 				$Page->startElement('tfoot');
 					$Page->startElement('tr');
 
@@ -150,6 +151,7 @@
 					}
 					$Page->endElement(); // ENDS TR
 				$Page->endElement(); // ENDS TFOOT
+				*/
 			}
 			$Page->endElement(); // ENDS ROWS
 		$pageoutput = $Page->flush();

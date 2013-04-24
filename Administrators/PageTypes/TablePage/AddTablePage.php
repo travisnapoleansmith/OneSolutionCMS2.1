@@ -1023,9 +1023,9 @@
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
 			
-			$FormOptionValue = $NewTablesPage;
+			$FormOptionValue = $NewPageID;
 			$FormOptionValue .= ' - ';
-			$FormOptionValue .= $NewPageID;
+			$FormOptionValue .= 'NULL';
 			
 			require('../../ModuleFormSubmissions/Tier6ContentLayer/Extended/XhtmlMainMenu/AddMainMenu.php');
 			

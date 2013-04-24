@@ -1860,7 +1860,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			}
 		}
-
+		
 		if (isset($Data)) {
 			$EnableDisable = $this->FormLookupTableName['FormSelect'][$Lookup]['Enable/Disable'];
 			$Status = $this->FormLookupTableName['FormSelect'][$Lookup]['Status'];

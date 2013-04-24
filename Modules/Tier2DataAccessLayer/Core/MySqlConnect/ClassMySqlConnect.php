@@ -39,18 +39,18 @@
 class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2DataAccessLayerModules
 {
 	/**
-	 * Create an instance of MySqlConnect
+	 * Create an instance of MySqlConnect.
 	 *
 	 * @access public
 	*/
 	public function MySqlConnect () {
-		$this->idsearch = Array();
+		$this->IDSearch = Array();
 
-		$hold = array();
+		$Hold = array();
 		if (!is_array($GLOBALS['ErrorMessage']['MySqlConnect'])) {
 			$GLOBALS['ErrorMessage']['MySqlConnect'] = array();
 		}
-		array_push($GLOBALS['ErrorMessage']['MySqlConnect'], $hold);
+		array_push($GLOBALS['ErrorMessage']['MySqlConnect'], $Hold);
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['MySqlConnect'][key($GLOBALS['ErrorMessage']['MySqlConnect'])];
 	}
 
@@ -61,19 +61,19 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function Connect () {
-		if ($this->hostname == NULL | $this->user == NULL | $this->password == NULL | $this->databasename == NULL) {
-			$this->hostname = $GLOBALS['credentaillogonarray'][0];
-			$this->user = $GLOBALS['credentaillogonarray'][1];
-			$this->password = $GLOBALS['credentaillogonarray'][2];
-			$this->databasename = $GLOBALS['credentaillogonarray'][3];
+		if ($this->HostName == NULL | $this->User == NULL | $this->Password == NULL | $this->DatabaseName == NULL) {
+			$this->HostName = $GLOBALS['credentaillogonarray'][0];
+			$this->User = $GLOBALS['credentaillogonarray'][1];
+			$this->Password = $GLOBALS['credentaillogonarray'][2];
+			$this->DatabaseName = $GLOBALS['credentaillogonarray'][3];
 		}
 
-		if (!($this->link = mysql_connect($this->hostname, $this->user, $this->password))) {
+		if (!($this->Link = mysql_connect($this->HostName, $this->User, $this->Password))) {
 			array_push($this->ErrorMessage,'Connect: Could not connect to server');
 		}
 
-		if ($this->link) {
-			if (!mysql_select_db($this->databasename, $this->link)) {
+		if ($this->Link) {
+			if (!mysql_select_db($this->DatabaseName, $this->Link)) {
 				array_push($this->ErrorMessage,'Connect: Could not select database');
 			}
 		}
@@ -86,79 +86,109 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function Disconnect () {
-		if ($this->link) {
-			mysql_close($this->link);
+		if ($this->Link) {
+			mysql_close($this->Link);
 		}
 	}
-
+	
+	/**
+	 * checkDatabaseName
+	 * Check to see if database name exists.
+	 *
+	 * @return Database Name or BOOL FALSE if the database name does not exist.
+	 * @access protected
+	*/
 	protected function checkDatabaseName (){
 		$this->Connect();
-		$results = mysql_list_dbs($this->link);
+		$Results = mysql_list_dbs($this->Link);
 		$i = 0;
-		while (mysql_db_name($results, $i)){
-			$temp = mysql_db_name($results, $i);
-			if ($temp == $this->databasename) {
-				return $temp;
+		while (mysql_db_name($Results, $i)){
+			$Temp = mysql_db_name($Results, $i);
+			if ($Temp == $this->DatabaseName) {
+				return $Temp;
 			}
 			$i++;
 		}
 		array_push($this->ErrorMessage,'checkDatabaseName: Database Name does not exist');
 		return FALSE;
 	}
-
+	
+	/**
+	 * checkTableName
+	 * Check to see if database table exists.
+	 *
+	 * @return Database Table Name or BOOL FALSE if the table name does not exist.
+	 * @access protected
+	*/
 	protected function checkTableName () {
-		$TableName = $this->databasetable;
-		if ($this->tablenames === NULL) {
+		$TableName = $this->DatabaseTable;
+		if ($this->TableNames === NULL) {
 			$this->Connect();
 
-			$query = 'SHOW TABLES FROM `' . $this->databasename . '`';
-			$result = mysql_query($query);
+			$Query = 'SHOW TABLES FROM `' . $this->DatabaseName . '`';
+			$Result = mysql_query($Query);
 
-			$this->tablenames = Array();
+			$this->TableNames = Array();
 
-			while ($CurrentTableName = mysql_fetch_array($result, MYSQL_NUM)) {
-				array_push($this->tablenames, $CurrentTableName[0]);
+			while ($CurrentTableName = mysql_fetch_array($Result, MYSQL_NUM)) {
+				array_push($this->TableNames, $CurrentTableName[0]);
 			}
 
 			$this->Disconnect();
 
 		}
 
-		foreach ($this->tablenames as $Key => $Value) {
+		foreach ($this->TableNames as $Key => $Value) {
 			if ($Value === $TableName) {
 				return $TableName;
 			}
 		}
 		return FALSE;
 	}
-
+	
+	/**
+	 * checkPermissions
+	 * Check to see if database table exists.
+	 *
+	 * @param string $Permission String of permissions to check for. Must be a string.
+	 * @return BOOL TRUE if the permissions exists or permissions are set to ALL or BOOL FALSE if the permissions have been denied.
+	 * @access protected
+	*/
 	protected function checkPermissions ($Permission) {
 		$this->Connect();
-		$query = 'SHOW GRANTS';
-		$result = mysql_query($query);
-		$userdata = mysql_result($result, 1);
-		$userdata2 = mysql_result($result, 0);
-		$userdata = substr_replace($userdata, NULL, 0, 5);
-		if (strpos($userdata, $Permission)) {
+		$Query = 'SHOW GRANTS';
+		$Result = mysql_query($Query);
+		$UserData = mysql_result($Result, 1);
+		$UserData2 = mysql_result($Result, 0);
+		$UserData = substr_replace($UserData, NULL, 0, 5);
+		if (strpos($UserData, $Permission)) {
 			return TRUE;
-		} else if (strpos($userdata2, 'ALL PRIVILEGES ON')){
+		} else if (strpos($UserData2, 'ALL PRIVILEGES ON')){
 			return TRUE;
 		} else {
 			array_push($this->ErrorMessage,'checkPermissions: Permission has been denied');
 			return FALSE;
 		}
 	}
-
+	
+	/**
+	 * checkField
+	 * Check to see if database field exists.
+	 *
+	 * @param string $Field String of Field Name to be checked. Must be a string.
+	 * @return Field Name if the field exists BOOL FALSE if the field not exist.
+	 * @access protected
+	*/
 	protected function checkField ($Field) {
 		$this->Connect();
-		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` LIKE "' . $Field . '" ';
-		$result = mysql_query($query);
-		$userdata = mysql_result($result, 0);
-		if (!$userdata) {
+		$Query = 'SHOW COLUMNS FROM `' . $this->DatabaseTable . '` LIKE "' . $Field . '" ';
+		$Result = mysql_query($Query);
+		$UserData = mysql_result($Result, 0);
+		if (!$UserData) {
 			return FALSE;
 		} else {
-			if ($userdata == $Field) {
-				return $userdata;
+			if ($UserData == $Field) {
+				return $UserData;
 			} else {
 				array_push($this->ErrorMessage,'checkField: Field does not exist');
 				return FALSE;
@@ -173,13 +203,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function createDatabase () {
-		$databasenamecheck = $this->checkDatabaseName();
-		$permissionscheck = $this->checkPermissions ('CREATE');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$PermissionsCheck = $this->checkPermissions ('CREATE');
 
-		if (!$databasenamecheck) {
-			if ($permissionscheck) {
-				$query = 'CREATE DATABASE ' . $this->databasename .'';
-				$result = mysql_query($query);
+		if (!$DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				$Query = 'CREATE DATABASE ' . $this->DatabaseName .'';
+				$Result = mysql_query($Query);
 			} else {
 				array_push($this->ErrorMessage,'createDatabase: Permission has been denied!');
 			}
@@ -195,13 +225,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function deleteDatabase (){
-		$databasenamecheck = $this->checkDatabaseName();
-		$permissionscheck = $this->checkPermissions('DROP');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$PermissionsCheck = $this->checkPermissions('DROP');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				$query = 'DROP DATABASE ' . $this->databasename .'';
-				$result = mysql_query($query);
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				$Query = 'DROP DATABASE ' . $this->DatabaseName .'';
+				$Result = mysql_query($Query);
 			} else {
 				array_push($this->ErrorMessage,'deleteDatabase: Permission has been denied!');
 			}
@@ -219,17 +249,17 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function createTable ($TableString) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('CREATE');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('CREATE');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if (!$tablenamecheck) {
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if (!$TableNameCheck) {
 					if (!is_array($TableString)) {
 						if ($TableString != NULL) {
-							$query = 'CREATE TABLE ' . $this->databasetable . ' ( ' . $TableString . ' ); ';
-							$result = mysql_query($query);
+							$Query = 'CREATE TABLE ' . $this->DatabaseTable . ' ( ' . $TableString . ' ); ';
+							$Result = mysql_query($Query);
 						} else {
 							array_push($this->ErrorMessage,'createTable: Table String cannot be NULL!');
 						}
@@ -256,20 +286,20 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function updateTable ($TableString) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('UPDATE');
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('UPDATE');
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
 					if ($TableString != NULL) {
 						if (!is_array($TableString)) {
-							$query = 'UPDATE `'  . $this->databasetable . '` SET ' . $TableString . '; ';
-							$result = mysql_query($query);
+							$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET ' . $TableString . '; ';
+							$Result = mysql_query($Query);
 						} else {
 							while (isset($TableString[key($TableString)])) {
-								$query = 'UPDATE `'  . $this->databasetable . '` SET ' . current($TableString) . '; ';
-								$result = mysql_query($query);
+								$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET ' . current($TableString) . '; ';
+								$Result = mysql_query($Query);
 								next($TableString);
 							}
 						}
@@ -294,15 +324,15 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function deleteTable () {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('CREATE');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('CREATE');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
-					$query = 'DROP TABLE ' . $this->databasetable . '';
-					$result = mysql_query($query);
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
+					$Query = 'DROP TABLE ' . $this->DatabaseTable . '';
+					$Result = mysql_query($Query);
 				} else {
 					array_push($this->ErrorMessage,'deleteTable: Table name does not exist!');
 				}
@@ -324,52 +354,52 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function createRow ($RowName, $RowValue) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('INSERT');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('INSERT');
 
-		$insertrow = NULL;
-		$insertrowvalue = NULL;
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
+		$InsertRow = NULL;
+		$InsertRowValue = NULL;
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
 					if (is_array($RowName[0])) {
 						if (is_array($RowValue[0])) {
 							if ($RowName != NULL) {
 								if ($RowValue != NULL) {
 									while (isset($RowName[key($RowName)])) {
 										while(current($RowName[key($RowName)])) {
-											$insertrow .= "`";
-											$insertrow .= mysql_real_escape_string(current($RowName[key($RowName)]));
-											$insertrow .= "`";
+											$InsertRow .= "`";
+											$InsertRow .= mysql_real_escape_string(current($RowName[key($RowName)]));
+											$InsertRow .= "`";
 
 											if (is_null(current($RowValue[key($RowValue)]))) {
-												$insertrowvalue .= 'NULL';
+												$InsertRowValue .= 'NULL';
 											} else {
-												$insertrowvalue .= "'";
-												$insertrowvalue .= mysql_real_escape_string(current($RowValue[key($RowValue)]));
-												$insertrowvalue .= "'";
+												$InsertRowValue .= "'";
+												$InsertRowValue .= mysql_real_escape_string(current($RowValue[key($RowValue)]));
+												$InsertRowValue .= "'";
 											}
 
 											next($RowName[key($RowName)]);
 											next($RowValue[key($RowValue)]);
 											if (current($RowName[key($RowName)])) {
-												$insertrow .= ' , ';
-												$insertrowvalue .= ' , ';
+												$InsertRow .= ' , ';
+												$InsertRowValue .= ' , ';
 											}
 										}
-										$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
-										$result = mysql_query($query);
-										if (!$result) {
-											$temp = key($RowValue);
-											array_push($this->ErrorMessage,"createRow: Row Value [$temp] exists in the Database!");
+										$Query = 'INSERT INTO ' . $this->DatabaseTable . ' ( ' . $InsertRow . ') VALUES ( ' . $InsertRowValue . '); ';
+										$Result = mysql_query($Query);
+										if (!$Result) {
+											$Temp = key($RowValue);
+											array_push($this->ErrorMessage,"createRow: Row Value [$Temp] exists in the Database!");
 										}
 
 										next($RowName);
 										next($RowValue);
 
-										$insertrowvalue = NULL;
-										$insertrow = NULL;
+										$InsertRowValue = NULL;
+										$InsertRow = NULL;
 									}
 								} else {
 									array_push($this->ErrorMessage,'createRow: Row Value cannot be NULL!');
@@ -389,29 +419,29 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							if ($RowName != NULL) {
 								if ($RowValue != NULL) {
 									while (isset($RowName[key($RowName)])) {
-										$insertrow .= "`";
-										$insertrow .= mysql_real_escape_string(current($RowName));
-										$insertrow .= "`";
+										$InsertRow .= "`";
+										$InsertRow .= mysql_real_escape_string(current($RowName));
+										$InsertRow .= "`";
 
 										if (is_null(current($RowValue))) {
-											$insertrowvalue .= 'NULL';
+											$InsertRowValue .= 'NULL';
 										} else {
-											$insertrowvalue .= "'";
-											$insertrowvalue .= mysql_real_escape_string(current($RowValue));
-											$insertrowvalue .= "'";
+											$InsertRowValue .= "'";
+											$InsertRowValue .= mysql_real_escape_string(current($RowValue));
+											$InsertRowValue .= "'";
 										}
 
 										next($RowName);
 										next($RowValue);
 										if (current($RowName)) {
-											$insertrow .= ' , ';
-											$insertrowvalue .= ' , ';
+											$InsertRow .= ' , ';
+											$InsertRowValue .= ' , ';
 										}
 									}
 
-									$query = 'INSERT INTO ' . $this->databasetable . ' ( ' . $insertrow . ') VALUES ( ' . $insertrowvalue . '); ';
-									$result = mysql_query($query);
-									if (!$result) {
+									$Query = 'INSERT INTO ' . $this->DatabaseTable . ' ( ' . $InsertRow . ') VALUES ( ' . $InsertRowValue . '); ';
+									$Result = mysql_query($Query);
+									if (!$Result) {
 										array_push($this->ErrorMessage,'createRow: Row Value exists in the Database!');
 									}
 								} else {
@@ -451,13 +481,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function updateRow ($RowName, $RowValue, $RowNumberName, $RowNumber) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('UPDATE');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('UPDATE');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
 					if (!is_array($RowName)) {
 						if (!is_array($RowValue)) {
 							if (!is_array($RowNumberName)) {
@@ -467,8 +497,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											if ($RowNumberName != NULL) {
 												if ($RowNumber != NULL) {
 													$RowNumber = mysql_real_escape_string($RowNumber);
-													$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowName . '` = \'' . $RowValue . '\' WHERE `' . $RowNumberName .'` = "' . $RowNumber . '" ';
-													$result = mysql_query($query);
+													$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET `' . $RowName . '` = \'' . $RowValue . '\' WHERE `' . $RowNumberName .'` = "' . $RowNumber . '" ';
+													$Result = mysql_query($Query);
 												} else {
 													array_push($this->ErrorMessage,'updateRow: Row Number cannot be NULL!');
 												}
@@ -496,33 +526,33 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 								if (is_array($RowNumber)) {
 									while (isset($RowName[key($RowName)])) {
 										if (is_array($RowNumberName[key($RowNumberName)]) || is_array($RowNumber[key($RowNumber)])) {
-											$namearray = $RowNumberName[key($RowNumberName)];
-											$valuearray = $RowNumber[key($RowNumber)];
-											reset($namearray);
-											reset($valuearray);
-											$string = NULL;
-											while (isset($namearray[key($namearray)])) {
-												$string .= '`';
-												$string .= mysql_real_escape_string(current($namearray));
-												$string .= '` = \'';
-												$string .= mysql_real_escape_string(current($valuearray));
-												$string .= '\'';
-												next($namearray);
-												next($valuearray);
-												if (isset($namearray[key($namearray)])) {
-													$string .= ' AND ';
+											$NameArray = $RowNumberName[key($RowNumberName)];
+											$ValueArray = $RowNumber[key($RowNumber)];
+											reset($NameArray);
+											reset($ValueArray);
+											$String = NULL;
+											while (isset($NameArray[key($NameArray)])) {
+												$String .= '`';
+												$String .= mysql_real_escape_string(current($NameArray));
+												$String .= '` = \'';
+												$String .= mysql_real_escape_string(current($ValueArray));
+												$String .= '\'';
+												next($NameArray);
+												next($ValueArray);
+												if (isset($NameArray[key($NameArray)])) {
+													$String .= ' AND ';
 												}
 											}
 											$RowValuestring = NULL;
 											$RowValuestring = current($RowValue);
 											$RowValuestring = mysql_real_escape_string($RowValuestring);
 											if ($RowValuestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($RowName) . '` = \'' . $RowValuestring . '\' WHERE ' . $string . ' ';
+												$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET `' . current($RowName) . '` = \'' . $RowValuestring . '\' WHERE ' . $String . ' ';
 											} else {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . current($RowName) . '` = NULL WHERE ' . $string . ' ';
+												$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET `' . current($RowName) . '` = NULL WHERE ' . $String . ' ';
 											}
 
-											$result = mysql_query($query);
+											$Result = mysql_query($Query);
 										} else {
 											$RowNumberstring = NULL;
 											$RowNumberstring = mysql_real_escape_string(current($RowNumber));
@@ -533,11 +563,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											$RowValuestring = NULL;
 											$RowValuestring = mysql_real_escape_string(current($RowValue));
 											if ($RowValuestring) {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowNamestring . '` = \'' . $RowValuestring . '\' WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
+												$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET `' . $RowNamestring . '` = \'' . $RowValuestring . '\' WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
 											} else {
-												$query = 'UPDATE `'  . $this->databasetable . '` SET `' . $RowNamestring . '` = NULL WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
+												$Query = 'UPDATE `'  . $this->DatabaseTable . '` SET `' . $RowNamestring . '` = NULL WHERE `' . $RowNumberNamestring .'` = "' . $RowNumberstring . '" ';
 											}
-											$result = mysql_query($query);
+											$Result = mysql_query($Query);
 										}
 										next($RowName);
 										next($RowValue);
@@ -580,26 +610,26 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function deleteRow ($RowName, $RowValue) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('DELETE');
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('DELETE');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
 					if (!is_array($RowName)) {
 						if (!is_array($RowValue)) {
 							if ($RowName != NULL) {
 								if ($RowValue != NULL) {
-									$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . $RowName . ' = ' . $RowValue . '';
-									$result = mysql_query($query);
+									$Query = 'DELETE FROM ' . $this->DatabaseTable . ' WHERE ' . $RowName . ' = ' . $RowValue . '';
+									$Result = mysql_query($Query);
 								} else {
 									array_push($this->ErrorMessage,'deleteRow: Row Name has a value but Row Value cannot be NULL!');
 								}
 							} else {
 								if ($RowValue == NULL) {
-									$query = 'DELETE FROM ' . $this->databasetable . ' ';
-									$result = mysql_query($query);
+									$Query = 'DELETE FROM ' . $this->DatabaseTable . ' ';
+									$Result = mysql_query($Query);
 								} else {
 									array_push($this->ErrorMessage,'deleteRow: Row Name is NULL but Row Value cannot have a value!');
 								}
@@ -612,8 +642,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							if ($RowName != NULL) {
 								if ($RowValue != NULL) {
 									while (isset($RowName[key($RowName)])) {
-										$query = 'DELETE FROM ' . $this->databasetable . ' WHERE ' . current($RowName) . ' = ' . current($RowValue) . '';
-										$result = mysql_query($query);
+										$Query = 'DELETE FROM ' . $this->DatabaseTable . ' WHERE ' . current($RowName) . ' = ' . current($RowValue) . '';
+										$Result = mysql_query($Query);
 										next($RowName);
 										next($RowValue);
 									}
@@ -622,8 +652,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 								}
 							} else {
 								if ($RowValue == NULL) {
-									$query = 'DELETE FROM ' . $this->databasetable . ' ';
-									$result = mysql_query($query);
+									$Query = 'DELETE FROM ' . $this->DatabaseTable . ' ';
+									$Result = mysql_query($Query);
 								} else {
 									array_push($this->ErrorMessage,'deleteRow: Row Name is an array and is NULL but Row Value is an array but cannot have a value!');
 								}
@@ -647,41 +677,41 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * Creates a new field from fieldstring. Fieldstring can be a string or an array. Fieldflag and fieldflagcolumn can be null. They
 	 * are used to set attributes for a new field.
 	 *
-	 * @param string $fieldstring Name of the field to create. Must be a string or an array of strings.
-	 * @param string $fieldflag Specify which field flag to be used. Must be any one of these values:
+	 * @param string $FieldString Name of the field to create. Must be a string or an array of strings.
+	 * @param string $FieldFlag Specify which field flag to be used. Must be any one of these values:
 	 *		- FIRST - Specifies if the field is to be the first column of the table.
 	 *		- AFTER - Specifies that the field is to be after fieldflagcolumn.
-	 * @param string $fieldflagcolumn Used only when fieldflag is set to AFTER. Specify which field fieldstring is after.
+	 * @param string $FieldFlagColumn Used only when fieldflag is set to AFTER. Specify which field fieldstring is after.
 	 * @access public
 	*/
-	public function createField ($fieldstring, $fieldflag, $fieldflagcolumn) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('ALTER');
+	public function createField ($FieldString, $FieldFlag, $FieldFlagColumn) {
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('ALTER');
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
-					if (!is_array($fieldstring)) {
-						if (!is_array($fieldflag)) {
-							if (!is_array($fieldflagcolumn)) {
-								if ($fieldstring != NULL) {
-									if ($fieldflag != NULL) {
-										if ($fieldflag == 'FIRST') {
-											if ($fieldflagcolumn == NULL) {
-												$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' FIRST; ';
-												$result = mysql_query($query);
-												if (!$result) {
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
+					if (!is_array($FieldString)) {
+						if (!is_array($FieldFlag)) {
+							if (!is_array($FieldFlagColumn)) {
+								if ($FieldString != NULL) {
+									if ($FieldFlag != NULL) {
+										if ($FieldFlag == 'FIRST') {
+											if ($FieldFlagColumn == NULL) {
+												$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . $FieldString . ' FIRST; ';
+												$Result = mysql_query($Query);
+												if (!$Result) {
 													array_push($this->ErrorMessage,"createField: FIRST: Field String exists in the Database!");
 												}
 											} else {
 												array_push($this->ErrorMessage,'createField: Field Flag has been set to FIRST and Field Flag Column has to be NULL!');
 											}
-										} else if ($fieldflag == 'AFTER') {
-											if ($fieldflagcolumn != NULL) {
-												$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' AFTER `' . $fieldflagcolumn .'` ; ';
-												$result = mysql_query($query);
-												if (!$result) {
+										} else if ($FieldFlag == 'AFTER') {
+											if ($FieldFlagColumn != NULL) {
+												$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . $FieldString . ' AFTER `' . $FieldFlagColumn .'` ; ';
+												$Result = mysql_query($Query);
+												if (!$Result) {
 													array_push($this->ErrorMessage,"createField: AFTER: Field String exists in the Database!");
 												}
 											} else {
@@ -691,9 +721,9 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 											array_push($this->ErrorMessage,'createField: Field Flag can only be FIRST or AFTER');
 										}
 									} else {
-										$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . $fieldstring . ' ; ';
-										$result = mysql_query($query);
-										if (!$result) {
+										$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . $FieldString . ' ; ';
+										$Result = mysql_query($Query);
+										if (!$Result) {
 											array_push($this->ErrorMessage,"createField: Field String exists in the Database!");
 										}
 									}
@@ -708,47 +738,47 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage,'createField: Field Flag cannot be an Array!');
 						}
 					} else {
-						if (is_array($fieldflag)) {
-							if (is_array($fieldflagcolumn)) {
-								if ($fieldstring != NULL) {
-									while (current($fieldstring)) {
-										if ($fieldflag != NULL) {
-											if (current($fieldflag) == 'FIRST') {
-												if (current($fieldflagcolumn) == NULL) {
-													$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . current($fieldstring) . ' FIRST; ';
-													$result = mysql_query($query);
-													if (!$result) {
-														$temp = key($fieldstring);
-														array_push($this->ErrorMessage,"createField: FIRST: Field String [$temp] exists in the Database!");
+						if (is_array($FieldFlag)) {
+							if (is_array($FieldFlagColumn)) {
+								if ($FieldString != NULL) {
+									while (current($FieldString)) {
+										if ($FieldFlag != NULL) {
+											if (current($FieldFlag) == 'FIRST') {
+												if (current($FieldFlagColumn) == NULL) {
+													$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . current($FieldString) . ' FIRST; ';
+													$Result = mysql_query($Query);
+													if (!$Result) {
+														$Temp = key($FieldString);
+														array_push($this->ErrorMessage,"createField: FIRST: Field String [$Temp] exists in the Database!");
 													}
 												} else {
-													array_push($this->ErrorMessage,"createField: Field Flag [current($fieldflag)] has been set to FIRST and Field Flag Column [current($fieldflagcolumn)]has to be NULL!");
+													array_push($this->ErrorMessage,"createField: Field Flag [current($FieldFlag)] has been set to FIRST and Field Flag Column [current($FieldFlagColumn)]has to be NULL!");
 												}
-											} else if (current($fieldflag) == 'AFTER') {
-												if ($fieldflagcolumn != NULL) {
-													$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . current($fieldstring) . ' AFTER `' . current($fieldflagcolumn) .'` ; ';
-													$result = mysql_query($query);
-													if (!$result) {
-														$temp = key($fieldstring);
-														array_push($this->ErrorMessage,"createField: AFTER: Field String [$temp] and Field Flag Column [$temp] exists in the Database!");
+											} else if (current($FieldFlag) == 'AFTER') {
+												if ($FieldFlagColumn != NULL) {
+													$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . current($FieldString) . ' AFTER `' . current($FieldFlagColumn) .'` ; ';
+													$Result = mysql_query($Query);
+													if (!$Result) {
+														$Temp = key($FieldString);
+														array_push($this->ErrorMessage,"createField: AFTER: Field String [$Temp] and Field Flag Column [$Temp] exists in the Database!");
 													}
 												} else {
-													array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] has been set to AFTER and Field Flag Column [current($fieldflagcolumn)] cannot be NULL!');
+													array_push($this->ErrorMessage,'createField: Field Flag [current($FieldFlag)] has been set to AFTER and Field Flag Column [current($FieldFlagColumn)] cannot be NULL!');
 												}
 											} else {
-												array_push($this->ErrorMessage,'createField: Field Flag [current($fieldflag)] can only be FIRST or AFTER');
+												array_push($this->ErrorMessage,'createField: Field Flag [current($FieldFlag)] can only be FIRST or AFTER');
 											}
 										} else {
-											$query = 'ALTER TABLE `' . $this->databasetable . '` ADD ' . current($fieldstring) . ' ; ';
-											$result = mysql_query($query);
-											if (!$result) {
-												$temp = key($fieldstring);
-												array_push($this->ErrorMessage,"createField: Field String [$temp] exists in the Database!");
+											$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ADD ' . current($FieldString) . ' ; ';
+											$Result = mysql_query($Query);
+											if (!$Result) {
+												$Temp = key($FieldString);
+												array_push($this->ErrorMessage,"createField: Field String [$Temp] exists in the Database!");
 											}
 										}
-										next($fieldstring);
-										next($fieldflag);
-										next($fieldflagcolumn);
+										next($FieldString);
+										next($FieldFlag);
+										next($FieldFlagColumn);
 									}
 								} else {
 									array_push($this->ErrorMessage,'createField: Field String cannot be NULL!');
@@ -776,71 +806,71 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 *
 	 * Updates a field from field and fieldchange. Field and fieldchange can be a string or an array but must be the same type for each!
 	 *
-	 * @param string $field Name of the field to change. Must be a string or an array of strings.
-	 * @param string $fieldchange Value of the field to change. Must be a string or an array of strings.
+	 * @param string $Field Name of the field to change. Must be a string or an array of strings.
+	 * @param string $FieldChange Value of the field to change. Must be a string or an array of strings.
 	 * @access public
 	*/
-	public function updateField ($field, $fieldchange) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('ALTER');
-		$fieldcheck = $this->checkField($field);
-		$fieldcheck2 = $this->checkField($fieldchange);
+	public function updateField ($Field, $FieldChange) {
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('ALTER');
+		$FieldCheck = $this->checkField($Field);
+		$FieldCheck2 = $this->checkField($FieldChange);
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
-					if (!is_array($field)) {
-						if ($field != NULL) {
-							if ($fieldcheck) {
-								if (!is_array($fieldchange)) {
-									if ($fieldchange != NULL) {
-										if (!$fieldcheck2) {
-											$type = NULL;
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
+					if (!is_array($Field)) {
+						if ($Field != NULL) {
+							if ($FieldCheck) {
+								if (!is_array($FieldChange)) {
+									if ($FieldChange != NULL) {
+										if (!$FieldCheck2) {
+											$Type = NULL;
 
-											$query = "SHOW COLUMNS FROM `$this->databasetable` LIKE '$field';";
-											$result = mysql_query($query);
-											$fieldvalue = mysql_fetch_array($result, MYSQL_ASSOC);
-											unset($fieldvalue['Field']);
+											$Query = "SHOW COLUMNS FROM `$this->DatabaseTable` LIKE '$Field';";
+											$Result = mysql_query($Query);
+											$FieldValue = mysql_fetch_array($Result, MYSQL_ASSOC);
+											unset($FieldValue['Field']);
 
-											if ($fieldvalue['Type']) {
-												$type = $fieldvalue['Type'];
-												unset($fieldvalue['Type']);
+											if ($FieldValue['Type']) {
+												$Type = $FieldValue['Type'];
+												unset($FieldValue['Type']);
 											}
 
-											if ($fieldvalue['Key'] == NULL) {
-												unset($fieldvalue['Key']);
+											if ($FieldValue['Key'] == NULL) {
+												unset($FieldValue['Key']);
 											}
 
-											if ($fieldvalue['Extra'] == NULL) {
-												unset($fieldvalue['Extra']);
+											if ($FieldValue['Extra'] == NULL) {
+												unset($FieldValue['Extra']);
 											}
 
-											if ($type){
-												$type = strtoupper($type);
-												$changestring .= $type;
-												$changestring .= ' ';
+											if ($Type){
+												$Type = strtoupper($Type);
+												$ChangeString .= $Type;
+												$ChangeString .= ' ';
 											} else {
-												$changestring .= 'NULL ';
+												$ChangeString .= 'NULL ';
 											}
-											reset($fieldvalue);
-											while (key($fieldvalue)){
-												if (key($fieldvalue) == 'Null') {
-													if (current($fieldvalue)) {
-														$changestring .= "current($fieldvalue) ";
+											reset($FieldValue);
+											while (key($FieldValue)){
+												if (key($FieldValue) == 'Null') {
+													if (current($FieldValue)) {
+														$ChangeString .= "current($FieldValue) ";
 													} else {
-														$changestring .= 'NOT NULL ';
+														$ChangeString .= 'NOT NULL ';
 													}
 												} else {
-													$hold = key($fieldvalue);
-													$changestring .= "$hold ";
-													$hold = current($fieldvalue);
-													$changestring .= "'$hold' ";
+													$Hold = key($FieldValue);
+													$ChangeString .= "$Hold ";
+													$Hold = current($FieldValue);
+													$ChangeString .= "'$Hold' ";
 												}
-												next($fieldvalue);
+												next($FieldValue);
 											}
-											$query2 = 'ALTER TABLE `' . $this->databasetable . '` CHANGE `' . $field .'` `' . $fieldchange . '` ' . $changestring . ' ;';
-											$result2 = mysql_query($query2);
+											$Query2 = 'ALTER TABLE `' . $this->DatabaseTable . '` CHANGE `' . $Field .'` `' . $FieldChange . '` ' . $ChangeString . ' ;';
+											$Result2 = mysql_query($Query2);
 										} else {
 											array_push($this->ErrorMessage,'updateField: Field Change - Field name exists!');
 										}
@@ -859,62 +889,62 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage,'updateField: Field cannot be NULL!');
 						}
 					} else {
-						if ($field != NULL) {
-							while (isset($field[key($field)])) {
-								$fieldcheck = $this->checkField(current($field));
-								$fieldcheck2 = $this->checkField(current($fieldchange));
-								if ($fieldcheck) {
-									if (is_array($fieldchange)) {
-										if ($fieldchange != NULL) {
-											if (!$fieldcheck2) {
-												$type = NULL;
-												$helper = current($field);
-												$query = "SHOW COLUMNS FROM `$this->databasetable` LIKE '$helper';";
-												$result = mysql_query($query);
-												$fieldvalue = mysql_fetch_array($result, MYSQL_ASSOC);
-												unset($fieldvalue['Field']);
+						if ($Field != NULL) {
+							while (isset($Field[key($Field)])) {
+								$FieldCheck = $this->checkField(current($Field));
+								$FieldCheck2 = $this->checkField(current($FieldChange));
+								if ($FieldCheck) {
+									if (is_array($FieldChange)) {
+										if ($FieldChange != NULL) {
+											if (!$FieldCheck2) {
+												$Type = NULL;
+												$Helper = current($Field);
+												$Query = "SHOW COLUMNS FROM `$this->DatabaseTable` LIKE '$Helper';";
+												$Result = mysql_query($Query);
+												$FieldValue = mysql_fetch_array($Result, MYSQL_ASSOC);
+												unset($FieldValue['Field']);
 
-												if ($fieldvalue['Type']) {
-													$type = $fieldvalue['Type'];
-													unset($fieldvalue['Type']);
+												if ($FieldValue['Type']) {
+													$Type = $FieldValue['Type'];
+													unset($FieldValue['Type']);
 												}
 
-												if ($fieldvalue['Key'] == NULL) {
-													unset($fieldvalue['Key']);
+												if ($FieldValue['Key'] == NULL) {
+													unset($FieldValue['Key']);
 												}
 
-												if ($fieldvalue['Extra'] == NULL) {
-													unset($fieldvalue['Extra']);
+												if ($FieldValue['Extra'] == NULL) {
+													unset($FieldValue['Extra']);
 												}
 
-												if ($type){
-													$type = strtoupper($type);
-													$changestring .= $type;
-													$changestring .= ' ';
+												if ($Type){
+													$Type = strtoupper($Type);
+													$ChangeString .= $Type;
+													$ChangeString .= ' ';
 												} else {
-													$changestring .= 'NULL ';
+													$ChangeString .= 'NULL ';
 												}
-												reset($fieldvalue);
-												while (key($fieldvalue)){
-													if (key($fieldvalue) == 'Null') {
-														if (current($fieldvalue)) {
-															$changestring .= "current($fieldvalue) ";
+												reset($FieldValue);
+												while (key($FieldValue)){
+													if (key($FieldValue) == 'Null') {
+														if (current($FieldValue)) {
+															$ChangeString .= "current($FieldValue) ";
 														} else {
-															$changestring .= 'NOT NULL ';
+															$ChangeString .= 'NOT NULL ';
 														}
 													} else {
-														$hold = key($fieldvalue);
-														$changestring .= "$hold ";
-														$hold = current($fieldvalue);
-														$changestring .= "'$hold' ";
+														$Hold = key($FieldValue);
+														$ChangeString .= "$Hold ";
+														$Hold = current($FieldValue);
+														$ChangeString .= "'$Hold' ";
 													}
-													next($fieldvalue);
+													next($FieldValue);
 												}
-												$query2 = 'ALTER TABLE `' . $this->databasetable . '` CHANGE `' . current($field) .'` `' . current($fieldchange) . '` ' . $changestring . ' ;';
-												$result2 = mysql_query($query2);
+												$Query2 = 'ALTER TABLE `' . $this->DatabaseTable . '` CHANGE `' . current($Field) .'` `' . current($FieldChange) . '` ' . $ChangeString . ' ;';
+												$Result2 = mysql_query($Query2);
 											} else {
-												$temp = key($fieldchange);
-												array_push($this->ErrorMessage,"updateField: Field is an Array and Field Change [$temp] - Field name exists!");
+												$Temp = key($FieldChange);
+												array_push($this->ErrorMessage,"updateField: Field is an Array and Field Change [$Temp] - Field name exists!");
 											}
 										} else {
 											array_push($this->ErrorMessage,'updateField: Field is an Array so Field Change cannot be NULL!');
@@ -923,11 +953,11 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 										array_push($this->ErrorMessage,'updateField: Field is an Array so Field Change must be an Array!');
 									}
 								} else {
-									$temp = key($field);
-									array_push($this->ErrorMessage,"updateField: Field [$temp] is an Array and Field name does not exist!");
+									$Temp = key($Field);
+									array_push($this->ErrorMessage,"updateField: Field [$Temp] is an Array and Field name does not exist!");
 								}
-								next($field);
-								next($fieldchange);
+								next($Field);
+								next($FieldChange);
 							}
 						} else {
 							array_push($this->ErrorMessage,'updateField: Field is an Array and cannot be NULL!');
@@ -949,23 +979,23 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 *
 	 * Deletes a field from field. Field can be a string or an array.
 	 *
-	 * @param string $field Name of the field to delete. Must be a string or an array of strings.
+	 * @param string $Field Name of the field to delete. Must be a string or an array of strings.
 	 * @access public
 	*/
-	public function deleteField ($field) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('ALTER');
-		$fieldcheck = $this->checkField($field);
+	public function deleteField ($Field) {
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('ALTER');
+		$FieldCheck = $this->checkField($Field);
 
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
-					if (!is_array($field)) {
-						if ($field != NULL) {
-							if ($fieldcheck) {
-								$query = 'ALTER TABLE `' . $this->databasetable . '` DROP `' . $field . '` ; ';
-								$result = mysql_query($query);
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
+					if (!is_array($Field)) {
+						if ($Field != NULL) {
+							if ($FieldCheck) {
+								$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` DROP `' . $Field . '` ; ';
+								$Result = mysql_query($Query);
 							} else {
 								array_push($this->ErrorMessage,'deleteField: Field does not exist!');
 							}
@@ -973,13 +1003,13 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage,'deleteField: Field cannot be NULL!');
 						}
 					} else {
-						if ($field != NULL) {
-							while (isset($field[key($field)])) {
-								$fieldcheck = $this->checkField(current($field));
-								if ($fieldcheck) {
-									$query = 'ALTER TABLE `' . $this->databasetable . '` DROP `' . current($field) . '` ; ';
-									$result = mysql_query($query);
-									next($field);
+						if ($Field != NULL) {
+							while (isset($Field[key($Field)])) {
+								$FieldCheck = $this->checkField(current($Field));
+								if ($FieldCheck) {
+									$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` DROP `' . current($Field) . '` ; ';
+									$Result = mysql_query($Query);
+									next($Field);
 								} else {
 									array_push($this->ErrorMessage,'deleteField: Field is an Array but does not exist!');
 								}
@@ -999,35 +1029,57 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 
 	}
-
+	
+	/**
+	 * emptyTable
+	 * Empties current database table.
+	 *
+	 * @access public
+	*/
 	public function emptyTable() {
-		$query = 'TRUNCATE TABLE `' . $this->databasetable . '` ; ';
-		$result = mysql_query($query);
+		$Query = 'TRUNCATE TABLE `' . $this->DatabaseTable . '` ; ';
+		$Result = mysql_query($Query);
 	}
-
+	
+	/**
+	 * executeSQlCommand
+	 *
+	 * Executes a direct SQL Command.
+	 *
+	 * @param string $SQLCommand a string with the SQL Command to be executed. Must be a string NO ARRAYS ARE ALLOWED.
+	 * @access public
+	*/
 	public function executeSQlCommand ($SQLCommand) {
 		if (!is_null($SQLCommand)) {
 			$this->Connect();
-			$result = mysql_query($SQLCommand);
+			$Result = mysql_query($SQLCommand);
 			$this->Disconnect();
 		}
 	}
-
-	public function sortTable($sortorder) {
-		$databasenamecheck = $this->checkDatabaseName();
-		$tablenamecheck = $this->checkTableName();
-		$permissionscheck = $this->checkPermissions ('ALTER');
-		if (!is_array($sortorder)) {
-			$fieldcheck = $this->checkField($sortorder);
+	
+	/**
+	 * sortTable
+	 *
+	 * Executes a direct SQL Command to sort out table from Sort Order.
+	 *
+	 * @param string $SortOrder a string or an array listing the Sort Order for the database table. Must be a string or an array.
+	 * @access public
+	*/
+	public function sortTable($SortOrder) {
+		$DatabaseNameCheck = $this->checkDatabaseName();
+		$TableNameCheck = $this->checkTableName();
+		$PermissionsCheck = $this->checkPermissions ('ALTER');
+		if (!is_array($SortOrder)) {
+			$FieldCheck = $this->checkField($SortOrder);
 		}
-		if ($databasenamecheck) {
-			if ($permissionscheck) {
-				if ($tablenamecheck) {
-					if (!is_array($sortorder)) {
-						if ($sortorder != NULL) {
-							if ($fieldcheck) {
-								$query = 'ALTER TABLE `' . $this->databasetable . '` ORDER BY `' . $sortorder . '` ; ';
-								$result = mysql_query($query);
+		if ($DatabaseNameCheck) {
+			if ($PermissionsCheck) {
+				if ($TableNameCheck) {
+					if (!is_array($SortOrder)) {
+						if ($SortOrder != NULL) {
+							if ($FieldCheck) {
+								$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ORDER BY `' . $SortOrder . '` ; ';
+								$Result = mysql_query($Query);
 							} else {
 								array_push($this->ErrorMessage,'sortTable: Field does not exist!');
 							}
@@ -1035,26 +1087,26 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 							array_push($this->ErrorMessage,'sortTable: Field cannot be NULL!');
 						}
 					} else {
-						if ($sortorder != NULL) {
-							$string = NULL;
-							reset($sortorder);
-							while (isset($sortorder[key($sortorder)])) {
-								$fieldcheck = $this->checkField(current($sortorder));
-								if ($fieldcheck) {
-									$string .= '`';
-									$string .= current($sortorder);
-									$string .= '`';
-									next($sortorder);
-									if (current($sortorder)) {
-										$string .= ', ';
+						if ($SortOrder != NULL) {
+							$String = NULL;
+							reset($SortOrder);
+							while (isset($SortOrder[key($SortOrder)])) {
+								$FieldCheck = $this->checkField(current($SortOrder));
+								if ($FieldCheck) {
+									$String .= '`';
+									$String .= current($SortOrder);
+									$String .= '`';
+									next($SortOrder);
+									if (current($SortOrder)) {
+										$String .= ', ';
 									}
 								} else {
 									array_push($this->ErrorMessage,'sortTable: Field is an Array but does not exist!');
 								}
 							}
-							if ($string != NULL) {
-								$query = 'ALTER TABLE `' . $this->databasetable . '` ORDER BY ' . $string . ' ; ';
-								$result = mysql_query($query);
+							if ($String != NULL) {
+								$Query = 'ALTER TABLE `' . $this->DatabaseTable . '` ORDER BY ' . $String . ' ; ';
+								$Result = mysql_query($Query);
 							}
 						} else {
 							array_push($this->ErrorMessage,'sortTable: Field is an Array but cannot be NULL!');
@@ -1078,50 +1130,50 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * To get the results, use getRowField(String $rowfield) for a single field in a row and getMultiRowField() for the entire row
 	 * or multiple rows depending on the idnumber passed!
 	 *
-	 * @param array $idnumber Idnumber for the database query. Must be an array of strings with the key being the name of the field
+	 * @param array $IDNumber Idnumber for the database query. Must be an array of strings with the key being the name of the field
 	 * and the value being value of the field.
 	 * @access public
 	*/
-	public function setDatabaseRow ($idnumber) {
-		$this->idnumber = $idnumber;
-		if ($this->multirowfield) {
-			$this->multirowfield = array();
+	public function setDatabaseRow ($IDNumber) {
+		$this->IDNumber = $IDNumber;
+		if ($this->MultRrowField) {
+			$this->MultRrowField = array();
 		}
 
-		if (is_array($idnumber)) {
-			while (isset($this->idnumber[key($this->idnumber)])) {
-				$temp .= '`';
-				$temp .= key($this->idnumber);
-				$temp .= '` = "';
-				$temp .= current($this->idnumber);
-				$temp .= '" ';
-				next($this->idnumber);
-				if (isset($this->idnumber[key($this->idnumber)])) {
-					$temp .= 'AND ';
+		if (is_array($IDNumber)) {
+			while (isset($this->IDNumber[key($this->IDNumber)])) {
+				$Temp .= '`';
+				$Temp .= key($this->IDNumber);
+				$Temp .= '` = "';
+				$Temp .= current($this->IDNumber);
+				$Temp .= '" ';
+				next($this->IDNumber);
+				if (isset($this->IDNumber[key($this->IDNumber)])) {
+					$Temp .= 'AND ';
 				}
 			}
-			reset($this->idnumber);
-			if ($this->orderbyname && $this->orderbytype) {
-				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ORDER BY `' . $this->orderbyname . '` ' . $this->orderbytype;
+			reset($this->IDNumber);
+			if ($this->OrderByName && $this->OrderByType) {
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ORDER BY `' . $this->OrderByName . '` ' . $this->OrderByType;
 			} else {
-				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ';
 			}
 
-			if ($this->limit) {
-				$this->rowquery .= ' LIMIT ';
-				$this->rowquery .= $this->limit;
+			if ($this->Limit) {
+				$this->RowQuery .= ' LIMIT ';
+				$this->RowQuery .= $this->Limit;
 			}
 
-			$this->rowresult = mysql_query($this->rowquery);
+			$this->RowResult = mysql_query($this->RowQuery);
 
-			if ($this->rowresult) {
-				$this->rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
+			if ($this->RowResult) {
+				$this->RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
 
-				array_push($this->multirowfield, $this->rowfield);
-				$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
-				while ($rowfield) {
-					array_push($this->multirowfield, $rowfield);
-					$rowfield = mysql_fetch_array($this->rowresult, MYSQL_ASSOC);
+				array_push($this->MultRrowField, $this->RowField);
+				$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
+				while ($RowField) {
+					array_push($this->MultRrowField, $RowField);
+					$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
 				}
 			}
 
@@ -1137,36 +1189,42 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function setEntireTable () {
-		if ($this->orderbyname && $this->orderbytype) {
-			$this->tablequery = 'SELECT * FROM ' . $this->databasetable . ' ' . 'ORDER BY `' . $this->orderbyname . '` ' . $this->orderbytype;
+		if ($this->OrderByName && $this->OrderByType) {
+			$this->TableQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' ' . 'ORDER BY `' . $this->OrderByName . '` ' . $this->OrderByType;
 		} else {
-			$this->tablequery = 'SELECT * FROM ' . $this->databasetable . ' ';
+			$this->TableQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' ';
 		}
-		if ($this->limit) {
-			$this->tablequery .= ' LIMIT ';
-			$this->tablequery .= $this->limit;
-		}
-
-		$this->tableresult = mysql_query($this->tablequery);
-
-		if ($this->tableresult) {
-			$this->rownumber = mysql_num_rows($this->tableresult);
-			//mysql_data_seek($this->tableresult, 0);
+		if ($this->Limit) {
+			$this->TableQuery .= ' LIMIT ';
+			$this->TableQuery .= $this->Limit;
 		}
 
-		$this->rownumber = $this->rownumber + 0;
-		$this->i = 1;
+		$this->TableResult = mysql_query($this->TableQuery);
+
+		if ($this->TableResult) {
+			$this->RowNumber = mysql_num_rows($this->TableResult);
+			//mysql_data_seek($this->TableResult, 0);
+		}
+
+		$this->RowNumber = $this->RowNumber + 0;
+		$this->I = 1;
 		$this->BuildingEntireTable();
 	}
-
+	
+	/**
+	 * BuildingEntireTable
+	 * Creates an array of all data in a database table. This information is stored in EntireTable.
+	 *
+	 * @access protected
+	*/
 	protected function BuildingEntireTable(){
 		$i = 1;
-		if ($this->entiretable) {
-			$this->entiretable = NULL;
-			$this->entiretable = array();
+		if ($this->EntireTable) {
+			$this->EntireTable = NULL;
+			$this->EntireTable = array();
 		}
-		while ($i <= $this->rownumber){
-			$this->entiretable[$i] = mysql_fetch_array($this->tableresult, MYSQL_ASSOC);
+		while ($i <= $this->RowNumber){
+			$this->EntireTable[$i] = mysql_fetch_array($this->TableResult, MYSQL_ASSOC);
 			$i++;
 		}
 	}
@@ -1174,7 +1232,7 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	/**
 	 * BuildDatabaseRows
 	 * Executes a SQL query to retrieve the database rows creating an associative array based on idnumber set from
-	 * setIdNumber($idnumber). Idnumber must be an array. To retrieve the results use getDatabase($rownumber) using
+	 * setIdNumber($IDNumber). Idnumber must be an array. To retrieve the results use getDatabase($rownumber) using
 	 * row value as rownumber.
 	 *
 	 * OPTIONAL - limit:
@@ -1183,51 +1241,58 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function BuildDatabaseRows (){
-		if (is_array($this->idnumber)) {
-			while (isset($this->idnumber[key($this->idnumber)])) {
-				$temp .= '`';
-				$temp .= key($this->idnumber);
-				$temp .= '` = "';
-				$temp .= current($this->idnumber);
-				$temp .= '" ';
-				next($this->idnumber);
-				if (isset($this->idnumber[key($this->idnumber)])) {
-					$temp .= 'AND ';
+		if (is_array($this->IDNumber)) {
+			while (isset($this->IDNumber[key($this->IDNumber)])) {
+				$Temp .= '`';
+				$Temp .= key($this->IDNumber);
+				$Temp .= '` = "';
+				$Temp .= current($this->IDNumber);
+				$Temp .= '" ';
+				next($this->IDNumber);
+				if (isset($this->IDNumber[key($this->IDNumber)])) {
+					$Temp .= 'AND ';
 				}
 			}
-			reset($this->idnumber);
-			if ($this->orderbyname && $this->orderbytype) {
-				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ORDER BY `' . $this->orderbyname . '` ' . $this->orderbytype;
+			reset($this->IDNumber);
+			if ($this->OrderByName && $this->OrderByType) {
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ORDER BY `' . $this->OrderByName . '` ' . $this->OrderByType;
 			} else {
-				$this->rowquery = 'SELECT * FROM ' . $this->databasetable . ' WHERE ' . $temp .' ';
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ';
 			}
 
-			if ($this->limit) {
-				$this->rowquery .= ' LIMIT ';
-				$this->rowquery .= $this->limit;
+			if ($this->Limit) {
+				$this->RowQuery .= ' LIMIT ';
+				$this->RowQuery .= $this->Limit;
 			}
-			$this->rowresult = mysql_query($this->rowquery);
-			if ($this->rowresult) {
-				$this->database = mysql_fetch_assoc($this->rowresult);
+			$this->RowResult = mysql_query($this->RowQuery);
+			if ($this->RowResult) {
+				$this->Database = mysql_fetch_assoc($this->RowResult);
 			}
 		} else {
 			array_push($this->ErrorMessage,'setDatabaseRow: Idnumber must be an Array!');
 		}
 	}
-
+	
+	/**
+	 * BuildFieldNames
+	 * Creates an array of all fields from a database table. This information is stored in RowFieldNames.
+	 *
+	 * @param string $TableName a string with the name of the table to put into RowFieldNames. Must be a string NO ARRAYS ARE ALLOWED.
+	 * @access public
+	*/
 	public function BuildFieldNames($TableName) {
 		if ($TableName) {
-			$this->databasetable = $TableName;
+			$this->DatabaseTable = $TableName;
 		}
 
 		$this->Connect();
-		$query = 'SHOW COLUMNS FROM `' . $this->databasetable . '` ';
-		$result = mysql_query($query);
+		$Query = 'SHOW COLUMNS FROM `' . $this->DatabaseTable . '` ';
+		$Result = mysql_query($Query);
 
-		$this->rowfieldnames = array();
-		while ($row = mysql_fetch_array ($result)) {
-			array_push($this->rowfieldnames, $row['Field']);
-			$row = NULL;
+		$this->RowFieldNames = array();
+		while ($Row = mysql_fetch_array ($Result)) {
+			array_push($this->RowFieldNames, $Row['Field']);
+			$Row = NULL;
 		}
 	}
 

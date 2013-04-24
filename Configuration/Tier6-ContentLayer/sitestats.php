@@ -52,6 +52,11 @@
 
 	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID);
 	$ReturnPageID = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkSiteStatPage',$PageID);
+	$ReturnPageIDDaily = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkDailySiteStatPage',$PageID);
+	
+	if ($ReturnPageIDDaily == FALSE) {
+		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createDailySiteStatPage', $SiteStatPage);
+	} 
 	if ($ReturnPageID == TRUE) {
 		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateSiteStatPage',$PageID);
 	} else {

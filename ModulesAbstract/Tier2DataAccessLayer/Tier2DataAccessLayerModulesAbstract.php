@@ -25,31 +25,31 @@
 
 abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 {
-	protected $idnumber;
-	protected $orderbyname;
-	protected $orderbytype;
-	protected $limit;
-	protected $databasename;
-	protected $user;
-	protected $password;
-	protected $databasetable;
-	protected $hostname;
-	protected $link;
-	protected $rowquery;
-	protected $rowresult;
-	protected $rowfield;
-	protected $multirowfield = array();
-	protected $rowfieldnames;
-	protected $tablenamequery;
-	protected $tablenames;
-	protected $tablequery;
-	protected $tableresult;
-	protected $rownumber;
-	protected $entiretable;
-	protected $entiretableresult;
-	protected $database;
-	protected $i;
-	protected $idsearch;
+	protected $IDNumber;
+	protected $OrderByName;
+	protected $OrderByType;
+	protected $Limit;
+	protected $DatabaseName;
+	protected $User;
+	protected $Password;
+	protected $DatabaseTable;
+	protected $HostName;
+	protected $Link;
+	protected $RowQuery;
+	protected $RowResult;
+	protected $RowField;
+	protected $MultRrowField = array();
+	protected $RowFieldNames;
+	protected $TableNameQuery;
+	protected $TableNames;
+	protected $TableQuery;
+	protected $TableResult;
+	protected $RowNumber;
+	protected $EntireTable;
+	protected $EntireTableResult;
+	protected $Database;
+	protected $I;
+	protected $IDSearch;
 
 	abstract protected function checkDatabaseName ();
 	abstract protected function checkTableName ();
@@ -58,102 +58,102 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 	abstract protected function BuildingEntireTable();
 
 	public function setIdnumber ($IdNumber) {
-		$this->idnumber = $IdNumber;
+		$this->IDNumber = $IdNumber;
 	}
 
 	public function getIdnumber () {
-		return $this->idnumber;
+		return $this->IDNumber;
 	}
 
 	public function setOrderbyname ($OrderByName) {
-		$this->orderbyname = $OrderByName;
+		$this->OrderByName = $OrderByName;
 	}
 
 	public function getOrderbyname () {
-		return $this->orderbyname;
+		return $this->OrderByName;
 	}
 
 	public function setOrderbytype ($OrderByType) {
-		$this->orderbytype = $OrderByType;
+		$this->OrderByType = $OrderByType;
 	}
 
 	public function getOrderbytype () {
-		return $this->orderbytype;
+		return $this->OrderByType;
 	}
 
 	public function setLimit ($Limit) {
-		$this->limit = $Limit;
+		$this->Limit = $Limit;
 	}
 
 	public function getLimit () {
-		return $this->limit;
+		return $this->Limit;
 	}
 
 	public function setDatabasename ($DatabaseName){
-		$this->databasename = $DatabaseName;
+		$this->DatabaseName = $DatabaseName;
 	}
 
 	public function getDatabasename () {
-		return $this->databasename;
+		return $this->DatabaseName;
 	}
 
 	public function setUser ($User){
-		$this->user = $User;
+		$this->User = $User;
 	}
 
 	public function getUser () {
-		return $this->user;
+		return $this->User;
 	}
 
 	public function setPassword ($Password){
-		$this->password = $Password;
+		$this->Password = $Password;
 	}
 
 	public function getPassword () {
-		return $this->password;
+		return $this->Password;
 	}
 
 	public function setDatabasetable ($DatabaseTable){
-		$this->databasetable = $DatabaseTable;
+		$this->DatabaseTable = $DatabaseTable;
 	}
 
 	public function getDatabasetable () {
-		return $this->databasetable;
+		return $this->DatabaseTable;
 	}
 
 	public function setHostname ($HostName){
-		$this->hostname = $HostName;
+		$this->HostName = $HostName;
 	}
 
 	public function getHostname () {
-		return $this->hostname;
+		return $this->HostName;
 	}
 
-	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
-		$this->hostname = $hostname;
-		$this->user = $user;
-		$this->password = $password;
-		$this->databasename = $databasename;
-		$this->databasetable = $databasetable;
+	public function setDatabaseAll ($HostName, $User, $Password, $DatabaseName, $DatabaseTable) {
+		$this->HostName = $HostName;
+		$this->User = $User;
+		$this->Password = $Password;
+		$this->DatabaseName = $DatabaseName;
+		$this->DatabaseTable = $DatabaseTable;
 	}
 
-	public function setOrderByAll ($orderbyname, $orderbytype) {
-		$this->orderbyname = $orderbyname;
-		$this->orderbytype = $orderbytype;
+	public function setOrderByAll ($OrderByName, $OrderByType) {
+		$this->OrderByName = $OrderByName;
+		$this->OrderByType = $OrderByType;
 	}
 
 	public function setDatabaseField ($IdNumber) {
-		$this->idnumber = $IdNumber;
+		$this->IDNumber = $IdNumber;
 		$this->BuildDatabaseRows();
-		$this->rowfieldnames = Array ();
-		if (is_array($this->database)) {
-			$this->rowfieldnames = array_keys($this->database);
+		$this->RowFieldNames = Array ();
+		if (is_array($this->Database)) {
+			$this->RowFieldNames = array_keys($this->Database);
 		}
 	}
 
 	public function searchFieldNames($Search) {
-		if (is_array($this->rowfieldnames)) {
-			if (array_search($Search, $this->rowfieldnames)) {
+		if (is_array($this->RowFieldNames)) {
+			if (array_search($Search, $this->RowFieldNames)) {
 				return TRUE;
 			} else {
 				return FALSE;
@@ -163,117 +163,117 @@ abstract class Tier2DataAccessLayerModulesAbstract extends LayerModulesAbstract
 
 	public function searchEntireTable($Search){
 		$arguments = func_get_args();
-		$search2 = $arguments[1];
+		$Search2 = $arguments[1];
 
-		if ($this->idsearch) {
-			unset ($this->idsearch);
+		if ($this->IDSearch) {
+			unset ($this->IDSearch);
 		}
 
-		if ($search2) {
-			$this->i = 0;
+		if ($Search2) {
+			$this->I = 0;
 			$j = 0;
-			while ($this->i <= $this->rownumber) {
-				if (in_array($Search, $this->entiretable[$this->i]) && in_array($search2, $this->entiretable[$this->i])){
-					$this->idsearch[$j]["idnumber"] = $this->entiretable[$this->i]["idnumber"];
-					$this->idsearch[$j]["keyname"] = array_search($Search, $this->entiretable[$this->i]);
+			while ($this->I <= $this->RowNumber) {
+				if (in_array($Search, $this->EntireTable[$this->I]) && in_array($Search2, $this->EntireTable[$this->I])){
+					$this->IDSearch[$j]["idnumber"] = $this->EntireTable[$this->I]["idnumber"];
+					$this->IDSearch[$j]["keyname"] = array_search($Search, $this->EntireTable[$this->I]);
 					$j++;
 				}
-				$this->i++;
+				$this->I++;
 			}
 		} else {
-			$this->i = 0;
+			$this->I = 0;
 			$j = 0;
-			while ($this->i <= $this->rownumber) {
-				if (is_array($this->entiretable[$this->i])) {
-					if (in_array($Search, $this->entiretable[$this->i])){
-						$this->idsearch[$j]["idnumber"] = $this->entiretable[$this->i]["idnumber"];
-						$this->idsearch[$j]["keyname"] = array_search($Search, $this->entiretable[$this->i]);
+			while ($this->I <= $this->RowNumber) {
+				if (is_array($this->EntireTable[$this->I])) {
+					if (in_array($Search, $this->EntireTable[$this->I])){
+						$this->IDSearch[$j]["idnumber"] = $this->EntireTable[$this->I]["idnumber"];
+						$this->IDSearch[$j]["keyname"] = array_search($Search, $this->EntireTable[$this->I]);
 						$j++;
 					}
 				}
-				$this->i++;
+				$this->I++;
 			}
 		}
 	}
 
-	public function removeEntryEntireTable($rownumber, $rowcolumn){
-		unset($this->entiretable[$rownumber][$rowcolumn]);
+	public function removeEntryEntireTable($RowNumber, $RowColumn){
+		unset($this->EntireTable[$RowNumber][$RowColumn]);
 	}
 
-	public function removeEntireEntireTable($rownumber) {
-		unset($this->entiretable[$rownumber]);
+	public function removeEntireEntireTable($RowNumber) {
+		unset($this->EntireTable[$RowNumber]);
 	}
 
 	public function reindexEntireTable(){
-		$this->entiretable = array_merge($this->entiretable);
+		$this->EntireTable = array_merge($this->EntireTable);
 	}
 
-	public function updateEntireTableEntry ($rownumber, $rowcolumn, $information) {
-		$this->entiretable[$rownumber][$rowcolumn] = $information;
+	public function updateEntireTableEntry ($RowNumber, $RowColumn, $Information) {
+		$this->EntireTable[$RowNumber][$RowColumn] = $Information;
 	}
 
 	public function getRowCount (){
-		return $this->rownumber;
+		return $this->RowNumber;
 	}
 
-	public function getRowFieldName ($rownumber) {
-		return $this->rowfieldnames[$rownumber];
+	public function getRowFieldName ($RowNumber) {
+		return $this->RowFieldNames[$RowNumber];
 	}
 
 	public function getRowFieldNames() {
-		return $this->rowfieldnames;
+		return $this->RowFieldNames;
 	}
 
-	public function getDatabase ($rownumber) {
-		return $this->database[$rownumber];
+	public function getDatabase ($RowNumber) {
+		return $this->Database[$RowNumber];
 	}
 
-	public function getRowField ($rownumber) {
-		return $this->rowfield[$rownumber];
+	public function getRowField ($RowNumber) {
+		return $this->RowField[$RowNumber];
 	}
 
 	public function getEntireRow(){
-		return $this->rowfield;
+		return $this->RowField;
 	}
 
 	public function getMultiRowField() {
-		return $this->multirowfield;
+		return $this->MultRrowField;
 	}
 
-	public function getTable ($rownumber, $rowcolumn) {
-		return $this->entiretable[$rownumber][$rowcolumn];
+	public function getTable ($RowNumber, $RowColumn) {
+		return $this->EntireTable[$RowNumber][$RowColumn];
 	}
 
 	public function getEntireTable () {
-		return $this->entiretable;
+		return $this->EntireTable;
 	}
 
-	public function getSearchResults($idnumber, $key) {
-		return $this->idsearch[$idnumber][$key];
+	public function getSearchResults($IDNumber, $Key) {
+		return $this->IDSearch[$IDNumber][$Key];
 	}
 
 	public function getSearchResultsArray() {
-		return $this->idsearch;
+		return $this->IDSearch;
 	}
 
 	public function getTableNames() {
-		return $this->tablenames;
+		return $this->TableNames;
 	}
 
 	public function walkarray () {
-		print_r($this->database);
+		print_r($this->Database);
 	}
 
 	public function walkfieldname () {
-		print_r($this->rowfieldnames);
+		print_r($this->RowFieldNames);
 	}
 
 	public function walktable () {
-		print_r($this->entiretable);
+		print_r($this->EntireTable);
 	}
 
 	public function walkidsearch () {
-		print_r($this->idsearch);
+		print_r($this->IDSearch);
 	}
 
 }

@@ -22,7 +22,15 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	$SessionName = NULL;
+	if ($_COOKIE['SessionID'] != NULL) {
+		$SessionName = $_COOKIE['SessionID'];
+	}
+	if ($SessionName != NULL) {
+		session_name($SessionName);
+		session_start();
+	}
+	
 	$Page = new XMLWriter();
 	$Page->openMemory();
 
@@ -104,7 +112,10 @@
 					$Page->writeAttribute('name', 'ServerName');
 					$Page->writeAttribute('type', 'text');
 					$Page->writeAttribute('size', '60');
-				$Page->endElement(); // END LABEL
+					if ($_SESSION['ServerName'] != NULL) {
+						$Page->writeAttribute('value', $_SESSION['ServerName']);
+					}
+				$Page->endElement(); // END INPUT
 			$Page->endElement(); // END DIV
 			$Page->startElement('div');
 				$Page->startElement('label');
@@ -114,7 +125,10 @@
 					$Page->writeAttribute('name', 'Username');
 					$Page->writeAttribute('type', 'text');
 					$Page->writeAttribute('size', '60');
-				$Page->endElement(); // END LABEL
+					if ($_SESSION['Username'] != NULL) {
+						$Page->writeAttribute('value', $_SESSION['Username']);
+					}
+				$Page->endElement(); // END INPUT
 			$Page->endElement(); // END DIV
 			$Page->startElement('div');
 				$Page->startElement('label');
@@ -124,7 +138,10 @@
 					$Page->writeAttribute('name', 'Password');
 					$Page->writeAttribute('type', 'text');
 					$Page->writeAttribute('size', '60');
-				$Page->endElement(); // END LABEL
+					if ($_SESSION['Password'] != NULL) {
+						$Page->writeAttribute('value', $_SESSION['Password']);
+					}
+				$Page->endElement(); // END INPUT
 			$Page->endElement(); // END DIV
 			$Page->startElement('div');
 				$Page->startElement('label');
@@ -134,14 +151,60 @@
 					$Page->writeAttribute('name', 'DatabaseName');
 					$Page->writeAttribute('type', 'text');
 					$Page->writeAttribute('size', '60');
-				$Page->endElement(); // END LABEL
+					if ($_SESSION['DatabaseName'] != NULL) {
+						$Page->writeAttribute('value', $_SESSION['DatabaseName']);
+					}
+				$Page->endElement(); // END INPUT
 			$Page->endElement(); // END DIV
+			if ($_SESSION != NULL) {
+				if ($_SESSION['ServerName'] == NULL) {
+					$Page->startElement('div');
+						$Page->startElement('p');
+							$Page->writeAttribute('style', 'font-weight:bold;');
+							$Page->text('Server Name is missing or is not correct! All fields are required to procceed!');
+						$Page->endElement(); // END LABEL
+					$Page->endElement(); // END DIV
+				}
+				if ($_SESSION['Username'] == NULL) {
+					$Page->startElement('div');
+						$Page->startElement('p');
+							$Page->writeAttribute('style', 'font-weight:bold;');
+							$Page->text('Username is missing or is not correct! All fields are required to procceed!');
+						$Page->endElement(); // END LABEL
+					$Page->endElement(); // END DIV
+				}
+				if ($_SESSION['Password'] == NULL) {
+					$Page->startElement('div');
+						$Page->startElement('p');
+							$Page->writeAttribute('style', 'font-weight:bold;');
+							$Page->text('Password is missing or is not correct! All fields are required to procceed!');
+						$Page->endElement(); // END LABEL
+					$Page->endElement(); // END DIV
+				}
+				if ($_SESSION['DatabaseName'] == NULL) {
+					$Page->startElement('div');
+						$Page->startElement('p');
+							$Page->writeAttribute('style', 'font-weight:bold;');
+							$Page->text('Database Name is missing or is not correct! All fields are required to procceed!');
+						$Page->endElement(); // END LABEL
+					$Page->endElement(); // END DIV
+				}
+				
+				if ($_SESSION['ServerName'] != NULL & $_SESSION['Username'] != NULL & $_SESSION['Password'] != NULL & $_SESSION['DatabaseName'] != NULL) {
+					$Page->startElement('div');
+						$Page->startElement('p');
+							$Page->writeAttribute('style', 'font-weight:bold;');
+							$Page->text('One of database configuration fields is not correct! Please review and correct the information!');
+						$Page->endElement(); // END LABEL
+					$Page->endElement(); // END DIV
+				}
+			}
 			$Page->startElement('div');
 				$Page->startElement('button');
 					$Page->writeAttribute('name', 'Submit');
 					$Page->writeAttribute('type', 'submit');
 					$Page->text('Step 2: Verify Database Configuration');
-				$Page->endElement(); // END LABEL
+				$Page->endElement(); // END BUTTON
 			$Page->endElement(); // END DIV
 		$Page->endElement(); // END FIELDSET
 	$Page->endElement(); // END FORM

@@ -1,4 +1,26 @@
-Changes For One Solution CMS 2.1.145 - Thursday, March 28, 2013
+Changes For One Solution CMS 2.1.146 - Tuesday, April 23, 2013
+Added:
+	1). Added Administrators Panel - Add and Update Menu Item forms have been put into the database. Will make the function in a future release.
+	2). Added Administrators Panel - Daily Site Stats as XML Format and Daily Site Stats as CSV Format.
+	3). Added SiteStats Module - The capability to keep track of daily site stats as well as by month.
+	
+Updated (Fixed):
+	1). Updated Administrators Panel - Tables Pages - Updated the AddTablesPage.php file so it will corectly add the correct information for the menu to be updated.
+	2). Updated Administrators Panel - selectmenu.php and updatemenu.php - Moved to System/Menu. All forms have been changed to reflect the new file location.
+	3). Updated Administrators Panel - register.php - Moved to System/Register. All forms have been changed to reflect the new file location.
+	4). Updated Administrators Panel - Renamed System/PasswordChange to System/Password.
+	5). Updated Administrators Panel - Tables Pages - Updated XmlDhtmlXGridImport.php so it doesn't include an footer.
+	6). Update Libraries / DHTMLX Suite Standard - Updated to version 3.6. Also we combined all the elements into one folder codebase. All modules have been updated.
+	7). Updated Administrators Panel - Update Menu - Have changed the menu so it doesn't create an ID for each menu item. This could break IE 6 compatibility. May bring in back in another release.
+	8). Updated MySqlConnect - Updated documentation and renamed all variables to follow the current naming standard One Solution CMS uses. 
+	9). Updated Administrators Panel - Update Menu - Have fixed a bug where if you went more than 2 menu item deep it would only show you the deepest menu.
+	
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.145 - Thursday, March 28, 2013 10:29:48 PM
 Added:
 	1). Nothing Added
 	

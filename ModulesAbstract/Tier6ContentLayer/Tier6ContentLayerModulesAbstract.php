@@ -44,6 +44,11 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	protected $Status;
 	protected $HttpUserAgent;
 	protected $HttpAccept;
+	
+	protected $HttpOutput; // URL OUTPUT CAN BE: HTML, HTML5, HTML4Trans, HTML4Frame, HTML4Strict, XML, XHTML
+	protected $HttpScreen; // URL SCREEN TYPE CAN BE: Print, Touch, Mobile, Full
+	protected $HttpOutputDefault; // DEFAULT VALUE FOR HttpOutput 
+	protected $HttpOutputAutoDetect; // IF TRUE WILL SHOW THE HIGHEST CAPABLE HttpOutput AVAILABLE FOR THE BROWSER
 
 	protected $ContentTableName;
 	protected $ContentObjectName;
