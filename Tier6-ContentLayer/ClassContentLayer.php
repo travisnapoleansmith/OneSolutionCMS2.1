@@ -1182,7 +1182,14 @@ class ContentLayer extends LayerModulesAbstract
 	*/
 	public function Login() {
 		$sessionname = $this->SessionStart('UserAuthentication');
-
+		
+		$EventData = array();
+		$PassArray = array();
+		$PassArray['Execute'] = TRUE;
+		$PassArray['Method'] = 'createLogonHistoryEvent';
+		$PassArray['ObjectType'] = 'LogonMonitor';
+		$PassArray['ObjectTypeName'] = 'logonmonitor';
+		
 		$loginidnumber = Array();
 		$loginidnumber['PageID'] = $_POST['Login'];
 		if ($_GET['PageID']){
@@ -1200,11 +1207,24 @@ class ContentLayer extends LayerModulesAbstract
 		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
 		if ($hold['Error']) {
 			$_SESSION['POST'] = $hold;
+			$EventData['UserName'] = $_POST['UserName'];
+			$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+			$EventData['LogonType'] = 'BadCaptcha';
+			$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
+			
 			header("Location: $AuthenticationPage&SessionID=$sessionname");
+			
 		} else {
 			$hold = NULL;
 			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST);
 			if ($hold['Error']) {
+				$EventData['UserName'] = $_POST['UserName'];
+				$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+				$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+				$EventData['LogonType'] = 'BadLogonAttempt';
+				$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
+				
 				$_SESSION['POST'] = $hold;
 				header("Location: $AuthenticationPage&SessionID=$sessionname");
 			} else {
@@ -1223,10 +1243,18 @@ class ContentLayer extends LayerModulesAbstract
 				setcookie('Editor', $UserInfo['Editor'], time()+3600, '/');
 				setcookie('User', $UserInfo['User'], time()+3600, '/');
 				setcookie('Guest', $UserInfo['Guest'], time()+3600, '/');
+				
+				$EventData['UserName'] = $username;
+				$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+				$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+				$EventData['LogonType'] = 'GoodLogonAttempt';
+				
 				if ($DestinationPageID) {
+					$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
 					header("Location: index.php?PageID=$DestinationPageID");
 					exit;
 				} else {
+					$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
 					header("Location: index.php");
 					exit;
 				}

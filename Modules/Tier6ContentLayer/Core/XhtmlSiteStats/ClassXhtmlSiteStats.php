@@ -413,7 +413,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			
 			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'BuildFieldNames', $passarray);
 			$RowFieldName = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowFieldNames', array());
-			$Key = array_search($CurrentMonthYear, $RowFieldName);
+			$Key = array_search($CurrentDayMonthYear, $RowFieldName);
 			if ($Key) {
 				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
 				$CurrentDayCount++;
@@ -421,7 +421,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			} else {
 				$passarray = array('fieldstring' => "`$CurrentDayMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
 				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'createField', $passarray);
-				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentMonthYear));
+				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
 				$CurrentDayCount++;
 				$Content[$CurrentDayMonthYear] = $CurrentDayCount;
 			}

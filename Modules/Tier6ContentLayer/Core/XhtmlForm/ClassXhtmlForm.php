@@ -1346,16 +1346,23 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			} else {
 				if (!strstr(current($this->$content), "<br />")){
-					$this->Writer->startElement('p');
+					if (!strstr(current($this->$starttag), "div")){
+						$this->Writer->startElement('p');
+					}
 				}
-				$hold = $this->CreateWordWrap($this->$content[key($this->$content)], '     ');
-				$hold .= "\n   ";
-				$this->$content[key($this->$content)] = $hold;
-				$this->Writer->writeRaw("\n     ");
-				$this->Writer->writeRaw($this->$content[key($this->$content)]);
-
+				
+				if (!strstr(current($this->$starttag), "div")){
+					$hold = $this->CreateWordWrap($this->$content[key($this->$content)], '     ');
+					$hold .= "\n   ";
+					$this->$content[key($this->$content)] = $hold;
+					$this->Writer->writeRaw("\n     ");
+					$this->Writer->writeRaw($this->$content[key($this->$content)]);
+				}
+				
 				if (!strstr(current($this->$content), "<br />")){
-					$this->Writer->endElement();
+					if (!strstr(current($this->$starttag), "div")){
+						$this->Writer->endElement();
+					}
 				}
 			}
 		} else if (current($this->$content)) {

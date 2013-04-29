@@ -660,7 +660,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 			}
 
 			if (!empty($this->JavaScriptSheet) && !$printpreviewflag && !$stylesheet) {
-				$this->TagSheet('script', NULL, NULL, NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL, NULL);
+				$this->TagSheet('script', NULL, 'text/javascript', NULL, NULL, NULL, $this->JavaScriptSheet, NULL, NULL, NULL);
 			}
 
 			if (!empty($this->PrintPreviewStyleSheet) && $printpreviewflag && !$stylesheet) {

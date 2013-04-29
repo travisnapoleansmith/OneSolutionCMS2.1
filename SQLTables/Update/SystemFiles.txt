@@ -46,7 +46,6 @@
 ../../Administrators/passwordcreation.php
 ../../Administrators/passwordreset.php
 ../../Administrators/passwordresetchange.php
-../../Administrators/CAPTCHAIMAGE/captchaimage-584c1cf63a.png
 ../../Administrators/Configuration/Tier2-DataAccessLayer/
 ../../Administrators/Configuration/Tier3-ProtectionLayer/
 ../../Administrators/Configuration/Tier4-AuthenticationLayer/
@@ -254,6 +253,7 @@
 ../../Administrators/System/Password/
 ../../Administrators/System/PHPInfo/
 ../../Administrators/System/Register/
+../../Administrators/System/SystemFileIntegrityScanner/
 ../../Administrators/System/SystemUpdateFileRemover/
 ../../Administrators/System/SystemUpdateUpgradeFolderRemover/
 ../../Administrators/System/DatabaseBackup/DatabaseBackup.php
@@ -262,6 +262,8 @@
 ../../Administrators/System/Menu/UpdateMenu.php
 ../../Administrators/System/PHPInfo/PHPInfo.php
 ../../Administrators/System/Register/Register.php
+../../Administrators/System/SystemFileIntegrityScanner/SystemFileIntegrityScanner.php
+../../Administrators/System/SystemFileIntegrityScanner/UpdateSystemFileIntegrityDatabaseTable.php
 ../../Administrators/System/SystemUpdateFileRemover/SystemUpdateFileRemover.php
 ../../Administrators/System/SystemUpdateUpgradeFolderRemover/SystemUpdateUpgradeFolderRemover.php
 ../../Configuration/.htaccess
@@ -2463,14 +2465,19 @@
 ../../Modules/Tier3ProtectionLayer/Extended/
 ../../Modules/Tier3ProtectionLayer/User/
 ../../Modules/Tier3ProtectionLayer/Core/Audit/
+../../Modules/Tier3ProtectionLayer/Core/LogonMonitor/
 ../../Modules/Tier3ProtectionLayer/Core/Revisions/
 ../../Modules/Tier3ProtectionLayer/Core/SpamFilter/
 ../../Modules/Tier3ProtectionLayer/Core/SqlInjection/
+../../Modules/Tier3ProtectionLayer/Core/SystemFileIntegrityScanner/
 ../../Modules/Tier3ProtectionLayer/Core/UserPermissions/
 ../../Modules/Tier3ProtectionLayer/Core/Audit/ClassAudit.php
+../../Modules/Tier3ProtectionLayer/Core/LogonMonitor/ClassLogonMonitor.php
 ../../Modules/Tier3ProtectionLayer/Core/Revisions/ClassRevisions.php
 ../../Modules/Tier3ProtectionLayer/Core/SpamFilter/ClassSpamFilter.php
 ../../Modules/Tier3ProtectionLayer/Core/SqlInjection/ClassSqlInjection.php
+../../Modules/Tier3ProtectionLayer/Core/SystemFileIntegrityScanner/ClassSystemFileIntegrityScanner.php
+../../Modules/Tier3ProtectionLayer/Core/SystemFileIntegrityScanner/SystemFiles.txt
 ../../Modules/Tier3ProtectionLayer/Core/UserPermissions/ClassUserPermissions.php
 ../../Modules/Tier4AuthenticationLayer/Core/
 ../../Modules/Tier4AuthenticationLayer/Extended/
@@ -2659,6 +2666,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.143.sql
 ../../SQLTables/Update/UpdateTables-2.1.144.sql
 ../../SQLTables/Update/UpdateTables-2.1.145.sql
+../../SQLTables/Update/UpdateTables-2.1.146.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -2680,7 +2688,6 @@
 ../../Testcases/SimpleTest/simpletest/errors.php
 ../../Testcases/SimpleTest/simpletest/exceptions.php
 ../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
-../../Testcases/SimpleTest/simpletest/invoker.php
 ../../Testcases/SimpleTest/simpletest/LICENSE
 ../../Testcases/SimpleTest/simpletest/mock_objects.php
 ../../Testcases/SimpleTest/simpletest/page.php

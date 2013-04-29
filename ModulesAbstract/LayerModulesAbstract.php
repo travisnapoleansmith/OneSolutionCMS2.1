@@ -490,34 +490,34 @@ abstract class LayerModulesAbstract
 				}
 			} else {
 				$i = 0;
-				reset($Content);
 
-				while ($Content[key($Content)]) {
-					$j = 0;
-					$hold = $Content[key($Content)];
-					reset($hold);
-					while (key($hold)) {
-						$passarray2[$j] = current($hold);
-						next($hold);
-						$j++;
+				$count = 0;
+				$count2 = count($Content[key($Content)]);
+
+				$passarray = array();
+				if (is_array($Content)) {
+					foreach ($Content as $Key => $Value) {
+						$j = 0;
+						$hold = $Value;
+						reset($hold);
+						while (key($hold)) {
+							$passarray2[$j] = current($hold);
+							next($hold);
+							$j++;
+						}
+						$passarray['rowname'][] = $passarray1;
+						$passarray['rowvalue'][] = $passarray2;
+						
+						$i++;
 					}
-					$passarray['rowname'] = $passarray1;
-					$passarray['rowvalue'] = $passarray2;
-
+					
 					if ($this->LayerModuleOn === TRUE) {
-						//$this->LayerModule->Connect($DatabaseTableName);
 						$this->LayerModule->pass ($DatabaseTableName, 'createRow', $passarray);
-						//$this->LayerModule->Disconnect($DatabaseTableName);
 					} else {
-						//$this->Client->Connect($DatabaseTableName);
 						$this->Client->pass ($DatabaseTableName, 'createRow', $passarray);
-						//$this->Client->Disconnect($DatabaseTableName);
 					}
-
-					$i++;
-					next($Content);
 				}
-
+				
 			}
 			if ($this->LayerModuleOn === TRUE) {
 				$this->LayerModule->Disconnect($DatabaseTableName);

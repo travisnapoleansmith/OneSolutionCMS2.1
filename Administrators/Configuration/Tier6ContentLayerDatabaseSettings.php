@@ -24,7 +24,7 @@
 	*/
 
 	// MySql Database Tables
-	$Tier6Databases = &new ContentLayer();
+	$Tier6Databases = new ContentLayer();
 
 	$Tier6Databases->createDatabaseTable('AdministratorContentLayer');
 	$Tier6Databases->createDatabaseTable('AdministratorContentLayerVersion');

@@ -28,7 +28,8 @@
 	$FileUpload == FALSE;
 	$UploadArray = $_FILES['SystemUpdateFile'];
 	$TargetPath = '../../SQLTables/Update/';
-	if ($UploadArray['type'] == 'application/zip') {
+	
+	if ($UploadArray['type'] == 'application/zip' || $UploadArray['type'] == 'application/x-zip-compressed') {
 		if (move_uploaded_file($UploadArray['tmp_name'], $TargetPath . 'Update.zip')) {
 			$FileUpload = TRUE;
 		} else {

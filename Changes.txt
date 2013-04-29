@@ -1,4 +1,25 @@
-Changes For One Solution CMS 2.1.146 - Tuesday, April 23, 2013
+Changes For One Solution CMS 2.1.147 - Sunday, April 28, 2013
+Added:
+	1). Added LogonMonitor Module - This module will record in the database all log on attempts, along with timestamp and IP address. This modules is in the Protection Tier.
+	2). Added SystemFileIntegrityScanner Module - This module will compare the system file's hashes with what is stored in the database. This module is in the Protection Tier.
+	3). Added Administrators Panel - Site Configuration - Security Tools - Update System File Integrity Database Table. This tool is for the creation of the master database for System File Integrity Scanner.
+	4). Added Administrators Panel - Site Configuration - Security Tools - System File Integrity Scanner. This tool is for scanning the system files to see if any file has been changed.
+	
+Updated (Fixed):
+	1). Updated SiteStats Module - Fix the daily site stats so it counts per day correctly.
+	2). Updated NewsStories Module - Fixed buildOutput ($Space) method in the Modules Abstraction so it will not put <ul> inside of a <p> tag.
+	3). Updated Administrators Panel - Tier6ContentLayerDatabaseSettings.php so that when Content Layer is initialized it doesn't not do it by reference. This is for PHP 5.3. 
+	4). Updated Administrators Panel - Upload System Update - Fixed UploadSystemupdate.php so it will upload update.zip file correctly.
+	5). Updated XhtmlForm - Updated the buttons so they are W3C Complience. They will now correctly show up in a div.
+	6). Updated XhtmlHeader - Updated the JavaScript includes so they will get type = text/javascript attribute. This is for W3C Complience.
+	7). Updated Administrators Panel - System Updater - Upgrade Database - Fixed the long standing not being able to update a database with .sql file.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.146 - Tuesday, April 23, 2013 07:23:30 PM
 Added:
 	1). Added Administrators Panel - Add and Update Menu Item forms have been put into the database. Will make the function in a future release.
 	2). Added Administrators Panel - Daily Site Stats as XML Format and Daily Site Stats as CSV Format.

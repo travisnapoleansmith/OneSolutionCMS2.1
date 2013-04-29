@@ -335,7 +335,22 @@ class ProtectionLayer extends LayerModulesAbstract
 								$hookargumentsarray = func_get_args();
 								$hookarguments = $hookargumentsarray[3];
 								if (is_array($hookarguments)) {
-									$hold = $this->checkPass($databasetable, $function, $functionarguments, $hookarguments);
+									if ($hookarguments['Execute'] === TRUE) {
+										if ($hookarguments['Method'] != NULL) {
+											if ($hookarguments['ObjectType'] != NULL) {
+												if ($hookarguments['ObjectTypeName'] != NULL) {
+													$Method = $hookarguments['Method'];
+													$ObjectType = $hookarguments['ObjectType'];
+													$ObjectTypeName = $hookarguments['ObjectTypeName'];
+													$hold = $this->Modules[$ObjectType][$ObjectTypeName]->$Method($functionarguments);
+												}
+											}
+											
+										}
+										
+									} else {
+										$hold = $this->checkPass($databasetable, $function, $functionarguments, $hookarguments);
+									}
 								} else {
 									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
 								}
