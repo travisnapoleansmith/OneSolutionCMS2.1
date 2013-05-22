@@ -390,7 +390,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					//print "OPENED AD HOC SENSE PATH\n";
 				}
 			}
-
+			
 			foreach ($PrintOrder as $CurrentData) {
 				$i = 1;
 				$PageIDKey = 'PageID' . $i;
@@ -425,7 +425,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					}
 				}
 			}
-
+			
 			for ($i = 0; $i < $ShowNumber; $i++) {
 				$this->selectRandomSponsor ($TableNamePageID, $this->AdSponsorsDatabaseTable[$TableNamePageID]);
 			}
@@ -444,6 +444,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			}
 
 			$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
+			
 		}
 
 		$this->LayerModule->Connect($this->DatabaseTable);
@@ -521,7 +522,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		}
 
 		$this->ProcessStandardAttribute('');
-
+		
 		foreach ($this->AdSponsorsOutputAdLookup as $AdSponsorsTableName => $AdSponsorsLookupValues) {
 			$AdvertisingTableName = str_replace('PageID', '', $AdSponsorsTableName);
 
@@ -768,16 +769,20 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$Index = array_rand($DatabaseTable);
 				array_push($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName], $Index);
 			} else {
-				foreach($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName] as $value) {
-					if ($Index == $value) {
-						$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
-						if (array_search($Index, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName])) {
+				$Count = count($DatabaseTable);
+				if ($Count != 1) {
+					foreach($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName] as $value) {
+						if ($Index == $value) {
 							$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
+							
+							if (array_search($Index, $this->AdSponsorsOutputAdLookup[$AdSponsorsTableName])) {
+								$Index = $this->recurssiveRand ($DatabaseTable, $Index, $value);
+							}
 						}
 					}
+	
+					array_push($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName], $Index);
 				}
-
-				array_push($this->AdSponsorsOutputAdLookup[$AdSponsorsTableName], $Index);
 			}
 
 			if (isset($this->AdSponsorsRemoveArray[$AdSponsorsTableName])) {

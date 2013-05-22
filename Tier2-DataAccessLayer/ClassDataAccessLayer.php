@@ -107,10 +107,17 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @access public
 	 */
 	public function setDatabaseAll ($hostname, $user, $password, $databasename) {
-		$this->Hostname = $hostname;
-		$this->User = $user;
-		$this->Password = $password;
-		$this->DatabaseName = $databasename;
+		if ($hostname != NULL & $user != NULL & $password != NULL & $databasename != NULL) {
+			$this->Hostname = $hostname;
+			$this->User = $user;
+			$this->Password = $password;
+			$this->DatabaseName = $databasename;
+			
+			return $this;
+		} else {
+			array_push($this->ErrorMessage,'setDatabaseAll: hostname, user, password or databasename Cannot Be Null!');
+			return FALSE;
+		}
 	}
 
 	/**
@@ -121,13 +128,29 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @access public
 	*/
 	public function ConnectAll () {
-		reset($this->DatabaseTable);
-		while (current($this->DatabaseTable)){
-			$tablename = key($this->DatabaseTable);
-			$this->DatabaseTable[key($this->DatabaseTable)]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $tablename);
-			$this->DatabaseTable[key($this->DatabaseTable)]->Connect();
-
-			next($this->DatabaseTable);
+		if ($this->Hostname != NULL & $this->User != NULL & $this->Password != NULL & $this->DatabaseName != NULL) {
+			if ($this->DatabaseTable != NULL) {
+				if (is_array($this->DatabaseTable)) {
+					foreach ($this->DatabaseTable as $TableNameKey => $TableNameValue) {
+						try {
+							$this->DatabaseTable[$TableNameKey]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $TableNameValue);
+							$this->DatabaseTable[$TableNameKey]->Connect();
+						} catch (Exception $e) {
+							array_push($this->ErrorMessage,'ConnectAll: Exception Thrown - Message: ' . $e->getMessage() . '!');
+						}
+					}
+					return $this;
+				} else {
+					array_push($this->ErrorMessage,'ConnectAll: $this->DatabaseTable Must Be An Array!');
+					return FALSE;
+				}
+			} else {
+				array_push($this->ErrorMessage,'ConnectAll: $this->DatabaseTable Cannot Be Null!');
+				return FALSE;
+			}
+		} else {
+			array_push($this->ErrorMessage,'ConnectAll: $this->Hostname, $this->User, $this->Password or $this->DatabaseName Cannot Be Null!');
+			return FALSE;
 		}
 	}
 
@@ -139,12 +162,26 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to connect to
 	 * @access public
 	 */
-	public function Connect ($key) {
-		if ($key != NULL) {
-			$this->DatabaseTable[$key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $key);
-			$this->DatabaseTable[$key]->Connect();
+	public function Connect ($Key) {
+		if ($Key != NULL) {
+			if (isset($this->DatabaseTable[$Key])) {
+				try {
+					$this->DatabaseTable[$Key]->setDatabaseAll($this->Hostname, $this->User, $this->Password, $this->DatabaseName, $Key);
+					$this->DatabaseTable[$Key]->Connect();
+				} catch (Exception $E) {
+					array_push($this->ErrorMessage,'ConnectAll: Exception Thrown - Message: ' . $E->getMessage() . '!');
+					return FALSE;
+				} 
+				
+				return $this;
+			} else {
+				array_push($this->ErrorMessage,'ConnectAll: Exception Thrown - Message: Key Doesn\'t Exist!');
+				
+				return new Exception('Key Doesn\'t Exist!');
+			}
 		} else {
 			array_push($this->ErrorMessage,'Connect: Key Cannot Be Null!');
+			return FALSE;
 		}
 	}
 
@@ -163,6 +200,7 @@ class DataAccessLayer extends LayerModulesAbstract
 
 			next($this->DatabaseTable);
 		}
+		return $this;
 	}
 
 	/**
@@ -176,8 +214,10 @@ class DataAccessLayer extends LayerModulesAbstract
 	public function Disconnect ($key) {
 		if ($key != NULL) {
 			$this->DatabaseTable[$key]->Disconnect();
+			return $this;
 		} else {
 			array_push($this->ErrorMessage,'Disconnect: Key Cannot Be Null!');
+			return FALSE;
 		}
 	}
 
@@ -195,6 +235,7 @@ class DataAccessLayer extends LayerModulesAbstract
 	 */
 	public function createDatabaseTable($key) {
 		$this->DatabaseTable[$key] =  new MySqlConnect();
+		return $this;
 	}
 
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
@@ -249,18 +290,23 @@ class DataAccessLayer extends LayerModulesAbstract
 							}
 						} else {
 							array_push($this->ErrorMessage,"pass: $function from $databasetable - MySqlConnect Member Does Not Exist!");
+							return FALSE;
 						}
 					} else {
 						array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be An Array!');
+						return FALSE;
 					}
 				} else {
 					array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be Null!');
+					return FALSE;
 				}
 			} else {
 				array_push($this->ErrorMessage,'pass: Function Arguments Must Be An Array!');
+				return FALSE;
 			}
 		} else {
 			array_push($this->ErrorMessage,'pass: Function Arguments Cannot Be Null!');
+			return FALSE;
 		}
 	}
 
@@ -390,7 +436,10 @@ class DataAccessLayer extends LayerModulesAbstract
 			}
 		} else {
 			array_push($this->ErrorMessage,'buildModules: Module Tablename is not set!');
+			return FALSE;
 		}
+		
+		return $this;
 	}
 
 }

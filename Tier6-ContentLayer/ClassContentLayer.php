@@ -790,7 +790,7 @@ class ContentLayer extends LayerModulesAbstract
 		$StartNumber2 = NULL;
 		$Seperator2 = NULL;
 		$SecondStartNumber2 = NULL;
-
+		$PostName3 = NULL;
 		if ($functionarguments[3]) {
 			$Seperator = $functionarguments[3];
 		}
@@ -833,7 +833,13 @@ class ContentLayer extends LayerModulesAbstract
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 cannot be NULL!');
 			}
 		}
-
+		if ($functionarguments[9]) {
+			$PostName3 = $functionarguments[9];
+			if (is_null($PostName9)) {
+				array_push($this->ErrorMessage,'MultiPostCheck: PostName3 cannot be NULL!');
+			}
+		}
+		
 		if (is_int($StartNumber)) {
 			if (!is_null($StartNumber)) {
 				if (!is_null($PostName)) {
@@ -940,7 +946,7 @@ class ContentLayer extends LayerModulesAbstract
 										$temp .= $k;
 										$temp .= $Seperator2;
 										$temp .= $l;
-
+	
 										while (($_POST[$temp])) {
 											while (($_POST[$temp])) {
 												while (($_POST[$temp])) {
@@ -1006,7 +1012,48 @@ class ContentLayer extends LayerModulesAbstract
 											if (is_null($Seperator) & !is_null($SecondStartNumber)) {
 												array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber is set but Seperator cannot be NULL!');
 											} else if (!is_null($Seperator) & is_null($SecondStartNumber)) {
-												array_push($this->ErrorMessage,'MultiPostCheck: Seperator is set but SecondStartNumber cannot be NULL!');
+												if (!is_null($PostName3)) {
+													$i = $StartNumber;
+													$j = $StartNumber2;
+													$temp = $PostName;
+													$temp .= $i;
+													$temp .= $Seperator;
+													$temp .= $PostName2;
+													$temp .= $j;
+													$temp .= $Seperator2;
+													$temp .= $PostName3;
+													
+													while (($_POST[$temp])) {
+														while (($_POST[$temp])) {
+															$hold = $this->PostCheck ($temp, 'FilteredInput', $Input);
+															if (!is_null($hold)) {
+																$Input = $hold;
+															}
+															
+															$j++;
+															$temp = $PostName;
+															$temp .= $i;
+															$temp .= $Seperator;
+															$temp .= $PostName2;
+															$temp .= $j;
+															$temp .= $Seperator2;
+															$temp .= $PostName3;
+														}
+														
+														$i++;
+														$j = $StartNumber2;
+														
+														$temp = $PostName;
+														$temp .= $i;
+														$temp .= $Seperator;
+														$temp .= $PostName2;
+														$temp .= $j;
+														$temp .= $Seperator2;
+														$temp .= $PostName3;
+													}
+												} else {
+													array_push($this->ErrorMessage,'MultiPostCheck: Seperator is set but SecondStartNumber cannot be NULL!');
+												}
 											} else if (!is_null($Seperator) & !is_null($SecondStartNumber)){
 												$i = $StartNumber;
 												$j = $SecondStartNumber;
@@ -1521,6 +1568,7 @@ class ContentLayer extends LayerModulesAbstract
 		$ElementName = NULL;
 		$AddLookupData = NULL;
 		$arguments = func_get_args();
+		
 		if ($arguments[2] != NULL) {
 			$FileLocation = $arguments[2];
 		}
@@ -1598,11 +1646,7 @@ class ContentLayer extends LayerModulesAbstract
 			}
 			$XMLFile->writeAttribute('name', $Key);
 			if (is_array($Value)) {
-				foreach ($Value as $SubElement => $SubValue) {
-					$XMLFile->startElement($SubElement);
-					$XMLFile->text($SubValue);
-					$XMLFile->endElement(); // ENDS SUBELEMENT
-				}
+				$this->RecursiveProcessFormXMLFileElement($Value, $XMLFile);
 			} else {
 				$XMLFile->text($Value);
 			}
@@ -1611,7 +1655,21 @@ class ContentLayer extends LayerModulesAbstract
 		$XMLFile->endElement(); // ENDS Content;
 		$XMLFile->endDocument();
 	}
-
+	
+	public function RecursiveProcessFormXMLFileElement ($Data, XmlWriter $XMLFile) {
+		foreach ($Data as $Element => $Value) {
+			if (is_array($Value)) {
+				$XMLFile->startElement($Element);
+					$this->RecursiveProcessFormXMLFileElement($Value, $XMLFile);
+				$XMLFile->endElement(); // ENDS ELEMENT
+			} else {
+				$XMLFile->startElement($Element);
+				$XMLFile->text($Value);
+				$XMLFile->endElement(); // ENDS ELEMENT
+			}
+		}
+	}
+	
 	public function FormSubmit($SessionName, $PageName, $ObjectType, $Function, array $Arguments) {
 
 	}
@@ -1620,6 +1678,7 @@ class ContentLayer extends LayerModulesAbstract
 		if ($ModuleType != NULL && $ModuleName != NULL && $Function != NULL) {
 			$PassArguments = array();
 			$PassArguments[0] = $Arguments;
+			
 			$hold = call_user_func_array(array($this->Modules[$ModuleType][$ModuleName], $Function), $PassArguments);
 			if ($hold) {
 				return $hold;

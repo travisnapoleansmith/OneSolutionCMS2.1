@@ -1,67 +1,27 @@
 // JavaScript Document
 var GET = GetUrlVars();
-//var PageLocation = "../Modules/Tier6ContentLayer/Core/XhtmlTable/XmlTableListing.php";
-//var TableListings = null;
-
-//var TableSelectionOutput = document.createDocumentFragment();
-
-//var TableSelectionLabel = document.createElement('label');
-//var TableSelectionLabelDiv = document.createElement('div');
 
 var COOKIE = document.cookie.split(';');
 //var SessionID = null;
 
 $(document).ready(function()
 {
-	//CreateTableSelectionLabel();
-	
-	/*$.ajax({
-		url: PageLocation,
-		type: "GET", 
-		dataType: "xml",
-		success: LoadTableListings
-	}).done(function (data){
-		if (GET['SessionID'] != null) {
+	if (GET['SessionID'] != null) {
 			SessionID = GET['SessionID'];
-		}
+	}
 		
-		if (SessionID != null) {
-			var File = '../Administrators/PageTypes/TablePage/TEMPFILES/' + SessionID + '.xml';
-			
-			$.ajax({
-				url: File,
-				type: "GET", 
-				dataType: "xml",
-				success: LoadTables
-			});
-		}
-	});*/
+	if (SessionID != null) {
+		var File = '../Administrators/PageTypes/VideosPage/TEMPFILES/' + SessionID + '.xml';
+		
+		$.ajax({
+			url: File,
+			type: "GET", 
+			dataType: "xml",
+			success: LoadVideoContent
+		});
+	}
 	
 });
-
-/*function CreateTableSelectionLabel() {
-	TableSelectionLabel.setAttribute('class', 'BodyText ShortForm');
-	TableSelectionLabel.setAttribute('dir', "ltr");
-	TableSelectionLabel.setAttribute('lang', "en-us");
-	TableSelectionLabel.setAttribute('xml:lang', "en-us");
-	TableSelectionLabel.innerHTML = "Table";
-	
-	TableSelectionLabelDiv.appendChild(TableSelectionLabel);
-}*/
-
-/*
-function CreateTableListing() {
-	var TableSelectionContentDiv = document.createElement('select');
-	
-	TableSelectionContentDiv.setAttribute('class', "ShortForm");
-	TableSelectionContentDiv.setAttribute('dir', "ltr");
-	TableSelectionContentDiv.setAttribute('lang', "en-us");
-	TableSelectionContentDiv.setAttribute('xml:lang', "en-us");
-	TableSelectionContentDiv.appendChild(TableSelectionOutput.cloneNode(true));
-	
-	return (TableSelectionContentDiv);
-}
-*/
 
 function AddContent(ContentNumber) {
 	var Data = null;
@@ -207,7 +167,7 @@ function AddContent(ContentNumber) {
 		var RemoveVideoButton = document.createElement("button");
 		RemoveVideoButton.setAttribute('class', "BodyTextButton ShortForm ShortFormButton");
 		RemoveVideoButton.setAttribute('dir', "ltr");
-		RemoveVideoButton.setAttribute('id', "RemoveVideo" + 1);
+		RemoveVideoButton.setAttribute('id', ContentID + "RemoveVideo" + 1);
 		RemoveVideoButton.setAttribute('lang', "en-us");
 		RemoveVideoButton.setAttribute('xml:lang', "en-us");
 		RemoveVideoButton.setAttribute('name', "RemoveVideo" + 1);
@@ -216,7 +176,6 @@ function AddContent(ContentNumber) {
 		RemoveVideoButton.innerHTML = "Remove Video " + 1;
 		
 		FieldSet.appendChild(RemoveVideoButton);
-		
 	
 	
 	// BOTTOM TEXT
@@ -321,7 +280,7 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	var AppendID = null;
 	if (VideoNumber === 1) {
-		AppendID = ContentID + "AddVideo1";
+		AppendID = ContentID + "RemoveVideo1";
 	} else {
 		AppendID = VideoNumber;
 		AppendID = AppendID - 1;
@@ -340,8 +299,16 @@ function AddVideo(VideoNumber, ContentID) {
 	var VideoLocationContentID = ContentID + "Video" + VideoNumber + "VideoLocation";
 	var VideoLocationContentName = ContentID + "_Video" + VideoNumber + "_VideoLocation";
 	
-	var NoFlashTextContentID = ContentID + "Video" + VideoNumber + "TopText";
-	var NoFlashTextContentName = ContentID + "_Video" + VideoNumber + "_TopText";
+	var NoFlashTextContentID = ContentID + "Video" + VideoNumber + "NoFlashText";
+	var NoFlashTextContentName = ContentID + "_Video" + VideoNumber + "_NoFlashText";
+	
+	var NextNextAddVideoPage = VideoNumber + 2;
+	var NextAddVideoName = ContentID + "AddVideo" + NextNextAddVideoPage;
+	var AddNextVideoButton = false;
+	
+	if (document.getElementById(NextAddVideoName) != null) {
+		AddNextVideoButton = true;
+	}
 	
 	var FieldSet = document.createElement('fieldset');
 	FieldSet.setAttribute('class', "ShortForm");
@@ -380,12 +347,12 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	if (Data != null) {
 		if (Data['VideoLocation'] != null) {
-			VideoLocationContent.setAttribute('value', Data['VideoLocation']);
+			VideoLocationContent.setAttribute('value', stripSlashes(Data['VideoLocation']));
 		} else {
-			VideoLocationContent.setAttribute('value', 'NULL');
+			VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION?fs=1&amp;hl=en_US&amp;rel=0&amp;color1=0x234900;color2=0x4e9e00&amp;border=1');
 		}
 	} else {
-		VideoLocationContent.setAttribute('value', 'NULL');
+		VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION?fs=1&amp;hl=en_US&amp;rel=0&amp;color1=0x234900;color2=0x4e9e00&amp;border=1');
 	}
 	
 	var VideoLocationLabelDiv = document.createElement('div');
@@ -417,7 +384,7 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	if (Data != null) {
 		if (Data['NoFlashText'] != null) {
-			NoFlashTextContent.innerHTML = Data['NoFlashText'];
+			NoFlashTextContent.innerHTML = stripSlashes(Data['NoFlashText']);
 		} else {
 			NoFlashTextContent.innerHTML = "VIDEO NAME - <a href='http://get.adobe.com/flashplayer/'>Adobe Flash </a> is needed to view these pictures";
 		}
@@ -433,7 +400,7 @@ function AddVideo(VideoNumber, ContentID) {
 	FieldSet.appendChild(NoFlashTextLabelDiv);
 	FieldSet.appendChild(NoFlashTextContentDiv);
 	
-	// ADD CONTENT BUTTON
+	// ADD VIDEO BUTTON
 	var AddButton = document.createElement("button");
 	AddButton.setAttribute('class', "BodyTextButton ShortForm ShortFormButton");
 	AddButton.setAttribute('dir', "ltr");
@@ -447,7 +414,7 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	FieldSet.appendChild(AddButton);
 	
-	// REMOVE CONTENT BUTTON
+	// REMOVE VIDEO BUTTON
 	var RemoveButton = document.createElement("button");
 	RemoveButton.setAttribute('class', "BodyTextButton ShortForm ShortFormButton");
 	RemoveButton.setAttribute('dir', "ltr");
@@ -465,7 +432,9 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	$("#" + AppendID).after(FieldSet);
 	
-	// FIX When someone clicks remove button and then clicks on Add the same one that was removed that all the proper buttons are disabled.
+	if (AddNextVideoButton == true) {
+		DisablePriorAddVideoButtons(NextAddVideoPage, ContentID);
+	}
 }
 
 function RemoveVideo(VideoNumber, ContentID) {
@@ -490,65 +459,40 @@ function EnablePriorAddVideoButton(VideoNumber, ContentID) {
 	$("#" + ButtonID).show();
 }
 
-/*
-function LoadTableListings(XML) {
-	var Listings = $(XML).find("TableListings");
-	var TableContentArray = new Array();
-	var TableSelectionContent = document.createElement('option');
-	
-	Listings.find("Item").each(function(){
-		TableContentArray['TableID'] = $(this).find("TableID").text();
-		TableContentArray['TableName'] = $(this).find("TableName").text();
-		
-		TableSelectionContent = document.createElement('option');
-		TableSelectionContent.setAttribute('class', "ShortForm");
-		TableSelectionContent.setAttribute('dir', "ltr");
-		TableSelectionContent.setAttribute('lang', "en-us");
-		TableSelectionContent.setAttribute('xml:lang', "en-us");
-		TableSelectionContent.innerHTML = TableContentArray['TableID'] + " - " + TableContentArray['TableName'];
-		
-		TableSelectionOutput.appendChild(TableSelectionContent);
-		
-	});
-}
-*/
-
-/*
-function LoadTables(XML) {
-	var Tables = $(XML).find("Content");
-	var TableContent = new Array();
-	Tables.find("Table").each(function() {
-		var TableName = $(this).attr("name");
+function LoadVideoContent(XML) {
+	var Videos = $(XML).find("Content");
+	var VideosContent = new Array();
+	Videos.find("Data").each(function() {
+		var ContentName = $(this).attr("name");
 		var Heading = $(this).find("Heading").text();
 		var TopText = $(this).find("TopText").text();
-		var Image1Alt = $(this).find("Image1Alt").text();
-		var Image1Src = $(this).find("Image1Src").text();
-		var Image1Text = $(this).find("Image1Text").text();
-		var Image2Alt = $(this).find("Image2Alt").text();
-		var Image2Src = $(this).find("Image2Src").text();
-		var Image2Text = $(this).find("Image2Text").text();
-		var Name = $(this).find("Name").text();
 		var BottomText = $(this).find("BottomText").text();
 		
 		var Data = new Array();
-		Data['TableName'] = TableName;
+		Data['ContentName'] = ContentName;
 		Data['Heading'] = Heading;
 		Data['TopText'] = stripSlashes(TopText);
-		Data['Image1Alt'] = Image1Alt;
-		Data['Image1Src'] = Image1Src;
-		Data['Image1Text'] = stripSlashes(Image1Text);
-		Data['Image2Alt'] = Image2Alt;
-		Data['Image2Src'] = Image2Src;
-		Data['Image2Text'] = stripSlashes(Image2Text);
-		Data['Name'] = Name;
 		Data['BottomText'] = BottomText;
 		
-		var TableNumber = TableName.replace("Table", '');
-		TableNumber = parseInt(TableNumber);
-		AddTable(TableNumber, Data);		
+		var ContentNumber = ContentName.replace("Content", '');
+		ContentNumber = parseInt(ContentNumber);
+		AddContent(ContentNumber, Data);
+		
+		for (var i = 1; $(this).find("Video" + i).length > 0; i++) {
+			var ContentID = $(this).attr("name");
+			$(this).find("Video" + i).each(function() {
+				var VideoData = new Array();
+				var VideoNumber = i;
+				var ElementName = "Video" + i;
+				var VideoLocation = $(this).find("VideoLocation").text();
+				var NoFlashText = $(this).find("NoFlashText").text();
+				VideoData['VideoLocation'] = VideoLocation;
+				VideoData['NoFlashText'] = NoFlashText;
+				AddVideo(VideoNumber, ContentID, VideoData);
+			});
+		}
 	});
 }
-*/
 
 function stripSlashes(str) {
 	str = str.replace(/\\'/g, '\'');

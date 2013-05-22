@@ -1,4 +1,23 @@
-Changes For One Solution CMS 2.1.147 - Sunday, April 28, 2013
+Changes For One Solution CMS 2.1.148 - 
+Added:
+	1). Nothing Added.
+	
+Updated (Fixed):
+	1). Updated XhtmlForm - Corrected Bug ID #0000021 - Forms with a form option will not continue when a continue id is set. This has been corrected.
+	2). Updated XhtmlForm - Corrected Bug ID #0000022 - Add, Update Photos Pages don't display any form - 500 Error. This has been corrected.
+	3). Updated Administrators Panel - Update Menu - Corrected Bug ID #0000020 - Update Menu throws 500 error when updating page id 1. This still happens but cannot figure out what is happening. It happens a lot less now.
+	4). Updated XhtmlAd - Corected Bug ID #0000013 - If AdClientShowNumber is set to be greater than the number of ads all pages will throw a 500 server error. This has been corrected.
+	5). Updated MySqlConnect - Corrected a few minor issues found while writing tests for One Solution CMS 2.2.
+	6). Updated DataAccessLayer - Corrected a few minor issues found while writing tests for One Solution CMS 2.2.
+	7). Updated Administrators Panel - AddVideosPages.php and VideoContentPageBehavior.js have been updated to add new videos pages. Updating and removing them are scheduled for the next release.
+
+Removed:
+	1). Removed Pullers Retro Theme and Neo Might Blue Theme. Will be removing most themes in the upcoming releases. They will be as add-ons instead.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Changes For One Solution CMS 2.1.147 - Sunday, April 28, 2013 08:04:45 PM
 Added:
 	1). Added LogonMonitor Module - This module will record in the database all log on attempts, along with timestamp and IP address. This modules is in the Protection Tier.
 	2). Added SystemFileIntegrityScanner Module - This module will compare the system file's hashes with what is stored in the database. This module is in the Protection Tier.

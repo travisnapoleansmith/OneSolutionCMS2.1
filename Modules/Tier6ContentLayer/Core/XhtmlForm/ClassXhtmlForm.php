@@ -468,12 +468,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		}
 
 		//$this->sortFormOption('ASC');
-		//print($this->FormLookupTableName);
 		reset($this->TableNames);
 		//print_r($this->TableNames);
 		while (current($this->TableNames)) {
 			$i = 0;
-			//print "HERE\n";
 			reset($this->FormLookupTableName);
 			while ($this->FormLookupTableName[key($this->TableNames)][$i]) {
 				if (key($this->TableNames) == 'Form') {
@@ -518,7 +516,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($this->TableNames);
 		}
 		//$this->sortFormOption('ASC');
-		//print_r($this->FormOptionText);
 		$i = 0;
 		$pageid = NULL;
 
@@ -1278,6 +1275,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 	}
 
 	protected function createTextArea($startingvariablename, $contentvariablename) {
+		
 		$starttag = $startingvariablename;
 		$starttag .= $contentvariablename;
 		$starttag .= 'StartTag';
@@ -1288,12 +1286,15 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 
 		$content = $startingvariablename;
 		$content .= $contentvariablename;
-
+		
+		
 		if (current($this->$starttag) == '<p>'){
+			$StartTagLocal = &$this->$starttag;
+			$Key = key($this->$starttag);
 			$hold = str_replace('<','', current($this->$starttag));
-			$this->$starttag[key($this->$starttag)] = str_replace('>','', $hold);
+			$StartTagLocal[$Key] = str_replace('>','', $hold);
 
-			$this->Writer->startElement($this->$starttag[key($this->$starttag)]);
+			$this->Writer->startElement($StartTagLocal[$Key]);
 				//$this->ProcessStandardAttribute($starttag);
 				$temp = trim(current($this->$content));
 				if (strpos($temp, "\n\r")) {
@@ -1325,10 +1326,13 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 
 		} else if (current($this->$starttag)){
 			$hold = str_replace('<','', current($this->$starttag));
-			$this->$starttag[key($this->$starttag)] = str_replace('>','', $hold);
-			$this->Writer->startElement($this->$starttag[key($this->$starttag)]);
+			$StartTagLocal = &$this->$starttag;
+			$Key = key($this->$starttag);
+			$StartTagLocal[$Key] = str_replace('>','', $hold);
+			
+			$this->Writer->startElement($StartTagLocal[$Key]);
 				//$this->ProcessStandardAttribute($starttag);
-
+			
 			$temp = trim(current($this->$content));
 			if (strpos($temp, "\n\r")) {
 				$hold = explode("\n\r", $temp);
@@ -1404,7 +1408,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			}
 		}
-
+		
 		if (current($this->$endtag)) {
 			$this->Writer->endElement();
 		}
@@ -1835,7 +1839,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$Lookup = NULL;
 		$Data = array();
 		$StopObject = NULL;
-
+		$ContinueID = NULL;
+		$ContinueIDLookup = NULL;
+		$ContinueStopObject = NULL;
+		
 		foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
 			if ($Lookup === NULL) {
 				if ($Info['ObjectID'] == $ObjectID) {
@@ -1851,9 +1858,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 				}
 			}
 		}
-
+		
 		foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
 			if ($Key >= $Lookup) {
+				$ContinueID = $Info['ContinueObjectID'];
 				if ($Key != $StopObject) {
 					if ($Lookup !== NULL) {
 						$Data[$Key] = $Info;
@@ -1861,7 +1869,26 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					}
 				} else {
 					$Data[$Key] = $Info;
+					if ($ContinueID !== NULL) {
+						break;
+					}
+					
 					if ($StopObject !== NULL) {
+						break;
+					}
+				}
+			}
+		}
+		
+		if ($ContinueID !== NULL) {
+			foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
+				$ContinueIDLookup = $Info['ObjectID'];
+				$ContinueStopObject = $Info['StopObjectID'];
+				
+				if ($ContinueIDLookup >= $ContinueID) {
+					$Data[$Key] = $Info;
+					
+					if ($ContinueStopObject != NULL) {
 						break;
 					}
 				}

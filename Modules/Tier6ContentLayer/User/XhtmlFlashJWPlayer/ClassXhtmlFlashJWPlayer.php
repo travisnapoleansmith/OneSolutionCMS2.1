@@ -172,35 +172,17 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 			}
 		}
 	}
-
-	/*public function createFlash(array $Flash) {
+	
+	public function createFlash(array $Flash) {
 		if ($Flash != NULL) {
-			$Keys = array();
-			$Keys[0] = 'PageID';
-			$Keys[1] = 'ObjectID';
-			$Keys[2] = 'RevisionID';
-			$Keys[3] = 'CurrentVersion';
-			$Keys[4] = 'StartTag';
-			$Keys[5] = 'EndTag';
-			$Keys[6] = 'StartTagID';
-			$Keys[7] = 'StartTagStyle';
-			$Keys[8] = 'StartTagClass';
-			$Keys[9] = 'PictureID';
-			$Keys[10] = 'PictureClass';
-			$Keys[11] = 'PictureStyle';
-			$Keys[12] = 'PictureLink';
-			$Keys[13] = 'PictureAltText';
-			$Keys[14] = 'Width';
-			$Keys[15] = 'Height';
-			$Keys[16] = 'Enable/Disable';
-			$Keys[17] = 'Status';
-
+			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
+			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
 			$this->addModuleContent($Keys, $Flash, $this->DatabaseTable);
 		} else {
 			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
 		}
 	}
-
+	
 	public function updateFlash(array $PageID) {
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->DatabaseTable);
@@ -240,6 +222,6 @@ class XhtmlFlashJWPlayer extends Tier6ContentLayerModulesAbstract implements Tie
 		} else {
 			array_push($this->ErrorMessage,'updateFlashStatus: PageID cannot be NULL!');
 		}
-	}*/
+	}
 }
 ?>
