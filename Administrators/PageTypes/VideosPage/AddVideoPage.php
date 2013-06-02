@@ -54,9 +54,7 @@
 		require_once ("$ADMINHOME/Configuration/includes.php");
 		
 		$Options = $Tier6Databases->getLayerModuleSetting();
-		
-		//$XhtmlTableName = $Options['XhtmlTable']['table']['XhtmlTableName']['SettingAttribute'];
-		
+				
 		$PageTitle = $_POST['PageTitle'];
 		$Keywords = $_POST['Keywords'];
 		$Description = $_POST['Description'];
@@ -94,7 +92,12 @@
 			$SubKey = $NewKey[1];
 			if (strstr($SubKey, 'Video')) {
 				$SubSubKey = $NewKey[2];
-				$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+				if ($SubSubKey === 'NoFlashText') {
+					$Value = str_replace("\'", "", $Value);
+					$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+				} else {
+					$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+				}
 			} else {
 				$Video[$VideoName][$SubKey] = $Value;
 			}
@@ -128,7 +131,7 @@
 			
 			$LastVideosPage = $Options['XhtmlContent']['content']['LastVideosPage']['SettingAttribute'];
 			$NewVideosPage = ++$LastVideosPage;
-			//$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
+			$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
 			
 			$NewPage = '../../../index.php?PageID=';
 			$NewPage .= $NewPageID;
@@ -166,6 +169,11 @@
 			}
 			
 			$temp = $Tier6Databases->MultiPostCheck('Content', 1, $hold, '_', NULL, 'Video', 1, '_', 1, 'VideoLocation');
+			if ($temp != NULL) {
+				$hold = $temp;
+			}
+			
+			$temp = $Tier6Databases->MultiPostCheck('Content', 1, $hold, '_', NULL, 'Video', 1, '_', 1, 'FlashVarsText');
 			if ($temp != NULL) {
 				$hold = $temp;
 			}
@@ -209,7 +217,12 @@
 				$SubKey = $NewKey[1];
 				if (strstr($SubKey, 'Video')) {
 					$SubSubKey = $NewKey[2];
-					$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+					if ($SubSubKey === 'NoFlashText') {
+						$Value = str_replace("\'", "", $Value);
+						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+					} else {
+						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
+					}
 				} else {
 					$Video[$VideoName][$SubKey] = $Value;
 				}
@@ -392,14 +405,128 @@
 							$j = 1;
 							$LookupTemp = 'Video' . $j;
 							
+							$VideoLocation = $Value[$LookupTemp]['VideoLocation'];
+							$NoFlashTest = $Value[$LookupTemp]['NoFlashText'];
+							$FlashVarsText = $Value[$LookupTemp]['FlashVarsText'];
+							
+							$Content[$i]['PageID'] = $NewPageID;
+							$Content[$i]['ObjectID'] = $i;
+							$Content[$i]['ContainerObjectType'] = 'XhtmlFlash';
+							$Content[$i]['ContainerObjectName'] = 'flash';
+							$Content[$i]['ContainerObjectID'] = $VideoID;
+							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['RevisionID'] = $NewRevisionID;
+							$Content[$i]['CurrentVersion'] = 'true';
+							$Content[$i]['Empty'] = 'false';
+							$Content[$i]['StartTag'] = NULL;
+							$Content[$i]['EndTag'] = NULL;
+							$Content[$i]['StartTagID'] = NULL;
+							$Content[$i]['StartTagStyle'] = NULL;
+							$Content[$i]['StartTagClass'] = NULL;
+	
+							$Content[$i]['Heading'] = NULL;
+							$Content[$i]['HeadingStartTag'] = NULL;
+							$Content[$i]['HeadingEndTag'] = NULL;
+							$Content[$i]['HeadingStartTagID'] = NULL;
+							$Content[$i]['HeadingStartTagStyle'] = NULL;
+							$Content[$i]['HeadingStartTagClass'] = NULL;
+	
+							$Content[$i]['Content'] = NULL;
+							$Content[$i]['ContentStartTag'] = NULL;
+							$Content[$i]['ContentEndTag'] = NULL;
+							$Content[$i]['ContentStartTagID'] = NULL;
+							$Content[$i]['ContentStartTagStyle'] = NULL;
+							$Content[$i]['ContentStartTagClass'] = NULL;
+							$Content[$i]['ContentPTagID'] = NULL;
+							$Content[$i]['ContentPTagStyle'] = NULL;
+							$Content[$i]['ContentPTagClass'] = NULL;
+		
+							$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
+							$Content[$i]['Status'] = $_POST['Status'];
+								
+							$VideoContent[$VideoID]['PageID'] = $NewPageID;
+							$VideoContent[$VideoID]['ObjectID'] = $VideoID;
+							$VideoContent[$VideoID]['RevisionID'] = $NewRevisionID;
+							$VideoContent[$VideoID]['CurrentVersion'] = 'true';
+							$VideoContent[$VideoID]['FlashPath'] = $VideoLocation;
+							$VideoContent[$VideoID]['Width'] = 480;
+							$VideoContent[$VideoID]['Height'] = 390;
+							$VideoContent[$VideoID]['Wmode'] = 'opaque';
+							$VideoContent[$VideoID]['AllowFullScreen'] = 'true';
+							$VideoContent[$VideoID]['AllowScriptAccess'] = 'true';
+							$VideoContent[$VideoID]['Quality'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsAuthor'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDate'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDescription'] = $FlashVarsText;
+							$VideoContent[$VideoID]['FlashVarsDuration'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsFile'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsImage'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsLink'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsStart'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsStreamer'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsTags'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsTitle'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsType'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsBackColor'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsControlBar'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDock'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsFrontColor'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsHeight'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsIcons'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsLightColor'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsLogo'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsPlaylist'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsPlaylistSize'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsSkin'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsScreenColor'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsWidth'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsAutoStart'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsBufferLength'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDisplayClick'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDisplayTitle'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsFullScreen'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsItem'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsLinkTarget'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsMute'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsRepeat'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsShuffle'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsSmoothing'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsState'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsStretching'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsVolume'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsClient'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsDebug'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsId'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsPlugins'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsVersion'] = NULL;
+							$VideoContent[$VideoID]['FlashVarsConfig'] = NULL;
+							$VideoContent[$VideoID]['AltText'] = $NoFlashTest;
+							$VideoContent[$VideoID]['FlashID'] = NULL;
+							$VideoContent[$VideoID]['FlashStyle'] = NULL;
+							$VideoContent[$VideoID]['FlashClass'] = NULL;
+							$VideoContent[$VideoID]['StartTag'] = '<div>';
+							$VideoContent[$VideoID]['EndTag'] = '</div>';
+							$VideoContent[$VideoID]['StartTagId'] = NULL;
+							$VideoContent[$VideoID]['StartTagStyle'] = NULL;
+							$VideoContent[$VideoID]['StartTagClass'] = 'YouTube1';
+							$VideoContent[$VideoID]['Enable/Disable'] = 'Enable';
+							$VideoContent[$VideoID]['Status'] = 'Approved';
+							
+							$j++;
+							$LookupTemp = 'Video' . $j;
+							$i++;
+							$k++;
+							$VideoID++;
+							
 							while ($Value[$LookupTemp] != NULL) {
 								$VideoLocation = $Value[$LookupTemp]['VideoLocation'];
 								$NoFlashTest = $Value[$LookupTemp]['NoFlashText'];
+								$FlashVarsText = $Value[$LookupTemp]['FlashVarsText'];
 								
 								$Content[$i]['PageID'] = $NewPageID;
 								$Content[$i]['ObjectID'] = $i;
-								$Content[$i]['ContainerObjectType'] = 'XhtmlFlashJWPlayer';
-								$Content[$i]['ContainerObjectName'] = 'flashjwplayer';
+								$Content[$i]['ContainerObjectType'] = 'XhtmlFlash';
+								$Content[$i]['ContainerObjectName'] = 'flash';
 								$Content[$i]['ContainerObjectID'] = $VideoID;
 								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
@@ -444,7 +571,7 @@
 								$VideoContent[$VideoID]['Quality'] = NULL;
 								$VideoContent[$VideoID]['FlashVarsAuthor'] = NULL;
 								$VideoContent[$VideoID]['FlashVarsDate'] = NULL;
-								$VideoContent[$VideoID]['FlashVarsDescription'] = NULL;
+								$VideoContent[$VideoID]['FlashVarsDescription'] = $FlashVarsText;
 								$VideoContent[$VideoID]['FlashVarsDuration'] = NULL;
 								$VideoContent[$VideoID]['FlashVarsFile'] = NULL;
 								$VideoContent[$VideoID]['FlashVarsImage'] = NULL;
@@ -491,11 +618,11 @@
 								$VideoContent[$VideoID]['FlashID'] = NULL;
 								$VideoContent[$VideoID]['FlashStyle'] = NULL;
 								$VideoContent[$VideoID]['FlashClass'] = NULL;
-								$VideoContent[$VideoID]['StartTag'] = '<p>';
-								$VideoContent[$VideoID]['EndTag'] = '</p>';
+								$VideoContent[$VideoID]['StartTag'] = '<div>';
+								$VideoContent[$VideoID]['EndTag'] = '</div>';
 								$VideoContent[$VideoID]['StartTagId'] = NULL;
 								$VideoContent[$VideoID]['StartTagStyle'] = NULL;
-								$VideoContent[$VideoID]['StartTagClass'] = NULL;
+								$VideoContent[$VideoID]['StartTagClass'] = 'YouTube2';
 								$VideoContent[$VideoID]['Enable/Disable'] = 'Enable';
 								$VideoContent[$VideoID]['Status'] = 'Approved';
 								
@@ -677,7 +804,7 @@
 			$FormOption['Enable/Disable'] = 'Enable';
 			$FormOption['Status'] = 'Approved';
 			
-			$Tier6Databases->ModulePass('XhtmlFlashJWPlayer', 'flashjwplayer', 'createFlash', $VideoContent);
+			$Tier6Databases->ModulePass('XhtmlFlash', 'flash', 'createFlash', $VideoContent);
 			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);

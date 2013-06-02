@@ -9,11 +9,12 @@
     position: absolute;
     height: 25px;
 }
-a.link:hover, a.link:visited, a.link:link {color: #0033CC;}
+a.link:hover, a.link:visited, a.link:link, .dhxvlt_linkbtn {color: #0033CC;}
 
-.fileName, .text, a.link:hover, a.link:visited, a.link:link {font-size: 11px;font-family: Tahoma, Arial, Helvetica, sans-serif;}
-.fileName {overflow:hidden;height:14px;width:280px;}
-.btnAddDiv {left:9px;width:70px;overflow:hidden;height:32px;direction:rtl;position:absolute;top:212px;}
+.fileName, .text, a.link:hover, a.link:visited, a.link:link, .dhxvlt_linkbtn {font-size: 11px;font-family: Tahoma, Arial, Helvetica, sans-serif;}
+.fileName {overflow:hidden;height:14px;}
+.btnAddDiv, .btnAddDivLink {left:9px;width:70px;overflow:hidden;height:32px;direction:rtl;position:absolute;top:212px;}
+.btnAddFlash {left:9px;overflow:hidden;direction:rtl;position:absolute;top:212px;}
 .dhxvlt_panelbg {background-color:#eceef4;}
 .dhxvlt_panelborder {border: 1px solid #a4bed4;}
 .dhxvlt_panel2border {border:1px solid #a4bed4;}
@@ -22,7 +23,7 @@ a.link:hover, a.link:visited, a.link:link {color: #0033CC;}
 .dhxvlt_rowsel {background: url(imgs/rowsel.gif);}
 .dhxvlt_rowsel table {border-bottom:1px solid #ffffff !important;}
 .dhxvlt_txtremove {display:none;}
-#dhxvlt_icoremove {position:relative;top:7px;width:16px;height:16px;background:url(imgs/delete.gif) no-repeat;cursor:pointer;}
+.dhxvlt_icoremove {position:relative;top:7px;width:16px;height:16px;background:url(imgs/delete.gif) no-repeat;cursor:pointer;}
 
 .dhxvlt_rbtn {margin-right:7px;}
 .dhxvlt_rbtn3 {width:4px;height:21px;float:right;background:url(imgs/btn3.gif) no-repeat;}
@@ -43,3 +44,8 @@ a.link:hover, a.link:visited, a.link:link {color: #0033CC;}
 .btnAddBtn {left:10px;width:94px;overflow:hidden;height:32px;position:absolute;top:212px;}
 
 .dhxvlt_dis {color:#999}
+
+.dhxvlt_linkbtn {text-decoration:underline;cursor:pointer;}
+.btnAddBtnLink, .btnAddBtnLinkFF {left:12px;overflow:hidden;height:32px;position:absolute;top:217px;margin:0;padding:0;}
+.btnAddBtnLinkFF {top:215px;}
+.btnAddBtnLink, .btnAddBtnLinkFF, .btnAddDivLink {width:44px;}

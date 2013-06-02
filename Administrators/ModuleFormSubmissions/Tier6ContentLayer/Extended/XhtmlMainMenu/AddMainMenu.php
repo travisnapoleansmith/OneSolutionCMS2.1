@@ -14,6 +14,7 @@
 	
 	$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
 	$FormSelect['PageID'] = $MainMenuUpdatePage;
+	$FormSelect['FormSelectName'] = 'MenuItem1';
 	$FormOption['PageID'] = $MainMenuUpdatePage;
 	
 	$FormOptionArray[] = $FormOption;
@@ -35,5 +36,4 @@
 	
 	$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelectionArray);
 	$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOptionArray);
-				
 ?>

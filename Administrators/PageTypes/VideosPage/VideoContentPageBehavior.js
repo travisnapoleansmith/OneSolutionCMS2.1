@@ -299,6 +299,9 @@ function AddVideo(VideoNumber, ContentID) {
 	var VideoLocationContentID = ContentID + "Video" + VideoNumber + "VideoLocation";
 	var VideoLocationContentName = ContentID + "_Video" + VideoNumber + "_VideoLocation";
 	
+	var FlashVarsTextContentID = ContentID + "Video" + VideoNumber + "FlashVarsText";
+	var FlashVarsTextContentName = ContentID + "_Video" + VideoNumber + "_FlashVarsText";
+	
 	var NoFlashTextContentID = ContentID + "Video" + VideoNumber + "NoFlashText";
 	var NoFlashTextContentName = ContentID + "_Video" + VideoNumber + "_NoFlashText";
 	
@@ -349,10 +352,10 @@ function AddVideo(VideoNumber, ContentID) {
 		if (Data['VideoLocation'] != null) {
 			VideoLocationContent.setAttribute('value', stripSlashes(Data['VideoLocation']));
 		} else {
-			VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION?fs=1&amp;hl=en_US&amp;rel=0&amp;color1=0x234900;color2=0x4e9e00&amp;border=1');
+			VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION');
 		}
 	} else {
-		VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION?fs=1&amp;hl=en_US&amp;rel=0&amp;color1=0x234900;color2=0x4e9e00&amp;border=1');
+		VideoLocationContent.setAttribute('value', 'http://www.youtube.com/v/REPLACEWITHVIDEOIDINFORMATION');
 	}
 	
 	var VideoLocationLabelDiv = document.createElement('div');
@@ -362,6 +365,43 @@ function AddVideo(VideoNumber, ContentID) {
 	
 	FieldSet.appendChild(VideoLocationLabelDiv);
 	FieldSet.appendChild(VideoLocationContentDiv);
+	
+	// Flash Vars TEXT
+	var FlashVarsTextLabel = document.createElement('label');
+	var FlashVarsTextContent = document.createElement('textarea');
+	
+	FlashVarsTextLabel.setAttribute('class', 'BodyText ShortForm');
+	FlashVarsTextLabel.setAttribute('dir', "ltr");
+	FlashVarsTextLabel.setAttribute('lang', "en-us");
+	FlashVarsTextLabel.setAttribute('xml:lang', "en-us");
+	FlashVarsTextLabel.innerHTML = "Flash Vars Text";
+	
+	FlashVarsTextContent.setAttribute('class', "ShortFormTableBox");
+	FlashVarsTextContent.setAttribute('dir', "ltr");
+	FlashVarsTextContent.setAttribute('id', FlashVarsTextContentID);
+	FlashVarsTextContent.setAttribute('lang', "en-us");
+	FlashVarsTextContent.setAttribute('xml:lang', "en-us");
+	FlashVarsTextContent.setAttribute('rows', "2");
+	FlashVarsTextContent.setAttribute('cols', "3");
+	FlashVarsTextContent.setAttribute('name', FlashVarsTextContentName);
+	
+	if (Data != null) {
+		if (Data['FlashVarsText'] != null) {
+			FlashVarsTextContent.innerHTML = stripSlashes(Data['FlashVarsText']);
+		} else {
+			FlashVarsTextContent.innerHTML = "VIDEO NAME";
+		}
+	} else {
+		FlashVarsTextContent.innerHTML = "VIDEO NAME";
+	}
+	
+	var FlashVarsTextLabelDiv = document.createElement('div');
+	var FlashVarsTextContentDiv = document.createElement('div');
+	FlashVarsTextLabelDiv.appendChild(FlashVarsTextLabel);
+	FlashVarsTextContentDiv.appendChild(FlashVarsTextContent);
+	
+	FieldSet.appendChild(FlashVarsTextLabelDiv);
+	FieldSet.appendChild(FlashVarsTextContentDiv);
 	
 	// NO FLASH TEXT
 	var NoFlashTextLabel = document.createElement('label');
@@ -485,8 +525,11 @@ function LoadVideoContent(XML) {
 				var VideoNumber = i;
 				var ElementName = "Video" + i;
 				var VideoLocation = $(this).find("VideoLocation").text();
+				var FlashVarsText = $(this).find("FlashVarsText").text();
 				var NoFlashText = $(this).find("NoFlashText").text();
+				
 				VideoData['VideoLocation'] = VideoLocation;
+				VideoData['FlashVarsText'] = FlashVarsText;
 				VideoData['NoFlashText'] = NoFlashText;
 				AddVideo(VideoNumber, ContentID, VideoData);
 			});

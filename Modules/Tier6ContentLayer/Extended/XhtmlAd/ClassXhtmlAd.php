@@ -442,9 +442,9 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			if ($ShowNumber > $AdCount) {
 				$ShowNumber = $AdCount;
 			}
-
-			$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
-			
+			if ($this->AdSponsorsOutputAdLookup[$TableNamePageID] !== NULL) {
+				$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
+			}
 		}
 
 		$this->LayerModule->Connect($this->DatabaseTable);

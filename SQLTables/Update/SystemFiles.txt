@@ -247,7 +247,11 @@
 ../../Administrators/PageTypes/VideosPage/TEMPFILES/
 ../../Administrators/PageTypes/VideosPage/AddVideoPage.php
 ../../Administrators/PageTypes/VideosPage/AddVideoPage.txt
+../../Administrators/PageTypes/VideosPage/DeleteVideoPage.php
 ../../Administrators/PageTypes/VideosPage/EmptyTempFilesDirectory.php
+../../Administrators/PageTypes/VideosPage/EnableDisableStatusChangeVideoPage.php
+../../Administrators/PageTypes/VideosPage/SelectVideoPage.php
+../../Administrators/PageTypes/VideosPage/UpdateVideoPage.php
 ../../Administrators/PageTypes/VideosPage/VideoContentPageBehavior.js
 ../../Administrators/System/DatabaseBackup/
 ../../Administrators/System/EmptyCaptchaImageDirectory/
@@ -256,6 +260,7 @@
 ../../Administrators/System/Password/
 ../../Administrators/System/PHPInfo/
 ../../Administrators/System/Register/
+../../Administrators/System/SessionDataCleanupRemover/
 ../../Administrators/System/SystemFileIntegrityScanner/
 ../../Administrators/System/SystemUpdateFileRemover/
 ../../Administrators/System/SystemUpdateUpgradeFolderRemover/
@@ -265,6 +270,7 @@
 ../../Administrators/System/Menu/UpdateMenu.php
 ../../Administrators/System/PHPInfo/PHPInfo.php
 ../../Administrators/System/Register/Register.php
+../../Administrators/System/SessionDataCleanupRemover/SessionDataCleanupRemover.php
 ../../Administrators/System/SystemFileIntegrityScanner/SystemFileIntegrityScanner.php
 ../../Administrators/System/SystemFileIntegrityScanner/UpdateSystemFileIntegrityDatabaseTable.php
 ../../Administrators/System/SystemUpdateFileRemover/SystemUpdateFileRemover.php
@@ -2671,6 +2677,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.145.sql
 ../../SQLTables/Update/UpdateTables-2.1.146.sql
 ../../SQLTables/Update/UpdateTables-2.1.147.sql
+../../SQLTables/Update/UpdateTables-2.1.148.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -2692,7 +2699,6 @@
 ../../Testcases/SimpleTest/simpletest/encoding.php
 ../../Testcases/SimpleTest/simpletest/errors.php
 ../../Testcases/SimpleTest/simpletest/exceptions.php
-../../Testcases/SimpleTest/simpletest/expectation.php
 ../../Testcases/SimpleTest/simpletest/form.php
 ../../Testcases/SimpleTest/simpletest/frames.php
 ../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE

@@ -127,7 +127,10 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		$this->StartTagId = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagId'));
 		$this->StartTagStyle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagStyle'));
 		$this->StartTagClass = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StartTagClass'));
-
+		
+		$this->EnableDisable = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Enable/Disable'));
+		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
+		
 		$this->IsIE = $this->CheckUserString();
 
 		$this->LayerModule->Disconnect($this->DatabaseTable);
@@ -159,132 +162,182 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 
 	public function CreateOutput($space) {
 		$this->Space = $space;
-
-		if ($this->StartTag){
-			$this->StartTag = str_replace('<','', $this->StartTag);
-			$this->StartTag = str_replace('>','', $this->StartTag);
-			$this->Writer->startElement($this->StartTag);
-
-				if ($this->StartTagID) {
-					$this->Writer->writeAttribute('id', $this->StartTagID);
+		if ($this->EnableDisable == 'Enable' & $this->Status == 'Approved') {
+			if ($this->StartTag){
+				$this->StartTag = str_replace('<','', $this->StartTag);
+				$this->StartTag = str_replace('>','', $this->StartTag);
+				$this->Writer->startElement($this->StartTag);
+	
+					if ($this->StartTagID) {
+						$this->Writer->writeAttribute('id', $this->StartTagID);
+					}
+					if ($this->StartTagStyle) {
+						$this->Writer->writeAttribute('style', $this->StartTagStyle);
+					}
+					if ($this->StartTagClass) {
+						$this->Writer->writeAttribute('class', $this->StartTagClass);
+					}
+			}
+	
+			$this->Writer->startElement('object');
+	
+			if ($this->IsIE) {
+				$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
+			}
+	
+			if ($this->Width) {
+				$this->Writer->writeAttribute('width', $this->Width);
+			}
+	
+			if ($this->Height) {
+				$this->Writer->writeAttribute('height', $this->Height);
+			}
+	
+			if ($this->IsIE) {
+				$this->Writer->writeAttribute('id', 'player');
+				$this->Writer->writeAttribute('name', 'player');
+	
+				if ($this->FlashStyle) {
+					$this->Writer->writeAttribute('style', $this->FlashStyle);
 				}
-				if ($this->StartTagStyle) {
-					$this->Writer->writeAttribute('style', $this->StartTagStyle);
+				if ($this->FlashClass) {
+					$this->Writer->writeAttribute('class', $this->FlashClass);
 				}
-				if ($this->StartTagClass) {
-					$this->Writer->writeAttribute('class', $this->StartTagClass);
+			} else {
+				if ($this->FlashID) {
+					$this->Writer->writeAttribute('id', $this->FlashID);
 				}
-		}
-
-		$this->Writer->startElement('object');
-
-		if ($this->IsIE) {
-			$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
-		}
-
-		if ($this->Width) {
-			$this->Writer->writeAttribute('width', $this->Width);
-		}
-
-		if ($this->Height) {
-			$this->Writer->writeAttribute('height', $this->Height);
-		}
-
-		if ($this->IsIE) {
-			$this->Writer->writeAttribute('id', 'player');
-			$this->Writer->writeAttribute('name', 'player');
-
-			if ($this->FlashStyle) {
-				$this->Writer->writeAttribute('style', $this->FlashStyle);
+				if ($this->FlashStyle) {
+					$this->Writer->writeAttribute('style', $this->FlashStyle);
+				}
+				if ($this->FlashClass) {
+					$this->Writer->writeAttribute('class', $this->FlashClass);
+				}
+				$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
 			}
-			if ($this->FlashClass) {
-				$this->Writer->writeAttribute('class', $this->FlashClass);
+	
+			if (!$this->IsIE) {
+				if ($this->FlashPath) {
+					$this->Writer->writeAttribute('data', $this->FlashPath);
+				}
 			}
-		} else {
-			if ($this->FlashID) {
-				$this->Writer->writeAttribute('id', $this->FlashID);
-			}
-			if ($this->FlashStyle) {
-				$this->Writer->writeAttribute('style', $this->FlashStyle);
-			}
-			if ($this->FlashClass) {
-				$this->Writer->writeAttribute('class', $this->FlashClass);
-			}
-			$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
-		}
-
-		if (!$this->IsIE) {
+	
 			if ($this->FlashPath) {
-				$this->Writer->writeAttribute('data', $this->FlashPath);
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'movie');
+				$this->Writer->writeAttribute('value', $this->FlashPath);
+				$this->Writer->endElement();
+			}
+	
+			if ($this->Wmode) {
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'wmode');
+				$this->Writer->writeAttribute('value', $this->Wmode);
+				$this->Writer->endElement();
+			}
+	
+			if ($this->AllowFullScreen) {
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'allowfullscreen');
+				$this->Writer->writeAttribute('value', $this->AllowFullScreen);
+				$this->Writer->endElement();
+			}
+	
+			if ($this->AllowScriptAccess) {
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'allowscriptaccess');
+				$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
+				$this->Writer->endElement();
+			}
+	
+			if ($this->Quality) {
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'quality');
+				$this->Writer->writeAttribute('value', $this->Quality);
+				$this->Writer->endElement();
+			}
+	
+			if ($this->FlashVars) {
+				$this->BuildFlashVars();
+			}
+	
+			if ($this->FlashVarsText) {
+				$this->Writer->startElement('param');
+				$this->Writer->writeAttribute('name', 'flashvars');
+				$this->Writer->writeAttribute('value', $this->FlashVarsText);
+				$this->Writer->endElement();
+			}
+	
+	
+			if ($this->AltText) {
+				$this->Writer->writeRaw("\t");
+				$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
+				$this->Writer->writeRaw("\n");
+			}
+	
+			$this->Writer->writeRaw($this->Space);
+			$this->Writer->writeRaw('  ');
+			$this->Writer->endElement(); // END OBJECT TAG
+			if ($this->EndTag) {
+				$this->Writer->writeRaw($this->Space);
+				$this->Writer->fullEndElement(); // ENDS END TAG
+				$this->Writer->writeRaw("\n");
 			}
 		}
-
-		if ($this->FlashPath) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'movie');
-			$this->Writer->writeAttribute('value', $this->FlashPath);
-			$this->Writer->endElement();
-		}
-
-		if ($this->Wmode) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'wmode');
-			$this->Writer->writeAttribute('value', $this->Wmode);
-			$this->Writer->endElement();
-		}
-
-		if ($this->AllowFullScreen) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'allowfullscreen');
-			$this->Writer->writeAttribute('value', $this->AllowFullScreen);
-			$this->Writer->endElement();
-		}
-
-		if ($this->AllowScriptAccess) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'allowscriptaccess');
-			$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
-			$this->Writer->endElement();
-		}
-
-		if ($this->Quality) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'quality');
-			$this->Writer->writeAttribute('value', $this->Quality);
-			$this->Writer->endElement();
-		}
-
-		if ($this->FlashVars) {
-			$this->BuildFlashVars();
-		}
-
-		if ($this->FlashVarsText) {
-			$this->Writer->startElement('param');
-			$this->Writer->writeAttribute('name', 'flashvars');
-			$this->Writer->writeAttribute('value', $this->FlashVarsText);
-			$this->Writer->endElement();
-		}
-
-
-		if ($this->AltText) {
-			$this->Writer->writeRaw("\t");
-			$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
-			$this->Writer->writeRaw("\n");
-	  	}
-
-		$this->Writer->writeRaw($this->Space);
-		$this->Writer->writeRaw('  ');
-		$this->Writer->endElement(); // END OBJECT TAG
-		if ($this->EndTag) {
-			$this->Writer->writeRaw($this->Space);
-			$this->Writer->fullEndElement(); // ENDS END TAG
-			$this->Writer->writeRaw("\n");
-		}
-
 		if ($this->FileName) {
 			$this->Writer->flush();
 		}
 	}
+	
+	public function createFlash(array $Flash) {
+		if ($Flash != NULL) {
+			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
+			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $Flash, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
+		}
+	}
+	
+	public function updateFlash(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'updateFlash: PageID cannot be NULL!');
+		}
+	}
 
+	public function deleteFlash(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'deleteFlash: PageID cannot be NULL!');
+		}
+	}
+
+	public function updateFlashStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->DatabaseTable);
+			}
+
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->DatabaseTable);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->DatabaseTable);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateFlashStatus: PageID cannot be NULL!');
+		}
+	}
 }
 ?>

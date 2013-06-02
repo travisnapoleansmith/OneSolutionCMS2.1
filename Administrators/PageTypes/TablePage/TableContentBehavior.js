@@ -277,7 +277,6 @@ function ImportData() {
 	
 	Vault.onUploadComplete = function (Files) {
 			var File = Files[0];
-			
 			var Url = document.URL + "&File=" + File.name;
 			alert ("You are being redirect to a new Table Content form with your file");
 			window.location = Url;

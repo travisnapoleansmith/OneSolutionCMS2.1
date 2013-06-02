@@ -25,7 +25,9 @@
 
 class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3ProtectionLayerModules
 {
-
+	protected $BannedIPAddressTableName;
+	protected $UserBannedIPAddressTableName;
+	
 	public function __construct($tablenames, $databaseoptions, $layermodule) {
 		$this->LayerModule = &$layermodule;
 
@@ -33,27 +35,62 @@ class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3Pro
 		$GLOBALS['ErrorMessage']['SpamFilter'][$hold] = NULL;
 		$this->ErrorMessage = &$GLOBALS['ErrorMessage']['SpamFilter'][$hold];
 		$this->ErrorMessage = array();
-
+		
+		if (is_array($tablenames) === true) {
+			$this->BannedIPAddressTableName = $tablenames['DatabaseTable1'];
+			$this->UserBannedIPAddressTableName = $tablenames['DatabaseTable2'];
+		}
 	}
 
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
+		$this->Hostname = $hostname;
+		$this->User = $user;
+		$this->Password = $password;
+		$this->DatabaseName = $databasename;
+		$this->DatabaseTable = $databasetable;
 
+		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
+		$this->LayerModule->setDatabasetable ($databasetable);
 	}
 
 	public function FetchDatabase ($PageID) {
-
-	}
-
-	public function CreateOutput($space){
-
+		$this->PageID = $PageID;
+		
+		$passarray = array();
+		$passarray = $PageID;
+		
+		$this->LayerModule->createDatabaseTable($this->BannedIPAddressTableName);
+		$this->LayerModule->Connect($this->BannedIPAddressTableName);
+		
+		$this->LayerModule->pass ($this->BannedIPAddressTableName, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->BannedIPAddressTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		
+		$this->LayerModule->Disconnect($this->BannedIPAddressTableName);
+		
+		$this->LayerModule->createDatabaseTable($this->UserBannedIPAddressTableName);
+		$this->LayerModule->Connect($this->UserBannedIPAddressTableName);
+		
+		$this->LayerModule->pass ($this->UserBannedIPAddressTableName, 'setDatabaseField', array('idnumber' => $passarray));
+		$this->LayerModule->pass ($this->UserBannedIPAddressTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+		
+		$this->LayerModule->Disconnect($this->UserBannedIPAddressTableName);
 	}
 
 	public function Verify($function, $functionarguments){
 		return TRUE;
 	}
-
-	public function getOutput() {
-
+	
+	public function findBannedIPAddress ($IPAddress) {
+		$this->FetchDatabase($IPAddress);
+		
+		$BannedIPAddressRecord = $this->LayerModule->pass ($this->BannedIPAddressTableName, 'getMultiRowField', array());
+		$UserBannedIPAddressRecord = $this->LayerModule->pass ($this->UserBannedIPAddressTableName, 'getMultiRowField', array());
+		
+		if ($BannedIPAddressRecord[0] === FALSE & $UserBannedIPAddressRecord[0] === FALSE) {
+			return "TRUE";
+		} else {
+			return "FALSE";
+		}
 	}
 }
 

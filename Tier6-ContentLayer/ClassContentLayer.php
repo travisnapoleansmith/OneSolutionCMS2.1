@@ -497,7 +497,6 @@ class ContentLayer extends LayerModulesAbstract
 			} else {
 				$ContentLayer = &$this->ContentLayerThemeGlobalLayerContent;
 			}
-
 			foreach ($ContentLayer as $Key => $ContentLayerDatabase) {
 				$PrintPreviewFlag = $ContentLayerDatabase['PrintPreview'];
 				if ($this->PrintPreview == FALSE || $PrintPreviewFlag == 'true') {
@@ -1237,75 +1236,101 @@ class ContentLayer extends LayerModulesAbstract
 		$PassArray['ObjectType'] = 'LogonMonitor';
 		$PassArray['ObjectTypeName'] = 'logonmonitor';
 		
-		$loginidnumber = Array();
-		$loginidnumber['PageID'] = $_POST['Login'];
-		if ($_GET['PageID']){
-			$loginidnumber['PageID'] = $_GET['PageID'];
-		}
-
-		$DestinationPageID = NULL;
-		if ($_GET['DestinationPageID']) {
-			$DestinationPageID = $_GET['DestinationPageID'];
-		}
-
-		$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
-
-		$this->LayerModule->setPageID($loginidnumber['PageID']);
-		$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		if ($hold['Error']) {
-			$_SESSION['POST'] = $hold;
-			$EventData['UserName'] = $_POST['UserName'];
-			$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
-			$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
-			$EventData['LogonType'] = 'BadCaptcha';
-			$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
-			
-			header("Location: $AuthenticationPage&SessionID=$sessionname");
-			
-		} else {
-			$hold = NULL;
-			$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST);
+		$SpamData = array();
+		$SpamData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+		$SpamPassArray = array();
+		$SpamPassArray['Execute'] = TRUE;
+		$SpamPassArray['Method'] = 'findBannedIPAddress';
+		$SpamPassArray['ObjectType'] = 'SpamFilter';
+		$SpamPassArray['ObjectTypeName'] = 'spamfilter';
+		
+		$Return = $this->LayerModule->pass('BannedIPAddress', 'PROTECT', $SpamData, $SpamPassArray);
+		
+		if ($Return === 'TRUE') {
+			$loginidnumber = Array();
+			$loginidnumber['PageID'] = $_POST['Login'];
+			if ($_GET['PageID']){
+				$loginidnumber['PageID'] = $_GET['PageID'];
+			}
+	
+			$DestinationPageID = NULL;
+			if ($_GET['DestinationPageID']) {
+				$DestinationPageID = $_GET['DestinationPageID'];
+			}
+	
+			$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+	
+			$this->LayerModule->setPageID($loginidnumber['PageID']);
+			$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
 			if ($hold['Error']) {
+				$_SESSION['POST'] = $hold;
 				$EventData['UserName'] = $_POST['UserName'];
 				$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
 				$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
-				$EventData['LogonType'] = 'BadLogonAttempt';
+				$EventData['LogonType'] = 'BadCaptcha';
 				$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
 				
-				$_SESSION['POST'] = $hold;
 				header("Location: $AuthenticationPage&SessionID=$sessionname");
+				
 			} else {
-				$passarray = array();
-				$passarray['getUserInfo'] = array(array());
-				$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
-				$UserInfo = $hold['getUserInfo']['UserAccounts'][0];
-				unset($UserInfo['Password']);
-				unset($UserInfo['Salt']);
-
-				$username = $_POST['UserName'];
-				setcookie("UserName", $username, NULL, '/');
-				setcookie("LoggedIn", TRUE, time()+3600, '/');
-				setcookie('Administrator', $UserInfo['Administrator'], time()+3600, '/');
-				setcookie('ContentCreator', $UserInfo['ContentCreator'], time()+3600, '/');
-				setcookie('Editor', $UserInfo['Editor'], time()+3600, '/');
-				setcookie('User', $UserInfo['User'], time()+3600, '/');
-				setcookie('Guest', $UserInfo['Guest'], time()+3600, '/');
-				
-				$EventData['UserName'] = $username;
-				$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
-				$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
-				$EventData['LogonType'] = 'GoodLogonAttempt';
-				
-				if ($DestinationPageID) {
+				$hold = NULL;
+				$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST);
+				if ($hold['Error']) {
+					$EventData['UserName'] = $_POST['UserName'];
+					$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+					$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+					$EventData['LogonType'] = 'BadLogonAttempt';
 					$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
-					header("Location: index.php?PageID=$DestinationPageID");
-					exit;
+					
+					$_SESSION['POST'] = $hold;
+					header("Location: $AuthenticationPage&SessionID=$sessionname");
 				} else {
-					$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
-					header("Location: index.php");
-					exit;
+					$passarray = array();
+					$passarray['getUserInfo'] = array(array());
+					$hold = $this->LayerModule->pass('UserAccounts', 'AUTHENTICATE', $_POST, $passarray);
+					$UserInfo = $hold['getUserInfo']['UserAccounts'][0];
+					unset($UserInfo['Password']);
+					unset($UserInfo['Salt']);
+	
+					$username = $_POST['UserName'];
+					setcookie("UserName", $username, NULL, '/');
+					setcookie("LoggedIn", TRUE, time()+3600, '/');
+					setcookie('Administrator', $UserInfo['Administrator'], time()+3600, '/');
+					setcookie('ContentCreator', $UserInfo['ContentCreator'], time()+3600, '/');
+					setcookie('Editor', $UserInfo['Editor'], time()+3600, '/');
+					setcookie('User', $UserInfo['User'], time()+3600, '/');
+					setcookie('Guest', $UserInfo['Guest'], time()+3600, '/');
+					
+					$EventData['UserName'] = $username;
+					$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+					$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+					$EventData['LogonType'] = 'GoodLogonAttempt';
+					
+					if ($DestinationPageID) {
+						$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
+						header("Location: index.php?PageID=$DestinationPageID");
+						exit;
+					} else {
+						$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
+						header("Location: index.php");
+						exit;
+					}
 				}
 			}
+		
+		} else {
+			$EventData['UserName'] = $_POST['UserName'];
+			$EventData['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$EventData['Timestamp'] = $_SERVER['REQUEST_TIME'];
+			$EventData['LogonType'] = 'Spam';
+			$this->LayerModule->pass('UserAccountsLogonHistory', 'PROTECT', $EventData, $PassArray);
+			
+			$_SESSION['POST']['Error']['SPAM'] = 'Your IP Address Has Been Banned From The Accessing Site.';
+			$_SESSION['POST']['Error']['SPAM'] .= "<br />";
+			$_SESSION['POST']['Error']['SPAM'] .= 'If This Is In Error Contact Site Adminstrator!';
+			
+			$AuthenticationPage = $this->LayerModuleSetting['ContentLayer']['ContentLayer']['Authentication']['SettingAttribute'];
+			header("Location: $AuthenticationPage&SessionID=$sessionname");
 		}
 	}
 

@@ -32,6 +32,9 @@ while (iter.hasNext()) {
 
     if (item.isFormField()) {
         //processFormField
+        String fieldName = item.getFieldName();
+        String value = item.getString();
+        //do your work here
     } else {
         //processUploadedFile
 		String fieldName = item.getFieldName();
