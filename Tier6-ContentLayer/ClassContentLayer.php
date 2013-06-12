@@ -1592,6 +1592,7 @@ class ContentLayer extends LayerModulesAbstract
 		$FileDataForm = NULL;
 		$ElementName = NULL;
 		$AddLookupData = NULL;
+		$XMLOptions = NULL;
 		$arguments = func_get_args();
 		
 		if ($arguments[2] != NULL) {
@@ -1608,6 +1609,10 @@ class ContentLayer extends LayerModulesAbstract
 
 		if ($arguments[5] != NULL) {
 			$AddLookupData = $arguments[5];
+		}
+		
+		if ($arguments[6] != NULL) {
+			$XMLOptions = $arguments[6];
 		}
 
 		$sessionname = $this->SessionStart($SessionName);
@@ -1643,7 +1648,11 @@ class ContentLayer extends LayerModulesAbstract
 
 		if ($hold['Error']) {
 			if ($FileName != NULL & $FileDataForm != NULL) {
-				$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
+				if ($XMLOptions != NULL) {
+					$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName, $XMLOptions);
+				} else {
+					$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
+				}
 			}
 			$_SESSION['POST'] = $hold;
 			header("Location: $PageName&SessionID=$sessionname");
@@ -1658,26 +1667,110 @@ class ContentLayer extends LayerModulesAbstract
 	}
 
 	public function ProcessFormXMLFile($FileName, $FileDataForm, $ElementName) {
+		$RootElementName = NULL;
+		$Attribute = NULL;
+		$Raw = NULL;
+		$Skip = NULL;
+		$Repeat = NULL;
+		$arguments = func_get_args();
+		if ($arguments[3] != NULL) {
+			$RootElementName = $arguments[3]['RootElementName'];
+			$Attribute = $arguments[3]['Attribute'];
+			$Raw = $arguments[3]['Raw'];
+			$Skip = $arguments[3]['Skip'];
+			$Repeat = $arguments[3]['Repeat'];
+		}
 		$XMLFile = new XmlWriter();
 		$XMLFile->openURI($FileName);
 		$XMLFile->setIndent(4);
 		$XMLFile->startDocument('1.0', 'utf-8');
-		$XMLFile->startElement('Content');
+		if ($RootElementName != NULL) {
+			$XMLFile->startElement($RootElementName);
+		} else {
+			$XMLFile->startElement('Content');
+		}
 		foreach ($FileDataForm as $Key => $Value) {
+			if ($Skip != NULL) {
+				if ($Key == $Skip) {
+					if (is_array($Value)) {
+						foreach ($Value as $SubKey => $SubValue) {
+							if (!is_array($SubValue)) {
+								$XMLFile->startElement($SubKey);
+								$XMLFile->text($SubValue);
+								$XMLFile->endElement(); // ENDS KEY
+							} else {
+								if ($Repeat != NULL & array_key_exists($SubKey, $Repeat)) {
+									$RepeatAttribute = $Repeat[$SubKey]['name'];
+									$RepeatOptions = $Repeat[$SubKey]['options'];
+									if (is_array($SubValue[$RepeatAttribute])) {
+										$XMLFile->startElement($SubKey);
+										foreach ($SubValue[$RepeatAttribute] as $FinalKey => $FinalValue) {
+											$XMLFile->startElement($RepeatAttribute);
+											if (is_array($RepeatOptions)) {
+												foreach ($RepeatOptions as $OptionsKey => $OptionsValue) {
+													$XMLFile->writeAttribute($OptionsKey, $OptionsValue);
+												}
+											}
+											$XMLFile->text($FinalValue);
+											$XMLFile->endElement(); // ENDS REPEATATTRIBUTE
+										}
+										
+										$XMLFile->endElement(); // ENDS KEY
+									}
+								} else {
+									$XMLFile->startElement($SubKey);
+									$this->RecursiveProcessFormXMLFileElement($SubValue, $XMLFile);
+									$XMLFile->endElement(); // ENDS KEY
+								}
+							} 
+						}
+					}
+					continue; 
+				}
+			}
+			
 			if ($ElementName != NULL) {
 				$XMLFile->startElement($ElementName);
 			} else {
 				$XMLFile->startElement($Key);
 			}
-			$XMLFile->writeAttribute('name', $Key);
-			if (is_array($Value)) {
-				$this->RecursiveProcessFormXMLFileElement($Value, $XMLFile);
+			if ($Attribute != NULL) {
+				$XMLFile->writeAttribute($Attribute, $Key);
 			} else {
-				$XMLFile->text($Value);
+				$XMLFile->writeAttribute('name', $Key);
+			}
+
+			if ($Raw === 'true') {
+				if (is_array($Value)) {
+					foreach ($Value as $SubKey => $SubValue) {
+						if (is_array($SubValue)) {
+							foreach ($SubValue as $FinalSubKey => $FinalSubValue) {
+								$XMLFile->startElement($SubKey);
+								if (is_array($FinalSubValue)) {
+									$this->RecursiveProcessFormXMLFileElement($FinalSubValue, $XMLFile);
+								} else {
+									$XMLFile->text($FinalSubValue);
+								}
+								
+								$XMLFile->endElement(); // ENDS SUBKEY
+							}
+						} else {
+						
+						}
+					}
+				} else {
+					$XMLFile->text($Value);
+				}
+			} else {
+				if (is_array($Value)) {
+					$this->RecursiveProcessFormXMLFileElement($Value, $XMLFile);
+				} else {
+					$XMLFile->text($Value);
+				}
 			}
 			$XMLFile->endElement(); // ENDS KEY OR ELEMENTNAME
 		}
-		$XMLFile->endElement(); // ENDS Content;
+		$XMLFile->endElement(); // ENDS Content OR ROOTELEMENTNAME;
 		$XMLFile->endDocument();
 	}
 	
@@ -1701,8 +1794,12 @@ class ContentLayer extends LayerModulesAbstract
 
 	public function ModulePass($ModuleType, $ModuleName, $Function, array $Arguments) {
 		if ($ModuleType != NULL && $ModuleName != NULL && $Function != NULL) {
+			$Args = func_get_args();
 			$PassArguments = array();
 			$PassArguments[0] = $Arguments;
+			if ($Args[4] != NULL) {
+				$PassArguments[1] = $Args[4];
+			}
 			
 			$hold = call_user_func_array(array($this->Modules[$ModuleType][$ModuleName], $Function), $PassArguments);
 			if ($hold) {

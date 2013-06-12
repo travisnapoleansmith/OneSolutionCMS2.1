@@ -1,4 +1,22 @@
-Changes For One Solution CMS 2.1.149 - Sunday, June 2, 2013
+Changes For One Solution CMS 2.1.150 - Wednesday, June 12, 2013 
+Added:
+	1). Added Administrators Panel - Site Stats - Added IP Address Site Stats as XML and CSV format.
+	2). Added Administrators Panel - Site Stats - Added Daily IP Address Site Stats as XML and CSV format.
+	3). Added Administrators Panel - Site Stats - Added Timestamp Site Stats as XML and CSV format.
+	4). Added XhtmlSiteStats - Added IP Address stats, Daily IP Address stats and Timestamp Site Stats to the module. Updated the Administrators Panel to show the new reports as well.
+	
+Updated (Fixed):
+	1). Updated Administrators Panel - Videos Pages - Corrected Bug ID #0000035 - When NULL is used for any form field created by AJAX, NULL gets put into the database. This bug has been corrected.
+	2). Updated Administrators Panel - Videos Pages - Corrected Bug ID #0000036 - An extra empty content shows up at the bottom of Videos form. If 5 Video Contants are suppose to be there 6 shows up. This has been corrected.
+	3). Updated Administrators Panel - Videos Pages - Corrected Bug ID #0000037 - Quote and single quote gets escaped when a user uses them in the Videos Pages form fields. This has been corrected.
+	4). Updated Administrators Panel - Tables Content - Corrected Bug ID #0000018 - When Captcha is entered in incorrectly the table content is set back to default. This has finally been corrected. Only limitation is footers. You will loose the footer information. Submitted another bug report for that.
+	
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.149 - Sunday, June 2, 2013 6:03:54 PM
 Added:
 	1). Added Administrators Panel - Session Data Cleanup Remover Tool.
 	2). Added Spam Filter - Tier 3 Protection Tier - This checks a user's IP address to see if it is listed in the BannedIPAddress database table or UserBannedIPAddress table. If it is it will be banned from logging into the system.

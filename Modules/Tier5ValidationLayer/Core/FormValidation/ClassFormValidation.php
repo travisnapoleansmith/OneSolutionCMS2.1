@@ -81,7 +81,6 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 		if ($function == 'FORM') {
 			$hold = array();
 			reset ($this->LookupTable['FormValidation']);
-
 			while (current($this->LookupTable['FormValidation'])) {
 				if ($this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldAttribute']) {
 					$attrib = $this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldAttribute'];
@@ -90,8 +89,8 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 					$maxlength = $this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldMaxLength'];
 					$minvalue = $this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldMinValue'];
 					$maxvalue = $this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldMaxValue'];
-
-					if (isset($functionarguments[$key])) {
+					
+					//if (isset($functionarguments[$key])) {
 						$functionname = 'Process';
 						$functionname .= $attrib;
 						$functionarguments[$key] = stripslashes($functionarguments[$key]);
@@ -101,12 +100,11 @@ class FormValidation extends Tier5ValidationLayerModulesAbstract implements Tier
 						}
 
 						$hold['FilteredInput'][$key] = $functionarguments[$key];
-					}
+					//}
 				} else {
 					$key = $this->LookupTable['FormValidation'][key($this->LookupTable['FormValidation'])]['FormFieldName'];
 					$hold['FilteredInput'][$key] = $functionarguments[$key];
 				}
-
 				next ($this->LookupTable['FormValidation']);
 			}
 

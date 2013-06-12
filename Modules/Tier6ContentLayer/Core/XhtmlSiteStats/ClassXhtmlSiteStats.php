@@ -53,6 +53,22 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var string
 	 */
 	protected $DayCount;
+	
+	/**
+	 * Current IP Address Page Count - retrieved from the database table. The name of the database table is set
+	 * in ContentLayerModule Table under XhtmlSiteStats - DatabaseTable3.
+	 *
+	 * @var string
+	 */
+	protected $IPAddressCount;
+	
+	/**
+	 * Current Day IP Address Page Count - retrieved from the database table. The name of the database table is set
+	 * in ContentLayerModule Table under XhtmlSiteStats - DatabaseTable4.
+	 *
+	 * @var string
+	 */
+	protected $IPAddressDayCount;
 
 	/**
 	 * Class Name - retrieved from the ContentLayerModulesSettings table. The setting is from XhtmlSiteStats
@@ -117,6 +133,27 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var string
 	 */
 	protected $DailySiteStatsTableName;
+	
+	/**
+	 * Database Table Name for IP Address Site Stats.
+	 *
+	 * @var string
+	 */
+	protected $IPAddressSiteStatsTableName;
+	
+	/**
+	 * Database Table Name for Daily IP Address Site Stats.
+	 *
+	 * @var string
+	 */
+	protected $DailyIPAddressSiteStatsTableName;
+	
+	/**
+	 * Database Table Name for Timestamp Log Site Stats.
+	 *
+	 * @var string
+	 */
+	protected $TimestampLogSiteStatsTableName;
 
 	/**
 	 * Create an instance of XtmlSiteStats
@@ -136,6 +173,18 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		
 		if ($TableNames['DatabaseTable2']) {
 			$this->DailySiteStatsTableName = $TableNames['DatabaseTable2'];
+		}
+		
+		if ($TableNames['DatabaseTable3']) {
+			$this->IPAddressSiteStatsTableName = $TableNames['DatabaseTable3'];
+		}
+		
+		if ($TableNames['DatabaseTable4']) {
+			$this->DailyIPAddressSiteStatsTableName = $TableNames['DatabaseTable4'];
+		}
+		
+		if ($TableNames['DatabaseTable5']) {
+			$this->TimestampLogSiteStatsTableName = $TableNames['DatabaseTable5'];
 		}
 		
 		if ($DatabaseOptions['FileName']) {
@@ -212,26 +261,55 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 *
 	 */
 	public function FetchDatabase ($PageID) {
-		$this->PageID = $PageID['PageID'];
-		unset ($PageID['PrintPreview']);
-
-		$this->LayerModule->Connect($this->DatabaseTable);
-		$passarray = array();
-		$passarray = $PageID;
-
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-
-		$this->Count = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Count'));
-
-		$this->LayerModule->Disconnect($this->DatabaseTable);
+		if ($PageID != NULL) {
+			$this->PageID = $PageID['PageID'];
+			unset ($PageID['PrintPreview']);
+			
+			$Args = func_get_args();
+			$IPAddressPageID = $Args[1];
+			
+			$this->LayerModule->Connect($this->DatabaseTable);
+			$passarray = array();
+			$passarray = $PageID;
+	
+			$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+	
+			$this->Count = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Count'));
+	
+			$this->LayerModule->Disconnect($this->DatabaseTable);
+			
+			if ($this->DailySiteStatsTableName != NULL) {
+				$this->LayerModule->Connect($this->DailySiteStatsTableName);
+				
+				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setDatabaseRow', array('idnumber' => $passarray));
 		
-		$this->LayerModule->Connect($this->DailySiteStatsTableName);
+				$this->DayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
 		
-		$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+				$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+			}
+			
+			if ($IPAddressPageID != NULL) {
+				if ($this->IPAddressSiteStatsTableName != NULL) {
+					$this->LayerModule->Connect($this->IPAddressSiteStatsTableName);
 
-		$this->DayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
-
-		$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+					$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
+			
+					$this->IPAddressCount = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+					
+					$this->LayerModule->Disconnect($this->IPAddressSiteStatsTableName);
+				}
+				
+				if ($this->DailyIPAddressSiteStatsTableName != NULL) {
+					$this->LayerModule->Connect($this->DailyIPAddressSiteStatsTableName);
+					
+					$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
+			
+					$this->IPAddressDayCount = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+					
+					$this->LayerModule->Disconnect($this->DailyIPAddressSiteStatsTableName);
+				}
+			}
+		}
 	}
 
 	/**
@@ -335,11 +413,102 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * checkDailyIPAddressSiteStatsPage
+	 *
+	 * Checks to see if the page exists in the Daily IP Address Site Stat database table.
+	 *
+	 * @return bool TRUE if page exists
+	 * @return bool FALSE if page doesn't exists
+	 *
+	 */
+	public function checkDailyIPAddressSiteStatPage () {
+		if ($this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'PageID'))) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * checkIPAddressSiteStatPage
+	 *
+	 * Checks to see if the page exists in the IP Address Site Stat database table.
+	 *
+	 * @return bool TRUE if page exists
+	 * @return bool FALSE if page doesn't exists
+	 *
+	 */
+	public function checkIPAddressSiteStatPage () {
+		if ($this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'PageID'))) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 
+	/**
+	 * createTimestampLog
+	 *
+	 * Creates a timestamp log in the database.
+	 *
+	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createTimestampLog(array $SiteStatPage) {
+		if ($SiteStatPage != NULL) {
+			if ($this->TimestampLogSiteStatsTableName != NULL ) {
+				$this->LayerModule->pass ($this->TimestampLogSiteStatsTableName, 'BuildFieldNames', array('TableName' => $this->TimestampLogSiteStatsTableName));
+				$Keys = $this->LayerModule->pass ($this->TimestampLogSiteStatsTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $SiteStatPage, $this->TimestampLogSiteStatsTableName);
+			} else {
+				array_push($this->ErrorMessage,'createTimestampLog: TimestampLogSiteStatsTableName cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createTimestampLog: SiteStatPage cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createTimestampLogEntry
+	 *
+	 * Creates a timestamp log in the database.
+	 *
+	 * @return array $SiteStatPage = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createTimestampLogEntry() {
+		if ($this->TimestampLogSiteStatsTableName != NULL ) {
+			$SiteStatPage = array();
+			$passarray = array('TableName' => $this->TimestampLogSiteStatsTableName);
+			
+			$this->LayerModule->Connect($this->TimestampLogSiteStatsTableName);
+			$this->LayerModule->pass ($this->TimestampLogSiteStatsTableName, 'BuildFieldNames', $passarray);
+			$RowFieldName = $this->LayerModule->pass ($this->TimestampLogSiteStatsTableName, 'getRowFieldNames', array());
+			$this->LayerModule->Disconnect($this->TimestampLogSiteStatsTableName);
+			
+			foreach ($RowFieldName as $Value) {
+				$SiteStatPage[$Value] = NULL;
+			}
+			$Timestamp = $_SERVER['REQUEST_TIME'];
+			$Timestamp = date('Y-m-d H:i:s', $Timestamp);
+			$SiteStatPage['Timestamp'] = $Timestamp;
+			
+			$SiteStatPage['PageID'] = $_SERVER['REQUEST_URI'];
+			
+			$SiteStatPage['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$SiteStatPage['ReferPageID'] = $_SERVER['HTTP_REFERER'];
+			$SiteStatPage['UserAgentString'] = $_SERVER['HTTP_USER_AGENT'];
+			return $SiteStatPage;
+			
+		}
+	}
+	
 	/**
 	 * createSiteStatPage
 	 *
-	 * Creates a daily site stat page in the database.
+	 * Creates a site stat page in the database.
 	 *
 	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
 	 *
@@ -357,7 +526,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	/**
 	 * createDailySiteStatPage
 	 *
-	 * Creates a site stat page in the database.
+	 * Creates a daily site stat page in the database.
 	 *
 	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
 	 *
@@ -369,6 +538,42 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			$this->addModuleContent($Keys, $SiteStatPage, $this->DailySiteStatsTableName);
 		} else {
 			array_push($this->ErrorMessage,'createSiteStatPage: SiteStatPage cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createIPAddressSiteStatPage
+	 *
+	 * Creates a ip address site stat page in the database.
+	 *
+	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createIPAddressSiteStatPage(array $SiteStatPage) {
+		if ($SiteStatPage != NULL) {
+			$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'BuildFieldNames', array('TableName' => $this->IPAddressSiteStatsTableName));
+			$Keys = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $SiteStatPage, $this->IPAddressSiteStatsTableName);
+		} else {
+			array_push($this->ErrorMessage,'createIPAddressSiteStatPage: SiteStatPage cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createDailyIPAddressSiteStatPage
+	 *
+	 * Creates a daily ip address site stat page in the database.
+	 *
+	 * @param array $SiteStatPage = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createDailyIPAddressSiteStatPage(array $SiteStatPage) {
+		if ($SiteStatPage != NULL) {
+			$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'BuildFieldNames', array('TableName' => $this->DailyIPAddressSiteStatsTableName));
+			$Keys = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowFieldNames', array());
+			$this->addModuleContent($Keys, $SiteStatPage, $this->DailyIPAddressSiteStatsTableName);
+		} else {
+			array_push($this->ErrorMessage,'createDailyIPAddressSiteStatPage: SiteStatPage cannot be NULL!');
 		}
 	}
 
@@ -405,28 +610,95 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 
 			$this->updateModuleContent($PageID, $this->DatabaseTable, $Content);
 			
-			$NewCount = $this->DayCount;
-			$NewCount++;
-			$Content = array('Count' => $NewCount);
-			$CurrentDayMonthYear = date('F-d-Y');
-			$passarray = array('TableName' => $this->DailySiteStatsTableName);
-			
-			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'BuildFieldNames', $passarray);
-			$RowFieldName = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowFieldNames', array());
-			$Key = array_search($CurrentDayMonthYear, $RowFieldName);
-			if ($Key) {
-				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
-				$CurrentDayCount++;
-				$Content[$CurrentDayMonthYear] = $CurrentDayCount;
-			} else {
-				$passarray = array('fieldstring' => "`$CurrentDayMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
-				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'createField', $passarray);
-				$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
-				$CurrentDayCount++;
-				$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+			if ($this->DailySiteStatsTableName != NULL) {
+				$NewCount = $this->DayCount;
+				$NewCount++;
+				$Content = array('Count' => $NewCount);
+				$CurrentDayMonthYear = date('F-d-Y');
+				$passarray = array('TableName' => $this->DailySiteStatsTableName);
+				
+				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'BuildFieldNames', $passarray);
+				$RowFieldName = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowFieldNames', array());
+				$Key = array_search($CurrentDayMonthYear, $RowFieldName);
+				if ($Key) {
+					$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
+					$CurrentDayCount++;
+					$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+				} else {
+					$passarray = array('fieldstring' => "`$CurrentDayMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
+					$this->LayerModule->pass ($this->DailySiteStatsTableName, 'createField', $passarray);
+					$CurrentDayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
+					$CurrentDayCount++;
+					$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+				}
+				
+				$this->updateModuleContent($PageID, $this->DailySiteStatsTableName, $Content);
 			}
-			
-			$this->updateModuleContent($PageID, $this->DailySiteStatsTableName, $Content);
+		} else {
+			array_push($this->ErrorMessage,'updateSiteStatPage: PageID cannot be NULL!');
+		}
+	}
+	
+	/*
+	 * updateIPAddressSiteStatPage
+	 *
+	 * Updates a ip address site stat page counter and month counter.
+	 *
+	 * @param array $PageID = An array with the lookup page id of the site stat page to be updated.
+	 *
+	 */
+	public function updateIPAddressSiteStatPage(array $PageID) {
+		if ($PageID != NULL) {
+			if ($this->IPAddressSiteStatsTableName != NULL) {
+				$NewCount = $this->IPAddressCount;
+				$NewCount++;
+				$Content = array('Count' => $NewCount);
+				$CurrentMonthYear = date('FY');
+				if ($this->IPAddressSiteStatsTableName != NULL) {
+					$passarray = array('TableName' => $this->IPAddressSiteStatsTableName);
+					
+					$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'BuildFieldNames', $passarray);
+					$RowFieldName = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowFieldNames', array());
+					$Key = array_search($CurrentMonthYear, $RowFieldName);
+					if ($Key) {
+						$CurrentMonthYearCount = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => $CurrentMonthYear));
+						$CurrentMonthYearCount++;
+						$Content[$CurrentMonthYear] = $CurrentMonthYearCount;
+					} else {
+						$passarray = array('fieldstring' => "`$CurrentMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
+						$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'createField', $passarray);
+						$CurrentMonthYearCount = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => $CurrentMonthYear));
+						$CurrentMonthYearCount++;
+						$Content[$CurrentMonthYear] = $CurrentMonthYearCount;
+					}
+		
+					$this->updateModuleContent($PageID, $this->IPAddressSiteStatsTableName, $Content);
+				}
+			}
+			if ($this->DailyIPAddressSiteStatsTableName != NULL) {
+				$NewCount = $this->IPAddressDayCount;
+				$NewCount++;
+				$Content = array('Count' => $NewCount);
+				$CurrentDayMonthYear = date('F-d-Y');
+				$passarray = array('TableName' => $this->DailyIPAddressSiteStatsTableName);
+				
+				$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'BuildFieldNames', $passarray);
+				$RowFieldName = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowFieldNames', array());
+				$Key = array_search($CurrentDayMonthYear, $RowFieldName);
+				if ($Key) {
+					$CurrentDayCount = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
+					$CurrentDayCount++;
+					$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+				} else {
+					$passarray = array('fieldstring' => "`$CurrentDayMonthYear` INT NOT NULL DEFAULT '0'", 'fieldflag' => '', 'fieldflagcolumn' => '');
+					$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'createField', $passarray);
+					$CurrentDayCount = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => $CurrentDayMonthYear));
+					$CurrentDayCount++;
+					$Content[$CurrentDayMonthYear] = $CurrentDayCount;
+				}
+				
+				$this->updateModuleContent($PageID, $this->DailyIPAddressSiteStatsTableName, $Content);
+			}
 		} else {
 			array_push($this->ErrorMessage,'updateSiteStatPage: PageID cannot be NULL!');
 		}

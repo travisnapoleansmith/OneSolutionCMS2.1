@@ -61,8 +61,9 @@
 		$TempTable = array();
 		$Header = array();
 		$Footer = array();
-	
-		foreach ($_COOKIE as $Key => $Value) {
+		$Table = array();
+		$Table['SKIP']['caption'] = $TableHeading;
+		/*foreach ($_COOKIE as $Key => $Value) {
 			if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 				setcookie($Key, '', time()-4800, '/');
 			}
@@ -79,7 +80,7 @@
 					}
 				}
 			}
-		}
+		}*/
 	
 		foreach ($_POST as $Key => $Value) {
 			if (strstr($Key, 'Grid_')) {
@@ -87,6 +88,7 @@
 	
 				} else {
 					$TempTable[$Key] = $Value;
+					//$Table[$Key] = $Value;
 				}
 			}
 	
@@ -95,6 +97,7 @@
 					$Header[$Key] = NULL;
 				} else {
 					$Header[$Key] = $Value;
+					$Table['SKIP']['head']['column'][] = $Value;
 				}
 			}
 	
@@ -115,6 +118,7 @@
 			$NewKey = str_replace('Grid_', '', $Key);
 			$NewKey = explode('_', $NewKey);
 			$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
+			$Table[$NewKey[0]]['cell'][] = $Value;
 			$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
 			if ($Value != NULL) {
 				setcookie($CookieKey, $Value, time()+4800, '/');
@@ -127,7 +131,7 @@
 		foreach ($TableContent as $Key => $Value) {
 			$EMPTY = FALSE;
 			if ($Value != NULL) {
-	
+				
 			}
 	
 			foreach ($Value as $IDKey => $IDValue) {
@@ -147,8 +151,18 @@
 		if ($_POST['File']) {
 			$PageName .= '&File=' . $_POST['File'];
 		}
-	
-		$hold = $Tier6Databases->FormSubmitValidate('AddTableContent', $PageName);
+		
+		$FileLocation = 'TEMPFILES/';
+		$XMLOptions = array();
+		$XMLOptions['RootElementName'] = 'rows';
+		$XMLOptions['Attribute'] = 'id';
+		$XMLOptions['Raw'] = 'true';
+		$XMLOptions['Skip'] = 'SKIP';
+		$XMLOptions['Repeat']['head']['name'] = 'column';
+		$XMLOptions['Repeat']['head']['options']['type'] = 'ed';
+		$XMLOptions['Repeat']['head']['options']['sort'] = 'str';
+		$XMLOptions['Repeat']['head']['options']['width'] = '110';
+		$hold = $Tier6Databases->FormSubmitValidate('AddTableContent', $PageName, $FileLocation, $Table, 'row', NULL, $XMLOptions);
 	
 		if ($hold) {
 			foreach ($_POST as $Key => $Value) {

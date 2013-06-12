@@ -266,6 +266,7 @@
 ../../Administrators/System/SystemUpdateUpgradeFolderRemover/
 ../../Administrators/System/DatabaseBackup/DatabaseBackup.php
 ../../Administrators/System/EmptyCaptchaImageDirectory/EmptyCaptchaImageDirectory.php
+../../Administrators/System/Menu/AddMenuItem.php
 ../../Administrators/System/Menu/SelectMenu.php
 ../../Administrators/System/Menu/UpdateMenu.php
 ../../Administrators/System/PHPInfo/PHPInfo.php
@@ -2521,8 +2522,11 @@
 ../../Modules/Tier6ContentLayer/Core/XhtmlOrderedList/ClassXhtmlOrderedList.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlPicture/ClassXhtmlPicture.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/ClassXhtmlSiteStats.php
+../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLDailyIPAddressSiteStatsListing.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLDailySiteStatsListing.php
+../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLIPAddressSiteStatsListing.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLSiteStatsListing.php
+../../Modules/Tier6ContentLayer/Core/XhtmlSiteStats/XMLTimestampLogListing.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlTable/ClassXhtmlTable.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlTable/XmlTableListing.php
 ../../Modules/Tier6ContentLayer/Core/XhtmlTable/XmlTables.php
@@ -2653,6 +2657,7 @@
 ../../SQLTables/Install/UpdateInstallation.sql
 ../../SQLTables/Update/PatchTables-2.1.129.sql
 ../../SQLTables/Update/PatchTables-2.1.130.sql
+../../SQLTables/Update/PatchTables-2.1.149.sql
 ../../SQLTables/Update/SystemFiles.txt
 ../../SQLTables/Update/UpdateSystemFiles.txt
 ../../SQLTables/Update/UpdateTableFiles.txt
@@ -2678,12 +2683,12 @@
 ../../SQLTables/Update/UpdateTables-2.1.146.sql
 ../../SQLTables/Update/UpdateTables-2.1.147.sql
 ../../SQLTables/Update/UpdateTables-2.1.148.sql
+../../SQLTables/Update/UpdateTables-2.1.149.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
 ../../Testcases/SimpleTest/simpletest/
 ../../Testcases/SimpleTest/simpletest/docs/
-../../Testcases/SimpleTest/simpletest/extensions/
 ../../Testcases/SimpleTest/simpletest/test/
 ../../Testcases/SimpleTest/simpletest/arguments.php
 ../../Testcases/SimpleTest/simpletest/authentication.php
@@ -2756,10 +2761,6 @@
 ../../Testcases/SimpleTest/simpletest/docs/fr/reporter_documentation.html
 ../../Testcases/SimpleTest/simpletest/docs/fr/unit_test_documentation.html
 ../../Testcases/SimpleTest/simpletest/docs/fr/web_tester_documentation.html
-../../Testcases/SimpleTest/simpletest/extensions/testdox/
-../../Testcases/SimpleTest/simpletest/extensions/pear_test_case.php
-../../Testcases/SimpleTest/simpletest/extensions/testdox.php
-../../Testcases/SimpleTest/simpletest/extensions/testdox/test.php
 ../../Testcases/SimpleTest/simpletest/test/site/
 ../../Testcases/SimpleTest/simpletest/test/support/
 ../../Testcases/SimpleTest/simpletest/test/acceptance_test.php

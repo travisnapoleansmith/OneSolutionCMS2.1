@@ -126,6 +126,19 @@
 		$j = 1;
 		for ($j = 1; $j < $Count; $j++) {
 			$Record = $Content[$j];
+			if ($Record['EndTag'] == '</div>') {
+				$i++;
+				$k = 1;
+				
+				$VideoHeading = "Content$i" . '_Heading';
+				$VideoTopText = "Content$i" . '_TopText';
+				$VideoSource = "Content$i";
+				$NoFlashText = "Content$i";
+				$FlashVarsText = "Content$i";
+				$VideoBottomText = "Content$i" . '_BottomText';
+				continue;
+			}
+			
 			if ($Record['Heading'] != NULL) {
 				$Post[$VideoHeading] = $Record['Heading'];
 			} else {

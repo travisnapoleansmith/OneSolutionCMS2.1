@@ -102,7 +102,8 @@
 		if (strstr($SubKey, 'Video')) {
 			$SubSubKey = $NewKey[2];
 			if ($SubSubKey === 'NoFlashText') {
-				$Value = str_replace("\'", "", $Value);
+				$Value = str_replace("\'", "'", $Value);
+				$Value = str_replace('\"', '"', $Value);
 				$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
 			} else {
 				$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
@@ -196,8 +197,10 @@
 			$Video = array();
 			
 			foreach ($_POST as $Key => $Value) {
-				if ($Key !== 'AddVideoPage') {
+				if ($Key !== 'UpdateVideoPage') {
 					if (strstr($Key, "Content")) {
+						$Value = str_replace("\'", "'", $Value);
+						$Value = str_replace('\"', '"', $Value);
 						$TempVideo[$Key] = $Value;
 					}
 				}
@@ -210,7 +213,8 @@
 				if (strstr($SubKey, 'Video')) {
 					$SubSubKey = $NewKey[2];
 					if ($SubSubKey === 'NoFlashText') {
-						$Value = str_replace("\'", "", $Value);
+						$Value = str_replace("\'", "'", $Value);
+						$Value = str_replace('\"', '"', $Value);
 						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
 					} else {
 						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;

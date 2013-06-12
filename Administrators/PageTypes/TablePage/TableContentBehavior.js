@@ -17,6 +17,8 @@ var PageLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.ph
 var PageID = 0;
 var FileName = null;
 
+var SessionID = null;
+
 var TableContentTemp = COOKIE;
 var TableContent = new Array();
 
@@ -73,7 +75,25 @@ $(document).ready(function()
 window.onload=setTimeout("LoadCookieData()", 90);
 
 function CheckFile() {
-	if (FileName != null) {
+	if (GET['SessionID'] != null) {
+		SessionID = GET['SessionID'];
+	}
+	if (SessionID != null && GET['TableID'] == null) {
+		var FileLocation = '../Administrators/PageTypes/TablePage/TEMPFILES/';
+		FileName = SessionID + '.xml';
+		FileLocation += FileName;
+		PageLocation = FileLocation;
+		
+		var FileDiv = document.createElement('div');
+		var FileInput = document.createElement('input');
+		FileInput.setAttribute('type', 'hidden');
+		FileInput.setAttribute('name', "File");
+		FileInput.setAttribute('value', FileName);
+		
+		FileDiv.appendChild(FileInput);
+		var FormElement = document.getElementsByTagName('form');
+		FormElement[0].appendChild(FileDiv);
+	} else if (FileName != null) {
 		var FileLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridImport.php?File=";
 		FileLocation += FileName;
 		PageLocation = FileLocation;
@@ -161,12 +181,13 @@ function LoadColumns(Page, Header, Name, IDName) {
 			document.getElementById(IDName).appendChild(DivLabel);
 			
 			var Input = document.createElement('input');
-			var Heading = readCookie(ColumnID);
+			/*var Heading = readCookie(ColumnID);
 			if (Heading != null) {
+				alert(ColumnValue);
 				Input.setAttribute('value', Heading);
-			} else {
+			} else {*/
 				Input.setAttribute('value', ColumnValue);
-			}
+			/*}*/
 			Input.setAttribute('id', ColumnID);
 			Input.setAttribute('class', 'ShortForm');
 			Input.setAttribute('xml:lang', 'en-us');
@@ -179,7 +200,7 @@ function LoadColumns(Page, Header, Name, IDName) {
 			i++;
 		}
 		ColumnID = Name + i;
-		var VALUE = readCookie(ColumnID);
+		/*var VALUE = readCookie(ColumnID);
 		if (readCookie(ColumnID) != null) {
 			alert ("Loading More Header and Footer Columns!");
 		}
@@ -193,7 +214,7 @@ function LoadColumns(Page, Header, Name, IDName) {
 			}
 			i++;
 			ColumnID = Name + i;
-		}
+		}*/
 	}
 }
 

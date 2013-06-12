@@ -93,7 +93,8 @@
 			if (strstr($SubKey, 'Video')) {
 				$SubSubKey = $NewKey[2];
 				if ($SubSubKey === 'NoFlashText') {
-					$Value = str_replace("\'", "", $Value);
+					$Value = str_replace("\'", "'", $Value);
+					$Value = str_replace('\"', '"', $Value);
 					$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
 				} else {
 					$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
@@ -131,7 +132,7 @@
 			
 			$LastVideosPage = $Options['XhtmlContent']['content']['LastVideosPage']['SettingAttribute'];
 			$NewVideosPage = ++$LastVideosPage;
-			$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
+			//$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
 			
 			$NewPage = '../../../index.php?PageID=';
 			$NewPage .= $NewPageID;
@@ -206,6 +207,8 @@
 			foreach ($_POST as $Key => $Value) {
 				if ($Key !== 'AddVideoPage') {
 					if (strstr($Key, "Content")) {
+						$Value = str_replace("\'", "'", $Value);
+						$Value = str_replace('\"', '"', $Value);
 						$TempVideo[$Key] = $Value;
 					}
 				}
@@ -218,7 +221,8 @@
 				if (strstr($SubKey, 'Video')) {
 					$SubSubKey = $NewKey[2];
 					if ($SubSubKey === 'NoFlashText') {
-						$Value = str_replace("\'", "", $Value);
+						$Value = str_replace("\'", "'", $Value);
+						$Value = str_replace('\"', '"', $Value);
 						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
 					} else {
 						$Video[$VideoName][$SubKey][$SubSubKey] = $Value;
@@ -744,7 +748,7 @@
 			$FormSelect['ContainerObjectID'] = $NewVideosPage;
 			$FormSelect['FormSelectDisabled'] = NULL;
 			$FormSelect['FormSelectMultiple'] = NULL;
-			$FormSelect['FormSelectName'] = 'TablesPage';
+			$FormSelect['FormSelectName'] = 'VideosPage';
 			$FormSelect['FormSelectNameDynamic'] = NULL;
 			$FormSelect['FormSelectNameTableName'] = NULL;
 			$FormSelect['FormSelectNameField'] = NULL;

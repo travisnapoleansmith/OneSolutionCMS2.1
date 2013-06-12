@@ -27,7 +27,6 @@ $(document).ready(function()
 		
 		if (SessionID != null) {
 			var File = '../Administrators/PageTypes/TablePage/TEMPFILES/' + SessionID + '.xml';
-			
 			$.ajax({
 				url: File,
 				type: "GET", 
