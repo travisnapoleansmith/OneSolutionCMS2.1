@@ -54,7 +54,7 @@
 	$PageVersion = array_combine($PageNumber, array_values($PageVersion));
 
 	$PageAttributes = $Tier6Databases->getRecord($passarray, 'PageAttributes', TRUE, array('1' => 'PageID'), 'ASC');
-
+		
 	$PageNumber = array();
 	foreach ($PageAttributes as $Value) {
 		if ($Value['PageID'] != NULL) {
@@ -76,7 +76,12 @@
 		$_SESSION['POST']['FilteredInput']['TopMenuHidden'] = $_POST['MenuItem'];
 		$_SESSION['POST']['FilteredInput']['TopMenu'] .= $TopMenuName;
 	} else {
-		$_SESSION['POST']['FilteredInput']['TopMenu'] = 'NULL';
+		if ($_POST['MenuItem'] != NULL) {
+			$_SESSION['POST']['FilteredInput']['TopMenuHidden'] = $_POST['MenuItem'];
+			$_SESSION['POST']['FilteredInput']['TopMenu'] .= $PageVersion[$PageID]['ContentPageMenuTitle'];
+		} else {
+			$_SESSION['POST']['FilteredInput']['TopMenu'] = 'NULL';
+		}
 	}
 
 	for ($i = 1; $i < 16; $i++) {

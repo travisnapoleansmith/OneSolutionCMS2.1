@@ -19,8 +19,6 @@ codebase/ext/dhtmlxform_item_colorpicker.js
 codebase/ext/dhtmlxform_item_container.js
 codebase/ext/dhtmlxform_item_combo.js
 codebase/ext/dhtmlxform_item_editor.js
-codebase/ext/dhtmlxgrid_form.js
-codebase/ext/dhtmlxgrid_mcol.js
 codebase/dhtmlxgrid.js
 codebase/dhtmlxgridcell.js
 codebase/ext/dhtmlxgrid_filter.js

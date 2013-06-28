@@ -268,7 +268,9 @@
 ../../../Administrators/System/EmptyCaptchaImageDirectory/EmptyCaptchaImageDirectory.php
 ../../../Administrators/System/Menu/AddMenuItem.php
 ../../../Administrators/System/Menu/SelectMenu.php
+../../../Administrators/System/Menu/SelectMenuItem.php
 ../../../Administrators/System/Menu/UpdateMenu.php
+../../../Administrators/System/Menu/UpdateMenuItem.php
 ../../../Administrators/System/PHPInfo/PHPInfo.php
 ../../../Administrators/System/Register/Register.php
 ../../../Administrators/System/SessionDataCleanupRemover/SessionDataCleanupRemover.php
@@ -2690,6 +2692,7 @@
 ../../../SQLTables/Update/UpdateTables-2.1.147.sql
 ../../../SQLTables/Update/UpdateTables-2.1.148.sql
 ../../../SQLTables/Update/UpdateTables-2.1.149.sql
+../../../SQLTables/Update/UpdateTables-2.1.150.sql
 ../../../SQLTables/Update/UpdateTables.sql
 ../../../Testcases/SimpleTest/
 ../../../Testcases/Tier6-ContentLayer/
@@ -2710,7 +2713,6 @@
 ../../../Testcases/SimpleTest/simpletest/encoding.php
 ../../../Testcases/SimpleTest/simpletest/errors.php
 ../../../Testcases/SimpleTest/simpletest/exceptions.php
-../../../Testcases/SimpleTest/simpletest/form.php
 ../../../Testcases/SimpleTest/simpletest/frames.php
 ../../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
 ../../../Testcases/SimpleTest/simpletest/http.php

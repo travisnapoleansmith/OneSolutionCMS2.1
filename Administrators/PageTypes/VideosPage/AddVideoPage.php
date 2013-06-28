@@ -132,7 +132,7 @@
 			
 			$LastVideosPage = $Options['XhtmlContent']['content']['LastVideosPage']['SettingAttribute'];
 			$NewVideosPage = ++$LastVideosPage;
-			//$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
+			$Tier6Databases->updateModuleSetting('XhtmlContent', 'content', 'LastVideosPage', $NewVideosPage);
 			
 			$NewPage = '../../../index.php?PageID=';
 			$NewPage .= $NewPageID;

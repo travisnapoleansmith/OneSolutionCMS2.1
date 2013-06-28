@@ -1509,7 +1509,6 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 			next($FormFieldSetEnableDisable);
 			next($FormFieldSetStatus);
 		}
-
 		while (current($FormFieldSetObjectID)) {
 			if (current($FormFieldSetEnableDisable) == 'Enable' && current($FormFieldSetStatus) == 'Approved') {
 				if (current($FormFieldSetObjectID) == $objectid && current($FormFieldSetPageID) == $this->PageID) {
@@ -1862,6 +1861,7 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		foreach ($this->FormLookupTableName['FormSelect'] as $Key => $Info) {
 			if ($Key >= $Lookup) {
 				$ContinueID = $Info['ContinueObjectID'];
+				
 				if ($Key != $StopObject) {
 					if ($Lookup !== NULL) {
 						$Data[$Key] = $Info;
@@ -1889,11 +1889,42 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 					$Data[$Key] = $Info;
 					
 					if ($ContinueStopObject != NULL) {
-						break;
+						if ($ContinueStopObject > $ContinueID & $ContinueIDLookup != $ContinueID) {
+							break;
+						}
 					}
 				}
 			}
 		}
+
+		$Temp = array();
+		$LeftOver = array();
+		
+		if (isset($Data)) {
+			foreach ($Data as $Key => $Value) {
+				if ($Value['ObjectID'] != NULL) {
+					$ObjectID = $Value['ObjectID'];
+					if (!isset($Temp[$ObjectID])) {
+						$Temp[$ObjectID] = $Value;
+					} else {
+						$LeftOver[] = $Value;
+					}
+				}
+				
+			}
+			
+			if ($LeftOver != NULL) {
+				if (is_array($LeftOver)) {
+					foreach ($LeftOver as $Value) {
+						$Temp[] = $Value;
+					}
+				}
+			}
+		}
+		
+		$Data = $Temp;
+		unset($Temp);
+		unset($LeftOver);
 		
 		if (isset($Data)) {
 			$EnableDisable = $this->FormLookupTableName['FormSelect'][$Lookup]['Enable/Disable'];
@@ -1926,11 +1957,11 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						$this->Writer->writeAttribute('name', $hold);
 					}
 				}
-
+				
 				foreach ($Data as $Key => $Info) {
 					$SelectEnableDisable = $Info['Enable/Disable'];
 					$SelectStatus = $Info['Status'];
-
+					
 					if ($SelectEnableDisable == 'Enable' && $SelectStatus == 'Approved') {
 						if ($Info['ContainerObjectType'] == 'OptGroup') {
 							$this->buildFormOptGroup($Info['ContainerObjectID'], $Info['FormSelectName']);
@@ -1939,9 +1970,10 @@ class XhtmlForm extends Tier6ContentLayerModulesAbstract implements Tier6Content
 						} else if ($Info['ContainerObjectTypeName']) {
 							$this->buildObjects($Info['ContainerObjectID'], 1, $Info['ContainerObjectTypeName'], $Info['ContainerObjectType']);
 						}
-
+						
 					}
 				}
+				
 				$this->Writer->endElement(); // ENDS SELECT
 			}
 		}

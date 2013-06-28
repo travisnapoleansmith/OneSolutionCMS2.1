@@ -61,11 +61,14 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	 * @access public
 	*/
 	public function Connect () {
+		
 		if ($this->HostName == NULL | $this->User == NULL | $this->Password == NULL | $this->DatabaseName == NULL) {
-			$this->HostName = $GLOBALS['credentaillogonarray'][0];
-			$this->User = $GLOBALS['credentaillogonarray'][1];
-			$this->Password = $GLOBALS['credentaillogonarray'][2];
-			$this->DatabaseName = $GLOBALS['credentaillogonarray'][3];
+			if (isset($GLOBALS['credentaillogonarray']) & !isset($GLOBALS['ConnectionOverride'])) {
+				$this->HostName = $GLOBALS['credentaillogonarray'][0];
+				$this->User = $GLOBALS['credentaillogonarray'][1];
+				$this->Password = $GLOBALS['credentaillogonarray'][2];
+				$this->DatabaseName = $GLOBALS['credentaillogonarray'][3];
+			}
 		}
 		
 		if ($this->HostName == NULL | $this->User == NULL | $this->Password == NULL | $this->DatabaseName == NULL) {
@@ -106,7 +109,16 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	*/
 	public function Disconnect () {
 		if ($this->Link) {
-			mysql_close($this->Link);
+			if (mysql_close($this->Link) === TRUE) {
+				return $this;
+			} else {
+				array_push($this->ErrorMessage,'Disconnect: Could not disconnect from server');
+				return new Exception('Could not disconnect from server');
+			}
+		} else {
+			array_push($this->ErrorMessage,'Disconnect: Link is not set!');
+			//return new Exception('Link is not set!');
+			return FALSE;
 		}
 	}
 	
@@ -1157,8 +1169,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 	*/
 	public function setDatabaseRow ($IDNumber) {
 		$this->IDNumber = $IDNumber;
-		if ($this->MultRrowField) {
-			$this->MultRrowField = array();
+		if ($this->MultRowField) {
+			$this->MultRowField = array();
 		}
 
 		if (is_array($IDNumber)) {
@@ -1190,10 +1202,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			if ($this->RowResult) {
 				$this->RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
 
-				array_push($this->MultRrowField, $this->RowField);
+				array_push($this->MultRowField, $this->RowField);
 				$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
 				while ($RowField) {
-					array_push($this->MultRrowField, $RowField);
+					array_push($this->MultRowField, $RowField);
 					$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
 				}
 			}

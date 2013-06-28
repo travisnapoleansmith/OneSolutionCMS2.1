@@ -228,7 +228,7 @@
 			define(NewPageID, $NewPageID);
 			define(NewRevisionID, $NewRevisionID);
 			define(CurrentVersionTrueFalse, 'true');
-			define(ContentPageType, 'TablesPage');
+			define(ContentPageType, 'VideosPage');
 	
 			define(ContentPageMenuName, $hold['FilteredInput']['MenuName']);
 			define(ContentPageMenuTitle, $hold['FilteredInput']['MenuTitle']);

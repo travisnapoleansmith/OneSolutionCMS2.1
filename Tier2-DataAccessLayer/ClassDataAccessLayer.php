@@ -26,7 +26,7 @@
 /**
  * Class Data Access Layer
  *
- * Class DataAccessLayer is designed as the security of the entire system.
+ * Class DataAccessLayer is designed as the database abstraction of the entire system.
  *
  * @author Travis Napolean Smith
  * @copyright Copyright (c) 1999 - 2013 One Solution CMS
@@ -106,13 +106,12 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @param string $DatabaseName the name of the database needed to connect to database.
 	 * @access public
 	 */
-	public function setDatabaseAll ($hostname, $user, $password, $databasename) {
-		if ($hostname != NULL & $user != NULL & $password != NULL & $databasename != NULL) {
-			$this->Hostname = $hostname;
-			$this->User = $user;
-			$this->Password = $password;
-			$this->DatabaseName = $databasename;
-			
+	public function setDatabaseAll ($Hostname, $User, $Password, $DatabaseName) {
+		if ($Hostname != NULL & $User != NULL & $Password != NULL & $DatabaseName != NULL) {
+			$this->Hostname = $Hostname;
+			$this->User = $User;
+			$this->Password = $Password;
+			$this->DatabaseName = $DatabaseName;
 			return $this;
 		} else {
 			array_push($this->ErrorMessage,'setDatabaseAll: hostname, user, password or databasename Cannot Be Null!');
@@ -193,12 +192,23 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @access public
 	 */
 	public function DisconnectAll () {
-		reset($this->DatabaseTable);
-		while (current($this->DatabaseTable)){
-			$tablename = key($this->DatabaseTable);
-			$this->DatabaseTable[key($this->DatabaseTable)]->Disconnect();
-
-			next($this->DatabaseTable);
+		if ($this->DatabaseTable != NULL) {
+			if (is_array($this->DatabaseTable)) {
+				foreach($this->DatabaseTable as $Key => $Value) {
+					$Return = $this->DatabaseTable[$Key]->Disconnect();
+					
+					if ($Return != TRUE) {
+						array_push($this->ErrorMessage,'DisconnectAll: Could Not Disconnect From Database!');
+						return FALSE;
+					}
+				}
+			} else {
+				array_push($this->ErrorMessage,'DisconnectAll: $this->DatabaseTable Must Be An Array!');
+				return FALSE;
+			}
+		} else {
+			array_push($this->ErrorMessage,'DisconnectAll: $this->DatabaseTable Cannot Be Null!');
+			return FALSE;
 		}
 		return $this;
 	}
@@ -211,10 +221,22 @@ class DataAccessLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to disconnect from
 	 * @access public
 	*/
-	public function Disconnect ($key) {
-		if ($key != NULL) {
-			$this->DatabaseTable[$key]->Disconnect();
-			return $this;
+	public function Disconnect ($Key) {
+		if ($Key != NULL) {
+			$Return = NULL;
+			if (isset($this->DatabaseTable[$Key])) {
+				$Return = $this->DatabaseTable[$Key]->Disconnect();
+			} else {
+				array_push($this->ErrorMessage,'Disconnect: Exception Thrown - Message: Key Doesn\'t Exist!');
+				return new Exception('Key Doesn\'t Exist!');
+			}
+			
+			if ($Return == TRUE) {
+				return $this;
+			} else {
+				array_push($this->ErrorMessage,'Disconnect: Could Not Disconnect From Database!');
+				return FALSE;
+			}
 		} else {
 			array_push($this->ErrorMessage,'Disconnect: Key Cannot Be Null!');
 			return FALSE;
@@ -228,19 +250,68 @@ class DataAccessLayer extends LayerModulesAbstract
 	/**
 	 * createDatabaseTable
 	 *
-	 * Creates a connection for a database table
+	 * Creates a database table object
 	 *
-	 * @param string $DatabaseTable the name of the database table to create a connection to
+	 * @param string $DatabaseTableName the name of the database table to create
 	 * @access public
 	 */
-	public function createDatabaseTable($key) {
-		$this->DatabaseTable[$key] =  new MySqlConnect();
-		return $this;
+	public function createDatabaseTable($DatabaseTableName) {
+		if ($DatabaseTableName != NULL) {
+			if (!is_array($DatabaseTableName)) {
+				if (!isset($this->DatabaseTable[$DatabaseTableName])) {
+					$this->DatabaseTable[$DatabaseTableName] =  new MySqlConnect();
+					return $this;
+				} else {
+					array_push($this->ErrorMessage,'createDatabaseTable: Exception Thrown - Message: DatabaseTableName Has Already Been Set!');
+					return new Exception('DatabaseTableName Has Already Been Set!');
+				}
+				
+			} else {
+				array_push($this->ErrorMessage,'createDatabaseTable: DatabaseTableName Cannot Be An Array!');
+				return FALSE;
+			}
+		} else {
+			array_push($this->ErrorMessage,'createDatabaseTable: DatabaseTableName Cannot Be Null!');
+			return FALSE;
+		}
+		
+	}
+	
+	/**
+	 * destroyDatabaseTable
+	 *
+	 * Destroys a database table object
+	 *
+	 * @param string $DatabaseTableName the name of the database table to destroy
+	 * @access public
+	 */
+	public function destroyDatabaseTable($DatabaseTableName) {
+		if ($DatabaseTableName != NULL) {
+			if (!is_array($DatabaseTableName)) {
+				if (isset($this->DatabaseTable[$DatabaseTableName])) {
+					unset($this->DatabaseTable[$DatabaseTableName]);
+					return $this;
+				} else {
+					array_push($this->ErrorMessage,'destroyDatabaseTable: Exception Thrown - Message: DatabaseTableName Has Not Been Set!');
+					return new Exception('DatabaseTableName Has Not Been Set!');
+				}
+				
+			} else {
+				array_push($this->ErrorMessage,'destroyDatabaseTable: DatabaseTableName Cannot Be An Array!');
+				return FALSE;
+			}
+		} else {
+			array_push($this->ErrorMessage,'destroyDatabaseTable: DatabaseTableName Cannot Be Null!');
+			return FALSE;
+		}
+		
 	}
 
-	protected function checkPass($DatabaseTable, $function, $functionarguments) {
-		reset($this->Modules);
+	protected function checkPass($DatabaseTable, $Function, $FunctionArguments) {
+		//reset($this->Modules);
+		
 		$hold = NULL;
+		
 		/*while (current($this->Modules)) {
 			//$tempobject = current($this->Modules[key($this->Modules)]);
 			//$databasetables = $tempobject->getTableNames();
@@ -250,46 +321,79 @@ class DataAccessLayer extends LayerModulesAbstract
 			//$hold = $tempobject->Verify($function, $functionarguments);
 			next($this->Modules);
 		}*/
-		if ($functionarguments[0]) {
-			$PassArguments = array();
-			$PassArguments[0] = $functionarguments;
+		
+		if (!is_null($FunctionArguments)) {
+			if (is_array($FunctionArguments)) {
+				if (!is_null($Function)) {
+					if (!is_array($Function)) {
+						if (isset($this->DatabaseTable["$DatabaseTable"])) {
+							if ($FunctionArguments[0]) {
+								$PassArguments = array();
+								$PassArguments[0] = $FunctionArguments;
+							} else {
+								$PassArguments = $FunctionArguments;
+							}
+							
+							$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$Function"), $PassArguments);
+							if ($hold2) {
+								return $hold2;
+							} else {
+								return $this;
+							}
+						} else {
+							array_push($this->ErrorMessage,'checkPass: $DatabaseTable MUST BE SET!');
+							return FALSE;
+						}
+					} else {
+						array_push($this->ErrorMessage,'checkPass: MySqlConnect Member Cannot Be An Array!');
+						return FALSE;
+					}
+				} else {
+					array_push($this->ErrorMessage,'checkPass: MySqlConnect Member Cannot Be Null!');
+					return FALSE;
+				}
+			} else {
+				array_push($this->ErrorMessage,'checkPass: Function Arguments Must Be An Array!');
+				return FALSE;
+			}
 		} else {
-			$PassArguments = $functionarguments;
-		}
-		//print_r($functionarguments);
-		$hold2 = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$function"), $PassArguments);
-		if ($hold2) {
-			return $hold2;
-		} else {
+			array_push($this->ErrorMessage,'checkPass: Function Arguments Cannot Be Null!');
 			return FALSE;
 		}
 	}
 
-	public function pass($databasetable, $function, $functionarguments) {
-		if (!is_null($functionarguments)) {
-			if (is_array($functionarguments)) {
-				if (!is_null($function)) {
-					if (!is_array($function)) {
-						if ($this->DatabaseAllow[$function]) {
-							if ($functionarguments[0]) {
-								$PassArguments = array();
-								$PassArguments[0] = $functionarguments;
+	public function pass($DatabaseTable, $Function, $FunctionArguments) {
+		if (!is_null($FunctionArguments)) {
+			if (is_array($FunctionArguments)) {
+				if (!is_null($Function)) {
+					if (!is_array($Function)) {
+						if (isset($this->DatabaseTable["$DatabaseTable"])) {
+							if ($this->DatabaseAllow[$Function]) {
+								if ($FunctionArguments[0]) {
+									$PassArguments = array();
+									$PassArguments[0] = $FunctionArguments;
+								} else {
+									$PassArguments = $FunctionArguments;
+								}
+								$hold = call_user_func_array(array($this->DatabaseTable["$DatabaseTable"], "$Function"), $PassArguments);
+								if ($hold) {
+									return $hold;
+								} else {
+									return $this;
+								}
+							} else if ($this->DatabaseDeny[$Function]) {
+								$hold = $this->checkPass($DatabaseTable, $Function, $FunctionArguments);
+								if ($hold) {
+									return $hold;
+								} else {
+									return FALSE;
+								}
 							} else {
-								$PassArguments = $functionarguments;
-							}
-							$hold = call_user_func_array(array($this->DatabaseTable["$databasetable"], "$function"), $functionarguments);
-							if ($hold) {
-								return $hold;
-							}
-						} else if ($this->DatabaseDeny[$function]) {
-							$hold = $this->checkPass($databasetable, $function, $functionarguments);
-							if ($hold) {
-								return $hold;
-							} else {
+								array_push($this->ErrorMessage,"pass: $Function from $DatabaseTable - MySqlConnect Member Does Not Exist!");
 								return FALSE;
 							}
 						} else {
-							array_push($this->ErrorMessage,"pass: $function from $databasetable - MySqlConnect Member Does Not Exist!");
+							array_push($this->ErrorMessage,'pass: $DatabaseTable MUST BE SET!');
 							return FALSE;
 						}
 					} else {
@@ -352,7 +456,6 @@ class DataAccessLayer extends LayerModulesAbstract
 		$this->Disconnect($this->LayerTableName);
 
 		$this->LayerTable = $this->pass ($this->LayerTableName, 'getEntireTable', array());
-
 		if ($LayerModuleTableName && $this->LayerModuleTable && $LayerTableName && $this->LayerTable) {
 			$moduletable = current($this->LayerModuleTable);
 			$keymoduletable = key($this->LayerModuleTable);

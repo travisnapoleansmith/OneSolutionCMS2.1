@@ -84,8 +84,7 @@
 		
 		if ($hold) {
 			$sessionname = $Tier6Databases->SessionStart('CreateMenuItem');
-			print_r($_POST);
-			print_r($hold);
+
 			// Menu Information - Post Checking For NULL Elements
 			$temp = $Tier6Databases->PostCheck ('MenuName', 'FilteredInput', $hold);
 			if (!is_null($temp)) {
@@ -115,7 +114,7 @@
 			
 			$LastMenuItem = $Options['XhtmlMainMenu']['mainmenu']['LastMenuItem']['SettingAttribute'];
 			$NewMenuItem = ++$LastMenuItem;
-			//$Tier6Databases->updateModuleSetting('XhtmlMainMenu', 'mainmenu', 'LastMenuItem', $NewMenuItem);
+			$Tier6Databases->updateModuleSetting('XhtmlMainMenu', 'mainmenu', 'LastMenuItem', $NewMenuItem);
 			
 			if (isset($LastMenuItem)) {
 				$StartPageID = $Options['XhtmlMainMenu']['mainmenu']['StartPageID']['SettingAttribute'];
@@ -133,7 +132,6 @@
 				$LogFileHandle = fopen($LogFile, 'a');
 				$FileInformation = 'Logging - Add Menu Item Top Script - ' . $NewPageID . ' - ' . date("F j, Y, g:i a") . "\n";
 				fwrite($LogFileHandle, $FileInformation);
-				//fwrite($LogFileHandle, print_r($ImageContent, TRUE));
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
@@ -175,6 +173,9 @@
 	
 			$MainMenuItemLookup = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlMainMenu/AddMainMenuItemLookup.ini',FALSE);
 			$MainMenuItemLookup = $Tier6Databases->EmptyStringToNullArray($MainMenuItemLookup);
+			if ($MenuLink != NULL) {
+				$MainMenuItemLookup['PageLocation'] = $MenuLink;
+			}
 			
 			$UpdateMenuItemSelect = $Options['XhtmlMainMenu']['mainmenu']['UpdateMenuItemSelect']['SettingAttribute'];
 			$FormSelect = array();
@@ -206,7 +207,7 @@
 			$FormSelect['Enable/Disable'] = 'Enable';
 			$FormSelect['Status'] = 'Approved';
 	
-			$FormOptionText = $hold['FilteredInput']['PageTitle'];
+			$FormOptionText = $hold['FilteredInput']['MenuTitle'];
 			$FormOptionValue = $LastPageID;
 			$FormOptionValue .= ' - ';
 			$FormOptionValue .= $NewMenuItem;
@@ -249,41 +250,9 @@
 			$FormOption['Enable/Disable'] = 'Enable';
 			$FormOption['Status'] = 'Approved';
 			
-			print_r($ContentLayerVersion);
-			print_r($MainMenuItemLookup);
-			print_r($FormSelect);
-			print_r($FormOption);
-			/*			
 			$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
 			
 			$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
-				
-			$UpdateVideosPageSelect = $Options['XhtmlContent']['content']['UpdateVideosPageSelect']['SettingAttribute'];
-			$FormSelect['PageID'] = $UpdateVideosPageSelect;
-			$FormOption['PageID'] = $UpdateVideosPageSelect;
-			
-			//$FormOptionArray[] = $FormOption;
-			//$FormSelectionArray[] = $FormSelect;
-			
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-			
-			$DeleteVideosPage = $Options['XhtmlContent']['content']['DeleteVideosPage']['SettingAttribute'];
-			$FormSelect['PageID'] = $DeleteVideosPage;
-			$FormOption['PageID'] = $DeleteVideosPage;
-			
-			//$FormOptionArray[] = $FormOption;
-			//$FormSelectionArray[] = $FormSelect;
-			
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
-			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-			
-			$EnableDisableStatusChangeVideosPage = $Options['XhtmlContent']['content']['EnableDisableStatusChangeVideosPage']['SettingAttribute'];
-			$FormSelect['PageID'] = $EnableDisableStatusChangeVideosPage;
-			$FormOption['PageID'] = $EnableDisableStatusChangeVideosPage;
-			
-			//$FormOptionArray[] = $FormOption;
-			//$FormSelectionArray[] = $FormSelect;
 			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
@@ -291,22 +260,53 @@
 			$FormOptionValue = $NewPageID;
 			$FormOptionValue .= ' - ';
 			$FormOptionValue .= 'NULL';
+			$FormOptionValue .= ' - ';
+			$FormOptionValue .= $MenuLink;
 			
-			require('../../ModuleFormSubmissions/Tier6ContentLayer/Extended/XhtmlMainMenu/AddMainMenu.php');
+			// ADD TO MAIN MENU
+			$MainMenuSelectPage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+			$FormSelect['PageID'] = $MainMenuSelectPage;
+			$FormSelect['ObjectID'] = $NewPageID;
+			$FormSelect['ContainerObjectID'] = $NewPageID;
+			$FormSelect['FormSelectName'] = 'MenuItem';
+			$FormSelect['StopObjectID'] = NULL;
+			$FormSelect['FormSelectStyle'] = NULL;
+			$FormOption['PageID'] = $MainMenuSelectPage;
+			$FormOption['ObjectID'] = $NewPageID;
 			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelectionArray);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOptionArray);
+			$FormOptionArray[] = $FormOption;
+			$FormSelectionArray[] = $FormSelect;
 			
-			$sessionname = $Tier6Databases->SessionStart('AddedVideosPage');
-	
+			$MainMenuUpdatePage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+			$FormSelect['PageID'] = $MainMenuUpdatePage;
+			$FormSelect['FormSelectName'] = 'MenuItem1';
+			$FormOption['PageID'] = $MainMenuUpdatePage;
+			
+			$FormOptionArray[] = $FormOption;
+			$FormSelectionArray[] = $FormSelect;
+			
+			$j = $NewPageID;
+			for ($i = 2; $i < 16; $i++) {
+				$j += 1000000;
+				$FormSelect['ObjectID'] = $j;
+				$FormSelect['FormSelectName'] = 'MenuItem';
+				$FormSelect['FormSelectName'] .= $i;
+				$FormSelectionArray[] = $FormSelect;
+			}
+			
+			$j += 1000000;
+			$FormSelect['ObjectID'] = $j;
+			$FormSelect['FormSelectName'] = 'TopMenu';
+			$FormSelectionArray[] = $FormSelect;
+			
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelectionArray);
+			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOptionArray);
+			// END ADD TO MAIN MENU
+			
 			$Page = '../../../index.php?PageID=';
 			$Page .= $NewPageID;
 			
-			$_SESSION['POST']['Error']['Link'] = '<a href=\'';
-			$_SESSION['POST']['Error']['Link'] .= $Page;
-			$_SESSION['POST']['Error']['Link'] .= '\'>Added Videos Page</a>';
-			
-			$VideosPageCreatedPage = $Options['XhtmlContent']['content']['VideosPageCreatedPage']['SettingAttribute'];
+			$MenuItemCreatedPage = $Options['XhtmlMainMenu']['mainmenu']['CreatedUpdateMenuItem']['SettingAttribute'];
 			
 			if ($LogPage === TRUE) {
 				$LogFile = "AddMenuItem.txt";
@@ -318,9 +318,9 @@
 				fclose($LogFileHandle);
 			}
 			
-			header("Location: $VideosPageCreatedPage&SessionID=$sessionname");
+			header("Location: $MenuItemCreatedPage");
 			exit;
-			*/
+			
 		} else {
 			//print "I DID NOT MAKE IT\n";
 		}

@@ -23,7 +23,17 @@
 	*************************************************************************************
 	*/
 
-	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
+		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	} else {
+		if ($_SERVER['REAL_DOCUMENT_ROOT'] != NULL) {
+			$_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] = $_SERVER['REAL_DOCUMENT_ROOT'];
+			$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+		} else {
+			$HOME = NULL;
+		}
+	}
+	
 	$ADMIN = $HOME . '/Administrators';
 
 	// General Settings
