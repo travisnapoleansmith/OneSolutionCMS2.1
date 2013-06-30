@@ -1,4 +1,18 @@
-Changes For One Solution CMS 2.1.151 - Friday, June 28, 2013
+Changes For One Solution CMS 2.1.152 - Sunday, June 30, 2013 
+Added:
+	1). Nothing Added
+	
+Updated (Fixed):
+	1). Updated Tier2DataAccessLayer - Corrected Bug ID #0000041 - Cannot use object of type DataAccessLayer as array. This major issue has been resolved.
+	2). Updated LayerModulesAbstract - Corrected Bug ID #0000041 - Cannot use object of type DataAccessLayer as array. This major issue has been resolved.
+	3). Updated Tier2DataAccessLayer Database Tables to reflect a change in this module - All changes have been moved to 2.2.7 as well.
+
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.151 - Friday, June 28, 2013 - 7:37:37 PM
 Added:
 	1). Added Administrators Panel - Menu Items - Added Menu Items. This allows for a user to define in the menu a link to something that is ether on site or not. This is for pages that don't exist in the system.
 	

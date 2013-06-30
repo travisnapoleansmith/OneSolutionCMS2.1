@@ -81,5 +81,4 @@
 	$header->setSiteName($sitename);
 
 	$header->CreateOutput ($printpreview, $stylesheet);
-
 ?>

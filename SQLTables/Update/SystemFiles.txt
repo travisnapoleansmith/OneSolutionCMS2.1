@@ -2687,6 +2687,7 @@
 ../../SQLTables/Update/UpdateTables-2.1.148.sql
 ../../SQLTables/Update/UpdateTables-2.1.149.sql
 ../../SQLTables/Update/UpdateTables-2.1.150.sql
+../../SQLTables/Update/UpdateTables-2.1.151.sql
 ../../SQLTables/Update/UpdateTables.sql
 ../../Testcases/SimpleTest/
 ../../Testcases/Tier6-ContentLayer/
@@ -2707,7 +2708,6 @@
 ../../Testcases/SimpleTest/simpletest/encoding.php
 ../../Testcases/SimpleTest/simpletest/errors.php
 ../../Testcases/SimpleTest/simpletest/exceptions.php
-../../Testcases/SimpleTest/simpletest/frames.php
 ../../Testcases/SimpleTest/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
 ../../Testcases/SimpleTest/simpletest/http.php
 ../../Testcases/SimpleTest/simpletest/invoker.php

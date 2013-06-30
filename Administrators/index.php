@@ -30,12 +30,12 @@
 		session_name($sessionname);
 	}
 	session_start();
-
+	
 	// Includes all files
 	require_once ('Configuration/includes.php');
-
+	
 	$printpreview = NULL;
-
+	
 	$Tier6Databases->setDatabaseTableName('AdministratorContentLayer');
 
 	if ($_GET['printpreview']) {
@@ -43,9 +43,9 @@
 	} else {
 		$printpreview = FALSE;
 	}
-
+	
 	$Tier6Databases->setPrintPreview($printpreview);
-
+	
 	// Fetch Current Page ID - Based On ID Number
 	$contentidnumber = Array();
 	$contentidnumber['Enable/Disable'] = 'Enable';
@@ -56,10 +56,10 @@
 	} else {
 		$contentidnumber['CurrentVersion'] = 'true';
 	}
-
+	
 	$Tier6Databases->FetchDatabase($contentidnumber);
 	$Tier6Databases->CreateOutput(NULL);
-
+	
 	$output = $Writer->flush();
 	if ($output) {
 		print "$output\n";

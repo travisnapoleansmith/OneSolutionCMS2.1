@@ -99,6 +99,8 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			throw $E;
 			return FALSE;
 		}
+		
+		return FALSE;
 	}
 
 	/**
@@ -1319,9 +1321,10 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 		}
 
 		$this->Connect();
+		
 		$Query = 'SHOW COLUMNS FROM `' . $this->DatabaseTable . '` ';
 		$Result = mysql_query($Query);
-
+		
 		$this->RowFieldNames = array();
 		while ($Row = mysql_fetch_array ($Result)) {
 			array_push($this->RowFieldNames, $Row['Field']);

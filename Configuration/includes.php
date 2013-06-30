@@ -22,7 +22,8 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	set_time_limit(60);
+	
 	if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
 		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	} else {

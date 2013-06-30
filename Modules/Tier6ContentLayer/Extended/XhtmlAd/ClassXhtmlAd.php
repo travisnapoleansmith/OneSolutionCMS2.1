@@ -314,25 +314,10 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 
 			$this->AdSponsorsOutputAdsOrder[$TableNamePageID] = array();
 			$j = 1;
-
-			foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
-				if ($DatabaseTable['Enable/Disable'] == 'Disable') {
-					unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
-					$AdvertisingKey = $DatabaseTable['AdvertisingID'];
-					foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-						if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-							unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-						}
-					}
-				}
-
-				if (isset($DatabaseTable['AdStartDateTime']) | isset($DatabaseTable['AdEndDateTime'])) {
-					$CurrentTime = time();
-
-					$AdStartTimeStamp = strtotime($DatabaseTable['AdStartDateTime']);
-					$AdEndTimeStamp = strtotime($DatabaseTable['AdEndDateTime']);
-
-					if ((int)$AdStartTimeStamp > (int)$CurrentTime & $DatabaseTable['AdStartDateTime'] != NULL) {
+			
+			if ($this->AdSponsorsDatabaseTable[$TableName] != NULL) {
+				foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
+					if ($DatabaseTable['Enable/Disable'] == 'Disable') {
 						unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
 						$AdvertisingKey = $DatabaseTable['AdvertisingID'];
 						foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
@@ -340,44 +325,63 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 								unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
 							}
 						}
-					} else if ((int)$AdEndTimeStamp < (int)$CurrentTime & $DatabaseTable['AdEndDateTime'] != NULL) {
-						unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
-						$AdvertisingKey = $DatabaseTable['AdvertisingID'];
-						foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-							if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-								unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+					}
+	
+					if (isset($DatabaseTable['AdStartDateTime']) | isset($DatabaseTable['AdEndDateTime'])) {
+						$CurrentTime = time();
+	
+						$AdStartTimeStamp = strtotime($DatabaseTable['AdStartDateTime']);
+						$AdEndTimeStamp = strtotime($DatabaseTable['AdEndDateTime']);
+	
+						if ((int)$AdStartTimeStamp > (int)$CurrentTime & $DatabaseTable['AdStartDateTime'] != NULL) {
+							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+							$AdvertisingKey = $DatabaseTable['AdvertisingID'];
+							foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+								if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+									unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+								}
+							}
+						} else if ((int)$AdEndTimeStamp < (int)$CurrentTime & $DatabaseTable['AdEndDateTime'] != NULL) {
+							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+							$AdvertisingKey = $DatabaseTable['AdvertisingID'];
+							foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+								if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+									unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+								}
 							}
 						}
 					}
 				}
 			}
-
-			foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-				$RemoveFlag = FALSE;
-				foreach ($AdSponsorsDatabaseTable as $SponsorsKey => $SponsorsItem) {
-					if ($SponsorsKey != 'AdvertisingID') {
-						if (!strstr($SponsorsKey, 'Order')) {
-							if ($SponsorsItem == 0) {
-								if ($RemoveFlag !== TRUE) {
-									$RemoveFlag == FALSE;
-								}
-							} else {
-								if ($this->PageID == $SponsorsItem) {
-									$RemoveFlag = FALSE;
-								} else if ($RemoveFlag === FALSE) {
-									$RemoveFlag = TRUE;
+			
+			if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
+				foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+					$RemoveFlag = FALSE;
+					foreach ($AdSponsorsDatabaseTable as $SponsorsKey => $SponsorsItem) {
+						if ($SponsorsKey != 'AdvertisingID') {
+							if (!strstr($SponsorsKey, 'Order')) {
+								if ($SponsorsItem == 0) {
+									if ($RemoveFlag !== TRUE) {
+										$RemoveFlag == FALSE;
+									}
+								} else {
+									if ($this->PageID == $SponsorsItem) {
+										$RemoveFlag = FALSE;
+									} else if ($RemoveFlag === FALSE) {
+										$RemoveFlag = TRUE;
+									}
 								}
 							}
 						}
 					}
-				}
-
-				if ($RemoveFlag === TRUE) {
-					unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-					$AdvertisingKey = $AdSponsorsDatabaseTable['AdvertisingID'];
-					foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
-						if ($DatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+	
+					if ($RemoveFlag === TRUE) {
+						unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+						$AdvertisingKey = $AdSponsorsDatabaseTable['AdvertisingID'];
+						foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
+							if ($DatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+								unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+							}
 						}
 					}
 				}
@@ -390,35 +394,36 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 					//print "OPENED AD HOC SENSE PATH\n";
 				}
 			}
-			
-			foreach ($PrintOrder as $CurrentData) {
-				$i = 1;
-				$PageIDKey = 'PageID' . $i;
-				$OrderKey = 'PageID' .$i . 'Order';
-
-				if ($CurrentData[$PageIDKey] != 0) {
-					foreach ($CurrentData as $LookupKey => $LookupData) {
-						if (!strstr($LookupKey,'Order')) {
-							if ($LookupKey != 'AdvertisingID') {
-								if ($LookupData != 0) {
-									if ($LookupData == $this->PageID) {
-										if (!isset($this->AdSponsorsOutputAdLookup[$TableNamePageID])) {
-											$this->AdSponsorsOutputAdLookup[$TableNamePageID] = array();
+			if ($PrintOrder != NULL) {
+				foreach ($PrintOrder as $CurrentData) {
+					$i = 1;
+					$PageIDKey = 'PageID' . $i;
+					$OrderKey = 'PageID' .$i . 'Order';
+	
+					if ($CurrentData[$PageIDKey] != 0) {
+						foreach ($CurrentData as $LookupKey => $LookupData) {
+							if (!strstr($LookupKey,'Order')) {
+								if ($LookupKey != 'AdvertisingID') {
+									if ($LookupData != 0) {
+										if ($LookupData == $this->PageID) {
+											if (!isset($this->AdSponsorsOutputAdLookup[$TableNamePageID])) {
+												$this->AdSponsorsOutputAdLookup[$TableNamePageID] = array();
+											}
+											array_push($this->AdSponsorsOutputAdLookup[$TableNamePageID], $CurrentData['AdvertisingID']);
+											$ShowNumber--;
+										} else {
+											$KeyName = 'REMOVE' . $j;
+											$this->AdSponsorsRemoveArray[$TableNamePageID][$KeyName] = $CurrentData['AdvertisingID'];
+											$j++;
 										}
-										array_push($this->AdSponsorsOutputAdLookup[$TableNamePageID], $CurrentData['AdvertisingID']);
-										$ShowNumber--;
-									} else {
-										$KeyName = 'REMOVE' . $j;
-										$this->AdSponsorsRemoveArray[$TableNamePageID][$KeyName] = $CurrentData['AdvertisingID'];
-										$j++;
 									}
 								}
-							}
-						} else {
-							$NewKey = str_replace('Order', '', $LookupKey);
-							if ($CurrentData[$NewKey] == $this->PageID) {
-								if ($LookupData != 'NA') {
-									$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData;
+							} else {
+								$NewKey = str_replace('Order', '', $LookupKey);
+								if ($CurrentData[$NewKey] == $this->PageID) {
+									if ($LookupData != 'NA') {
+										$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData;
+									}
 								}
 							}
 						}
@@ -431,11 +436,12 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			}
 
 			$i = 0;
-
-			foreach($this->AdSponsorsDatabaseTable[$TableNamePageID] as $key => $value) {
-				$i++;
+			
+			if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
+				foreach($this->AdSponsorsDatabaseTable[$TableNamePageID] as $key => $value) {
+					$i++;
+				}
 			}
-
 			$ShowNumber = $TableName . 'ShowNumber';
 			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
 

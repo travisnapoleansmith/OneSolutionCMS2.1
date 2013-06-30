@@ -22,10 +22,11 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	error_reporting(0);
+	
 	// Includes all files
 	require_once ('Configuration/includes.php');
-
+	
 	// Fetch idnumber For Current Page
 	$idnumber = 1;
 	if ($_GET['PageID']){
@@ -44,7 +45,7 @@
 	}
 
 	$Tier6Databases->setPrintPreview($printpreview);
-
+	
 	// Fetch Current Page ID - Based On ID Number
 	$contentidnumber = Array();
 	$contentidnumber['PageID'] = $idnumber;
@@ -56,7 +57,7 @@
 	} else {
 		$contentidnumber['CurrentVersion'] = 'true';
 	}
-
+	
 	$Tier6Databases->FetchDatabase($contentidnumber);
 	$Tier6Databases->CreateOutput(NULL);
 

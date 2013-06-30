@@ -151,12 +151,12 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass (current($this->TableNames), 'setDatabaseRow', array('idnumber' => $passarray));
 		$this->LayerModule->Disconnect(current($this->TableNames));
-
+		
 		$this->FillArray('MetaName', 'MetaName');
 		$this->FillArray('MetaNameContent', 'MetaNameContent');
 		$this->FillArray('HttpEquivType', 'HttpEquivType');
 		$this->FillArray('HttpEquivTypeContent', 'HttpEquivTypeContent');
-
+		
 		$this->FillArray('LinkCharset', 'LinkCharset');
 		$this->FillArray('LinkHref', 'LinkHref');
 		$this->FillArray('LinkHreflang', 'LinkHreflang');
@@ -164,7 +164,7 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$this->FillArray('LinkRel', 'LinkRel');
 		$this->FillArray('LinkRev', 'LinkRev');
 		$this->FillArray('LinkType', 'LinkType');
-
+		
 		$this->PageID = $PageID['PageID'];
 		$this->RevisionID = $PageID['RevisionID'];
 		$this->CurrentVersion = $PageID['CurrentVersion'];
@@ -236,15 +236,18 @@ class XhtmlHeader extends Tier6ContentLayerModulesAbstract implements Tier6Conte
 		$temp .= $i;
 		$j = 0;
 		$this->$arrayname = Array();
-		while ($this->LayerModule->pass (current($this->TableNames), 'searchFieldNames', array('temp' => $temp))) {
+
+		while ($this->LayerModule->pass (current($this->TableNames), 'searchFieldNames', array('temp' => $temp)) === TRUE) {
 			if ($this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp))) {
 				array_push($this->$arrayname, $this->LayerModule->pass (current($this->TableNames), 'getRowField', array('rowfield' => $temp)));
 			} else {
 				array_push($this->$arrayname, NULL);
 			}
+			
 			$i++;
 			$temp = $arrayvalue;
 			$temp .= $i;
+			
 		}
 		$this->NullArrayWalk ($arrayname, 0, count($this->$arrayname));
 	}
