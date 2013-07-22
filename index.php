@@ -22,7 +22,7 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-	error_reporting(0);
+	//error_reporting(0);
 	
 	// Includes all files
 	require_once ('Configuration/includes.php');

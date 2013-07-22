@@ -17,7 +17,7 @@
 *
 * @copyright  Copyright (c) 1999 - 2013 One Solution CMS (http://www.onesolutioncms.com/)
 * @license    http://www.gnu.org/licenses/gpl-2.0.txt
-* @version    2.1.141, 2013-01-14
+* @version    2.1.153, 2013-07-06
 *************************************************************************************
 
 Upcoming Releases
@@ -31,7 +31,7 @@ Upcoming Releases
 	
 	One Solution CMS 2.2
 	--------------------
-	One Solution CMS 2.2 will begin once 2.1 has stopped.
+	One Solution CMS 2.2 will be in tangum with 2.1 until 2.1 has finished being developed. All 2.2 features will be moved into 2.1 until development of 2.1 stops.
 	This version of One Solution CMS will have the following new features:
 		System Installer
 	This version will be a go between the Version 2 and Version 3 of the system.

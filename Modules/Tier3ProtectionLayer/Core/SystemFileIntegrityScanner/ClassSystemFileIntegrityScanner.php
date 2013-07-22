@@ -52,7 +52,11 @@ class SystemFileIntegrityScanner extends Tier3ProtectionLayerModulesAbstract imp
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID;
 		
-		$this->LayerModule->createDatabaseTable($this->DatabaseTable);
+		try {
+			$this->LayerModule->createDatabaseTable($this->DatabaseTable);
+		} catch (SoapFault $E) {
+		
+		}
 		$this->LayerModule->Connect($this->DatabaseTable);
 		
 		$this->LayerModule->pass ($this->DatabaseTable, 'setEntireTable', array());

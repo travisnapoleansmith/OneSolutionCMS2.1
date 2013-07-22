@@ -25,6 +25,17 @@
 	
 	set_time_limit(120);
 	
+	if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
+		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	} else {
+		if ($_SERVER['REAL_DOCUMENT_ROOT'] != NULL) {
+			$_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] = $_SERVER['REAL_DOCUMENT_ROOT'];
+			$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+		} else {
+			$HOME = NULL;
+		}
+	}
+	
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;

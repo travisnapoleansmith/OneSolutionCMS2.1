@@ -58,8 +58,11 @@ class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3Pro
 		
 		$passarray = array();
 		$passarray = $PageID;
+		try {
+			$this->LayerModule->createDatabaseTable($this->BannedIPAddressTableName);
+		} catch (SoapFault $E) {
 		
-		$this->LayerModule->createDatabaseTable($this->BannedIPAddressTableName);
+		}
 		$this->LayerModule->Connect($this->BannedIPAddressTableName);
 		
 		$this->LayerModule->pass ($this->BannedIPAddressTableName, 'setDatabaseField', array('idnumber' => $passarray));
@@ -67,7 +70,11 @@ class SpamFilter extends Tier3ProtectionLayerModulesAbstract implements Tier3Pro
 		
 		$this->LayerModule->Disconnect($this->BannedIPAddressTableName);
 		
-		$this->LayerModule->createDatabaseTable($this->UserBannedIPAddressTableName);
+		try {
+			$this->LayerModule->createDatabaseTable($this->UserBannedIPAddressTableName);
+		} catch (SoapFault $E) {
+		
+		}
 		$this->LayerModule->Connect($this->UserBannedIPAddressTableName);
 		
 		$this->LayerModule->pass ($this->UserBannedIPAddressTableName, 'setDatabaseField', array('idnumber' => $passarray));

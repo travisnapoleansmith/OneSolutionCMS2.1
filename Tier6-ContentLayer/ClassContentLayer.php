@@ -141,7 +141,11 @@ class ContentLayer extends LayerModulesAbstract
 		$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 		$this->LayerModule = new ValidationLayer();
 		$this->LayerModule->setPriorLayerModule($this);
-		$this->LayerModule->createDatabaseTable('ContentLayer');
+		//try {
+			$this->createDatabaseTable('ContentLayer');
+		//} catch (SoapFault $E) {
+			
+		//}
 		$this->LayerModule->setDatabaseAll ($credentaillogonarray[0], $credentaillogonarray[1], $credentaillogonarray[2], $credentaillogonarray[3], NULL);
 		$this->LayerModule->buildModules('ValidationLayerModules', 'ValidationLayerTables', 'ValidationLayerModulesSettings');
 
@@ -226,6 +230,7 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseName the name of the database needed to connect to database.
 	 * @access public
 	*/
+	//
 	public function setDatabaseAll ($Hostname, $User, $Password, $DatabaseName) {
 		$this->Hostname = $Hostname;
 		$this->User = $User;
@@ -260,10 +265,10 @@ class ContentLayer extends LayerModulesAbstract
 			$passarray = array();
 			$passarray['Enable/Disable'] = 'Enable';
 
-			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeTableName);
-			$this->LayerModule->Connect($this->ContentLayerThemeTableName);
+			$this->createDatabaseTable($this->ContentLayerThemeTableName);
+			$this->Connect($this->ContentLayerThemeTableName);
 			$this->LayerModule->pass ($this->ContentLayerThemeTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->LayerModule->Disconnect($this->ContentLayerThemeTableName);
+			$this->Disconnect($this->ContentLayerThemeTableName);
 
 			$Theme = $this->LayerModule->pass ($this->ContentLayerThemeTableName, 'getMultiRowField', array());
 			$this->ContentLayerThemeName = $Theme[0]['ThemeName'];
@@ -271,10 +276,10 @@ class ContentLayer extends LayerModulesAbstract
 			$passarray = array();
 			$passarray['ThemeName'] = $this->ContentLayerThemeName;
 
-			$this->LayerModule->createDatabaseTable($this->ContentLayerThemeGlobalLayerTableName);
-			$this->LayerModule->Connect($this->ContentLayerThemeGlobalLayerTableName);
+			$this->createDatabaseTable($this->ContentLayerThemeGlobalLayerTableName);
+			$this->Connect($this->ContentLayerThemeGlobalLayerTableName);
 			$this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-			$this->LayerModule->Disconnect($this->ContentLayerThemeGlobalLayerTableName);
+			$this->Disconnect($this->ContentLayerThemeGlobalLayerTableName);
 			$this->ContentLayerThemeGlobalLayerContent = $this->LayerModule->pass ($this->ContentLayerThemeGlobalLayerTableName, 'getMultiRowField', array());
 
 		}
@@ -287,6 +292,7 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
+	//
 	public function ConnectAll () {
 		$this->LayerModule->ConnectAll();
 	}
@@ -299,6 +305,7 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to connect to
 	 * @access public
 	*/
+	//
 	public function Connect ($DatabaseTable) {
 		$this->LayerModule->Connect($DatabaseTable);
 	}
@@ -310,6 +317,7 @@ class ContentLayer extends LayerModulesAbstract
 	 *
 	 * @access public
 	*/
+	//
 	public function DisconnectAll () {
 		$this->LayerModule->DisconnectAll();
 	}
@@ -322,6 +330,7 @@ class ContentLayer extends LayerModulesAbstract
 	 * @param string $DatabaseTable the name of the database table to disconnect from
 	 * @access public
 	*/
+	//
 	public function Disconnect ($DatabaseTable) {
 		$this->LayerModule->Disconnect($DatabaseTable);
 	}
@@ -346,7 +355,11 @@ class ContentLayer extends LayerModulesAbstract
 	 * @access public
 	*/
 	public function createDatabaseTable($DatabaseTable) {
-		$this->LayerModule->createDatabaseTable($DatabaseTable);
+		try {
+			$this->LayerModule->createDatabaseTable($DatabaseTable);
+		} catch (SoapFault $E) {
+			return FALSE;
+		}
 	}
 
 	protected function checkPass($DatabaseTable, $function, $functionarguments) {
@@ -452,12 +465,12 @@ class ContentLayer extends LayerModulesAbstract
 		$passarray = array();
 		$passarray = $PageID;
 
-		$this->LayerModule->createDatabaseTable($this->DatabaseTableName);
-		$this->LayerModule->Connect($this->DatabaseTableName);
+		$this->createDatabaseTable($this->DatabaseTableName);
+		$this->Connect($this->DatabaseTableName);
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbyname', array('OrderName' => 'ObjectID'));
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setOrderbytype', array('OrderType' => 'ASC'));
 		$this->LayerModule->pass ($this->DatabaseTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-		$this->LayerModule->Disconnect($this->DatabaseTableName);
+		$this->Disconnect($this->DatabaseTableName);
 
 		$this->ContentLayerDatabase = $this->LayerModule->pass ($this->DatabaseTableName, 'getMultiRowField', array());
 
@@ -468,10 +481,10 @@ class ContentLayer extends LayerModulesAbstract
 		}
 		$passarray['CurrentVersion'] = $this->PageID['CurrentVersion'];
 
-		$this->LayerModule->createDatabaseTable($this->ContentLayerVersionTableName);
-		$this->LayerModule->Connect($this->ContentLayerVersionTableName);
+		$this->createDatabaseTable($this->ContentLayerVersionTableName);
+		$this->Connect($this->ContentLayerVersionTableName);
 		$this->LayerModule->pass ($this->ContentLayerVersionTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-		$this->LayerModule->Disconnect($this->ContentLayerVersionTableName);
+		$this->Disconnect($this->ContentLayerVersionTableName);
 
 		$this->ContentLayerVersionDatabase = $this->LayerModule->pass ($this->ContentLayerVersionTableName, 'getMultiRowField', array());
 

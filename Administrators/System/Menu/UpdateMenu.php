@@ -22,7 +22,18 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	
+	if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
+		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+	} else {
+		if ($_SERVER['REAL_DOCUMENT_ROOT'] != NULL) {
+			$_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] = $_SERVER['REAL_DOCUMENT_ROOT'];
+			$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
+		} else {
+			$HOME = NULL;
+		}
+	}
+	
 	set_time_limit(60);
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
@@ -276,7 +287,8 @@
 		$MenuChange[$NextIDNumber]['Ul'] = NULL;
 		$MenuChange[$NextIDNumber]['UlClass'] = $UlClassChild;
 		$MenuChange[$NextIDNumber]['UlDir'] = NULL;
-		$MenuChange[$NextIDNumber]['UlID'] = $UlID;
+		$MenuChange[$NextIDNumber]['UlID'] = NULL;
+		//$MenuChange[$NextIDNumber]['UlID'] = $UlID;
 		$MenuChange[$NextIDNumber]['UlLang'] = NULL;
 		$MenuChange[$NextIDNumber]['UlStyle'] = NULL;
 		$MenuChange[$NextIDNumber]['UlTitle'] = NULL;

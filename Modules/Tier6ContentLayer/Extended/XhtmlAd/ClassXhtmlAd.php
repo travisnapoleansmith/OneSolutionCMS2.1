@@ -870,7 +870,13 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 		if ($AdPage != NULL) {
 			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
 			$Keys = $this->LayerModule->pass ($this->DatabaseTable, 'getRowFieldNames', array());
+			//debug_print_backtrace();
+			//print_r($AdPage);
+			//print "$this->DatabaseTable\n";
+			//print_r($GLOBALS['ErrorMessage']);
 			$this->addModuleContent($Keys, $AdPage, $this->DatabaseTable);
+			
+			
 		} else {
 			array_push($this->ErrorMessage,'createAdStatPage: AdPage cannot be NULL!');
 		}
