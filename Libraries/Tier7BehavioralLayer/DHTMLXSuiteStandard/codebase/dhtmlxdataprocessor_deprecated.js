@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -7,7 +7,7 @@ To use it on other terms or get Professional edition of the component please con
 */
 dataProcessor.prototype.setOnAfterUpdate=function(a){this.attachEvent("onAfterUpdate",a)};dataProcessor.prototype.enableDebug=function(){};dataProcessor.prototype.setOnBeforeUpdateHandler=function(a){this.attachEvent("onBeforeDataSending",a)};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

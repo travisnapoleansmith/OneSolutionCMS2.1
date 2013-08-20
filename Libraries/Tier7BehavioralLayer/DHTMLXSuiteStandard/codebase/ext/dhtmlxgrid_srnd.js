@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -17,7 +17,7 @@ dhtmlXGridObject.prototype._add_from_buffer=function(b){var a=this.render_row(b)
 -e[1]+f,0));break}}};dhtmlXGridObject.prototype._update_fillers=function(b,a,d){var c=this._fillers[b];c[1]+=a;c[0]+=d;c[1]?(c[2].firstChild.style.height=parseFloat(c[2].firstChild.style.height)+a*this._srdh+"px",this.callEvent("onUpdateFiller",[c[2]])):(this.callEvent("onRemoveFiller",[c[2]]),c[2].parentNode.removeChild(c[2]),this._fillers.splice(b,1))};
 dhtmlXGridObject.prototype._insert_before=function(b,a,d){d.parentNode.insertBefore(a,d);this.rowsCol[b]=a;this.callEvent("onRowInserted",[a,null,d,"before"])};dhtmlXGridObject.prototype._insert_after=function(b,a,d){d.nextSibling?d.parentNode.insertBefore(a,d.nextSibling):d.parentNode.appendChild(a);this.rowsCol[b]=a;this.callEvent("onRowInserted",[a,null,d,"after"])};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

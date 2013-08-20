@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -8,8 +8,8 @@ To use it on other terms or get Professional edition of the component please con
 dhtmlXGridObject.prototype.loadCSVFile=function(b,d){this.load(b,d,"csv")};dhtmlXGridObject.prototype.enableCSVAutoID=function(b){this._csvAID=convertStringToBoolean(b)};dhtmlXGridObject.prototype.enableCSVHeader=function(b){this._csvHdr=convertStringToBoolean(b)};dhtmlXGridObject.prototype.setCSVDelimiter=function(b){this.csv.cell=b};dhtmlXGridObject.prototype._csvAID=!0;dhtmlXGridObject.prototype.loadCSVString=function(b){this.parse(b,"csv")};
 dhtmlXGridObject.prototype.serializeToCSV=function(b){this.editStop();this._agetm=this._mathSerialization?"getMathValue":this._strictText||b?"getTitle":"getValue";var d=[];if(this._csvHdr)for(var c=1;c<this.hdr.rows.length;c++){for(var e=[],a=0;a<this._cCount;a++)(!this._srClmn||this._srClmn[a])&&e.push(this.getColumnLabel(a,c-1));d.push(this.csvParser.str(e,this.csv.cell,this.csv.row))}for(var a=0,i=this.rowsBuffer.length;a<i;a++){var f=this._serializeRowToCVS(null,a);f!=""&&d.push(f)}return this.csvParser.block(d,
 this.csv.row)};
-dhtmlXGridObject.prototype._serializeRowToCVS=function(b,d,c,e){var a=[];b||(b=this.render_row(d),this._fake&&!this._fake.rowsAr[b.idd]&&this._fake.render_row(d));if(!this._csvAID)a[a.length]=b.idd;for(var c=c||0,e=e||this._cCount,i=!1,f=c;b.childNodes[c]._cellIndex>f&&c;)c--;for(var k=c;f<e;k++){if(!b.childNodes[k])break;var j=b.childNodes[k]._cellIndex;if(!this._srClmn||this._srClmn[j]){for(var g=b.childNodes[k],l=this.cells(b.idd,j);f!=j;)if(f++,a.push(""),f>=e)break;if(f>=e)break;f++;zxVal=l.cell?
-l[this._agetm]():"";this._chAttr&&l.wasChanged()&&(i=!0);a[a.length]=zxVal===null?"":zxVal;if(this._ecspn&&g.colSpan&&g.colSpan>1)for(var g=g.colSpan-1,h=0;h<g;h++)a[a.length]="",f++}else f++}return this._onlChAttr&&!i?"":this.csvParser.str(a,this.csv.cell,this.csv.row)};dhtmlXGridObject.prototype.toClipBoard=function(b){window.clipboardData?window.clipboardData.setData("Text",b):(new Clipboard).copy(b)};
+dhtmlXGridObject.prototype._serializeRowToCVS=function(b,d,c,e){var a=[];b||(b=this.render_row(d),this._fake&&!this._fake.rowsAr[b.idd]&&this._fake.render_row(d));if(!this._csvAID)a[a.length]=b.idd;for(var c=c||0,e=e||this._cCount,i=!1,f=c;b.childNodes[c]._cellIndex>f&&c;)c--;for(var k=c;f<e;k++){if(!b.childNodes[k])break;var j=b.childNodes[k]._cellIndex;if((!this._srClmn||this._srClmn[j])&&(!this._serialize_visible||!this._hrrar[j])){for(var g=b.childNodes[k],l=this.cells(b.idd,j);f!=j;)if(f++,a.push(""),
+f>=e)break;if(f>=e)break;f++;zxVal=l.cell?l[this._agetm]():"";this._chAttr&&l.wasChanged()&&(i=!0);a[a.length]=zxVal===null?"":zxVal;if(this._ecspn&&g.colSpan&&g.colSpan>1)for(var g=g.colSpan-1,h=0;h<g;h++)a[a.length]="",f++}else f++}return this._onlChAttr&&!i?"":this.csvParser.str(a,this.csv.cell,this.csv.row)};dhtmlXGridObject.prototype.toClipBoard=function(b){window.clipboardData?window.clipboardData.setData("Text",b):(new Clipboard).copy(b)};
 dhtmlXGridObject.prototype.fromClipBoard=function(){return window.clipboardData?window.clipboardData.getData("Text"):(new Clipboard).paste()};dhtmlXGridObject.prototype.cellToClipboard=function(b,d){if(!b||!d){if(!this.selectedRows[0])return;b=this.selectedRows[0].idd;d=this.cell._cellIndex}var c=this.cells(b,d);this.toClipBoard(((c.getLabel?c.getLabel():c.getValue())||"").toString())};
 dhtmlXGridObject.prototype.updateCellFromClipboard=function(b,d){if(!b||!d){if(!this.selectedRows[0])return;b=this.selectedRows[0].idd;d=this.cell._cellIndex}var c=this.cells(b,d);c[c.setImage?"setLabel":"setValue"](this.fromClipBoard())};
 dhtmlXGridObject.prototype.rowToClipboard=function(b){var d="";this._agetm=this._mathSerialization?"getMathValue":this._strictText?"getTitle":"getValue";if(b)d=this._serializeRowToCVS(this.getRowById(b));else for(var c=[],e=0;e<this.selectedRows.length;e++)c[c.length]=this._serializeRowToCVS(this.selectedRows[e]),d=this.csvParser.block(c,this.csv.row);this.toClipBoard(d)};
@@ -31,7 +31,7 @@ if(!window.clipboardData)window.clipboardData={_make:function(){var b=Components
 setData:function(b,d){try{netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect")}catch(c){return dhtmlxError.throwError("Clipboard","Access to clipboard denied",[b,d]),""}if(!this._make())return!1;this._p[2].data=d;this._p[1].setTransferData("text/unicode",this._p[2],d.length*2);var e=Components.interfaces.nsIClipboard;this._p[0].setData(this._p[1],null,e.kGlobalClipboard)},getData:function(b){try{netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect")}catch(d){return dhtmlxError.throwError("Clipboard",
 "Access to clipboard denied",[b]),""}if(!this._make())return!1;this._p[0].getData(this._p[1],this._p[0].kGlobalClipboard);var c={},e={};try{this._p[1].getTransferData("text/unicode",e,c)}catch(a){return""}e&&(e=e.value.QueryInterface(Components.interfaces.nsISupportsString));return e?e.data.substring(0,c.value/2):""}};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

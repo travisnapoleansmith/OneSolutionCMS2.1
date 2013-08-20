@@ -1,0 +1,118 @@
+#main-menu {
+	position: relative;
+	width: 10px;
+	height: auto;
+	left: 50px;
+	text-align: left;
+	float: left;
+	z-index: 1;
+	left: 5px;
+}
+
+#main-menu-top {
+	position: relative;
+	background: url(TemplateImages/Main-Menu-Top.png);
+	width: 150px;
+	height: 32px;
+	top: 10px;
+}
+
+#main-menu-middle {
+	position: relative;
+	background: url(TemplateImages/Main-Menu-Middle.png);
+	background-repeat: repeat-y;
+	width: 150px;
+	height: auto;
+	min-height: 100px;
+	top: -6px;
+	padding-bottom: 10px;
+}
+
+#main-menu-bottom {
+	position: relative;
+	background: url(TemplateImages/Main-Menu-Bottom.png);
+	width: 150px;
+	height: 58px;
+	top: -6px;
+}
+
+#menu {
+	position: relative;
+	width: 100px;
+}
+
+.main-menu a:link {
+	color: #FFCC00;
+	text-decoration: none;
+}
+
+.main-menu a:visited {
+	color: #FFCC00;
+	text-decoration: none;
+}
+
+.main-menu a:hover {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.main-menu a:active {
+	text-decoration: none;
+}
+
+.MenuLi {
+	list-style-type: none;
+	position: relative;
+	left: -15px;
+	padding-right: 10px;
+	min-width: 10px;
+	width: auto;
+}
+
+.MenuLiSub {
+	list-style-type: none;
+	position: relative;
+	left: 5px;
+	text-indent: 20px;
+	top: 24px;
+	background: url(TemplateImages/Main-Menu-SubMenu-Middle.png);
+	background-repeat: repeat-y;
+	overflow: visible;
+	min-width: 50px;
+	width: auto;
+	white-space: nowrap;
+	text-align: left;
+	height: auto;
+}
+
+.MenuLiSubFinal {
+	background: url(TemplateImages/Main-Menu-SubMenu-Bottom.png);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	min-height: 64px;
+}
+
+.MenuLiSubRoot {
+
+}
+
+.mainmenuul {
+	position: relative;
+	top: -20px;
+	background: url(TemplateImages/Main-Menu-SubMenu-Top.png);
+	background-repeat: no-repeat;
+	background-position: top;
+	padding-left: 0px;
+	padding-right: 10px;
+	left: 80px;
+	width: 150px;
+	height: auto;
+	/*z-index: 10;*/
+}
+
+.main-menu-image {
+	position: relative;
+	top: 30px;
+	left: 15px;
+	z-index: 1;
+}

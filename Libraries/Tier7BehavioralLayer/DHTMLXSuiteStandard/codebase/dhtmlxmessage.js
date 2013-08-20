@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -15,7 +15,7 @@ b&&(f+=l(a.ok||"OK",!0));i&&(f+=l(a.cancel||"Cancel",!1));if(a.buttons)for(var e
 dhtmlx.confirm=function(){var a=n.apply(this,arguments);a.type=a.type||"alert";return p(a)};dhtmlx.modalbox=function(){var a=n.apply(this,arguments);a.type=a.type||"alert";return q(a)};dhtmlx.modalbox.hide=function(a){for(;a&&a.getAttribute&&!a.getAttribute("dhxbox");)a=a.parentNode;a&&(a.parentNode.removeChild(a),e(!1))};var b=dhtmlx.message=function(a,b,e,c){a=t.apply(this,arguments);a.type=a.type||"info";var f=a.type.split("-")[0];switch(f){case "alert":return o(a);case "confirm":return p(a);case "modalbox":return q(a);
 default:return r(a)}};b.seed=(new Date).valueOf();b.uid=function(){return b.seed++};b.expire=4E3;b.keyboard=!0;b.position="top";b.pull={};b.timers={};b.hideAll=function(){for(var a in b.pull)b.hide(a)};b.hide=function(a){var d=b.pull[a];d&&d.parentNode&&(window.setTimeout(function(){d.parentNode.removeChild(d);d=null},2E3),d.className+=" hidden",b.timers[a]&&window.clearTimeout(b.timers[a]),delete b.pull[a])}})();
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

@@ -569,6 +569,9 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	-o-transform: rotate(-90deg);
 	-o-transform-origin: left top;
 	
+	-ms-transform: rotate(-90deg);
+	-ms-transform-origin: left top;
+	
 	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3),alpha(opacity=100);
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_collapsedhor2.gif");
 

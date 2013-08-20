@@ -240,7 +240,7 @@ input.BodyText {
 	width: 775px;
 	height: 40px;
 	top: 10px;
-	z-index: -1;
+	z-index: 0;
 }
 
 #main-content-middle {
@@ -280,7 +280,7 @@ input.BodyText {
 	min-height: 400px;
 	top: 10px;
 	padding-bottom: 10px;
-	z-index: -1;
+	z-index: 0;
 }
 
 #main-content-bottom {
@@ -289,7 +289,7 @@ input.BodyText {
 	width: 775px;
 	height: 107px;
 	top: -3px;
-	z-index: -1;
+	z-index: 0;
 }
 
 #main-content-bottom-empty{
@@ -298,7 +298,7 @@ input.BodyText {
 	width: 775px;
 	height: 107px;
 	top: 10px;
-	z-index: -1;
+	z-index: 0;
 }
 
 #main-content {
@@ -393,4 +393,16 @@ a:active {
 
 #Vault td, #Vault {
 	color: black;
+}
+
+#sv-container {
+	position: relative;
+	left: 75px;
+	width: 585px;
+	height: 585px;
+}
+
+#sv-container object {
+	position: absolute;
+	top: 0px;
 }

@@ -1,0 +1,78 @@
+/* CSS Document */
+
+/* Heading Styles */
+.MainHeading {
+	color: #FFCC00;
+	font-size: 30px;
+	font-weight: bold;
+}
+.SecondaryHeading {
+	color: #FFCC00;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.CopyrightHeading {
+	color: #FFCC00;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.SponsorsHeading {
+	color: #FFCC00;
+	font-size: 18px;
+	font-weight: bold;
+	padding-left: 20px;
+	padding-right: 30px;
+	text-align: center;
+}
+
+.SponsorsName {
+	color: #FFCC00;
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 20px;
+	padding-right: 30px;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+.BodyHeading{
+	color: #FFCC00;
+	font-size: 18px;
+	font-weight: bold;
+	padding-left: 20px;
+	padding-right: 30px;
+	text-align: center;
+}
+
+.BodyText{
+	color: #FFFFFF;
+	font-size: 16px;
+	padding-left: 20px;
+	padding-right: 15px;
+	padding-bottom: 10px;
+	text-indent: 10px;
+}
+
+.BodyTextButton{
+	color: #FFCC00;
+	font-size: 14px;
+	padding-left: 20px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	text-indent: 10px;
+}
+
+.MenuText{
+	color: #FFCC00;
+	/*font-size: 18px;*/
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.MenuTextSub {
+	color: #FFCC00;
+	font-size: 12px;
+	font-style: italic;
+}

@@ -298,7 +298,7 @@
 			$FormOptionText .= $_POST['NewsYear'];
 			$FormOptionText .= ' - ';
 
-			$temp = $hold['FilteredInput']['Heading'];
+			/*$temp = $hold['FilteredInput']['Heading'];
 			$temp = explode(' ', $temp);
 			if ($temp[0] == 'Men\'s' | $temp[0] == 'Women\'s') {
 				$FormOptionText .= addslashes($temp[0]);
@@ -311,7 +311,9 @@
 					$FormOptionText .= $temp[1];
 				}
 			}
-			unset($temp);
+			unset($temp);*/
+			
+			$FormOptionText .= addslashes($hold['FilteredInput']['Heading']);
 
 			$FormOption = array();
 			//$FormOption['PageID'] = $NewsArticleUpdateSelectPage;

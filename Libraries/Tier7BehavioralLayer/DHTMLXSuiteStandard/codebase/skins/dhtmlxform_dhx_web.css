@@ -15,10 +15,12 @@
 	margin: 4px 6px;
 }
 .dhxform_obj_dhx_web div.dhxform_base_nested {
-	padding: 0px 0px 0px 20px;
+	padding: 0px 0px 0px 0px;
 	clear: both;
 }
-
+.dhxform_obj_dhx_web.dhxform_block { /* IE fix */
+	clear: both;
+}
 /************************************************************************************************************************/
 /*	label-link, inner container, checkbox/radio									*/
 
@@ -43,7 +45,9 @@
 /************************************************************************************************************************/
 /*	image, checkbox/radio												*/
 
-.dhxform_obj_dhx_web div.dhxform_img {
+.dhxform_obj_dhx_web div.dhxform_img,
+.dhxform_obj_dhx_web div.dhxform_actv_c,
+.dhxform_obj_dhx_web div.dhxform_actv_r {
 	width: 18px;
 	height: 18px;
 	font-size: 1px;
@@ -56,7 +60,11 @@
 .dhxform_obj_dhx_web div.dhxform_img.rdbt0,
 .dhxform_obj_dhx_web div.dhxform_img.rdbt1,
 .dhxform_obj_dhx_web div.disabled div.dhxform_img.rdbt0,
-.dhxform_obj_dhx_web div.disabled div.dhxform_img.rdbt1 {
+.dhxform_obj_dhx_web div.disabled div.dhxform_img.rdbt1,
+.dhxform_obj_dhx_web div.dhxform_actv_c.chbx0,
+.dhxform_obj_dhx_web div.dhxform_actv_c.chbx1,
+.dhxform_obj_dhx_web div.dhxform_actv_r.rdbt0,
+.dhxform_obj_dhx_web div.dhxform_actv_r.rdbt1 {
 	background-image: url("../imgs/dhxform_dhx_web/dhxform_chbxrd.gif");
 	background-repeat: no-repeat;
 }
@@ -69,6 +77,11 @@
 .dhxform_obj_dhx_web div.dhxform_img.rdbt1 { background-position: -72px 0px; }
 .dhxform_obj_dhx_web div.disabled div.dhxform_img.rdbt0 { background-position: -126px 0px; }
 .dhxform_obj_dhx_web div.disabled div.dhxform_img.rdbt1 { background-position: -108px 0px; }
+
+.dhxform_obj_dhx_web div.dhxform_actv_c.chbx0 {background-position: -162px 0px;}
+.dhxform_obj_dhx_web div.dhxform_actv_c.chbx1 {background-position: -144px 0px;}
+.dhxform_obj_dhx_web div.dhxform_actv_r.rdbt0 {background-position: -198px 0px;}
+.dhxform_obj_dhx_web div.dhxform_actv_r.rdbt1 {background-position: -180px 0px;}
 
 
 /************************************************************************************************************************/
@@ -141,7 +154,9 @@
 	color: white;
 	visibility: hidden;
 }
-.dhxform_obj_dhx_web div.dhxform_control.dhxform_img_node div.dhxform_img {
+.dhxform_obj_dhx_web div.dhxform_control.dhxform_img_node div.dhxform_img,
+.dhxform_obj_dhx_web div.dhxform_control.dhxform_img_node div.dhxform_actv_c,
+.dhxform_obj_dhx_web div.dhxform_control.dhxform_img_node div.dhxform_actv_r {
 	float: none;
 	top: 3px;
 	left: 0px;
@@ -172,11 +187,18 @@
 /************************************************************************************************************************/
 /*	fieldset													*/
 
+.dhxform_obj_dhx_web div.fs_dhxform_item_label_left {
+	padding: 5px 5px 5px 2px;
+}
+.dhxform_obj_dhx_web div.fs_dhxform_item_label_left fieldset.dhxform_fs div.dhxform_base_nested.dhxform_fs_nested {
+	margin-right: 19px;
+	margin-left: 5px;
+}
+
 .dhxform_obj_dhx_web fieldset.dhxform_fs {
 	border: #8b8b8b 1px solid;
-	margin-top: 5px;
-	padding: 5px;
-	adisplay: inline;
+	margin: 0px;
+	padding: 5px 0px 5px 0px;
 	clear: left;
 	width: 100%;
 }
@@ -190,6 +212,7 @@
 	font-size: inherit;
 	font-weight: normal;
 	padding: 0px 4px 1px 4px;
+	margin-left: 5px;
 	text-align: left;
 	
 }
@@ -206,7 +229,9 @@
 	padding-top: 4px;
 	cursor: default;
 }
-.dhxform_obj_dhx_web div.dhxform_item_label_right div.dhxform_img {
+.dhxform_obj_dhx_web div.dhxform_item_label_right div.dhxform_img,
+.dhxform_obj_dhx_web div.dhxform_item_label_right div.dhxform_actv_c,
+.dhxform_obj_dhx_web div.dhxform_item_label_right div.dhxform_actv_r {
 	float: left;
 	margin: 3px 5px 0px 1px;
 }
@@ -229,7 +254,9 @@
 	padding-top: 4px;
 	cursor: default;
 }
-.dhxform_obj_dhx_web div.dhxform_item_label_left div.dhxform_img {
+.dhxform_obj_dhx_web div.dhxform_item_label_left div.dhxform_img,
+.dhxform_obj_dhx_web div.dhxform_item_label_left div.dhxform_actv_c,
+.dhxform_obj_dhx_web div.dhxform_item_label_left div.dhxform_actv_r {
 	float: right;
 	margin: 3px 1px 0px 5px;
 }
@@ -270,7 +297,9 @@
 	top: 0px;
 	cursor: default;
 }
-.dhxform_obj_dhx_web div.item_absolute div.dhxform_img {
+.dhxform_obj_dhx_web div.item_absolute div.dhxform_img,
+.dhxform_obj_dhx_web div.item_absolute div.dhxform_actv_c,
+.dhxform_obj_dhx_web div.item_absolute div.dhxform_actv_r {
 	position: absolute;
 }
 .dhxform_obj_dhx_web div.dhxform_item_absolute div.dhxform_control,
@@ -689,3 +718,20 @@
 	background-position: -87px 0px;
 	cursor: default;
 }
+
+/************************************************************************************************************************/
+/*	skin detect													*/
+div.dhxform_skin_detect {
+	position: absolute;
+	display: block;
+	visibility: hidden;
+	left: -100px;
+	top: 0px;
+	width: 20px;
+	height: 10px;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	overflow: hidden;
+}
+

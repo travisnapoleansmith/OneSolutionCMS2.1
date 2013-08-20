@@ -33,12 +33,22 @@ function dhtmlXCalendarObject(inps, skin) {
 		inps[q] = null;
 	}
 	
-	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : "dhx_skyblue"));
+	this.skinDetect = function() {
+		var t = document.createElement("DIV");
+		t.className = "dhtmlxcalendar_skin_detect";
+		if (document.body.firstChild) document.body.insertBefore(t, document.body.firstChild); else document.body.appendChild(t);
+		var w = t.offsetWidth;
+		t.parentNode.removeChild(t);
+		t = null;
+		return {10:"dhx_skyblue",20:"dhx_web",30:"dhx_terrace",40:"dhx_blue",50:"dhx_black",60:"omega"}[w]||null;
+	}
+	
+	this.skin = (skin != null ? skin : (typeof(dhtmlx) != "undefined" && typeof(dhtmlx.skin) == "string" ? dhtmlx.skin : (this.skinDetect()||"dhx_skyblue")));
 	
 	this.setSkin = function(skin, force) {
 		if (this.skin == skin && !force) return;
 		this.skin = skin;
-		this.base.className = "dhtmlxcalendar_container dhtmlxcalendar_skin_"+this.skin+(String(this.base.className).search("dhtmlxcalendar_time_hidden")>0?" dhtmlxcalendar_time_hidden":"");
+		this.base.className = "dhtmlxcalendar_container dhtmlxcalendar_skin_"+this.skin;
 		this._ifrSize();
 	}
 	
@@ -46,6 +56,7 @@ function dhtmlXCalendarObject(inps, skin) {
 	this.base = document.createElement("DIV");
 	this.base.className = "dhtmlxcalendar_container";
 	this.base.style.display = "none";
+	this.base.appendChild(document.createElement("DIV"));
 	
 	if (p != null) {
 		this._hasParent = true;
@@ -95,7 +106,7 @@ function dhtmlXCalendarObject(inps, skin) {
 	this.contMonth = document.createElement("DIV");
 	this.contMonth.className = "dhtmlxcalendar_month_cont";
 	this.contMonth.onselectstart = function(e){e=e||event;e.cancelBubble=true;e.returnValue=false;return false;}
-	this.base.appendChild(this.contMonth);
+	this.base.firstChild.appendChild(this.contMonth);
 	
 	var ul = document.createElement("UL");
 	ul.className = "dhtmlxcalendar_line";
@@ -140,7 +151,7 @@ function dhtmlXCalendarObject(inps, skin) {
 	// build days names
 	this.contDays = document.createElement("DIV");
 	this.contDays.className = "dhtmlxcalendar_days_cont";
-	this.base.appendChild(this.contDays);
+	this.base.firstChild.appendChild(this.contDays);
 	
 	this.setWeekStartDay = function(ind) {
 		// 1..7 = Mo-Su, also 0 = Su
@@ -162,16 +173,21 @@ function dhtmlXCalendarObject(inps, skin) {
 		var k = this.langData[this.lang].daysSNames;
 		k.push(String(this.langData[this.lang].daysSNames[0]).valueOf());
 		
-		for (var q=0; q<7; q++) {
+		for (var q=0; q<8; q++) {
 			if (ul.childNodes[q] == null) {
 				var li = document.createElement("LI");
 				ul.appendChild(li);
 			} else {
 				var li = ul.childNodes[q];
 			}
-			li.className = "dhtmlxcalendar_cell"+(w>=6?" dhtmlxcalendar_day_weekday_cell":"")+(q==0?"_first":"");
-			li.innerHTML = k[w];
-			if (++w > 7) w = 1;
+			if (q == 0) {
+				li.className = "dhtmlxcalendar_cell_wn";
+				li.innerHTML = "<div class='dhtmlxcalendar_label'>"+(this.langData[this.lang].weekname||"w")+"</div>";
+			} else {
+				li.className = "dhtmlxcalendar_cell"+(w>=6?" dhtmlxcalendar_day_weekday_cell":"")+(q==1?"_first":"");
+				li.innerHTML = k[w];
+				if (++w > 7) w = 1;
+			}
 		}
 		if (this._activeMonth != null) this._drawMonth(this._activeMonth);
 	}
@@ -182,11 +198,12 @@ function dhtmlXCalendarObject(inps, skin) {
 	// dates container
 	this.contDates = document.createElement("DIV");
 	this.contDates.className = "dhtmlxcalendar_dates_cont";
-	this.base.appendChild(this.contDates);
+	this.base.firstChild.appendChild(this.contDates);
 	
 	this.contDates.onclick = function(e){
 		e = e||event;
 		var t = (e.target||e.srcElement);
+		if (t.parentNode != null && t.parentNode._date != null) t = t.parentNode;
 		if (t._date != null && !t._css_dis) {
 			
 			var t1 = that._activeDate.getHours();
@@ -212,7 +229,6 @@ function dhtmlXCalendarObject(inps, skin) {
 			that._activeDateCell = t;
 			that._activeDateCell._css_date = true;
 			that._activeDateCell._css_hover = false;
-			that._lastHover = null;
 			that._updateCellStyle(that._activeDateCell._q, that._activeDateCell._w);
 			
 			if (refreshView) that._drawMonth(that._activeDate);
@@ -232,21 +248,27 @@ function dhtmlXCalendarObject(inps, skin) {
 	this.contDates.onmouseover = function(e) {
 		e = e||event;
 		var t = (e.target||e.srcElement);
+		if (t.parentNode != null && t.parentNode._date != null) t = t.parentNode;
 		if (t._date != null) { // && t != that._activeDateCell) { // skip hover for selected date
+			if (that._lastHover == t || t._css_hover) return;
 			t._css_hover = true;
 			that._updateCellStyle(t._q, t._w);
 			that._lastHover = t;
+			that.callEvent("onMouseOver", [new Date(t._date.getFullYear(),t._date.getMonth(),t._date.getDate(),0,0,0,0),e]);
+			t = null;
 		}
 	}
-	this.contDates.onmouseout = function() {
-		that._clearDayHover();
+	this.contDates.onmouseout = function(e) {
+		that._clearDayHover(e||event);
 	}
 	
 	this._lastHover = null;
-	this._clearDayHover = function() {
+	this._clearDayHover = function(ev) {
+		//if (!this._lastHover || !this._lastHover._css_hover) return;
 		if (!this._lastHover) return;
 		this._lastHover._css_hover = false;
 		this._updateCellStyle(this._lastHover._q, this._lastHover._w);
+		that.callEvent("onMouseOut", [new Date(this._lastHover._date.getFullYear(),this._lastHover._date.getMonth(),this._lastHover._date.getDate(),0,0,0,0),ev]);
 		this._lastHover = null;
 	}
 	
@@ -255,27 +277,37 @@ function dhtmlXCalendarObject(inps, skin) {
 		var ul = document.createElement("UL");
 		ul.className = "dhtmlxcalendar_line";
 		this.contDates.appendChild(ul);
-		for (var w=0; w<7; w++) {
+		for (var w=0; w<=7; w++) {
 			var li = document.createElement("LI");
-			li.className = "dhtmlxcalendar_cell";
+			if (w == 0) {
+				// week number
+				li.className = "dhtmlxcalendar_cell_wn";
+			} else {
+				li.className = "dhtmlxcalendar_cell";
+			}
 			ul.appendChild(li);
 		}
 	}
 	
 	
 	// timepicker
-	
 	this.contTime = document.createElement("DIV");
 	this.contTime.className = "dhtmlxcalendar_time_cont";
-	this.base.appendChild(this.contTime);
+	this.base.firstChild.appendChild(this.contTime);
+	
+	// bottom border
+	var t = document.createElement("DIV");
+	t.className = "dhtmlxcalendar_bottom";
+	this.base.firstChild.appendChild(t);
+	t = null;
 	
 	this.showTime = function() {
-		if (String(this.base.className).search("dhtmlxcalendar_time_hidden") > 0) this.base.className = String(this.base.className).replace(/dhtmlxcalendar_time_hidden/gi,"");
+		this.contTime.style.display = "";
 		this._ifrSize();
 	}
 	
 	this.hideTime = function() {
-		if (String(this.base.className).search("dhtmlxcalendar_time_hidden") < 0) this.base.className += " dhtmlxcalendar_time_hidden";
+		this.contTime.style.display = "none";
 		this._ifrSize();
 	}
 	
@@ -291,6 +323,10 @@ function dhtmlXCalendarObject(inps, skin) {
 	li.onclick = function(e) {
 		e = e||event;
 		var t = (e.target||e.srcElement);
+		if (t.tagName != null && t.tagName.toLowerCase() == "span" && t._par == true && t.parentNode != null) {
+			console.log("span-click")
+			t = t.parentNode;
+		}
 		// show hours selector
 		if (t.className && t.className == "dhtmlxcalendar_label_hours") {
 			e.cancelBubble = true;
@@ -300,7 +336,21 @@ function dhtmlXCalendarObject(inps, skin) {
 		// show minutes selector
 		if (t.className && t.className == "dhtmlxcalendar_label_minutes") {
 			e.cancelBubble = true;
-			that._showSelector("minutes",59,115,"selector_minutes",true);
+			var x = 59;
+			var y = 115;
+			if (that._minutesInterval == 1) {
+				var d = that.getFormatedDate("%i");
+				t.innerHTML = "<span class='dhtmlxcalendar_selected_date'>"+d.charAt(0)+"</span>"+d.charAt(1);
+				t.firstChild._par = true;
+				that._selectorMode = 1; // select hour
+				y = 149;
+			}
+			if (that._minutesInterval == 10) y = 149;
+			if (that._minutesInterval == 15) {
+				x = 46;
+				y = 165;
+			}
+			that._showSelector("minutes",x,y,"selector_minutes",true);
 			return;
 		}
 		// hide selector if it visible
@@ -361,26 +411,49 @@ function dhtmlXCalendarObject(inps, skin) {
 		var i = 0;
 		for (var q=0; q<6; q++) {
 			var ws = this._wStart;
-			for (var w=0; w<7; w++) {
-				var d2 = new Date(first.getFullYear(), first.getMonth(), first.getDate()+i++, 0, 0, 0, 0);
-				this.contDates.childNodes[q].childNodes[w].innerHTML = d2.getDate();
-				var day = d2.getDay();
-				var time = d2.getTime();
+			for (var w=0; w<=7; w++) {
+				if (w == 0) {
+					var wn = this.getWeekNumber(new Date(first.getFullYear(), first.getMonth(), first.getDate()+i, 0, 0, 0, 0));
+					this.contDates.childNodes[q].childNodes[w].innerHTML = "<div class='dhtmlxcalendar_label'>"+wn+"</div>";
+				} else {
+					
+					var d2 = new Date(first.getFullYear(), first.getMonth(), first.getDate()+i, 0, 0, 0, 0);
+					var day = d2.getDay();
+					var time = d2.getTime();
+					
+					var label_css = "dhtmlxcalendar_label";
+					if (this._tipData[time] != null) {
+						if (this._tipData[time].usePopup && typeof(window.dhtmlXPopup) == "function") {
+							this.contDates.childNodes[q].childNodes[w].removeAttribute("title");
+							this._initTooltipPopup();
+						} else {
+							this.contDates.childNodes[q].childNodes[w].setAttribute("title", this._tipData[time].text);
+						}
+						if (this._tipData[time].showIcon) label_css += " dhtmlxcalendar_label_title";
+					} else {
+						this.contDates.childNodes[q].childNodes[w].removeAttribute("title");
+						
+					}
+					
+					this.contDates.childNodes[q].childNodes[w].innerHTML = "<div class='"+label_css+"'>"+d2.getDate()+"</div>";
+					
+					this.contDates.childNodes[q].childNodes[w]._date = new Date(time);
+					this.contDates.childNodes[q].childNodes[w]._q = q;
+					this.contDates.childNodes[q].childNodes[w]._w = w;
+					this.contDates.childNodes[q].childNodes[w]._css_month = (d2.getMonth()==mx);
+					this.contDates.childNodes[q].childNodes[w]._css_date = (!this._nullDate&&time==dx);
+					this.contDates.childNodes[q].childNodes[w]._css_weekend = (ws>=6);
+					this.contDates.childNodes[q].childNodes[w]._css_dis = this._isOutOfRange(time);
+					this.contDates.childNodes[q].childNodes[w]._css_holiday = (this._holidays[time] == true);
+					
+					this._updateCellStyle(q, w);
+					
+					if (time==dx) this._activeDateCell = this.contDates.childNodes[q].childNodes[w];
+					
+					if (++ws > 7) ws = 1;
+					i++;
+				}
 				
-				this.contDates.childNodes[q].childNodes[w]._date = new Date(time);
-				this.contDates.childNodes[q].childNodes[w]._q = q;
-				this.contDates.childNodes[q].childNodes[w]._w = w;
-				this.contDates.childNodes[q].childNodes[w]._css_month = (d2.getMonth()==mx);
-				this.contDates.childNodes[q].childNodes[w]._css_date = (!this._nullDate&&time==dx);
-				this.contDates.childNodes[q].childNodes[w]._css_weekend = (ws>=6);
-				this.contDates.childNodes[q].childNodes[w]._css_dis = this._isOutOfRange(time);
-				this.contDates.childNodes[q].childNodes[w]._css_holiday = (this._holidays[time] == true);
-				
-				this._updateCellStyle(q, w);
-				
-				if (time==dx) this._activeDateCell = this.contDates.childNodes[q].childNodes[w];
-				
-				if (++ws > 7) ws = 1;
 			}
 		}
 		
@@ -420,19 +493,21 @@ function dhtmlXCalendarObject(inps, skin) {
 	
 	/* global selector obj */
 	
+	this._minutesInterval = 5; // default
+	
 	this._initSelector = function(type,css) {
 		
 		if (!this._selCover) {
 			this._selCover = document.createElement("DIV");
 			this._selCover.className = "dhtmlxcalendar_selector_cover";
-			this.base.appendChild(this._selCover);
+			this.base.firstChild.appendChild(this._selCover);
 		}
 
 		if (!this._sel) {
 			
 			this._sel = document.createElement("DIV");
 			this._sel.className = "dhtmlxcalendar_selector_obj";
-			this.base.appendChild(this._sel);
+			this.base.firstChild.appendChild(this._sel);
 			
 			this._sel.appendChild(document.createElement("TABLE"));
 			this._sel.firstChild.className = "dhtmlxcalendar_selector_table";
@@ -621,6 +696,31 @@ function dhtmlXCalendarObject(inps, skin) {
 		// init minutes
 		if (type == "minutes") {
 			
+			// _minutesInterval = 5, def
+			
+			var q1 = 4;
+			var w1 = 3;
+			var len = 2; // leading zero
+			
+			if (this._minutesInterval == 1) {
+				if (this._selectorMode == 1) {
+					q1 = 2;
+					w1 = 3;
+					len = 1;
+				} else {
+					q1 = 2;
+					w1 = 5;
+					len = 1;
+					css += "5";
+				}
+			}
+			if (this._minutesInterval == 10) q1 = 2;
+			if (this._minutesInterval == 15) {
+				q1 = 1;
+				w1 = 4;
+				css += "4";
+			}
+			
 			this._rsCells = {};
 			
 			this.rsCont = document.createElement("DIV");
@@ -628,19 +728,19 @@ function dhtmlXCalendarObject(inps, skin) {
 			this._sel.firstChild.firstChild.firstChild.childNodes[1].appendChild(this.rsCont);
 			
 			var i = 0;
-			for (var q=0; q<4; q++) {
+			for (var q=0; q<q1; q++) {
 				var ul = document.createElement("UL");
 				ul.className = "dhtmlxcalendar_selector_line";
 				this.rsCont.appendChild(ul);
-				for (var w=0; w<3; w++) {
+				for (var w=0; w<w1; w++) {
 					var li = document.createElement("LI");
-					li.innerHTML = this._fixLength(i,2);
+					li.innerHTML = (len>1?this._fixLength(i,len):i);
 					li.className = "dhtmlxcalendar_selector_cell";
 					ul.appendChild(li);
 					li._minutes = i;
 					li._cell = true;
 					this._rsCells[i] = li;
-					i+=5;
+					i += this._minutesInterval;
 				}
 			}
 			
@@ -649,9 +749,34 @@ function dhtmlXCalendarObject(inps, skin) {
 				e.cancelBubble = true;
 				var t = (e.target||e.srcElement);
 				if (t._minutes != null) {
-					that._hideSelector();
-					that._activeDate.setMinutes(t._minutes);
-					that._updateActiveMinutes();
+					if (that._minutesInterval == 1) {
+						
+						var m = that.getFormatedDate("%i");
+						if (that._selectorMode == 1) {
+							m = t._minutes.toString()+m.charAt(1);
+						} else {
+							m = m.charAt(0)+t._minutes.toString();
+						}
+						that._activeDate.setMinutes(Number(m));
+						
+						that._hideSelector(); // will unload
+						
+						if (that._selectorMode == 1) {
+							// show 2nd
+							
+							that._updateVisibleMinutes(true);
+							that._selectorMode = 2;
+							that._showSelector("minutes",32,149,"selector_minutes",true);
+							that._updateActiveMinutes();
+							return;
+						} else {
+							that._selectorMode = 1;
+						}
+					} else {
+						that._hideSelector();
+						that._activeDate.setMinutes(t._minutes);
+						that._updateActiveMinutes();
+					}
 					that._updateVisibleMinutes();
 					that._doOnSelectorChange();
 				}
@@ -687,6 +812,11 @@ function dhtmlXCalendarObject(inps, skin) {
 		this._sel.style.display = "";
 		this._sel.className = "dhtmlxcalendar_selector_obj dhtmlxcalendar_"+css;
 		
+		// arrow width for IE
+		this._sel.childNodes[0].firstChild.firstChild.childNodes[0].style.display = this._sel.childNodes[0].firstChild.firstChild.childNodes[2].style.display = (type=="year"?"":"none");
+		this._sel.childNodes[1].style.width = this._sel.childNodes[0].offsetWidth+"px";
+		
+		
 		// callbacks
 		this._doOnSelectorShow(type);
 	}
@@ -698,10 +828,15 @@ function dhtmlXCalendarObject(inps, skin) {
 		if (type == "minutes") this._updateActiveMinutes();
 	}
 	
-	this._hideSelector = function() {
+	this._hideSelector = function(selMode) {
 		if (!this._sel) return;
 		this._sel.style.display = "none";
 		this._selCover.style.display = "none";
+		//
+		if (this._sel._t == "minutes" && this._minutesInterval == 1) {
+			this.contTime.firstChild.firstChild.childNodes[3].innerHTML = this.getFormatedDate("%i");
+			this._unloadSelector("minutes");
+		}
 	}
 	
 	this._isSelectorVisible = function() {
@@ -710,13 +845,122 @@ function dhtmlXCalendarObject(inps, skin) {
 	}
 	
 	this._doOnSelectorChange = function(state) {
-		this.callEvent("onChange",[new Date(this._activeMonth.getFullYear(), this._activeMonth.getMonth(), this._activeDate.getDate(), this._activeDate.getHours(), this._activeDate.getMinutes(), this._activeDate.getSeconds()),state]);
+		this.callEvent("onChange",[new Date(this._activeMonth.getFullYear(), this._activeMonth.getMonth(), this._activeDate.getDate(), this._activeDate.getHours(), this._activeDate.getMinutes(), this._activeDate.getSeconds()),state===true]);
 	}
 	
 	this._clearSelHover = function() {
 		if (!this._selHover) return;
 		this._selHover.className = String(this._selHover.className.replace(/dhtmlxcalendar_selector_cell_hover/gi,""));
 		this._selHover = null;
+	}
+	
+	this._unloadSelector = function(type) {
+		if (!this._sel) return;
+		if (!this._sel._ta[type]) return;
+		
+		// month selector
+		if (type == "month") {
+			
+			this.msCont.onclick = null;
+			this._msActive = null;
+			
+			// li
+			for (var a in this._msCells) {
+				this._msCells[a]._cell = null;
+				this._msCells[a]._month = null;
+				this._msCells[a].parentNode.removeChild(this._msCells[a]);
+				this._msCells[a] = null;
+			}
+			this._msCells = null;
+			
+			// ul
+			while (this.msCont.childNodes.length > 0) this.msCont.removeChild(this.msCont.lastChild);
+			
+			// div
+			this.msCont.parentNode.removeChild(this.msCont);
+			this.msCont = null;
+			
+		}
+		
+		// years selector
+		if (type == "year") {
+			
+			this.ysCont.onclick = null;
+			
+			// li
+			for (var a in this._ysCells) {
+				this._ysCells[a]._cell = null;
+				this._ysCells[a]._year = null;
+				this._ysCells[a].parentNode.removeChild(this._ysCells[a]);
+				this._ysCells[a] = null;
+			}
+			this._ysCells = null;
+			
+			// ul
+			while (this.ysCont.childNodes.length > 0) this.ysCont.removeChild(this.ysCont.lastChild);
+			
+			// div
+			this.ysCont.parentNode.removeChild(this.ysCont);
+			this.ysCont = null;
+			
+		}
+		
+		// hours selector
+		if (type == "hours") {
+			
+			this.hsCont.onclick = null;
+			this._hsActive = null;
+			
+			// li
+			for (var a in this._hsCells) {
+				this._hsCells[a]._cell = null;
+				this._hsCells[a]._hours = null;
+				this._hsCells[a].parentNode.removeChild(this._hsCells[a]);
+				this._hsCells[a] = null;
+			}
+			this._hsCells = null;
+			
+			// ul
+			while (this.hsCont.childNodes.length > 0) this.hsCont.removeChild(this.hsCont.lastChild);
+			
+			// div
+			this.hsCont.parentNode.removeChild(this.hsCont);
+			this.hsCont = null;
+			
+		}
+		
+		// minutes selector
+		if (type == "minutes") {
+			
+			this.rsCont.onclick = null;
+			this._rsActive = null;
+			
+			// li
+			for (var a in this._rsCells) {
+				this._rsCells[a]._cell = null;
+				this._rsCells[a]._minutes = null;
+				this._rsCells[a].parentNode.removeChild(this._rsCells[a]);
+				this._rsCells[a] = null;
+			}
+			this._rsCells = null;
+			
+			// ul
+			while (this.rsCont.childNodes.length > 0) this.rsCont.removeChild(this.rsCont.lastChild);
+			
+			// div
+			this.rsCont.parentNode.removeChild(this.rsCont);
+			this.rsCont = null;
+			
+		}
+		
+		
+		this._sel._ta[type] = null;
+	}
+	
+	this.setMinutesInterval = function(d) {
+		if (!(d == 1 || d == 5 || d == 10 || d == 15)) return;
+		this._minutesInterval = d;
+		this._unloadSelector("minutes");
 	}
 	
 	
@@ -777,14 +1021,21 @@ function dhtmlXCalendarObject(inps, skin) {
 	
 	// update minutes in selector
 	this._updateActiveMinutes = function() {
-		if (typeof(this._rsActive) != "undefined" && typeof(this._rsCells[this._rsActive]) != "undefined") this._rsCells[this._rsActive].className = "dhtmlxcalendar_selector_cell";
-		this._rsActive = this._activeDate.getMinutes();
+		if (this._rsActive != null && typeof(this._rsActive) != "undefined" && typeof(this._rsCells[this._rsActive]) != "undefined") this._rsCells[this._rsActive].className = "dhtmlxcalendar_selector_cell";
+		if (this._minutesInterval == 1) {
+			this._rsActive = (this.getFormatedDate("%i").toString()).charAt(this._selectorMode==1?0:1);
+		} else {
+			this._rsActive = this._activeDate.getMinutes();
+		}
 		if (typeof(this._rsCells[this._rsActive]) != "undefined") this._rsCells[this._rsActive].className = "dhtmlxcalendar_selector_cell dhtmlxcalendar_selector_cell_active";
 	}
 	
 	// update minutes in calendar
-	this._updateVisibleMinutes = function() {
-		this.contTime.firstChild.firstChild.childNodes[3].innerHTML = this._fixLength(this._activeDate.getMinutes(),2);
+	this._updateVisibleMinutes = function(h) {
+		var t = this._fixLength(this._activeDate.getMinutes(),2).toString();
+		if (h == true) t = t.charAt(0)+"<span class='dhtmlxcalendar_selected_date'>"+t.charAt(1)+"</span>";
+		this.contTime.firstChild.firstChild.childNodes[3].innerHTML = t;
+		if (h == true) this.contTime.firstChild.firstChild.childNodes[3].lastChild._par = true;
 	}
 	
 	/* some common functionality */
@@ -844,7 +1095,7 @@ function dhtmlXCalendarObject(inps, skin) {
 		format = (format||this._dateFormat);
 		
 		
-		var v = val.match(/[a-z0-9]{1,}/gi);
+		var v = val.match(/[a-z0-9éûä\u0430-\u044F\u0451]{1,}/gi);
 		var f = format.match(/%[a-zA-Z]/g);
 		
 		if (!v || v.length != f.length) return "Invalid Date";
@@ -1003,6 +1254,8 @@ function dhtmlXCalendarObject(inps, skin) {
 	}
 	
 	this.showMonth = function(d) {
+		if (typeof(d) == "string") d = this._strToDate(d);
+		if (!(d instanceof Date)) return;
 		this._drawMonth(d);
 	}
 	
@@ -1018,6 +1271,61 @@ function dhtmlXCalendarObject(inps, skin) {
 			date = new Date(this._activeDate);
 		}
 		return this._dateToStr(date, format);
+	}
+	
+	/* week numbers */
+	this.getWeekNumber = function(dateX) {
+		
+		if (typeof(dateX) == "string") dateX = this._strToDate(dateX);
+		if (!(dateX instanceof Date)) return "Invalid Date";
+		
+		if (typeof(this._ftDay) == "undefined") this._ftDay = 4;
+		
+		var ws = this._wStart; // 1..7 = Mo-Su
+		var we = ws+7;
+		
+		var ft = 4; // first thursday
+		
+		
+		var x1_date = new Date(dateX.getFullYear(), 0, 1, 0, 0, 0, 0);// day-of-week, jan first
+		var x1 = x1_date.getDay();
+		if (x1 == 0) x1 = 7;
+		
+		// offset
+		if (ft < ws) {
+			ft += 7;
+			x1 += 7;
+		}
+		
+		// detect date of 1st week
+		
+		var i = 0; // week offset
+		if (x1 >= ws && x1 <= ft) {
+			// x1 belong 1st week
+		} else {
+			// x1 belong 2nd week
+			i = 1;
+		}
+		var k = x1-ws;
+		var w1 = new Date(dateX.getFullYear(), 0, 1-k+i*7, 0, 0, 0, 0);// 1st week start date
+		
+		// console.log("1st week of "+x.getFullYear()+" year starts from "+this.getFormatedDate("%M %d, %Y",w1));
+		
+		var d7 = 604800000; // 7 days in ms, 60*60*24*7*1000
+		var x2 = new Date(dateX.getFullYear(), dateX.getMonth(), dateX.getDate()+1, 0, 0, 0, 0); // 2nd day to get interval
+		
+		var wn = Math.ceil((x2.getTime()-w1.getTime())/d7);
+		
+		return wn;
+		
+	}
+	
+	this.showWeekNumbers = function() {
+		this.base.firstChild.className = "dhtmlxcalendar_wn";
+	}
+	
+	this.hideWeekNumbers = function() {
+		this.base.firstChild.className = "";
 	}
 	
 	/* show/hide calendar */
@@ -1432,6 +1740,97 @@ function dhtmlXCalendarObject(inps, skin) {
 		this._drawMonth(this._activeMonth);
 	}
 	
+	
+	/* tooltips */
+	
+	this._tipData = {};
+	this._tipTM = null;
+	this._tipTMTime = 400;
+	this._tipEvs = false;
+	this._tipPopup = null;
+	this._tipCellDate = null;
+	this._tipCellDim = null;
+	
+	this.setTooltip = function(dateX, text, showIcon, usePopup) {
+		
+		var t = this._extractDates(dateX);
+		for (var q=0; q<t.length; q++) {
+			var k = new Date(t[q].getFullYear(),t[q].getMonth(),t[q].getDate(),0,0,0,0).getTime();
+			this._tipData[k] = { text: text, showIcon: showIcon, usePopup: usePopup };
+		}
+		this._drawMonth(this._activeMonth);
+	}
+	
+	this.clearTooltip = function(dateX) {
+		
+		var t = this._extractDates(dateX);
+		for (var q=0; q<t.length; q++) {
+			var k = new Date(t[q].getFullYear(),t[q].getMonth(),t[q].getDate(),0,0,0,0).getTime();
+			this._tipData[k] = null;
+			delete this._tipData[k];
+		}
+		this._drawMonth(this._activeMonth);
+	}
+	
+	this._initTooltipPopup = function() {
+		
+		if (this._tipEvs) return;
+		
+		this.attachEvent("onMouseOver", function(d){
+			var k = new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0).getTime();
+			if (this._tipData[k] != null) {
+				if (this._tipTM) window.clearTimeout(this._tipTM);
+				this._tipCellDate = d;
+				this._tipCellDim = this.getCellDimension(d);
+				this._tipText = this._tipData[k].text;
+				this._tipTM = window.setTimeout(this._showTooltipPopup,this._tipTMTime);
+			}
+		});
+		
+		this.attachEvent("onMouseOut", this._hideTooltipPopup);
+		
+		this._tipEvs = true;
+	}
+	this._showTooltipPopup = function(text,x,y,w,h) {
+		if (!that._tipPopup) that._tipPopup = new dhtmlXPopup({mode:"top"});
+		that._tipPopup.attachHTML(that._tipText);
+		that._tipPopup.show(that._tipCellDim.x, that._tipCellDim.y, that._tipCellDim.w, that._tipCellDim.h);
+		that.callEvent("onPopupShow",[that._tipCellDate]);
+	}
+	
+	this._hideTooltipPopup = function() {
+		if (this._tipTM) window.clearTimeout(this._tipTM);
+		if (this._tipPopup != null && this._tipPopup.isVisible()) {
+			this._tipPopup.hide();
+			this.callEvent("onPopupHide",[this._tipCellDate]);
+		}
+	}
+	
+	this.getPopup = function() {
+		return this._tipPopup;
+	}
+	
+	this.getCellDimension = function(dateX) {
+		
+		if (typeof(dateX) == "string") dateX = this._strToDate(dateX);
+		if (!(dateX instanceof Date)) return null;
+		
+		var t = new Date(dateX.getFullYear(),dateX.getMonth(),dateX.getDate(),0,0,0,0).getTime();
+		
+		var k = null;
+		
+		for (var q=0; q<this.contDates.childNodes.length; q++) {
+			for (var w=0; w<this.contDates.childNodes[q].childNodes.length; w++) {
+				var p = this.contDates.childNodes[q].childNodes[w];
+				if (p._date != null && p._date.getTime() == t) k = { x: this._getLeft(p), y: this._getTop(p), w: p.offsetWidth, h: p.offsetHeight };
+				p = null;
+			}
+		}
+		
+		return k;
+	}
+	
+	/* other */
 	this._updateFromInput = function(t) {
 		if (this._nullInInput && ((t.value).replace(/\s/g,"")).length == 0) {
 			if (this.checkEvent("onBeforeChange")) {
@@ -1803,104 +2202,15 @@ function dhtmlXCalendarObject(inps, skin) {
 		this.contTime.parentNode.removeChild(this.contTime);
 		this.contTime = null;
 		
-		/* selector */
 		
 		this._lastHover = null;
 		
-		// month selector
-		if (this.msCont) {
-			
-			this.msCont.onclick = null;
-			this._msActive = null;
-			
-			// li
-			for (var a in this._msCells) {
-				this._msCells[a]._cell = null;
-				this._msCells[a]._month = null;
-				this._msCells[a].parentNode.removeChild(this._msCells[a]);
-				this._msCells[a] = null;
-			}
-			this._msCells = null;
-			
-			// ul
-			while (this.msCont.childNodes.length > 0) this.msCont.removeChild(this.msCont.lastChild);
-			
-			// div
-			this.msCont.parentNode.removeChild(this.msCont);
-			this.msCont = null;
-			
-		}
+		/* selector */
 		
-		// years selector
-		if (this.ysCont) {
-			
-			this.ysCont.onclick = null;
-			
-			// li
-			for (var a in this._ysCells) {
-				this._ysCells[a]._cell = null;
-				this._ysCells[a]._year = null;
-				this._ysCells[a].parentNode.removeChild(this._ysCells[a]);
-				this._ysCells[a] = null;
-			}
-			this._ysCells = null;
-			
-			// ul
-			while (this.ysCont.childNodes.length > 0) this.ysCont.removeChild(this.ysCont.lastChild);
-			
-			// div
-			this.ysCont.parentNode.removeChild(this.ysCont);
-			this.ysCont = null;
-			
-		}
-		
-		// hours selector
-		if (this.hsCont) {
-			
-			this.hsCont.onclick = null;
-			this._hsActive = null;
-			
-			// li
-			for (var a in this._hsCells) {
-				this._hsCells[a]._cell = null;
-				this._hsCells[a]._hours = null;
-				this._hsCells[a].parentNode.removeChild(this._hsCells[a]);
-				this._hsCells[a] = null;
-			}
-			this._hsCells = null;
-			
-			// ul
-			while (this.hsCont.childNodes.length > 0) this.hsCont.removeChild(this.hsCont.lastChild);
-			
-			// div
-			this.hsCont.parentNode.removeChild(this.hsCont);
-			this.hsCont = null;
-			
-		}
-		
-		// minutes selector
-		if (this.rsCont) {
-			
-			this.rsCont.onclick = null;
-			this._rsActive = null;
-			
-			// li
-			for (var a in this._rsCells) {
-				this._rsCells[a]._cell = null;
-				this._rsCells[a]._minutes = null;
-				this._rsCells[a].parentNode.removeChild(this._rsCells[a]);
-				this._rsCells[a] = null;
-			}
-			this._rsCells = null;
-			
-			// ul
-			while (this.rsCont.childNodes.length > 0) this.rsCont.removeChild(this.rsCont.lastChild);
-			
-			// div
-			this.rsCont.parentNode.removeChild(this.rsCont);
-			this.rsCont = null;
-			
-		}
+		this._unloadSelector("month");
+		this._unloadSelector("year");
+		this._unloadSelector("hours");
+		this._unloadSelector("minutes");
 		
 		// selector cover
 		if (this._selCover) {
@@ -1990,6 +2300,12 @@ function dhtmlXCalendarObject(inps, skin) {
 		this.showTime = null;
 		this.unload = null;
 		
+		/* popup */
+		if (this._tipPopup != null) {
+			this._tipPopup.unload();
+			this._tipPopup = null;
+		}
+		
 		for (var a in this) delete this[a];
 		
 		a = that = null;
@@ -2013,7 +2329,8 @@ dhtmlXCalendarObject.prototype.langData = {
 		monthesSNames: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
 		daysFNames: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
 		daysSNames: ["Su","Mo","Tu","We","Th","Fr","Sa"],
-		weekstart: 1
+		weekstart: 1,
+		weekname: "w"
 	}
 };
 

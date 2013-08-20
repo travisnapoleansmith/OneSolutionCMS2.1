@@ -78,6 +78,8 @@
 
 		$EnableDisablePhotosPage = $Options['XhtmlPicture']['picture']['EnableDisablePhotosPage']['SettingAttribute'];
 		header("Location: $EnableDisablePhotosPage");
+		exit;
+		
 	} else {
 		$EnableDisableStatusChangePhotosPage = $Options['XhtmlPicture']['picture']['EnableDisableStatusChangePhotosPage']['SettingAttribute'];
 		header("Location: ../../index.php?PageID=$EnableDisableStatusChangePhotosPage");

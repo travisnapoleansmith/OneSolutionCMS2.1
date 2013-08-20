@@ -1,4 +1,4 @@
-<files settings.ini>
+<files Settings.ini>
 	order deny,allow 
 	deny from all 
 </files> 

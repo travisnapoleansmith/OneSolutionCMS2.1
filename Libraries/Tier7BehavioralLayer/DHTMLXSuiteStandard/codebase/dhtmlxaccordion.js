@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -49,7 +49,7 @@ dhtmlXAccordion.prototype.loadXML=function(f,i){var d=this;this.callEvent("onXLS
 "indefined"&&String(a.childNodes[h].tagName).toLowerCase()=="cell"){var o=a.childNodes[h].getAttribute("id")||d._genStr(12),p=a.childNodes[h].firstChild.nodeValue||"";e.cells.push({id:o,text:p});if(a.childNodes[h].getAttribute("icon")!=null)e.cells[e.cells.length-1].icon=a.childNodes[h].getAttribute("icon");if(a.childNodes[h].getAttribute("height")!=null)e.cells[e.cells.length-1].height=a.childNodes[h].getAttribute("height");if(b[a.childNodes[h].getAttribute("open")||0])e.cells[e.cells.length-1].open=
 !0}d.loadJSON(e);d.callEvent("onXLE",[]);typeof i=="function"&&i();d=i=null})};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

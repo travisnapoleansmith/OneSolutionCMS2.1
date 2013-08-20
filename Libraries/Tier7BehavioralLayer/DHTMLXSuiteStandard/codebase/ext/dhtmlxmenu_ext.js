@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -52,7 +52,7 @@ dhtmlXMenuObject.prototype._readLevel=function(a){var c="",b;for(b in this.itemP
 "</hotkey>"));this.itemPull[b].type=="separator"?i=' type="separator"':this.itemPull[b].state=="disabled"&&(g=' enabled="false"');this.itemPull[b].type=="checkbox"&&(i=' type="checkbox"'+(this.itemPull[b].checked?' checked="true"':""));this.itemPull[b].type=="radio"&&(i=' type="radio" group="'+this.itemPull[b].group+'" '+(this.itemPull[b].checked?' checked="true"':""));c+="<item id='"+k+"'"+h+i+d+e+g+">";c+=f;this.itemPull[b].complex&&(c+=this._readLevel(b));c+="</item>"}return c};
 dhtmlXMenuObject.prototype.serialize=function(){var a="<menu>"+this._readLevel(this.idPrefix+this.topId)+"</menu>";return a};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

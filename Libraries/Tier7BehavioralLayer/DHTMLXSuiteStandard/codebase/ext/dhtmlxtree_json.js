@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -20,7 +20,7 @@ dhtmlXTreeObject.prototype._serializeItemJSON=function(a){var b=[];if(a.unParsed
 1?', "checked":"1" ':a.checkstate==2?', "checked":"-1"':"")+(a.closeable?', "closeable":"1" ':"")+(this.XMLsource&&a.XMLload==0?', "child":"1" ':"")):b.push('{ "id":"'+a.id+'", '+(this._getOpenState(a)==1?' "open":"1", ':"")+(d==a.id?' "select":"1",':"")+' "text":"'+f+'"'+(this.XMLsource&&a.XMLload==0?', "child":"1" ':""));if(this._xuserData&&a._userdatalist){b.push(', "userdata":[');for(var c=a._userdatalist.split(","),e=[],g=0;g<c.length;g++)e.push('{ "name":"'+c[g]+'" , "content":"'+a.userData["t_"+
 c[g]]+'" }');b.push(e.join(","));b.push("]")}if(a.childsCount){b.push(', "item":[');e=[];for(g=0;g<a.childsCount;g++)e.push(this._serializeItemJSON(a.childNodes[g]));b.push(e.join(","));b.push("]\n")}b.push("}\n");return b.join("")};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

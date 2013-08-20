@@ -22,15 +22,20 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	
 	$credentaillogonarray = $GLOBALS['credentaillogonarray'];
+	$ThemeLocation = $GLOBALS['ThemeLocation'];
 	$Writer = $GLOBALS['Writer'];
 	$Writer->startElement('div');
 		$Writer->writeAttribute('id','backgroundimage');
 			if ($GLOBALS['ThemeName']) {
 				$ThemeName = $GLOBALS['ThemeName'];
 				$Writer->startElement('img');
-				$Writer->writeAttribute('src', "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Background.jpg");
+				if (empty($ThemeLocation)) {
+					$Writer->writeAttribute('src', "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Background.jpg");
+				} else {
+					$Writer->writeAttribute('src', "$HOME/$ThemeLocation/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Background.jpg");
+				}
 				$Writer->writeAttribute('alt', 'Background Image');
 				$Writer->writeAttribute('id', 'background');
 				$Writer->endElement();

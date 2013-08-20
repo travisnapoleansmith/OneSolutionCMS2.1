@@ -38,11 +38,39 @@
 
 class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
 	/**
+	 * RecordExecutionTime, if true, time each methods execution and record the results in $this->ExecutionTimeLog.
+	 *
+	 * @var array
+	 */
+	protected $RecordExecutionTime = FALSE;
+	
+	/**
+	 * ExecutionTimeLog, the file name for the Execution Time Log.
+	 *
+	 * @var array
+	 */
+	protected $ExecutionTimeLog;
+	
+	/**
+	 * TimeStart, the time the scripted started.
+	 *
+	 * @var array
+	 */
+	protected $TimeStart;
+	
+	/**
 	 * DHtmlXGridTable Output, if true display for DHtmlX Grid Table
 	 *
 	 * @var array
 	 */
 	protected $DHtmlXGridTable = FALSE;
+	
+	/**
+	 * TableID Current Table ID To Lookup
+	 *
+	 * @var string
+	 */
+	protected $TableID = NULL;
 
 	/**
 	 * Table Names passed to contructor
@@ -214,6 +242,12 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 	 * @access public
 	*/
 	public function __construct(array $TableNames, array $DatabaseOptions, $LayerModule) {
+		$this->RecordExecutionTime = FALSE;
+		if ($this->RecordExecutionTime === TRUE) {
+			$this->ExecutionTimeLog = "Modules/Tier6ContentLayer/Core/XhtmlTable/TableTimeLog.txt";
+			$this->TimeStart = microtime(true);
+		}
+		
 		$this->LayerModule = &$LayerModule;
 
 		$hold = current($TableNames);
@@ -248,6 +282,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->TableNames[key($TableNames)] = current($TableNames);
 			next($TableNames);
 		}
+		
+		if ($this->RecordExecutionTime === TRUE) {
+			$TimeEnd = microtime(true);
+			$ExecutionTime = ($TimeEnd - $this->TimeStart)/60;
+			//$LogFile = "TableTime.txt";
+			$LogFileHandle = fopen($this->ExecutionTimeLog, 'a');
+			$FileInformation = 'Logging - XhtmlTable __construct Executed at - ' . date("F j, Y, g:i a") . "\n";
+			fwrite($LogFileHandle, $FileInformation);
+			fwrite($LogFileHandle, "XhtmlTable StartTime - $this->TimeStart\n");
+			fwrite($LogFileHandle, "Current Method's EndTime - $TimeEnd\n");
+			fwrite($LogFileHandle, "Total Execution Time - $ExecutionTime\n");
+			fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+			fclose($LogFileHandle);
+		}
 	}
 
 	/**
@@ -277,6 +325,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			$this->LayerModule->setDatabasetable (current($this->TableNames));
 			next($this->TableNames);
 		}
+		
+		if ($this->RecordExecutionTime === TRUE) {
+			$TimeEnd = microtime(true);
+			$ExecutionTime = ($TimeEnd - $this->TimeStart)/60;
+			//$LogFile = "TableTime.txt";
+			$LogFileHandle = fopen($this->ExecutionTimeLog, 'a');
+			$FileInformation = 'Logging - XhtmlTable setDatabaseAll Executed at - ' . date("F j, Y, g:i a") . "\n";
+			fwrite($LogFileHandle, $FileInformation);
+			fwrite($LogFileHandle, "XhtmlTable StartTime - $this->TimeStart\n");
+			fwrite($LogFileHandle, "Current Method's EndTime - $TimeEnd\n");
+			fwrite($LogFileHandle, "Total Execution Time - $ExecutionTime\n");
+			fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+			fclose($LogFileHandle);
+		}
 	}
 
 	/**
@@ -292,6 +354,8 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 		unset ($PageID['PrintPreview']);
 		$passarray = array();
 		$passarray = &$PageID;
+		
+		$this->TableID = $PageID['TableID'];
 		reset($this->TableNames);
 
 		foreach ($this->TableNames as $TableName => $TableContent) {
@@ -517,6 +581,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 				}
 			}
 		}
+		
+		if ($this->RecordExecutionTime === TRUE) {
+			$TimeEnd = microtime(true);
+			$ExecutionTime = ($TimeEnd - $this->TimeStart)/60;
+			//$LogFile = "TableTime.txt";
+			$LogFileHandle = fopen($this->ExecutionTimeLog, 'a');
+			$FileInformation = 'Logging - XhtmlTable FetchDatabase Executed at - ' . date("F j, Y, g:i a") . "\n";
+			fwrite($LogFileHandle, $FileInformation);
+			fwrite($LogFileHandle, "XhtmlTable StartTime - $this->TimeStart\n");
+			fwrite($LogFileHandle, "Current Method's EndTime - $TimeEnd\n");
+			fwrite($LogFileHandle, "Total Execution Time - $ExecutionTime\n");
+			fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+			fclose($LogFileHandle);
+		}
 	}
 
 	/**
@@ -576,6 +654,20 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 					$this->Writer->endElement(); // END TABLE OR ROWS
 				}
 			}
+		}
+		
+		if ($this->RecordExecutionTime === TRUE) {
+			$TimeEnd = microtime(true);
+			$ExecutionTime = ($TimeEnd - $this->TimeStart)/60;
+			//$LogFile = "TableTime.txt";
+			$LogFileHandle = fopen($this->ExecutionTimeLog, 'a');
+			$FileInformation = 'Logging - XhtmlTable CreateOutput Executed at - ' . date("F j, Y, g:i a") . "\n";
+			fwrite($LogFileHandle, $FileInformation);
+			fwrite($LogFileHandle, "XhtmlTable StartTime - $this->TimeStart\n");
+			fwrite($LogFileHandle, "Current Method's EndTime - $TimeEnd\n");
+			fwrite($LogFileHandle, "Total Execution Time - $ExecutionTime\n");
+			fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+			fclose($LogFileHandle);
 		}
 	}
 
@@ -1560,10 +1652,34 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 			if ($CurrentRecord != NULL) {
 				if ($this->DHtmlXGridTable == TRUE) {
-					$this->Writer->startElement('column');
-					$this->Writer->writeAttribute('type', 'ed');
-					$this->Writer->writeAttribute('sort', 'str');
-					$this->Writer->writeAttribute('width', '110');
+					if ($ObjectID == 1 & $this->TableID == 0) {
+						$this->Writer->startElement('column');
+						$this->Writer->writeAttribute('type', 'cntr');
+						$this->Writer->writeAttribute('sort', 'na');
+						$this->Writer->writeAttribute('width', '30');
+					} else if ($ObjectID == 1) {
+						$this->Writer->startElement('column');
+							$this->Writer->writeAttribute('type', 'cntr');
+							$this->Writer->writeAttribute('sort', 'na');
+							$this->Writer->writeAttribute('width', '30');
+							
+							$this->Writer->text('');
+							
+							//$this->Writer->text('&nbsp;');
+						
+						$this->Writer->endElement(); // END TD OR COLUMN TAG
+						
+						$this->Writer->startElement('column');
+						$this->Writer->writeAttribute('type', 'ed');
+						$this->Writer->writeAttribute('sort', 'str');
+						$this->Writer->writeAttribute('width', '110');
+						
+					} else {
+						$this->Writer->startElement('column');
+						$this->Writer->writeAttribute('type', 'ed');
+						$this->Writer->writeAttribute('sort', 'str');
+						$this->Writer->writeAttribute('width', '110');
+					}
 				} else {
 					$this->Writer->startElement('th');
 				}
@@ -1600,6 +1716,11 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 			}
 			if ($CurrentRecord != NULL) {
 				if ($this->DHtmlXGridTable == TRUE) {
+					if (($ObjectID == 1 | $ObjectID %100 == 0) & $this->TableID != 0) {
+						$this->Writer->startElement('cell');
+							$this->Writer->text('');
+						$this->Writer->endElement(); // END TD OR CELL TAG
+					}
 					$this->Writer->startElement('cell');
 				} else {
 					$this->Writer->startElement('td');
@@ -1609,7 +1730,15 @@ class XhtmlTable extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						if ($this->DHtmlXGridTable == FALSE) {
 							$this->TableCellElement ($CurrentRecord);
 						}
+						
+						if ($this->DHtmlXGridTable == TRUE) {
+							if (strpos($Text, '\\') !== FALSE) {
+								$Text = str_replace('\\', '', $Text);
+							}
+						}
+						
 						$this->Writer->text($Text);
+						
 					}
 				$this->Writer->endElement(); // END TD OR CELL TAG
 			}

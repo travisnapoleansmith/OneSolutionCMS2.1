@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -45,7 +45,7 @@ dtmlXMLLoaderObject.prototype.doXSLTransToString=function(a,b){var c=this.doXSLT
 dhtmlxEventable=function(a){a.attachEvent=function(a,c,d){a="ev_"+a.toLowerCase();this[a]||(this[a]=new this.eventCatcher(d||this));return a+":"+this[a].addEvent(c)};a.callEvent=function(a,c){a="ev_"+a.toLowerCase();return this[a]?this[a].apply(this,c):!0};a.checkEvent=function(a){return!!this["ev_"+a.toLowerCase()]};a.eventCatcher=function(a){var c=[],d=function(){for(var d=!0,g=0;g<c.length;g++)if(c[g]!=null)var f=c[g].apply(a,arguments),d=d&&f;return d};d.addEvent=function(a){typeof a!="function"&&
 (a=eval(a));return a?c.push(a)-1:!1};d.removeEvent=function(a){c[a]=null};return d};a.detachEvent=function(a){if(a!=!1){var c=a.split(":");this[c[0]].removeEvent(c[1])}};a.detachAllEvents=function(){for(var a in this)a.indexOf("ev_")==0&&(this.detachEvent(a),this[a]=null)};a=null};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

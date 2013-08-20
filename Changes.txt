@@ -1,6 +1,29 @@
-Changes For One Solution CMS 2.1.154 - Monday, July 22, 2013
+Changes For One Solution CMS 2.1.155 - Tuesday, August 20, 2013
 Added:
-	1). Nothing Added
+	1). Added Administrators Panel - SimpleViewer Gallery - Added forms for SimpleViewer Gallery.
+	2). Added UserData Folder - Added to UserData folder Themes. This is where new themes go when they are extracted from a .zip file. This includes all current themes minus the included themes. Each theme will need Install.ini, Install.txt, Theme.sql and ThemeGlobalLayer.sql file. More details will be coming in the future.
+	3). Added Administrators Panel - Tables Content - Added a counter to the side of each row to let the user know the row order. This also means that when a table is sorted it will get submitted in the sorted order.
+	4). Added Administrators Panel - SimpleViewer Gallery - Added forms processing for SimpleViewer Gallery. Pages are coming in a future release!
+	
+Updated (Fixed):
+	1). Updated Libraries / DHTMLX Suite Standard - Updated to version 3.6 Build 130619. We have combined all the elements into one folder codebase. All modules have been updated.
+	2). Updated Administrators Panel - Tables Content - Corrected Bug ID #0000044 - When using the import feature in Internet Explorer path gets changed to C:\FakePath and file does not display. This issue has been fixed.
+	3). Updated Administrators Panel - Tables Content - Debugging Bug ID #0000045 - Add Table data has been out of order. We added debugging mode to Add Tables. This will collected what data has been sent to the server. When an incident occurs again we can see what is going on. All sites will have this turned on.
+	4). Updated Administrators Panel - Tables Content - Changed the way import works, it no longer redirects to a new page.
+	5). Updated Administrators Panel - News Pages - Changed the Add / Update News Story so it will show the entire heading name in the drop down. If it doesn't work well, will switch back to just 2 words after date.
+	6). Updated All Themes - All user based themes have been moved to UserData. The user will have to re-enable the theme in the next update. Only themes that are not part of this are OneSolutionCMSDefault and AdminTheme. After this update these will be the only theme that come with One Solution CMS.
+	7). Updated settings.ini - Updated the file location for settings.ini. It now is located in UserData/Configuration. Also the name is now Settings.ini. Make sure to adjust for this when apply the update.
+	8). Updated Administrators Panel - Tables Content - Corrected Bug ID #0000046 - Table Content is out of order when a user removes then adds a row. This issue has been fixed. We added a non editable field showing what spot it will be in.
+	9). Updated Administrators Panel - Tables Content - Corrected Bug ID #0000047 - When a user selects row 1 and clicks add row 1, a new row with not be added and no new rows can be added. This has been corrected.
+	
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.154 - Monday, July 22, 2013 - 5:36:49 PM
+Added:
+	1). Nothing Added.
 	
 Updated (Fixed):
 	1). Updated Administrators Panel - System Updater - Did't put in the most up to date copy of System Updater.
@@ -12,7 +35,7 @@ Removed:
 	
 Changes For One Solution CMS 2.1.153 - Monday, July 22, 2013 - 4:56:36 PM
 Added:
-	1). Nothing Added
+	1). Nothing Added.
 	
 Updated (Fixed):
 	1). Updated All Tiers With One Solution CMS 2.2.8 changes.
@@ -32,7 +55,7 @@ Removed:
 
 Changes For One Solution CMS 2.1.152 - Sunday, June 30, 2013 - 4:19:23 PM
 Added:
-	1). Nothing Added
+	1). Nothing Added.
 	
 Updated (Fixed):
 	1). Updated Tier2DataAccessLayer - Corrected Bug ID #0000041 - Cannot use object of type DataAccessLayer as array. This major issue has been resolved.
@@ -48,9 +71,8 @@ Changes For One Solution CMS 2.1.151 - Friday, June 28, 2013 - 7:37:37 PM
 Added:
 	1). Added Administrators Panel - Menu Items - Added Menu Items. This allows for a user to define in the menu a link to something that is ether on site or not. This is for pages that don't exist in the system.
 	
-Updated (Fixed):
-	1). 
-	2). Updated MySqlConnect - Added more error checking. This is from One Solution CMS 2.2.5 release.
+Updated (Fixed): 
+	1). Updated MySqlConnect - Added more error checking. This is from One Solution CMS 2.2.5 release.
 	2). Update Libraries / DHTMLX Suite Standard - Updated to version 3.6 Build 130619. We have combined all the elements into one folder codebase. All modules have been updated.
 	3). Updated Administrators Panel - Videos Pages - Corrected Bug ID #000039 - Videos Pages were not incrementing when a user created a new page. This has been corrected.
 	4). Updated Administrators Panel - Videos Pages - Corrected Bug ID #000040 - Created Videos Pages shows up as a Tables Page. This has been corrected.

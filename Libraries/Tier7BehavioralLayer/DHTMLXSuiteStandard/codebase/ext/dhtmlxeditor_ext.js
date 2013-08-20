@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -19,7 +19,7 @@ function(a,b){var b=b.toLowerCase(),c=a;do if(b==""||c.nodeName.toLowerCase()==b
 "strike")this.style.del=!0};this._unloadExtModule=function(){this.tb.unload();this.setStyleProperty=this.isStyleProperty=this.getParentByTag=this.clearFormatting=this.decreaseIndent=this.increaseIndent=this.createBulList=this.createNumList=this.applyH4=this.applyH3=this.applyH2=this.applyH1=this.applySuper=this.applySub=this.alignJustify=this.alignCenter=this.alignRight=this.alignLeft=this.applyStrikethrough=this.applyUnderscore=this.applyItalic=this.applyBold=this._doOnBeforeStateChange=this._doOnStateChange=
 this._doOnToolbarClick=this._doOnFocusChanged=this._checkH=this._checkAlign=this.tbXML=this._xmlSizes=this._availSizes=this._xmlFonts=this._initFont=this._availFonts=this.tb=null}};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

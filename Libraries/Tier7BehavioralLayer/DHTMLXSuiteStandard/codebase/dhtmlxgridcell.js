@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -14,7 +14,7 @@ dhtmlXGridCellObject.prototype={getAttribute:function(a){return this.cell._attrs
 dhtmlXGridCellObject.prototype.setValue=function(a){typeof a!="number"&&(!a||a.toString()._dhx_trim()=="")?(a="&nbsp;",this.cell._clearCell=!0):this.cell._clearCell=!1;this.setCValue(a)};dhtmlXGridCellObject.prototype.getTitle=function(){return _isIE?this.cell.innerText:this.cell.textContent};dhtmlXGridCellObject.prototype.setCValue=function(a){this.cell.innerHTML=a};dhtmlXGridCellObject.prototype.setCTxtValue=function(a){this.cell.innerHTML="";this.cell.appendChild(document.createTextNode(a))};
 dhtmlXGridCellObject.prototype.setLabel=function(a){this.cell.innerHTML=a};dhtmlXGridCellObject.prototype.getMath=function(){return this._val?this.val:this.getValue()};function eXcell(){this.val=this.obj=null;this.changeState=function(){return!1};this.edit=function(){this.val=this.getValue()};this.detach=function(){return!1};this.getPosition=function(a){for(var b=a,c=0,d=0;b.tagName!="BODY";)c+=b.offsetLeft,d+=b.offsetTop,b=b.offsetParent;return[c,d]}}eXcell.prototype=new dhtmlXGridCellObject;
 function eXcell_ed(a){if(a)this.cell=a,this.grid=this.cell.parentNode.grid;this.edit=function(){this.cell.atag=!this.grid.multiLine&&(_isKHTML||_isMacOS||_isFF)?"INPUT":"TEXTAREA";this.val=this.getValue();this.obj=document.createElement(this.cell.atag);this.obj.setAttribute("autocomplete","off");this.obj.style.height=this.cell.offsetHeight-(_isIE?4:4)+"px";this.obj.className="dhx_combo_edit";this.obj.wrap="soft";this.obj.style.textAlign=this.cell.style.textAlign;this.obj.onclick=function(a){(a||event).cancelBubble=
-!0};this.obj.onmousedown=function(a){(a||event).cancelBubble=!0};this.obj.value=this.val;this.cell.innerHTML="";this.cell.appendChild(this.obj);this.obj.onselectstart=function(a){a||(a=event);return a.cancelBubble=!0};_isIE&&this.obj.focus();this.obj.focus()};this.getValue=function(){return this.cell.firstChild&&this.cell.atag&&this.cell.firstChild.tagName==this.cell.atag?this.cell.firstChild.value:this.cell._clearCell?"":this.cell.innerHTML.toString()._dhx_trim()};this.detach=function(){this.setValue(this.obj.value);
+!0};this.obj.onmousedown=function(a){(a||event).cancelBubble=!0};this.obj.value=this.val;this.cell.innerHTML="";this.cell.appendChild(this.obj);this.obj.onselectstart=function(a){a||(a=event);return a.cancelBubble=!0};_isIE&&(this.obj.focus(),this.obj.blur());this.obj.focus()};this.getValue=function(){return this.cell.firstChild&&this.cell.atag&&this.cell.firstChild.tagName==this.cell.atag?this.cell.firstChild.value:this.cell._clearCell?"":this.cell.innerHTML.toString()._dhx_trim()};this.detach=function(){this.setValue(this.obj.value);
 return this.val!=this.getValue()}}eXcell_ed.prototype=new eXcell;function eXcell_edtxt(a){if(a)this.cell=a,this.grid=this.cell.parentNode.grid;this.getValue=function(){return this.cell.firstChild&&this.cell.atag&&this.cell.firstChild.tagName==this.cell.atag?this.cell.firstChild.value:this.cell._clearCell?"":_isIE?this.cell.innerText:this.cell.textContent};this.setValue=function(a){!a||a.toString()._dhx_trim()==""?(a=" ",this.cell._clearCell=!0):this.cell._clearCell=!1;this.setCTxtValue(a)}}
 eXcell_edtxt.prototype=new eXcell_ed;
 function eXcell_ch(a){if(a)this.cell=a,this.grid=this.cell.parentNode.grid;this.disabledF=function(a){this.cell.innerHTML=a==!0||a==1?this.cell.innerHTML.replace("item_chk0.","item_chk0_dis.").replace("item_chk1.","item_chk1_dis."):this.cell.innerHTML.replace("item_chk0_dis.","item_chk0.").replace("item_chk1_dis.","item_chk1.")};this.changeState=function(a){a===!0&&!this.grid.isActive&&(window.globalActiveDHTMLGridObject!=null&&window.globalActiveDHTMLGridObject!=this.grid&&window.globalActiveDHTMLGridObject.isActive&&
@@ -59,7 +59,7 @@ function dhtmlXGridComboObject(){this.keys=new dhtmlxArray;this.values=new dhtml
 a)return this.keys._dhx_removeAt(b),this.values._dhx_removeAt(b),!0};this.size=function(){for(var a=0,b=0;b<this.keys.length;b++)this.keys[b]!=null&&a++;return a};this.getKeys=function(){for(var a=[],b=0;b<this.keys.length;b++)this.keys[b]!=null&&(a[a.length]=this.keys[b]);return a};this.save=function(){this._save=[];for(var a=0;a<this.keys.length;a++)this._save[a]=[this.keys[a],this.values[a]]};this.restore=function(){if(this._save){this.keys[a]=[];this.values[a]=[];for(var a=0;a<this._save.length;a++)this.keys[a]=
 this._save[a][0],this.values[a]=this._save[a][1]}};return this}function Hashtable(){this.keys=new dhtmlxArray;this.values=new dhtmlxArray;return this}Hashtable.prototype=new dhtmlXGridComboObject;
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

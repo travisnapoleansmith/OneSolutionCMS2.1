@@ -22,9 +22,9 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-	
+
 	set_time_limit(120);
-	
+
 	$ReferPage = $_SERVER['HTTP_REFERER'];
 	$ReferPageIDArray = explode('?', $ReferPage);
 	unset($ReferPageIDArray[0]);
@@ -32,20 +32,22 @@
 	$ReferPageIDArray = explode('&', $ReferPageIDArray);
 	$Key = array_search('PageID', $ReferPageIDArray);
 	$ReferPageID = $ReferPageIDArray[$Key];
-	
+
 	if ($ReferPageID === 'PageID=200') {
-		$LogPage = FALSE;
-		
+		$LogPage = TRUE;
+
 		if ($LogPage === TRUE) {
 			$LogFile = "AddTableContent.txt";
 			$LogFileHandle = fopen($LogFile, 'a');
 			$FileInformation = 'Logging - Add Table Content Script Loading - ' . date("F j, Y, g:i a") . "\n";
 			fwrite($LogFileHandle, $FileInformation);
 			fwrite($LogFileHandle, print_r($_SERVER['HTTP_REFERER'], TRUE));
+			fwrite($LogFileHandle, "\n=============================================\n\n");
+			fwrite($LogFileHandle, print_r($_POST, TRUE));
 			fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 			fclose($LogFileHandle);
 		}
-		
+
 		if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
 			$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 		} else {
@@ -56,14 +58,14 @@
 				$HOME = NULL;
 			}
 		}
-		
+
 		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 		$ADMINHOME = $HOME . '/Administrators/';
 		$GLOBALS['HOME'] = $HOME;
 		$GLOBALS['ADMINHOME'] = $ADMINHOME;
-	
+
 		require_once ("$ADMINHOME/Configuration/includes.php");
-	
+
 		$TableName = $_POST['TableName'];
 		$TableHeading = $_POST['TableHeading'];
 		$EnableDisable = $_POST['EnableDisable'];
@@ -78,7 +80,7 @@
 			if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 				setcookie($Key, '', time()-4800, '/');
 			}
-	
+
 			if ($Key == 'TableContent') {
 				if (is_array($Value)) {
 					foreach ($Value as $ArrayKey => $ArrayValue) {
@@ -92,17 +94,18 @@
 				}
 			}
 		}*/
-	
+		$Table['SKIP']['head']['column'][] = 'Order';
+		
 		foreach ($_POST as $Key => $Value) {
 			if (strstr($Key, 'Grid_')) {
 				if ($Key == 'Grid_rowsadded' || $Key == 'Grid_rowsdeleted') {
-	
+
 				} else {
 					$TempTable[$Key] = $Value;
 					//$Table[$Key] = $Value;
 				}
 			}
-	
+			
 			if (strstr($Key, "Header")) {
 				if ($Value == 'NULL') {
 					$Header[$Key] = NULL;
@@ -111,7 +114,7 @@
 					$Table['SKIP']['head']['column'][] = $Value;
 				}
 			}
-	
+
 			if (strstr($Key, "Footer")) {
 				if ($Value == 'NULL') {
 					$Footer[$Key] = NULL;
@@ -119,17 +122,24 @@
 					$Footer[$Key] = $Value;
 				}
 			}
-	
+
 			if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 				setcookie($Key, $Value, time()+4800, '/');
 			}
 		}
-	
+		
+		$SortOrder = 0;
+		$TempTable2 = array();
+		
 		foreach($TempTable as $Key => $Value) {
 			$NewKey = str_replace('Grid_', '', $Key);
 			$NewKey = explode('_', $NewKey);
-			$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
-			$Table[$NewKey[0]]['cell'][] = $Value;
+			
+			if ($NewKey[1] == 0) {
+				$SortOrder = $Value;
+			}
+			//$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
+			$TempTable2[$SortOrder][$NewKey[0]]['cell'][] = html_entity_decode($Value);
 			$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
 			if ($Value != NULL) {
 				setcookie($CookieKey, $Value, time()+4800, '/');
@@ -137,34 +147,56 @@
 				//setcookie($CookieKey, "NULL", time()+4800, '/');
 			}
 		}
-	
-	
+		
+		$TempTable = array();
+		ksort($TempTable2);
+		$i = 1;
+		$Index = 1;
+		foreach($TempTable2 as $Key => $Value) {
+			ksort($Value);
+			foreach ($Value as $SubKey => $SubValue) {
+				$SubValue['cell'][0] = $i;
+				$Table[$Index] = $SubValue;
+				
+				array_shift($SubValue['cell']);
+				$TableContent[$Index] = $SubValue['cell'];
+				
+				$i++;
+				if ($Index == 1) {
+					$Index = $Index + 99;
+				} else {
+					$Index = $Index + 100;
+				}
+			}
+		}
+		
 		foreach ($TableContent as $Key => $Value) {
 			$EMPTY = FALSE;
 			if ($Value != NULL) {
-				
+
 			}
-	
+
 			foreach ($Value as $IDKey => $IDValue) {
 				if ($IDValue != NULL) {
 					$EMPTY = TRUE;
 				}
 			}
-	
+
 			if ($EMPTY == FALSE) {
 				unset($TableContent[$Key]);
 			}
 		}
-	
+
 		$PageName = "../../index.php?PageID=";
 		$PageName .= $_POST['AddTableContent'];
-	
+
 		if ($_POST['File']) {
 			$PageName .= '&File=' . $_POST['File'];
 		}
-		
+
 		$FileLocation = 'TEMPFILES/';
 		$XMLOptions = array();
+		$XMLOptions['SimpleViewer'] = TRUE;
 		$XMLOptions['RootElementName'] = 'rows';
 		$XMLOptions['Attribute'] = 'id';
 		$XMLOptions['Raw'] = 'true';
@@ -173,15 +205,16 @@
 		$XMLOptions['Repeat']['head']['options']['type'] = 'ed';
 		$XMLOptions['Repeat']['head']['options']['sort'] = 'str';
 		$XMLOptions['Repeat']['head']['options']['width'] = '110';
+		
 		$hold = $Tier6Databases->FormSubmitValidate('AddTableContent', $PageName, $FileLocation, $Table, 'row', NULL, $XMLOptions);
-	
+
 		if ($hold) {
 			foreach ($_POST as $Key => $Value) {
 				if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 					setcookie($Key, $Value, time()-4800, '/');
 				}
 			}
-	
+
 			foreach($TempTable as $Key => $Value) {
 				$NewKey = str_replace('Grid_', '', $Key);
 				$NewKey = explode('_', $NewKey);
@@ -190,22 +223,23 @@
 					setcookie($CookieKey, $Value, time()-4800, '/');
 				}
 			}
-	
+
 			$XhtmlTableIDArray = $Tier6Databases->ModulePass('XhtmlTable', 'table', 'getLastTableID', array('XhtmlTableName' => 'XhtmlTable'));
-	
+
 			$TableID = $XhtmlTableIDArray['XhtmlTable'];
 			$TableID++;
-			
+
 			if ($LogPage === TRUE) {
 				$LogFile = "AddTableContent.txt";
 				$LogFileHandle = fopen($LogFile, 'a');
 				$FileInformation = 'Logging - Add Table Content Top Script - ' . $TableID . ' - ' . date("F j, Y, g:i a") . "\n";
 				fwrite($LogFileHandle, $FileInformation);
+				fwrite($LogFileHandle, print_r($TempTable, TRUE));
 				//fwrite($LogFileHandle, print_r($ImageContent, TRUE));
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
-			
+
 			$Options = $Tier6Databases->getLayerModuleSetting();
 			$ObjectID = 1;
 			$TableI = 0;
@@ -238,9 +272,9 @@
 			$FormSelect['FormSelectXMLLang'] = 'en-us';
 			$FormSelect['Enable/Disable'] = 'Enable';
 			$FormSelect['Status'] = 'Approved';
-	
+
 			$FormOptionText = $TableID . ' - ' . $TableName;
-	
+
 			$FormOption = array();
 			$FormOption['PageID'] = $TableContentUpdateSelectPage;
 			$FormOption['ObjectID'] = $TableID;
@@ -276,7 +310,7 @@
 			$FormOption['FormOptionXMLLang'] = 'en-us';
 			$FormOption['Enable/Disable'] = 'Enable';
 			$FormOption['Status'] = 'Approved';
-	
+
 			$TableLookup = array();
 			$TableLookup[0]['PageID'] = 0;
 			$TableLookup[0]['ObjectID'] = $TableID;
@@ -286,7 +320,7 @@
 			$TableLookup[0]['TableID'] = $TableID;
 			$TableLookup[0]['Enable/Disable'] = $EnableDisable;
 			$TableLookup[0]['Status'] = $Status;
-	
+
 			$TableListing = array();
 			$TableListing[0]['XhtmlTableName'] = 'XhtmlTable';
 			$TableListing[0]['XhtmlTableID'] = $TableID;
@@ -308,7 +342,7 @@
 			$TableListing[0]['TableXMLLang'] = NULL;
 			$TableListing[0]['Enable/Disable'] = $EnableDisable;
 			$TableListing[0]['Status'] = $Status;
-	
+
 			// Setting Caption For XhtmlTable
 			$Table = array();
 			$Table[$TableI]['TableID'] = $TableID;
@@ -319,7 +353,7 @@
 			$Table[$TableI]['ContainerObjectID'] = 1;
 			$Table[$TableI]['Enable/Disable'] = $EnableDisable;
 			$Table[$TableI]['Status'] = $Status;
-	
+
 			$TableCaption = array();
 			$TableCaption[0]['TableID'] = $TableID;
 			$TableCaption[0]['ObjectID'] = 1;
@@ -333,19 +367,19 @@
 			$TableCaption[0]['TableCaptionXMLLang'] = NULL;
 			$TableCaption[0]['Enable/Disable'] = $EnableDisable;
 			$TableCaption[0]['Status'] = $Status;
-	
+
 			$ObjectID++;
 			$TableI++;
-	
-	
+
+
 			// Table Header
 			$TableTHead = array();
 			$TableTHeadContent = array();
 			$TableTHeadHeader = array();
-	
+
 			$i = 0;
 			$HeaderObjectID = 1;
-	
+
 			$Table[$TableI]['TableID'] = $TableID;
 			$Table[$TableI]['ObjectID'] = $ObjectID;
 			$Table[$TableI]['StopObjectID'] = NULL;
@@ -354,10 +388,10 @@
 			$Table[$TableI]['ContainerObjectID'] = 1;
 			$Table[$TableI]['Enable/Disable'] = $EnableDisable;
 			$Table[$TableI]['Status'] = $Status;
-	
+
 			$ObjectID++;
 			$TableI++;
-	
+
 			$TableTHead[$i]['TableID'] = $TableID;
 			$TableTHead[$i]['ObjectID'] = $HeaderObjectID;
 			$TableTHead[$i]['StopObjectID'] = NULL;
@@ -377,7 +411,7 @@
 			$TableTHead[$i]['TableHeaderXMLLang'] = NULL;
 			$TableTHead[$i]['Enable/Disable'] = $EnableDisable;
 			$TableTHead[$i]['Status'] = $Status;
-	
+
 			foreach ($Header as $Key => $Data) {
 				$TableTHeadContent[$i]['TableID'] = $TableID;
 				$TableTHeadContent[$i]['ObjectID'] = $HeaderObjectID;
@@ -398,7 +432,7 @@
 				$TableTHeadContent[$i]['TableHeaderXMLLang'] = NULL;
 				$TableTHeadContent[$i]['Enable/Disable'] = $EnableDisable;
 				$TableTHeadContent[$i]['Status'] = $Status;
-	
+
 				$TableTHeadHeader[$i]['TableID'] = $TableID;
 				$TableTHeadHeader[$i]['ObjectID'] = $HeaderObjectID;
 				$TableTHeadHeader[$i]['TableHeaderText'] = $Data;
@@ -420,11 +454,11 @@
 				$TableTHeadHeader[$i]['TableHeaderXMLLang'] = NULL;
 				$TableTHeadHeader[$i]['Enable/Disable'] = $EnableDisable;
 				$TableTHeadHeader[$i]['Status'] = $Status;
-	
+
 				$i++;
 				$HeaderObjectID++;
 			}
-	
+
 			// Table Body
 			$TableRow = array();
 			$TableRowCell = array();
@@ -442,7 +476,7 @@
 					$Table[$TableI]['ContainerObjectID'] = $MasterContainerObjectID;
 					$Table[$TableI]['Enable/Disable'] = $EnableDisable;
 					$Table[$TableI]['Status'] = $Status;
-	
+
 					$ObjectID++;
 					$TableI++;
 					$ContentObjectID = $MasterContainerObjectID;
@@ -467,7 +501,7 @@
 						$TableRow[$i]['TableRowXMLLang'] = NULL;
 						$TableRow[$i]['Enable/Disable'] = $EnableDisable;
 						$TableRow[$i]['Status'] = $Status;
-	
+
 						$TableRowCell[$j]['TableID'] = $TableID;
 						$TableRowCell[$j]['ObjectID'] = $ContentObjectID;
 						if (isset($SubData) && strlen($SubData) != 0) {
@@ -494,12 +528,12 @@
 						$TableRowCell[$j]['TableCellXMLLang'] = NULL;
 						$TableRowCell[$j]['Enable/Disable'] = $EnableDisable;
 						$TableRowCell[$j]['Status'] = $Status;
-	
+
 						$i++;
 						$j++;
 						$ContentObjectID++;
 					}
-	
+
 					$TableRow[$i]['TableID'] = $TableID;
 					$TableRow[$i]['ObjectID'] = $StopObjectID;
 					$TableRow[$i]['StopObjectID'] = $StopObjectID;
@@ -521,7 +555,7 @@
 					$TableRow[$i]['Enable/Disable'] = $EnableDisable;
 					$TableRow[$i]['Status'] = $Status;
 					$i++;
-	
+
 					if ($MasterContainerObjectID === 1) {
 						$MasterContainerObjectID = 0;
 					}
@@ -529,22 +563,22 @@
 					$StopObjectID = $StopObjectID + 100;
 				}
 			}
-	
+
 			// Table Footer
 			$TableTFoot = array();
 			$TableTFootContent = array();
 			$TableTFootCell = array();
-	
+
 			$i = 0;
 			$FooterObjectID = 1;
-	
+
 			$FooterIsNull = false;
 			foreach ($Footer as $Key => $Data) {
 				if (isset($Data) && strlen($Data) != 0) {
 					$FooterIsNull = true;
 				}
 			}
-	
+
 			if ($FooterIsNull == true) {
 				$Table[$TableI]['TableID'] = $TableID;
 				$Table[$TableI]['ObjectID'] = $ObjectID;
@@ -556,7 +590,7 @@
 				$Table[$TableI]['Status'] = $Status;
 				$ObjectID++;
 				$TableI++;
-	
+
 				$TableTFoot[$i]['TableID'] = $TableID;
 				$TableTFoot[$i]['ObjectID'] = $FooterObjectID;
 				$TableTFoot[$i]['StopObjectID'] = NULL;
@@ -577,7 +611,7 @@
 				$TableTFoot[$i]['TableRowXMLLang'] = NULL;
 				$TableTFoot[$i]['Enable/Disable'] = $EnableDisable;
 				$TableTFoot[$i]['Status'] = $Status;
-	
+
 				foreach ($Footer as $Key => $Data) {
 					$TableTFootContent[$i]['TableID'] = $TableID;
 					$TableTFootContent[$i]['ObjectID'] = $FooterObjectID;
@@ -599,7 +633,7 @@
 					$TableTFootContent[$i]['TableRowXMLLang'] = NULL;
 					$TableTFootContent[$i]['Enable/Disable'] = $EnableDisable;
 					$TableTFootContent[$i]['Status'] = $Status;
-	
+
 					$TableTFootCell[$i]['TableID'] = $TableID;
 					$TableTFootCell[$i]['ObjectID'] = $FooterObjectID;
 					if (isset($Data) && strlen($Data) != 0) {
@@ -626,53 +660,53 @@
 					$TableTFootCell[$i]['TableCellXMLLang'] = NULL;
 					$TableTFootCell[$i]['Enable/Disable'] = $EnableDisable;
 					$TableTFootCell[$i]['Status'] = $Status;
-	
+
 					$i++;
 					$FooterObjectID++;
 				}
 			}
-	
+
 			// SUBMIT FORM DATA
-	
+
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-	
+
 			$TableContentDeleteSelectPage = $Options['XhtmlTable']['table']['TableContentDeleteSelectPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $TableContentDeleteSelectPage;
 			$FormOption['PageID'] = $TableContentDeleteSelectPage;
-	
+
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-	
+
 			$TableContentEnableDisableSelectPage = $Options['XhtmlTable']['table']['TableContentEnableDisableSelectPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $TableContentEnableDisableSelectPage;
 			$FormOption['PageID'] = $TableContentEnableDisableSelectPage;
 			$FormSelect['StopObjectID'] = 9999;
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-	
-	
+
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTHead, 'TableName' => 'XhtmlTableTHead'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTHeadContent, 'TableName' => 'XhtmlTableTHeadContent'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTHeadHeader, 'TableName' => 'XhtmlTableTHeadHeader'));
-	
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTFoot, 'TableName' => 'XhtmlTableTFoot'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTFootContent, 'TableName' => 'XhtmlTableTFootContent'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableTFootCell, 'TableName' => 'XhtmlTableTFootCell'));
-	
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableLookup, 'TableName' => 'XhtmlTableLookup'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableListing, 'TableName' => 'XhtmlTableListing'));
-	
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableCaption, 'TableName' => 'XhtmlTableCaption'));
-	
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $Table, 'TableName' => 'XhtmlTable'));
-	
+
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableRow, 'TableName' => 'XhtmlTableRow'));
 			$Tier6Databases->ModulePass('XhtmlTable', 'table', 'createTable', array('Content' => $TableRowCell, 'TableName' => 'XhtmlTableRowCell'));
-	
+
 			$TableContentCreatedPage = $Options['XhtmlTable']['table']['TableContentCreatedPage']['SettingAttribute'];
 			$TableContentCreatedPage = $TableContentCreatedPage . '&TableID=' . $TableID ;
-	
+
 			if ($LogPage === TRUE) {
 				$LogFile = "AddTableContent.txt";
 				$LogFileHandle = fopen($LogFile, 'a');
@@ -682,7 +716,7 @@
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
-			
+
 			header("Location: $TableContentCreatedPage");
 			exit;
 		}

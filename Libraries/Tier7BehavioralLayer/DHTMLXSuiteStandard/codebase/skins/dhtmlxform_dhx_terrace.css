@@ -13,10 +13,12 @@
 	float: left;
 }
 .dhxform_obj_dhx_terrace div.dhxform_base_nested {
-	padding: 0px 0px 0px 20px;
+	padding: 0px 0px 0px 0px;
 	clear: both;
 }
-
+.dhxform_obj_dhx_terrace.dhxform_block { /* IE fix */
+	clear: both;
+}
 /************************************************************************************************************************/
 /*	label-link, inner container, checkbox/radio									*/
 
@@ -219,11 +221,18 @@
 /************************************************************************************************************************/
 /*	fieldset													*/
 
+.dhxform_obj_dhx_terrace div.fs_dhxform_item_label_left {
+	padding: 5px 5px 5px 2px;
+}
+.dhxform_obj_dhx_terrace div.fs_dhxform_item_label_left fieldset.dhxform_fs div.dhxform_base_nested.dhxform_fs_nested {
+	margin-right: 19px;
+	margin-left: 5px;
+}
+
 .dhxform_obj_dhx_terrace fieldset.dhxform_fs {
 	border: #cecece 1px solid;
-	margin-top: 5px;
-	padding: 5px;
-	adisplay: inline;
+	margin: 0px;
+	padding: 5px 0px 5px 0px;
 	clear: left;
 	width: 100%;
 	border-radius: 3px;
@@ -238,6 +247,7 @@
 	font-size: inherit;
 	font-weight: normal;
 	padding: 0px 4px 1px 4px;
+	margin-left: 5px;
 	text-align: left;
 	
 }
@@ -765,3 +775,20 @@ div.dhx_combo_list.dhx_terrace_list:active {
 	background-position: -87px 0px;
 	cursor: default;
 }
+
+/************************************************************************************************************************/
+/*	skin detect													*/
+div.dhxform_skin_detect {
+	position: absolute;
+	display: block;
+	visibility: hidden;
+	left: -100px;
+	top: 0px;
+	width: 30px;
+	height: 10px;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	overflow: hidden;
+}
+

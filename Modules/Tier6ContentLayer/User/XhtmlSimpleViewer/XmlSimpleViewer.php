@@ -39,7 +39,7 @@
 	} else {
 		$SimpleViewerIdNumber['ObjectID'] = 1;
 	}
-	$SimpleViewerIdNumber['RevisionID'] = 1;
+	//$SimpleViewerIdNumber['RevisionID'] = 1;
 	$SimpleViewerIdNumber['CurrentVersion'] = 'true';
 
 	$SimpleViewerDatabase = Array();

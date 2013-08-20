@@ -4,7 +4,7 @@ You allowed to use this component or parts of it under GPL terms
 To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
 */
 /*
-2013 April 17
+2013 June 20
 */
 
 
@@ -5564,7 +5564,7 @@ dhtmlXChart.prototype={
 			if(this.callEvent("onLegendClick",[e,series,obj])){
 				var config = this._settings;
 				var values = config.legend.values;
-				var toggle = (values&&values[series].toggle)||config.legend.toggle;
+				var toggle = (values&&(typeof values[series].toggle != "undefined"))?values[series].toggle:config.legend.toggle;
 			    if((typeof series != "undefined")&&this._series.length>1){
 				    // hide action
 				    if(toggle){

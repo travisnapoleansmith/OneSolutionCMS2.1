@@ -33,7 +33,9 @@
 		//$pagename[0] = '';
 		//$pagename = trim($pagename);
 	//}
-
+	
+	$ThemeLocation = $GLOBALS['ThemeLocation'];
+	
 	// Fetch Current Page ID - Based On ID Number
 	$mainmenuidnumber = Array();
 	$mainmenuidnumber['PageID'] = 1;
@@ -50,7 +52,11 @@
 
 	$databaseoptions = NULL;
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
-		$databaseoptions['JavaScriptFileName'] = 'Tier7-BehavioralLayer/ComputerAidBlue/menu-jquery.js';
+		if (empty($ThemeLocation)) {
+			$databaseoptions['JavaScriptFileName'] = 'Tier7-BehavioralLayer/$ThemeName/menu-jquery.js';
+		} else {
+			$databaseoptions['JavaScriptFileName'] = "$ThemeLocation/Tier7-BehavioralLayer/$ThemeName/menu-jquery.js";
+		}
 		$databaseoptions['JavaScriptLibraryName'] = 'Libraries/Tier7BehavioralLayer/jQuery/jquery-1.3.2.min.js';
 	}
 
@@ -71,7 +77,12 @@
 
 	if ($GLOBALS['ThemeName']) {
 		$ThemeName = $GLOBALS['ThemeName'];
-		$Insert = "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Logo.png";
+		if (empty($ThemeLocation)) {
+			$Insert = "$HOME/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Logo.png";
+		} else {
+			$Insert = "$HOME/$ThemeLocation/Tier8-PresentationLayer/$ThemeName/TemplateImages/Main-Logo.png";
+		}
+		
 		$databaseoptions['Insert'] = "<img src=\"$Insert\" alt=\"";
 		$databaseoptions['Insert'] .= $SiteName;
 		$databaseoptions['Insert'] .= '" class="main-menu-image"/>';

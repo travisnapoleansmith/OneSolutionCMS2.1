@@ -55,6 +55,12 @@
 							$HeaderSize = count($Data);
 							$Page->startElement('head');
 								$Page->writeAttribute('align', 'center');
+								$Page->startElement('column');
+									$Page->writeAttribute('type', 'cntr');
+									$Page->writeAttribute('sort', 'na');
+									$Page->writeAttribute('width', '30');
+								$Page->endElement(); // ENDS COLUMN
+								
 								for ($j = 1; $j <= $HeaderSize; $j++) {
 									$Page->startElement('column');
 										$Page->writeAttribute('type', 'ed');
@@ -74,7 +80,10 @@
 							$ID = ($i * 100) - 100;
 							$Page->writeAttribute('id', $ID);
 						}
-
+						
+						$Page->startElement('cell');
+						$Page->endElement(); // ENDS CELL
+						
 						foreach ($Data as $Key => $Cell) {
 							$Page->startElement('cell');
 								$Page->text($Cell);
@@ -113,7 +122,13 @@
 
 				$Page->startElement('head');
 					$Page->writeAttribute('align', 'center');
-
+					
+					$Page->startElement('column');
+						$Page->writeAttribute('type', 'cntr');
+						$Page->writeAttribute('sort', 'na');
+						$Page->writeAttribute('width', '30');
+					$Page->endElement(); // ENDS COLUMN
+					
 					foreach ($ColumnNames as $Key => $Data) {
 						$Page->startElement('column');
 							$Page->writeAttribute('type', 'ed');
@@ -133,6 +148,10 @@
 						$ID = ($Key * 100) - 100;
 						$Page->writeAttribute('id', $ID);
 					}
+					
+					$Page->startElement('cell');
+					$Page->endElement(); // ENDS CELL
+					
 					foreach ($Value as $ColumnKey => $ColumnValue) {
 						$Page->startElement('cell');
 							$Page->text($ColumnValue);

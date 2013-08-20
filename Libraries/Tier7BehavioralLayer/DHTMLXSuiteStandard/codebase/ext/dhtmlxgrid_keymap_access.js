@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -15,7 +15,7 @@ var a=a=this.getRowIndex(this.row.idd)+1;if(this.rowsBuffer[a]){var b=this._next
 this.selectCell(this.rowsCol[0],0,!0,!1,!0);this._select_ifpossible()},k35_1_0:function(){if(this.editor||!this.rowsCol.length)return!1;this.selectCell(this.rowsCol[this.rowsCol.length-1],this._cCount-1,!0,!1,!0);this._select_ifpossible()},k33_0_0:function(){this.pagingOn?this.changePage(this.currentPage-1):this.scrollPage(-1)},k34_0_0:function(){this.pagingOn?this.changePage(this.currentPage+1):this.scrollPage(1)},k38_0_0:function(){if(this.editor&&this.editor.combo)this.editor.shiftPrev();else{if(!this.row.idd)return;
 var a=a=this.getRowIndex(this.row.idd)+1;if(a!=-1){var b=this._nextRow(a-1,-1);this._Opera_stop=0;this.pagingOn&&b&&this.showRow(b.idd);this.selectCell(b,this.cell._cellIndex,!0,!1,!0)}else this._key_events.k33_0_0.apply(this,[])}this._still_active=!0}};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

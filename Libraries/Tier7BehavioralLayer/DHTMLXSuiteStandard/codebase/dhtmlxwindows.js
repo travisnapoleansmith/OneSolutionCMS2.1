@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -122,7 +122,7 @@ dhtmlXWindows.prototype.i18n={dhxcontaler:"dhtmlxcontainer.js is missed on the p
 else b.indexOf("on")==0&&a.attachEvent(b,c[b]);return a}},animation:"setEffect",image_path:"setImagePath",skin:"setSkin",viewport:"_viewport",wins:"_wins"},{_viewport:function(c){c.object?(this.enableAutoViewport(!1),this.attachViewportTo(c.object)):(this.enableAutoViewport(!1),this.setViewport(c.left,c.top,c.width,c.height,c.parent))},_wins:function(c){for(var d=0;d<c.length;d++){var a=c[d];this.createWindow(a.id,a.left,a.top,a.width,a.height);a.text&&this.window(a.id).setText(a.text);a.keep_in_viewport&&
 this.window(a.id).keepInViewport(!0);a.deny_resize&&this.window(a.id).denyResize();a.deny_park&&this.window(a.id).denyPark();a.deny_move&&this.window(a.id).denyMove()}}});var d={move:"allowMoveA",park:"allowParkA",resize:"allowResizeA",center:"center",modal:"setModal",caption:"setText",header:"showHeader"}})();
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

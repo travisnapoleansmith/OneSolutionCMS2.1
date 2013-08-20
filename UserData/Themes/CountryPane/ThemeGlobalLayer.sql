@@ -1,0 +1,13 @@
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 10, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('CountryPane', 12, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');

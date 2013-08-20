@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -9,7 +9,7 @@ function dhx_init_sliders(){for(var f=document.getElementsByTagName("input"),d=0
 "left"?"right":"left"]=c.style.top=a.style.top=a.style[g]="0px";c.style.position=a.style.position="absolute";a.style.width=e+"px";c.style.height=a.offsetHeight+"px";b.appendChild(a);b.appendChild(c);b=c}var h=new dhtmlxSlider(b,b.offsetWidth,a.getAttribute("skin")||"",!1,a.getAttribute("min")||"",a.getAttribute("max")||"",a.value,a.getAttribute("step")||"");h.linkTo(a);h.init()}}
 window.addEventListener?window.addEventListener("load",dhx_init_sliders,!1):window.attachEvent&&window.attachEvent("onload",dhx_init_sliders);
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

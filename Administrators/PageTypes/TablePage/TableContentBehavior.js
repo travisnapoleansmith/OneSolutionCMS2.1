@@ -12,54 +12,64 @@ var RowCount = null;
 var ColumnCount = null;
 
 var GET = GetUrlVars();
-var COOKIE = document.cookie.split(';');
-var PageLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php?TableID=";
+var COOKIE = null;
+var PageLocation = null;
 var PageID = 0;
 var FileName = null;
 
 var SessionID = null;
 
-var TableContentTemp = COOKIE;
+var TableContentTemp = null;
 var TableContent = new Array();
 
 var mygrid = null;
 
-if (TableContentTemp instanceof Array) {
-	for (Index in TableContentTemp) {
-		var CurrentValue = TableContentTemp[Index];
-		if (CurrentValue.search(/TableContent\[/) != -1) {
-			var Temp = CurrentValue.split(/\[|\]/);
-			Temp[4] = Temp[4].replace('=', '');
-			var FirstIndex = Temp[1];
-			var SecondIndex = Temp[3];
-			var Value = Temp[4];
-			
-			if (TableContent[FirstIndex] == null) {
-				TableContent[FirstIndex] = new Array();
-			}
-			TableContent[FirstIndex][SecondIndex] = Value;
-		}
-	}
-}
-
-
-if (GET['TableID'] != null) {
-	PageID = GET['TableID'];
-}
-
-if (GET['File'] != null) {
-	FileName = GET['File'];
-}
-
-PageLocation = PageLocation + PageID;
 
 var ColumnHeader = new Array();
 var ColumnFooter = new Array();
 
-mygrid = new dhtmlXGridObject('Grid');
+$(document).ready(PageLoad());
 
-$(document).ready(function()
-{
+//window.onload=setTimeout("LoadRowColumnCount()", 60);
+//window.onload=setTimeout("LoadCookieData()", 90);
+
+function PageLoad() {
+	mygrid = new dhtmlXGridObject('Grid');
+	
+	COOKIE = document.cookie.split(';');
+	TableContentTemp = COOKIE;
+	
+	if (TableContentTemp instanceof Array) {
+		for (Index in TableContentTemp) {
+			var CurrentValue = TableContentTemp[Index];
+			if (CurrentValue.search(/TableContent\[/) != -1) {
+				var Temp = CurrentValue.split(/\[|\]/);
+				Temp[4] = Temp[4].replace('=', '');
+				var FirstIndex = Temp[1];
+				var SecondIndex = Temp[3];
+				var Value = Temp[4];
+				
+				if (TableContent[FirstIndex] == null) {
+					TableContent[FirstIndex] = new Array();
+				}
+				TableContent[FirstIndex][SecondIndex] = Value;
+			}
+		}
+	}
+	
+	PageLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php?TableID=";
+	
+	if (GET['TableID'] != null) {
+		PageID = GET['TableID'];
+	}
+	
+	if (GET['File'] != null) {
+		FileName = GET['File'];
+	}
+	
+	PageLocation = PageLocation + PageID;
+	
+	
 	CheckFile();
 	$.ajax({
 		url: PageLocation,
@@ -69,10 +79,7 @@ $(document).ready(function()
 	});
 	
 	LoadGrid();
-});
-
-//window.onload=setTimeout("LoadRowColumnCount()", 60);
-window.onload=setTimeout("LoadCookieData()", 90);
+}
 
 function CheckFile() {
 	if (GET['SessionID'] != null) {
@@ -111,7 +118,7 @@ function CheckFile() {
 }
 
 function LoadGrid() {
-	mygrid.setImagePath("../../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/dhtmlxGrid/codebase/imgs/");
+	mygrid.setImagePath("../../Libraries/Tier7BehavioralLayer/DHTMLXSuiteStandard/codebase/imgs/");
 	mygrid.init();
 	mygrid.setSkin("dhx_skyblue");
 	mygrid.setStyle("", "color: black;");
@@ -119,6 +126,21 @@ function LoadGrid() {
 	mygrid.load(PageLocation);
 	
 	mygrid.submitOnlyChanged(false);
+	//mygrid.insertColumn(1000, '&nbsp;', 'cntr', 40, 'na', 'right');
+	
+	//mygrid.setHeader("&nbsp;");
+	//mygrid.setInitWidths("40");
+	//mygrid.setColAlign("right");
+	//mygrid.setColTypes("cntr");
+	//mygrid.setColSorting("na");
+	//mygrid.setColumnColor("#CCE2FE");
+	//mygrid.init();
+	
+	//mygrid.splitAt(1);
+	
+	//mygrid.load(PageLocation);
+	
+	
 	
 	var Start = confirm("Click OK when table data has been loaded!");
 	if (Start == true) {
@@ -132,6 +154,7 @@ function LoadGrid() {
 function LoadRowColumnCount() {
 	ColumnCount = mygrid.getColumnsNum();
 	RowCount = mygrid.getRowsNum();
+
 	if (RowCount == 0) {
 		alert("Data has not loaded, data may not save properly, please refresh the page!");
 	} else {
@@ -164,8 +187,13 @@ function LoadCookieData() {
 
 function LoadColumns(Page, Header, Name, IDName) {
 	var i = 1;
+
 	if (Header instanceof Array) {
 		for (Index in Header) {
+			if (Index == 0) {
+				continue;
+			}
+			
 			var LabelID = Name + "Label" + i;
 			var ColumnID = Name + i;
 			var ColumnName = Name + " " + i;
@@ -298,41 +326,135 @@ function ImportData() {
 	
 	Vault.onUploadComplete = function (Files) {
 			var File = Files[0];
-			var Url = document.URL + "&File=" + File.name;
-			alert ("You are being redirect to a new Table Content form with your file");
-			window.location = Url;
+			var FileName = File.name;
+			FileName = FileName.replace("fakepath", "");
+			FileName = FileName.replace("C:\\", "");
+			FileName = FileName.replace("\\", "");
+			//var Url = document.URL + "&File=" + FileName;
+			//alert ("You are being redirect to a new Table Content form with your file");
+			//window.location = Url;
+			alert ("The Table Content Form is being reset with data from your file");
+			
+			GET['File'] = FileName;
+			
+			$("#Vault").empty();
+			$("#ColumnHeadings").empty();
+			$("#ColumnFooters").empty();
+			$("#Grid").empty();
+			
+			RowCount = null;
+			ColumnCount = null;
+			
+			mygrid = null;
+
+			ColumnHeader = new Array();
+			ColumnFooter = new Array();
+			//$("[id^='Image']").remove();
+			//EnablePriorAddContentButton(1);
+			
+			// Replace Header Legend
+			var HeaderLegend = document.createElement('legend');
+			HeaderLegend.setAttribute('class', 'BodyHeading');
+			HeaderLegend.setAttribute('dir', "ltr");
+			HeaderLegend.setAttribute('lang', "en-us");
+			HeaderLegend.setAttribute('xml:lang', "en-us");
+			HeaderLegend.innerHTML = "Column Headings";
+			
+			document.getElementById("ColumnHeadings").appendChild(HeaderLegend);
+			
+			// Replace Footer Legend
+			var FooterLegend = document.createElement('legend');
+			FooterLegend.setAttribute('class', 'BodyHeading');
+			FooterLegend.setAttribute('dir', "ltr");
+			FooterLegend.setAttribute('lang', "en-us");
+			FooterLegend.setAttribute('xml:lang', "en-us");
+			FooterLegend.innerHTML = "Column Footers";
+			
+			document.getElementById("ColumnFooters").appendChild(FooterLegend);
+			
+			// Reload Javascript Commands
+			PageLoad();
+			
 		};
 	Vault.create("Vault");
 }
 
 function AddOneRow() {
-	RowCount = +RowCount + 100;
 	var Id = mygrid.getSelectedId();
+	var OldRowCount;
+	var MaxColumn = 100;
+	//alert(Id);
+	/*if (Id == 1) {
+		OldRowCount = RowCount;
+		alert(OldRowCount);
+		RowCount = 100;
+		MaxColumn = 99
+		
+	} else {*/
+		RowCount = +RowCount + MaxColumn;
+	//}
+	
 	if (Id != null) {
 		var NewRow;
 		var OldRow;
-		var LastRow;
 		NewRow = RowCount -0;
-		OldRow = RowCount - 100;
+		OldRow = RowCount - MaxColumn;
+		
+		/*mygrid.forEachRow(function(id) {
+			if (id > Id) {
+				//alert("ID " + id);
+				//alert("NewRow " + NewRow);
+				//alert("OldRow " + OldRow);
+				NewRow = id;
+				OldRow = id - 100;
+				mygrid.changeRowId(OldRow, NewRow);
+			}
+		});*/
+		
 		for(var i = 0; NewRow != Id; i++) {
-			//alert(NewRow);
 			mygrid.changeRowId(OldRow, NewRow);
-			NewRow = NewRow - 100;
-			OldRow = OldRow - 100;
+			NewRow = NewRow - MaxColumn;
+			OldRow = OldRow - MaxColumn;
 		}
 		
 		var RowPosition;
 		RowPosition = null;
-		RowPosition = Id / 100;
-		mygrid.addRow(Id, "", RowPosition);
+		
+		/*if (Id == 1) {
+			RowPosition = 100;
+			MaxColumn = 100;
+			RowCount = OldRowCount;
+			RowCount = +RowCount + MaxColumn;
+			alert(RowCount);
+		} else {*/
+			RowPosition = Id / MaxColumn;
+		//}
+		
+		mygrid.addRow(Id, "10", RowPosition);
 	} else {
 		mygrid.addRow(RowCount, "");
 	}
 	
+	
 }
 
 function DeleteCurrentRows() {
-	mygrid.deleteSelectedRows();	
+	//mygrid.deleteSelectedRows();
+	RowCount = +RowCount - 100;
+
+var Id = mygrid.getSelectedId();
+	mygrid.deleteRow(Id);
+	
+	var NewRow;
+	var OldRow;
+	
+	mygrid.forEachRow(function(id) {
+		if (id > Id) {
+			OldRow = id;
+			NewRow = id - 100;
+			mygrid.changeRowId(OldRow, NewRow);
+		}
+	});
 }
 
 function AddOneColumn() {

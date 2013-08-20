@@ -72,15 +72,18 @@
 		}
 	}*/
 
+	$Table['SKIP']['head']['column'][] = 'Order';
+	
 	foreach ($_POST as $Key => $Value) {
 		if (strstr($Key, 'Grid_')) {
 			if ($Key == 'Grid_rowsadded' || $Key == 'Grid_rowsdeleted') {
-
+			
 			} else {
 				$TempTable[$Key] = $Value;
+				//$Table[$Key] = $Value;
 			}
 		}
-
+		
 		if (strstr($Key, "Header")) {
 			if ($Value == 'NULL') {
 				$Header[$Key] = NULL;
@@ -97,26 +100,55 @@
 				$Footer[$Key] = $Value;
 			}
 		}
-
+		
 		if (strstr($Key, "Header") || strstr($Key, "Footer")) {
 			setcookie($Key, $Value, time()+4800, '/');
 		}
-
 	}
-
+	
+	$SortOrder = 0;
+	$TempTable2 = array();
+	
 	foreach($TempTable as $Key => $Value) {
 		$NewKey = str_replace('Grid_', '', $Key);
 		$NewKey = explode('_', $NewKey);
-		$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
-		$Table[$NewKey[0]]['cell'][] = $Value;
+		
+		if ($NewKey[1] == 0) {
+			$SortOrder = $Value;
+		}
+		
+		//$TableContent[$NewKey[0]][$NewKey[1]] = html_entity_decode($Value);
+		$TempTable2[$SortOrder][$NewKey[0]]['cell'][] = html_entity_decode($Value);
 		//$CookieKey = "TableContent" . "[$NewKey[0]]" . "[$NewKey[1]]";
 		if ($Value != NULL) {
-			////////setcookie($CookieKey, $Value, time()+4800, '/');
+			//setcookie($CookieKey, $Value, time()+4800, '/');
 		} else {
 			//setcookie($CookieKey, "NULL", time()+4800, '/');
 		}
 	}
-
+	
+	$TempTable = array();
+	ksort($TempTable2);
+	$i = 1;
+	$Index = 1;
+	foreach($TempTable2 as $Key => $Value) {
+		ksort($Value);
+		foreach ($Value as $SubKey => $SubValue) {
+			$SubValue['cell'][0] = $i;
+			$Table[$Index] = $SubValue;
+			
+			array_shift($SubValue['cell']);
+			$TableContent[$Index] = $SubValue['cell'];
+			
+			$i++;
+			if ($Index == 1) {
+				$Index = $Index + 99;
+			} else {
+				$Index = $Index + 100;
+			}
+		}
+	}
+	
 	foreach ($TableContent as $Key => $Value) {
 		$EMPTY = FALSE;
 		if ($Value != NULL) {
@@ -145,6 +177,7 @@
 	
 	$FileLocation = 'TEMPFILES/';
 	$XMLOptions = array();
+	$XMLOptions['SimpleViewer'] = TRUE;
 	$XMLOptions['RootElementName'] = 'rows';
 	$XMLOptions['Attribute'] = 'id';
 	$XMLOptions['Raw'] = 'true';
@@ -155,7 +188,7 @@
 	$XMLOptions['Repeat']['head']['options']['width'] = '110';
 	
 	$hold = $Tier6Databases->FormSubmitValidate('UpdateTableContent', $PageName, $FileLocation, $Table, 'row', NULL, $XMLOptions);
-
+	
 	if ($hold) {
 		foreach ($_POST as $Key => $Value) {
 			if (strstr($Key, "Header") || strstr($Key, "Footer")) {
@@ -635,5 +668,6 @@
 		$TableContentCreatedUpdatePage = $TableContentCreatedUpdatePage . '&TableID=' . $TableID ;
 
 		header("Location: $TableContentCreatedUpdatePage");
+		
 	}
 ?>

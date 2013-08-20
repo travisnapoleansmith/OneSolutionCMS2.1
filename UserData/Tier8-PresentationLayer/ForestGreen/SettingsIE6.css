@@ -1,0 +1,81 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+#backgroundimage {
+	position: absolute;
+	z-index: -10;
+}
+
+#content {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	z-index: 1;
+}
+
+#content-side {
+	top: 0px;
+	left: 0px;
+	z-index: 0;
+}
+
+/*Header Styles */
+
+#header {
+	top: 15px;
+	margin-left: 10%;
+}
+
+#header-pagename{
+	top: -5px;
+}
+
+#main-content-top {
+	z-index: 1;
+	top: 0px;
+}
+
+#main-content-middle {
+	top: -20px;
+	z-index: 1;
+}
+
+#main-content-middle-empty {
+	z-index: 1;
+}
+
+#main-content-bottom {
+	top: -20px;
+	z-index: 1;
+	width: 1000px;
+	left: -20px;
+}
+
+#main-content-bottom-empty{
+	z-index: 1;
+}
+
+#main-content {
+	margin-left: 10%;
+	top: -20px;
+}
+
+#footer {
+	top: 0px;
+	margin-left: 5%;
+}
+
+#footer-copyright{
+	top: 10px;
+}
+
+/*IE PNG FIX*/
+
+img, div, ul, li { 
+	behavior: url(includes/templates/TheHalfwayHouseTheme/javascript/IEPngFix/iepngfix.htc);
+}

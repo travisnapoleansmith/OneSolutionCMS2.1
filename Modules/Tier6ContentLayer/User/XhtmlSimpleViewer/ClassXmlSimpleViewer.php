@@ -33,7 +33,8 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	protected $XMLSimpleViewerLookupGalleryStyle;
 	protected $XMLSimpleViewerLookupGalleryWidth;
 	protected $XMLSimpleViewerLookupGalleryHeight;
-
+	
+	protected $XMLSimpleViewerName;
 	protected $XMLSimpleViewerLookupTitle;
 	protected $XMLSimpleViewerLookupTextColor;
 
@@ -120,17 +121,24 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		$this->ObjectID = $PageID['ObjectID'];
-		$this->RevisionID = $PageID['RevisionID'];
-		$this->CurrentVersion = $PageID['CurrentVersion'];
+		//$this->RevisionID = $PageID['RevisionID'];
+		//$this->CurrentVersion = $PageID['CurrentVersion'];
 		unset ($PageID['PrintPreview']);
-
+		unset ($PageID['RevisionID']);
+		unset ($PageID['CurrentVersion']);
+		
+		$PageID['CurrentVersion'] = 'true';
+		$this->CurrentVersion = $PageID['CurrentVersion'];
+		
 		$this->LayerModule->Connect($this->DatabaseTable);
 		$passarray = array();
 		$passarray = $PageID;
 
 		//$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseField', array('idnumber' => $passarray));
 		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-
+		
+		$this->RevisionID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'RevisionID'));
+		
 		$this->XMLSimpleViewerLookupStopObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'StopObjectID'));
 		$this->XMLSimpleViewerLookupContinueObjectID = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'ContinueObjectID'));
 		$this->XMLSimpleViewerLookupXMLSimpleViewerTableName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerTableName'));
@@ -140,6 +148,7 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		$this->XMLSimpleViewerLookupGalleryWidth = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGalleryWidth'));
 		$this->XMLSimpleViewerLookupGalleryHeight = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerGalleryHeight'));
 
+		$this->XMLSimpleViewerName = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerName'));
 		$this->XMLSimpleViewerLookupTitle = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerTitle'));
 		$this->XMLSimpleViewerLookupTextColor = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'XMLSimpleViewerTextColor'));
 
@@ -444,16 +453,16 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 			$Keys[8] = 'Caption';
 			$Keys[9] = 'Enable/Disable';
 			$Keys[10] = 'Status';
-
+			
 			$this->addModuleContent($Keys, $Gallery, $this->XMLSimpleViewerTableName);
 		} else {
 			array_push($this->ErrorMessage,'createGallery: Gallery cannot be NULL!');
 		}
 	}
-	/*
+	
 	public function updateGallery(array $PageID) {
 		if ($PageID != NULL) {
-			$this->updateModuleContent($PageID, $this->DatabaseTable);
+			$this->updateModuleContent($PageID, $this->XMLSimpleViewerTableName);
 		} else {
 			array_push($this->ErrorMessage,'updateGallery: PageID cannot be NULL!');
 		}
@@ -461,13 +470,101 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 
 	public function deleteGallery(array $PageID) {
 		if ($PageID != NULL) {
-			$this->deleteModuleContent($PageID, $this->DatabaseTable);
+			$this->deleteModuleContent($PageID, $this->XMLSimpleViewerTableName);
 		} else {
 			array_push($this->ErrorMessage,'deleteGallery: PageID cannot be NULL!');
 		}
 	}
 
 	public function updateGalleryStatus(array $PageID) {
+		if ($PageID != NULL) {
+			$PassID = array();
+			$PassID['PageID'] = $PageID['PageID'];
+
+			if ($PageID['EnableDisable'] == 'Enable') {
+				$this->enableModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			} else if ($PageID['EnableDisable'] == 'Disable') {
+				$this->disableModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			}
+
+			if ($PageID['Status'] == 'Approved') {
+				$this->approvedModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			} else if ($PageID['Status'] == 'Not-Approved') {
+				$this->notApprovedModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			} else if ($PageID['Status'] == 'Pending') {
+				$this->pendingModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			} else if ($PageID['Status'] == 'Spam') {
+				$this->spamModuleContent($PassID, $this->XMLSimpleViewerTableName);
+			}
+		} else {
+			array_push($this->ErrorMessage,'updateGalleryStatus: PageID cannot be NULL!');
+		}
+	}
+	
+	public function createLookupGallery(array $Gallery) {
+		if ($Gallery != NULL) {
+			$Keys = array();
+			$Keys[0] = 'PageID';
+			$Keys[1] = 'ObjectID';
+			$Keys[2] = 'RevisionID';
+			$Keys[3] = 'CurrentVersion';
+			$Keys[4] = 'StopObjectID';
+			$Keys[5] = 'ContinueObjectID';
+			$Keys[6] = 'XMLSimpleViewerTableName';
+			$Keys[7] = 'XMLSimpleViewerObjectID';
+			$Keys[8] = 'XMLSimpleViewerGalleryStyle';
+			$Keys[9] = 'XMLSimpleViewerGalleryWidth';
+			$Keys[10] = 'XMLSimpleViewerGalleryHeight';
+			$Keys[11] = 'XMLSimpleViewerName';
+			$Keys[12] = 'XMLSimpleViewerTitle';
+			$Keys[13] = 'XMLSimpleViewerTextColor';
+			$Keys[14] = 'XMLSimpleViewerFrameColor';
+			$Keys[15] = 'XMLSimpleViewerFrameWidth';
+			$Keys[16] = 'XMLSimpleViewerThumbPosition';
+			$Keys[17] = 'XMLSimpleViewerThumbColumns';
+			$Keys[18] = 'XMLSimpleViewerThumbRows';
+			$Keys[19] = 'XMLSimpleViewerThumbWidth';
+			$Keys[20] = 'XMLSimpleViewerThumbHeight';
+			$Keys[21] = 'XMLSimpleViewerThumbQuality';
+			$Keys[22] = 'XMLSimpleViewerShowOpenButton';
+			$Keys[23] = 'XMLSimpleViewerShowFullscreenButton';
+			$Keys[24] = 'XMLSimpleViewerImageQuality';
+			$Keys[25] = 'XMLSimpleViewerMaxImageWidth';
+			$Keys[26] = 'XMLSimpleViewerMaxImageHeight';
+			$Keys[27] = 'XMLSimpleViewerUseFlickr';
+			$Keys[28] = 'XMLSimpleViewerFlickrUserName';
+			$Keys[29] = 'XMLSimpleViewerFlickrTags';
+			$Keys[30] = 'XMLSimpleViewerLanguageCode';
+			$Keys[31] = 'XMLSimpleViewerLanguageList';
+			$Keys[32] = 'XMLSimpleViewerImagePath';
+			$Keys[33] = 'XMLSimpleViewerThumbPath';
+			$Keys[34] = 'Enable/Disable';
+			$Keys[35] = 'Status';
+
+			$this->addModuleContent($Keys, $Gallery, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'createGallery: Gallery cannot be NULL!');
+		}
+	}
+	
+	
+	public function updateLookupGallery(array $PageID) {
+		if ($PageID != NULL) {
+			$this->updateModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'updateGallery: PageID cannot be NULL!');
+		}
+	}
+
+	public function deleteLookupGallery(array $PageID) {
+		if ($PageID != NULL) {
+			$this->deleteModuleContent($PageID, $this->DatabaseTable);
+		} else {
+			array_push($this->ErrorMessage,'deleteGallery: PageID cannot be NULL!');
+		}
+	}
+
+	public function updateLookupGalleryStatus(array $PageID) {
 		if ($PageID != NULL) {
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
@@ -490,6 +587,6 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 		} else {
 			array_push($this->ErrorMessage,'updateGalleryStatus: PageID cannot be NULL!');
 		}
-	}*/
+	}
 }
 ?>

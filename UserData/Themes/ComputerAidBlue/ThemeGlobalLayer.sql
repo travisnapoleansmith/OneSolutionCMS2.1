@@ -1,0 +1,13 @@
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 0, 'XhtmlHeader', 'header', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 1, 'BACKGROUND', 'background', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 2, 'NOTICE', 'notice', 0, 'true', 'false', 'true', '<div>', NULL, 'content', NULL, NULL, NULL, 'xml', 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 3, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'container-box', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 4, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', '<div>', NULL, 'content-side', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 5, 'XhtmlMenu', 'headerpanel1', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 6, 'XhtmlMainMenu', 'mainmenu', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 7, 'XhtmlContent', 'content', 0, 'true', 'false', 'true', '<div>', '</div>', 'main-content', NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 8, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 9, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 10, 'FOOTER', 'footer', 0, 'true', 'false', 'true', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 11, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');
+REPLACE INTO `ContentLayerThemeGlobalLayer` VALUES('ComputerAidBlue', 12, 'CONTENT', 'contentdummy', 0, 'true', 'false', 'true', NULL, '</div>', NULL, NULL, NULL, NULL, NULL, 'Enable', 'Approved');

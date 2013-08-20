@@ -1,0 +1,402 @@
+body,td,th {
+	color: white;
+}
+body {
+	background-color: #330000;
+	font-family: Arial, Helvetica, sans-serif;
+}
+img#background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -5;
+}
+
+hr.SponsorsRule {
+	position: relative;
+	background-color: #ffffff;
+	height: 2px;
+	width: 170px;
+	left: 1px;
+	border: 0;
+}
+
+.Picture1 {
+	position: relative;
+	width: 775px;
+	height: auto;
+	top: 0px;
+	padding-bottom: 20px;
+}
+
+.PictureLeft {
+	position: relative;
+	width: 275px;
+	top: 0px;
+	left: 130px;
+	height: 100%;
+}
+
+.PictureRight {
+	position: absolute;
+	width: 275px;
+	top: 0px;
+	left: 410px;
+}
+
+.PictureCenter {
+	position: relative;
+	left: 30%;
+	top: 0px;
+	width: 275px;
+}
+
+.TextSideLeft {
+	position: relative;
+	width: 260px;
+	left: -20px;
+}
+
+.TextSideRight {
+	position: relative;
+	width: 260px;
+	left: -15px;
+}
+
+.YouTube1 {
+	position: relative;
+	left: 40px;
+	top: 0px;	
+	margin-bottom: 20px;
+}
+
+.YouTube2 {
+	position: relative;
+	left: 50px;
+	top: 20px;
+	margin-bottom: 40px;
+}
+
+.TableClass {
+	width: 700px;
+}
+
+.TableClass caption {
+	color: #FFCC00;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.TableClass th {
+	color: #FFCC00;
+}
+
+.TableClass td {
+	padding-left: 10px;
+}
+
+.TableClass tr {
+	
+}
+
+.TableClass {
+	position: relative;
+	left: 10px;
+}
+
+table.Calendar {
+	position: relative;
+	left: 10px;
+}
+
+.Calendar th {
+	text-align: center;
+}
+
+fieldset.ShortForm {
+	position: relative;
+	width: auto;
+	max-width: 475px;
+	min-width: 400px;
+	/*width: 400px;*/
+	left: 50px;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+label.ShortForm {
+	position: relative;
+	top: 10px;
+	margin-bottom: 10px;
+}
+
+input.ShortForm {
+	position: relative;
+	width: 275px;
+	top: -8px;
+	margin-bottom: 10px;
+	left: 120px;
+}
+
+button.ShortForm {
+	position: relative;
+	left: 35%;
+	right: 35%;
+	background-color:#741D01;
+	border-color: #FFFFFF;
+	top: 10px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	height: 25px;
+}
+
+textarea.ShortForm {
+	position: relative;
+	left: 120px;
+	top: -8px;
+	width: 275px;
+	height: 100px;
+}
+
+select.ShortForm {
+	position: relative;
+	left: 120px;
+	top: -10px;
+	margin-bottom: -5px;
+	margin-top: 5px;
+}
+
+input.BodyText {
+	top: -30px;
+	height: 10px;
+	color: #000000;
+	padding-left: 0px;
+	padding-right: 0px;
+	text-indent: 0px;
+}
+
+.image {
+	position: relative;
+	top: 0px;
+	margin-left: auto;
+    margin-right: auto;
+	display: block;
+}
+
+.sponsors-image{
+	position: relative;
+	top: 0px;
+	left: 15px;
+}
+
+#backgroundimage {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#content {
+	/*position: absolute;*/
+	height: auto;
+	/*width: 900px;*/
+	margin-right: auto; 
+	margin-left: auto; 
+	width: 90%; 
+	position: relative;
+}
+
+#content-side {
+	position: relative;
+	float: left;
+}
+
+/*Header Styles */
+#header {
+	position: relative;
+	background: url(TemplateImages/Main-Header.png);
+	background-repeat: no-repeat;
+	height: 98px;
+	width: 950px;
+	left: 5px;
+}
+
+#header-sitename{
+	position: relative;
+	width: auto;
+	height: 10px;
+	text-align: center;
+	top: 20px;
+	left: 0px;
+	
+}
+
+#header-pagename{
+	position: relative;
+	text-align: left;
+	width: auto;
+	height: 100px;
+	text-align: center;
+	top: 35px;
+	left: 0px;
+}
+
+#main-content-top {
+	position: relative;
+	background: url(TemplateImages/Main-Content-Top.png);
+	width: 775px;
+	height: 40px;
+	top: 10px;
+	z-index: 0;
+}
+
+#main-content-middle {
+	position: relative;
+	background: url(TemplateImages/Main-Content-Middle.png);
+	width: 775px;
+	height: auto;
+	min-height: 400px;
+	top: -5px;
+	padding-bottom: 10px;
+	z-index: 0;
+}
+
+#main-content-middle li {
+	position: relative;
+	top: -10px;
+	left: -15px;
+	padding-bottom: -10px;
+	list-style-type: none;
+	font-weight: bold;
+}
+
+#main-content-middle li ul li{
+	position: relative;
+	top: 5px;
+	left: -40px;
+	padding-bottom: -10px;
+	list-style-type: none;
+	font-weight: normal;
+}
+
+#main-content-middle-empty {
+	position: relative;
+	background: url(TemplateImages/Main-Content-Middle.png);
+	width: 775px;
+	height: auto;
+	min-height: 400px;
+	top: 10px;
+	padding-bottom: 10px;
+	z-index: 0;
+}
+
+#main-content-bottom {
+	position: relative;
+	background: url(TemplateImages/Main-Content-Bottom.png);
+	width: 775px;
+	height: 107px;
+	top: -5px;
+	z-index: 0;
+}
+
+#main-content-bottom-empty{
+	position: relative;
+	background: url(TemplateImages/Main-Content-Bottom.png);
+	width: 775px;
+	height: 107px;
+	top: 10px;
+	z-index: 0;
+}
+
+#main-content {
+	position: relative;
+	width: 700px;
+	height: auto;
+	left: 175px;
+	text-align: left;
+}
+
+#footer {
+	position: relative;
+	background: url(TemplateImages/Main-Footer.png);
+	height: 91px;
+	width: 950px;
+	left: 50px;
+	float: left;
+	top: 10px;
+	left: 5px;
+}
+
+#footer-copyright{
+	position: relative;
+	width: auto;
+	height: 10px;
+	text-align: center;
+	top: 25px;
+}
+
+a:link {
+	color: #FFCC00;
+	text-decoration: underline;
+}
+a:visited {
+	color: #00FF00;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: underline;
+	color: #FFFFFF;
+}
+a:active {
+	text-decoration: none;
+}
+
+.Calendar table {
+	padding-left: -10px;
+}
+
+/*.Calendar table:first-child tr td{
+	text-align: center;
+}*/
+
+.Calendar td {
+	color: #FFCC00;
+	font-size: 14px;
+	text-align: center;
+	/*padding-left: 20px;
+	padding-right: 30px;
+	padding-bottom: 10px;*/
+	/*text-indent: 10px;*/
+}
+
+.Calendar th {
+	color: #FFCC00;
+	font-size: 14px;
+	font-style: italic;
+	border-bottom: 2px groove #FFFFFF;
+}
+
+.Calendar tr {
+	
+}
+
+.Calendar td a {
+	color: #FFFFFF;
+}
+
+.Calendar tr:first-child td {
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	/*border: 1px groove #000000;*/
+	padding-left: 10px;
+}
+
+.Calendar a:hover {
+	text-decoration: none;
+	color: #33CC00;
+}

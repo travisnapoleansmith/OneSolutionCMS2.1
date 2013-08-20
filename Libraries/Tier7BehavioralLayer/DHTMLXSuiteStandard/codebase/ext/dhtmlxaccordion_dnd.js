@@ -1,4 +1,4 @@
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -14,7 +14,7 @@ this.dragObj.parentNode.childNodes[c];if(a!=this.dragObj){a._tm&&window.clearTim
 this.dragObj.parentNode.insertBefore(this.dragObj,d));if(typeof this.doOnDragStop!="undefined")for(var f=this.dragObj._id,e=this.dragObj._ind,g=e,c=0;c<this.dragObj.parentNode.childNodes.length;c++)this.dragObj.parentNode.childNodes[c]==this.dragObj&&(g=c);this.dragObj=null;typeof this.doOnDragStop!="undefined"&&e!=g&&this.doOnDragStop(f,e,g)}};this.animate=function(d,c,a,f){var e=!1;c?(a+=5,a>=f&&(a=f,e=!0)):(a-=5,a<=f&&(a=f,e=!0));d.style.top=a+"px";d._tm&&window.clearTimeout(d._tm);d._tm=e?null:
 window.setTimeout(function(){h.animate(d,c,a,f)},5)};this.doOnMouseMove=function(d){h.doDrag(d||event)};this.doOnMouseUp=function(d){h.dragStop(d||event)};window.addEventListener?(document.body.addEventListener("mousemove",this.doOnMouseMove,!1),document.body.addEventListener("mouseup",this.doOnMouseUp,!1)):(document.body.attachEvent("onmousemove",this.doOnMouseMove,!1),document.body.attachEvent("onmouseup",this.doOnMouseUp,!1));return this};
 
-//v.3.6 build 130417
+//v.3.6 build 130619
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
