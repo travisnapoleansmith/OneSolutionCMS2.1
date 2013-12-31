@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -21,7 +21,7 @@ eXcell_dhxCalendarA.prototype.detach=function(){if(this.grid._grid_calendarA&&(t
 eXcell_dhxCalendarA.prototype.setValue=function(a){a&&typeof a=="object"?(this.cell.val=a,this.cell._clearCell=!1,this.setCValue(this.grid._grid_calendarA.getFormatedDate(this.grid._dtmask||"%d/%m/%Y",a).toString(),this.cell.val)):(!a||a.toString()._dhx_trim()==""?(a="&nbsp",this.cell._clearCell=!0,this.cell.val=""):(this.cell._clearCell=!1,this.cell.val=new Date(this.grid._grid_calendarA.setFormatedDate(this.grid._dtmask_inc||this.grid._dtmask||"%d/%m/%Y",a.toString(),null,!0)),this.grid._dtmask_inc&&
 (a=this.grid._grid_calendarA.getFormatedDate(this.grid._dtmask||"%d/%m/%Y",this.cell.val))),this.cell.val=="NaN"||this.cell.val=="Invalid Date"?(this.cell.val=new Date,this.cell._clearCell=!0,this.setCValue("&nbsp;",0)):this.setCValue((a||"").toString(),this.cell.val))};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

@@ -154,7 +154,20 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	 * @var string
 	 */
 	protected $TimestampLogSiteStatsTableName;
-
+	
+	/**
+	 * Database Table Name for Site Stats: This will be a name like SiteStats2013.
+	 *
+	 * @var string
+	 */
+	protected $SiteStatsTableName;
+	
+	/**
+	 * Database Table Name for Site Stats Browser Stats: This will be a name like SiteStatsBrowserStats2013.
+	 *
+	 * @var string
+	 */
+	protected $SiteStatsBrowserStatTableName;
 	/**
 	 * Create an instance of XtmlSiteStats
 	 *
@@ -268,45 +281,142 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			$Args = func_get_args();
 			$IPAddressPageID = $Args[1];
 			
-			$this->LayerModule->Connect($this->DatabaseTable);
-			$passarray = array();
-			$passarray = $PageID;
-	
-			$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-	
-			$this->Count = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Count'));
-	
-			$this->LayerModule->Disconnect($this->DatabaseTable);
-			
-			if ($this->DailySiteStatsTableName != NULL) {
-				$this->LayerModule->Connect($this->DailySiteStatsTableName);
+			if ($this->SiteStatsTableName != NULL) {
+				$this->LayerModule->createDatabaseTable($this->SiteStatsTableName);
 				
-				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setDatabaseRow', array('idnumber' => $passarray));
-		
-				$this->DayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
-		
-				$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
-			}
-			
-			if ($IPAddressPageID != NULL) {
-				if ($this->IPAddressSiteStatsTableName != NULL) {
-					$this->LayerModule->Connect($this->IPAddressSiteStatsTableName);
-
-					$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
-			
-					$this->IPAddressCount = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
-					
-					$this->LayerModule->Disconnect($this->IPAddressSiteStatsTableName);
+				$this->LayerModule->Connect($this->SiteStatsTableName);
+				$Return = $this->LayerModule->pass ($this->SiteStatsTableName, 'checkTableName', array());
+				if ($Return !== $this->SiteStatsTableName) {
+					$TableCreationQuery = "`Timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  											`RequestUri` text NOT NULL,
+ 											`IPAddress` varchar(20) default NULL,
+  											`HttpRefer` text,
+  											`HttpUserAgentString` text,
+  											`HttpAccept` text,
+  											`HttpAcceptLanguage` text,
+  											`HttpAcceptEncoding` text,
+  											`HttpHost` text,
+  											`HttpDNT` text,
+  											`HttpConnection` text,
+  											`HttpCookie` text,
+  											`GatewayInterface` text,
+  											`ServerProtocol` text,
+  											`RequestMethod` text,
+  											`QueryString` text
+										";
+					$this->LayerModule->pass ($this->SiteStatsTableName, 'createTable', array($TableCreationQuery));
 				}
 				
-				if ($this->DailyIPAddressSiteStatsTableName != NULL) {
-					$this->LayerModule->Connect($this->DailyIPAddressSiteStatsTableName);
-					
-					$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
+				$this->LayerModule->Disconnect($this->SiteStatsTableName);
+			}
 			
-					$this->IPAddressDayCount = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+			if ($this->SiteStatsBrowserStatTableName != NULL) {
+				$this->LayerModule->createDatabaseTable($this->SiteStatsBrowserStatTableName);
+				
+				$this->LayerModule->Connect($this->SiteStatsBrowserStatTableName);
+				$Return = $this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'checkTableName', array());
+				if ($Return !== $this->SiteStatsBrowserStatTableName) {
+					$TableCreationQuery = "`Timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+										  `RequestUri` text NOT NULL,
+										  `IPAddress` varchar(20) default NULL,
+										  `HttpRefer` text,
+										  `HttpUserAgentString` text,
+										  `HttpAccept` text,
+										  `HttpAcceptLanguage` text,
+										  `HttpAcceptEncoding` text,
+										  `HttpHost` text,
+										  `HttpDNT` text,
+										  `HttpConnection` text,
+										  `HttpCookie` text,
+										  `GatewayInterface` text,
+										  `ServerProtocol` text,
+										  `RequestMethod` text,
+										  `QueryString` text,
+										  `AdobeReaderVersion` text,
+										  `DevalvrVersion` text,
+										  `FlashVersion` text,
+										  `PDFJSVersion` text,
+										  `PDFReaderVersion` text,
+										  `QuicktimeVersion` text,
+										  `RealPlayerVersion` text,
+										  `ShockWaveVersion` text,
+										  `SilverlightVersion` text,
+										  `VLCVersion` text,
+										  `WindowsMediaPlayerVersion` text,
+										  `ScreenHeight` text,
+										  `ScreenWidth` text,
+										  `ScreenAvailableHeight` text,
+										  `ScreenAvailableWidth` text,
+										  `ScreenColorDepth` text,
+										  `ScreenPixelDepth` text,
+										  `NavigatorAppCodeName` text,
+										  `NavigatorAppName` text,
+										  `NavigatorAppVersion` text,
+										  `NavigatorCookieEnabled` text,
+										  `NavigatorOnline` text,
+										  `NavigatorPlatform` text,
+										  `NavigatorUserAgent` text,
+										  `NavigatorSystemLanguage` text,
+										  `NavigatorJavaEnabled` text,
+										  `OS` text,
+										  `OSVersion` text,
+										  `ActiveXEnabled` text,
+										  `IEVersion` text,
+										  `IETrueVersion` text,
+										  `IEDocMode` text,
+										  `GeckoVersion` text,
+										  `SafariVersion` text,
+										  `ChromeVersion` text,
+										  `OperaVersion` text
+										";
+					$this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'createTable', array($TableCreationQuery));
+				}
+				
+				$this->LayerModule->Disconnect($this->SiteStatsBrowserStatTableName);
+			}
+			
+			$Year = date('Y');
+			if ($Year <= 2013) {
+				$this->LayerModule->Connect($this->DatabaseTable);
+				$passarray = array();
+				$passarray = $PageID;
+		
+				$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+		
+				$this->Count = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Count'));
+		
+				$this->LayerModule->Disconnect($this->DatabaseTable);
+				
+				if ($this->DailySiteStatsTableName != NULL) {
+					$this->LayerModule->Connect($this->DailySiteStatsTableName);
 					
-					$this->LayerModule->Disconnect($this->DailyIPAddressSiteStatsTableName);
+					$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setDatabaseRow', array('idnumber' => $passarray));
+			
+					$this->DayCount = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+			
+					$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+				}
+				
+				if ($IPAddressPageID != NULL) {
+					if ($this->IPAddressSiteStatsTableName != NULL) {
+						$this->LayerModule->Connect($this->IPAddressSiteStatsTableName);
+	
+						$this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
+				
+						$this->IPAddressCount = $this->LayerModule->pass ($this->IPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+						
+						$this->LayerModule->Disconnect($this->IPAddressSiteStatsTableName);
+					}
+					
+					if ($this->DailyIPAddressSiteStatsTableName != NULL) {
+						$this->LayerModule->Connect($this->DailyIPAddressSiteStatsTableName);
+						
+						$this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'setDatabaseRow', array('idnumber' => $IPAddressPageID));
+				
+						$this->IPAddressDayCount = $this->LayerModule->pass ($this->DailyIPAddressSiteStatsTableName, 'getRowField', array('rowfield' => 'Count'));
+						
+						$this->LayerModule->Disconnect($this->DailyIPAddressSiteStatsTableName);
+					}
 				}
 			}
 		}
@@ -323,13 +433,23 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		$Args = func_get_args();
 		$DatabaseTable2Use = $Args[0];
 		
+		// MAKE SURE THIS LOGIC WORKS!
 		if (isset($DatabaseTable2Use)) {
-			$this->LayerModule->Connect($this->DailySiteStatsTableName);
-	
-			$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setEntireTable', array());
-			$EntireDatabaseTable = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getEntireTable', array());
-	
-			$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+			if ($DatabaseTable2Use === TRUE) {
+				$this->LayerModule->Connect($this->DailySiteStatsTableName);
+		
+				$this->LayerModule->pass ($this->DailySiteStatsTableName, 'setEntireTable', array());
+				$EntireDatabaseTable = $this->LayerModule->pass ($this->DailySiteStatsTableName, 'getEntireTable', array());
+		
+				$this->LayerModule->Disconnect($this->DailySiteStatsTableName);
+			} else {
+				$this->LayerModule->Connect($this->$DatabaseTable2Use);
+		
+				$this->LayerModule->pass ($this->$DatabaseTable2Use, 'setEntireTable', array());
+				$EntireDatabaseTable = $this->LayerModule->pass ($this->$DatabaseTable2Use, 'getEntireTable', array());
+		
+				$this->LayerModule->Disconnect($this->$DatabaseTable2Use);
+			}
 		} else {
 			$this->LayerModule->Connect($this->DatabaseTable);
 	
@@ -381,6 +501,43 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 	}
 	
 	/**
+	 * setSiteStatsTableName
+	 *
+	 * Sets the name of the table for Site Stats.
+	 *
+	 * @param array or string $SiteStatsTableName = An array or string with the name of the table for Site Stats.
+	 *
+	 */
+	public function setSiteStatsTableName($SiteStatsTableName) {
+		if (is_array($SiteStatsTableName)) {
+			$this->SiteStatsTableName = array_shift($SiteStatsTableName);
+		} else if ($SiteStatsTableName != NULL) {
+			$this->SiteStatsTableName = $SiteStatsTableName;
+		} else {
+			array_push($this->ErrorMessage,'setSiteStatsTableName: SiteStatsTableName cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * setSiteStatsBrowserStatTableName
+	 *
+	 * Sets the name of the table for Site Stats Browser Stat.
+	 *
+	 * @param array or string $SiteStatsBrowserStatTableName = An array or string with the name of the table for Site Stats Browser Stat.
+	 *
+	 */
+	public function setSiteStatsBrowserStatTableName($SiteStatsBrowserStatTableName) {
+		if (is_array($SiteStatsBrowserStatTableName)) {
+			$this->SiteStatsBrowserStatTableName = array_shift($SiteStatsBrowserStatTableName);
+		} else if ($SiteStatsBrowserStatTableName != NULL) {
+			$this->SiteStatsBrowserStatTableName = $SiteStatsBrowserStatTableName;
+		} else {
+			array_push($this->ErrorMessage,'setSiteStatsBrowserStatTableName: SiteStatsBrowserStatTableName cannot be NULL!');
+		}
+	}
+	
+	// WILL BE REMOVED AT THE END OF 2013
+	/**
 	 * checkDailySiteStatsPage
 	 *
 	 * Checks to see if the page exists in the Daily Site Stat database table.
@@ -397,6 +554,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * checkSiteStatPage
 	 *
@@ -414,6 +572,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * checkDailyIPAddressSiteStatsPage
 	 *
@@ -431,6 +590,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * checkIPAddressSiteStatPage
 	 *
@@ -447,7 +607,201 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			return FALSE;
 		}
 	}
-
+	
+	/**
+	 * createSiteStatLog
+	 *
+	 * Creates a timestamp log in the database.
+	 *
+	 * @param array $SiteStatEntry = An array with the contents of the new site stat page to be created.
+	 *
+	 */
+	public function createSiteStatLog(array $SiteStatEntry) {
+		if ($SiteStatEntry != NULL) {
+			if ($this->SiteStatsTableName != NULL ) {
+				$this->LayerModule->pass ($this->SiteStatsTableName, 'BuildFieldNames', array('TableName' => $this->SiteStatsTableName));
+				$Keys = $this->LayerModule->pass ($this->SiteStatsTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $SiteStatEntry, $this->SiteStatsTableName);
+			} else {
+				array_push($this->ErrorMessage,'createSiteStatLog: SiteStatsTableName cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createSiteStatLog: SiteStatEntry cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createSiteStatLogEntry
+	 *
+	 * Creates a site stat log entry for the database.
+	 *
+	 * @return array $SiteStatEntry = An array with the contents of the new site stat entry to be created.
+	 *
+	 */
+	public function createSiteStatLogEntry() {
+		if ($this->SiteStatsTableName != NULL ) {
+			$SiteStatEntry = array();
+			$passarray = array('TableName' => $this->SiteStatsTableName);
+			
+			$this->LayerModule->Connect($this->SiteStatsTableName);
+			$this->LayerModule->pass ($this->SiteStatsTableName, 'BuildFieldNames', $passarray);
+			$RowFieldName = $this->LayerModule->pass ($this->SiteStatsTableName, 'getRowFieldNames', array());
+			$this->LayerModule->Disconnect($this->SiteStatsTableName);
+			
+			foreach ($RowFieldName as $Value) {
+				$SiteStatEntry[$Value] = NULL;
+			}
+			$Timestamp = $_SERVER['REQUEST_TIME'];
+			$Timestamp = date('Y-m-d H:i:s', $Timestamp);
+			$SiteStatEntry['Timestamp'] = $Timestamp;
+			
+			$SiteStatEntry['RequestUri'] = $_SERVER['REQUEST_URI'];
+			
+			$SiteStatEntry['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$SiteStatEntry['HttpRefer'] = $_SERVER['HTTP_REFERER'];
+			$SiteStatEntry['HttpUserAgentString'] = $_SERVER['HTTP_USER_AGENT'];
+			
+			$SiteStatEntry['HttpAccept'] = $_SERVER['HTTP_ACCEPT'];
+			$SiteStatEntry['HttpAcceptLanguage'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			$SiteStatEntry['HttpAcceptEncoding'] = $_SERVER['HTTP_ACCEPT_ENCODING'];
+			$SiteStatEntry['HttpHost'] = $_SERVER['HTTP_HOST'];
+			$SiteStatEntry['HttpDNT'] = $_SERVER['HTTP_DNT'];
+			$SiteStatEntry['HttpConnection'] = $_SERVER['HTTP_CONNECTION'];
+			$SiteStatEntry['HttpCookie'] = $_SERVER['HTTP_COOKIE'];
+			$SiteStatEntry['GatewayInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+			$SiteStatEntry['ServerProtocol'] = $_SERVER['SERVER_PROTOCOL'];
+			$SiteStatEntry['RequestMethod'] = $_SERVER['REQUEST_METHOD'];
+			$SiteStatEntry['QueryString'] = $_SERVER['QUERY_STRING'];
+			
+			foreach ($SiteStatEntry as $Key => $Value) {
+				if (!isset($Value) || $Value === '') {
+					$SiteStatEntry[$Key] = NULL;
+				}
+			}
+			
+			return $SiteStatEntry;
+			
+		}
+	}
+	
+	/**
+	 * createSiteStatBrowserStatLog
+	 *
+	 * Creates a browser timestamp log in the database.
+	 *
+	 * @param array $SiteStatEntry = An array with the contents of the new site stat browser page to be created.
+	 *
+	 */
+	public function createSiteStatBrowserStatLog(array $SiteStatEntry) {
+		if ($SiteStatEntry != NULL) {
+			if ($this->SiteStatsBrowserStatTableName != NULL ) {
+				$this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'BuildFieldNames', array('TableName' => $this->SiteStatsBrowserStatTableName));
+				$Keys = $this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $SiteStatEntry, $this->SiteStatsBrowserStatTableName);
+			} else {
+				array_push($this->ErrorMessage,'createSiteStatBrowserStatLog: SiteStatsBrowserStatTableName cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createSiteStatBrowserStatLog: SiteStatEntry cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createSiteStatBrowserStatLogEntry
+	 *
+	 * Creates a site stat browser stat log entry for the database.
+	 *
+	 * @return array $SiteStatEntry = An array with the contents of the new site stat browser stat entry to be created.
+	 *
+	 */
+	public function createSiteStatBrowserStatLogEntry() {
+		if ($this->SiteStatsBrowserStatTableName != NULL ) {
+			$SiteStatEntry = array();
+			$passarray = array('TableName' => $this->SiteStatsBrowserStatTableName);
+			
+			$this->LayerModule->Connect($this->SiteStatsBrowserStatTableName);
+			$this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'BuildFieldNames', $passarray);
+			$RowFieldName = $this->LayerModule->pass ($this->SiteStatsBrowserStatTableName, 'getRowFieldNames', array());
+			$this->LayerModule->Disconnect($this->SiteStatsBrowserStatTableName);
+			
+			foreach ($RowFieldName as $Value) {
+				$SiteStatEntry[$Value] = NULL;
+			}
+			$Timestamp = $_SERVER['REQUEST_TIME'];
+			$Timestamp = date('Y-m-d H:i:s', $Timestamp);
+			$SiteStatEntry['Timestamp'] = $Timestamp;
+			
+			$SiteStatEntry['RequestUri'] = $_SERVER['REQUEST_URI'];
+			
+			$SiteStatEntry['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$SiteStatEntry['HttpRefer'] = $_SERVER['HTTP_REFERER'];
+			$SiteStatEntry['HttpUserAgentString'] = $_SERVER['HTTP_USER_AGENT'];
+			
+			$SiteStatEntry['HttpAccept'] = $_SERVER['HTTP_ACCEPT'];
+			$SiteStatEntry['HttpAcceptLanguage'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			$SiteStatEntry['HttpAcceptEncoding'] = $_SERVER['HTTP_ACCEPT_ENCODING'];
+			$SiteStatEntry['HttpHost'] = $_SERVER['HTTP_HOST'];
+			$SiteStatEntry['HttpDNT'] = $_SERVER['HTTP_DNT'];
+			$SiteStatEntry['HttpConnection'] = $_SERVER['HTTP_CONNECTION'];
+			$SiteStatEntry['HttpCookie'] = $_SERVER['HTTP_COOKIE'];
+			$SiteStatEntry['GatewayInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+			$SiteStatEntry['ServerProtocol'] = $_SERVER['SERVER_PROTOCOL'];
+			$SiteStatEntry['RequestMethod'] = $_SERVER['REQUEST_METHOD'];
+			$SiteStatEntry['QueryString'] = $_SERVER['QUERY_STRING'];
+			
+			$SiteStatEntry['AdobeReaderVersion'] = $_POST['AdobeReaderVersion'];
+			$SiteStatEntry['DevalvrVersion'] = $_POST['DevalvrVersion'];
+			$SiteStatEntry['FlashVersion'] = $_POST['FlashVersion'];
+			$SiteStatEntry['PDFJSVersion'] = $_POST['PDFJSVersion'];
+			$SiteStatEntry['PDFReaderVersion'] = $_POST['PDFReaderVersion'];
+			$SiteStatEntry['QuicktimeVersion'] = $_POST['QuicktimeVersion'];
+			$SiteStatEntry['RealPlayerVersion'] = $_POST['RealPlayerVersion'];
+			$SiteStatEntry['ShockWaveVersion'] = $_POST['ShockWaveVersion'];
+			$SiteStatEntry['SilverlightVersion'] = $_POST['SilverlightVersion'];
+			$SiteStatEntry['VLCVersion'] = $_POST['VLCVersion'];
+			$SiteStatEntry['WindowsMediaPlayerVersion'] = $_POST['WindowsMediaPlayerVersion'];
+			
+			$SiteStatEntry['ScreenHeight'] = $_POST['ScreenHeight'];
+			$SiteStatEntry['ScreenWidth'] = $_POST['ScreenWidth'];
+			$SiteStatEntry['ScreenAvailableHeight'] = $_POST['ScreenAvailableHeight'];
+			$SiteStatEntry['ScreenAvailableWidth'] = $_POST['ScreenAvailableWidth'];
+			$SiteStatEntry['ScreenColorDepth'] = $_POST['ScreenColorDepth'];
+			$SiteStatEntry['ScreenPixelDepth'] = $_POST['ScreenPixelDepth'];
+			
+			$SiteStatEntry['NavigatorAppCodeName'] = $_POST['NavigatorAppCodeName'];
+			$SiteStatEntry['NavigatorAppName'] = $_POST['NavigatorAppName'];
+			$SiteStatEntry['NavigatorAppVersion'] = $_POST['NavigatorAppVersion'];
+			$SiteStatEntry['NavigatorCookieEnabled'] = $_POST['NavigatorCookieEnabled'];
+			$SiteStatEntry['NavigatorOnline'] = $_POST['NavigatorOnline'];
+			$SiteStatEntry['NavigatorPlatform'] = $_POST['NavigatorPlatform'];
+			$SiteStatEntry['NavigatorUserAgent'] = $_POST['NavigatorUserAgent'];
+			$SiteStatEntry['NavigatorSystemLanguage'] = $_POST['NavigatorSystemLanguage'];
+			$SiteStatEntry['NavigatorJavaEnabled'] = $_POST['NavigatorJavaEnabled'];
+			
+			$SiteStatEntry['OS'] = $_POST['OS'];
+			$SiteStatEntry['OSVersion'] = $_POST['OSVersion'];
+			$SiteStatEntry['ActiveXEnabled'] = $_POST['ActiveXEnabled'];
+			$SiteStatEntry['IEVersion'] = $_POST['IEVersion'];
+			$SiteStatEntry['IETrueVersion'] = $_POST['IETrueVersion'];
+			$SiteStatEntry['IEDocMode'] = $_POST['IEDocMode'];
+			$SiteStatEntry['GeckoVersion'] = $_POST['GeckoVersion'];
+			$SiteStatEntry['SafariVersion'] = $_POST['SafariVersion'];
+			$SiteStatEntry['ChromeVersion'] = $_POST['ChromeVersion'];
+			$SiteStatEntry['OperaVersion'] = $_POST['OperaVersion'];
+			
+			foreach ($SiteStatEntry as $Key => $Value) {
+				if (!isset($Value) || $Value === '') {
+					$SiteStatEntry[$Key] = NULL;
+				}
+			}
+			
+			return $SiteStatEntry;
+			
+		}
+	}
+	
+	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createTimestampLog
 	 *
@@ -470,6 +824,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createTimestampLogEntry
 	 *
@@ -505,6 +860,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createSiteStatPage
 	 *
@@ -523,6 +879,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createDailySiteStatPage
 	 *
@@ -541,6 +898,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createIPAddressSiteStatPage
 	 *
@@ -559,6 +917,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * createDailyIPAddressSiteStatPage
 	 *
@@ -576,7 +935,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			array_push($this->ErrorMessage,'createDailyIPAddressSiteStatPage: SiteStatPage cannot be NULL!');
 		}
 	}
-
+	
+	// WILL BE REMOVED AT THE END OF 2013
 	/*
 	 * updateSiteStatPage
 	 *
@@ -639,6 +999,7 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 		}
 	}
 	
+	// WILL BE REMOVED AT THE END OF 2013
 	/*
 	 * updateIPAddressSiteStatPage
 	 *
@@ -703,7 +1064,8 @@ class XhtmlSiteStats extends Tier6ContentLayerModulesAbstract implements Tier6Co
 			array_push($this->ErrorMessage,'updateSiteStatPage: PageID cannot be NULL!');
 		}
 	}
-
+	
+	// WILL BE REMOVED AT THE END OF 2013
 	/**
 	 * deleteSiteStatPage
 	 *

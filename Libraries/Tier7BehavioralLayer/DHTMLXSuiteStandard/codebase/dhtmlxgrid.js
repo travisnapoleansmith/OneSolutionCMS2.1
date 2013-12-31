@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -172,7 +172,7 @@ this);if(c=="inserted")return a.set_invalid(b,!1),a.setUpdated(b,!1),!0;if(c=="d
 for(var d=this.obj.getRowById(a),e=0;e<this.obj._cCount;e++){var j=this.obj._c_order?this.obj._c_order[e]:e,i=this.obj.cells(d.idd,e);if(!this._changed||i.wasChanged())this._endnm?c[this.obj.getColumnId(e)]=i.getValue():c["c"+j]=i.getValue()}var f=this.obj.UserData[a];if(f)for(var g=0;g<f.keys.length;g++)f.keys[g]&&f.keys[g].indexOf("__")!=0&&(c[f.keys[g]]=f.values[g]);if(f=this.obj.UserData.gridglobaluserdata)for(g=0;g<f.keys.length;g++)c[f.keys[g]]=f.values[g];return c};a._clearUpdateFlag=function(a){var c=
 this.obj.getRowById(a);if(c)for(var d=0;d<this.obj._cCount;d++)this.obj.cells(a,d).cell.wasChanged=!1};a.checkBeforeUpdate=function(a){for(var c=!0,d=[],e=0;e<this.obj._cCount;e++)if(this.mandatoryFields[e]){var j=this.mandatoryFields[e].call(this.obj,this.obj.cells(a,e).getValue(),a,e);typeof j=="string"?(this.messages.push(j),c=!1):(c&=j,d[e]=!j)}c||(this.set_invalid(a,"invalid",d),this.setUpdated(a,!1));return c}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

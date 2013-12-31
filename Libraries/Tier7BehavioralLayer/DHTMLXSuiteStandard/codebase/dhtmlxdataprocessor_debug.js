@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -18,7 +18,7 @@ dataProcessor.wrap("_sendData",function(a,b){b?this._log("&nbsp;Sending in one-b
 dataProcessor.wrap("afterUpdate",function(a,b,c,d,e){a._log("&nbsp;Server response received <a onclick='this.nextSibling.style.display=\"block\"' href='#'>details</a><blockquote style='display:none'><code>"+(e.xmlDoc.responseText||"").replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</code></blockquote>");if(a.xml_analize(e)){var f=e.doXPath("//data/action");f||(a._log("&nbsp;No actions found"),(f=e.getXMLTopNode("data"))?a._log("&nbsp;Incorrect content type - need to be text/xml"):
 a._log("&nbsp;XML not valid"))}},function(){});dataProcessor.wrap("afterUpdateCallback",function(a,b,c){this.obj.mytype=="tree"?this.obj._idpull[a]||this._log("Incorrect SID, item with such ID not exists in grid"):this.obj.rowsAr&&(this.obj.rowsAr[a]||this._log("Incorrect SID, row with such ID not exists in grid"));this._log("&nbsp;Action: "+c+" SID:"+a+" TID:"+b)},function(){});
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

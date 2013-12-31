@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -27,7 +27,7 @@ dhtmlXGridObject.prototype.pasteBlockFromClipboard=function(){var b=this.fromCli
 j=a;j<f;j++)if(this._hrrar[j])f=Math.max(f+1,this._cCount);else{var e=this.cells3(k,j);if(e.isDisabled())i++;else{this._onEditUndoRedo&&this._onEditUndoRedo(2,k.idd,j,b[h][i],e.getValue());if(e.combo){for(var g=e.combo.values,m=0;m<g.length;m++)if(b[h][i]==g[m]){e.setValue(e.combo.keys[m]);g=null;break}g!=null&&e.editable?e.setValue(b[h][i++]):i++}else e[e.setImage?"setLabel":"setValue"](b[h][i++]);e.cell.wasChanged=!0}}this.callEvent("onRowPaste",[k.idd]);h++}}};
 dhtmlXGridObject.prototype.getSelectedBlock=function(){return this._selectionArea?this._selectionArea:this.getSelectedRowId()!==null?{LeftTopRow:this.getSelectedRowId(),LeftTopCol:this.getSelectedCellIndex(),RightBottomRow:this.getSelectedRowId(),RightBottomCol:this.getSelectedCellIndex()}:null};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

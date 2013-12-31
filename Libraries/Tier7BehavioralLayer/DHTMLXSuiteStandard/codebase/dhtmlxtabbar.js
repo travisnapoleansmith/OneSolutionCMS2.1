@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -69,7 +69,7 @@ d;this._frame=f;this._doOnFrameContentLoaded&&this._doOnFrameContentLoaded(!0)}e
 (function(){dhtmlx.extend_api("dhtmlXTabBar",{_init:function(a){return[a.parent,a.mode,a.height]},tabs:"tabs",skin:"setSkin",offset:"setOffset",margin:"setMargin",image_path:"setImagePath",href_mode:"setHrefMode",align:"setAlign",xml:"loadXML",close_button:"enableTabCloseButton",scroll:"enableScroll",forced:"enableForceHiding",content_zone:"enableContentZone",size_by_content:"enableAutoSize",auto_size:"enableAutoReSize"},{tabs:function(a){for(var b=0;b<a.length;b++){var c=a[b];this.addTab(c.id,c.label,
 c.width,c.index,c.row);c.active&&this.setTabActive(c.id)}}})})();
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

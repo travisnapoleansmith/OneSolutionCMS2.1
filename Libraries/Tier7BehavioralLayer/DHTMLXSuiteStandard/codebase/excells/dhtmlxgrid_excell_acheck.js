@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -10,7 +10,7 @@ this.cell._cellIndex]),this.grid.callEvent("onCheck",[this.cell.parentNode.idd,t
 this.getValue()};this.drawCurrentState=function(){return this.cell.chstate==1?"<div  onclick='(new eXcell_acheck(this.parentNode)).changeState(); (arguments[0]||event).cancelBubble=true;'  style='cursor:pointer; font-weight:bold; text-align:center; '><img height='13px' src='"+this.grid.imgURL+"green.gif'>&nbsp;Yes</div>":"<div  onclick='(new eXcell_acheck(this.parentNode)).changeState(); (arguments[0]||event).cancelBubble=true;' style='cursor:pointer;  text-align:center; '><img height='13px' src='"+
 this.grid.imgURL+"red.gif'>&nbsp;No</div>"}}eXcell_acheck.prototype=new eXcell;eXcell_acheck.prototype.setValue=function(a){a=(a||"").toString();a.indexOf("1")!=-1||a.indexOf("true")!=-1?(a="1",this.cell.chstate="1"):(a="0",this.cell.chstate="0");var b=this;this.setCValue(this.drawCurrentState(),this.cell.chstate)};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

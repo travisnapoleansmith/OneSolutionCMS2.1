@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -138,7 +138,7 @@ dhtmlXTreeObject.prototype._dp_init=function(a){a.attachEvent("insertCallback",f
 this.action_param,"true_deleted");this.obj.deleteItem(c,!1)});a._methods=["setItemStyle","","changeItemId","deleteItem"];this.attachEvent("onEdit",function(b,c){b==3&&a.setUpdated(c,!0);return!0});this.attachEvent("onDrop",function(b,c,d,e,f){e==f&&a.setUpdated(b,!0)});this._onrdlh=function(b){var c=a.getState(b);if(c=="inserted")return a.set_invalid(b,!1),a.setUpdated(b,!1),!0;if(c=="true_deleted")return a.setUpdated(b,!1),!0;a.setUpdated(b,!0,"deleted");return!1};this._onradh=function(b){a.setUpdated(b,
 !0,"inserted")};a._getRowData=function(a){for(var c={},d=this.obj._globalIdStorageFind(a),e=d.parentObject,f=0,f=0;f<e.childsCount;f++)if(e.childNodes[f]==d)break;c.tr_id=d.id;c.tr_pid=e.id;c.tr_order=f;c.tr_text=d.span.innerHTML;e=(d._userdatalist||"").split(",");for(f=0;f<e.length;f++)c[e[f]]=d.userData["t_"+e[f]];return c}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

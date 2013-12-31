@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -31,7 +31,7 @@ if(!window.clipboardData)window.clipboardData={_make:function(){var b=Components
 setData:function(b,d){try{netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect")}catch(c){return dhtmlxError.throwError("Clipboard","Access to clipboard denied",[b,d]),""}if(!this._make())return!1;this._p[2].data=d;this._p[1].setTransferData("text/unicode",this._p[2],d.length*2);var e=Components.interfaces.nsIClipboard;this._p[0].setData(this._p[1],null,e.kGlobalClipboard)},getData:function(b){try{netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect")}catch(d){return dhtmlxError.throwError("Clipboard",
 "Access to clipboard denied",[b]),""}if(!this._make())return!1;this._p[0].getData(this._p[1],this._p[0].kGlobalClipboard);var c={},e={};try{this._p[1].getTransferData("text/unicode",e,c)}catch(a){return""}e&&(e=e.value.QueryInterface(Components.interfaces.nsISupportsString));return e?e.data.substring(0,c.value/2):""}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -77,7 +77,7 @@ null;this.setActive=this.getView=this.getFrame=this._getSt=this._dhxContDestruct
 this.attachLayout=this.attachAccordion=this.attachFolders=this.attachTabbar=this.attachTree=this.attachScheduler=this.attachGrid=this.hideStatusBar=this.hideToolbar=this.hideMenu=this.showStatusBar=this.showToolbar=this.showMenu=this.detachStatusBar=this.detachToolbar=this.detachMenu=this.attachStatusBar=this.attachToolbar=this.attachMenu=this.vs=null;g.st.innerHTML="";g.st.parentNode.removeChild(g.st);g.st=null;g.setContent=null;g.dhxcont=null;g=g.obj=null;if(dhtmlx.detaches)for(a in dhtmlx.detaches)dhtmlx.detaches[a](this)};
 if(dhtmlx.attaches)for(var j in dhtmlx.attaches)this.obj[j]=dhtmlx.attaches[j];return this};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

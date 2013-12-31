@@ -14,6 +14,7 @@ var ColumnCount = null;
 var GET = GetUrlVars();
 var COOKIE = null;
 var PageLocation = null;
+var HeaderLocation = null;
 var PageID = 0;
 var FileName = null;
 
@@ -58,6 +59,7 @@ function PageLoad() {
 	}
 	
 	PageLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php?TableID=";
+	HeaderLocation = "../Administrators/PageTypes/TablePage/XmlDHtmlXGridTables.php?TableID=";
 	
 	if (GET['TableID'] != null) {
 		PageID = GET['TableID'];
@@ -68,11 +70,11 @@ function PageLoad() {
 	}
 	
 	PageLocation = PageLocation + PageID;
-	
+	HeaderLocation = HeaderLocation + PageID;
 	
 	CheckFile();
 	$.ajax({
-		url: PageLocation,
+		url: HeaderLocation,
 		type: "GET", 
 		dataType: "xml",
 		success: LoadHeaderData
@@ -154,7 +156,8 @@ function LoadGrid() {
 function LoadRowColumnCount() {
 	ColumnCount = mygrid.getColumnsNum();
 	RowCount = mygrid.getRowsNum();
-
+	ColumnCount = ColumnCount - 1;
+	
 	if (RowCount == 0) {
 		alert("Data has not loaded, data may not save properly, please refresh the page!");
 	} else {
@@ -473,7 +476,7 @@ function RemoveOneColumn() {
 	var Index = mygrid.getColIndexById(Id);
 	mygrid.deleteColumn(Id);
 	
-	var ElementRemove = Id + 1;
+	var ElementRemove = Id;
 	
 	ColumnHeader.splice(Id, 1);
 	ColumnFooter.splice(Id, 1);
@@ -488,10 +491,10 @@ function LoadHeaderData(XML) {
 		ColumnHeader.push($(this).text());
 	});
 	
-	LoadColumns(PageLocation, ColumnHeader, "Header", "ColumnHeadings");
+	LoadColumns(HeaderLocation, ColumnHeader, "Header", "ColumnHeadings");
 	
 	LoadFooterData(XML);
-	LoadColumns(PageLocation, ColumnFooter, "Footer", "ColumnFooters");
+	LoadColumns(HeaderLocation, ColumnFooter, "Footer", "ColumnFooters");
 }
 
 function LoadFooterData(XML) {

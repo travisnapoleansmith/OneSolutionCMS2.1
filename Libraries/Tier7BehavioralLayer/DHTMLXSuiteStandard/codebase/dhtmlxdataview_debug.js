@@ -4,7 +4,7 @@ You allowed to use this component or parts of it under GPL terms
 To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
 */
 /*
-2013 June 20
+2013 November 08
 */
 
 

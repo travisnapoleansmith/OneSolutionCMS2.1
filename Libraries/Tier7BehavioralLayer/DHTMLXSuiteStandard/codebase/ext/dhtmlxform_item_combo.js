@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -16,7 +16,7 @@ b,a._combo.readonly(a._combo_ro)},isReadonly:function(a){return a._combo_ro||!1}
 function(){return!1};c.callEvent("onFocus",[c._idd]);c=b=null},_comboBlur:function(a){var a=a||event,b=(a.target||a.srcElement).parentNode.parentNode,c=b.parentNode.parentNode;if(c.getForm().skin=="dhx_terrace"&&b.className.search(/combo_in_focus/)>=0)b.className=b.className.replace(/combo_in_focus/gi,"");for(var d=0;d<c._combo.DOMlist.childNodes.length;d++)c._combo.DOMlist.childNodes[d].onmousedown=null;c.callEvent("onBlur",[c._idd]);c=b=null}};
 (function(){for(var a in{doAddLabel:1,doAddInput:1,doLoadOpts:1,doUnloadNestedLists:1,setText:1,getText:1,isEnabled:1,_checkNoteWidth:1})dhtmlXForm.prototype.items.combo[a]=dhtmlXForm.prototype.items.select[a]})();dhtmlXForm.prototype.items.combo.d2=dhtmlXForm.prototype.items.select.destruct;dhtmlXForm.prototype.getCombo=function(a){return this.doWithItem(a,"getCombo")};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

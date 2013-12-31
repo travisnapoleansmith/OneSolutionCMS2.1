@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -59,7 +59,7 @@ dhtmlXCombo.prototype.dhx_Event=function(){this.dhx_SeverCatcherPath="";this.att
 '<?xml version="1.0"?><methodCall><methodName>'+a[2]+"</methodName><params>",d="</params></methodCall>",e=b);var k=function(){};return k},d=function(){if(b)var a=!0;for(var d=0;d<b.length;d++)if(b[d]!=null)var e=b[d].apply(c,arguments),a=a&&e;return a};d.addEvent=function(a){typeof a!="function"&&(a=a&&a.indexOf&&a.indexOf("server:")==0?new e(a,c.rpcServer):eval(a));return a?b.push(a)-1:!1};d.removeEvent=function(a){b[a]=null};return d};this.detachEvent=function(a){if(a!=!1){var b=a.split(":");this[b[0]].removeEvent(b[1])}}};
 (function(){dhtmlx.extend_api("dhtmlXCombo",{_init:function(a){if(a.image_path)dhx_globalImgPath=a.image_path;return[a.parent,a.name,a.width||"100%",a.type,a.index]},filter:"filter_command",auto_height:"enableOptionAutoHeight",auto_position:"enableOptionAutoPositioning",auto_width:"enableOptionAutoWidth",xml:"loadXML",readonly:"readonly",items:"addOption"},{filter_command:function(a){typeof a=="string"?this.enableFilteringMode(!0,a):this.enableFilteringMode(a)}})})();
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

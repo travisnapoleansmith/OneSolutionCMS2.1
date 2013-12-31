@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -17,7 +17,7 @@ dhtmlXForm.prototype.clearValidation=function(b,e){typeof e!="undefined"&&(b=[b,
 dhtmlXForm.prototype.reloadOptions=function(b,e){var c=this.getItemType(b);if({select:1,multiselect:1,combo:1}[c]){if(c=="select"||c=="multiselect"){for(var a=this.getOptions(b);a.length>0;)a.remove(0);a.length=0;a=null;typeof e=="string"?this.doWithItem(b,"doLoadOptsConnector",e):e instanceof Array&&this.doWithItem(b,"doLoadOpts",{options:e})}if(c=="combo"){var d=this.getCombo(b);d.clearAll();d.setComboValue("");if(typeof e=="string")this.doWithItem(b,"doLoadOptsConnector",e);else if(e instanceof
 Array){for(var g=null,f=0;f<e.length;f++)if(this._s2b(e[f].selected))g=e[f].value;d.addOption(e);g!=null&&this.setItemValue(b,g);d=null}}}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

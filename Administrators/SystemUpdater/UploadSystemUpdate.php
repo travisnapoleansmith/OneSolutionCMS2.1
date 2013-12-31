@@ -24,6 +24,7 @@
 	* @version    2.1.139, 2012-12-27
 	*************************************************************************************
 	*/
+	
 	$ReferPage = $_SERVER['HTTP_REFERER'];
 	$ReferPageIDArray = explode('?', $ReferPage);
 	unset($ReferPageIDArray[0]);
@@ -36,14 +37,17 @@
 		$FileUpload == FALSE;
 		$UploadArray = $_FILES['SystemUpdateFile'];
 		$TargetPath = '../../SQLTables/Update/';
-
+		
 		if ($UploadArray['type'] == 'application/zip' || $UploadArray['type'] == 'application/x-zip-compressed') {
 			if (move_uploaded_file($UploadArray['tmp_name'], $TargetPath . 'Update.zip')) {
 				$FileUpload = TRUE;
 			} else {
 				$FileUpload = FALSE;
 			}
+		} else {
+			
 		}
+		
 		$Page = new XMLWriter();
 		$Page->openMemory();
 

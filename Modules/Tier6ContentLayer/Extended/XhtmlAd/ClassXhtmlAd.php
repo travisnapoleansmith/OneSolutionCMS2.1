@@ -24,7 +24,7 @@
 */
 
 class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLayerModules {
-	protected $AdStatsTableName;
+	protected $AdStatsTableNameVersion1;
 	protected $AdStatsTable = array();
 	protected $AdSponsorsTableName = array();
 	protected $AdSponsorsDatabaseOptions = array();
@@ -61,7 +61,21 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	protected $SeparatorStartTag;
 
 	protected $AdMax;
-
+	
+	/**
+	 * Database Table Name for Ad Stats: This will be a name like AdStats2013.
+	 *
+	 * @var string
+	 */
+	protected $AdStatsTableName;
+	
+	/**
+	 * Database Table Name for Ad Stats Browser Stats: This will be a name like AdStatsBrowserStats2013.
+	 *
+	 * @var string
+	 */
+	protected $AdStatsBrowserStatTableName;
+	
 	/**
 	 * Create an instance of XtmlAd
 	 *
@@ -174,7 +188,7 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 
 		$this->LastAccess = date('Y-m-d H:i:s');
 
-		$this->AdStatsTableName = $tablenames['DatabaseTable1'];
+		$this->AdStatsTableNameVersion1 = $tablenames['DatabaseTable1'];
 		foreach($TableNames as $key => $databasename) {
 			if ($key != 'DatabaseTable1') {
 				$this->AdSponsorsTableName[$key] = $databasename;
@@ -285,184 +299,303 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 	public function FetchDatabase ($PageID) {
 		$this->PageID = $PageID['PageID'];
 		unset ($PageID['PrintPreview']);
-
+		
+		$AdStatsAdvertisingTableNameEnum = NULL;
+		$AdStatsAdvertisingTableNameDefault = $this->AdSponsorsTableName['DatabaseTable2'];
 		foreach ($this->AdSponsorsTableName as $TableName) {
-			$this->LayerModule->createDatabaseTable($TableName);
-			$TableNamePageID = $TableName . 'PageID';
-			$this->LayerModule->createDatabaseTable($TableNamePageID);
-
-			$this->LayerModule->Connect($TableName);
-			$this->LayerModule->pass ($TableName, 'setEntireTable', array());
-			$this->AdSponsorsDatabaseTable[$TableName] = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
-			$this->LayerModule->Disconnect($TableName);
-
-			$this->LayerModule->Connect($TableNamePageID);
-			$this->LayerModule->pass ($TableNamePageID, 'setEntireTable', array());
-			$this->AdSponsorsDatabaseTable[$TableNamePageID] = $this->LayerModule->pass ($TableNamePageID, 'getEntireTable', array());
-			$this->LayerModule->Disconnect($TableNamePageID);
-
-			$AdCount = count($this->AdSponsorsDatabaseTable[$TableName]);
-
-			$ShowNumber = $TableName . 'ShowNumber';
-			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
-
-			if ($ShowNumber > $AdCount) {
-				$ShowNumber = $AdCount;
-			}
-
-			$PrintOrder = $this->AdSponsorsDatabaseTable[$TableNamePageID];
-
-			$this->AdSponsorsOutputAdsOrder[$TableNamePageID] = array();
-			$j = 1;
-			
-			if ($this->AdSponsorsDatabaseTable[$TableName] != NULL) {
-				foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
-					if ($DatabaseTable['Enable/Disable'] == 'Disable') {
-						unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
-						$AdvertisingKey = $DatabaseTable['AdvertisingID'];
-						foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-							if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-								unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-							}
-						}
-					}
+			if ($TableName != NULL) {
+				$AdStatsAdvertisingTableNameEnum .= "'$TableName',";
+				
+				$this->LayerModule->createDatabaseTable($TableName);
+				$TableNamePageID = $TableName . 'PageID';
+				$this->LayerModule->createDatabaseTable($TableNamePageID);
 	
-					if (isset($DatabaseTable['AdStartDateTime']) | isset($DatabaseTable['AdEndDateTime'])) {
-						$CurrentTime = time();
+				$this->LayerModule->Connect($TableName);
+				$this->LayerModule->pass ($TableName, 'setEntireTable', array());
+				$this->AdSponsorsDatabaseTable[$TableName] = $this->LayerModule->pass ($TableName, 'getEntireTable', array());
+				$this->LayerModule->Disconnect($TableName);
 	
-						$AdStartTimeStamp = strtotime($DatabaseTable['AdStartDateTime']);
-						$AdEndTimeStamp = strtotime($DatabaseTable['AdEndDateTime']);
+				$this->LayerModule->Connect($TableNamePageID);
+				$this->LayerModule->pass ($TableNamePageID, 'setEntireTable', array());
+				$this->AdSponsorsDatabaseTable[$TableNamePageID] = $this->LayerModule->pass ($TableNamePageID, 'getEntireTable', array());
+				$this->LayerModule->Disconnect($TableNamePageID);
 	
-						if ((int)$AdStartTimeStamp > (int)$CurrentTime & $DatabaseTable['AdStartDateTime'] != NULL) {
-							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
-							$AdvertisingKey = $DatabaseTable['AdvertisingID'];
-							foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-								if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-									unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-								}
-							}
-						} else if ((int)$AdEndTimeStamp < (int)$CurrentTime & $DatabaseTable['AdEndDateTime'] != NULL) {
-							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
-							$AdvertisingKey = $DatabaseTable['AdvertisingID'];
-							foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-								if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
-									unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-								}
-							}
-						}
-					}
+				$AdCount = count($this->AdSponsorsDatabaseTable[$TableName]);
+	
+				$ShowNumber = $TableName . 'ShowNumber';
+				$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
+	
+				if ($ShowNumber > $AdCount) {
+					$ShowNumber = $AdCount;
 				}
-			}
-			
-			if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
-				foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
-					$RemoveFlag = FALSE;
-					foreach ($AdSponsorsDatabaseTable as $SponsorsKey => $SponsorsItem) {
-						if ($SponsorsKey != 'AdvertisingID') {
-							if (!strstr($SponsorsKey, 'Order')) {
-								if ($SponsorsItem == 0) {
-									if ($RemoveFlag !== TRUE) {
-										$RemoveFlag == FALSE;
-									}
-								} else {
-									if ($this->PageID == $SponsorsItem) {
-										$RemoveFlag = FALSE;
-									} else if ($RemoveFlag === FALSE) {
-										$RemoveFlag = TRUE;
-									}
+	
+				$PrintOrder = $this->AdSponsorsDatabaseTable[$TableNamePageID];
+	
+				$this->AdSponsorsOutputAdsOrder[$TableNamePageID] = array();
+				$j = 1;
+				
+				if ($this->AdSponsorsDatabaseTable[$TableName] != NULL) {
+					foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
+						if ($DatabaseTable['Enable/Disable'] == 'Disable') {
+							unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+							$AdvertisingKey = $DatabaseTable['AdvertisingID'];
+							foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+								if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+									unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
 								}
 							}
 						}
-					}
-	
-					if ($RemoveFlag === TRUE) {
-						unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
-						$AdvertisingKey = $AdSponsorsDatabaseTable['AdvertisingID'];
-						foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
-							if ($DatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+		
+						if (isset($DatabaseTable['AdStartDateTime']) | isset($DatabaseTable['AdEndDateTime'])) {
+							$CurrentTime = time();
+		
+							$AdStartTimeStamp = strtotime($DatabaseTable['AdStartDateTime']);
+							$AdEndTimeStamp = strtotime($DatabaseTable['AdEndDateTime']);
+		
+							if ((int)$AdStartTimeStamp > (int)$CurrentTime & $DatabaseTable['AdStartDateTime'] != NULL) {
 								unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+								$AdvertisingKey = $DatabaseTable['AdvertisingID'];
+								foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+									if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+										unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+									}
+								}
+							} else if ((int)$AdEndTimeStamp < (int)$CurrentTime & $DatabaseTable['AdEndDateTime'] != NULL) {
+								unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+								$AdvertisingKey = $DatabaseTable['AdvertisingID'];
+								foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+									if ($AdSponsorsDatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+										unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-
-			// PUT IN AD HOC SENSE IN HERE - ALL MODULES ARE IN /AdHocSense FOLDER.
-			$AdHocSensePath = dirname(__FILE__) . '/AdHocSense';
-			if (is_dir($AdHocSensePath)) {
-				if (opendir($AdHocSensePath)) {
-					//print "OPENED AD HOC SENSE PATH\n";
-				}
-			}
-			if ($PrintOrder != NULL) {
-				foreach ($PrintOrder as $CurrentData) {
-					$i = 1;
-					$PageIDKey = 'PageID' . $i;
-					$OrderKey = 'PageID' .$i . 'Order';
-	
-					if ($CurrentData[$PageIDKey] != 0) {
-						foreach ($CurrentData as $LookupKey => $LookupData) {
-							if (!strstr($LookupKey,'Order')) {
-								if ($LookupKey != 'AdvertisingID') {
-									if ($LookupData != 0) {
-										if ($LookupData == $this->PageID) {
-											if (!isset($this->AdSponsorsOutputAdLookup[$TableNamePageID])) {
-												$this->AdSponsorsOutputAdLookup[$TableNamePageID] = array();
-											}
-											array_push($this->AdSponsorsOutputAdLookup[$TableNamePageID], $CurrentData['AdvertisingID']);
-											$ShowNumber--;
-										} else {
-											$KeyName = 'REMOVE' . $j;
-											$this->AdSponsorsRemoveArray[$TableNamePageID][$KeyName] = $CurrentData['AdvertisingID'];
-											$j++;
+				
+				if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
+					foreach ($this->AdSponsorsDatabaseTable[$TableNamePageID] as $AdSponsorsKey => $AdSponsorsDatabaseTable) {
+						$RemoveFlag = FALSE;
+						foreach ($AdSponsorsDatabaseTable as $SponsorsKey => $SponsorsItem) {
+							if ($SponsorsKey != 'AdvertisingID') {
+								if (!strstr($SponsorsKey, 'Order')) {
+									if ($SponsorsItem == 0) {
+										if ($RemoveFlag !== TRUE) {
+											$RemoveFlag == FALSE;
+										}
+									} else {
+										if ($this->PageID == $SponsorsItem) {
+											$RemoveFlag = FALSE;
+										} else if ($RemoveFlag === FALSE) {
+											$RemoveFlag = TRUE;
 										}
 									}
 								}
-							} else {
-								$NewKey = str_replace('Order', '', $LookupKey);
-								if ($CurrentData[$NewKey] == $this->PageID) {
-									if ($LookupData != 'NA') {
-										$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData;
+							}
+						}
+		
+						if ($RemoveFlag === TRUE) {
+							unset($this->AdSponsorsDatabaseTable[$TableNamePageID][$AdSponsorsKey]);
+							$AdvertisingKey = $AdSponsorsDatabaseTable['AdvertisingID'];
+							foreach ($this->AdSponsorsDatabaseTable[$TableName] as $DatabaseKey => $DatabaseTable) {
+								if ($DatabaseTable['AdvertisingID'] == $AdvertisingKey) {
+									unset($this->AdSponsorsDatabaseTable[$TableName][$DatabaseKey]);
+								}
+							}
+						}
+					}
+				}
+	
+				// PUT IN AD HOC SENSE IN HERE - ALL MODULES ARE IN /AdHocSense FOLDER.
+				$AdHocSensePath = dirname(__FILE__) . '/AdHocSense';
+				if (is_dir($AdHocSensePath)) {
+					if (opendir($AdHocSensePath)) {
+						//print "OPENED AD HOC SENSE PATH\n";
+					}
+				}
+				if ($PrintOrder != NULL) {
+					foreach ($PrintOrder as $CurrentData) {
+						$i = 1;
+						$PageIDKey = 'PageID' . $i;
+						$OrderKey = 'PageID' .$i . 'Order';
+		
+						if ($CurrentData[$PageIDKey] != 0) {
+							foreach ($CurrentData as $LookupKey => $LookupData) {
+								if (!strstr($LookupKey,'Order')) {
+									if ($LookupKey != 'AdvertisingID') {
+										if ($LookupData != 0) {
+											if ($LookupData == $this->PageID) {
+												if (!isset($this->AdSponsorsOutputAdLookup[$TableNamePageID])) {
+													$this->AdSponsorsOutputAdLookup[$TableNamePageID] = array();
+												}
+												array_push($this->AdSponsorsOutputAdLookup[$TableNamePageID], $CurrentData['AdvertisingID']);
+												$ShowNumber--;
+											} else {
+												$KeyName = 'REMOVE' . $j;
+												$this->AdSponsorsRemoveArray[$TableNamePageID][$KeyName] = $CurrentData['AdvertisingID'];
+												$j++;
+											}
+										}
+									}
+								} else {
+									$NewKey = str_replace('Order', '', $LookupKey);
+									if ($CurrentData[$NewKey] == $this->PageID) {
+										if ($LookupData != 'NA') {
+											$this->AdSponsorsOutputAdsOrder[$TableNamePageID][$CurrentData['AdvertisingID']] = $LookupData;
+										}
 									}
 								}
 							}
 						}
 					}
 				}
-			}
-			
-			for ($i = 0; $i < $ShowNumber; $i++) {
-				$this->selectRandomSponsor ($TableNamePageID, $this->AdSponsorsDatabaseTable[$TableNamePageID]);
-			}
-
-			$i = 0;
-			
-			if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
-				foreach($this->AdSponsorsDatabaseTable[$TableNamePageID] as $key => $value) {
-					$i++;
+				
+				for ($i = 0; $i < $ShowNumber; $i++) {
+					$this->selectRandomSponsor ($TableNamePageID, $this->AdSponsorsDatabaseTable[$TableNamePageID]);
+				}
+	
+				$i = 0;
+				
+				if ($this->AdSponsorsDatabaseTable[$TableNamePageID] != NULL) {
+					foreach($this->AdSponsorsDatabaseTable[$TableNamePageID] as $key => $value) {
+						$i++;
+					}
+				}
+				$ShowNumber = $TableName . 'ShowNumber';
+				$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
+	
+				if ($ShowNumber > $AdCount) {
+					$ShowNumber = $AdCount;
+				}
+				if ($this->AdSponsorsOutputAdLookup[$TableNamePageID] !== NULL) {
+					$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
 				}
 			}
-			$ShowNumber = $TableName . 'ShowNumber';
-			$ShowNumber = $this->AdSponsorsDatabaseOptions[$TableName][$ShowNumber];
-
-			if ($ShowNumber > $AdCount) {
-				$ShowNumber = $AdCount;
-			}
-			if ($this->AdSponsorsOutputAdLookup[$TableNamePageID] !== NULL) {
-				$this->AdSponsorsOutputAdLookup[$TableNamePageID] = $this->sortArray ($this->AdSponsorsOutputAdLookup[$TableNamePageID], $this->AdSponsorsOutputAdsOrder[$TableNamePageID],$ShowNumber);
-			}
 		}
-
-		$this->LayerModule->Connect($this->DatabaseTable);
-		$passarray = array();
-		$passarray = $PageID;
-
-		$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
-
-		$this->AdStatsTable = $this->LayerModule->pass ($this->DatabaseTable, 'getMultiRowField', array());
-		$this->LayerModule->Disconnect($this->DatabaseTable);
+		
+		// REMOVE AFTER 2013
+		// PERFORM CHECK FOR 2013
+		$Year = date('Y');
+		if ($Year <= 2013) {
+			$this->LayerModule->Connect($this->DatabaseTable);
+			$passarray = array();
+			$passarray = $PageID;
+	
+			$this->LayerModule->pass ($this->DatabaseTable, 'setDatabaseRow', array('idnumber' => $passarray));
+	
+			$this->AdStatsTable = $this->LayerModule->pass ($this->DatabaseTable, 'getMultiRowField', array());
+			$this->LayerModule->Disconnect($this->DatabaseTable);
+		}
+		// END CHECK FOR 2013
+		// END REMOVE
+		if ($AdStatsAdvertisingTableNameEnum != NULL) {
+			$AdStatsAdvertisingTableNameEnum = substr($AdStatsAdvertisingTableNameEnum, 0, /*strlen($AdStatsAdvertisingTableNameEnum)*/-1); 
+		}
+		
+		if ($this->AdStatsTableName != NULL) {
+			$this->LayerModule->createDatabaseTable($this->AdStatsTableName);
+			
+			$this->LayerModule->Connect($this->AdStatsTableName);
+			$Return = $this->LayerModule->pass ($this->AdStatsTableName, 'checkTableName', array());
+			if ($Return !== $this->AdStatsTableName) {
+				if ($AdStatsAdvertisingTableNameEnum != NULL) {
+					$TableCreationQuery = "	`AdvertisingID` int(11),
+											`AdvertisingTableName` enum($AdStatsAdvertisingTableNameEnum) NOT NULL default '$AdStatsAdvertisingTableNameDefault',
+											`Timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+											`RequestUri` text NOT NULL,
+											`IPAddress` varchar(20) default NULL,
+											`HttpRefer` text,
+											`HttpUserAgentString` text,
+											`HttpAccept` text,
+											`HttpAcceptLanguage` text,
+											`HttpAcceptEncoding` text,
+											`HttpHost` text,
+											`HttpDNT` text,
+											`HttpConnection` text,
+											`HttpCookie` text,
+											`GatewayInterface` text,
+											`ServerProtocol` text,
+											`RequestMethod` text,
+											`QueryString` text
+										";
+					$this->LayerModule->pass ($this->AdStatsTableName, 'createTable', array($TableCreationQuery));
+				}
+			}
+			
+			$this->LayerModule->Disconnect($this->AdStatsTableName);
+		}
+		
+		if ($this->AdStatsBrowserStatTableName != NULL) {
+			$this->LayerModule->createDatabaseTable($this->AdStatsBrowserStatTableName);
+			
+			$this->LayerModule->Connect($this->AdStatsBrowserStatTableName);
+			$Return = $this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'checkTableName', array());
+			if ($Return !== $this->AdStatsBrowserStatTableName) {
+				if ($AdStatsAdvertisingTableNameEnum != NULL) {
+					$TableCreationQuery = " `AdvertisingID` int(11),
+											`AdvertisingTableName` enum($AdStatsAdvertisingTableNameEnum) NOT NULL default '$AdStatsAdvertisingTableNameDefault',
+											`Timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+										  	`RequestUri` text NOT NULL,
+										  	`IPAddress` varchar(20) default NULL,
+										  	`HttpRefer` text,
+											`HttpUserAgentString` text,
+										  	`HttpAccept` text,
+										  	`HttpAcceptLanguage` text,
+										  	`HttpAcceptEncoding` text,
+										  	`HttpHost` text,
+										  	`HttpDNT` text,
+										  	`HttpConnection` text,
+										  	`HttpCookie` text,
+										  	`GatewayInterface` text,
+										  	`ServerProtocol` text,
+										  	`RequestMethod` text,
+										  	`QueryString` text,
+										  	`AdobeReaderVersion` text,
+										  	`DevalvrVersion` text,
+										  	`FlashVersion` text,
+										  	`PDFJSVersion` text,
+										  	`PDFReaderVersion` text,
+										  	`QuicktimeVersion` text,
+										  	`RealPlayerVersion` text,
+										  	`ShockWaveVersion` text,
+										  	`SilverlightVersion` text,
+										  	`VLCVersion` text,
+										  	`WindowsMediaPlayerVersion` text,
+										  	`ScreenHeight` text,
+										  	`ScreenWidth` text,
+										  	`ScreenAvailableHeight` text,
+										  	`ScreenAvailableWidth` text,
+										  	`ScreenColorDepth` text,
+										  	`ScreenPixelDepth` text,
+										  	`NavigatorAppCodeName` text,
+										  	`NavigatorAppName` text,
+										  	`NavigatorAppVersion` text,
+										  	`NavigatorCookieEnabled` text,
+										  	`NavigatorOnline` text,
+										  	`NavigatorPlatform` text,
+										  	`NavigatorUserAgent` text,
+										  	`NavigatorSystemLanguage` text,
+										  	`NavigatorJavaEnabled` text,
+										  	`OS` text,
+										  	`OSVersion` text,
+										  	`ActiveXEnabled` text,
+										  	`IEVersion` text,
+										  	`IETrueVersion` text,
+										  	`IEDocMode` text,
+										  	`GeckoVersion` text,
+										  	`SafariVersion` text,
+										  	`ChromeVersion` text,
+										  	`OperaVersion` text
+										";
+					$this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'createTable', array($TableCreationQuery));
+				}
+			}
+			
+			$this->LayerModule->Disconnect($this->AdStatsBrowserStatTableName);
+		}
 	}
 	
+	// REMOVE THIS AFTER 2013
 	/**
 	 * FetchDatabaseAll
 	 *
@@ -579,23 +712,43 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 				$PageID['PageID'] = $this->PageID;
 				$PageID['AdvertisingID'] = $LookupValue;
 				$PageID['AdvertisingTableName'] = $AdvertisingTableName;
-
-				if ($ReturnPage !== 'FALSE') {
-					$this->updateAdStatPage($PageID, $ReturnPage);
-				} else {
-					$AdStatPage = array();
-					$AdStatPage['PageID'] = $this->PageID;
-					$AdStatPage['AdvertisingID'] = $LookupValue;
-					$AdStatPage['AdvertisingTableName'] = $AdvertisingTableName;
-
-					$this->createAdStatPage($AdStatPage);
-					$this->updateAdStatPage($PageID, $ReturnPage);
-					$this->sortAdStatPage();
+				
+				// LOGIC FOR 2013 CHECK!
+				// REMOVE AFTER 2013
+				$Year = date('Y');
+				if ($Year <= 2013) {
+					if ($ReturnPage !== 'FALSE') {
+						$this->updateAdStatPage($PageID, $ReturnPage);
+					} else {
+						$AdStatPage = array();
+						$AdStatPage['PageID'] = $this->PageID;
+						$AdStatPage['AdvertisingID'] = $LookupValue;
+						$AdStatPage['AdvertisingTableName'] = $AdvertisingTableName;
+	
+						$this->createAdStatPage($AdStatPage);
+						$this->updateAdStatPage($PageID, $ReturnPage);
+						$this->sortAdStatPage();
+					}
 				}
-
+				// END REMOVE AFTER 2013
+				// END LOGIC FOR 2013 CHECK!
+				
+				$AdStatPage = array();
+				//$AdStatPage['PageID'] = $this->PageID;
+				$AdStatPage['AdvertisingID'] = $LookupValue;
+				$AdStatPage['AdvertisingTableName'] = $AdvertisingTableName;
+				
+				$AdStatPage = $this->createAdStatLogEntry($AdStatPage);
+				$this->createAdStatLog($AdStatPage);
+				
 				// OUTPUT ADS
 				$AdSponsorsData = $this->AdSponsorsDatabaseTable[$AdvertisingTableName][$LookupValue];
-
+				
+				$AdStatsOutputID = 'AdvertisingLabel_' . $AdvertisingTableName . '_AdvertisingID_' . $LookupValue;
+				// Ad Stats Output Lookup
+				$this->Writer->startElement('div');
+				$this->Writer->writeAttribute('id', $AdStatsOutputID);
+				
 				if ($this->AdvertisingStartTag) {
 					$this->Writer->startElement($this->AdvertisingStartTag);
 					if ($this->AdvertisingClass) {
@@ -732,6 +885,8 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 
 					}
 				}
+				$this->Writer->endElement(); // ENDS AD STATS OUTPUT LOOKUP - DIV
+				
 				// ENDS OUTPUT ADS
 			}
 
@@ -859,13 +1014,15 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			return 'FALSE';
 		}
 	}
-
+	
+	// REMOVE AFTER 2013
 	public function sortAdStatPage() {
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('AdvertisingTableName' => 'AdvertisingTableName'));
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('AdvertisingID' => 'AdvertisingID'));
 		$this->LayerModule->pass ($this->DatabaseTable, 'sortTable', array('PageID' => 'PageID'));
 	}
-
+	
+	// REMOVE AFTER 2013
 	public function createAdStatPage(array $AdPage) {
 		if ($AdPage != NULL) {
 			$this->LayerModule->pass ($this->DatabaseTable, 'BuildFieldNames', array('TableName' => $this->DatabaseTable));
@@ -881,7 +1038,8 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			array_push($this->ErrorMessage,'createAdStatPage: AdPage cannot be NULL!');
 		}
 	}
-
+	
+	// REMOVE AFTER 2013
 	public function updateAdStatPage(array $PageID, $StatsPageLookup) {
 		if ($PageID != NULL) {
 			if ($StatsPageLookup !== NULL) {
@@ -913,6 +1071,245 @@ class XhtmlAd extends Tier6ContentLayerModulesAbstract implements Tier6ContentLa
 			}
 		} else {
 			array_push($this->ErrorMessage,'updateAdStatPage: PageID cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * setAdStatsTableName
+	 *
+	 * Sets the name of the table for Ad Stats.
+	 *
+	 * @param array or string $AdStatsTableName = An array or string with the name of the table for Ad Stats.
+	 *
+	 */
+	public function setAdStatsTableName($AdStatsTableName) {
+		if (is_array($AdStatsTableName)) {
+			$this->AdStatsTableName = array_shift($AdStatsTableName);
+		} else if ($AdStatsTableName != NULL) {
+			$this->AdStatsTableName = $AdStatsTableName;
+		} else {
+			array_push($this->ErrorMessage,'setAdStatsTableName: AdStatsTableName cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createAdStatLogEntry
+	 *
+	 * Creates a site stat log entry for the database.
+	 *
+	 * @param array $AdStatEntry = An array containing three keys: 'PageID', 'AdvertisingID' and 'AdvertisingTableName'.
+	 * @return array $AdStatEntry = An array with the contents of the new ad stat entry to be created.
+	 *
+	 */
+	public function createAdStatLogEntry(array $AdStatEntry) {
+		if ($AdStatEntry != NULL) {
+			if ($this->AdStatsTableName != NULL ) {
+				//$AdStatEntry = array();
+				//$passarray = array('TableName' => $this->AdStatsTableName);
+				
+				//$this->LayerModule->Connect($this->AdStatsTableName);
+				//$this->LayerModule->pass ($this->AdStatsTableName, 'BuildFieldNames', $passarray);
+				//$RowFieldName = $this->LayerModule->pass ($this->AdStatsTableName, 'getRowFieldNames', array());
+				//$this->LayerModule->Disconnect($this->AdStatsTableName);
+				
+				/*foreach ($RowFieldName as $Value) {
+					$AdStatEntry[$Value] = NULL;
+				}*/
+				
+				//$AdStatEntry['PageID'] = NULL;
+				//$AdStatEntry['AdvertisingID'] = NULL;
+				//$AdStatEntry['AdvertisingTableName'] = NULL;
+				
+				$Timestamp = $_SERVER['REQUEST_TIME'];
+				$Timestamp = date('Y-m-d H:i:s', $Timestamp);
+				$AdStatEntry['Timestamp'] = $Timestamp;
+				
+				$AdStatEntry['RequestUri'] = $_SERVER['REQUEST_URI'];
+				
+				$AdStatEntry['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+				$AdStatEntry['HttpRefer'] = $_SERVER['HTTP_REFERER'];
+				$AdStatEntry['HttpUserAgentString'] = $_SERVER['HTTP_USER_AGENT'];
+				
+				$AdStatEntry['HttpAccept'] = $_SERVER['HTTP_ACCEPT'];
+				$AdStatEntry['HttpAcceptLanguage'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+				$AdStatEntry['HttpAcceptEncoding'] = $_SERVER['HTTP_ACCEPT_ENCODING'];
+				$AdStatEntry['HttpHost'] = $_SERVER['HTTP_HOST'];
+				$AdStatEntry['HttpDNT'] = $_SERVER['HTTP_DNT'];
+				$AdStatEntry['HttpConnection'] = $_SERVER['HTTP_CONNECTION'];
+				$AdStatEntry['HttpCookie'] = $_SERVER['HTTP_COOKIE'];
+				$AdStatEntry['GatewayInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+				$AdStatEntry['ServerProtocol'] = $_SERVER['SERVER_PROTOCOL'];
+				$AdStatEntry['RequestMethod'] = $_SERVER['REQUEST_METHOD'];
+				$AdStatEntry['QueryString'] = $_SERVER['QUERY_STRING'];
+				
+				foreach ($AdStatEntry as $Key => $Value) {
+					if (!isset($Value) || $Value === '') {
+						$AdStatEntry[$Key] = NULL;
+					}
+				}
+				
+				return $AdStatEntry;
+				
+			}
+		} else {
+			array_push($this->ErrorMessage,'createAdStatLogEntry: AdStatEntry cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createAdStatLog
+	 *
+	 * Creates a timestamp log in the database.
+	 *
+	 * @param array $AdStatEntry = An array with the contents of the new ad stat page to be created.
+	 *
+	 */
+	public function createAdStatLog(array $AdStatEntry) {
+		if ($AdStatEntry != NULL) {
+			if ($this->AdStatsTableName != NULL ) {
+				$this->LayerModule->pass ($this->AdStatsTableName, 'BuildFieldNames', array('TableName' => $this->AdStatsTableName));
+				$Keys = $this->LayerModule->pass ($this->AdStatsTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $AdStatEntry, $this->AdStatsTableName);
+			} else {
+				array_push($this->ErrorMessage,'createAdStatLog: SiteStatsTableName cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createAdStatLog: AdStatEntry cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * setAdStatsBrowserStatTableName
+	 *
+	 * Sets the name of the table for Ad Stats Browser Stat.
+	 *
+	 * @param array or string $AdStatsBrowserStatTableName = An array or string with the name of the table for Ad Stats Browser Stat.
+	 *
+	 */
+	public function setAdStatsBrowserStatTableName($AdStatsBrowserStatTableName) {
+		if (is_array($AdStatsBrowserStatTableName)) {
+			$this->AdStatsBrowserStatTableName = array_shift($AdStatsBrowserStatTableName);
+		} else if ($AdStatsBrowserStatTableName != NULL) {
+			$this->AdStatsBrowserStatTableName = $AdStatsBrowserStatTableName;
+		} else {
+			array_push($this->ErrorMessage,'setAdStatsBrowserStatTableName: AdStatsBrowserStatTableName cannot be NULL!');
+		}
+	}
+	
+	/**
+	 * createAdStatBrowserStatLogEntry
+	 *
+	 * Creates an ad stat browser stat log entry for the database.
+	 *
+	 * @return array $AdStatEntry = An array with the contents of the new ad stat browser stat entry to be created.
+	 *
+	 */
+	public function createAdStatBrowserStatLogEntry(array $AdStatEntry) {
+		if ($this->AdStatsBrowserStatTableName != NULL ) {
+			//$SiteStatEntry = array();
+			$passarray = array('TableName' => $this->AdStatsBrowserStatTableName);
+			
+			/*$this->LayerModule->Connect($this->AdStatsBrowserStatTableName);
+			$this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'BuildFieldNames', $passarray);
+			$RowFieldName = $this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'getRowFieldNames', array());
+			$this->LayerModule->Disconnect($this->AdStatsBrowserStatTableName);
+			
+			foreach ($RowFieldName as $Value) {
+				$SiteStatEntry[$Value] = NULL;
+			}*/
+			
+			$Timestamp = $_SERVER['REQUEST_TIME'];
+			$Timestamp = date('Y-m-d H:i:s', $Timestamp);
+			$AdStatEntry['Timestamp'] = $Timestamp;
+			
+			$AdStatEntry['RequestUri'] = $_SERVER['REQUEST_URI'];
+			
+			$AdStatEntry['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+			$AdStatEntry['HttpRefer'] = $_SERVER['HTTP_REFERER'];
+			$AdStatEntry['HttpUserAgentString'] = $_SERVER['HTTP_USER_AGENT'];
+			
+			$AdStatEntry['HttpAccept'] = $_SERVER['HTTP_ACCEPT'];
+			$AdStatEntry['HttpAcceptLanguage'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			$AdStatEntry['HttpAcceptEncoding'] = $_SERVER['HTTP_ACCEPT_ENCODING'];
+			$AdStatEntry['HttpHost'] = $_SERVER['HTTP_HOST'];
+			$AdStatEntry['HttpDNT'] = $_SERVER['HTTP_DNT'];
+			$AdStatEntry['HttpConnection'] = $_SERVER['HTTP_CONNECTION'];
+			$AdStatEntry['HttpCookie'] = $_SERVER['HTTP_COOKIE'];
+			$AdStatEntry['GatewayInterface'] = $_SERVER['GATEWAY_INTERFACE'];
+			$AdStatEntry['ServerProtocol'] = $_SERVER['SERVER_PROTOCOL'];
+			$AdStatEntry['RequestMethod'] = $_SERVER['REQUEST_METHOD'];
+			$AdStatEntry['QueryString'] = $_SERVER['QUERY_STRING'];
+			
+			$AdStatEntry['AdobeReaderVersion'] = $_POST['AdobeReaderVersion'];
+			$AdStatEntry['DevalvrVersion'] = $_POST['DevalvrVersion'];
+			$AdStatEntry['FlashVersion'] = $_POST['FlashVersion'];
+			$AdStatEntry['PDFJSVersion'] = $_POST['PDFJSVersion'];
+			$AdStatEntry['PDFReaderVersion'] = $_POST['PDFReaderVersion'];
+			$AdStatEntry['QuicktimeVersion'] = $_POST['QuicktimeVersion'];
+			$AdStatEntry['RealPlayerVersion'] = $_POST['RealPlayerVersion'];
+			$AdStatEntry['ShockWaveVersion'] = $_POST['ShockWaveVersion'];
+			$AdStatEntry['SilverlightVersion'] = $_POST['SilverlightVersion'];
+			$AdStatEntry['VLCVersion'] = $_POST['VLCVersion'];
+			$AdStatEntry['WindowsMediaPlayerVersion'] = $_POST['WindowsMediaPlayerVersion'];
+			
+			$AdStatEntry['ScreenHeight'] = $_POST['ScreenHeight'];
+			$AdStatEntry['ScreenWidth'] = $_POST['ScreenWidth'];
+			$AdStatEntry['ScreenAvailableHeight'] = $_POST['ScreenAvailableHeight'];
+			$AdStatEntry['ScreenAvailableWidth'] = $_POST['ScreenAvailableWidth'];
+			$AdStatEntry['ScreenColorDepth'] = $_POST['ScreenColorDepth'];
+			$AdStatEntry['ScreenPixelDepth'] = $_POST['ScreenPixelDepth'];
+			
+			$AdStatEntry['NavigatorAppCodeName'] = $_POST['NavigatorAppCodeName'];
+			$AdStatEntry['NavigatorAppName'] = $_POST['NavigatorAppName'];
+			$AdStatEntry['NavigatorAppVersion'] = $_POST['NavigatorAppVersion'];
+			$AdStatEntry['NavigatorCookieEnabled'] = $_POST['NavigatorCookieEnabled'];
+			$AdStatEntry['NavigatorOnline'] = $_POST['NavigatorOnline'];
+			$AdStatEntry['NavigatorPlatform'] = $_POST['NavigatorPlatform'];
+			$AdStatEntry['NavigatorUserAgent'] = $_POST['NavigatorUserAgent'];
+			$AdStatEntry['NavigatorSystemLanguage'] = $_POST['NavigatorSystemLanguage'];
+			$AdStatEntry['NavigatorJavaEnabled'] = $_POST['NavigatorJavaEnabled'];
+			
+			$AdStatEntry['OS'] = $_POST['OS'];
+			$AdStatEntry['OSVersion'] = $_POST['OSVersion'];
+			$AdStatEntry['ActiveXEnabled'] = $_POST['ActiveXEnabled'];
+			$AdStatEntry['IEVersion'] = $_POST['IEVersion'];
+			$AdStatEntry['IETrueVersion'] = $_POST['IETrueVersion'];
+			$AdStatEntry['IEDocMode'] = $_POST['IEDocMode'];
+			$AdStatEntry['GeckoVersion'] = $_POST['GeckoVersion'];
+			$AdStatEntry['SafariVersion'] = $_POST['SafariVersion'];
+			$AdStatEntry['ChromeVersion'] = $_POST['ChromeVersion'];
+			$AdStatEntry['OperaVersion'] = $_POST['OperaVersion'];
+			
+			foreach ($AdStatEntry as $Key => $Value) {
+				if (!isset($Value) || $Value === '') {
+					$AdStatEntry[$Key] = NULL;
+				}
+			}
+			
+			return $AdStatEntry;
+			
+		}
+	}
+	
+	/**
+	 * createAdStatBrowserStatLog
+	 *
+	 * Creates a browser timestamp log in the database.
+	 *
+	 * @param array $AdStatEntry = An array with the contents of the new ad stat browser page to be created.
+	 *
+	 */
+	public function createAdStatBrowserStatLog(array $AdStatEntry) {
+		if ($AdStatEntry != NULL) {
+			if ($this->AdStatsBrowserStatTableName != NULL ) {
+				$this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'BuildFieldNames', array('TableName' => $this->AdStatsBrowserStatTableName));
+				$Keys = $this->LayerModule->pass ($this->AdStatsBrowserStatTableName, 'getRowFieldNames', array());
+				$this->addModuleContent($Keys, $AdStatEntry, $this->AdStatsBrowserStatTableName);
+			} else {
+				array_push($this->ErrorMessage,'createAdStatBrowserStatLog: AdStatsBrowserStatTableName cannot be NULL!');
+			}
+		} else {
+			array_push($this->ErrorMessage,'createAdStatBrowserStatLog: AdStatEntry cannot be NULL!');
 		}
 	}
 }

@@ -1,1 +1,2 @@
 ../../SQLTables/Update/UpdateTables.sql
+../../SQLTables/Update/BannedIPAddress.sql

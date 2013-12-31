@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -23,7 +23,7 @@ this.updatedRows.length&&this.sendData();this.callEvent("onAfterUpdateFinish",[]
 this._loader.async=!0;this._loader.waitCall=b;this._loader.loadXML(a)},_v:function(a){return a.firstChild?a.firstChild.nodeValue:""},_a:function(a){for(var b=[],c=0;c<a.length;c++)b[c]=this._v(a[c]);return b},loadUpdate:function(){var a=this,b=this.obj.getUserData(0,"version"),c=this.serverProcessor+getUrlSymbol(this.serverProcessor)+["dhx_user="+this._user,"dhx_version="+b].join("&"),c=c.replace("editing=true&","");this.getUpdates(c,function(){var b=a._loader.doXPath("//userdata");a.obj.setUserData(0,
 "version",a._v(b[0]));var c=a._loader.doXPath("//update");if(c.length){a._silent_mode=!0;for(var f=0;f<c.length;f++){var g=c[f].getAttribute("status"),h=c[f].getAttribute("id"),i=c[f].getAttribute("parent");switch(g){case "inserted":a.callEvent("insertCallback",[c[f],h,i]);break;case "updated":a.callEvent("updateCallback",[c[f],h,i]);break;case "deleted":a.callEvent("deleteCallback",[c[f],h,i])}}a._silent_mode=!1}a._update_busy=!1;a=null})}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

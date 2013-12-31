@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -7,7 +7,7 @@ To use it on other terms or get Professional edition of the component please con
 */
 dhtmlXTabBar.prototype.setOnLoadingEnd=function(a){this.attachEvent("onXLE",a)};dhtmlXTabBar.prototype.setOnTabContentLoaded=function(a){this.attachEvent("onTabContentLoaded",a)};dhtmlXTabBar.prototype.setOnTabClose=function(a){this.attachEvent("onTabClose",a)};dhtmlXTabBar.prototype.setOnSelectHandler=function(a){this.attachEvent("onSelect",a)};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -32,7 +32,7 @@ dhtmlDragAndDropObject.prototype.stopDrag=function(a,b){dragger=window.dhtmlDrag
 dhtmlDragAndDropObject.prototype.initFrameRoute=function(a,b){if(a)window.dhtmlDragAndDrop.preCreateDragCopy(),window.dhtmlDragAndDrop.dragStartNode=a.dhtmlDragAndDrop.dragStartNode,window.dhtmlDragAndDrop.dragStartObject=a.dhtmlDragAndDrop.dragStartObject,window.dhtmlDragAndDrop.dragNode=a.dhtmlDragAndDrop.dragNode,window.dhtmlDragAndDrop.gldragNode=a.dhtmlDragAndDrop.dragNode,window.document.body.onmouseup=window.dhtmlDragAndDrop.stopDrag,window.waitDrag=0,!_isIE&&b&&(!_isFF||_FFrv<1.8)&&window.dhtmlDragAndDrop.calculateFramePosition();
 try{parent.dhtmlDragAndDrop&&parent!=window&&parent!=a&&parent.dhtmlDragAndDrop.initFrameRoute(window)}catch(c){}for(var d=0;d<window.frames.length;d++)try{window.frames[d]!=a&&window.frames[d].dhtmlDragAndDrop&&window.frames[d].dhtmlDragAndDrop.initFrameRoute(window,!a||b?1:0)}catch(e){}};_OperaRv=_KHTMLrv=_FFrv=_isChrome=_isMacOS=_isKHTML=_isOpera=_isIE=_isFF=!1;navigator.userAgent.indexOf("Macintosh")!=-1&&(_isMacOS=!0);navigator.userAgent.toLowerCase().indexOf("chrome")>-1&&(_isChrome=!0);
 if(navigator.userAgent.indexOf("Safari")!=-1||navigator.userAgent.indexOf("Konqueror")!=-1)_KHTMLrv=parseFloat(navigator.userAgent.substr(navigator.userAgent.indexOf("Safari")+7,5)),_KHTMLrv>525?(_isFF=!0,_FFrv=1.9):_isKHTML=!0;else if(navigator.userAgent.indexOf("Opera")!=-1)_isOpera=!0,_OperaRv=parseFloat(navigator.userAgent.substr(navigator.userAgent.indexOf("Opera")+6,3));else if(navigator.appName.indexOf("Microsoft")!=-1){if(_isIE=!0,(navigator.appVersion.indexOf("MSIE 8.0")!=-1||navigator.appVersion.indexOf("MSIE 9.0")!=
--1||navigator.appVersion.indexOf("MSIE 10.0")!=-1)&&document.compatMode!="BackCompat")_isIE=8}else _isFF=!0,_FFrv=parseFloat(navigator.userAgent.split("rv:")[1]);
+-1||navigator.appVersion.indexOf("MSIE 10.0")!=-1||document.documentMode>7)&&document.compatMode!="BackCompat")_isIE=8}else navigator.appName=="Netscape"&&navigator.userAgent.indexOf("Trident")!=-1?_isIE=8:(_isFF=!0,_FFrv=parseFloat(navigator.userAgent.split("rv:")[1]));
 dtmlXMLLoaderObject.prototype.doXPath=function(a,b,c,d){if(_isKHTML||!_isIE&&!window.XPathResult)return this.doXPathOpera(a,b);if(_isIE)return b||(b=this.xmlDoc.nodeName?this.xmlDoc:this.xmlDoc.responseXML),b||dhtmlxError.throwError("LoadXML","Incorrect XML",[b||this.xmlDoc,this.mainObject]),c!=null&&b.setProperty("SelectionNamespaces","xmlns:xsl='"+c+"'"),d=="single"?b.selectSingleNode(a):b.selectNodes(a)||[];else{var e=b;b||(b=this.xmlDoc.nodeName?this.xmlDoc:this.xmlDoc.responseXML);b||dhtmlxError.throwError("LoadXML",
 "Incorrect XML",[b||this.xmlDoc,this.mainObject]);b.nodeName.indexOf("document")!=-1?e=b:(e=b,b=b.ownerDocument);var g=XPathResult.ANY_TYPE;if(d=="single")g=XPathResult.FIRST_ORDERED_NODE_TYPE;var f=[],h=b.evaluate(a,e,function(){return c},g,null);if(g==XPathResult.FIRST_ORDERED_NODE_TYPE)return h.singleNodeValue;for(var i=h.iterateNext();i;)f[f.length]=i,i=h.iterateNext();return f}};function j(){if(!this.catches)this.catches=[];return this}j.prototype.catchError=function(a,b){this.catches[a]=b};
 j.prototype.throwError=function(a,b,c){if(this.catches[a])return this.catches[a](a,b,c);if(this.catches.ALL)return this.catches.ALL(a,b,c);alert("Error type: "+a+"\nDescription: "+b);return null};window.dhtmlxError=new j;
@@ -45,7 +45,7 @@ dtmlXMLLoaderObject.prototype.doXSLTransToString=function(a,b){var c=this.doXSLT
 dhtmlxEventable=function(a){a.attachEvent=function(a,c,d){a="ev_"+a.toLowerCase();this[a]||(this[a]=new this.eventCatcher(d||this));return a+":"+this[a].addEvent(c)};a.callEvent=function(a,c){a="ev_"+a.toLowerCase();return this[a]?this[a].apply(this,c):!0};a.checkEvent=function(a){return!!this["ev_"+a.toLowerCase()]};a.eventCatcher=function(a){var c=[],d=function(){for(var d=!0,g=0;g<c.length;g++)if(c[g]!=null)var f=c[g].apply(a,arguments),d=d&&f;return d};d.addEvent=function(a){typeof a!="function"&&
 (a=eval(a));return a?c.push(a)-1:!1};d.removeEvent=function(a){c[a]=null};return d};a.detachEvent=function(a){if(a!=!1){var c=a.split(":");this[c[0]].removeEvent(c[1])}};a.detachAllEvents=function(){for(var a in this)a.indexOf("ev_")==0&&(this.detachEvent(a),this[a]=null)};a=null};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

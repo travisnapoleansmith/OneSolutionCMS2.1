@@ -22,7 +22,8 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	$Year = date('Y');
+	$SiteStatsTableName = "SiteStats" . $Year;
 	///////////$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	// Fetch Current Page ID - Based on filename
 	//$pagename = $_SERVER['PHP_SELF'];
@@ -36,7 +37,9 @@
 	//}
 
 	// Fetch Current Page ID - Based On ID Number
-
+	
+	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','setSiteStatsTableName',array($SiteStatsTableName));
+	
 	$PageID = Array();
 	$PageID['PageID'] = 1;
 
@@ -44,54 +47,59 @@
 		$PageID['PageID'] = $_GET['PageID'];
 	}
 	
-	$IPAddressPageID = array();
-	$IPAddressPageID = $PageID;
-	$IPAddressPageID['IPAddress'] = $_SERVER['REMOTE_ADDR'];
-	
 	$Tier6Databases = $GLOBALS['Tier6Databases'];
 	
-	$SiteStatPage = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createTimestampLogEntry',array());
-	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createTimestampLog',$SiteStatPage);
+	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID);
+	$SiteStatEntry = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createSiteStatLogEntry',array());
+	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createSiteStatLog',$SiteStatEntry);
 	
-	$SiteStatPage = array();
-	$SiteStatPage['PageID'] = $PageID['PageID'];
-	$SiteStatPage['Count'] = 0;
-	
-	$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID, $IPAddressPageID);
-	$ReturnPageID = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkSiteStatPage',$PageID);
-	$ReturnPageIDDaily = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkDailySiteStatPage',$PageID);
-	
-	if ($ReturnPageIDDaily == FALSE) {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createDailySiteStatPage', $SiteStatPage);
-	} 
-	if ($ReturnPageID == TRUE) {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateSiteStatPage',$PageID);
-	} else {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createSiteStatPage',$SiteStatPage);
+	if ($Year <= 2013) {
+		$IPAddressPageID = array();
+		$IPAddressPageID = $PageID;
+		$IPAddressPageID['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+		
+		$SiteStatPage = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createTimestampLogEntry',array());
+		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createTimestampLog',$SiteStatPage);
+		
+		$SiteStatPage = array();
+		$SiteStatPage['PageID'] = $PageID['PageID'];
+		$SiteStatPage['Count'] = 0;
+		
 		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID, $IPAddressPageID);
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateSiteStatPage',$PageID);
+		$ReturnPageID = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkSiteStatPage',$PageID);
+		$ReturnPageIDDaily = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkDailySiteStatPage',$PageID);
+		
+		if ($ReturnPageIDDaily == FALSE) {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createDailySiteStatPage', $SiteStatPage);
+		} 
+		if ($ReturnPageID == TRUE) {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateSiteStatPage',$PageID);
+		} else {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createSiteStatPage',$SiteStatPage);
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID, $IPAddressPageID);
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateSiteStatPage',$PageID);
+		}
+		
+		
+		$SiteStatPage = array();
+		$SiteStatPage['PageID'] = $PageID['PageID'];
+		$SiteStatPage['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+		$SiteStatPage['Count'] = 0;
+	
+		$ReturnPageID = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkIPAddressSiteStatPage',$PageID);
+		$ReturnPageIDDaily = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkDailyIPAddressSiteStatPage',$PageID);
+		
+		if ($ReturnPageIDDaily == FALSE) {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createDailyIPAddressSiteStatPage', $SiteStatPage);
+		} 
+		if ($ReturnPageID == TRUE) {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateIPAddressSiteStatPage',$PageID);
+		} else {
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createIPAddressSiteStatPage',$SiteStatPage);
+			$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateIPAddressSiteStatPage',$PageID);
+		}
+		
 	}
-	
-	
-	$SiteStatPage = array();
-	$SiteStatPage['PageID'] = $PageID['PageID'];
-	$SiteStatPage['IPAddress'] = $_SERVER['REMOTE_ADDR'];
-	$SiteStatPage['Count'] = 0;
-
-	$ReturnPageID = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkIPAddressSiteStatPage',$PageID);
-	$ReturnPageIDDaily = $Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','checkDailyIPAddressSiteStatPage',$PageID);
-	
-	if ($ReturnPageIDDaily == FALSE) {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createDailyIPAddressSiteStatPage', $SiteStatPage);
-	} 
-	if ($ReturnPageID == TRUE) {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateIPAddressSiteStatPage',$PageID);
-	} else {
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','createIPAddressSiteStatPage',$SiteStatPage);
-		$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','updateIPAddressSiteStatPage',$PageID);
-	}
-	
-	
 	//$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','deleteSiteStatPage',$PageID);
 
 	//$Tier6Databases->ModulePass('XhtmlSiteStats','sitestats','FetchDatabase',$PageID);

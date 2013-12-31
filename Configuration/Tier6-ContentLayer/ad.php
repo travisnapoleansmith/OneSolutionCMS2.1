@@ -22,7 +22,10 @@
 	* @version    2.1.141, 2013-01-14
 	*************************************************************************************
 	*/
-
+	
+	$Year = date('Y');
+	$AdStatsTableName = "AdStats" . $Year;
+	
 	///////////$credentaillogonarray = $GLOBALS['credentaillogonarray'];
 	// Fetch Current Page ID - Based on filename
 	//$pagename = $_SERVER['PHP_SELF'];
@@ -49,7 +52,9 @@
 	$SiteStatPage = array();
 	$SiteStatPage['PageID'] = $PageID['PageID'];
 	$SiteStatPage['Count'] = 0;
-
+	
+	$Tier6Databases->ModulePass('XhtmlAd','ad','setAdStatsTableName',array($AdStatsTableName));
+	
 	$Tier6Databases->ModulePass('XhtmlAd','ad','FetchDatabase',$PageID);
 	/*$ReturnPageID = $Tier6Databases->ModulePass('XhtmlAd','ad','checkSiteStatPage',$PageID);
 

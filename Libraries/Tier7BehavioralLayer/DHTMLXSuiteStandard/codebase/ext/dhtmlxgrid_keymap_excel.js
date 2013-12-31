@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -15,7 +15,7 @@ for(var a=this.row.rowIndex,b=a;b<this.rowsCol.length;b++)this.selectCell(this.r
 1):this.scrollPage(1)},k38_0_0:function(){var a=this._realfake?this._fake:this;if(this.editor&&this.editor.combo)this.editor.shiftPrev();else{if(this.editor)return!1;if(this.row.idd){var b=this.getRowIndex(this.row.idd)+1;if(b!=-1&&(!this.pagingOn||b!=1)){var c=this._nextRow(b-1,-1);this.selectCell(c,this.cell._cellIndex,!0);a.pagingOn&&c&&a.showRow(c.idd)}else this._key_events.k33_0_0.apply(this,[])}}},k_other:function(a){if(this.editor)return!1;if(!a.ctrlKey&&a.keyCode>=40&&(a.keyCode<91||a.keyCode>
 95&&a.keyCode<111||a.keyCode>187)&&this.cell){var b=this.cells4(this.cell);if(b.isDisabled())return!1;var c=b.getValue();b.editable!==!1&&b.setValue("");this.editCell();this.editor?(this.editor.val=c,this.editor.obj&&this.editor.obj.select&&this.editor.obj.select()):b.setValue(c)}}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

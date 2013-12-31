@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -14,7 +14,7 @@ dhtmlXGridObject.prototype._process_inner_html=function(a,d){for(var f=a.rows.le
 dhtmlXGridObject.prototype._process_html_row=function(a,d){var f=d.getElementsByTagName("TD"),b=[];a._attrs=this._xml_attrs(d);for(var e=0;e<f.length;e++){var i=f[e],c=i.getAttribute("type");if(a.childNodes[e]){if(c)a.childNodes[e]._cellType=c;a.childNodes[e]._attrs=this._xml_attrs(f[e])}i.firstChild?b.push(i.innerHTML):b.push("");if(i.colSpan>1){a.childNodes[e]._attrs.colspan=i.colSpan;for(var j=1;j<i.colSpan;j++)b.push("")}}for(;e<a.childNodes.length;e++)a.childNodes[e]._attrs={};this._fillRow(a,
 this._c_order?this._swapColumns(b):b);return a};dhtmlXGridObject.prototype._get_html_data=function(a,d){for(a=a.firstChild;;){if(!a)return"";a.tagName=="TD"&&d--;if(d<0)break;a=a.nextSibling}return a.firstChild?a.firstChild.data:""};dhtmlxEvent(window,"load",function(){for(var a=document.getElementsByTagName("table"),d=0;d<a.length;d++)a[d].className=="dhtmlxGrid"&&dhtmlXGridFromTable(a[d])});
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -154,7 +154,7 @@ if(!window.dhtmlxValidation)dhtmlxValidation=function(){},dhtmlxValidation.proto
 isValidAplhaNumeric:function(a){return!!a.match(/^[_\-a-z0-9]+$/gi)},isValidDatetime:function(a){var b=a.match(/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/);return b&&!!(b[1]<=9999&&b[2]<=12&&b[3]<=31&&b[4]<=59&&b[5]<=59&&b[6]<=59)||!1},isValidDate:function(a){var b=a.match(/^(\d{4})-(\d{2})-(\d{2})$/);return b&&!!(b[1]<=9999&&b[2]<=12&&b[3]<=31)||!1},isValidTime:function(a){var b=a.match(/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/);return b&&!!(b[1]<=24&&b[2]<=59&&b[3]<=59)||!1},isValidIPv4:function(a){var b=
 a.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);return b&&!!(b[1]<=255&&b[2]<=255&&b[3]<=255&&b[4]<=255)||!1},isValidCurrency:function(a){return a.match(/^\$?\s?\d+?[\.,\,]?\d+?\s?\$?$/)&&!0||!1},isValidSSN:function(a){return a.match(/^\d{3}\-?\d{2}\-?\d{4}$/)&&!0||!1},isValidSIN:function(a){return a.match(/^\d{9}$/)&&!0||!1}},dhtmlxValidation=new dhtmlxValidation;
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

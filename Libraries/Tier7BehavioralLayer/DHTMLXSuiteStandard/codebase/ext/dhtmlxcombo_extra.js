@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -17,7 +17,7 @@ dhtmlXCombo_checkboxOption.prototype._DrawHeaderCheckbox=function(a){var b=docum
 dhtmlXCombo_checkboxOption.prototype.RedrawHeader=function(a,b){a.DOMelem_checkbox.style.visibility=b?"hidden":"";a.DOMelem_checkbox.checked=b?!1:this.content.firstChild.checked};dhtmlXCombo_optionTypes.checkbox=dhtmlXCombo_checkboxOption;dhtmlXCombo.prototype.getChecked=function(){for(var a=[],b=0;b<this.optionsArr.length;b++)this.optionsArr[b].data()[2]&&a.push(this.optionsArr[b].value);return a};
 dhtmlXCombo.prototype.setChecked=function(a,b){this.optionsArr[a].content.firstChild.checked=b!==!1;this._selOption==this.optionsArr[a]&&this._selOption.RedrawHeader(this)};dhtmlXCombo.prototype.setCheckedByValue=function(a,b){return this.setChecked(this.getIndexByValue(a),b)};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

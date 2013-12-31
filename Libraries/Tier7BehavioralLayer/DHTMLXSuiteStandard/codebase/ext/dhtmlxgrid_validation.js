@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -17,7 +17,7 @@ dhtmlXGridObject.prototype.validationEvent=function(a,b,c,d){var f=this._validat
 dhtmlXGridObject.prototype.validateCell=function(a,b,c,d){c=c||this._validators.data[b]||this.cells(a,b).getAttribute("validate");d=d||this.cells(a,b).getValue();if(c){var f=this.cells(a,b).cell,g=!0;typeof c=="string"&&(c=c.split(this.delim));for(var e=0;e<c.length;e++)dhtmlxValidation.checkValue(d,c[e])||(this.callEvent("onValidationError",[a,b,d,c[e]])&&(f.className+=" dhtmlx_validation_error"),g=!1);if(g)this.callEvent("onValidationCorrect",[a,b,d,c]),f.className=f.className.replace(/[ ]*dhtmlx_validation_error/g,
 "");return g}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

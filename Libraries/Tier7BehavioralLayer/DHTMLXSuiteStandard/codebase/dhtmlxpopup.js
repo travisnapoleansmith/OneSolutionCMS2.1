@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -36,7 +36,7 @@ c._doOnToolbarClick)}if(typeof dhtmlXForm!="undefined"&&this.conf.form!=null&&th
 btn2state:1,calendar:1,colorpicker:1,editor:1})if(dhtmlXForm.prototype.items[s]!=null)dhtmlXForm.prototype.items[s]._getDim=function(a){var b=a;({ta:!0,pw:!0,se:!0,calendar:!0,colorpicker:1,editor:!0})[a._type]&&(b=a.childNodes[a._ll?1:0].childNodes[0]);({ch:!0,ra:!0,btn2state:!0})[a._type]&&(b=a.childNodes[a._ll?1:0].childNodes[1]);if({bt:!0}[a._type])b=a.firstChild;if({combo:!0}[a._type])b=a._combo.DOMParent.firstChild;var c={left:getAbsoluteLeft(b),top:getAbsoluteTop(b),width:b.offsetWidth,height:b.offsetHeight},
 b=null;return c}}}this.setSkin(this.conf.skin||(typeof dhtmlx!="undefined"?dhtmlx.skin:null)||this.skinParent||this.skinDetect()||"dhx_skyblue");return this};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

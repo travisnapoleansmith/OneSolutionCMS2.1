@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -13,7 +13,7 @@ null&&a._c.setMinutesInterval(b.minutesInterval);a._c._itemIdd=a._idd;a._c.attac
 (function(){for(var a in{doAddLabel:1,doAddInput:1,doUnloadNestedLists:1,setText:1,getText:1,enable:1,disable:1,isEnabled:1,setWidth:1,setReadonly:1,isReadonly:1,setFocus:1,getInput:1})dhtmlXForm.prototype.items.calendar[a]=dhtmlXForm.prototype.items.input[a]})();dhtmlXForm.prototype.items.calendar.doAttachChangeLS=dhtmlXForm.prototype.items.select.doAttachChangeLS;dhtmlXForm.prototype.items.calendar.d2=dhtmlXForm.prototype.items.input.destruct;
 dhtmlXForm.prototype.getCalendar=function(a){return this.doWithItem(a,"getCalendar")};dhtmlXForm.prototype.setCalendarDateFormat=function(a,b,c){this.doWithItem(a,"setDateFormat",b,c)};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

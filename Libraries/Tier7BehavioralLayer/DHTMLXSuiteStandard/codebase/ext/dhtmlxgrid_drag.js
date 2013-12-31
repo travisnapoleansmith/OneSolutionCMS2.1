@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -33,7 +33,7 @@ dhtmlXGridObject.prototype._setMove=function(a,c,f,d){if(a.parentNode.idd){var g
 dhtmlXGridObject.prototype._clearMove=function(){if(this._sdrgc)this._sdrgc.style.display="none";if(this._llSelD&&this._llSelD.parentNode.tagName=="TR")for(var a=this._llSelD.parentNode.childNodes,c=0;c<a.length;c++)a[c].style.backgroundColor=a[c]._bgCol;this._llSelD=null};dhtmlXGridObject.prototype.rowToDragElement=function(a){var c=this.cells(a,0).getValue();return c};
 dhtmlXGridObject.prototype._copyUserData=function(a){if(!a.tobj.UserData[a.nid]||a.tobj!=a.sobj){a.tobj.UserData[a.nid]=new Hashtable;var c=a.sobj.UserData[a.sid],f=a.tobj.UserData[a.nid];if(c)f.keys=f.keys.concat(c.keys),f.values=f.values.concat(c.values)}};dhtmlXGridObject.prototype.moveRow=function(a,c,f,d){switch(c){case "row_sibling":this.moveRowTo(a,f,"move","sibling",this,d);break;case "up":this.moveRowUp(a);break;case "down":this.moveRowDown(a)}};
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com

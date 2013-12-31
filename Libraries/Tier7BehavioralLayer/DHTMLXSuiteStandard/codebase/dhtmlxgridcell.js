@@ -1,4 +1,4 @@
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
@@ -59,7 +59,7 @@ function dhtmlXGridComboObject(){this.keys=new dhtmlxArray;this.values=new dhtml
 a)return this.keys._dhx_removeAt(b),this.values._dhx_removeAt(b),!0};this.size=function(){for(var a=0,b=0;b<this.keys.length;b++)this.keys[b]!=null&&a++;return a};this.getKeys=function(){for(var a=[],b=0;b<this.keys.length;b++)this.keys[b]!=null&&(a[a.length]=this.keys[b]);return a};this.save=function(){this._save=[];for(var a=0;a<this.keys.length;a++)this._save[a]=[this.keys[a],this.values[a]]};this.restore=function(){if(this._save){this.keys[a]=[];this.values[a]=[];for(var a=0;a<this._save.length;a++)this.keys[a]=
 this._save[a][0],this.values[a]=this._save[a][1]}};return this}function Hashtable(){this.keys=new dhtmlxArray;this.values=new dhtmlxArray;return this}Hashtable.prototype=new dhtmlXGridComboObject;
 
-//v.3.6 build 130619
+//v.3.6 build 131108
 
 /*
 Copyright DHTMLX LTD. http://www.dhtmlx.com
