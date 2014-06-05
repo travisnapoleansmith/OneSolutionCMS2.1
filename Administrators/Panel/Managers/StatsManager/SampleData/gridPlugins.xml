@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rows>
+ 	<head>
+		<column width='400' align='left' type='ro' sort='str'>Page Name</column>
+		<column width='75' align='left' type='ro' sort='str'>Total Views</column>
+		<column width='75' align='left' type='ro' sort='str'>Adobe Reader</column>
+		<column width='75' align='left' type='ro' sort='str'>Devalvr</column>
+		<column width='75' align='left' type='ro' sort='str'>Flash</column>
+		<column width='75' align='left' type='ro' sort='str'>Java</column>
+		<column width='75' align='left' type='ro' sort='str'>PDF</column>
+		<column width='75' align='left' type='ro' sort='str'>Quicktime</column>
+		<column width='75' align='left' type='ro' sort='str'>Shockwave</column>
+		<column width='75' align='left' type='ro' sort='str'>Silverlight</column>
+		<column width='75' align='left' type='ro' sort='str'>VLC</column>
+		<column width='75' align='left' type='ro' sort='str'>Windows Media Player</column>
+	</head>
+	<row id="1">
+		<cell>Page 1</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+		
+	</row>
+	<row id="2">
+		<cell>Page 2</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="3">
+		<cell>Page 3</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>48</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="4">
+		<cell>Page 4</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="5">
+		<cell>Page 5</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="6">
+		<cell>Page 6</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>48</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="7">
+		<cell>Page 7</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>48</cell>
+		<cell>1</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="8">
+		<cell>Page 8</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="9">
+		<cell>Page 9</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>1</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="10">
+		<cell>Page 10</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>1</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+	<row id="11">
+		<cell>Page 11</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>1</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>0</cell>
+		<cell>1</cell>
+		<cell>24</cell>
+		<cell>0</cell>
+	</row>
+</rows>

@@ -1,0 +1,142 @@
+#MenusWrapper {
+	border-style: solid;
+	border-color: #f3f5f8 #f3f5f8 #267fa8 #f3f5f8;
+	border-width: 1px 0 ;
+	width: 100%;
+	/*float: left;*/
+	background: #dee2e6;
+	/*padding-top: -10px;*/
+	padding: 8px 0 0;
+	/*background:#e3e8ea url(../../Images/menus_wrapper_bg.png) repeat-x;*/
+	min-height: 1px;
+	
+}
+
+#MainMenu {
+	position: relative;
+	width: 100%;
+	height: 25px;
+	clear:left;
+	/*float: left;*/
+	
+}
+
+#MainMenu  ul {
+	margin: 0;
+	padding: 0 11px;
+	/*float: left;*/
+}
+
+#MainMenu li {
+	position: relative;
+	top: -8px;
+	float: left;
+	list-style: none;
+	padding: 0 1px 0 0;
+	margin: 0;
+	background:url(../../Images/MainMenuLi.png) no-repeat right bottom;
+}
+
+#MainMenu li.last {
+	background: none;
+	padding: 0;
+}
+
+#MainMenu a:link, #MainMenu a:visited, #MainMenu a:active {
+	display: block;
+	line-height: 33px;
+	float: left;
+	background:url(../../Images/MenuButtonMiddle.png) repeat-x 0 -33px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #fff;
+}
+
+#MainMenu span {
+	display: block;
+	float: left;
+	background:url(../../Images/MenuButtonLeft.png) no-repeat 0 -33px;
+}
+
+#MainMenu span span {
+	/*background:url(../../Images/MenuButtonRight.png) no-repeat right -33px;*/
+	background-image: url(../../Images/MenuButtonRight.png);
+	background-attachment: scroll;
+	background-repeat: no-repeat;
+	background-position-x: right;
+	background-position-y: -33px;
+	background-color: transparent;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#MainMenu a:hover {
+	background-position: 0 -66px;
+}
+
+#MainMenu a:hover span {
+	background-position: 0 -66px;
+	cursor: pointer;
+}
+
+#MainMenu a:hover span span {
+	background-position: right -66px;
+}
+
+#MainMenu a.Selected:link,
+#MainMenu a.Selected:visited,
+#MainMenu a.Selected:hover,
+#MainMenu a.Selected:active {
+	text-decoration: none;
+	color: #223138;
+	background-position: 0 0;
+}
+
+#MainMenu a.Selected:link span,
+#MainMenu a.Selected:visited span,
+#MainMenu a.Selected:hover span,
+#MainMenu a.Selected:active span {
+	background-position: 0 0;
+	cursor: default;
+}
+
+#MainMenu a.Selected:link span span,
+#MainMenu a.Selected:visited span span,
+#MainMenu a.Selected:hover span span,
+#MainMenu a.Selected:active span span {
+	background-position: right 0;
+}
+/*
+.MenuIcon1 {
+	background-image:url(../../Images/MenuIcon1.png);
+}
+
+.MenuIcon2 {
+	background-image:url(../../Images/MenuIcon2.png);
+}
+
+.MenuIcon3 {
+	background-image:url(../../Images/MenuIcon3.png);
+}
+
+.MenuIcon4 {
+	background-image:url(../../Images/MenuIcon4.png);
+}
+
+.MenuIcon5 {
+	background-image:url(../../Images/MenuIcon5.png);
+}
+
+.MenuIcon6 {
+	background-image:url(../../Images/MenuIcon6.png);
+}
+
+.MenuIcon7 {
+	background-image:url(../../Images/MenuIcon7.png);
+}
+
+.MenuIcon8 {
+	background-image:url(../../Images/MenuIcon8.png);
+}*/

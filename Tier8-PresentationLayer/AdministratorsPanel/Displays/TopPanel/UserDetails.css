@@ -1,0 +1,82 @@
+#UserDetails {
+	float: right;
+	width: 20%;
+	background: url(../../Images/Header-UserDetailBackground.png) no-repeat;
+	background-position: right;
+	padding: 15px 0 0 12px;
+	height: 112px;
+	position: relative;
+	top: -122px;
+	left: 0;
+}
+
+#UserDetailsMenu {
+	color: #a2bacc;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	float: left;
+}
+
+#UserDetailsMenu {
+	color: #a2bacc;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	float: left;
+}
+
+#UserDetailsMenu li {
+	margin: 0;
+	padding: 0 0 5px;
+	list-style: none;
+	width: 100%;
+	float: left;
+}
+
+#UserAccessControls {
+	margin: 0;
+	padding: 0 0 0 20px;
+	float: left;
+	background:url(../../Images/UserAccess.png) no-repeat left center;
+	font-size: 11px;
+	line-height: 16px;
+}
+
+#UserAccessControls li {
+	float: left;
+	width: auto;
+	padding: 0 5px 0 4px;
+	background:url(../../Images/UserAccessLi.png) no-repeat right center;
+}
+
+#UserAccessControls li.First {
+	padding-left: 0;
+}
+
+#UserAccessControls li.Last {
+	background: none;
+}
+
+#UserAccessControls a:link,
+#UserAccessControls a:visited,
+#UserAccessControls a:hover,
+#UserAccessControls a:active {
+	color: #78d4fe;
+}
+
+#UserDetailsNewMessages{
+	
+}
+
+.UserDetailsNewMessages:link,
+.UserDetailsNewMessages:visited,
+.new_messages:hover,
+.UserDetailsNewMessages:active {
+	color: #9ef185;
+	font-weight: bold;
+	padding: 0 0 0 20px;
+	display: block;
+	background:url(../../Images/NewMessages.png) no-repeat left center;
+	
+}

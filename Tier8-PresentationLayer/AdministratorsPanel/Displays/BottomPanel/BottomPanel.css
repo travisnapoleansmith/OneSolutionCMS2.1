@@ -1,0 +1,24 @@
+#BottomPanelFooter {
+	position: relative;
+	/*position: absolute;*/
+	z-index: 0;
+	
+	width: 100%;
+	
+	background-image: url("../../Images/MenuButton2Middle.png");
+	background-repeat: repeat-x;
+	/*background-position-x: 0px;
+	background-position-y: -33px;
+	*/
+	/*height: 33px;*/
+	min-height: 1px;
+	top: -15px;
+}
+
+.CopyrightHeading {
+	color: #ffffff;
+	line-height: 30px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}

@@ -1,0 +1,38 @@
+<data>
+	<item id="1">
+		<Percentage>5</Percentage>
+		<OSVersions>Windows XP</OSVersions>
+	</item>
+	<item id="2">
+		<Percentage>10</Percentage>
+		<OSVersions>Windows Vista</OSVersions>
+	</item>
+	<item id="3">
+		<Percentage>5</Percentage>
+		<OSVersions>Windows 7</OSVersions>
+	</item>
+	<item id="4">
+		<Percentage>20</Percentage>
+		<OSVersions>Windows 8</OSVersions>
+	</item>
+	<item id="5">
+		<Percentage>20</Percentage>
+		<OSVersions>Windows 8.1</OSVersions>
+	</item>
+	<item id="6">
+		<Percentage>15</Percentage>
+		<OSVersions>Mac OS X</OSVersions>
+	</item>
+	<item id="7">
+		<Percentage>10</Percentage>
+		<OSVersions>IOS 4</OSVersions>
+	</item>
+	<item id="8">
+		<Percentage>10</Percentage>
+		<OSVersions>IOS 3</OSVersions>
+	</item>
+	<item id="9">
+		<Percentage>10</Percentage>
+		<OSVersions>IOS 2</OSVersions>
+	</item>
+</data>

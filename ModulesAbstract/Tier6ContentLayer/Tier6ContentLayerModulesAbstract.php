@@ -13,7 +13,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
@@ -44,10 +44,10 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 	protected $Status;
 	protected $HttpUserAgent;
 	protected $HttpAccept;
-	
+
 	protected $HttpOutput; // URL OUTPUT CAN BE: HTML, HTML5, HTML4Trans, HTML4Frame, HTML4Strict, XML, XHTML
 	protected $HttpScreen; // URL SCREEN TYPE CAN BE: Print, Touch, Mobile, Full
-	protected $HttpOutputDefault; // DEFAULT VALUE FOR HttpOutput 
+	protected $HttpOutputDefault; // DEFAULT VALUE FOR HttpOutput
 	protected $HttpOutputAutoDetect; // IF TRUE WILL SHOW THE HIGHEST CAPABLE HttpOutput AVAILABLE FOR THE BROWSER
 
 	protected $ContentTableName;
@@ -621,9 +621,9 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 					}
 					$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 					$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
-	
+
 					$this->Writer->writeRaw(" ");
-					
+
 					if (strpos($this->Content, "\n\n")) {
 						$Content = explode("\n\n", $this->Content);
 					} else {
@@ -636,9 +636,9 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 								$Content[$Key] = explode("<ul*", $Value);
 							}
 						}
-						
+
 						$this->Content = array();
-						
+
 						foreach ($Content as $Key => $Value) {
 							if (is_array($Value)) {
 								foreach ($Value as $SubKey => $SubValue) {
@@ -648,7 +648,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 								$this->Content[] = $Value;
 							}
 						}
-						
+
 						foreach ($this->Content as $Key => $Value) {
 							if (strpos($Value, "<ul") === FALSE) {
 								$this->Writer->startElement($this->ContentStartTag);
@@ -659,7 +659,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 							$this->Writer->writeRaw("\n\t  ");
 							$this->Writer->writeRaw($Content);
 							$this->Writer->writeRaw("\n\t");
-							
+
 							if (strpos($Value, "<ul") === FALSE) {
 								if ($this->ContentEndTag) {
 									$this->Writer->writeRaw("      ");
@@ -674,7 +674,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 					}
 					$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 					$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
-	
+
 					$this->Writer->writeRaw(" ");
 					if ($this->Content) {
 						$this->Writer->startElement($this->ContentStartTag);
@@ -696,7 +696,7 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 									$this->Writer->writeRaw(current($this->Content));
 									$this->Writer->writeRaw("\n\t");
 									$this->Writer->endElement();
-	
+
 									next($this->Content);
 									if (current($this->Content)) {
 										$this->ContentEndTag = NULL;
@@ -712,14 +712,14 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 								$this->Writer->writeRaw("\n\t  ");
 								$this->Writer->writeRaw($this->Content);
 							}
-	
+
 							if ($this->ContentEndTag) {
 								$this->Writer->writeRaw("      ");
 								$this->Writer->endElement();
 							}
 					}
 				}
-				
+
 			} else if ($this->ContentStartTag){
 				$this->ContentStartTag = str_replace('<','', $this->ContentStartTag);
 				$this->ContentStartTag = str_replace('>','', $this->ContentStartTag);
@@ -857,11 +857,11 @@ abstract class Tier6ContentLayerModulesAbstract extends LayerModulesAbstract
 		$module->CreateOutput('    ');
 
 		if ($print == TRUE) {
-			if ($module->getOutput()) {
+			/*if (method_exists($module->getOutput())) {
 				$this->Writer->writeRaw("\t");
 				$this->Writer->writeRaw($module->getOutput());
 				$this->Writer->writeRaw("\n");
-			}
+			}*/
 		} else {
 			return $module;
 		}

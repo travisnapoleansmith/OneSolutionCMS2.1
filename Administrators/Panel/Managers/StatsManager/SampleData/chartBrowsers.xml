@@ -1,0 +1,22 @@
+<data>
+	<item id="1">
+		<Percentage>80</Percentage>
+		<Browsers>Internet Explorer</Browsers>
+	</item>
+	<item id="2">
+		<Percentage>10</Percentage>
+		<Browsers>Firefox</Browsers>
+	</item>
+	<item id="3">
+		<Percentage>5</Percentage>
+		<Browsers>Safari</Browsers>
+	</item>
+	<item id="4">
+		<Percentage>4</Percentage>
+		<Browsers>Chrome</Browsers>
+	</item>
+	<item id="5">
+		<Percentage>1</Percentage>
+		<Browsers>Opera</Browsers>
+	</item>
+</data>

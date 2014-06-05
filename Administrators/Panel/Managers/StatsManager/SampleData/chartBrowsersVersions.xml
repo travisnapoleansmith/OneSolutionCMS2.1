@@ -1,0 +1,38 @@
+<data>
+	<item id="1">
+		<Percentage>5</Percentage>
+		<BrowsersVersions>IE 6</BrowsersVersions>
+	</item>
+	<item id="2">
+		<Percentage>5</Percentage>
+		<BrowsersVersions>IE 7</BrowsersVersions>
+	</item>
+	<item id="3">
+		<Percentage>10</Percentage>
+		<BrowsersVersions>IE 8</BrowsersVersions>
+	</item>
+	<item id="4">
+		<Percentage>20</Percentage>
+		<BrowsersVersions>IE 9</BrowsersVersions>
+	</item>
+	<item id="5">
+		<Percentage>25</Percentage>
+		<BrowsersVersions>IE 10</BrowsersVersions>
+	</item>
+	<item id="6">
+		<Percentage>10</Percentage>
+		<BrowsersVersions>IE 11</BrowsersVersions>
+	</item>
+	<item id="7">
+		<Percentage>10</Percentage>
+		<BrowsersVersions>Firefox 26</BrowsersVersions>
+	</item>
+	<item id="8">
+		<Percentage>10</Percentage>
+		<BrowsersVersions>Firefox 27</BrowsersVersions>
+	</item>
+	<item id="9">
+		<Percentage>10</Percentage>
+		<BrowsersVersions>Firefox 28</BrowsersVersions>
+	</item>
+</data>

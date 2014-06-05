@@ -60,7 +60,7 @@
 	$passarray['DatabaseVariableName'] = 'DatabaseTable';
 	$NewsPicture = $Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'getRecord', $passarray);
 
-	unset($passarray['PageID']['CurrentVersion']);
+	//unset($passarray['PageID']['CurrentVersion']);
 	$passarray['DatabaseVariableName'] = 'NewsStoriesDatesTableName';
 	$NewsDate = $Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'getRecord', $passarray);
 

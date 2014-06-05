@@ -415,7 +415,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -475,7 +475,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -513,7 +513,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -590,7 +590,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -628,7 +628,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 								$Content[$i]['ContainerObjectName'] = 'content';
 								$Content[$i]['ContainerObjectID'] = $k;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -680,7 +680,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';

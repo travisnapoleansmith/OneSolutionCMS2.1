@@ -1,0 +1,111 @@
+#ContentPanel {
+	/*min-width: 1000px;*/
+	min-height: 90%;
+	/*background:url(../../Images/ContentBottom.gif) repeat-x left bottom;*/
+	position: relative;
+	width: 100%;
+	/*min-height: 1px;*/
+	padding: 10px 0 0px;
+	/*background:url(../../Images/Main-Background.jpg);*/
+	/*background:url(../../Images/ContentTop.gif) repeat-x;*/
+	/*top: 25px;*/
+	
+	background:url(../../Images/Content-Background.png) repeat;
+	
+		
+}
+
+#ContentPanel:after {
+  	/* content: "."; 
+   	display: block;*/ 
+    height: 0; 
+   	clear: both; 
+    visibility: hidden;
+}
+
+.Section {
+	/*padding: 0 0 17px;*/
+}
+
+.TitleContainerLeft {
+	/*display: block;*/
+	width: 10px;
+	height: 35px;
+	overflow: hidden;
+	background:url(../../Images/TitleContainerLeft.png);
+	position: absolute;
+	top: 0;
+	left: -10px;
+}
+
+.TitleContainerRight {
+	
+	/*display: block;*/
+	width: 10px;
+	height: 35px;
+	overflow: hidden;
+	background:url(../../Images/TitleContainerRight.png);
+	position: absolute;
+	top: 0;
+	right: -10px;
+}
+
+.TitleContainer {
+	/*background:#6997a7 url(../../Images/TitleContainerMiddle.png) repeat-x;*/
+	background:url(../../Images/TitleContainerMiddle.png) repeat-x;
+	padding: 0 5px;
+	margin: 0 10px;
+	position: relative;
+	top: 0;
+	left: 0;
+	min-height: 1px;
+}
+
+.TitleContainer h2 {
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 35px;
+	margin: 0;
+	color: #ffffff;
+	/*padding: 0;
+	float: left;
+	white-space: nowrap;*/
+}
+
+.ContentContainer {
+	background: #e7f3f8;
+	/*position: relative;
+	margin-top: -12px;
+	margin-bottom: -12px;*/
+}
+
+.ContentContainerLeft {
+	background: url(../../Images/ContentContainerLeftRight.png) repeat-y;
+}
+
+.ContentContainerRight {
+	background:  url(../../Images/ContentContainerLeftRight.png) repeat-y right top;
+}
+
+.Inner {
+	position: relative;
+	/*top: -75px;*/
+	top: 0px;
+	/*width: 100%;*/
+	height: 100%;
+}
+
+.Section {
+
+}
+
+.Content {
+	width: 96%;
+	/*overflow: hidden;*/
+	margin: 15px 0px 0px -10px;
+	/*margin: 15px 0px 0px 10px;*/
+	position: relative;
+	left: 0;
+	z-index: 1;
+	/*min-height: 500px;*/
+}

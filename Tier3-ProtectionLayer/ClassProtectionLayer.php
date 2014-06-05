@@ -277,7 +277,6 @@ class ProtectionLayer extends LayerModulesAbstract
 	 * @access public
 	 */
 	public function pass($DatabaseTable, $Function, $FunctionArguments) {
-		//print "HERE\n";
 		if (is_null($DatabaseTable) === TRUE) {
 			array_push($this->ErrorMessage,'checkPass: DatabaseTable Cannot Be NULL!');
 			$BackTrace = debug_backtrace(FALSE);

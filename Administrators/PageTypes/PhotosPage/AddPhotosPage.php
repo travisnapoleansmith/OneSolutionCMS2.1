@@ -244,7 +244,6 @@
 			define (SiteName, $GLOBALS['sitename']);
 			define (Header, $hold['FilteredInput']['Header']);
 	
-	
 			$Image = array();
 	
 			$ImageContent = array();
@@ -275,7 +274,7 @@
 					}
 				}
 			}
-	
+			
 			$RemoveKeys = array();
 			foreach ($ImageContent as $Key => $Content) {
 				$Set = FALSE;
@@ -299,9 +298,74 @@
 			foreach ($RemoveKeys as $Key => $Value) {
 				unset($ImageContent[$Value]);
 				}
-	
+			
 			ksort($ImageContent);
-	
+			
+			// START SORT IMAGE CONTENT
+			$ImageContentNew = array();
+			$ImageContentNoOrder = array();
+			$ImageContentMove = array();
+
+			$PopKey = array();
+			foreach ($ImageContent as $Key => $Content) {
+				if ($Key == $Content['Order']) {
+					$ImageContentNew[$Key] = $Content;
+					array_push($PopKey, $Key);
+				} else if ($Content['Order'] == NULL) {
+					$ImageContentNoOrder[$Key] = $Content;
+					array_push($PopKey, $Key);
+				} else {
+					$ImageContentMove[$Key] = $Content;
+					array_push($PopKey, $Key);
+				}
+
+			}
+			foreach ($PopKey as $Value) {
+				if ($Value != NULL) {
+					unset($ImageContent[$Value]);
+				}
+			}
+
+			$ImageContent = $ImageContentNew;
+			unset($ImageContentNew);
+			foreach ($ImageContentMove as $Key => $Content) {
+				$Order = $Content['Order'];
+				if (isset($ImageContent[$Order])) {
+					array_push($ImageContent, $Content);
+				} else {
+					$ImageContent[$Order] = $Content;
+				}
+			}
+			unset($ImageContentMove);
+
+			foreach($ImageContentNoOrder as $Content) {
+				array_push($ImageContent, $Content);
+			}
+			unset($ImageContentNoOrder);
+			
+			if ($LogImageContent === TRUE) {
+				$LogFile = "ImageContentLog.txt";
+				$LogFileHandle = fopen($LogFile, 'a');
+				$FileInformation = 'Logging - Image Content Unchanged - ' . $PageID . ' - ' . date("F j, Y, g:i a") . "\n";
+				fwrite($LogFileHandle, $FileInformation);
+				fwrite($LogFileHandle, print_r($ImageContent, TRUE));
+				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+				fclose($LogFileHandle);
+			}
+
+			ksort($ImageContent);
+
+			if ($LogImageContent === TRUE) {
+				$LogFile = "ImageContentLog.txt";
+				$LogFileHandle = fopen($LogFile, 'a');
+				$FileInformation = 'Logging - Image Content Changed - ' . $PageID . ' - ' . date("F j, Y, g:i a") . "\n";
+				fwrite($LogFileHandle, $FileInformation);
+				fwrite($LogFileHandle, print_r($ImageContent, TRUE));
+				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+				fclose($LogFileHandle);
+			}
+			// END SORT IMAGE CONTENT
+			
 			$Content = array();
 	
 			$PageID = array();
@@ -369,7 +433,7 @@
 			$k = $i;
 			$k++;
 			$PictureID = 1;
-	
+			
 			foreach($ImageContent as $Key => $Value) {
 				foreach ($Value as $SubKey => $SubValue) {
 					if ($SubValue != NULL) {
@@ -444,7 +508,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -502,7 +566,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -541,7 +605,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -618,7 +682,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -656,7 +720,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 								$Content[$i]['ContainerObjectName'] = 'content';
 								$Content[$i]['ContainerObjectID'] = $k;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -712,7 +776,7 @@
 					$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 					$Content[$i]['ContainerObjectName'] = 'content';
 					$Content[$i]['ContainerObjectID'] = $k;
-					$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+					$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 					$Content[$i]['RevisionID'] = $NewRevisionID;
 					$Content[$i]['CurrentVersion'] = 'true';
 					$Content[$i]['Empty'] = 'false';
@@ -816,7 +880,8 @@
 			$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[$i]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
-	
+			
+			
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 	

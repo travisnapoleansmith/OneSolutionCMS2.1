@@ -91,6 +91,7 @@
 
 	// Setting Database Row
 	$Tier6DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
+	$Tier6DatabaseAllow['searchDatabaseRow'] = 'searchDatabaseRow';
 
 	// Setting Database Fields
 	$Tier6DatabaseAllow['setDatabaseField'] = 'setDatabaseField';

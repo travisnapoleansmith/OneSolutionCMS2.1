@@ -1,0 +1,13 @@
+<?xml version="1.0"?> 
+<tabbar> 
+	<row>
+		<tab id="AdStatsRangeBrowserStats" selected="1">Browsers</tab>
+		<tab id="a2">Tab 1-2</tab>
+		<tab id="a2">Tab 1-3</tab>
+		<tab id="a3">Tab 1-2</tab>
+		<tab id="a4">Tab 1-2</tab>
+		<tab id="a5">Tab 1-2</tab>
+		<tab id="a6">Tab 1-2</tab>
+		<tab id="a7">Tab 1-2</tab>
+	</row>
+</tabbar>

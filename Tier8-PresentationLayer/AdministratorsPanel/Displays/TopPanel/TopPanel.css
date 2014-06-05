@@ -1,0 +1,17 @@
+#TopPanelHeader {
+	background: #455560 url(../../Images/Header-Background.png) repeat-x;
+	width: 100%;
+	min-height: 1px;
+	position: relative;
+	top: -10px;
+	left: 0;
+	z-index: 5;
+}
+
+#TopPanelHeader:after {
+    /*content: "."; 
+   	display: block; 
+    height: 0;*/ 
+    clear: both; 
+    visibility: hidden;
+}

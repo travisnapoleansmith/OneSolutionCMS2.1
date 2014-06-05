@@ -71,7 +71,8 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	protected $XMLSimpleViewerXMLTable;
 
 	protected $XMLSimpleViewer;
-
+	
+	protected $XMLSimpleViewerGalleryListing;
 	/**
 	 * Create an instance of XmlSimpleViewer
 	 *
@@ -92,19 +93,23 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 			$this->FileName = $DatabaseOptions['FileName'];
 			unset($DatabaseOptions['FileName']);
 		}
-
-		if ($this->FileName) {
-			$this->Writer = new XMLWriter();
-			$this->Writer->openURI($this->FileName);
-		} else if ($GLOBALS['Writer']){
-			$this->Writer = &$GLOBALS['Writer'];
+		
+		if ($DatabaseOptions['NoOutput']) {
+			
 		} else {
-			$this->Writer = new XMLWriter();
-			$this->Writer->openMemory();
+			if ($this->FileName) {
+				$this->Writer = new XMLWriter();
+				$this->Writer->openURI($this->FileName);
+			} else if ($GLOBALS['Writer']){
+				$this->Writer = &$GLOBALS['Writer'];
+			} else {
+				$this->Writer = new XMLWriter();
+				$this->Writer->openMemory();
+			}
+	
+			$this->Writer->startDocument('1.0' , 'UTF-8');
+			$this->Writer->setIndent(4);
 		}
-
-		$this->Writer->startDocument('1.0' , 'UTF-8');
-		$this->Writer->setIndent(4);
 	}
 
 	public function setDatabaseAll ($hostname, $user, $password, $databasename, $databasetable) {
@@ -358,7 +363,35 @@ class XmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier6C
 	public function getOutput() {
 		return $this->XmlSimpleViewer;
 	}
+	
+	/**
+	 * FetchXMLSimpleViewerGalleryListing
+	 *
+	 * Retrieves data from the database containing a list of all Simple Viewer Galleries
+	 *
+	 * @access public
+	 *
+	 */
+	public function FetchXMLSimpleViewerGalleryListing($DatabaseTableName) {
+		$this->LayerModule->createDatabaseTable($DatabaseTableName);
+		$this->LayerModule->Connect($DatabaseTableName);
+		$this->LayerModule->pass ($DatabaseTableName, 'setEntireTable', array());
+		$this->LayerModule->Disconnect($DatabaseTableName);
+		$this->XMLSimpleViewerGalleryListing = $this->LayerModule->pass ($DatabaseTableName, 'getEntireTable', array());
+	}
 
+	/**
+	 * getXMLSimpleViewerGalleryListing
+	 *
+	 * Returns the XML Simple Viewer Gallery Listing containing a list of all Simple Viewer Galleries
+	 *
+	 * @access public
+	 *
+	 */
+	public function getXMLSimpleViewerGalleryListing(){
+		return $this->XMLSimpleViewerGalleryListing;
+	}
+	
 	public function importGalleryFile($XMLFile, array $Path = NULL) {
 		if ($XMLFile != NULL) {
 			if (file_exists($XMLFile)) {

@@ -401,7 +401,7 @@ class XhtmlContent extends Tier6ContentLayerModulesAbstract implements Tier6Cont
 
 			$this->buildXhtmlContentObject ($this->PageID, $temp, $this->PrintPreview, $this->LayerModule, FALSE);
 
-			while ($this->EnableDisable) {
+			while ($this->EnableDisable === 'Enable') {
 				if ($this->ContainerObjectType) {
 					$containertype = $this->ContainerObjectType;
 					if ($containertype ==  'XhtmlContent') {

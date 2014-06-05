@@ -63,7 +63,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		$this->Password = $password;
 		$this->DatabaseName = $databasename;
 		$this->DatabaseTable = $databasetable;
-
+		
 		$this->LayerModule->setDatabaseAll ($hostname, $user, $password, $databasename);
 		$this->LayerModule->setDatabasetable ($databasetable);
 	}
@@ -250,7 +250,12 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 			$Keys[7] = 'SimpleViewerObjectID';
 			$Keys[8] = 'Enable/Disable';
 			$Keys[9] = 'Status';
-
+			
+			if (!isset($this->SimpleViewerFlashTableName)) {
+				$this->SimpleViewerFlashTableName = 'FlashSimpleViewerLookup';
+				$this->LayerModule->createDatabaseTable($this->SimpleViewerFlashTableName);
+			}
+			
 			$this->addModuleContent($Keys, $Flash, $this->SimpleViewerFlashTableName);
 		} else {
 			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
@@ -259,6 +264,11 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 	
 	public function updateFlashLookup(array $PageID) {
 		if ($PageID != NULL) {
+			if (!isset($this->SimpleViewerFlashTableName)) {
+				$this->SimpleViewerFlashTableName = 'FlashSimpleViewerLookup';
+				$this->LayerModule->createDatabaseTable($this->SimpleViewerFlashTableName);
+			}
+			
 			$this->updateModuleContent($PageID, $this->SimpleViewerFlashTableName);
 		} else {
 			array_push($this->ErrorMessage,'updateFlash: PageID cannot be NULL!');
@@ -267,6 +277,11 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 
 	public function deleteFlashLookup(array $PageID) {
 		if ($PageID != NULL) {
+			if (!isset($this->SimpleViewerFlashTableName)) {
+				$this->SimpleViewerFlashTableName = 'FlashSimpleViewerLookup';
+				$this->LayerModule->createDatabaseTable($this->SimpleViewerFlashTableName);
+			}
+			
 			$this->deleteModuleContent($PageID, $this->SimpleViewerFlashTableName);
 		} else {
 			array_push($this->ErrorMessage,'deleteFlash: PageID cannot be NULL!');
@@ -275,6 +290,11 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 
 	public function updateFlashLookupStatus(array $PageID) {
 		if ($PageID != NULL) {
+			if (!isset($this->SimpleViewerFlashTableName)) {
+				$this->SimpleViewerFlashTableName = 'FlashSimpleViewerLookup';
+				$this->LayerModule->createDatabaseTable($this->SimpleViewerFlashTableName);
+			}
+			
 			$PassID = array();
 			$PassID['PageID'] = $PageID['PageID'];
 
@@ -314,10 +334,10 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 			$Keys[10] = 'StartTagStyle';
 			$Keys[11] = 'Enable/Disable';
 			$Keys[12] = 'Status';
-
+			
 			$this->addModuleContent($Keys, $Flash, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'createFlash: Flash cannot be NULL!');
+			array_push($this->ErrorMessage,'createSimpleViewer: Flash cannot be NULL!');
 		}
 	}
 	
@@ -325,7 +345,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		if ($PageID != NULL) {
 			$this->updateModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'updateFlash: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateSimpleViewer: PageID cannot be NULL!');
 		}
 	}
 
@@ -333,7 +353,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 		if ($PageID != NULL) {
 			$this->deleteModuleContent($PageID, $this->DatabaseTable);
 		} else {
-			array_push($this->ErrorMessage,'deleteFlash: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'deleteSimpleViewer: PageID cannot be NULL!');
 		}
 	}
 
@@ -358,7 +378,7 @@ class XhtmlSimpleViewer extends Tier6ContentLayerModulesAbstract implements Tier
 				$this->spamModuleContent($PassID, $this->DatabaseTable);
 			}
 		} else {
-			array_push($this->ErrorMessage,'updateFlashStatus: PageID cannot be NULL!');
+			array_push($this->ErrorMessage,'updateSimpleViewerStatus: PageID cannot be NULL!');
 		}
 	}
 }

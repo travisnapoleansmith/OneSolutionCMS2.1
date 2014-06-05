@@ -1,3 +1,26 @@
+Changes For One Solution CMS 2.1.157 - 
+Added:
+	1). Added Administrators Panel - Panel - Added the new 3.0 look and Stats/Reports Manager. Some functionality like a few of the tabs are not going to show any information yet. It is coming very shortly. Expect it in the next release!
+	2). Added MySqlConnect - searchDatabaseRow is now available. This allows to put a BETWEEN for any SQL WHERE statements. This allows to narrow the data to a range of data to retrive.
+	3). Added Tier7-BehavioralLayer/AdministratorsPanel - The new scripting needed for the 3.0's Administrators Panel.
+	3). Added Tier7-BehavioralLayer/AdministratorsPanel - The new theme for the 3.0's Administrators Panel. 
+	4). Added Libraries/Tier7BehavioralLayer - DHTMLX Suite Standard 3.6 Compressed. This is for the new Administrators Panel and is a compressed version of the DHTMLX Suite Standard that is used.
+	5). Added Modules/Tier3ProtectionLayer/Core/FileTracker - File Tracker - This is a brand new module that is enabled to track all files that are opened. Right now it only tracks GET requests but will soon have POST requests as well. This records IP Address and a lot of header information in the database so the administrator can keep and eye on what is being opened up. It is started with .htaccess so for this to work you have to make sure .htaccess is available!
+	
+Updated (Fixed):
+	1). Updated Administrators Panel - Add Photos Page - Corrected Bug ID #00000-- - When adding a new Photo Page, it doesn't get added to the main menu. This issue has been fixed.
+	2). Updated Administrators Panel - Add Photos Page - Corrected Bug ID #00000-- - Photos show up on printer preview page. This issue has been fixed.
+	3). Updated Administrators Panel - Update Photos Page - Corrected Bug ID #00000-- - Photos show up on printer preview page. This issue has been fixed.
+	4). Updated Administrators Panel - Add Table Page - Corrected Bug ID #00000-- - Photos show up on printer preview page. This issue has been fixed.
+	5). Updated Administrators Panel - Update Table Page - Corrected Bug ID #00000-- - Photos show up on printer preview page. This issue has been fixed.
+	6). Updated Administrators Panel - SimpleViewer Page - All SimpleViewer Pages now can be processed.
+	7). Updated Administrators Panel - Update News Story - Corrected Bug ID #00000-- - News Story's date selection was showing up as the first version in the form, even though the date had changed. This issue has been fixed.
+	
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Changes For One Solution CMS 2.1.156 - Tuesday, December 31, 2013
 Added:
 	1). Added Administrators Panel - SimpleViewer Pages - Added forms for SimpleViewer Pages. Processing will be coming very shortly.

@@ -1,0 +1,46 @@
+<data>
+	<item id="1">
+		<Percentage>2</Percentage>
+		<IPAddresses>192.168.1.100</IPAddresses>
+	</item>
+	<item id="2">
+		<Percentage>3</Percentage>
+		<IPAddresses>192.168.1.101</IPAddresses>
+	</item>
+	<item id="3">
+		<Percentage>2</Percentage>
+		<IPAddresses>192.168.1.102</IPAddresses>
+	</item>
+	<item id="4">
+		<Percentage>5</Percentage>
+		<IPAddresses>192.168.1.103</IPAddresses>
+	</item>
+	<item id="5">
+		<Percentage>3</Percentage>
+		<IPAddresses>192.168.1.104</IPAddresses>
+	</item>
+	<item id="6">
+		<Percentage>10</Percentage>
+		<IPAddresses>192.168.1.105</IPAddresses>
+	</item>
+	<item id="7">
+		<Percentage>10</Percentage>
+		<IPAddresses>192.168.1.106</IPAddresses>
+	</item>
+	<item id="8">
+		<Percentage>5</Percentage>
+		<IPAddresses>192.168.1.107</IPAddresses>
+	</item>
+	<item id="9">
+		<Percentage>3</Percentage>
+		<IPAddresses>192.168.1.108</IPAddresses>
+	</item>
+	<item id="10">
+		<Percentage>7</Percentage>
+		<IPAddresses>192.168.1.109</IPAddresses>
+	</item>
+	<item id="11">
+		<Percentage>50</Percentage>
+		<IPAddresses>All Other Traffic</IPAddresses>
+	</item>
+</data>

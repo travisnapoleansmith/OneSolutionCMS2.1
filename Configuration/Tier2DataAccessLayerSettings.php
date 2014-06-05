@@ -94,6 +94,7 @@
 
 	// Setting Database Row
 	$Tier2DatabaseAllow['setDatabaseRow'] = 'setDatabaseRow';
+	$Tier2DatabaseAllow['searchDatabaseRow'] = 'searchDatabaseRow';
 
 	// Setting Database Fields
 	$Tier2DatabaseAllow['setDatabaseField'] = 'setDatabaseField';

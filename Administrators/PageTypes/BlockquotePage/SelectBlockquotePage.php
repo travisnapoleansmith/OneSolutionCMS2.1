@@ -118,7 +118,7 @@
 
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$UpdateBlockquotePage = $Options['XhtmlContent']['content']['UpdateBlockquotePage']['SettingAttribute'];
-
+	
 	header("Location: $UpdateBlockquotePage&SessionID=$sessionname");
 
 ?>

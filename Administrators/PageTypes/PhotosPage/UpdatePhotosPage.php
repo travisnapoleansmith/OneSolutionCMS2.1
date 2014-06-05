@@ -289,9 +289,10 @@
 			foreach ($RemoveKeys as $Key => $Value) {
 				unset($ImageContent[$Value]);
 			}
-
+			
 			ksort($ImageContent);
-
+			
+			// START SORT IMAGE CONTENT
 			$ImageContentNew = array();
 			$ImageContentNoOrder = array();
 			$ImageContentMove = array();
@@ -332,7 +333,7 @@
 				array_push($ImageContent, $Content);
 			}
 			unset($ImageContentNoOrder);
-
+			
 			if ($LogImageContent === TRUE) {
 				$LogFile = "ImageContentLog.txt";
 				$LogFileHandle = fopen($LogFile, 'a');
@@ -354,7 +355,8 @@
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
-
+			// END SORT IMAGE CONTENT
+			
 			$Content = array();
 
 			$PageID = array();
@@ -497,7 +499,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -555,7 +557,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -594,7 +596,7 @@
 							$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 							$Content[$i]['ContainerObjectName'] = 'content';
 							$Content[$i]['ContainerObjectID'] = $k;
-							$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+							$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 							$Content[$i]['RevisionID'] = $NewRevisionID;
 							$Content[$i]['CurrentVersion'] = 'true';
 							$Content[$i]['Empty'] = 'false';
@@ -671,7 +673,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlPicture';
 								$Content[$i]['ContainerObjectName'] = 'picture';
 								$Content[$i]['ContainerObjectID'] = $PictureID;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -709,7 +711,7 @@
 								$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 								$Content[$i]['ContainerObjectName'] = 'content';
 								$Content[$i]['ContainerObjectID'] = $k;
-								$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+								$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 								$Content[$i]['RevisionID'] = $NewRevisionID;
 								$Content[$i]['CurrentVersion'] = 'true';
 								$Content[$i]['Empty'] = 'false';
@@ -765,7 +767,7 @@
 					$Content[$i]['ContainerObjectType'] = 'XhtmlContent';
 					$Content[$i]['ContainerObjectName'] = 'content';
 					$Content[$i]['ContainerObjectID'] = $k;
-					$Content[$i]['ContainerObjectPrintPreview'] = 'true';
+					$Content[$i]['ContainerObjectPrintPreview'] = 'false';
 					$Content[$i]['RevisionID'] = $NewRevisionID;
 					$Content[$i]['CurrentVersion'] = 'true';
 					$Content[$i]['Empty'] = 'false';

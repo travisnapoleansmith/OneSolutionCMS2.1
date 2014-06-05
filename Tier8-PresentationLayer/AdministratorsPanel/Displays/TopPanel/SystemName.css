@@ -1,0 +1,22 @@
+#SystemName {
+	position: relative;
+	width: 100%;
+	/*float: left;*/
+	height: 127px;
+	top: 10px;
+}
+
+#SystemNameText {
+	position:relative;
+	float: left;
+	left: 10px;
+	width: 75%;
+	height: 50px;
+	top: 20px;
+	color: #ffffff;
+}
+
+#SystemNameImage {
+	position: relative;
+	float: left;
+}

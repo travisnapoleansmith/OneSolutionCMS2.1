@@ -1771,7 +1771,78 @@ class MySqlConnect extends Tier2DataAccessLayerModulesAbstract implements Tier2D
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * searchDatabaseRow
+	 *
+	 * Executes a SQL query to search the database rows creating a numerical array based on idnumber. Idnumber must be an array!
+	 * To get the results, use getRowField(String $rowfield) for a single field in a row and getMultiRowField() for the entire row
+	 * or multiple rows depending on the idnumber passed!
+	 *
+	 * @param array $IDNumber Idnumber for the database query. Must be an array of strings with the key being the name of the field
+	 * and the value being value of the field.
+	 *
+	 * @param array $Begin Idnumber for the database query. Must be an array of strings with the key being the name of the field
+	 * and the value being the beginning value of the field.
+	 *
+	 * @param array $End Idnumber for the database query. Must be an array of strings with the key being the name of the field
+	 * and the value being the ending value of the field.
+	 * @access public
+	*/
+	public function searchDatabaseRow ($IDNumber, $Begin, $End) {
+		$this->IDNumber = $IDNumber;
+		if ($this->MultRowField) {
+			$this->MultRowField = array();
+		}
+		
+		if (is_array($IDNumber) && is_array($Begin) && is_array($End)) {
+			while (isset($this->IDNumber[key($this->IDNumber)])) {
+				$Temp .= '`';
+				$Temp .= key($this->IDNumber);
+				$Temp .= '` BETWEEN "';
+				$Temp .= $Begin[key($this->IDNumber)];
+				$Temp .= '" AND ';
+				$Temp .= '"';
+				$Temp .= $End[key($this->IDNumber)];
+				$Temp .= '" ';
+				next($this->IDNumber);
+				if (isset($this->IDNumber[key($this->IDNumber)])) {
+					$Temp .= 'AND ';
+				}
+			}
+			reset($this->IDNumber);
+			if ($this->OrderByName && $this->OrderByType) {
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ORDER BY `' . $this->OrderByName . '` ' . $this->OrderByType;
+			} else {
+				$this->RowQuery = 'SELECT * FROM ' . $this->DatabaseTable . ' WHERE ' . $Temp .' ';
+			}
 
+			if ($this->Limit) {
+				$this->RowQuery .= ' LIMIT ';
+				$this->RowQuery .= $this->Limit;
+			}
+			
+			$this->RowResult = mysql_query($this->RowQuery);
+
+			if ($this->RowResult) {
+				$this->RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
+				
+				array_push($this->MultRowField, $this->RowField);
+				$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
+				while ($RowField) {
+					array_push($this->MultRowField, $RowField);
+					$RowField = mysql_fetch_array($this->RowResult, MYSQL_ASSOC);
+				}
+			}
+
+		} else {
+			array_push($this->ErrorMessage,'searchDatabaseRow: Idnumber, Begin and End must be an Array!');
+			$BackTrace = debug_backtrace(FALSE);
+			throw new SoapFault("searchDatabaseRow", 'Idnumber, Begin and End must be an Array!');
+			return FALSE;
+		}
+	}
+	
 	/**
 	 * setEntireTable
 	 * Performs a SQL query to get the entire database table. Use getEntireTable() to get the entire table results!

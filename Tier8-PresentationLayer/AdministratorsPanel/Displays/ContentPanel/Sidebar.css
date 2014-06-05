@@ -1,0 +1,97 @@
+#Sidebar {
+	//position: absolute;
+	width: 20%;
+	top: 0px;
+	max-width: 250px;
+}
+
+#Sidebar .Inner{
+	padding-top: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	padding-left: 15px;
+}
+
+#Sidebar .Sidebar {
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	padding-top: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	padding-left: 15px;
+	position: relative;
+	width: 160px;
+}
+
+#Sidebar ul {
+	position: relative;
+	padding-left: 5px;
+	list-style: none;
+}
+
+
+#Sidebar .Sidebar button {
+	position: relative;
+	left: 5px;
+}
+
+#Sidebar .Sidebar ul button{
+	postion: relative;
+	left: 0px;
+	
+}
+
+#Sidebar button {
+	background-color: #D3E6FE;
+	border-top-color: #FFFFFF;
+	border-right-color: #FFFFFF;
+	border-bottom-color: #FFFFFF;
+	border-left-color: #FFFFFF;
+}
+
+#Sidebar button:hover {
+	/*background-position: 0 -101px;*/
+	/*background-color: #ECF4F8;*/
+	background-color: #FFE3AC;
+}
+
+#Calendar ul{
+	position: relative;
+	padding-left: 0px;
+}
+
+/*#Sidebar .CalendarTop {
+	left: 0px;
+	/*top: 0px;*/
+	width: 100%;
+	text-align: center;
+	color: #A4D6ED;
+	position: absolute;
+	background-image: url(Images/CalendarTop.png);
+	background-attachment: scroll;
+	background-repeat: no-repeat;
+	background-position-x: 0%;
+	background-position-y: 0%;
+	background-size: auto;
+	background-origin: padding-box;
+	background-clip: border-box;
+	background-color: transparent;
+}
+
+#Sidebar .CalendarTop h2 {
+	color: #FFFFFF;
+	/*position: relative;
+	width: 100%;
+	top: 0px;*/
+	font-size: 25px;
+	font-weight: bold;
+	font-style: italic;
+}
+
+#Sidebar .CalendarTop h3 {
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-style: italic;
+}*/

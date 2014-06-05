@@ -1,0 +1,129 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	font-family: Arial;
+	font-size: 12px;
+	color: #3a3a3a;
+}
+
+a:link, a:visited, a:active {
+	/*color: #6b98a8;*/
+	color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+p {
+	margin: 0;
+	padding: 0 0 15px;
+}
+
+.DropDown {
+	display: block;
+	/*float: left;*/
+	background:url(Images/MoreRight.png) no-repeat -1000px;
+	padding-right: 10px;
+	z-index: 10;
+	
+}
+
+.DropDown span {
+	display: block;
+	background:url(Images/MoreLeft.png) no-repeat -1000px;
+	float: left;
+	padding-left: 11px;
+}
+
+.DropDown span span {
+	display: block;
+	
+	background:url(Images/Drop.png) no-repeat -1000px;
+	padding-right: 11px;
+	padding-left: 0;
+}
+
+
+#Form button {
+	position: relative;
+	top: 10px;
+	/*left: 5px;*/
+	left: 45%;
+	right: 45%;
+	font-size: 14px;
+	background-color: #D3E6FE;
+	border-top-color: #FFFFFF;
+	border-right-color: #FFFFFF;
+	border-bottom-color: #FFFFFF;
+	border-left-color: #FFFFFF;
+}
+
+#Form button:hover {
+	/*background-position: 0 -101px;*/
+	/*background-color: #ECF4F8;*/
+	background-color: #FFE3AC;
+}
+
+/* ADD TO ANOTHER FILE - APPLICATIONS CSS */
+/*File*/
+#FullPage {
+	position: relative;
+	/*top: 0px;*/
+	/*top: -75px;*/
+	/*margin-bottom: -75px;*/
+}
+
+/*File*/
+#Page {
+	position: absolute;
+	top: 20px;
+	/*background:url(Images/Content-Background.png) repeat;*/
+	width: 80%;
+	left: 250px;
+	/*left: 20%;*/
+	/*background-color: white;*/
+	/*float: right;
+	margin-left: -263px;
+	width: 100%;*/
+}
+
+#Page .Inner {
+	/*margin-left: 263px;*/
+	padding: 15px 15px 15px 15px;
+	
+}
+
+/*File*/
+#Scheduler {
+	position: relative;
+	height: 1075px;
+	width: 100%;
+	overflow: hidden;
+	padding-bottom: -100px;
+	/*top: -100px;*/
+}
+
+/*File*/
+#FileManager {
+	position: relative;
+	height: 1075px;
+	width: 100%;
+	overflow: hidden;
+	margin-left: 0px;
+}
+
+/*File*/
+#Content {
+	position: relative;
+	height: 1075px;
+	width: 100%;
+	/*overflow: hidden;*/
+	margin-left: 0px;
+}

@@ -178,106 +178,121 @@ class XhtmlFlash extends Tier6ContentLayerModulesAbstract implements Tier6Conten
 						$this->Writer->writeAttribute('class', $this->StartTagClass);
 					}
 			}
-	
-			$this->Writer->startElement('object');
-	
-			if ($this->IsIE) {
-				$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
-			}
-	
-			if ($this->Width) {
-				$this->Writer->writeAttribute('width', $this->Width);
-			}
-	
-			if ($this->Height) {
-				$this->Writer->writeAttribute('height', $this->Height);
-			}
-	
-			if ($this->IsIE) {
-				$this->Writer->writeAttribute('id', 'player');
-				$this->Writer->writeAttribute('name', 'player');
-	
-				if ($this->FlashStyle) {
-					$this->Writer->writeAttribute('style', $this->FlashStyle);
-				}
-				if ($this->FlashClass) {
-					$this->Writer->writeAttribute('class', $this->FlashClass);
-				}
+			if (strstr($this->FlashPath, "http://www.dailymotion.com")) {
+				$this->Writer->startElement('iframe');
+					$this->Writer->writeAttribute('frameborder', 0);
+					$this->Writer->writeAttribute('width', 480);
+					$this->Writer->writeAttribute('height', 270);
+					
+					if ($this->FlashPath) {
+						$this->Writer->writeAttribute('src', $this->FlashPath);
+					}
+					
+					if ($this->AllowFullScreen) {
+						$this->Writer->writeAttribute('allowfullscreen', $this->AllowFullScreen);
+					}
+				$this->Writer->fullEndElement(); // END IFRAME TAG
 			} else {
-				if ($this->FlashID) {
-					$this->Writer->writeAttribute('id', $this->FlashID);
+				$this->Writer->startElement('object');
+		
+				if ($this->IsIE) {
+					$this->Writer->writeAttribute('classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
 				}
-				if ($this->FlashStyle) {
-					$this->Writer->writeAttribute('style', $this->FlashStyle);
+		
+				if ($this->Width) {
+					$this->Writer->writeAttribute('width', $this->Width);
 				}
-				if ($this->FlashClass) {
-					$this->Writer->writeAttribute('class', $this->FlashClass);
+		
+				if ($this->Height) {
+					$this->Writer->writeAttribute('height', $this->Height);
 				}
-				$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
-			}
-	
-			if (!$this->IsIE) {
+		
+				if ($this->IsIE) {
+					$this->Writer->writeAttribute('id', 'player');
+					$this->Writer->writeAttribute('name', 'player');
+		
+					if ($this->FlashStyle) {
+						$this->Writer->writeAttribute('style', $this->FlashStyle);
+					}
+					if ($this->FlashClass) {
+						$this->Writer->writeAttribute('class', $this->FlashClass);
+					}
+				} else {
+					if ($this->FlashID) {
+						$this->Writer->writeAttribute('id', $this->FlashID);
+					}
+					if ($this->FlashStyle) {
+						$this->Writer->writeAttribute('style', $this->FlashStyle);
+					}
+					if ($this->FlashClass) {
+						$this->Writer->writeAttribute('class', $this->FlashClass);
+					}
+					$this->Writer->writeAttribute('type', 'application/x-shockwave-flash');
+				}
+		
+				if (!$this->IsIE) {
+					if ($this->FlashPath) {
+						$this->Writer->writeAttribute('data', $this->FlashPath);
+					}
+				}
+		
 				if ($this->FlashPath) {
-					$this->Writer->writeAttribute('data', $this->FlashPath);
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'movie');
+					$this->Writer->writeAttribute('value', $this->FlashPath);
+					$this->Writer->endElement();
 				}
+		
+				if ($this->Wmode) {
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'wmode');
+					$this->Writer->writeAttribute('value', $this->Wmode);
+					$this->Writer->endElement();
+				}
+		
+				if ($this->AllowFullScreen) {
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'allowfullscreen');
+					$this->Writer->writeAttribute('value', $this->AllowFullScreen);
+					$this->Writer->endElement();
+				}
+		
+				if ($this->AllowScriptAccess) {
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'allowscriptaccess');
+					$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
+					$this->Writer->endElement();
+				}
+		
+				if ($this->Quality) {
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'quality');
+					$this->Writer->writeAttribute('value', $this->Quality);
+					$this->Writer->endElement();
+				}
+		
+				if ($this->FlashVars) {
+					$this->BuildFlashVars();
+				}
+		
+				if ($this->FlashVarsText) {
+					$this->Writer->startElement('param');
+					$this->Writer->writeAttribute('name', 'flashvars');
+					$this->Writer->writeAttribute('value', $this->FlashVarsText);
+					$this->Writer->endElement();
+				}
+		
+		
+				if ($this->AltText) {
+					$this->Writer->writeRaw("\t");
+					$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
+					$this->Writer->writeRaw("\n");
+				}
+		
+				$this->Writer->writeRaw($this->Space);
+				$this->Writer->writeRaw('  ');
+				$this->Writer->endElement(); // END OBJECT TAG
 			}
-	
-			if ($this->FlashPath) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'movie');
-				$this->Writer->writeAttribute('value', $this->FlashPath);
-				$this->Writer->endElement();
-			}
-	
-			if ($this->Wmode) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'wmode');
-				$this->Writer->writeAttribute('value', $this->Wmode);
-				$this->Writer->endElement();
-			}
-	
-			if ($this->AllowFullScreen) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'allowfullscreen');
-				$this->Writer->writeAttribute('value', $this->AllowFullScreen);
-				$this->Writer->endElement();
-			}
-	
-			if ($this->AllowScriptAccess) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'allowscriptaccess');
-				$this->Writer->writeAttribute('value', $this->AllowScriptAccess);
-				$this->Writer->endElement();
-			}
-	
-			if ($this->Quality) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'quality');
-				$this->Writer->writeAttribute('value', $this->Quality);
-				$this->Writer->endElement();
-			}
-	
-			if ($this->FlashVars) {
-				$this->BuildFlashVars();
-			}
-	
-			if ($this->FlashVarsText) {
-				$this->Writer->startElement('param');
-				$this->Writer->writeAttribute('name', 'flashvars');
-				$this->Writer->writeAttribute('value', $this->FlashVarsText);
-				$this->Writer->endElement();
-			}
-	
-	
-			if ($this->AltText) {
-				$this->Writer->writeRaw("\t");
-				$this->Writer->writeRaw($this->CreateWordWrap($this->AltText));
-				$this->Writer->writeRaw("\n");
-			}
-	
-			$this->Writer->writeRaw($this->Space);
-			$this->Writer->writeRaw('  ');
-			$this->Writer->endElement(); // END OBJECT TAG
 			if ($this->EndTag) {
 				$this->Writer->writeRaw($this->Space);
 				$this->Writer->fullEndElement(); // ENDS END TAG

@@ -1,0 +1,7 @@
+<?xml version="1.0"?> 
+<toolbar> 
+	<item type="text" id="SiteStatsRangeToolbar1ExportLabel1" text="Export Data Format" />
+	<item type="button" id="SiteStatsRangeToolbar1ExportButton1" text="Excel" img="MicrosoftExcelIcon24.png" />
+	<item type="button" id="SiteStatsRangeToolbar1ExportButton2" text="CSV" img="CSVIcon24.png" />
+	<item type="button" id="SiteStatsRangeToolbar1ExportButton3" text="XML" img="XMLIcon24.png" />
+</toolbar>

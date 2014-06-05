@@ -1,0 +1,38 @@
+<data>
+	<item id="1">
+		<Percentage>50</Percentage>
+		<Countries>United States</Countries>
+	</item>
+	<item id="2">
+		<Percentage>10</Percentage>
+		<Countries>Canada</Countries>
+	</item>
+	<item id="3">
+		<Percentage>10</Percentage>
+		<Countries>Mexico</Countries>
+	</item>
+	<item id="4">
+		<Percentage>5</Percentage>
+		<Countries>Russia</Countries>
+	</item>
+	<item id="5">
+		<Percentage>5</Percentage>
+		<Countries>UK</Countries>
+	</item>
+	<item id="6">
+		<Percentage>2</Percentage>
+		<Countries>France</Countries>
+	</item>
+	<item id="7">
+		<Percentage>8</Percentage>
+		<Countries>Italy</Countries>
+	</item>
+	<item id="8">
+		<Percentage>6</Percentage>
+		<Countries>Germany</Countries>
+	</item>
+	<item id="9">
+		<Percentage>4</Percentage>
+		<Countries>Panama</Countries>
+	</item>
+</data>

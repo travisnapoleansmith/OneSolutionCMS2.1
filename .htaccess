@@ -1,0 +1,22 @@
+RewriteEngine on
+
+##Header set Set-Cookie "FileTrackerStop=STOP"
+
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !^.*FileTracker.php.*
+RewriteCond %{REQUEST_URI} !^.*.(php|html|htm).*
+RewriteCond %{QUERY_STRING} ^.*FileTrackerStop=STOP.*
+RewriteRule ^(^.*)$ $1 [L]
+
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !^.*FileTracker.php.*
+RewriteCond %{REQUEST_URI} !^.*.(php|html|htm).*
+#RewriteCond %{REQUEST_URI} ^.*UserData/.*
+RewriteRule ^(^.*)$ /Modules/Tier3ProtectionLayer/Core/FileTracker/FileTracker.php?File=$1&FileTrackerStop=STOP [QSA,L]
+
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !^.*FileTracker.php.*
+RewriteCond %{HTTP_COOKIE} !^.*FileTrackerStop=STOP.*$
+RewriteRule ^(^.*)$ /Modules/Tier3ProtectionLayer/Core/FileTracker/FileTracker.php?File=$1 [QSA,P]
+
+##RewriteCond %{QUERY_STRING} !^.*FileTrackerStop=STOP.*

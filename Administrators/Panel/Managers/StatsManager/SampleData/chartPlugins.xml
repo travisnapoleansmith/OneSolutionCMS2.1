@@ -1,0 +1,42 @@
+<data>
+	<item id="1">
+		<Percentage>5</Percentage>
+		<Plugins>Adobe Reader</Plugins>
+	</item>
+	<item id="2">
+		<Percentage>5</Percentage>
+		<Plugins>Devalvr</Plugins>
+	</item>
+	<item id="3">
+		<Percentage>10</Percentage>
+		<Plugins>Flash</Plugins>
+	</item>
+	<item id="4">
+		<Percentage>20</Percentage>
+		<Plugins>Java</Plugins>
+	</item>
+	<item id="5">
+		<Percentage>25</Percentage>
+		<Plugins>PDF</Plugins>
+	</item>
+	<item id="6">
+		<Percentage>10</Percentage>
+		<Plugins>Quicktime</Plugins>
+	</item>
+	<item id="7">
+		<Percentage>10</Percentage>
+		<Plugins>Shockwave</Plugins>
+	</item>
+	<item id="8">
+		<Percentage>10</Percentage>
+		<Plugins>Silverlight</Plugins>
+	</item>
+	<item id="9">
+		<Percentage>1</Percentage>
+		<Plugins>VLC</Plugins>
+	</item>
+	<item id="10">
+		<Percentage>9</Percentage>
+		<Plugins>Windows Media Player</Plugins>
+	</item>
+</data>
