@@ -35,7 +35,13 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
-	$MainMenuConfigurationFileName = '../../Configuration/Displays/MainMenu/Settings.ini';
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
+	if ($SubManager === TRUE) {
+		$MainMenuConfigurationFileName = '../../../Configuration/Displays/MainMenu/SubManagerSettings.ini';
+	} else {
+		$MainMenuConfigurationFileName = '../../Configuration/Displays/MainMenu/Settings.ini';
+	}
 	if (file_exists($MainMenuConfigurationFileName)) {
 		$MainMenuConfiguration = parse_ini_file($MainMenuConfigurationFileName, true);
 	} else {
@@ -43,8 +49,17 @@
 	}
 	
 	$AdminPage = $GLOBALS['ADMINPAGE'];
+	if ($SubManager === TRUE) {
+		$SubAdminPage = $GLOBALS['SUBADMINPAGE'];
+	}
+	
 	if ($AdminPage != NULL) {
-		$AdminPageConfigurationFileName = '../../Configuration/Managers/' . $AdminPage . '/Settings.ini';
+		if ($SubManager === TRUE) {
+			$AdminPageConfigurationFileName = '../../../Configuration/Managers/' . $AdminPage . '/' . $SubAdminPage . '/Settings.ini';
+		} else {
+			$AdminPageConfigurationFileName = '../../Configuration/Managers/' . $AdminPage . '/Settings.ini';
+		}
+		
 		if (file_exists($AdminPageConfigurationFileName)) {
 			$AdminPageConfiguration = parse_ini_file($AdminPageConfigurationFileName, true);
 		} else {

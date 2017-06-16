@@ -143,7 +143,6 @@ class XhtmlNews extends Tier6ContentLayerModulesAbstract implements Tier6Content
 		$this->Status = $this->LayerModule->pass ($this->DatabaseTable, 'getRowField', array('rowfield' => 'Status'));
 
 		$this->LayerModule->Disconnect($this->DatabaseTable);
-
 	}
 	// MAKE THIS WORK WITH XHTMLCONTENT's WORDWRAP!
 	protected function CreateWordWrap($wordwrapstring) {

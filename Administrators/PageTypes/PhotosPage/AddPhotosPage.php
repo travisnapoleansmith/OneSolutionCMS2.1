@@ -23,7 +23,7 @@
 	*************************************************************************************
 	*/
 	
-	set_time_limit(120);
+	set_time_limit(240);
 	
 	$ReferPage = $_SERVER['HTTP_REFERER'];
 	$ReferPageIDArray = explode('?', $ReferPage);
@@ -93,7 +93,7 @@
 				$LogFileHandle = fopen($LogFile, 'a');
 				$FileInformation = 'Logging - Add Photos Page Top Script - ' . $NewPageID . ' - ' . date("F j, Y, g:i a") . "\n";
 				fwrite($LogFileHandle, $FileInformation);
-				//fwrite($LogFileHandle, print_r($ImageContent, TRUE));
+				//////fwrite($LogFileHandle, print_r($ImageContent, TRUE));
 				fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
 				fclose($LogFileHandle);
 			}
@@ -881,7 +881,6 @@
 			$Content[$i]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
 			
-			
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/AddXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 	
@@ -980,12 +979,18 @@
 			$FormOptionArray = array();
 			$FormSelectionArray = array();
 			
+			/*
 			reset($Image);
 			while (current($Image)) {
 				$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'createPicture', $Image[key($Image)]);
 				next($Image);
+			}*/
+			
+			
+			if ($Image != NULL) {
+				$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'createPicture', $Image);
 			}
-	
+			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
 			$Tier6Databases->ModulePass('XhtmlHeader', 'header', 'createHeader', $Header);
 			$Tier6Databases->ModulePass('XhtmlMenu', 'headerpanel1', 'createMenu', $HeaderPanel1);
@@ -996,33 +1001,33 @@
 			$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'createMainMenuItemLookup', $MainMenuItemLookup);
 	
 			$Tier6Databases->ModulePass('XmlSitemap', 'sitemap', 'createSitemapItem', $Sitemap);
-	
+			
 			$UpdatePhotosPageSelect = $Options['XhtmlPicture']['picture']['UpdatePhotosPageSelect']['SettingAttribute'];
 			$FormSelect['PageID'] = $UpdatePhotosPageSelect;
 			$FormOption['PageID'] = $UpdatePhotosPageSelect;
 			
-			//$FormOptionArray[] = $FormOption;
-			//$FormSelectionArray[] = $FormSelect;
+			////$FormOptionArray[] = $FormOption;
+			////$FormSelectionArray[] = $FormSelect;
 			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-	
+			
 			$DeletePhotosPage = $Options['XhtmlPicture']['picture']['DeletePhotosPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $DeletePhotosPage;
 			$FormOption['PageID'] = $DeletePhotosPage;
 			
-			//$FormOptionArray[] = $FormOption;
-			//$FormSelectionArray[] = $FormSelect;
+			////$FormOptionArray[] = $FormOption;
+			////$FormSelectionArray[] = $FormSelect;
 			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
-	
+			
 			$EnableDisableStatusChangePhotosPage = $Options['XhtmlPicture']['picture']['EnableDisableStatusChangePhotosPage']['SettingAttribute'];
 			$FormSelect['PageID'] = $EnableDisableStatusChangePhotosPage;
 			$FormOption['PageID'] = $EnableDisableStatusChangePhotosPage;
 			
-			$FormOptionArray[] = $FormOption;
-			$FormSelectionArray[] = $FormSelect;
+			/////$FormOptionArray[] = $FormOption;
+			/////$FormSelectionArray[] = $FormSelect;
 			
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOption);
 			$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelect);
@@ -1032,9 +1037,9 @@
 			$FormOptionValue .= 'NULL';
 			
 			require('../../ModuleFormSubmissions/Tier6ContentLayer/Extended/XhtmlMainMenu/AddMainMenu.php');
-			
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelectionArray);
-			//$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOptionArray);
+
+			///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormSelect', $FormSelectionArray);
+			///$Tier6Databases->ModulePass('XhtmlForm', 'form', 'createFormOption', $FormOptionArray);
 			
 			$PhotosPageCreatedPage = $Options['XhtmlPicture']['picture']['PhotosPageCreatedPage']['SettingAttribute'];
 			

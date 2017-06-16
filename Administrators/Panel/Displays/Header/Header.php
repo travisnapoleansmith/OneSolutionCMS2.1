@@ -37,7 +37,13 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
-	$HeaderConfigurationFileName = '../../Configuration/Displays/Header/Settings.ini';
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	if ($SubManager === TRUE) {
+		$HeaderConfigurationFileName = '../../../Configuration/Displays/Header/SubManagerSettings.ini';
+	} else {
+		$HeaderConfigurationFileName = '../../Configuration/Displays/Header/Settings.ini';
+	}
+	
 	if (file_exists($HeaderConfigurationFileName)) {
 		$HeaderConfiguration = parse_ini_file($HeaderConfigurationFileName, true);
 	} else {
@@ -45,8 +51,16 @@
 	}
 	
 	$AdminPage = $GLOBALS['ADMINPAGE'];
+	if ($SubManager === TRUE) {
+		$SubAdminPage = $GLOBALS['SUBADMINPAGE'];
+	}
+	
 	if ($AdminPage != NULL) {
-		$AdminPageConfigurationFileName = '../../Configuration/Managers/' . $AdminPage . '/Settings.ini';
+		if ($SubManager === TRUE) {
+			$AdminPageConfigurationFileName = '../../../Configuration/Managers/' . $AdminPage . '/' . $SubAdminPage . '/Settings.ini';
+		} else {
+			$AdminPageConfigurationFileName = '../../Configuration/Managers/' . $AdminPage . '/Settings.ini';
+		}
 		if (file_exists($AdminPageConfigurationFileName)) {
 			$AdminPageConfiguration = parse_ini_file($AdminPageConfigurationFileName, true);
 		} else {

@@ -24,15 +24,18 @@
 	*/
 	
 	function buildColumns($Elements, $ColumnNames, $Page) {
-		if (is_array($Elements)) {
+		if (is_array($Elements) === TRUE) {
 			foreach ($Elements as $Key => $Value) {
 				if ($Key === 'TEMPLATE') {
-					if (is_array($ColumnNames)) {
+					if (is_array($ColumnNames) === TRUE) {
 						foreach ($ColumnNames as $ColumnKey => $ColumnValue) {
 							$Text = $ColumnValue;
 							$Page->startElement('column');
-							foreach ($Value as $Attribute => $AttributeValue) {
-								$Page->writeAttribute($Attribute, $AttributeValue);
+							
+							if (is_array($Value) === TRUE) {
+								foreach ($Value as $Attribute => $AttributeValue) {
+									$Page->writeAttribute($Attribute, $AttributeValue);
+								}
 							}
 							if ($Text != NULL) {
 								$Page->text($Text);
@@ -44,12 +47,15 @@
 					$Text = $Value['text'];
 					unset($Value['text']);
 					$Page->startElement('column');
-					foreach ($Value as $Attribute => $AttributeValue) {
-						$Page->writeAttribute($Attribute, $AttributeValue);
-					}
-					if ($Text != NULL) {
-						$Page->text($Text);
-					}
+						if (is_array($Value) === TRUE) {
+							foreach ($Value as $Attribute => $AttributeValue) {
+								$Page->writeAttribute($Attribute, $AttributeValue);
+							}
+						}
+						
+						if ($Text != NULL) {
+							$Page->text($Text);
+						}
 					$Page->endElement(); // ENDS COLUMN
 				}
 			}

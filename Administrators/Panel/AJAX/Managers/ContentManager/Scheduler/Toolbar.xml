@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+	<toolbar>
+		<item id="Name" pos="0"  type="text" text="Exports Formats Toolbar"/>
+		<item id="Sep1" pos="1" type="separator"/>
+		<item id="PDF" pos="2" type="button" text="PDF" img="PDF24.png" imgdis="PDF24.png" title="PDF"/>
+		<item id="CSV" pos="3" type="button" text="CSV" img="CSV24.png" imgdis="CSV24.png" title="CSV"/>
+		<item id="XLS" pos="4" type="button" text="Microsoft Excel" img="XLS24.png" imgdis="XLS24.png" title="Microsoft Excel"/>
+		<item id="XML" pos="5" type="button" text="XML" img="XML24.png" imgdis="XML24.png" title="XML"/>
+		<item id="iCal" pos="6" type="button" text="iCal" img="iCal24.png" imgdis="iCal24.png" title="iCal"/>
+		<!--
+		<item id="Sp" itemId="iCal" type="spacer"/>
+		-->
+		<item id="Sep2" pos="7" type="separator"/>
+		<item id="Functions" pos="8" type="text" text="Options"/>
+		<item id="Sep3" pos="9" type="separator"/>
+		<item id="Import" pos="10" type="button" text="Import" img="Import24.png" imgdis="Import24.png" title="Import"/>
+		<!--
+		<item id="MassUpdate" pos="12" type="button" text="Mass Update" img="Update24.png" imgdis="Update24.png" title="Mass Update"/>
+		-->
+		<item id="Print" pos="13" type="button" img="Print24.png" text="Print" imgdis="Print24.png" title="Print"/>
+	</toolbar>

@@ -35,6 +35,8 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
 	$Year = date('Y');
 	
 	$Page->startElement('div');

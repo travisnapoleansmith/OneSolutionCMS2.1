@@ -1,5 +1,6 @@
 <?php
 	$MainMenuSelectPage = $Options['XhtmlMainMenu']['mainmenu']['MainMenuSelectPage']['SettingAttribute'];
+	
 	$FormSelect['PageID'] = $MainMenuSelectPage;
 	$FormSelect['ObjectID'] = $NewPageID;
 	$FormSelect['ContainerObjectID'] = $NewPageID;

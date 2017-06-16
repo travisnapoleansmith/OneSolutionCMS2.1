@@ -90,7 +90,16 @@
 				$_POST['ImageAlt'] = NULL;
 				$hold['FilteredInput']['ImageAlt'] = NULL;
 			}
-
+			
+			if ($_POST['VideoLocation'] == 'Null' | $_POST['NoFlashText'] == 'NULL' | $_POST['FlashVarsText'] == 'NULL') {
+				$_POST['VideoLocation'] = NULL;
+				$hold['FilteredInput']['VideoLocation'] = NULL;
+				$_POST['NoFlashText'] = NULL;
+				$hold['FilteredInput']['NoFlashText'] = NULL;
+				$_POST['FlashVarsText'] = NULL;
+				$hold['FilteredInput']['FlashVarsText'] = NULL;
+			}
+			
 			$NewsStory = array();
 
 			$NewsStory[0]['PageID'] = $PageID;
@@ -124,8 +133,218 @@
 			$NewsStory[0]['ContentPTagClass'] = NULL;
 			$NewsStory[0]['Enable/Disable'] = $_POST['EnableDisable'];
 			$NewsStory[0]['Status'] = $_POST['Status'];
-
+			
+			$i = 2;
+			$j = 1;
+			
 			if ($hold['FilteredInput']['ImageSrc'] != NULL) {
+				$NewsStory[$j]['PageID'] = $PageID;
+				$NewsStory[$j]['ObjectID'] = $i;
+				$NewsStory[$j]['ContainerObjectType'] = 'XhtmlPicture';
+				$NewsStory[$j]['ContainerObjectName'] = 'newspicture';
+				$NewsStory[$j]['ContainerObjectID'] = 1;
+				$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+				$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+				$NewsStory[$j]['CurrentVersion'] = 'true';
+				$NewsStory[$j]['Empty'] = 'false';
+				$NewsStory[$j]['StartTag'] = NULL;
+				$NewsStory[$j]['EndTag'] = NULL;
+				$NewsStory[$j]['StartTagID'] = NULL;
+				$NewsStory[$j]['StartTagStyle'] = NULL;
+				$NewsStory[$j]['StartTagClass'] = NULL;
+				$NewsStory[$j]['Heading'] = NULL;
+				$NewsStory[$j]['HeadingStartTag'] = NULL;
+				$NewsStory[$j]['HeadingEndTag'] = NULL;
+				$NewsStory[$j]['HeadingStartTagID'] = NULL;
+				$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+				$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+				$NewsStory[$j]['Content'] = NULL;
+				$NewsStory[$j]['ContentStartTag'] = NULL;
+				$NewsStory[$j]['ContentEndTag'] = NULL;
+				$NewsStory[$j]['ContentStartTagID'] = NULL;
+				$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+				$NewsStory[$j]['ContentStartTagClass'] = NULL;
+				$NewsStory[$j]['ContentPTagID'] = NULL;
+				$NewsStory[$j]['ContentPTagStyle'] = NULL;
+				$NewsStory[$j]['ContentPTagClass'] = NULL;
+				$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+				$NewsStory[$j]['Status'] = $_POST['Status'];
+				
+				$i++;
+				$j++;
+				
+				if ($hold['FilteredInput']['VideoLocation'] != NULL) {
+					$NewsStory[$j]['PageID'] = $PageID;
+					$NewsStory[$j]['ObjectID'] = $i;
+					$NewsStory[$j]['ContainerObjectType'] = 'XhtmlFlash';
+					$NewsStory[$j]['ContainerObjectName'] = 'newsflash';
+					$NewsStory[$j]['ContainerObjectID'] = 1;
+					$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+					$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+					$NewsStory[$j]['CurrentVersion'] = 'true';
+					$NewsStory[$j]['Empty'] = 'false';
+					$NewsStory[$j]['StartTag'] = NULL;
+					$NewsStory[$j]['EndTag'] = NULL;
+					$NewsStory[$j]['StartTagID'] = NULL;
+					$NewsStory[$j]['StartTagStyle'] = NULL;
+					$NewsStory[$j]['StartTagClass'] = NULL;
+					$NewsStory[$j]['Heading'] = NULL;
+					$NewsStory[$j]['HeadingStartTag'] = NULL;
+					$NewsStory[$j]['HeadingEndTag'] = NULL;
+					$NewsStory[$j]['HeadingStartTagID'] = NULL;
+					$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+					$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+					$NewsStory[$j]['Content'] = NULL;
+					$NewsStory[$j]['ContentStartTag'] = NULL;
+					$NewsStory[$j]['ContentEndTag'] = NULL;
+					$NewsStory[$j]['ContentStartTagID'] = NULL;
+					$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+					$NewsStory[$j]['ContentStartTagClass'] = NULL;
+					$NewsStory[$j]['ContentPTagID'] = NULL;
+					$NewsStory[$j]['ContentPTagStyle'] = NULL;
+					$NewsStory[$j]['ContentPTagClass'] = NULL;
+					$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+					$NewsStory[$j]['Status'] = $_POST['Status'];
+					
+					$i++;
+					$j++;
+				}
+				
+				$NewsStory[$j]['PageID'] = $PageID;
+				$NewsStory[$j]['ObjectID'] = $i;
+				$NewsStory[$j]['ContainerObjectType'] = 'XhtmlNewsStories';
+				$NewsStory[$j]['ContainerObjectName'] = 'news';
+				$NewsStory[$j]['ContainerObjectID'] = 4;
+				$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+				$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+				$NewsStory[$j]['CurrentVersion'] = 'true';
+				$NewsStory[$j]['Empty'] = 'false';
+				$NewsStory[$j]['StartTag'] = NULL;
+				$NewsStory[$j]['EndTag'] = NULL;
+				$NewsStory[$j]['StartTagID'] = NULL;
+				$NewsStory[$j]['StartTagStyle'] = NULL;
+				$NewsStory[$j]['StartTagClass'] = NULL;
+				$NewsStory[$j]['Heading'] = NULL;
+				$NewsStory[$j]['HeadingStartTag'] = NULL;
+				$NewsStory[$j]['HeadingEndTag'] = NULL;
+				$NewsStory[$j]['HeadingStartTagID'] = NULL;
+				$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+				$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+				$NewsStory[$j]['Content'] = $hold['FilteredInput']['Content'];
+				$NewsStory[$j]['ContentStartTag'] = '<p>';
+				$NewsStory[$j]['ContentEndTag'] = '</p>';
+				$NewsStory[$j]['ContentStartTagID'] = NULL;
+				$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+				$NewsStory[$j]['ContentStartTagClass'] = 'BodyText';
+				$NewsStory[$j]['ContentPTagID'] = NULL;
+				$NewsStory[$j]['ContentPTagStyle'] = NULL;
+				$NewsStory[$j]['ContentPTagClass'] = 'BodyText';
+				$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+				$NewsStory[$j]['Status'] = $_POST['Status'];
+				
+			} else if ($hold['FilteredInput']['VideoLocation'] != NULL) {
+				$NewsStory[$j]['PageID'] = $PageID;
+				$NewsStory[$j]['ObjectID'] = $i;
+				$NewsStory[$j]['ContainerObjectType'] = 'XhtmlFlash';
+				$NewsStory[$j]['ContainerObjectName'] = 'newsflash';
+				$NewsStory[$j]['ContainerObjectID'] = 1;
+				$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+				$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+				$NewsStory[$j]['CurrentVersion'] = 'true';
+				$NewsStory[$j]['Empty'] = 'false';
+				$NewsStory[$j]['StartTag'] = NULL;
+				$NewsStory[$j]['EndTag'] = NULL;
+				$NewsStory[$j]['StartTagID'] = NULL;
+				$NewsStory[$j]['StartTagStyle'] = NULL;
+				$NewsStory[$j]['StartTagClass'] = NULL;
+				$NewsStory[$j]['Heading'] = NULL;
+				$NewsStory[$j]['HeadingStartTag'] = NULL;
+				$NewsStory[$j]['HeadingEndTag'] = NULL;
+				$NewsStory[$j]['HeadingStartTagID'] = NULL;
+				$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+				$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+				$NewsStory[$j]['Content'] = NULL;
+				$NewsStory[$j]['ContentStartTag'] = NULL;
+				$NewsStory[$j]['ContentEndTag'] = NULL;
+				$NewsStory[$j]['ContentStartTagID'] = NULL;
+				$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+				$NewsStory[$j]['ContentStartTagClass'] = NULL;
+				$NewsStory[$j]['ContentPTagID'] = NULL;
+				$NewsStory[$j]['ContentPTagStyle'] = NULL;
+				$NewsStory[$j]['ContentPTagClass'] = NULL;
+				$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+				$NewsStory[$j]['Status'] = $_POST['Status'];
+				
+				$i++;
+				$j++;
+				
+				$NewsStory[$j]['PageID'] = $PageID;
+				$NewsStory[$j]['ObjectID'] = $i;
+				$NewsStory[$j]['ContainerObjectType'] = 'XhtmlNewsStories';
+				$NewsStory[$j]['ContainerObjectName'] = 'news';
+				$NewsStory[$j]['ContainerObjectID'] = 4;
+				$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+				$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+				$NewsStory[$j]['CurrentVersion'] = 'true';
+				$NewsStory[$j]['Empty'] = 'false';
+				$NewsStory[$j]['StartTag'] = NULL;
+				$NewsStory[$j]['EndTag'] = NULL;
+				$NewsStory[$j]['StartTagID'] = NULL;
+				$NewsStory[$j]['StartTagStyle'] = NULL;
+				$NewsStory[$j]['StartTagClass'] = NULL;
+				$NewsStory[$j]['Heading'] = NULL;
+				$NewsStory[$j]['HeadingStartTag'] = NULL;
+				$NewsStory[$j]['HeadingEndTag'] = NULL;
+				$NewsStory[$j]['HeadingStartTagID'] = NULL;
+				$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+				$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+				$NewsStory[$j]['Content'] = $hold['FilteredInput']['Content'];
+				$NewsStory[$j]['ContentStartTag'] = '<p>';
+				$NewsStory[$j]['ContentEndTag'] = '</p>';
+				$NewsStory[$j]['ContentStartTagID'] = NULL;
+				$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+				$NewsStory[$j]['ContentStartTagClass'] = 'BodyText';
+				$NewsStory[$j]['ContentPTagID'] = NULL;
+				$NewsStory[$j]['ContentPTagStyle'] = NULL;
+				$NewsStory[$j]['ContentPTagClass'] = 'BodyText';
+				$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+				$NewsStory[$j]['Status'] = $_POST['Status'];
+			} else {
+				$NewsStory[$j]['PageID'] = $PageID;
+				$NewsStory[$j]['ObjectID'] = $i;
+				$NewsStory[$j]['ContainerObjectType'] = 'XhtmlNewsStories';
+				$NewsStory[$j]['ContainerObjectName'] = 'news';
+				$NewsStory[$j]['ContainerObjectID'] = 3;
+				$NewsStory[$j]['ContainerObjectPrintPreview'] = 'true';
+				$NewsStory[$j]['RevisionID'] = $NewRevisionID;
+				$NewsStory[$j]['CurrentVersion'] = 'true';
+				$NewsStory[$j]['Empty'] = 'false';
+				$NewsStory[$j]['StartTag'] = NULL;
+				$NewsStory[$j]['EndTag'] = NULL;
+				$NewsStory[$j]['StartTagID'] = NULL;
+				$NewsStory[$j]['StartTagStyle'] = NULL;
+				$NewsStory[$j]['StartTagClass'] = NULL;
+				$NewsStory[$j]['Heading'] = NULL;
+				$NewsStory[$j]['HeadingStartTag'] = NULL;
+				$NewsStory[$j]['HeadingEndTag'] = NULL;
+				$NewsStory[$j]['HeadingStartTagID'] = NULL;
+				$NewsStory[$j]['HeadingStartTagStyle'] = NULL;
+				$NewsStory[$j]['HeadingStartTagClass'] = NULL;
+				$NewsStory[$j]['Content'] = $hold['FilteredInput']['Content'];
+				$NewsStory[$j]['ContentStartTag'] = '<p>';
+				$NewsStory[$j]['ContentEndTag'] = '</p>';
+				$NewsStory[$j]['ContentStartTagID'] = NULL;
+				$NewsStory[$j]['ContentStartTagStyle'] = NULL;
+				$NewsStory[$j]['ContentStartTagClass'] = 'BodyText';
+				$NewsStory[$j]['ContentPTagID'] = NULL;
+				$NewsStory[$j]['ContentPTagStyle'] = NULL;
+				$NewsStory[$j]['ContentPTagClass'] = 'BodyText';
+				$NewsStory[$j]['Enable/Disable'] = $_POST['EnableDisable'];
+				$NewsStory[$j]['Status'] = $_POST['Status'];
+			}
+	
+			
+			/*if ($hold['FilteredInput']['ImageSrc'] != NULL) {
 				$NewsStory[1]['PageID'] = $PageID;
 				$NewsStory[1]['ObjectID'] = 2;
 				$NewsStory[1]['ContainerObjectType'] = 'XhtmlPicture';
@@ -223,7 +442,8 @@
 				$NewsStory[1]['Status'] = $_POST['Status'];
 			}
 			//$NewsStory = array_reverse($NewsStory);
-
+			*/
+			
 			$NewsDate = array();
 			$NewsDate['PageID'] = $PageID;
 			$NewsDate['ObjectID'] = 1;
@@ -256,6 +476,83 @@
 				$NewsImage['Enable/Disable'] = $_POST['EnableDisable'];
 				$NewsImage['Status'] = $_POST['Status'];
 			}
+			
+			if ($hold['FilteredInput']['VideoLocation'] != NULL) {
+				$VideoLocation = $hold['FilteredInput']['VideoLocation'];
+				$NoFlashTest = $hold['FilteredInput']['NoFlashText'];
+				$FlashVarsText = $hold['FilteredInput']['FlashVarsText'];
+				$VideoID = 1;
+				$VideoContent = array();
+				
+				$VideoContent[$VideoID]['PageID'] = $PageID;
+				$VideoContent[$VideoID]['ObjectID'] = $VideoID;
+				$VideoContent[$VideoID]['RevisionID'] = $NewRevisionID;
+				$VideoContent[$VideoID]['CurrentVersion'] = 'true';
+				$VideoContent[$VideoID]['FlashPath'] = $VideoLocation;
+				$VideoContent[$VideoID]['Width'] = 480;
+				$VideoContent[$VideoID]['Height'] = 390;
+				$VideoContent[$VideoID]['Wmode'] = 'opaque';
+				$VideoContent[$VideoID]['AllowFullScreen'] = 'true';
+				$VideoContent[$VideoID]['AllowScriptAccess'] = 'true';
+				$VideoContent[$VideoID]['Quality'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsAuthor'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDate'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDescription'] = $FlashVarsText;
+				$VideoContent[$VideoID]['FlashVarsDuration'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsFile'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsImage'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsLink'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsStart'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsStreamer'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsTags'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsTitle'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsType'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsBackColor'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsControlBar'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDock'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsFrontColor'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsHeight'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsIcons'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsLightColor'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsLogo'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsPlaylist'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsPlaylistSize'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsSkin'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsScreenColor'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsWidth'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsAutoStart'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsBufferLength'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDisplayClick'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDisplayTitle'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsFullScreen'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsItem'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsLinkTarget'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsMute'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsRepeat'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsShuffle'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsSmoothing'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsState'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsStretching'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsVolume'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsClient'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsDebug'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsId'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsPlugins'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsVersion'] = NULL;
+				$VideoContent[$VideoID]['FlashVarsConfig'] = NULL;
+				$VideoContent[$VideoID]['AltText'] = $NoFlashTest;
+				$VideoContent[$VideoID]['FlashID'] = NULL;
+				$VideoContent[$VideoID]['FlashStyle'] = NULL;
+				$VideoContent[$VideoID]['FlashClass'] = NULL;
+				$VideoContent[$VideoID]['StartTag'] = '<div>';
+				$VideoContent[$VideoID]['EndTag'] = '</div>';
+				$VideoContent[$VideoID]['StartTagId'] = NULL;
+				$VideoContent[$VideoID]['StartTagStyle'] = NULL;
+				$VideoContent[$VideoID]['StartTagClass'] = 'YouTube1';
+				$VideoContent[$VideoID]['Enable/Disable'] = 'Enable';
+				$VideoContent[$VideoID]['Status'] = 'Approved';
+			}
+			
 			$NewsVersion['PageID'] = $PageID;
 			$NewsVersion['RevisionID'] = $NewRevisionID;
 			$NewsVersion['CurrentVersion'] = 'true';
@@ -361,7 +658,8 @@
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryVersion', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'updateNewsStoryDate', array('PageID' => $PageID));
 			$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'updatePicture', array('PageID' => $PageID));
-
+			$Tier6Databases->ModulePass('XhtmlFlash', 'newsflash', 'updateFlash', array('PageID' => $PageID));
+			
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStory', $NewsStory);
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryDate', $NewsDate);
 			$Tier6Databases->ModulePass('XhtmlNewsStories', 'news', 'createNewsStoryVersion', $NewsVersion);
@@ -369,14 +667,17 @@
 			if ($hold['FilteredInput']['ImageSrc'] != NULL) {
 				$Tier6Databases->ModulePass('XhtmlPicture', 'newspicture', 'createPicture', $NewsImage);
 			}
-
+			
+			if ($hold['FilteredInput']['VideoLocation'] != NULL) {
+				$Tier6Databases->ModulePass('XhtmlFlash', 'newsflash', 'createFlash', $VideoContent);
+			}
+			
 			$Tier6Databases->ModulePass('XmlFeed', 'feed', 'updateStoryFeed', $NewsFeed);
 
 			$Tier6Databases->SessionDestroy($sessionname);
 			$Options = $Tier6Databases->getLayerModuleSetting();
 			$NewsArticleCreatedUpdatePage = $Options['XhtmlNewsStories']['news']['NewsArticleCreatedUpdatePage']['SettingAttribute'];
 			header("Location: $NewsArticleCreatedUpdatePage&NewsPageID=$PageID");
-
 		}
 
 	} else {

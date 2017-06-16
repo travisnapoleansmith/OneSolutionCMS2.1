@@ -34,15 +34,17 @@
 		}
 	}
 	
-	set_time_limit(60);
+	set_time_limit(120);
 	$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	$ADMINHOME = $HOME . '/Administrators/';
+	//$ADMINHOMEROOT = '../../../Administrators/';
+	
 	$GLOBALS['HOME'] = $HOME;
 	$GLOBALS['ADMINHOME'] = $ADMINHOME;
 	
 	require_once ("$ADMINHOME/Configuration/includes.php");
 	$Options = $Tier6Databases->getLayerModuleSetting();
-
+	
 	$passarray = array();
 	$passarray['CurrentVersion'] = 'true';
 
@@ -55,12 +57,12 @@
 		}
 	}
 	$PageVersion = array_combine($PageNumber, array_values($PageVersion));
-
+	
 	$passarray = array();
 	$passarray['PageID'] = 1;
 
 	$Menu = $Tier6Databases->getRecord($passarray, 'MainMenuItemLookup');
-
+	
 	$PageNumber = array();
 	foreach ($Menu as $Value) {
 		if ($Value['PageID'] != NULL) {
@@ -99,78 +101,81 @@
 	}
 
 	$CurrentMenu['ParentIDName'] = $CurrentIDName;
-
-	$_POST['TopMenu'] = $PageVersion[$PageID]['ContentPageMenuTitle'];
-	foreach ($_POST as $Key => $Value) {
-		if (strstr($Key, 'MenuItem')) {
-			$Temp = explode(' ', $Value);
-			$Temp = $Temp[0];
-			$NewKey = 'MenuItemLookup' . str_replace('MenuItem','', $Key);
-			$_POST[$NewKey] = $Temp;
-			$TempName = $PageVersion[$Temp]['ContentPageMenuTitle'];
-			$_POST[$Key] = $TempName;
-		}
-	}
-
-	$CurrentIDName = 'MenuItem';
-
-	$ParentObjectID = $CurrentMenu['ParentObjectID'];
-	$ChildChanges = array();
-	foreach ($_POST as $ChangesKey => $ChangesValue) {
-		if (strstr($ChangesKey, 'MenuItemLookup')) {
-			$ChangesKey = str_replace('MenuItemLookup', 'Child', $ChangesKey);
-			if ($ChangesValue == 'NULL') {
-				$ChildChanges[$ChangesKey] = NULL;
-			} else {
-				$ChildChanges[$ChangesKey] = $ChangesValue;
+	
+	// ONLY EXECUTES IF YOU ARE NOT REFRESHING THE MENU
+	if ($GLOBALS['REFRESHONLY'] !== 'TRUE') {
+		$_POST['TopMenu'] = $PageVersion[$PageID]['ContentPageMenuTitle'];
+		foreach ($_POST as $Key => $Value) {
+			if (strstr($Key, 'MenuItem')) {
+				$Temp = explode(' ', $Value);
+				$Temp = $Temp[0];
+				$NewKey = 'MenuItemLookup' . str_replace('MenuItem','', $Key);
+				$_POST[$NewKey] = $Temp;
+				$TempName = $PageVersion[$Temp]['ContentPageMenuTitle'];
+				$_POST[$Key] = $TempName;
 			}
 		}
-	}
+	
+		$CurrentIDName = 'MenuItem';
+	
+		$ParentObjectID = $CurrentMenu['ParentObjectID'];
+		$ChildChanges = array();
+		foreach ($_POST as $ChangesKey => $ChangesValue) {
+			if (strstr($ChangesKey, 'MenuItemLookup')) {
+				$ChangesKey = str_replace('MenuItemLookup', 'Child', $ChangesKey);
+				if ($ChangesValue == 'NULL') {
+					$ChildChanges[$ChangesKey] = NULL;
+				} else {
+					$ChildChanges[$ChangesKey] = $ChangesValue;
+				}
+			}
+		}
+	
+		$PageName = $ADMINHOMEROOT . 'index.php?PageID=';
+		$PageName .= $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
+		
+		$returnvalue = $Tier6Databases->FormSubmitValidate('UpdateMenu', $PageName);
 
-	$PageName = 'index.php?PageID=';
-	$PageName .= $Options['XhtmlMainMenu']['mainmenu']['MainMenuUpdatePage']['SettingAttribute'];
-
-	$returnvalue = $Tier6Databases->FormSubmitValidate('UpdateMenu', $PageName);
-
-	$GlobalUpdateRecord = array();
-	recursiveWalk($CurrentMenu, $ChildChanges, $CurrentIDName, $ParentObjectID, $Menu);
-
-	if ($GlobalUpdateRecord != NULL) {
-		foreach ($GlobalUpdateRecord as $UpdateRecord) {
-			if (isset($UpdateRecord['ObjectID'])) {
-				$CurrentDatabaseRecord = $Menu[$UpdateRecord['ObjectID']];
-				$Difference = array_diff_assoc($CurrentDatabaseRecord, $UpdateRecord);
-				if (!empty($Difference)) {
-					foreach ($Difference as $Key => $Value) {
-						if (strstr($Key, 'Child')) {
-							if (!is_null($Value)) {
-								$ModifyRecord = array();
-								$ModifyRecord['PageID'] = 1;
-								$ModifyRecord['ObjectID'] = $Value;
-								$ModifyRecord['VersionID'] = 1;
-								$ModifyRecord['RevisionID'] = 1;
-								$ModifyRecord['ParentObjectID'] = NULL;
-								$ModifyRecord['ParentIDName'] = NULL;
-								$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
-							} else if (!is_null($UpdateRecord[$Key])){
-								$ModifyRecord = array();
-								$ModifyRecord['PageID'] = 1;
-								$ModifyRecord['ObjectID'] = $UpdateRecord[$Key];
-								$ModifyRecord['VersionID'] = 1;
-								$ModifyRecord['RevisionID'] = 1;
-								$ModifyRecord['ParentObjectID'] = $UpdateRecord['ObjectID'];
-								$ModifyRecord['ParentIDName'] = $UpdateRecord['ParentIDName'] . '-' . str_replace('Child', '', $Key);
-								$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+		$GlobalUpdateRecord = array();
+		recursiveWalk($CurrentMenu, $ChildChanges, $CurrentIDName, $ParentObjectID, $Menu);
+	
+		if ($GlobalUpdateRecord != NULL) {
+			foreach ($GlobalUpdateRecord as $UpdateRecord) {
+				if (isset($UpdateRecord['ObjectID'])) {
+					$CurrentDatabaseRecord = $Menu[$UpdateRecord['ObjectID']];
+					$Difference = array_diff_assoc($CurrentDatabaseRecord, $UpdateRecord);
+					if (!empty($Difference)) {
+						foreach ($Difference as $Key => $Value) {
+							if (strstr($Key, 'Child')) {
+								if (!is_null($Value)) {
+									$ModifyRecord = array();
+									$ModifyRecord['PageID'] = 1;
+									$ModifyRecord['ObjectID'] = $Value;
+									$ModifyRecord['VersionID'] = 1;
+									$ModifyRecord['RevisionID'] = 1;
+									$ModifyRecord['ParentObjectID'] = NULL;
+									$ModifyRecord['ParentIDName'] = NULL;
+									$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+								} else if (!is_null($UpdateRecord[$Key])){
+									$ModifyRecord = array();
+									$ModifyRecord['PageID'] = 1;
+									$ModifyRecord['ObjectID'] = $UpdateRecord[$Key];
+									$ModifyRecord['VersionID'] = 1;
+									$ModifyRecord['RevisionID'] = 1;
+									$ModifyRecord['ParentObjectID'] = $UpdateRecord['ObjectID'];
+									$ModifyRecord['ParentIDName'] = $UpdateRecord['ParentIDName'] . '-' . str_replace('Child', '', $Key);
+									$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $ModifyRecord);
+								}
 							}
 						}
+						$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $UpdateRecord);
+	
 					}
-					$Tier6Databases->ModulePass('XhtmlMainMenu', 'mainmenu', 'updateMainMenuItemLookup', $UpdateRecord);
-
 				}
 			}
 		}
 	}
-
+	
 	$UlLiMenu = $Tier6Databases->getRecord($passarray, 'MainMenu');
 	$StartTagIDParent = 'main-menu-middle';
 	$UlClassParent = 'main-menu';
@@ -261,7 +266,7 @@
 	$UpdateMainMenu = $Options['XhtmlMainMenu']['mainmenu']['CreatedMainMenuUpdatedPage']['SettingAttribute'];
 
 	header("Location: ../../index.php?PageID=$UpdateMainMenu");
-
+	
 	function recursiveWalkUnorderedList(array $CurrentMenu, array $Menu, array $PageVersion, $NextIDNumber, $CurrentIDNumber) {
 		$MenuChange = &$GLOBALS['MenuChange'];
 

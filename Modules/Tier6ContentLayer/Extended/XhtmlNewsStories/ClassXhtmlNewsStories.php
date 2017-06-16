@@ -429,7 +429,6 @@ class XhtmlNewsStories extends Tier6ContentLayerModulesAbstract implements Tier6
 			$this->sortNewsStories('DSC');
 			
 			//print "$this->NewsStoriesLookupNewsStoryMonth\n";
-			
 			reset($this->NewsStoriesDatesTable);
 			while (current($this->NewsStoriesDatesTable)) {
 				$passarray = array();

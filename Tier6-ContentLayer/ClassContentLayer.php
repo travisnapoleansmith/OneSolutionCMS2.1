@@ -411,6 +411,7 @@ class ContentLayer extends LayerModulesAbstract
 									$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments, $hookargments);
 								} else {
 									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+									$BackTrace = debug_backtrace(FALSE);
 								}
 							} else {
 								$hold = $this->LayerModule->pass($databasetable, $function, $functionarguments);
@@ -427,6 +428,7 @@ class ContentLayer extends LayerModulesAbstract
 									$hold = $this->checkPass($databasetable, $function, $functionarguments, $hookargments);
 								} else {
 									array_push($this->ErrorMessage,'pass: Hook Arguments Must Be An Array!');
+									$BackTrace = debug_backtrace(FALSE);
 								}
 							} else {
 								$hold = $this->checkPass($databasetable, $function, $functionarguments);
@@ -439,18 +441,23 @@ class ContentLayer extends LayerModulesAbstract
 							}
 						} else {
 							array_push($this->ErrorMessage,'pass: MySqlConnect Member Does Not Exist!');
+							$BackTrace = debug_backtrace(FALSE);
 						}
 					} else {
 						array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be An Array!');
+						$BackTrace = debug_backtrace(FALSE);
 					}
 				} else {
 					array_push($this->ErrorMessage,'pass: MySqlConnect Member Cannot Be Null!');
+					$BackTrace = debug_backtrace(FALSE);
 				}
 			} else {
 				array_push($this->ErrorMessage,'pass: Function Arguments Must Be An Array!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		} else {
 			array_push($this->ErrorMessage,'pass: Function Arguments Cannot Be Null!');
+			$BackTrace = debug_backtrace(FALSE);
 		}
 	}
 
@@ -785,7 +792,45 @@ class ContentLayer extends LayerModulesAbstract
 
 		}
 	}
+	
+	public function NullCheck ($Input) {
+		if (!is_null($Input)) {
+			if (is_array($Input) === TRUE) {
+				foreach ($Input as $Key => $Value) {
+					if ($Value == 'Null' | $Value == 'NULL') {
+						$Input[$Key] = NULL;
+					} else if (empty($Value) === TRUE){
+						$Input[$Key] = NULL;
+					}
+				}
+				return $Input;
+			}
+			
+			if (is_object($Input) === TRUE) {
+				array_push($this->ErrorMessage,'NullCheck: Input Cannot Be An Object!');
+				$BackTrace = debug_backtrace(FALSE);
+				return FALSE;
+			}
+			
+			if (is_resource($Input) === TRUE) {
+				array_push($this->ErrorMessage,'NullCheck: Input Cannot Be A Resource!');
+				$BackTrace = debug_backtrace(FALSE);
+				return FALSE;
+			}
+			
+			if ($Input == 'Null' | $Input == 'NULL') {
+				$Input = NULL;
+			} else if (empty($Input) === TRUE){
+				$Input = NULL;
+			}
 
+			return $Input;
+		} else {
+			array_push($this->ErrorMessage,'NullCheck: Input cannot be NULL!');
+			$BackTrace = debug_backtrace(FALSE);
+		}
+	}
+	
 	public function PostCheck ($PostName, $FilteredInputName, array $Input) {
 		if (!is_null($PostName)) {
 			if (!is_null($Input)) {
@@ -801,9 +846,11 @@ class ContentLayer extends LayerModulesAbstract
 				}
 			} else {
 				array_push($this->ErrorMessage,'PostCheck: Input cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		} else {
 			array_push($this->ErrorMessage,'PostCheck: PostName cannot be NULL!');
+			$BackTrace = debug_backtrace(FALSE);
 		}
 	}
 
@@ -823,6 +870,7 @@ class ContentLayer extends LayerModulesAbstract
 			$SecondStartNumber = $functionarguments[4];
 			if (!is_int($SecondStartNumber)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber must be an integer!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 
@@ -830,38 +878,45 @@ class ContentLayer extends LayerModulesAbstract
 			$PostName2 = $functionarguments[5];
 			if (is_null($PostName2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: PostName2 cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 		if ($functionarguments[6]) {
 			$StartNumber2 = $functionarguments[6];
 			if (!is_int($StartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 must be an integer!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 
 			if (is_null($StartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 		if ($functionarguments[7]) {
 			$Seperator2 = $functionarguments[7];
 			if (is_null($Seperator2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: Seperator2 cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 		if ($functionarguments[8]) {
 			$SecondStartNumber2 = $functionarguments[8];
 			if (is_int($SecondStartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 must be an integer!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 
 			if (is_null($SecondStartNumber2)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 		if ($functionarguments[9]) {
 			$PostName3 = $functionarguments[9];
 			if (is_null($PostName9)) {
 				array_push($this->ErrorMessage,'MultiPostCheck: PostName3 cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		}
 		
@@ -889,9 +944,11 @@ class ContentLayer extends LayerModulesAbstract
 							} else {
 								if (is_null($Seperator)) {
 									array_push($this->ErrorMessage,'MultiPostCheck: Seperator cannot be NULL!');
+									$BackTrace = debug_backtrace(FALSE);
 								} else {
 									if (is_null($SecondStartNumber)) {
 										array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber cannot be NULL!');
+										$BackTrace = debug_backtrace(FALSE);
 									} else {
 										$i = $StartNumber;
 										$j = $SecondStartNumber;
@@ -1031,11 +1088,14 @@ class ContentLayer extends LayerModulesAbstract
 									} else {
 										if (is_null($Seperator2) & !is_null($SecondStartNumber2)) {
 											array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber2 is set but Seperator2 cannot be NULL!');
+											$BackTrace = debug_backtrace(FALSE);
 										} else if (!is_null($Seperator2) & is_null($SecondStartNumber2)){
 											array_push($this->ErrorMessage,'MultiPostCheck: Seperator2 is set but SecondStartNumber2 cannot be NULL!');
+											$BackTrace = debug_backtrace(FALSE);
 										} else {
 											if (is_null($Seperator) & !is_null($SecondStartNumber)) {
 												array_push($this->ErrorMessage,'MultiPostCheck: SecondStartNumber is set but Seperator cannot be NULL!');
+												$BackTrace = debug_backtrace(FALSE);
 											} else if (!is_null($Seperator) & is_null($SecondStartNumber)) {
 												if (!is_null($PostName3)) {
 													$i = $StartNumber;
@@ -1078,6 +1138,7 @@ class ContentLayer extends LayerModulesAbstract
 													}
 												} else {
 													array_push($this->ErrorMessage,'MultiPostCheck: Seperator is set but SecondStartNumber cannot be NULL!');
+													$BackTrace = debug_backtrace(FALSE);
 												}
 											} else if (!is_null($Seperator) & !is_null($SecondStartNumber)){
 												$i = $StartNumber;
@@ -1204,20 +1265,25 @@ class ContentLayer extends LayerModulesAbstract
 									}
 								} else {
 									array_push($this->ErrorMessage,'MultiPostCheck: StartNumber2 is set but PostName2 cannot be NULL!');
+									$BackTrace = debug_backtrace(FALSE);
 								}
 							}
 						}
 					} else {
 						array_push($this->ErrorMessage,'MultiPostCheck: Input cannot be NULL!');
+						$BackTrace = debug_backtrace(FALSE);
 					}
 				} else {
 					array_push($this->ErrorMessage,'MultiPostCheck: PostName cannot be NULL!');
+					$BackTrace = debug_backtrace(FALSE);
 				}
 			} else {
 				array_push($this->ErrorMessage,'MultiPostCheck: StartNumber cannot be NULL!');
+				$BackTrace = debug_backtrace(FALSE);
 			}
 		} else {
 			array_push($this->ErrorMessage,'MultiPostCheck: StartNumber must be an integer!');
+			$BackTrace = debug_backtrace(FALSE);
 		}
 	}
 
@@ -1625,77 +1691,107 @@ class ContentLayer extends LayerModulesAbstract
 	}
 
 	public function FormSubmitValidate($SessionName, $PageName) {
-		$FileLocation = NULL;
-		$FileName = NULL;
-		$FileDataForm = NULL;
-		$ElementName = NULL;
-		$AddLookupData = NULL;
-		$XMLOptions = NULL;
-		$arguments = func_get_args();
-		
-		if ($arguments[2] != NULL) {
-			$FileLocation = $arguments[2];
-		}
-
-		if ($arguments[3] != NULL) {
-			$FileDataForm = $arguments[3];
-		}
-
-		if ($arguments[4] != NULL) {
-			$ElementName = $arguments[4];
-		}
-
-		if ($arguments[5] != NULL) {
-			$AddLookupData = $arguments[5];
-		}
-		
-		if ($arguments[6] != NULL) {
-			$XMLOptions = $arguments[6];
-		}
-
-		$sessionname = $this->SessionStart($SessionName);
-		if ($FileLocation != NULL) {
-			$FileName = $FileLocation . $sessionname . '.xml';
-		}
-
-		$loginidnumber = Array();
-		$loginidnumber['PageID'] = $_POST[$SessionName];
-		if ($_GET['PageID']){
-			$loginidnumber['PageID'] = $_GET['PageID'];
-		}
-
-		$this->LayerModule->setPageID($loginidnumber['PageID']);
-		if ($AddLookupData !== NULL) {
-			$PassArguments = array();
-			$PassArguments[0]['Module'] = 'FormValidation';
-			$PassArguments[0]['Name'] = 'formvalidation';
-			$PassArguments[0]['POST'] = $_POST;
-			$PassArguments[0]['AddLookupData'] = $AddLookupData;
-			$hold = $this->LayerModule->pass('FormValidation', 'FORMBYPASS', $PassArguments);
-		} else {
-			$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
-		}
-
-		if ($hold['FilteredInput']['Priority']) {
-			$hold['FilteredInput']['Priority'] *= 10;
-		}
-
-		if ($hold['FilteredInput']['Frequency']) {
-			$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
-		}
-
-		if ($hold['Error']) {
-			if ($FileName != NULL & $FileDataForm != NULL) {
-				if ($XMLOptions != NULL) {
-					$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName, $XMLOptions);
+		if ($PageName != NULL) {
+			$FileLocation = NULL;
+			$FileName = NULL;
+			$FileDataForm = NULL;
+			$ElementName = NULL;
+			$AddLookupData = NULL;
+			$XMLOptions = NULL;
+			$arguments = func_get_args();
+			
+			if ($arguments[2] != NULL) {
+				$FileLocation = $arguments[2];
+			}
+	
+			if ($arguments[3] != NULL) {
+				$FileDataForm = $arguments[3];
+			}
+	
+			if ($arguments[4] != NULL) {
+				$ElementName = $arguments[4];
+			}
+	
+			if ($arguments[5] != NULL) {
+				$AddLookupData = $arguments[5];
+			}
+			
+			if ($arguments[6] != NULL) {
+				$XMLOptions = $arguments[6];
+			}
+	
+			$sessionname = $this->SessionStart($SessionName);
+			if ($FileLocation != NULL) {
+				$FileName = $FileLocation . $sessionname . '.xml';
+			}
+	
+			$loginidnumber = Array();
+			$loginidnumber['PageID'] = $_POST[$SessionName];
+			if ($_GET['PageID']){
+				$loginidnumber['PageID'] = $_GET['PageID'];
+			}
+	
+			$this->LayerModule->setPageID($loginidnumber['PageID']);
+			if ($AddLookupData !== NULL) {
+				$PassArguments = array();
+				$PassArguments[0]['Module'] = 'FormValidation';
+				$PassArguments[0]['Name'] = 'formvalidation';
+				$PassArguments[0]['POST'] = $_POST;
+				$PassArguments[0]['AddLookupData'] = $AddLookupData;
+				$hold = $this->LayerModule->pass('FormValidation', 'FORMBYPASS', $PassArguments);
+			} else {
+				$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+			}
+	
+			if ($hold['FilteredInput']['Priority']) {
+				$hold['FilteredInput']['Priority'] *= 10;
+			}
+	
+			if ($hold['FilteredInput']['Frequency']) {
+				$hold['FilteredInput']['Frequency'] = ucfirst($hold['FilteredInput']['Frequency']);
+			}
+	
+			if ($hold['Error']) {
+				if ($FileName != NULL & $FileDataForm != NULL) {
+					if ($XMLOptions != NULL) {
+						$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName, $XMLOptions);
+					} else {
+						$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
+					}
+				}
+				$_SESSION['POST'] = $hold;
+				header("Location: $PageName&SessionID=$sessionname");
+				exit;
+			} else {
+				if ($hold) {
+					return $hold;
 				} else {
-					$this->ProcessFormXMLFile($FileName, $FileDataForm, $ElementName);
+					return FALSE;
 				}
 			}
-			$_SESSION['POST'] = $hold;
-			header("Location: $PageName&SessionID=$sessionname");
-			exit;
-		} else {
+		} else if ($PageName === NULL) {
+			// FOR NEW ADMIN PANEL
+			// ADD SEPARATE VALIDATION MODULE JUST FOR NEW ADMIN PANEL - MAKE NEW TABLE AND CHANGE THIS AROUND SO CAPTCHA GOES AWAY
+			$arguments = func_get_args();
+			if ($arguments[2] != NULL) {
+				$PageID = $arguments[2];
+			}
+			
+			$sessionname = $this->SessionStart($SessionName);
+			$this->LayerModule->setPageID($PageID);
+			
+			$_POST['PageID'] = $PageID;
+			$hold = $this->LayerModule->pass('FormValidation', 'FORM', $_POST);
+			
+			// CAPTHCA ISSUE WITH NEW FORMS - REMOVED CAPTHCA
+			if (isset($hold['Error']['CAPTCHA']) === TRUE) {
+				unset($hold['Error']['CAPTCHA']);
+				
+				if (empty($hold['Error']) === TRUE) {
+					unset($hold['Error']);
+				}
+			}
+			
 			if ($hold) {
 				return $hold;
 			} else {

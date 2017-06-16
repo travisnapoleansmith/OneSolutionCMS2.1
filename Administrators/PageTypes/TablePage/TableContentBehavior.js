@@ -383,61 +383,125 @@ function ImportData() {
 }
 
 function AddOneRow() {
+	//alert("TEST");
+	//alert(RowCount);
 	var Id = mygrid.getSelectedId();
-	var OldRowCount;
-	var MaxColumn = 100;
 	//alert(Id);
-	/*if (Id == 1) {
-		OldRowCount = RowCount;
-		alert(OldRowCount);
-		RowCount = 100;
-		MaxColumn = 99
-		
-	} else {*/
-		RowCount = +RowCount + MaxColumn;
-	//}
-	
-	if (Id != null) {
+	if (Id == 1) {
+		alert("Currently you cannot add to the first row, this will be implemented in the future!");
+		// PUT IN CODE TO ADD TO THE FIRST ROW OF THE TABLE!
+		/*var LastRowID;
 		var NewRow;
 		var OldRow;
-		NewRow = RowCount -0;
-		OldRow = RowCount - MaxColumn;
+		
+		mygrid.forEachRow(function(id) {
+			LastRowID = id;
+		});
+		
+		/*alert (LastRowID);
+		
+		for(var i = LastRowID; i >= 0 ; i = i - 100) {
+			//alert(i);
+			var id = i;
+			if (id == 0) {
+				OldRow = 1;
+				NewRow = 100;
+			} else {
+				OldRow = id;
+				NewRow = id + 100;
+			}
+			
+			var TempValue = mygrid.cells(OldRow,0).getValue();
+			TempValue = Number(TempValue);
+			TempValue = TempValue + 1;
+			mygrid.cells(OldRow,0).setValue(TempValue);
+			//alert("TEMP VALUE = " + TempValue);
+			//alert(mygrid.cells(OldRow,0).getValue());
+			mygrid.changeRowId(OldRow, NewRow);
+		}*/
 		
 		/*mygrid.forEachRow(function(id) {
-			if (id > Id) {
-				//alert("ID " + id);
-				//alert("NewRow " + NewRow);
-				//alert("OldRow " + OldRow);
-				NewRow = id;
-				OldRow = id - 100;
-				mygrid.changeRowId(OldRow, NewRow);
+			var TempValue = mygrid.cells(id,0).getValue();
+			//TempValue = Number(TempValue);
+			//TempValue = TempValue + 1;
+			//mygrid.cells(id,0).setValue(TempValue);
+		});
+		alert ("DONE");
+		/*mygrid.forEachRow(function(id) {
+			alert(id);
+			if (id == 1) {
+				alert(id);
+				OldRow = id;
+				NewRow = 100;
+			} else {
+				OldRow = id;
+				NewRow = id + 100;
 			}
-		});*/
-		
-		for(var i = 0; NewRow != Id; i++) {
+			
+			var TempValue = mygrid.cells(OldRow,0).getValue();
+			TempValue = TempValue + 1;
+			mygrid.cells(OldRow,0).setValue(TempValue);
 			mygrid.changeRowId(OldRow, NewRow);
-			NewRow = NewRow - MaxColumn;
-			OldRow = OldRow - MaxColumn;
-		}
-		
-		var RowPosition;
-		RowPosition = null;
+			
+			/*if (id > Id) {
+				OldRow = id;
+				NewRow = id - 100;
+				
+				var TempValue = mygrid.cells(OldRow,0).getValue();
+				TempValue = TempValue - 1;
+				mygrid.cells(OldRow,0).setValue(TempValue);
+				mygrid.changeRowId(OldRow, NewRow);
+			}*/
+		//});
 		
 		/*if (Id == 1) {
-			RowPosition = 100;
-			MaxColumn = 100;
-			RowCount = OldRowCount;
-			RowCount = +RowCount + MaxColumn;
-			alert(RowCount);
-		} else {*/
-			RowPosition = Id / MaxColumn;
-		//}
+			alert(id);
+			OldRow = id;
+			NewRow = 100;
+		} else {
+			OldRow = id;
+			NewRow = id + 100;
+		}*/
 		
-		mygrid.addRow(Id, "10", RowPosition);
+		//mygrid.addRow(Id, "1");
+		//alert ("CHANGED");
+		//mygrid.forEachRow(function(id) {
+			//alert(id);   
+		//});
+		
+		//RowCount = RowCount + 100;
 	} else {
-		mygrid.addRow(RowCount, "");
+		var OldRowCount;
+		var MaxColumn = 100;
+		
+		RowCount = +RowCount + MaxColumn;
+		
+		if (Id != null) {
+			var NewRow;
+			var OldRow;
+			NewRow = RowCount -0;
+			OldRow = RowCount - MaxColumn;
+			
+			for(var i = 0; NewRow != Id; i++) {
+				var TempValue = mygrid.cells(OldRow,0).getValue();
+				TempValue = TempValue + 1;
+				mygrid.cells(OldRow,0).setValue(TempValue);
+				mygrid.changeRowId(OldRow, NewRow);
+				
+				NewRow = NewRow - MaxColumn;
+				OldRow = OldRow - MaxColumn;
+			}
+			
+			var RowPosition;
+			RowPosition = null;
+			
+			RowPosition = Id / MaxColumn;
+			
+			mygrid.addRow(Id, "10", RowPosition);
+		} else {
+			mygrid.addRow(RowCount, "");
+		}
 	}
-	
 	
 }
 
@@ -445,7 +509,7 @@ function DeleteCurrentRows() {
 	//mygrid.deleteSelectedRows();
 	RowCount = +RowCount - 100;
 
-var Id = mygrid.getSelectedId();
+	var Id = mygrid.getSelectedId();
 	mygrid.deleteRow(Id);
 	
 	var NewRow;
@@ -455,6 +519,10 @@ var Id = mygrid.getSelectedId();
 		if (id > Id) {
 			OldRow = id;
 			NewRow = id - 100;
+			
+			var TempValue = mygrid.cells(OldRow,0).getValue();
+			TempValue = TempValue - 1;
+			mygrid.cells(OldRow,0).setValue(TempValue);
 			mygrid.changeRowId(OldRow, NewRow);
 		}
 	});

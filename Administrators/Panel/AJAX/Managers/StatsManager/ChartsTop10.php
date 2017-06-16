@@ -32,7 +32,7 @@
 	if ($RefererPage == $ServerLocation . "/Administrators/Panel/Managers/StatsManager/StatsManager.php") {
 		//if ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
 			set_time_limit(120);
-			ini_set("memory_limit","256M");
+			ini_set("memory_limit","512M");
 			
 			//error_reporting(0);
 			
@@ -118,12 +118,23 @@
 						
 						$Year = date('Y', $TimeStamp);
 						$Date = date('Y-m-d', $TimeStamp);
+						$EndYear = $Year;
+						
 						if ($EndTimeStamp != NULL) {
 							$EndDate = date('Y-m-d', $EndTimeStamp);
+							$EndYear = date('Y', $EndTimeStamp);
 						}
 						
 						$BrowserStatsTableName = 'SiteStatsBrowserStats' . $Year;
 						$SiteStatsTableName = 'SiteStats' . $Year;
+						
+						$BrowserStatsTableName2 = NULL;
+						$SiteStatsTableName2 = NULL;
+						
+						if ($EndYear !== $Year) {
+							$BrowserStatsTableName2 = 'SiteStatsBrowserStats' . $EndYear;
+							$SiteStatsTableName2 = 'SiteStats' . $EndYear;
+						}
 						
 						$LookupField = array();
 						$Begin = array();
@@ -154,7 +165,28 @@
 						
 						$Tier2Databases->pass ($BrowserStatsTableName, 'searchDatabaseRow', array('IDNumber' => $LookupField, 'Begin' => $Begin, 'End' => $End));
 						
-						$BrowsersStats = $Tier2Databases->pass ($BrowserStatsTableName, "getMultiRowField", array());
+						// For Ranges Past One Year
+						if ($BrowserStatsTableName2 === NULL) {
+							$BrowsersStats = $Tier2Databases->pass ($BrowserStatsTableName, "getMultiRowField", array());
+						} else {
+							$BrowsersStatsTemp = $Tier2Databases->pass ($BrowserStatsTableName, "getMultiRowField", array());
+							
+							$Tier2Databases->createDatabaseTable($BrowserStatsTableName2);
+							$Tier2Databases->Connect($BrowserStatsTableName2);
+							
+							$Tier2Databases->pass ($BrowserStatsTableName2, 'setOrderbyname', array('Name' => 'Timestamp'));
+							$Tier2Databases->pass ($BrowserStatsTableName2, 'setOrderbytype', array('Type' => 'ASC'));
+							
+							$Tier2Databases->pass ($BrowserStatsTableName2, 'searchDatabaseRow', array('IDNumber' => $LookupField, 'Begin' => $Begin, 'End' => $End));
+							$BrowsersStatsTemp2 = $Tier2Databases->pass ($BrowserStatsTableName2, "getMultiRowField", array());
+							$Tier2Databases->Disconnect($BrowserStatsTableName2);
+							
+							if (is_array($BrowsersStatsTemp) === TRUE & is_array($BrowsersStatsTemp2) === TRUE) {
+								$BrowsersStats = array_merge($BrowsersStatsTemp, $BrowsersStatsTemp2);
+							} else {
+								header("HTTP/1.0 404 Not Found");
+							}
+						}
 						$Tier2Databases->Disconnect($BrowserStatsTableName);
 						
 						$TempBrowserStats = array();
@@ -189,7 +221,31 @@
 						
 						$Tier2Databases->pass ($SiteStatsTableName, 'searchDatabaseRow', array('IDNumber' => $LookupField, 'Begin' => $Begin, 'End' => $End));
 						
-						$SiteStats = $Tier2Databases->pass ($SiteStatsTableName, "getMultiRowField", array());
+						// For Ranges Past One Year
+						if ($SiteStatsTableName2 === NULL) {
+							$SiteStats = $Tier2Databases->pass ($SiteStatsTableName, "getMultiRowField", array());
+						} else {
+							$SiteStatsTemp = $Tier2Databases->pass ($SiteStatsTableName, "getMultiRowField", array());
+							
+							$Tier2Databases->createDatabaseTable($SiteStatsTableName2);
+							$Tier2Databases->Connect($SiteStatsTableName2);
+							
+							$Tier2Databases->pass ($SiteStatsTableName2, 'setOrderbyname', array('Name' => 'Timestamp'));
+							$Tier2Databases->pass ($SiteStatsTableName2, 'setOrderbytype', array('Type' => 'ASC'));
+							
+							$Tier2Databases->pass ($SiteStatsTableName2, 'searchDatabaseRow', array('IDNumber' => $LookupField, 'Begin' => $Begin, 'End' => $End));
+							
+							$SiteStatsTemp2 = $Tier2Databases->pass ($SiteStatsTableName2, "getMultiRowField", array());
+							$Tier2Databases->Disconnect($SiteStatsTableName2);
+							
+							if (is_array($SiteStatsTemp) === TRUE & is_array($SiteStatsTemp2) === TRUE) {
+								$SiteStats = array_merge($SiteStatsTemp, $SiteStatsTemp2);
+							} else {
+								header("HTTP/1.0 404 Not Found");
+							}
+						}
+						
+						//$SiteStats = $Tier2Databases->pass ($SiteStatsTableName, "getMultiRowField", array());
 						$Tier2Databases->Disconnect($SiteStatsTableName);
 						
 						$TempSiteStats = array();
@@ -235,8 +291,13 @@
 						if (is_array($BrowsersStats)) {
 							$Temp = $BrowsersStats[$Data['PageID']];
 							$HumanCount = 0;
-							if ($Temp != NULL) {
-								$HumanCount = count($Temp);
+							// Has Data
+							if (isset($Temp[0]['Timestamp']) === TRUE) {
+								if ($Temp != NULL) {
+									$HumanCount = count($Temp);
+								}
+							} else {
+								// Has No Data
 							}
 						}
 						$TempPageID = $Data['PageID'];
@@ -257,6 +318,17 @@
 				unset($TempTop10SortListings);
 				unset($TempTop10Listings);
 				
+				$TempTop10Listings = array();
+							
+				foreach ($Top10Listings as $Key => $Data) {
+					if ($Data['TotalViews'] != 0) {
+						$TempTop10Listings[$Key] = $Data;
+					}
+				}
+				
+				$Top10Listings = $TempTop10Listings;
+				unset($TempTop10Listings);
+							
 				foreach ($Top10Listings as $Key => $Value) {
 					$Page->startElement('item');
 					$Page->writeAttribute('id', $Key);

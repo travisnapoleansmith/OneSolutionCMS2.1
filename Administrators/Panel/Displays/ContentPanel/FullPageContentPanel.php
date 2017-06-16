@@ -35,6 +35,8 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
 	$Page->startElement('div');
 	$Page->writeAttribute('id', 'ContentPanel');
 		$Page->startElement('div');

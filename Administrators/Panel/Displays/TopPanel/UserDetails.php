@@ -35,6 +35,8 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
 	$UserAccountsTableName = 'UserAccounts';
 	$UserAccountsLogonHistoryTableName = 'UserAccountsLogonHistory';
 	
@@ -91,7 +93,11 @@
 					$Page->startElement('li');
 					$Page->writeAttribute('class', 'First');
 						$Page->startElement('a');
-						$Page->writeAttribute('href', "../../../Panel/Managers/UserManager/MyAccount.php?UserName=" . $UserName . '&Type=My_Account');
+						if ($SubManager === TRUE) {
+							$Page->writeAttribute('href', "../../../../Panel/Managers/UserManager/MyAccount.php?UserName=" . $UserName . '&Type=My_Account');
+						} else {
+							$Page->writeAttribute('href', "../../../Panel/Managers/UserManager/MyAccount.php?UserName=" . $UserName . '&Type=My_Account');
+						}
 						$Text = 'My Account';
 						$Page->text($Text);
 						$Page->endElement(); //ENDS A
@@ -100,7 +106,11 @@
 					$Page->startElement('li');
 					$Page->writeAttribute('class', 'Last');
 						$Page->startElement('a');
-						$Page->writeAttribute('href', "../../../logoff.php");
+						if ($SubManager === TRUE) {
+							$Page->writeAttribute('href', "../../../../logoff.php");
+						} else {
+							$Page->writeAttribute('href', "../../../logoff.php");
+						}
 						$Text = 'Log Out';
 						$Page->text($Text);
 						$Page->endElement(); //ENDS A
@@ -111,7 +121,11 @@
 			$Page->startElement('li');
 				$Page->startElement('a');
 				$Page->writeAttribute('class', 'UserDetailsNewMessages');
-				$Page->writeAttribute('href', "../../../Panel/Managers/UserManager/Messages.php?UserName=" . $UserName . '&Type=Messages');
+				if ($SubManager === TRUE) {
+					$Page->writeAttribute('href', "../../../../Panel/Managers/UserManager/Messages.php?UserName=" . $UserName . '&Type=Messages');
+				} else {
+					$Page->writeAttribute('href', "../../../Panel/Managers/UserManager/Messages.php?UserName=" . $UserName . '&Type=Messages');
+				}
 				$Text = $NumberNewMessages . ' new messages';
 				$Page->text($Text);
 				$Page->endElement(); //ENDS A

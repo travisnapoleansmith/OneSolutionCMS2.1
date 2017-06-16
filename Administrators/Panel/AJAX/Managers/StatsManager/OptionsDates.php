@@ -119,37 +119,37 @@
 					
 					if ($Range == 'Weekly') {
 						$Date = new DateTime();
-			
 						$CurrentWeekNumber = date("W");
 						
-						$WeeklyArray = array();
-						for ($TempCurrentYear = $InitialYear; $TempCurrentYear < $CurrentYear; $TempCurrentYear++) {
-							for ($TempCurrentWeekNumber = 1; $TempCurrentWeekNumber <= 52; $TempCurrentWeekNumber++) {
-								$Date->setISODate($TempCurrentYear, $TempCurrentWeekNumber);
-								$WeekStart = $Date->format('F d, Y');
-								$Date->modify('+6 days');
-								$WeekEnd = $Date->format('F d, Y');
-								
-								if ($TempCurrentWeekNumber == 1 && $TempCurrentYear == $InitialYear) {
-									$WeekStart = "January 1, " . $InitialYear;
-								}
-								
-								$WeeklyArray[] = $WeekStart . ' - ' . $WeekEnd;
-							}
-						}
-						
-						for ($TempCurrentWeekNumber = 1; $TempCurrentWeekNumber <= $CurrentWeekNumber; $TempCurrentWeekNumber++) {
-							$Date->setISODate($TempCurrentYear, $TempCurrentWeekNumber);
-							$WeekStart = $Date->format('F d, Y');
-							$Date->modify('+6 days');
+						$TempCurrentWeekNumber = 1;
+						$TempCurrentYear = $InitialYear;
+						$Date->setISODate($TempCurrentYear, $TempCurrentWeekNumber);
+						$STOP = TRUE;
+						if ($TempCurrentWeekNumber == 1 && $TempCurrentYear == $InitialYear) {
+							$WeekStart = "January 1, " . $InitialYear;
+							$Date->modify('+1 week');
+							$Date->modify('-2 day');
 							$WeekEnd = $Date->format('F d, Y');
-							
-							if ($TempCurrentWeekNumber == 1 && $TempCurrentYear == $InitialYear) {
-								$WeekStart = "January 1, " . $InitialYear;
-							}
-							
+							$Date->modify('+1 day');
 							$WeeklyArray[] = $WeekStart . ' - ' . $WeekEnd;
 						}
+						
+						do {
+							$WeekStart = $Date->format('F d, Y');
+							$Date->modify('+1 week');
+							$Date->modify('-1 day');
+							$WeekEnd = $Date->format('F d, Y');
+							$Date->modify('+1 day');
+							
+							$TempCurrentYear = $Date->format('Y');
+							$TempCurrentWeekNumber = $Date->format('W');
+							
+							$WeeklyArray[] = $WeekStart . ' - ' . $WeekEnd;
+							
+							if ($TempCurrentYear == $CurrentYear && $TempCurrentWeekNumber == $CurrentWeekNumber) {
+								$STOP = FALSE;
+							}
+						} while ($STOP);
 						
 						$WeeklyArray = array_reverse($WeeklyArray);
 						

@@ -89,6 +89,6 @@
 	// Tier 6 Modules
 
 	// Tier 6 Content Layer Settings
-	//require_once "$ADMIN/Configuration/Tier6ContentLayerDatabaseSettings.php";
+	require_once "$ADMIN/Panel/Configuration/Tier6ContentLayerDatabaseSettings.php";
 
 ?>

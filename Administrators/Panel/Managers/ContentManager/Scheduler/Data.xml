@@ -1,0 +1,22 @@
+<data>
+    <event id="1">
+        <text><![CDATA[Meeting]]></text>
+        <start_date>10/11/2015 14:00</start_date>
+        <end_date>10/11/2015 17:00</end_date>
+    </event>
+    <event id="2">
+        <text><![CDATA[Conference]]></text>
+        <start_date>10/15/2015 12:00</start_date>
+        <end_date>10/18/2015 19:00</end_date>
+    </event>
+    <event id="3">
+        <text><![CDATA[Interview]]></text>
+        <start_date>10/24/2015 09:00</start_date>
+        <end_date>10/24/2015 10:00</end_date>
+    </event>
+	<event id="4">
+	<text><![CDATA[The next meeting at the Ellenburg Center Fire Department in Ellenburg Center, NY. The upcoming season will be discussed.]]></text>
+	<start_date>10/30/2015 09:00</start_date>
+        <end_date>10/30/2015 10:00</end_date>
+	</event>
+</data>

@@ -35,12 +35,18 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
 	$Page->startElement('div');
 	$Page->writeAttribute('id', 'SystemName');
 		$Page->startElement('img');
 		$Page->writeAttribute('id', 'SystemNameImage');
 		$Page->writeAttribute('alt', 'One Solution CMS Logo');
-		$Page->writeAttribute('src', '../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/OneSolutionCMSLogo.png');
+		if ($SubManager === TRUE) {
+			$Page->writeAttribute('src', '../../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/OneSolutionCMSLogo.png');
+		} else {
+			$Page->writeAttribute('src', '../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/OneSolutionCMSLogo.png');
+		}
 		$Page->endElement(); //ENDS IMG
 		
 		$Page->startElement('h1');

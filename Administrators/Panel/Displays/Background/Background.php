@@ -35,12 +35,18 @@
 	
 	require_once ("$ADMINHOME/Panel/Configuration/includes.php");
 	
+	$SubManager = $GLOBALS['SUBMANAGER'];
+	
 	$Page->startElement('div');
 	$Page->writeAttribute('id', 'BackgroundImage');
 		$Page->startElement('img');
 		$Page->writeAttribute('id', 'Background');
 		$Page->writeAttribute('alt', 'Background Image');
-		$Page->writeAttribute('src', '../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/Main-Background.jpg');
+		if ($SubManager === TRUE) {
+			$Page->writeAttribute('src', '../../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/Main-Background.jpg');
+		} else {
+			$Page->writeAttribute('src', '../../../../Tier8-PresentationLayer/AdministratorsPanel/Images/Main-Background.jpg');
+		}
 		$Page->endElement(); //ENDS IMG
 	$Page->endElement(); //ENDS DIV
 	

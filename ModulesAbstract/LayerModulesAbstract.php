@@ -2256,7 +2256,7 @@ abstract class LayerModulesAbstract
 	public function getRecord($PageID) {
 		$passarray = array();
 		$passarray = $PageID['PageID'];
-
+		
 		$args = func_get_args();
 		if ($args[1]) {
 			$DatabaseName = $args[1];

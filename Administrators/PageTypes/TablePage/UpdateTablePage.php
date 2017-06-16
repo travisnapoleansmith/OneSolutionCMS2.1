@@ -1001,7 +1001,20 @@
 				
 				$Tier6Databases->createContentVersion($ContentLayerVersion, 'ContentLayerVersion');
 				//$Tier6Databases->createContent($ContentLayer, 'ContentLayer');
-	
+				
+				$LogPage = TRUE;
+				
+				if ($LogPage === TRUE) {
+					$LogFile = "UpdateTablePage.txt";
+					$LogFileHandle = fopen($LogFile, 'a');
+					$FileInformation = 'Logging - Update Table Page Script Loading - ' . date("F j, Y, g:i a") . "\n";
+					fwrite($LogFileHandle, $FileInformation);
+					fwrite($LogFileHandle, print_r($ContentLayerVersion, TRUE));
+					fwrite($LogFileHandle, "\n---------------------------------------------\n\n");
+					fclose($LogFileHandle);
+				}
+				
+				
 				$Tier6Databases->SessionDestroy($sessionname);
 				$sessionname = $Tier6Databases->SessionStart('UpdatedPhotosPage');
 	

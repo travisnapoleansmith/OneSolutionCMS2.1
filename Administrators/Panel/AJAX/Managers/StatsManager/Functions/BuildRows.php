@@ -24,10 +24,10 @@
 	*/
 	
 	function buildRows($Data, $Attributes, $Page) {
-		if (is_array($Data)) {
+		if (is_array($Data) === TRUE) {
 			foreach ($Data as $Key => $Text) {
 				$Page->startElement('cell');
-				if (is_array($Attributes)) {
+				if (is_array($Attributes) === TRUE) {
 					foreach ($Attributes as $Attribute => $AttributeValue) {
 						$Page->writeAttribute($Attribute, $AttributeValue);
 					}

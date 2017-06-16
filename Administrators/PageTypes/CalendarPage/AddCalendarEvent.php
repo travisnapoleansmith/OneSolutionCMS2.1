@@ -98,16 +98,20 @@
 	
 			$StartTime = $hold['FilteredInput']['StartHour'] . ':' . $hold['FilteredInput']['StartMinute'] . ':' . $hold['FilteredInput']['StartSecond'];
 			$EndTime = $hold['FilteredInput']['EndHour'] . ':' . $hold['FilteredInput']['EndMinute'] . ':' . $hold['FilteredInput']['EndSecond'];
-	
+			
+			// NEED TO UPDATE DATABASE TO INCLUDE AN END DATE
 			$CalendarAppointment = array();
 			$CalendarAppointment['TableName'] = 'CalendarAppointments';
 			$CalendarAppointment['CalendarID'] = $NewPageID;
-			$CalendarAppointment['Day'] = $hold['FilteredInput']['EventDay'];
-			$CalendarAppointment['Month'] = $hold['FilteredInput']['EventMonth'];
-			$CalendarAppointment['Year'] = $hold['FilteredInput']['EventYear'];
+			$CalendarAppointment['StartDay'] = $hold['FilteredInput']['StartDay'];
+			$CalendarAppointment['StartMonth'] = $hold['FilteredInput']['StartMonth'];
+			$CalendarAppointment['StartYear'] = $hold['FilteredInput']['StartYear'];
 			$CalendarAppointment['StartTime'] = $StartTime;
 			$CalendarAppointment['StartTimeAmPm'] = $hold['FilteredInput']['StartAMPM'];
 			$CalendarAppointment['StartTimeZone'] = $hold['FilteredInput']['StartTimezone'];
+			$CalendarAppointment['EndDay'] = $hold['FilteredInput']['EndDay'];
+			$CalendarAppointment['EndMonth'] = $hold['FilteredInput']['EndMonth'];
+			$CalendarAppointment['EndYear'] = $hold['FilteredInput']['EndYear'];
 			$CalendarAppointment['EndTime'] = $EndTime;
 			$CalendarAppointment['EndTimeAmPm'] = $hold['FilteredInput']['EndAMPM'];
 			$CalendarAppointment['EndTimeZone'] = $hold['FilteredInput']['EndTimezone'];
@@ -163,25 +167,41 @@
 			$FormSelect['Status'] = 'Approved';
 	
 			//$FormOptionValue = $NewPageID . ' - NULL';
-			$Date = date_parse($_POST['EventMonth']);
+			$Date = date_parse($_POST['StartMonth']);
 			if ($Date['month'] < 10) {
 				$FormOptionText .= 0 . $Date['month'];
 			} else {
 				$FormOptionText .= $Date['month'];
 			}
 			$FormOptionText .= '/';
-			if ($_POST['EventDay'] < 10) {
-				$FormOptionText .= 0 . $_POST['EventDay'];
+			if ($_POST['StartDay'] < 10) {
+				$FormOptionText .= 0 . $_POST['StartDay'];
 			} else {
-				$FormOptionText .= $_POST['EventDay'];
+				$FormOptionText .= $_POST['StartDay'];
 			}
 			$FormOptionText .= '/';
-			$FormOptionText .= $_POST['EventYear'];
-			$FormOptionText .= ' - ';
+			$FormOptionText .= $_POST['StartYear'];
+			$FormOptionText .= ' ';
 			$FormOptionText .= $StartTime;
 			$FormOptionText .= ' ';
 			$FormOptionText .= $_POST['StartAMPM'];
 			$FormOptionText .= ' - ';
+			
+			$Date = date_parse($_POST['EndMonth']);
+			if ($Date['month'] < 10) {
+				$FormOptionText .= 0 . $Date['month'];
+			} else {
+				$FormOptionText .= $Date['month'];
+			}
+			$FormOptionText .= '/';
+			if ($_POST['EndDay'] < 10) {
+				$FormOptionText .= 0 . $_POST['EndDay'];
+			} else {
+				$FormOptionText .= $_POST['EndDay'];
+			}
+			$FormOptionText .= '/';
+			$FormOptionText .= $_POST['EndYear'];
+			$FormOptionText .= ' ';
 			$FormOptionText .= $EndTime;
 			$FormOptionText .= ' ';
 			$FormOptionText .= $_POST['EndAMPM'];
@@ -190,7 +210,7 @@
 			$temp = $hold['FilteredInput']['Event'];
 			$temp = explode(' ', $temp);
 	
-			for ($i = 0; $i < 2; $i++) {
+			for ($i = 0; $i < 5; $i++) {
 				$FormOptionText .= $temp[$i];
 				$FormOptionText .= ' ';
 			}

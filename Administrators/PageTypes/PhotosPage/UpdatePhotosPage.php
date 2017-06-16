@@ -23,6 +23,8 @@
 	*************************************************************************************
 	*/
 	
+	set_time_limit(240);
+	
 	if ($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'] != NULL) {
 		$HOME = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 	} else {
@@ -38,7 +40,7 @@
 	$ADMINHOME = $HOME . '/Administrators/';
 	$GLOBALS['HOME'] = $HOME;
 	$GLOBALS['ADMINHOME'] = $ADMINHOME;
-
+	
 	require_once ("$ADMINHOME/Configuration/includes.php");
 
 	$sessionname = NULL;
@@ -75,7 +77,7 @@
 	$_POST['Owner'] = $Owner;
 	$_POST['UserAccessGroup'] = $UserAccessGroup;
 	$_POST['UpdatePhotosPage'] = $NewUpdatePhotosPage;
-
+	
 	if (!is_null($PageID) && !is_null($RevisionID) && !is_null($CreationDateTime) && !is_null($Owner) && !is_null($UserAccessGroup)) {
 		$PageName = $UpdatePhotosPage;
 
@@ -871,7 +873,7 @@
 			$Content[$i]['Enable/Disable'] = $_POST['EnableDisable'];
 			$Content[$i]['Status'] = $_POST['Status'];
 			//$Content = array_reverse($Content);
-
+			
 			$Header = parse_ini_file('../../ModuleSettings/Tier6-ContentLayer/Modules/XhtmlHeader/UpdateXhtmlHeader.ini',FALSE);
 			$Header = $Tier6Databases->EmptyStringToNullArray($Header);
 
@@ -959,12 +961,19 @@
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'updateContent', $PageID);
 			$Tier6Databases->updateContentVersion($PageID, 'ContentLayerVersion');
 			//$Tier6Databases->updateContent($PageID, 'ContentLayer');
-
+			
+			/*
 			reset($Image);
 			while (current($Image)) {
 				$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'createPicture', $Image[key($Image)]);
 				next($Image);
 			}
+			*/
+			
+			if ($Image != NULL) {
+				$Tier6Databases->ModulePass('XhtmlPicture', 'picture', 'createPicture', $Image);
+			}
+			
 			$Tier6Databases->ModulePass('XhtmlContent', 'content', 'createContent', $Content);
 
 			if ($LogContentLayerVersion === TRUE) {
@@ -993,7 +1002,6 @@
 			$CreatedUpdatePhotosPage = $Options['XhtmlPicture']['picture']['CreatedUpdatePhotosPage']['SettingAttribute'];
 			header("Location: $CreatedUpdatePhotosPage&SessionID=$sessionname");
 			exit;
-
 		}
 	} else {
 		$Tier6Databases->SessionDestroy($sessionname);

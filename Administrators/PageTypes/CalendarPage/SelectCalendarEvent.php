@@ -41,7 +41,7 @@
 
 	require_once ("$ADMINHOME/Configuration/includes.php");
 
-	$CalendarEvent = stripslashes($_POST['CalendarEvent']);
+	/*$CalendarEvent = stripslashes($_POST['CalendarEvent']);
 	$CalendarEvent = explode(' - ', $CalendarEvent);
 
 	$Event = array();
@@ -86,7 +86,8 @@
 	$EndTime = $EndTimeTemp[0];
 	$EndTimeAmPm = $EndTimeTemp[1];
 	unset($EndTimeTemp);
-
+	*/
+	
 	$passarray = array();
 	$passarray['PageID'] = $_POST['UpdateCalendarEvent'];
 	$passarray['ObjectID'] = $_POST['CalendarEvent'];
@@ -110,7 +111,46 @@
 	$CalendarEvent = $Tier6Databases->ModulePass('XhtmlCalendarTable', 'calendar', 'getRecord', $passarray);
 
 	$sessionname = $Tier6Databases->SessionStart('UpdateCalendarEvent');
+	
+	// START NEW CODE
+	/*$Date = NULL;
+	$Date = date_parse($CalendarEvent[0]['StartDate']);
 
+	$StartDay = NULL;
+	if ($Date['day'] < 10) {
+		$StartDay = 0 . $Date['day'];
+	} else {
+		$StartDay = $Date['day'];
+	}
+
+	$StartMonth = NULL;
+	$StartMonth = date("F", mktime(0, 0, 0, $Date['month'], 10));
+
+	$StartYear = NULL;
+	if ($Date['year'] < 10) {
+		$StartYear = 0 . $Date['year'];
+	} else {
+		$StartYear = $Date['year'];
+	}
+
+	$StartTime = NULL;
+	$StartTimeAmPm = NULL;
+
+	$StartTimeTemp = explode(' ', $Event['StartTime']);
+	$StartTime = $StartTimeTemp[0];
+	$StartTimeAmPm = $StartTimeTemp[1];
+	unset($StartTimeTemp);
+
+	$EndTime = NULL;
+	$EndTimeAmPm = NULL;
+
+	$EndTimeTemp = explode(' ', $Event['EndTime']);
+	$EndTime = $EndTimeTemp[0];
+	$EndTimeAmPm = $EndTimeTemp[1];
+	unset($EndTimeTemp);
+	*/
+	// END NEW CODE
+	
 	$Date = date_parse($CalendarEvent[0]['StartTime']);
 	$StartHour = NULL;
 	if ($Date['hour'] < 10) {
@@ -156,14 +196,17 @@
 	}
 
 	$_POST['FormOptionSelectedID'] = $FormOptionSelected[0]['ObjectID'];
-	$_POST['EventDay'] = $CalendarEvent[0]['Day'];
-	$_POST['EventMonth'] = $CalendarEvent[0]['Month'];
-	$_POST['EventYear'] = $CalendarEvent[0]['Year'];
+	$_POST['StartDay'] = $CalendarEvent[0]['StartDay'];
+	$_POST['StartMonth'] = $CalendarEvent[0]['StartMonth'];
+	$_POST['StartYear'] = $CalendarEvent[0]['StartYear'];
 	$_POST['StartHour'] = $StartHour;
 	$_POST['StartMinute'] = $StartMinute;
 	$_POST['StartSecond'] = $StartSecond;
 	$_POST['StartAMPM'] = $CalendarEvent[0]['StartTimeAmPm'];
 	$_POST['StartTimezone'] = $CalendarEvent[0]['StartTimeZone'];
+	$_POST['EndDay'] = $CalendarEvent[0]['EndDay'];
+	$_POST['EndMonth'] = $CalendarEvent[0]['EndMonth'];
+	$_POST['EndYear'] = $CalendarEvent[0]['EndYear'];
 	$_POST['EndHour'] = $EndHour;
 	$_POST['EndMinute'] = $EndMinute;
 	$_POST['EndSecond'] = $EndSecond;
@@ -174,14 +217,17 @@
 	$_POST['Status'] = $CalendarEvent[0]['Status'];
 
 	$_SESSION['POST']['FilteredInput']['FormOptionSelectedID'] = $_POST['FormOptionSelectedID'];
-	$_SESSION['POST']['FilteredInput']['EventDay'] = $_POST['EventDay'];
-	$_SESSION['POST']['FilteredInput']['EventMonth'] = $_POST['EventMonth'];
-	$_SESSION['POST']['FilteredInput']['EventYear'] = $_POST['EventYear'];
+	$_SESSION['POST']['FilteredInput']['StartDay'] = $_POST['StartDay'];
+	$_SESSION['POST']['FilteredInput']['StartMonth'] = $_POST['StartMonth'];
+	$_SESSION['POST']['FilteredInput']['StartYear'] = $_POST['StartYear'];
 	$_SESSION['POST']['FilteredInput']['StartHour'] = $_POST['StartHour'];
 	$_SESSION['POST']['FilteredInput']['StartMinute'] = $_POST['StartMinute'];
 	$_SESSION['POST']['FilteredInput']['StartSecond'] = $_POST['StartSecond'];
 	$_SESSION['POST']['FilteredInput']['StartAMPM'] = $_POST['StartAMPM'];
 	$_SESSION['POST']['FilteredInput']['StartTimezone'] = $_POST['StartTimezone'];
+	$_SESSION['POST']['FilteredInput']['EndDay'] = $_POST['EndDay'];
+	$_SESSION['POST']['FilteredInput']['EndMonth'] = $_POST['EndMonth'];
+	$_SESSION['POST']['FilteredInput']['EndYear'] = $_POST['EndYear'];
 	$_SESSION['POST']['FilteredInput']['EndHour'] = $_POST['EndHour'];
 	$_SESSION['POST']['FilteredInput']['EndMinute'] = $_POST['EndMinute'];
 	$_SESSION['POST']['FilteredInput']['EndSecond'] = $_POST['EndSecond'];
@@ -190,7 +236,7 @@
 	$_SESSION['POST']['FilteredInput']['Event'] = $_POST['Event'];
 	$_SESSION['POST']['FilteredInput']['EnableDisable'] = $_POST['EnableDisable'];
 	$_SESSION['POST']['FilteredInput']['Status'] = $_POST['Status'];
-
+	
 	$Options = $Tier6Databases->getLayerModuleSetting();
 	$CalendarEventUpdatePage = $Options['XhtmlCalendarTable']['calendar']['CalendarEventUpdatePage']['SettingAttribute'];
 	header("Location: $CalendarEventUpdatePage&SessionID=$sessionname");

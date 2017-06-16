@@ -17,9 +17,10 @@ function afterLoad() {
 	StatsReportsTabbar = StatsReports.cells("a").attachTabbar();
 	
 	StatsReportsTabbar.setAlign("left");
+	StatsReportsTabbar.setArrowsMode("auto");
 	
-	StatsReportsTabbar.addTab('SiteStats','Site Stats','');
-	//StatsReportsTabbar.addTab('AdStats','Ad Stats','');
+	StatsReportsTabbar.addTab('SiteStats','Site Stats','135');
+	//StatsReportsTabbar.addTab('AdStats','Ad Stats','135');
 	
 	var Tabs = StatsReportsTabbar.getAllTabs();
 	

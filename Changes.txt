@@ -1,4 +1,25 @@
-Changes For One Solution CMS 2.1.157 - 
+Changes For One Solution CMS 2.1.158 - 
+Added:
+	1). Add Administrators Panel - Panel - Site Stats - Added Overall Tab to Page Views.
+	2). Add Administrators Panel - Add/Update News Story - Added the ability to include a Video in a news story.
+	3). Add Administrators Panel - Panel - Site Stats - Added Overall Chart % Of Traffic: Browsers, Plugins, OS's.
+	4). Add Administrators Panel - Panel - Added Scheduler to Content Manager. 
+	5). Add Administrators Panel - Add/Update Calendar Event - Added end date capability to this content type. This is for compatibility for the Scheduler inside of the new Panel.
+	6). Add Tier6ContentLayer - Added new method NullCheck that allows a developer to send an array of elements to get checked for NULL values.
+	7). Add Administrators Panel - Content Manager - Menu - Refresh Menu tool to quickly refresh the menu when you make changes to a page title.
+	
+Updated (Fixed):
+	1). Updated Administrators Panel - Tables Page - Re-Added Upload Folder So Upload Works Now!
+	2). Updated Administrators Panel - Add Photos Page - Corrected Bug ID #00000-- - When adding a new Photo Page, it doesn't get added to the main menu. This issue has been fixed. 
+	3). Updated Administrators Panel - Add/Update Photos Page - Corrected Bug ID #00000-- - Script timing out when adding a large number of photo galleries to a page. This was a performance issue. The database querie was optimized. This issue has been fixed.
+	4). Updated Administrators Panel - Panel - Site Stats - Corrected Bug ID #00000-- - If a user selected a range that went past 1 year, it would only show the first year not the second.
+	
+Removed:
+	1). Nothing Removed.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+Changes For One Solution CMS 2.1.157 - Wednesday, June 04, 2014 - 9:11:05 PM
 Added:
 	1). Added Administrators Panel - Panel - Added the new 3.0 look and Stats/Reports Manager. Some functionality like a few of the tabs are not going to show any information yet. It is coming very shortly. Expect it in the next release!
 	2). Added MySqlConnect - searchDatabaseRow is now available. This allows to put a BETWEEN for any SQL WHERE statements. This allows to narrow the data to a range of data to retrive.
@@ -21,7 +42,7 @@ Removed:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Changes For One Solution CMS 2.1.156 - Tuesday, December 31, 2013
+Changes For One Solution CMS 2.1.156 - Tuesday, December 31, 2013 - 4:32:33 PM
 Added:
 	1). Added Administrators Panel - SimpleViewer Pages - Added forms for SimpleViewer Pages. Processing will be coming very shortly.
 	
