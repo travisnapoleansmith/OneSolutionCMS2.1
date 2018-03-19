@@ -13,7 +13,7 @@
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
 	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	* GNU General Public License for more details.
-	* 
+	*
 	* You should have received a copy of the GNU General Public License
 	* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	*
@@ -42,14 +42,14 @@
 	$author = $SETTINGS['SITE SETTINGS']['AUTHOR'];
 	$copyright = $SETTINGS['SITE SETTINGS']['COPYRIGHT'];
 
-	$cmsversion = '2.1.158';
+	$cmsversion = '2.1.159';
 
 	$Writer = new XMLWriter();
 	$Writer->openMemory();
 	$Writer->setIndent(4);
 
 	$ErrorMessage = array();
-	
+
 	// TURN THIS OFF AND FIGURE OUT HOW TO FIX THIS ISSUE WITH MYSQLCONNECT
 	$ConnectionOverride = FALSE;
 ?>

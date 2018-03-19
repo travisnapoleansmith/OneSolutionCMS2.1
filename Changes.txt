@@ -1,4 +1,16 @@
-Changes For One Solution CMS 2.1.158 - 
+Changes For One Solution CMS 2.1.159 - Monday, March 19, 2018
+Added:
+	1). Nothing Added
+	
+Updated (Fixed):
+	1). Replaced - Libraries - Tier 5 Validation Layer - HtmlPurifier - Missing files in the last update! Any content to update could not be updated. Has been fixed.
+	2). Replaced - Administrators - PageTypes - TablePage - SelectTablePage.php - Reverted back 2.1.157. For some reason there was an error that wouldn't allow for the page to be loaded!
+	
+Removed:
+	1). Nothing Removed.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Changes For One Solution CMS 2.1.158 - Friday, June 16, 2017 - 12:42:48 AM
 Added:
 	1). Add Administrators Panel - Panel - Site Stats - Added Overall Tab to Page Views.
 	2). Add Administrators Panel - Add/Update News Story - Added the ability to include a Video in a news story.

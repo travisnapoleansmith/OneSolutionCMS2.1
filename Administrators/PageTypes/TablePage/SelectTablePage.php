@@ -47,7 +47,7 @@
 
 	$XhtmlTableName = $Options['XhtmlTable']['table']['XhtmlTableName']['SettingAttribute'];
 	
-	$hold = $_POST['TablesPage'];
+	$hold = $_POST['TablePage'];
 	$hold = explode(' ', $hold);
 	$SelectedPageID = $hold[2];
 	$TableID = $hold[0];
@@ -67,7 +67,7 @@
 	$TableTemp = $Tier6Databases->getRecord($TableSelectedPageID, 'XhtmlTableLookup', TRUE, array());
 	
 	$Table = array();
-
+	
 	foreach ($TableTemp as $Key => $Value) {
 		if ($Value['ObjectID'] != NULL) {
 			$Table[$Value['ObjectID']] = $Value;
